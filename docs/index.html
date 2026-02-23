@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeOS Documentation — The Autonomous Vibe-Coding Operating System</title>
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border) transparent;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ---- NAV ---- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-brand span {
+      color: var(--color-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-xs);
+      transition: all 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+      background: var(--color-surface-2);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      padding: 10rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: var(--color-accent-bg);
+      border: 1px solid rgba(167, 139, 250, 0.15);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--color-accent);
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: var(--color-accent-dim);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .hero-cta:hover {
+      background: #6d28d9;
+      transform: translateY(-1px);
+    }
+
+    /* ---- MAIN ---- */
+    .main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* ---- SECTIONS ---- */
+    .section {
+      margin-bottom: 5rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .section > p,
+    .section > ul,
+    .section > ol {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    li::marker {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- CODE ---- */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--color-surface-2);
+      padding: 0.15em 0.45em;
+      border-radius: 4px;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    pre {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .code-label {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+
+    /* ---- CARDS ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--color-accent-dim);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+
+    .card h4 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    /* ---- TABLES ---- */
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background: var(--color-surface-2);
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+      color: var(--color-text-secondary);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--color-surface);
+    }
+
+    /* ---- CALLOUT ---- */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid;
+      font-size: 0.92rem;
+    }
+
+    .callout p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.info {
+      background: var(--color-blue-dim);
+      border-color: rgba(96, 165, 250, 0.2);
+      color: var(--color-blue);
+    }
+
+    .callout.tip {
+      background: var(--color-green-dim);
+      border-color: rgba(74, 222, 128, 0.2);
+      color: var(--color-green);
+    }
+
+    .callout.warn {
+      background: var(--color-amber-dim);
+      border-color: rgba(251, 191, 36, 0.2);
+      color: var(--color-amber);
+    }
+
+    .callout.danger {
+      background: var(--color-red-dim);
+      border-color: rgba(248, 113, 113, 0.2);
+      color: var(--color-red);
+    }
+
+    /* ---- FLOW DIAGRAM ---- */
+    .flow {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .flow .highlight {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .flow .muted {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- STEP LIST ---- */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 3.5rem;
+      margin-bottom: 2rem;
+      min-height: 2.25rem;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.25rem;
+      height: 2.25rem;
+      background: var(--color-accent-bg);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-accent);
+    }
+
+    .steps li h4 {
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    .steps li p {
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ---- BADGE ---- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
+    .badge.green { background: var(--color-green-dim); color: var(--color-green); }
+    .badge.amber { background: var(--color-amber-dim); color: var(--color-amber); }
+
+    /* ---- DIVIDER ---- */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 4rem 0;
+    }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .toc ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    .toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    .toc a {
+      color: var(--color-text-secondary);
+      font-size: 0.92rem;
+      transition: color 0.15s;
+    }
+
+    .toc a:hover {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .main { padding: 0 1.25rem 4rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.15rem; }
+      pre { padding: 1rem; }
+      .steps li { padding-left: 3rem; }
+    }
+
+    @media (prefers-color-scheme: light) {
+      /* keep dark — this is a terminal-culture product */
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <ul class="nav-links">
+      <li><a href="#why">Why VibeOS</a></li>
+      <li><a href="#install">Installation</a></li>
+      <li><a href="#warp">Warp Setup</a></li>
+      <li><a href="#new-projects">New Projects</a></li>
+      <li><a href="#existing-projects">Existing Projects</a></li>
+      <li><a href="#system">System Deep Dive</a></li>
+      <li><a href="#efficiency">Efficiency Guide</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-badge">Claude Code Plugin</div>
+  <h1>VibeOS Documentation</h1>
+  <p>The autonomous vibe-coding operating system that turns Claude Code into a full development team. Architecture-first, attention-aware, and self-improving.</p>
+  <a href="#install" class="hero-cta">Get Started &darr;</a>
+</header>
+
+<!-- ============ MAIN ============ -->
+<div class="main">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>Table of Contents</h3>
+    <ol>
+      <li><a href="#why">Why VibeOS &mdash; The Three Problems It Solves</a></li>
+      <li><a href="#install">Installation from Scratch</a></li>
+      <li><a href="#warp">Configuring Warp Terminal</a></li>
+      <li><a href="#new-projects">Using VibeOS with New Projects</a></li>
+      <li><a href="#existing-projects">Using VibeOS with Existing Projects</a></li>
+      <li><a href="#system">System Deep Dive</a>
+        <ol>
+          <li><a href="#agents">The 9-Agent Architecture</a></li>
+          <li><a href="#hooks">The Hook System</a></li>
+          <li><a href="#interrupt">The Interrupt Protocol</a></li>
+          <li><a href="#phase-gate">The Phase Gate</a></li>
+          <li><a href="#vibe-score">The Vibe Score &amp; Performance Coach</a></li>
+          <li><a href="#commands">Slash Commands Reference</a></li>
+          <li><a href="#state">State Management</a></li>
+        </ol>
+      </li>
+      <li><a href="#efficiency">Maximizing Efficiency</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <!-- ========================== -->
+  <!-- SECTION: WHY               -->
+  <!-- ========================== -->
+  <section class="section" id="why">
+    <span class="section-label">The Problem</span>
+    <h2>Why VibeOS Exists</h2>
+    <p>AI-assisted development &mdash; "vibe coding" &mdash; has changed how software gets built. A single developer can now ship at the pace of a small team. But scaling this workflow reveals three critical problems that VibeOS was designed to eliminate.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon amber">&#9888;</div>
+        <h4>The Attention Bottleneck</h4>
+        <p>When you run 5&ndash;15 concurrent Claude Code sessions, finished or blocked agents wait silently. You manually poll tabs to find which session needs you, destroying your focus every time. Your most valuable resource &mdash; your attention &mdash; is wasted on hunting.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#9632;</div>
+        <h4>Token Waste &amp; Context Exhaustion</h4>
+        <p>Pasting docs into chat (+1,500 tokens), correcting vague prompts (+500 each), re-explaining context after /clear (+2,000). When the context window fills, you lose all accumulated understanding and start from zero.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9881;</div>
+        <h4>Code Without Architecture</h4>
+        <p>Jump straight into code and the AI picks the wrong state library, uses incompatible API patterns, and generates components that ignore your design system. You catch it three features in, when technical debt has compounded.</p>
+      </div>
+    </div>
+
+    <h3>How VibeOS Solves Each One</h3>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">&#8594;</div>
+        <h4>The Interrupt Protocol</h4>
+        <p>The terminal stays silent during normal work. When an agent needs you (permission blocked, task complete, critical error), it sends a native OS notification with a one-click deep link to the exact tab. You never poll again.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#8594;</div>
+        <h4>The Performance Coach</h4>
+        <p>Every session ends with a Vibe Score (0&ndash;100). The coach identifies token waste, proposes a concrete CLAUDE.md rule to prevent it, and &mdash; with your approval &mdash; permanently writes that rule. Each session is more efficient than the last.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#8594;</div>
+        <h4>The Two-Tier Workflow</h4>
+        <p>A phase gate blocks all source code writes until the project foundation is complete: vision, design system, tech stack decision, roadmap, and project rules. Architecture decisions are deliberate, not accidental.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">The Core Philosophy</div>
+      <p>Human attention is the bottleneck, not AI speed. VibeOS is designed to maximize your focus time by minimizing interruptions, enforcing architecture before code, and turning every session into a learning opportunity.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
+  <!-- SECTION: INSTALL            -->
+  <!-- ========================== -->
+  <section class="section" id="install">
+    <span class="section-label">Getting Started</span>
+    <h2>Installation from Scratch</h2>
+    <p>A complete walkthrough from zero to a fully operational VibeOS environment.</p>
+
+    <h3>Prerequisites</h3>
+    <p>Verify these are installed before proceeding:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Requirement</th><th>Minimum Version</th><th>Check Command</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Claude Code</strong></td><td>2.0.0+</td><td><code>claude --version</code></td></tr>
+          <tr><td><strong>Git</strong></td><td>2.30+</td><td><code>git --version</code></td></tr>
+          <tr><td><strong>GitHub CLI</strong></td><td>2.0+</td><td><code>gh --version</code></td></tr>
+          <tr><td><strong>Node.js</strong></td><td>18+ (for JS/TS projects)</td><td><code>node --version</code></td></tr>
+          <tr><td><strong>jq</strong></td><td>1.6+</td><td><code>jq --version</code></td></tr>
+          <tr><td><strong>macOS</strong></td><td>13+ (for native notifications)</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Step-by-Step Installation</h3>
+
+    <ol class="steps">
+      <li>
+        <h4>Install system dependencies</h4>
+        <p>These are needed for notifications, JSON parsing in hooks, and PR automation.</p>
+        <pre><code><span class="code-label">bash</span>brew install terminal-notifier jq
+brew install gh && gh auth login</code></pre>
+      </li>
+
+      <li>
+        <h4>Add the plugin to your project</h4>
+        <p>Copy or symlink the VibeOS plugin directory into your project root. Symlinking is recommended for teams so updates propagate automatically.</p>
+        <pre><code><span class="code-label">bash</span># Option A: Direct copy
+cp -r /path/to/claude-plugin-vibe-os/ ./claude-plugin-vibe-os/
+
+# Option B: Symlink (recommended for teams)
+ln -s /path/to/claude-plugin-vibe-os ./claude-plugin-vibe-os
+
+# Option C: Git submodule (best for version control)
+git submodule add &lt;repo-url&gt; claude-plugin-vibe-os</code></pre>
+      </li>
+
+      <li>
+        <h4>Verify plugin detection</h4>
+        <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeOS automatically.</p>
+        <pre><code><span class="code-label">bash</span>cd /path/to/your-project
+claude</code></pre>
+        <p>You should see the VibeOS session startup agent run on first launch.</p>
+      </li>
+
+      <li>
+        <h4>Run the setup wizard</h4>
+        <p>Inside Claude Code, run:</p>
+        <pre><code><span class="code-label">claude code</span>/setup</code></pre>
+        <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibeos/</code> runtime directory.</p>
+      </li>
+
+      <li>
+        <h4>Install MCP servers (optional but recommended)</h4>
+        <p><strong>Context7</strong> saves ~1,500 tokens per API lookup by fetching documentation on-demand instead of pasting it into chat. <strong>Puppeteer</strong> enables browser automation for research and visual testing. Both are configured in <code>mcp-servers.json</code>.</p>
+      </li>
+
+      <li>
+        <h4>Verify the full pipeline</h4>
+        <ul>
+          <li><strong>Notifications:</strong> Tested during setup wizard</li>
+          <li><strong>Session startup:</strong> Exit and restart Claude Code &mdash; the startup agent should show a 3-line status summary</li>
+          <li><strong>Phase gate:</strong> Try writing a source file before running <code>/new-project</code> &mdash; it should be blocked</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>Resulting Directory Structure</h3>
+    <pre><code><span class="code-label">tree</span>your-project/
+  claude-plugin-vibe-os/          # The plugin (don't modify)
+    .claude-plugin/
+      plugin.json                 # Plugin manifest
+    mcp-servers.json              # Context7 + Puppeteer config
+    hooks/
+      hooks.json                  # Event hook bindings
+    scripts/                      # 6 bash automation scripts
+    agents/                       # 9 specialized AI agent prompts
+    commands/                     # 9 slash command definitions
+
+  .vibeos/                        # Per-project runtime state
+    config.json                   # Terminal preference, notification settings
+    state.json                    # Foundation status + active feature
+    backlog.json                  # Feature backlog with specs
+    sessions/                     # Session logs (JSON)
+    scores/                       # Vibe Score breakdowns (JSON)
+    releases/                     # Release notes data (JSON)</code></pre>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
+  <!-- SECTION: WARP              -->
+  <!-- ========================== -->
+  <section class="section" id="warp">
+    <span class="section-label">Terminal Setup</span>
+    <h2>Configuring Warp Terminal</h2>
+    <p>Warp provides the best VibeOS experience thanks to its deep-link support. When a notification fires, you click it and land on the <em>exact tab</em> that needs your attention &mdash; no hunting through 15 open sessions.</p>
+
+    <h3>Why Warp Is Recommended</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Terminal</th><th>Notification Method</th><th>Tab Deep-Link</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Warp</strong></td><td>OSC 777 + macOS banner</td><td>Yes &mdash; click goes to exact tab</td></tr>
+          <tr><td>iTerm2</td><td>OSC 9 + macOS banner</td><td>No</td></tr>
+          <tr><td>VS Code Terminal</td><td>macOS banner</td><td>No</td></tr>
+          <tr><td>Terminal.app</td><td>macOS banner</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How Deep-Linking Works</h3>
+    <p>Warp exposes a <code>WARP_SESSION_ID</code> environment variable for each terminal tab. VibeOS captures this value and constructs a <code>warp://session/&lt;id&gt;</code> URI. When the <code>notify.sh</code> script fires a notification, it passes this URI to <code>terminal-notifier</code>'s <code>-execute</code> flag. Clicking the macOS banner executes the deep link, which brings Warp to the foreground and switches to the exact tab.</p>
+
+    <div class="flow"><span class="muted">Agent blocks on permission</span>
+    &darr;
+<span class="highlight">notify.sh</span> reads JSON from stdin, extracts notification_type
+    &darr;
+Captures <span class="highlight">$WARP_SESSION_ID</span> from environment
+    &darr;
+Constructs deep link: <span class="highlight">warp://session/$SESSION_ID</span>
+    &darr;
+Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '$DEEP_LINK'"
+    &darr;
+<span class="muted">You click the notification &rarr; Warp focuses the exact tab</span></div>
+
+    <h3>Setup Steps for Warp</h3>
+    <ol class="steps">
+      <li>
+        <h4>Install Warp</h4>
+        <p>Download from <strong>warp.dev</strong> and complete the initial setup. Warp runs on macOS and Linux.</p>
+      </li>
+      <li>
+        <h4>Enable desktop notifications in Warp</h4>
+        <p>Open Warp Settings &rarr; Features &rarr; ensure <strong>Desktop Notifications</strong> is enabled.</p>
+      </li>
+      <li>
+        <h4>Verify WARP_SESSION_ID</h4>
+        <p>In any Warp tab, run:</p>
+        <pre><code><span class="code-label">bash</span>echo $WARP_SESSION_ID</code></pre>
+        <p>This should return a UUID. If it's empty, update Warp to the latest version.</p>
+      </li>
+      <li>
+        <h4>Allow macOS notifications</h4>
+        <p>Go to <strong>System Settings &rarr; Notifications &rarr; terminal-notifier</strong> and ensure "Allow Notifications" is on. Set the alert style to <strong>Banners</strong> or <strong>Alerts</strong>.</p>
+      </li>
+      <li>
+        <h4>Select Warp during /setup</h4>
+        <p>When the VibeOS setup wizard asks "Which terminal do you use?", select <strong>Warp</strong>. This is stored in <code>.vibeos/config.json</code> and determines how notifications are dispatched.</p>
+      </li>
+      <li>
+        <h4>Test the full loop</h4>
+        <p>The setup wizard sends a test notification. Click it &mdash; you should be taken back to the exact Warp tab where Claude Code is running.</p>
+      </li>
+    </ol>
+
+    <div class="callout info">
+      <div class="callout-title">Using a different terminal?</div>
+      <p>VibeOS works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
+  <!-- SECTION: NEW PROJECTS      -->
+  <!-- ========================== -->
+  <section class="section" id="new-projects">
+    <span class="section-label">New Projects</span>
+    <h2>Using VibeOS with New Projects</h2>
+    <p>New projects follow the <strong>Two-Tier Workflow</strong>. Tier 1 creates the architectural foundation. Tier 2 builds features on top of it. The phase gate enforces this order &mdash; you cannot write source code until the foundation is complete.</p>
+
+    <h3>Tier 1: The Project Foundation</h3>
+    <p>Run <code>/new-project</code> to start a guided, 6-step process. Each step produces a concrete artifact before the next begins.</p>
+
+    <ol class="steps">
+      <li>
+        <h4>VISION.md &mdash; Define project goals</h4>
+        <p>VibeOS asks: What problem does this solve? Who are the target users? What's the value proposition? What are the constraints? What does success look like?</p>
+        <p>The output is <code>VISION.md</code> &mdash; a document every agent reads. When the Feature Developer writes code, it knows who your users are. When the Stack Scout evaluates technologies, it factors in your constraints.</p>
+      </li>
+      <li>
+        <h4>design-system.css &mdash; Establish visual identity</h4>
+        <p>The <strong>UI Designer agent</strong> asks about your brand preferences: primary color, font, border radius, density. It generates a complete set of CSS custom properties (colors, typography, spacing, radii) that every component will use. No hardcoded values, ever.</p>
+      </li>
+      <li>
+        <h4>TDR &mdash; Research and lock the tech stack</h4>
+        <p>The <strong>Stack Scout agent</strong> activates. This is a read-only research agent that runs in an <em>isolated context window</em>. It uses WebSearch, Context7, and Puppeteer to evaluate technology options against your requirements, then produces a <strong>Technology Decision Record</strong> at <code>docs/tdr-001-tech-stack.md</code>.</p>
+        <p>The TDR documents what was considered, what was chosen, and why. Once approved, every agent works within these boundaries. The research costs 8,000&ndash;15,000 tokens but none of them touch your main session &mdash; only the distilled decision enters your context window.</p>
+      </li>
+      <li>
+        <h4>Roadmap &mdash; Map out features</h4>
+        <p>List your planned features in rough priority order. VibeOS generates <code>docs/roadmap.md</code> with priority tiers (Must Have, Should Have, Nice to Have, Out of Scope). This becomes the input for <code>/plan-features</code> later.</p>
+      </li>
+      <li>
+        <h4>CLAUDE.md &mdash; Codify project rules</h4>
+        <p>VibeOS synthesizes everything into the master rules file. It includes your tech stack, architecture conventions, design system reference, and a "Session Learnings" section that the Performance Coach populates over time. This is the first file Claude Code reads every session.</p>
+      </li>
+      <li>
+        <h4>Git commit &mdash; Version the foundation</h4>
+        <p>Everything is committed: <code>git commit -m "plan: project foundation"</code>. The phase gate unlocks. Source code writes are now allowed.</p>
+      </li>
+    </ol>
+
+    <div class="callout warn">
+      <div class="callout-title">The Phase Gate</div>
+      <p>Until all 6 steps are complete, a PreToolUse hook blocks all writes to source directories (src/, app/, lib/, components/). Configuration files (.vibeos/, CLAUDE.md, docs/) are allowed. This is enforced by <code>phase-gate.sh</code> &mdash; it's a hard block, not a suggestion.</p>
+    </div>
+
+    <h3>Tier 2: Building Features</h3>
+    <p>With the foundation in place, you enter the iterative feature loop.</p>
+
+    <h4>Planning the backlog</h4>
+    <p>Run <code>/plan-features</code> to create structured specifications for each feature: name, description, acceptance criteria, priority, complexity (S/M/L/XL), and dependencies. These are stored in <code>.vibeos/backlog.json</code>.</p>
+
+    <h4>Starting a feature</h4>
+    <pre><code><span class="code-label">claude code</span>/new-feature "user authentication"</code></pre>
+    <p>This creates a feature branch (<code>feat/user-authentication</code>), initializes 5-phase tracking, and loads the feature spec. You're now in the development loop.</p>
+
+    <h4>The 5-phase cycle</h4>
+    <div class="flow"><span class="highlight">Plan</span> &rarr; <span class="highlight">UI Design</span> &rarr; <span class="highlight">Code</span> &rarr; <span class="highlight">Test</span> &rarr; <span class="highlight">Docs</span>
+
+<span class="muted">Phases can be worked in any order.
+Completeness is checked at /wrap, not during work.</span></div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h4>Plan</h4>
+        <p>Feature spec with acceptance criteria, edge cases, and technical notes at <code>docs/features/&lt;name&gt;.md</code>.</p>
+      </div>
+      <div class="card">
+        <h4>UI Design</h4>
+        <p>Component hierarchy, props, variants. Uses design system tokens. Mobile-first, WCAG AA compliant.</p>
+      </div>
+      <div class="card">
+        <h4>Code</h4>
+        <p>Implementation within TDR boundaries. Checks Context7 before using any library API. Follows CLAUDE.md conventions.</p>
+      </div>
+      <div class="card">
+        <h4>Test</h4>
+        <p>TDD-hybrid: spec tests for business logic (written first), implementation tests for UI (written after). Tests behavior, not implementation.</p>
+      </div>
+      <div class="card">
+        <h4>Docs</h4>
+        <p>Feature documentation, CHANGELOG entries, session logs. Structured JSON for the companion dashboard.</p>
+      </div>
+    </div>
+
+    <h4>Wrapping a session</h4>
+    <pre><code><span class="code-label">claude code</span>/wrap</code></pre>
+    <p>Checks completeness, runs the quality gate (tests + build + lint), triggers the Performance Coach for your Vibe Score, logs the session, and creates a conventional commit. <strong>Never close the terminal without wrapping.</strong></p>
+
+    <h4>Automated execution</h4>
+    <pre><code><span class="code-label">claude code</span>/run-backlog</code></pre>
+    <p>Automatically picks the next planned feature by priority, executes it through Plan &rarr; Design &rarr; Code &rarr; Test, runs the quality gate, and loops. Stops on failure so you can fix and resume.</p>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
+  <!-- SECTION: EXISTING PROJECTS -->
+  <!-- ========================== -->
+  <section class="section" id="existing-projects">
+    <span class="section-label">Existing Projects</span>
+    <h2>Using VibeOS with Existing Projects</h2>
+    <p>VibeOS isn't only for greenfield work. Bringing it into an existing codebase provides structure, quality gates, and continuous improvement to projects that were started without this framework.</p>
+
+    <h3>Onboarding an Existing Project</h3>
+
+    <ol class="steps">
+      <li>
+        <h4>Install the plugin</h4>
+        <p>Same process as a new project: copy or symlink <code>claude-plugin-vibe-os/</code> into your project root, then run <code>/setup</code> inside Claude Code.</p>
+      </li>
+      <li>
+        <h4>Run /new-project in "existing mode"</h4>
+        <p>When VibeOS detects an existing codebase (source files already present, git history exists), the <code>/new-project</code> flow adapts. Instead of asking you to define everything from scratch, it:</p>
+        <ul>
+          <li><strong>Audits the codebase</strong> &mdash; scans for frameworks, dependencies, patterns, and conventions already in use</li>
+          <li><strong>Generates VISION.md</strong> from your input, same as greenfield</li>
+          <li><strong>Derives the design system</strong> by extracting existing CSS variables, colors, and spacing values where possible</li>
+          <li><strong>Creates the TDR</strong> documenting the stack <em>as it exists</em> rather than researching from scratch &mdash; the Stack Scout still runs to verify the current stack is optimal</li>
+          <li><strong>Builds CLAUDE.md</strong> incorporating discovered patterns and conventions</li>
+        </ul>
+      </li>
+      <li>
+        <h4>Run a test gap analysis</h4>
+        <p>The Test Writer agent scans your existing code and identifies areas without test coverage. It produces a prioritized list of tests to write, starting with the most critical business logic.</p>
+      </li>
+      <li>
+        <h4>Map existing features to the backlog</h4>
+        <p>Use <code>/plan-features</code> to document features that already exist (marked as "complete") and define new features you want to build. This gives you a unified backlog that includes both history and future work.</p>
+      </li>
+      <li>
+        <h4>Start developing with full VibeOS workflow</h4>
+        <p>From this point forward, every new feature uses the Tier 2 cycle. The phase gate is active, the Performance Coach runs at session end, and CLAUDE.md accumulates project-specific intelligence.</p>
+      </li>
+    </ol>
+
+    <div class="callout info">
+      <div class="callout-title">The phase gate and existing code</div>
+      <p>The phase gate only blocks <em>new</em> source code writes before the foundation is complete. Once you've completed the /new-project flow for your existing project, the gate unlocks and you can modify any file freely. Existing code is never touched or reformatted without your explicit instruction.</p>
+    </div>
+
+    <h3>What You Get Immediately</h3>
+    <ul>
+      <li><strong>Interrupt Protocol</strong> &mdash; native notifications for blocked agents, completed tasks, and errors</li>
+      <li><strong>Safety hooks</strong> &mdash; protection against <code>rm -rf</code>, force pushes, and other destructive commands</li>
+      <li><strong>Auto-formatting</strong> &mdash; every file the AI writes is formatted automatically via PostToolUse hooks</li>
+      <li><strong>Context warnings</strong> &mdash; alerts at 60% and 80% context usage to prevent exhaustion</li>
+      <li><strong>Performance coaching</strong> &mdash; Vibe Scores and CLAUDE.md mutations from your first <code>/wrap</code></li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
+  <!-- SECTION: SYSTEM DEEP DIVE  -->
+  <!-- ========================== -->
+  <section class="section" id="system">
+    <span class="section-label">Architecture</span>
+    <h2>System Deep Dive</h2>
+    <p>VibeOS is a system of specialized agents, deterministic hooks, and bash scripts that work together to enforce quality, manage attention, and continuously improve your workflow. Here's how every piece fits together.</p>
+
+    <!-- AGENTS -->
+    <h3 id="agents">The 9-Agent Architecture</h3>
+    <p>Each agent has a specific role, model selection, tool access, and context budget. Haiku agents handle fast, routine tasks. Sonnet agents handle complex reasoning and implementation.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Model</th><th>Role</th><th>When It Runs</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Session Startup</strong></td>
+            <td><span class="badge amber">Haiku</span></td>
+            <td>Environment check, state detection, 3-line routing summary</td>
+            <td>Every session start</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow Orchestrator</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Routes between Tier 1 and Tier 2, coordinates agent handoffs</td>
+            <td>Command routing</td>
+          </tr>
+          <tr>
+            <td><strong>Stack Scout</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Read-only research. Uses WebSearch, Context7, Puppeteer. Produces TDR in isolated context</td>
+            <td>Tier 1 architecture step</td>
+          </tr>
+          <tr>
+            <td><strong>UI Designer</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Design system creation (Tier 1) and component design (Tier 2). Always uses design tokens</td>
+            <td>Foundation + feature UI phases</td>
+          </tr>
+          <tr>
+            <td><strong>Feature Developer</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Implements features within TDR boundaries. Checks Context7 for all library APIs</td>
+            <td>Tier 2 coding phase</td>
+          </tr>
+          <tr>
+            <td><strong>Test Writer</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>TDD-hybrid: spec tests before code (business logic), implementation tests after (UI)</td>
+            <td>Tier 2 testing phase</td>
+          </tr>
+          <tr>
+            <td><strong>Doc Generator</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Session logs, CHANGELOG, feature docs, release notes. Structured JSON output</td>
+            <td>/wrap + Tier 2 docs phase</td>
+          </tr>
+          <tr>
+            <td><strong>Performance Coach</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Calculates Vibe Score, identifies token waste, proposes CLAUDE.md mutations</td>
+            <td>/wrap session end</td>
+          </tr>
+          <tr>
+            <td><strong>Quality Check</strong></td>
+            <td><span class="badge amber">Haiku</span></td>
+            <td>Runs tests, build, lint. Auto-detects project type. 60-second timeout per command</td>
+            <td>/check, /wrap, /run-backlog</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Why isolated agents matter</div>
+      <p>The Stack Scout, Test Writer, and Doc Generator run in separate context windows. All their research tokens, documentation fetches, and analysis stay outside your main session. Only the distilled output enters your primary context &mdash; saving thousands of tokens per session.</p>
+    </div>
+
+    <!-- HOOKS -->
+    <h3 id="hooks">The Hook System</h3>
+    <p>Hooks are the enforcement layer. They run as bash scripts triggered by Claude Code lifecycle events. Because they're shell scripts, they consume <strong>zero AI context tokens</strong> &mdash; the most efficient enforcement mechanism possible.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Hook Event</th><th>Script</th><th>When It Fires</th><th>What It Does</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SessionStart</strong></td>
+            <td><code>session-startup.md</code></td>
+            <td>Every Claude Code start</td>
+            <td>Environment check, state detection, route to next action</td>
+          </tr>
+          <tr>
+            <td><strong>PreToolUse</strong> (Write/Edit)</td>
+            <td><code>phase-gate.sh</code></td>
+            <td>Before any file write</td>
+            <td>Blocks source code writes if foundation incomplete</td>
+          </tr>
+          <tr>
+            <td><strong>PreToolUse</strong> (Bash)</td>
+            <td><code>protect-data.sh</code></td>
+            <td>Before any shell command</td>
+            <td>Blocks destructive operations (rm -rf, DROP TABLE, force push)</td>
+          </tr>
+          <tr>
+            <td><strong>PostToolUse</strong> (Write/Edit)</td>
+            <td><code>format-code.sh</code></td>
+            <td>After every file write</td>
+            <td>Auto-formats with Prettier, Black, rustfmt, gofmt</td>
+          </tr>
+          <tr>
+            <td><strong>Notification</strong></td>
+            <td><code>notify.sh</code></td>
+            <td>Permission blocked or task complete</td>
+            <td>Sends native OS notification with Warp deep-link</td>
+          </tr>
+          <tr>
+            <td><strong>PostToolUseFailure</strong></td>
+            <td><code>notify.sh</code></td>
+            <td>Any tool execution fails</td>
+            <td>Sends error notification</td>
+          </tr>
+          <tr>
+            <td><strong>Stop</strong></td>
+            <td><code>check-context.sh</code></td>
+            <td>Context hits 60% or 80%</td>
+            <td>Warns about context exhaustion risk</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>How hooks enforce behavior</h4>
+    <p>When Claude Code encounters a lifecycle event, it checks <code>hooks.json</code> for matching entries, passes a JSON payload to the script via stdin, and reads the exit code. <strong>Exit 0</strong> = allow the operation. <strong>Exit 2</strong> = block the operation. This gives hooks the power to both observe (PostToolUse) and control (PreToolUse) agent behavior.</p>
+
+    <!-- INTERRUPT -->
+    <h3 id="interrupt">The Interrupt Protocol</h3>
+    <p>The Interrupt Protocol is the "Attention Economy" architecture. The terminal stays completely silent during normal operation. Notifications fire <em>only</em> on three conditions:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">!</div>
+        <h4>Permission Stalls</h4>
+        <p><code>permission_prompt</code> &mdash; The agent needs Y/N approval. Execution is halted. Priority: Critical.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#10004;</div>
+        <h4>Task Completion</h4>
+        <p><code>idle_prompt</code> &mdash; A complex operation finished. The agent is waiting for your next instruction. Priority: High.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9888;</div>
+        <h4>Critical Failures</h4>
+        <p><code>PostToolUseFailure</code> &mdash; A tool returned a fatal exit code or compilation error that can't be resolved autonomously. Priority: High.</p>
+      </div>
+    </div>
+
+    <p>Everything else &mdash; standard tool execution, file reads, successful commands &mdash; is silent. Your Deep Work state is preserved.</p>
+
+    <!-- PHASE GATE -->
+    <h3 id="phase-gate">The Phase Gate</h3>
+    <p>The phase gate is the architectural enforcement mechanism. It runs as a <code>PreToolUse</code> hook on every Write and Edit operation.</p>
+
+    <div class="flow"><span class="highlight">phase-gate.sh</span> receives JSON payload from Claude Code
+    &darr;
+Reads <span class="highlight">.vibeos/state.json</span> &rarr; checks project_foundation.status
+    &darr;
+<span class="muted">If "complete":</span> exit 0 (allow all writes)
+<span class="muted">If "incomplete":</span>
+    &darr;
+Check file path being written:
+  <span class="highlight">.vibeos/</span>, <span class="highlight">CLAUDE.md</span>, <span class="highlight">VISION.md</span>, <span class="highlight">docs/</span>, <span class="highlight">design-system.css</span> &rarr; exit 0 (foundation artifacts allowed)
+  <span class="highlight">src/</span>, <span class="highlight">app/</span>, <span class="highlight">lib/</span>, <span class="highlight">components/</span>, etc. &rarr; exit 2 (BLOCKED)</div>
+
+    <p>When blocked, the developer sees a clear message listing which foundation steps remain incomplete and how to complete them.</p>
+
+    <!-- VIBE SCORE -->
+    <h3 id="vibe-score">The Vibe Score &amp; Performance Coach</h3>
+    <p>The Performance Coach runs at the end of every session (triggered by <code>/wrap</code>). It ingests the session transcript, calculates a Vibe Score, and initiates an interactive coaching dialogue.</p>
+
+    <h4>How the score is calculated</h4>
+    <p>Starting from 100, deductions are applied for detected anti-patterns:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Anti-Pattern</th><th>Deduction</th><th>How It's Detected</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Prompt churn</strong></td>
+            <td>-5 per sequence</td>
+            <td>3+ consecutive corrective messages without a successful tool call</td>
+          </tr>
+          <tr>
+            <td><strong>Tool loops</strong></td>
+            <td>-10 per loop</td>
+            <td>Same tool call with identical arguments repeated 3+ times</td>
+          </tr>
+          <tr>
+            <td><strong>Low cache utilization</strong></td>
+            <td>-15</td>
+            <td>cache_read_input_tokens &lt; 20% of total input_tokens</td>
+          </tr>
+          <tr>
+            <td><strong>Context violation</strong></td>
+            <td>-20</td>
+            <td>Significant work continued after the 80% context warning</td>
+          </tr>
+          <tr>
+            <td><strong>No tests written</strong></td>
+            <td>-10</td>
+            <td>Feature has coding artifacts but no test artifacts</td>
+          </tr>
+          <tr>
+            <td><strong>No feature spec</strong></td>
+            <td>-5</td>
+            <td>Coding started without a plan artifact</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Bonuses</strong> (up to +10): +5 for all 5 phases having artifacts, +5 for cache utilization above 50%.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Score Range</th><th>Rating</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>90&ndash;100</strong></td><td><span class="badge green">Excellent</span></td><td>Efficient, well-structured session</td></tr>
+          <tr><td><strong>75&ndash;89</strong></td><td><span class="badge purple">Good</span></td><td>Minor inefficiencies</td></tr>
+          <tr><td><strong>60&ndash;74</strong></td><td><span class="badge amber">Needs Improvement</span></td><td>Notable token waste</td></tr>
+          <tr><td><strong>Below 60</strong></td><td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Review Session</span></td><td>Significant anti-patterns detected</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>The coaching dialogue</h4>
+    <p>After calculating the score, the Performance Coach:</p>
+    <ol>
+      <li><strong>Presents the score</strong> with the single biggest observation: <em>"Vibe Score: 82/100. You pasted API docs 3 times (~4,500 tokens). Using Context7 MCP would have saved those tokens."</em></li>
+      <li><strong>Asks for feedback</strong>: <em>"How did this session feel? Any friction points?"</em></li>
+      <li><strong>Proposes a CLAUDE.md rule</strong>: <em>"Proposed rule: Always use Context7 for Dexie.js API docs. Add this? (y/n)"</em></li>
+      <li><strong>Mutates CLAUDE.md</strong> if approved &mdash; the rule is permanent and active from the next session onwards.</li>
+    </ol>
+
+    <div class="callout tip">
+      <div class="callout-title">The recursive improvement loop</div>
+      <p>Session 1: paste docs, score 78, rule added. Session 2: AI reads rule, uses Context7, score 89, new rule proposed. Session 3: two rules active, score 94. Each session is more efficient than the last. Mistakes are identified, codified, and permanently prevented.</p>
+    </div>
+
+    <!-- COMMANDS -->
+    <h3 id="commands">Slash Commands Reference</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/setup</code></td><td>First-time environment configuration</td><td>Once per developer</td></tr>
+          <tr><td><code>/new-project</code></td><td>Create the project foundation (Tier 1)</td><td>Once per project</td></tr>
+          <tr><td><code>/plan-features</code></td><td>Define and prioritize the feature backlog</td><td>Before starting feature work</td></tr>
+          <tr><td><code>/new-feature "name"</code></td><td>Start a feature session on a new branch</td><td>Beginning of each feature</td></tr>
+          <tr><td><code>/run-backlog</code></td><td>Auto-execute features in priority order</td><td>Hands-free batch execution</td></tr>
+          <tr><td><code>/idea "text"</code></td><td>Capture an idea with zero disruption (1 line output)</td><td>Anytime &mdash; mid-session inspiration</td></tr>
+          <tr><td><code>/status</code></td><td>Full project dashboard: foundation, backlog, active feature, recent scores</td><td>Start of session or when lost</td></tr>
+          <tr><td><code>/check</code></td><td>Run tests + build + lint (uses fast Haiku model)</td><td>During development</td></tr>
+          <tr><td><code>/wrap</code></td><td>End session: completeness check, quality gate, coaching, commit</td><td>End of <strong>every</strong> session</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- STATE -->
+    <h3 id="state">State Management</h3>
+    <p>All VibeOS runtime state lives in <code>.vibeos/</code>:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>File</th><th>Purpose</th><th>Updated By</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>config.json</code></td><td>Terminal preference, notification settings</td><td>/setup</td></tr>
+          <tr><td><code>state.json</code></td><td>Foundation status + active feature + phase tracking</td><td>All commands</td></tr>
+          <tr><td><code>backlog.json</code></td><td>Feature backlog with specs, priorities, dependencies</td><td>/plan-features, /idea, /run-backlog</td></tr>
+          <tr><td><code>sessions/*.json</code></td><td>Session logs with phase data and token metrics</td><td>/wrap</td></tr>
+          <tr><td><code>scores/*.json</code></td><td>Vibe Score breakdowns with deductions and bonuses</td><td>Performance Coach</td></tr>
+          <tr><td><code>releases/*.json</code></td><td>Release notes data</td><td>Doc Generator</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Git strategy for .vibeos/</h4>
+    <ul>
+      <li><strong>Solo developer:</strong> Commit everything &mdash; preserves session history across machines</li>
+      <li><strong>Teams:</strong> Commit <code>state.json</code>, <code>backlog.json</code>, and <code>scores/</code>. Gitignore <code>config.json</code> (terminal-specific)</li>
+      <li><strong>Sensitive projects:</strong> Add <code>.vibeos/</code> to <code>.gitignore</code> entirely</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
+  <!-- SECTION: EFFICIENCY        -->
+  <!-- ========================== -->
+  <section class="section" id="efficiency">
+    <span class="section-label">Best Practices</span>
+    <h2>Maximizing Efficiency</h2>
+    <p>VibeOS is designed to make each session more efficient than the last. Here's how to get the most out of the system and <em>why</em> each practice matters.</p>
+
+    <h3>Token Efficiency</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Use Context7 for everything</h4>
+        <p>This is consistently the single biggest token saver. Every time you paste documentation into chat, you burn ~1,500 tokens that Context7 could fetch on-demand. The Performance Coach will flag this &mdash; listen to it.</p>
+      </div>
+      <div class="card">
+        <h4>Write clear initial prompts</h4>
+        <p>Prompt churn (-5 points each) comes from vague instructions. Spend 30 seconds writing a precise prompt instead of 3 follow-up corrections. The first prompt is the cheapest prompt.</p>
+      </div>
+      <div class="card">
+        <h4>Respect context warnings</h4>
+        <p>At 60%: start thinking about wrapping. At 80%: definitely wrap. Pushing to 100% forces a /clear and loses all accumulated understanding. A fresh context + CLAUDE.md = fast restart.</p>
+      </div>
+      <div class="card">
+        <h4>Let agents run in isolation</h4>
+        <p>Stack Scout, Test Writer, and Doc Generator run in separate context windows. Don't duplicate their work in the main session. Their research tokens never touch your context.</p>
+      </div>
+    </div>
+
+    <h3>Workflow Efficiency</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Always /wrap</h4>
+        <p>Never close the terminal without wrapping. The session log feeds the learning system, the commit preserves your work, and the Vibe Score identifies improvements. Skipping /wrap means the session is invisible.</p>
+      </div>
+      <div class="card">
+        <h4>Use /idea aggressively</h4>
+        <p>Mid-feature inspiration should be captured, not pursued. /idea takes 1 second and produces 1 line of output. The idea is safe in the backlog. Your flow is preserved.</p>
+      </div>
+      <div class="card">
+        <h4>Trust the phase gate</h4>
+        <p>It feels restrictive at first. But the 15&ndash;30 minutes spent on the foundation prevents hours of rework from wrong architectural assumptions. Every seasoned VibeOS user says the same thing: "I'm glad it forced me to plan."</p>
+      </div>
+      <div class="card">
+        <h4>Review CLAUDE.md monthly</h4>
+        <p>Remove stale rules, consolidate duplicates, promote critical rules to the top. The Performance Coach adds rules &mdash; you curate them. A well-maintained CLAUDE.md is the most powerful file in your project.</p>
+      </div>
+    </div>
+
+    <h3>A Typical Day</h3>
+    <pre><code><span class="code-label">workflow</span># Morning — start fresh
+claude
+# Session startup agent runs, shows where you left off
+
+/status
+# Dashboard: 2/4 features done, Trip Creation in progress
+
+# Continue where you left off
+"Continue implementing the itinerary builder component"
+
+# Mid-session inspiration
+/idea "add drag-and-drop reordering to itinerary items"
+
+# Quick quality check
+/check
+
+# End of day
+/wrap
+# Vibe Score: 91/100. Coaching + commit + session log.</code></pre>
+
+    <h3>Common Anti-Patterns to Avoid</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Anti-Pattern</th><th>Consequence</th><th>Fix</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Skipping /wrap</strong></td>
+            <td>No session log, no Vibe Score, no CLAUDE.md improvements, uncommitted work</td>
+            <td>Always wrap. Make it a habit.</td>
+          </tr>
+          <tr>
+            <td><strong>Ignoring the phase gate</strong></td>
+            <td>AI makes wrong assumptions about stack, design, patterns</td>
+            <td>Complete /new-project fully before any feature work</td>
+          </tr>
+          <tr>
+            <td><strong>Pasting docs into chat</strong></td>
+            <td>1,500+ tokens wasted per paste, context fills faster</td>
+            <td>Use Context7 MCP &mdash; it's configured and ready</td>
+          </tr>
+          <tr>
+            <td><strong>Starting features without specs</strong></td>
+            <td>Feature Developer guesses at requirements, rework later</td>
+            <td>Always run /plan-features or write a spec at /new-feature</td>
+          </tr>
+          <tr>
+            <td><strong>Pushing past 80% context</strong></td>
+            <td>Context exhaustion, /clear, lose all session state</td>
+            <td>Wrap at 80%. Fresh context + CLAUDE.md = fast restart</td>
+          </tr>
+          <tr>
+            <td><strong>Hardcoding design values</strong></td>
+            <td>Inconsistent UI, wasted tokens fixing later</td>
+            <td>Always reference design-system.css tokens</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>For Teams</h3>
+    <ul>
+      <li><strong>One person owns the foundation.</strong> The project lead runs <code>/new-project</code> and establishes the TDR. Don't debate architecture in separate sessions.</li>
+      <li><strong>Share the backlog.</strong> Use <code>/plan-features</code> as a team exercise. Commit <code>backlog.json</code> so everyone works from the same list.</li>
+      <li><strong>Commit Vibe Scores.</strong> Make scores visible to the team &mdash; not as competition, but as a shared learning signal for retrospectives.</li>
+      <li><strong>Standardize on Warp.</strong> The deep-link notifications are worth it when running parallel sessions across a team.</li>
+      <li><strong>Do score retros.</strong> Even 15 minutes every two weeks reviewing score trends and adding team rules to CLAUDE.md compounds into massive efficiency gains.</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
+  <!-- SECTION: TROUBLESHOOTING   -->
+  <!-- ========================== -->
+  <section class="section" id="troubleshooting">
+    <span class="section-label">Help</span>
+    <h2>Troubleshooting</h2>
+
+    <h3>Notifications don't appear</h3>
+    <ol>
+      <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li>
+      <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li>
+      <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li>
+      <li>Check VibeOS config: verify <code>.vibeos/config.json</code> has <code>"notifications": true</code></li>
+      <li>Warp deep-links not working: run <code>echo $WARP_SESSION_ID</code> &mdash; should return a UUID</li>
+    </ol>
+
+    <h3>Phase gate blocks when it shouldn't</h3>
+    <ol>
+      <li>Check <code>.vibeos/state.json</code> &mdash; is <code>project_foundation.status</code> set to <code>"complete"</code>?</li>
+      <li>If any foundation step is null, run <code>/new-project</code> to complete the missing steps</li>
+      <li>The phase gate allows writes to config paths (<code>.vibeos/</code>, <code>CLAUDE.md</code>, <code>docs/</code>). If a legitimate config file is blocked, check the path patterns in <code>phase-gate.sh</code></li>
+    </ol>
+
+    <h3>MCP servers not available</h3>
+    <ol>
+      <li><strong>Context7:</strong> Verify it's configured in your Claude Code settings. Try a test query</li>
+      <li><strong>Puppeteer:</strong> Ensure the Puppeteer MCP server is running and configured</li>
+      <li>Both are optional. VibeOS works without them &mdash; you just miss the token efficiency benefits</li>
+    </ol>
+
+    <h3>Vibe Score seems inaccurate</h3>
+    <ul>
+      <li><strong>New projects:</strong> Scores are less meaningful in the first few sessions as the system establishes baselines</li>
+      <li><strong>Complex features:</strong> Large features naturally have more tool calls and corrections &mdash; the score accounts for this but may seem low</li>
+      <li><strong>Override deductions:</strong> If the coach flags something unavoidable, say so during the coaching dialogue &mdash; it factors into the next proposal</li>
+    </ul>
+
+    <h3>Git conflicts in .vibeos/</h3>
+    <ul>
+      <li><code>state.json</code>: Resolve by keeping the most recent active feature</li>
+      <li><code>backlog.json</code>: Merge the feature arrays</li>
+      <li><code>scores/</code> and <code>sessions/</code>: Rarely conflict &mdash; they're timestamped per-developer</li>
+    </ul>
+  </section>
+
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p style="margin-top: 0.25rem;">A Claude Code plugin by SpeedKit &middot; February 2026</p>
+</footer>
+
+</body>
+</html>

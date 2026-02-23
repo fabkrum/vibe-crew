@@ -1,0 +1,56 @@
+# {{PROJECT_NAME}} — Vision
+
+> Created: {{DATE}} | Author: {{AUTHOR}}
+
+## Problem Statement
+
+<!-- What problem does this project solve? Who experiences it? How painful is it? -->
+
+## Target Users
+
+### Primary Persona
+
+- **Name:**
+- **Role:**
+- **Pain Points:**
+- **Goals:**
+
+### Secondary Persona (optional)
+
+- **Name:**
+- **Role:**
+- **Pain Points:**
+- **Goals:**
+
+## Value Proposition
+
+<!-- One sentence: "{{PROJECT_NAME}} helps [target user] do [key action] by [unique approach], unlike [alternatives] which [limitation]." -->
+
+## Core Features (MVP)
+
+1.
+2.
+3.
+
+## Non-Goals (Explicitly Out of Scope)
+
+-
+
+## Success Metrics
+
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| | | |
+
+## Constraints
+
+- **Timeline:**
+- **Budget:**
+- **Technical:**
+- **Regulatory:**
+
+## Design Direction
+
+- **Tone:** (e.g., professional, playful, minimal)
+- **Inspiration:** (reference sites or apps)
+- **Accessibility:** WCAG AA minimum

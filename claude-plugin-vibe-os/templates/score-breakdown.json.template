@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "session_id": "session-{{DATE}}-{{NNN}}",
+  "timestamp": "{{ISO_TIMESTAMP}}",
+  "feature_id": null,
+  "score": 100,
+  "rating": "excellent",
+  "metrics": {
+    "tokens": {
+      "total_input": 0,
+      "total_cache_read": 0,
+      "total_output": 0,
+      "cache_ratio": 0
+    },
+    "context": {
+      "peak_usage_percent": 0,
+      "warnings_triggered": 0
+    },
+    "prompt_churn": {
+      "detected": false,
+      "sequences": 0
+    },
+    "tool_loops": {
+      "detected": false,
+      "count": 0
+    },
+    "phases": {
+      "plan": false,
+      "design": false,
+      "code": false,
+      "test": false,
+      "docs": false
+    },
+    "quality": {
+      "tests_passed": false,
+      "coverage_percent": 0,
+      "lint_clean": false,
+      "build_passes": false
+    }
+  },
+  "deductions": [],
+  "bonuses": [],
+  "coaching": {
+    "suggestions": [],
+    "celebration": null,
+    "claude_md_mutation": null
+  }
+}

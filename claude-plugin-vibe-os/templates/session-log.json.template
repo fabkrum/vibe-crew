@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "session_id": "session-{{DATE}}-{{NNN}}",
+  "started_at": "{{ISO_TIMESTAMP}}",
+  "ended_at": null,
+  "feature_id": null,
+  "task_summary": null,
+  "agents": [],
+  "commits": [],
+  "tokens": {
+    "input": 0,
+    "cache_creation": 0,
+    "cache_read": 0,
+    "output": 0,
+    "cache_hit_rate": 0,
+    "estimated_cost_usd": 0
+  },
+  "tests": {
+    "ran": false,
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "coverage_percent": 0
+  },
+  "context": {
+    "peak_usage_percent": 0,
+    "average_usage_percent": 0,
+    "compactions": 0
+  },
+  "files_modified": [],
+  "duration_seconds": 0,
+  "vibe_score": null
+}

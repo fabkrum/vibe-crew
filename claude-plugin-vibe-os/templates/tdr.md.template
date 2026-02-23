@@ -1,0 +1,35 @@
+# TDR-{{TDR_NUMBER}}: {{DECISION_TITLE}}
+
+> Project: {{PROJECT_NAME}} | Date: {{DATE}} | Status: Proposed
+
+## Context
+
+<!-- Technical requirements and business goals from VISION.md that drive this decision. -->
+
+## Options Considered
+
+| Option | Pros | Cons | Fit |
+|--------|------|------|-----|
+| | | | |
+| | | | |
+| | | | |
+
+## Decision
+
+<!-- The chosen option with detailed justification referencing project constraints from VISION.md. -->
+
+## Consequences
+
+### Positive
+
+-
+
+### Negative
+
+-
+
+### Token Impact Assessment
+
+- **Boilerplate level:** Low / Medium / High
+- **Context7 coverage:** Full / Partial / None
+- **Recommendation:**

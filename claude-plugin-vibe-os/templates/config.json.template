@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "terminal": "{{TERMINAL}}",
+  "notifications": {
+    "enabled": true,
+    "sound": "Submarine",
+    "on_permission_prompt": true,
+    "on_task_complete": true,
+    "on_failure": true
+  },
+  "concurrency": {
+    "max_parallel_agents": 3
+  },
+  "models": {
+    "lightweight": "haiku",
+    "standard": "sonnet"
+  },
+  "mcp_servers": {
+    "context7": true,
+    "puppeteer": true
+  },
+  "formatting": {
+    "auto_format": true,
+    "formatter": "prettier"
+  },
+  "context_warnings": {
+    "warn_at_percent": 60,
+    "critical_at_percent": 80
+  },
+  "cost_limits": {
+    "session_warn_usd": 2.00,
+    "session_max_usd": 5.00,
+    "daily_warn_usd": 20.00
+  }
+}

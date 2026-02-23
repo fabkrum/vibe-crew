@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "foundation": {
+    "complete": false,
+    "completed_at": null,
+    "artifacts": {
+      "vision": {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      },
+      "design_system": {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      },
+      "tdr": {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      },
+      "roadmap": {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      },
+      "claude_md": {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      }
+    }
+  },
+  "active_feature": {
+    "id": null,
+    "name": null,
+    "worktree": null,
+    "phase": null,
+    "phases_completed": []
+  },
+  "git": {
+    "default_branch": "main",
+    "initialized": false
+  },
+  "updated_at": "{{TIMESTAMP}}"
+}

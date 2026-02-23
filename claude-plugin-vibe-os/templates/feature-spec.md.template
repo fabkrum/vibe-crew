@@ -1,0 +1,30 @@
+# Feature: {{FEATURE_NAME}}
+
+> ID: {{FEATURE_ID}} | Created: {{DATE}} | Status: Planned
+
+## Description
+
+<!-- What does this feature do? Who benefits? -->
+
+## Acceptance Criteria
+
+- [ ]
+- [ ]
+- [ ]
+
+## UI Description
+
+<!-- Layout, key components, responsive behavior, states (empty, loading, error, success). -->
+
+## Business Logic
+
+-
+
+## Technical Notes
+
+<!-- Dependencies on other features, API endpoints needed, data model changes. -->
+
+## Complexity
+
+- **Estimated sessions:**
+- **Risk:** Low / Medium / High

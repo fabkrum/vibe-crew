@@ -1,0 +1,106 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+VibeOS is a Claude Code plugin that transforms Claude Code into an autonomous vibe-coding operating system. It orchestrates multiple Claude Code sessions, manages the full software development lifecycle, and enables non-technical users to build production-grade SaaS applications. The project is currently in the **design and planning phase** — no implementation code exists yet.
+
+## Repository Structure
+
+This is a documentation-only repository containing the design specification:
+
+- `vibeos-prompt.md` — Master planning prompt defining the 3-phase approach (Research, Architecture Design, Implementation Plan). This is the primary entry point for understanding the project scope.
+- `docs/vibeos-guide-complete.md` — Complete user-facing guide covering installation, Tier 1 (project foundation) and Tier 2 (feature development) workflows, all 9 slash commands, hook system, agent architecture, Vibe Score system, and team rollout.
+- `docs/VibeOS_ Claude Plugin Architecture Design.pdf` — Technical architecture paper covering the Interrupt Protocol, Performance Coach retrospective system, Research-First Protocol (Stack Scout + TDR), and implementation specs with code samples for hooks and scripts.
+- `docs/vibe-coding-team-guide.docx` — Team guide (Word format).
+
+## Core Architecture Concepts
+
+### Two-Tier Workflow
+
+- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css, TDR (Technology Decision Record), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook.
+- **Tier 2 (Feature Development)**: Iterative 5-phase cycle (Plan > UI Design > Code > Test > Docs) for each feature. Phases can be worked in any order.
+
+### Agent Topology (9 agents)
+
+| Agent | Model | Role |
+|---|---|---|
+| Session Startup | Haiku | Environment check, state detection, routing on every session start |
+| Workflow Orchestrator | Sonnet | Routes between Tier 1/Tier 2, coordinates agent handoffs |
+| Stack Scout | Sonnet | Read-only research agent (WebSearch, Context7, Puppeteer) that produces TDRs in isolated context |
+| UI Designer | Sonnet | Design system creation (Tier 1) and component design (Tier 2) |
+| Feature Developer | Sonnet | Implements features within TDR boundaries |
+| Test Writer | Sonnet | TDD-hybrid: spec tests before code (business logic), implementation tests after (UI) |
+| Doc Generator | Sonnet | Session logs, CHANGELOG, feature docs, release notes |
+| Performance Coach | Sonnet | Calculates Vibe Score (0-100), proposes CLAUDE.md mutations |
+| Quality Check | Haiku | Runs tests/build/lint for `/check`, `/wrap`, `/run-backlog` |
+
+### Hook System (zero-token enforcement via bash scripts)
+
+| Hook | Script | Purpose |
+|---|---|---|
+| SessionStart | session-startup.md | Environment check and state routing |
+| PreToolUse (Write/Edit) | phase-gate.sh | Blocks source code writes until foundation complete |
+| PreToolUse (Bash) | protect-data.sh | Blocks dangerous commands (rm -rf, DROP TABLE, force push) |
+| PostToolUse (Write/Edit) | format-code.sh | Auto-formats written files |
+| Notification | notify.sh | Native OS notifications with Warp deep-linking |
+| PostToolUseFailure | notify.sh | Error notifications |
+| Stop | check-context.sh | Warns at 60% and 80% context usage |
+
+### Interrupt Protocol
+
+Notifications fire only on three conditions: permission stalls (permission_prompt), task completion (idle_prompt), and critical failures (PostToolUseFailure). All other operations stay silent. Warp Terminal gets deep-link support via `WARP_SESSION_ID` and `warp://session/<id>` URIs.
+
+### Vibe Score System
+
+Starts at 100, applies deductions: prompt churn (-5/sequence), tool loops (-10/loop), low cache utilization (-15), context violations (-20), no tests (-10), no feature spec (-5). Bonuses up to +10 for complete phase artifacts and high cache utilization. The Performance Coach proposes permanent CLAUDE.md rule mutations based on identified anti-patterns.
+
+### Plugin File Structure (target)
+
+```
+claude-plugin-vibe-os/
+  .claude-plugin/plugin.json    # Plugin manifest
+  mcp-servers.json              # Context7 + Puppeteer config
+  hooks/hooks.json              # Event-to-script routing table
+  scripts/                      # 6 bash automation scripts
+  agents/                       # 9 specialized agent prompts
+  commands/                     # 9 slash command definitions
+
+.vibeos/                        # Per-project runtime state
+  config.json                   # Terminal preference, notification settings
+  state.json                    # Foundation status + active feature
+  backlog.json                  # Feature backlog with specs
+  sessions/                     # Session logs (JSON)
+  scores/                       # Vibe Score breakdowns (JSON)
+  releases/                     # Release notes data (JSON)
+```
+
+### Slash Commands (target)
+
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`
+
+## Design Principles
+
+1. **Research before code** — The phase gate enforces architecture decisions (TDR) before any source code writes are allowed.
+2. **Human attention is the bottleneck** — The system stays silent during normal operation and interrupts only when blocked, complete, or failed.
+3. **Context window discipline** — Target <50% context usage. Subagents isolate expensive research. MCP servers (Context7) replace pasting docs. Warnings at 60%/80%.
+4. **Hooks over suggestions** — Enforce rules via deterministic bash scripts (zero tokens) rather than relying on the model to remember.
+5. **Self-improving** — Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules, creating a recursive efficiency improvement loop.
+6. **Parallel by default** — Planning and development can run simultaneously across terminal tabs.
+
+## Current Status
+
+The project needs to proceed through the phases defined in `vibeos-prompt.md`:
+1. **Phase 1: Research** — Create `research/` folder with findings on Claude Code plugin architecture, multi-agent orchestration, git automation, modern SaaS stacks, testing strategies, documentation generation, UX/design systems, and safety/sandboxing.
+2. **Phase 2: Architecture Design** — Create `architecture/` folder with system overview, agent design, workflow design, safety model, docs site design, scoring system, installation design, and tech stack recommendation.
+3. **Phase 3: Implementation Plan** — Phased roadmap from foundation through polish.
+
+No code should be written until the plan is approved by the user.
+
+## Key Dependencies
+
+- Claude Code 2.0+, Git 2.30+, GitHub CLI 2.0+, Node.js 18+
+- `terminal-notifier` (macOS notifications via Homebrew)
+- `jq` (JSON parsing in hook scripts)
+- MCP servers: Context7 (documentation lookup), Puppeteer (browser automation) — both optional but strongly recommended

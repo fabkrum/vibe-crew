@@ -1,0 +1,40 @@
+# {{PROJECT_NAME}} — Feature Roadmap
+
+> Created: {{DATE}} | Updated: {{DATE}}
+
+## Priority Tiers
+
+### Tier 1: Must Have (MVP)
+
+| # | Feature | Description | Dependencies | Complexity |
+|---|---------|-------------|--------------|------------|
+| 1 | | | None | |
+
+### Tier 2: Should Have (Post-MVP)
+
+| # | Feature | Description | Dependencies | Complexity |
+|---|---------|-------------|--------------|------------|
+| | | | | |
+
+### Tier 3: Nice to Have (Future)
+
+| # | Feature | Description | Dependencies | Complexity |
+|---|---------|-------------|--------------|------------|
+| | | | | |
+
+## Out of Scope
+
+-
+
+## Dependency Graph
+
+<!-- List features that must complete before others can start. -->
+
+## Estimated Sessions
+
+| Tier | Features | Sessions (est.) |
+|------|----------|-----------------|
+| Tier 1 | | |
+| Tier 2 | | |
+| Tier 3 | | |
+| **Total** | | |

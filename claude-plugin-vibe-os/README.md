@@ -1,0 +1,256 @@
+# VibeOS
+
+**Autonomous vibe-coding operating system for Claude Code.**
+
+VibeOS is a Claude Code plugin that transforms your terminal into a managed
+software development environment. It orchestrates specialized agents, enforces
+architecture-before-code discipline, and keeps you informed only when your
+attention is needed -- permission stalls, task completions, and critical failures.
+
+---
+
+## Quick Install
+
+**Prerequisites**
+
+| Dependency | Minimum Version |
+|---|---|
+| Claude Code | 2.0+ |
+| Git | 2.30+ |
+| GitHub CLI (`gh`) | 2.0+ |
+| Node.js | 18+ |
+| `jq` | any |
+| `terminal-notifier` (macOS) | any |
+
+Install missing dependencies on macOS:
+
+```bash
+brew install jq terminal-notifier gh node
+```
+
+**Install the plugin**
+
+```bash
+claude plugin install /path/to/claude-plugin-vibe-os
+```
+
+Installation takes under 5 minutes. The plugin registers hooks, agents, slash
+commands, permission rules, and optional MCP servers automatically.
+
+**Optional MCP servers**
+
+VibeOS ships with configurations for two MCP servers in `.mcp.json`. They are
+enabled by default but work is not blocked if they are unavailable.
+
+- **Context7** -- documentation lookup for popular frameworks and libraries.
+- **Puppeteer** -- headless browser automation for visual testing and research.
+
+---
+
+## Quick Start
+
+1. Open a new Claude Code session in any directory.
+2. Run `/setup` to verify your environment and install dependencies.
+3. Run `/new-project` to create a fresh project. VibeOS walks you through
+   Tier 1 (project foundation) before any source code can be written.
+4. Run `/plan-features` to build your feature backlog.
+5. Run `/new-feature "feature name"` to begin developing a feature through the
+   Tier 2 cycle.
+6. Run `/wrap` when you are done to generate session logs, release notes, and
+   a Vibe Score breakdown.
+
+---
+
+## Commands Reference
+
+VibeOS provides 9 slash commands. Each command is defined in the `skills/`
+directory and invoked directly from the Claude Code prompt.
+
+### Project Setup
+
+| Command | Description |
+|---|---|
+| `/setup` | Verify environment (Git, Node, gh, jq, terminal-notifier), detect terminal, initialize `.vibeos/` state directory. |
+| `/new-project` | Create a new project and run through Tier 1: generate VISION.md, design-system.css, TDR, roadmap, and CLAUDE.md. Phase gate blocks source code writes until all foundation artifacts exist. |
+
+### Planning
+
+| Command | Description |
+|---|---|
+| `/plan-features` | Define and prioritize the feature backlog. Creates or updates `.vibeos/backlog.json` with feature specs, priorities, and dependency ordering. |
+| `/idea "text"` | Capture a quick idea and append it to the backlog as an unrefined item for later triage during `/plan-features`. |
+
+### Development
+
+| Command | Description |
+|---|---|
+| `/new-feature "name"` | Start the Tier 2 cycle for a specific feature: plan, design, code, test, docs. Creates a feature branch and claims the task in the backlog. |
+| `/run-backlog` | Autonomously process the next unclaimed feature from the backlog. Equivalent to `/new-feature` but picks the highest-priority item automatically. |
+
+### Quality and Wrap-Up
+
+| Command | Description |
+|---|---|
+| `/check` | Run the full quality suite: tests, build, lint, type-check. Reports pass/fail status without modifying code. |
+| `/wrap` | End the current session. Generates a session log, calculates the Vibe Score, produces release notes, and proposes CLAUDE.md mutations based on identified anti-patterns. |
+| `/status` | Display current project state: foundation progress, active feature, backlog summary, recent session scores, and context usage. |
+
+---
+
+## Architecture Overview
+
+### Two-Tier Workflow
+
+**Tier 1 -- Project Foundation** is a sequential, one-time process that
+produces five artifacts before any source code is written:
+
+1. `VISION.md` -- product vision, target users, success criteria
+2. `design-system.css` -- colors, typography, spacing, component tokens
+3. `TDR` (Technology Decision Record) -- stack choices with rationale
+4. `roadmap.md` -- phased delivery plan
+5. `CLAUDE.md` -- project-specific rules for Claude Code
+
+A phase gate hook (`phase-gate.sh`) blocks all Write and Edit operations on
+source code files until every foundation artifact is present.
+
+**Tier 2 -- Feature Development** is an iterative 5-phase cycle for each
+feature:
+
+1. **Plan** -- feature spec, acceptance criteria, task breakdown
+2. **Design** -- UI/component design aligned to the design system
+3. **Code** -- implementation within TDR boundaries
+4. **Test** -- unit tests (Vitest), E2E tests (Playwright), accessibility (axe)
+5. **Docs** -- feature documentation, CHANGELOG entry, session log
+
+### Agents
+
+VibeOS uses 5 specialized agents, each with a dedicated system prompt:
+
+| Agent | Model | Execution | Role |
+|---|---|---|---|
+| Session Startup | Haiku | Inline | Environment check, state detection, routing on every session start. |
+| Workflow Orchestrator | Sonnet | Inline | Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state. |
+| Stack Scout | Sonnet | Worktree | Read-only research agent. Uses WebSearch, Context7, and Puppeteer to produce Technology Decision Records in an isolated context. |
+| Builder | Sonnet | Worktree | Implements features within TDR boundaries. Runs in a worktree to isolate work-in-progress from the main branch. |
+| Verifier | Sonnet | Inline | Runs quality checks (tests, lint, build, type-check), calculates Vibe Score, proposes CLAUDE.md mutations. |
+
+### Hook System
+
+Hooks enforce rules deterministically via bash scripts, consuming zero LLM
+tokens. The `hooks/hooks.json` file binds 10 hook entries across 6 lifecycle
+events:
+
+| Event | Scripts | Purpose |
+|---|---|---|
+| SessionStart | `session-startup.sh`, `sync-state.sh`, `error-recovery.sh` | Initialize session, reconcile state, clear stale locks. |
+| SessionStart (compact) | `compact-reinject.sh` | Re-inject project state after context compaction. |
+| PreToolUse (Write/Edit) | `phase-gate.sh`, `restrict-paths.sh` | Block source writes before foundation; validate write targets. |
+| PreToolUse (Bash) | `protect-data.sh` | Block dangerous commands (rm -rf, force push, DROP TABLE). |
+| PostToolUse (Write/Edit) | `format-code.sh` | Auto-format written files with Prettier. |
+| Notification | `notify.sh` | Native OS notifications on permission stalls and task completion. |
+| PostToolUseFailure | `notify.sh error` | Error notifications on tool failures. |
+| Stop | `check-context.sh`, `cost-guardrails.sh`, `claude-md-lint.sh` | Context usage warnings, cost threshold checks, CLAUDE.md validation. |
+
+### Interrupt Protocol
+
+The system stays silent during normal operation. Notifications fire only on
+three conditions:
+
+1. **Permission stalls** (`permission_prompt`) -- the agent needs approval.
+2. **Task completion** (`idle_prompt`) -- work is done, awaiting next instruction.
+3. **Critical failures** (`PostToolUseFailure`) -- a tool call failed.
+
+---
+
+## File Structure
+
+```
+claude-plugin-vibe-os/
+  .claude-plugin/
+    plugin.json                 # Plugin manifest (name, version, entry points)
+  .mcp.json                    # Context7 + Puppeteer MCP server config
+  settings.json                # 68 permission rules (allowed + denied tools)
+  hooks/
+    hooks.json                 # 10 hook bindings across 6 lifecycle events
+  agents/
+    session-startup.md         # Session Startup agent prompt
+    workflow-orchestrator.md   # Workflow Orchestrator agent prompt
+    stack-scout.md             # Stack Scout agent prompt
+    builder.md                 # Builder agent prompt
+    verifier.md                # Verifier agent prompt
+  skills/
+    setup/SKILL.md             # /setup command
+    new-project/SKILL.md       # /new-project command
+    plan-features/SKILL.md     # /plan-features command
+    new-feature/SKILL.md       # /new-feature command
+    run-backlog/SKILL.md       # /run-backlog command
+    idea/SKILL.md              # /idea command
+    status/SKILL.md            # /status command
+    check/SKILL.md             # /check command
+    wrap/SKILL.md              # /wrap command
+  scripts/                     # 28 bash automation scripts
+  templates/                   # Project templates and doc-site scaffold
+  LICENSE                      # MIT License
+
+.vibeos/                       # Per-project runtime state (created by /setup)
+  config.json                  # Terminal preference, notification settings
+  state.json                   # Foundation status + active feature
+  backlog.json                 # Feature backlog with specs and priorities
+  sessions/                    # Session log JSON files
+  scores/                      # Vibe Score breakdown JSON files
+  releases/                    # Release notes data JSON files
+```
+
+---
+
+## Troubleshooting
+
+**Phase gate blocked -- "Foundation not complete"**
+
+The phase gate hook prevents source code writes until all five Tier 1 artifacts
+exist (VISION.md, design-system.css, TDR, roadmap, CLAUDE.md). Run `/status`
+to see which artifacts are missing, then run `/new-project` to complete the
+foundation.
+
+**Notifications not working**
+
+Verify `terminal-notifier` is installed:
+
+```bash
+which terminal-notifier
+```
+
+If missing, install it with `brew install terminal-notifier`. Check that
+`.vibeos/config.json` has `"notifications": true`. On macOS, ensure
+System Settings > Notifications allows alerts from `terminal-notifier`.
+
+**MCP servers not connecting**
+
+MCP servers (Context7, Puppeteer) are optional. If they fail to start:
+
+1. Verify Node.js 18+ is available: `node --version`
+2. Test manually: `npx -y @upstash/context7-mcp@latest`
+3. Check `.mcp.json` for correct configuration.
+4. VibeOS continues to function without MCP servers -- research agents fall
+   back to WebSearch.
+
+**Stale locks or corrupted state**
+
+If a previous session crashed or left stale locks:
+
+```bash
+./scripts/error-recovery.sh
+```
+
+This script clears lock files in `.vibeos/`, repairs corrupted JSON state files,
+and resets any in-progress tasks that were interrupted.
+
+---
+
+## License
+
+MIT -- see [LICENSE](LICENSE) for details.
+
+## Author
+
+[SpeedKit](https://github.com/speedkit)

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "session_id": "session-{{DATE}}-{{NNN}}",
   "timestamp": "{{ISO_TIMESTAMP}}",
   "feature_id": null,
@@ -44,5 +44,14 @@
     "suggestions": [],
     "celebration": null,
     "claude_md_mutation": null
+  },
+  "user_feedback": {
+    "rating": null,
+    "comment": null
+  },
+  "trend": {
+    "direction": "unknown",
+    "window_size": 0,
+    "average_score": 0
   }
 }

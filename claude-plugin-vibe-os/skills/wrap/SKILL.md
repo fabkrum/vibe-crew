@@ -728,7 +728,123 @@ Follow these principles strictly:
 
 ---
 
+## Step 9.5: Performance Coach
+
+After displaying the Vibe Score, invoke the Performance Coach agent for cross-session trend analysis and CLAUDE.md mutation proposals.
+
+### 9.5.1 Check if Performance Coach is enabled
+
+```bash
+jq -r '.performance_coach.enabled // true' .vibeos/config.json 2>/dev/null || echo "true"
+```
+
+If the result is `"false"`, skip this step entirely and proceed to Step 10.
+
+### 9.5.2 Check minimum session threshold
+
+```bash
+ls -1 .vibeos/scores/score-*.json 2>/dev/null | wc -l | tr -d ' '
+```
+
+If fewer than 5 score files exist, print:
+"Performance Coach: Collecting data (N/5 sessions). Trend analysis starts after 5 sessions."
+Then skip to Step 10.
+
+### 9.5.3 Run trend analysis
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/aggregate-scores.sh"
+```
+
+Parse the trend JSON output and display a one-line trend summary:
+
+```
+Trend: {direction} over last {window_size} sessions (avg {average_score}/100)
+```
+
+### 9.5.4 Invoke Performance Coach
+
+Invoke the Performance Coach agent. It will:
+1. Read the current score file and MEMORY.md
+2. Correlate deductions against historical patterns
+3. Check mutation eligibility
+4. If eligible, present a mutation proposal and wait for user approval
+5. Update MEMORY.md and mutation-log.json
+
+The Performance Coach handles its own user interaction for mutation proposals. Wait for it to complete before proceeding to Step 10.
+
+### 9.5.5 User feedback
+
+After the Performance Coach completes (or is skipped), ask the user for session feedback:
+
+```
+How was this session? (1-4)
+  1 = Frustrating  2 = Okay  3 = Good  4 = Excellent
+Optional: Any notes? (press Enter to skip)
+```
+
+Wait for the user's response. Store the rating (integer 1-4) and optional comment (string or null).
+
+Update the score file with the feedback:
+
+```bash
+today=$(date -u +%Y-%m-%d)
+latest_score=$(ls -1t .vibeos/scores/score-${today}-*.json 2>/dev/null | head -1)
+if [[ -n "$latest_score" ]]; then
+  jq --argjson rating <RATING> --arg comment "<COMMENT_OR_NULL>" \
+    '.user_feedback = {rating: $rating, comment: (if $comment == "" then null else $comment end)}' \
+    "$latest_score" > "${latest_score}.tmp" && mv "${latest_score}.tmp" "$latest_score"
+fi
+```
+
+Also update the trend data in the score file:
+
+```bash
+trend_json=$(bash "${CLAUDE_PLUGIN_ROOT}/scripts/aggregate-scores.sh" 2>/dev/null || echo '{}')
+direction=$(echo "$trend_json" | jq -r '.direction // "unknown"')
+window_size=$(echo "$trend_json" | jq -r '.window_size // 0')
+avg_score=$(echo "$trend_json" | jq -r '.average_score // 0')
+
+jq --arg dir "$direction" --argjson ws "$window_size" --argjson avg "$avg_score" \
+  '.trend = {direction: $dir, window_size: $ws, average_score: $avg}' \
+  "$latest_score" > "${latest_score}.tmp" && mv "${latest_score}.tmp" "$latest_score"
+```
+
+### 9.5.6 Report outcome
+
+After the Performance Coach completes, print one of:
+- "Performance Coach: Mutation applied to CLAUDE.md" (if approved)
+- "Performance Coach: Mutation declined" (if rejected)
+- "Performance Coach: No mutation proposed" (if no recurring patterns qualified)
+- "Performance Coach: Analysis complete" (if no deductions in this session)
+
+---
+
 ## Step 10: Session Complete
+
+### 10.5 Auto-generate Handoff and Invoke Doc Generator
+
+#### 10.5.1 Generate handoff document
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-handoff.sh"
+```
+
+This creates a structured handoff document at `.vibeos/handoffs/handoff-{date}-{NNN}.md` that the next session's Session Startup agent will detect and summarize.
+
+Report: "Handoff generated: {filename} ({word_count} words)"
+
+#### 10.5.2 Invoke Doc Generator
+
+Check if any features moved to `done` or `review` during this session. If so, invoke the Doc Generator agent to:
+1. Generate feature docs for newly completed features
+2. Update CHANGELOG.md with conventional commits
+3. Rebuild VitePress sidebar if docs were added
+
+If no features completed, skip Doc Generator invocation and print:
+"Doc Generator: No completed features to document."
+
+---
 
 ### 10.1 Update state.json
 

@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "description": "CLAUDE.md mutation log — tracks proposed and applied rule changes for v1.1 Performance Coach",
+  "schema_version": "1.1.0",
+  "description": "CLAUDE.md mutation log — tracks proposed and applied rule changes from Performance Coach",
   "mutations": [
     {
       "id": "mut-001",
@@ -10,10 +10,13 @@
       "proposed_rule": "Always validate form inputs with zod schemas before submission",
       "section": "## Code Conventions",
       "reasoning": "3 consecutive sessions had form validation bugs caught in test phase. Adding upfront validation rule prevents rework.",
-      "source": "verifier",
+      "source": "performance-coach",
       "status": "proposed",
       "applied_at": null,
-      "rejected_reason": null
+      "rejected_reason": null,
+      "rejection_count": 0,
+      "cooldown_until": null,
+      "confidence": "medium"
     }
   ]
 }

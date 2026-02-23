@@ -1,0 +1,24 @@
+# Session Handoff — {{DATE}}
+
+## State
+- **Active feature**: {{FEATURE_NAME}} ({{FEATURE_ID}}) — Phase: {{PHASE}}
+- **Phases done**: {{PHASES_COMPLETED}}
+- **Branch**: {{BRANCH}}
+- **Vibe Score**: {{SCORE}}/100 ({{RATING}})
+
+## What Was Done
+- {{ACCOMPLISHMENT_1}}
+- {{ACCOMPLISHMENT_2}}
+
+## Blockers
+{{BLOCKERS}}
+
+## Next Steps
+1. {{NEXT_STEP_1}}
+2. {{NEXT_STEP_2}}
+
+## Key Decisions
+{{DECISIONS}}
+
+## Files Changed
+{{FILES_CHANGED}}

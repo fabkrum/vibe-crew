@@ -123,6 +123,19 @@ Create a dedicated git branch for this feature.
 
 ---
 
+## Step 5.5: Create Checkpoint
+
+Create a safety checkpoint before feature development begins.
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-checkpoint.sh" "Before feature: <feature-name>"
+```
+
+Report:
+> Checkpoint created: `vibeos-checkpoint-<timestamp>`. Use `/undo` to roll back if needed.
+
+---
+
 ## Step 6: Update State
 
 Update the backlog and project state to reflect the new active feature.

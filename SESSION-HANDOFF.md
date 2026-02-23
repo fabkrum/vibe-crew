@@ -1,6 +1,6 @@
 # VibeOS — Session Handoff
 
-> Updated after Session 10 (February 23, 2026). **All 6 implementation phases complete. Plugin is v1.0.0 release-ready.** Phase 6 (Polish) added README.md, CHANGELOG.md, uninstall.sh, extract-design-system.sh, gitignore-additions.template, CONTRIBUTING.md.template, finalized hooks.json (15 bindings), finalized notify.sh. Plugin self-test passes 99/99 checks. Plugin now has 78 files total across 10 sessions.
+> Updated after Session 12 (February 23, 2026). **v1.2.0 implementation complete.** Top 4 deferred v1.2 items shipped: `/cost` (real-time token dashboard), `/undo` (checkpoint rollback), `/audit` (OWASP Top 10 security review), and non-Node.js convention detection (Python, Ruby, Go, Rust, PHP, Java). Plugin self-test passes **149/149 checks**. Plugin now has **~118 files** total across 12 sessions. Version bumped from 1.1.0 to 1.2.0.
 
 ---
 
@@ -108,6 +108,99 @@
   - **Finalized** `scripts/notify.sh` — already complete from Phase 1 (6-level fallback: Warp deep-link > terminal-notifier > osascript > OSC 777 > bell > log)
 - Plugin self-test: **99/99 checks passed** (up from 91 — new scripts, new hook references)
 - **All 6 implementation phases complete. Plugin is v1.0.0 release-ready.**
+
+### Session 11
+- Read session handoff and full v1.1 implementation plan
+- Explored entire v1.0 codebase (81 files) using Explore agent to build full context
+- Implemented all 4 phases of v1.1 in a single session:
+  - **Phase 1: Performance Coach + Cross-Session Trends** (3 sub-tasks)
+    - Created `agents/performance-coach.md` — Sonnet agent with persistent MEMORY.md, 7-step mutation workflow, 5 anti-pattern templates
+    - Created `scripts/aggregate-scores.sh` — reads last 10 score files, classifies trends (improving/declining/recurring/plateau/volatile), satisfaction-score correlation
+    - Created `scripts/detect-anti-patterns.sh` — frequency data for recurring deduction categories
+    - Created `scripts/apply-mutation.sh` — appends approved rules to CLAUDE.md "Session Learnings"
+    - Created `scripts/check-mutation-eligibility.sh` — guardrails: min 5 sessions, 3+ occurrences, max 1/session, no duplicates, 3-rejection cooldown
+    - Created `templates/memory-md.template` — persistent Performance Coach memory structure
+    - Created `templates/mutation-proposal.json.template` — structured proposal format
+    - Modified `skills/wrap/SKILL.md` — added Step 9.5 (Performance Coach invocation), Step 9.7 (4-point user satisfaction feedback), Step 10.5 (auto-handoff + Doc Generator)
+    - Modified `templates/score-breakdown.json.template` — added `user_feedback` and `trend` fields, bumped schema to 1.1.0
+    - Modified `templates/mutation-log.json.template` — added `rejection_count`, `cooldown_until`, `confidence` fields, bumped schema to 1.1.0
+  - **Phase 2: Existing Project Onboarding** (7 files)
+    - Created `agents/code-auditor.md` — Sonnet agent, read-only worktree analysis, scans deps/conventions/test gaps/architecture
+    - Created `skills/onboard/SKILL.md` — 8-step guided onboarding for existing projects
+    - Created `scripts/detect-conventions.sh` — naming, imports, formatting, commit format, linter/formatter detection
+    - Created `scripts/analyze-test-gaps.sh` — source vs test file comparison, untested module identification
+    - Created `scripts/extract-project-conventions.sh` — deep scanner: framework, state mgmt, API patterns, component libraries, auth, database
+    - Created `scripts/generate-onboard-claude-md.sh` — generates project-specific CLAUDE.md from onboard findings
+    - Created `templates/onboard-state.json.template` — pre-filled state.json for onboarded projects (foundation.complete=true)
+  - **Phase 3: Doc Generator + /handoff** (9 files + 2 modifications)
+    - Created `agents/doc-generator.md` — Sonnet agent for feature docs, CHANGELOG, VitePress sidebar, release notes
+    - Created `scripts/generate-feature-docs.sh` — reads backlog, generates markdown feature docs
+    - Created `scripts/update-changelog.sh` — parses conventional commits, groups by type, appends to CHANGELOG.md
+    - Created `scripts/rebuild-sidebar.sh` — scans docs/features/, outputs VitePress sidebar config
+    - Created `skills/handoff/SKILL.md` — structured context transfer (<500 words)
+    - Created `templates/handoff.md.template` — handoff document template
+    - Created `scripts/generate-handoff.sh` — reads state/backlog/commits, produces structured handoff
+    - Modified `agents/session-startup.md` — added handoff detection, progressive hints, version bump to v1.1.0
+    - Modified `scripts/session-startup.sh` — added handoff file detection
+  - **Phase 4: Dashboard + Progressive Onboarding + Polish** (14 new files + 8 modifications)
+    - Created `templates/docs-site/data/scores.data.ts` — data loader: reads scores, aggregates trends
+    - Created `templates/docs-site/data/agents.data.ts` — data loader: reads sessions, agent activity
+    - Created `templates/docs-site/components/ScoreTrend.vue` — SVG line chart, trend arrow, target line at 80
+    - Created `templates/docs-site/components/TokenBreakdown.vue` — stacked horizontal bars, cost overlay
+    - Created `templates/docs-site/components/CoverageGauge.vue` — SVG radial gauge with color bands
+    - Created `templates/docs-site/components/FeatureProgress.vue` — horizontal bars by kanban column, velocity
+    - Created `templates/docs-site/components/AgentActivityPanel.vue` — agent bars + session timeline with chips
+    - Created `templates/docs-site/trends.md` — trends dashboard page
+    - Created `templates/docs-site/coverage.md` — coverage and progress dashboard page
+    - Created `templates/docs-site/system/welcome.md` — guided first-session flow
+    - Created `scripts/onboarding-hints.sh` — state-aware hint engine (max 1/session, dismissable)
+    - Modified `templates/docs-site/package.json` — added chart.js + vue-chartjs
+    - Modified `templates/docs-site/.vitepress/config.ts` — added Trends + Coverage nav items
+    - Modified `templates/config.json.template` — added performance_coach, doc_generator, onboarding sections
+    - Modified `templates/state.json.template` — added onboarded + onboarded_at fields
+    - Modified `scripts/migrate-state.sh` — added 1.0.0 -> 1.1.0 migration
+    - Modified `.claude-plugin/plugin.json` — version bumped to 1.1.0
+    - Modified `README.md` — updated agent count (5->8), command count (9->11), added /onboard + /handoff
+    - Modified `CHANGELOG.md` — added full v1.1.0 entry
+- Plugin self-test: **132/132 checks passed** (up from 99 — new agents, skills, scripts, templates)
+- **v1.1.0 complete. All 6 deferred items shipped plus /handoff.**
+
+### Session 12 (Current)
+- Read session handoff and v1.2 implementation plan
+- Explored entire v1.1 codebase (~107 files) using Explore agent to build full context
+- Implemented all 4 phases of v1.2 in a single session using 4 parallel agents:
+  - **Phase 1: `/cost` — Token Cost Dashboard** (2 new files + 1 modification)
+    - Created `skills/cost/SKILL.md` — Slash command displaying current session cost, daily/weekly/monthly aggregates, threshold proximity bars, model pricing reference table (Opus/Sonnet/Haiku)
+    - Created `scripts/aggregate-costs.sh` — Scans `.vibeos/sessions/session-*.json` + live `session-cost.json`, computes daily/weekly/monthly/all-time totals with macOS/GNU date handling
+    - Modified `scripts/cost-guardrails.sh` — Multi-model pricing via `case` on model name from payload (Opus $15/$75, Sonnet $3/$15, Haiku $0.25/$1.25), added `model` field to session-cost.json
+  - **Phase 2: `/undo` — Checkpoint Rollback** (4 new files + 2 modifications)
+    - Created `skills/undo/SKILL.md` — 6-step rollback: list checkpoints, select target, detect pushed/unpushed, confirm, execute via `git revert` (pushed) or `git reset --soft` (unpushed), report
+    - Created `scripts/create-checkpoint.sh` — Creates lightweight annotated git tag `vibeos-checkpoint-<ISO-timestamp>` with description
+    - Created `scripts/list-checkpoints.sh` — Lists `vibeos-checkpoint-*` tags sorted by date + 10 recent commits, outputs JSON
+    - Created `scripts/rollback-checkpoint.sh` — Validates target commit, performs rollback in revert or reset mode with clean abort on failure
+    - Modified `skills/new-feature/SKILL.md` — Added Step 5.5: create checkpoint before feature development
+    - Modified `skills/run-backlog/SKILL.md` — Added checkpoint creation after branch creation in feature claim step
+  - **Phase 3: `/audit` — OWASP Security Review** (5 new files)
+    - Created `agents/security-auditor.md` — Sonnet agent, worktree isolation, read-only (disallowedTools: Write, Edit). 10-step OWASP scan (A01-A10) + secret detection. Outputs structured findings JSON
+    - Created `skills/audit/SKILL.md` — 8-step command: pre-flight, language detection, dependency audit, secret scan, agent invocation, results formatting, optional GitHub issue creation, report save
+    - Created `scripts/scan-dependencies.sh` — Multi-language dep audit: npm, pip, bundle, govulncheck, cargo, composer. Graceful fallback if tool missing
+    - Created `scripts/detect-secrets.sh` — Regex scan for 9 secret patterns (AWS keys, API keys, private keys, passwords, JWTs, connection strings, Stripe/GitHub tokens). Redacts values in output
+    - Created `templates/audit-report.json.template` — Schema v1.2.0 report structure
+  - **Phase 4: Non-Node.js Convention Detection** (3 modifications)
+    - Modified `scripts/detect-conventions.sh` — Added language detection from 8 manifest types. Per-language formatter/linter/indent detection for Python (Black/Ruff), Ruby (RuboCop), Go (gofmt), Rust (rustfmt/clippy), PHP (PHP-CS-Fixer), Java (Checkstyle). Added `language` + `package_manager` to JSON output. Existing JS/TS path untouched.
+    - Modified `scripts/extract-project-conventions.sh` — Added per-language framework/ORM/auth detection: Python (Django/Flask/FastAPI, SQLAlchemy), Ruby (Rails, ActiveRecord, Devise), Go (Gin/Echo/Fiber, GORM), Rust (Actix/Axum, Diesel/SeaORM), PHP (Laravel/Symfony, Eloquent/Doctrine), Java (Spring Boot, Hibernate). Wrapped existing Node.js path in conditional.
+    - Modified `agents/code-auditor.md` — Updated Step 1 to detect language before reading manifest. Non-Node.js supported languages now get "medium" confidence (was "low")
+  - **Cross-phase modifications** (6 files)
+    - `.claude-plugin/plugin.json` — Version bumped 1.1.0 → 1.2.0
+    - `settings.json` — Added 9 allowedTools: npm/pip/bundle/govulncheck/cargo/composer audit, git tag/revert/reset --soft
+    - `scripts/migrate-state.sh` — Added `migrate_1_1_to_1_2()`: adds `audit` config section. Updated version chain to 1.2.0
+    - `templates/config.json.template` — Added `audit: { auto_github_issues: false, severity_threshold: "high" }`. Schema bumped to 1.2.0
+    - `README.md` — Updated to 9 agents (was 8), 14 commands (was 11), added /cost + /undo + /audit sections + Security Auditor agent
+    - `CHANGELOG.md` — Added full v1.2.0 entry
+- Fixed bash syntax error in aggregate-costs.sh (`>=` operator in `[[ ]]` — replaced with `> || ==`)
+- Plugin self-test: **149/149 checks passed** (up from 132 — new agent, skills, scripts, template)
+- Verified detect-conventions.sh and extract-project-conventions.sh produce valid JSON with `"unknown"` language in plugin dir (no manifest)
+- **v1.2.0 complete. Top 4 deferred items shipped.**
 
 ---
 
@@ -321,23 +414,219 @@ Integrated into `architecture/implementation-plan.md` (see above).
 | 1 | `hooks/hooks.json` | 10 → 15 bindings | Added sync-state.sh + error-recovery.sh to SessionStart; cost-guardrails.sh + claude-md-lint.sh to Stop |
 | 2 | `scripts/notify.sh` | No change needed | Already complete: 6-level fallback (Warp > terminal-notifier > osascript > OSC 777 > bell > log) |
 
-**Plugin totals: 78 files, 99/99 self-test checks, 15 hook bindings, 5 agents, 9 skills, 26 scripts, 17 templates**
+**v1.0 Plugin totals: 78 files, 99/99 self-test checks, 15 hook bindings, 5 agents, 9 skills, 26 scripts, 17 templates**
+
+### v1.1 Implementation: Performance Coach (Phase 1)
+
+**Agent (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `agents/performance-coach.md` | Sonnet agent, persistent MEMORY.md, 7-step mutation workflow, 5 anti-pattern templates |
+
+**Scripts (4 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/aggregate-scores.sh` | Reads last 10 score files, classifies trends, satisfaction-score correlation |
+| 2 | `scripts/detect-anti-patterns.sh` | Scans score history for recurring deduction categories, frequency data |
+| 3 | `scripts/apply-mutation.sh` | Appends approved rules to CLAUDE.md "Session Learnings", updates mutation-log.json |
+| 4 | `scripts/check-mutation-eligibility.sh` | Guardrails: min 5 sessions, 3+ occurrences, max 1/session, no duplicates, 3-rejection cooldown |
+
+**Templates (2 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/memory-md.template` | Persistent Performance Coach memory (anti-patterns, mutations, trends, notes) |
+| 2 | `templates/mutation-proposal.json.template` | Structured mutation proposal format |
+
+**Modified Files**: `skills/wrap/SKILL.md` (Steps 9.5, 9.7, 10.5), `templates/score-breakdown.json.template` (+user_feedback, +trend), `templates/mutation-log.json.template` (+rejection_count, +cooldown_until, +confidence)
+
+### v1.1 Implementation: Existing Project Onboarding (Phase 2)
+
+**Agent (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `agents/code-auditor.md` | Sonnet agent, read-only worktree analysis, scans deps/conventions/test gaps/architecture |
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/onboard/SKILL.md` | 8-step guided onboarding for existing projects |
+
+**Scripts (4 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/detect-conventions.sh` | Naming, imports, formatting, commit format, linter/formatter detection |
+| 2 | `scripts/analyze-test-gaps.sh` | Source vs test file comparison, untested module identification |
+| 3 | `scripts/extract-project-conventions.sh` | Deep scanner: framework, state mgmt, API patterns, auth, database |
+| 4 | `scripts/generate-onboard-claude-md.sh` | Generates project-specific CLAUDE.md from onboard findings |
+
+**Template (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/onboard-state.json.template` | Pre-filled state.json for onboarded projects (foundation.complete=true) |
+
+### v1.1 Implementation: Doc Generator + /handoff (Phase 3)
+
+**Agent (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `agents/doc-generator.md` | Sonnet agent for feature docs, CHANGELOG, VitePress sidebar, release notes |
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/handoff/SKILL.md` | Structured context transfer (<500 words): state, work done, blockers, next steps, decisions |
+
+**Scripts (4 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/generate-feature-docs.sh` | Reads backlog, generates markdown feature docs from specs |
+| 2 | `scripts/update-changelog.sh` | Parses conventional commits, groups by type, appends to CHANGELOG.md |
+| 3 | `scripts/rebuild-sidebar.sh` | Scans docs/features/, outputs VitePress sidebar config |
+| 4 | `scripts/generate-handoff.sh` | Reads state/backlog/commits, produces structured handoff |
+
+**Template (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/handoff.md.template` | Handoff document template |
+
+**Modified Files**: `agents/session-startup.md` (handoff detection, progressive hints, v1.1.0 version), `scripts/session-startup.sh` (handoff file detection)
+
+### v1.1 Implementation: Dashboard + Progressive Onboarding + Polish (Phase 4)
+
+**Vue Components (5 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `components/ScoreTrend.vue` | SVG line chart: Vibe Score over last 20 sessions, trend arrow, target line at 80 |
+| 2 | `components/TokenBreakdown.vue` | Stacked horizontal bars: input/cache/output tokens, cost overlay |
+| 3 | `components/CoverageGauge.vue` | SVG radial gauge: test coverage % with color bands |
+| 4 | `components/FeatureProgress.vue` | Horizontal bars: features by kanban column, velocity metric |
+| 5 | `components/AgentActivityPanel.vue` | Agent invocation bars + session timeline with agent chips |
+
+**Data Loaders (2 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `data/scores.data.ts` | Reads .vibeos/scores/*.json, aggregates trends, top deductions |
+| 2 | `data/agents.data.ts` | Reads .vibeos/sessions/*.json, agent activity, token usage |
+
+**Pages (3 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/docs-site/trends.md` | Trends dashboard: ScoreTrend + TokenBreakdown + AgentActivity |
+| 2 | `templates/docs-site/coverage.md` | Coverage dashboard: CoverageGauge + FeatureProgress |
+| 3 | `templates/docs-site/system/welcome.md` | Guided first-session flow with command reference |
+
+**Script (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/onboarding-hints.sh` | State-aware hint engine (max 1/session, dismissable) |
+
+**Modified Files**: `templates/docs-site/package.json` (+chart.js, +vue-chartjs), `templates/docs-site/.vitepress/config.ts` (+Trends, +Coverage nav), `templates/config.json.template` (+performance_coach, +doc_generator, +onboarding), `templates/state.json.template` (+onboarded, +onboarded_at), `scripts/migrate-state.sh` (1.0->1.1 migration), `.claude-plugin/plugin.json` (v1.1.0), `README.md` (8 agents, 11 commands), `CHANGELOG.md` (v1.1.0 entry)
+
+**v1.1 Plugin totals: ~107 files, 132/132 self-test checks, 15 hook bindings, 8 agents, 11 skills, 41 scripts, ~23 templates, 7 Vue components, 4 data loaders**
+
+### v1.2 Implementation: `/cost` — Token Cost Dashboard (Phase 1)
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/cost/SKILL.md` | Real-time cost dashboard: session cost, daily/weekly/monthly aggregates, threshold bars, model pricing table |
+
+**Script (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/aggregate-costs.sh` | Scans session files + live session-cost.json, computes daily/weekly/monthly/all-time cost totals |
+
+**Modified Files**: `scripts/cost-guardrails.sh` (multi-model pricing case statement, model field in session-cost.json)
+
+### v1.2 Implementation: `/undo` — Checkpoint Rollback (Phase 2)
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/undo/SKILL.md` | 6-step checkpoint rollback: list, select, detect mode, confirm, execute, report |
+
+**Scripts (3 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/create-checkpoint.sh` | Creates `vibeos-checkpoint-<ISO-timestamp>` annotated git tag |
+| 2 | `scripts/list-checkpoints.sh` | Lists checkpoint tags + 10 recent commits as JSON |
+| 3 | `scripts/rollback-checkpoint.sh` | Validates target, performs git revert (pushed) or git reset --soft (unpushed) |
+
+**Modified Files**: `skills/new-feature/SKILL.md` (Step 5.5: checkpoint before dev), `skills/run-backlog/SKILL.md` (checkpoint after branch creation)
+
+### v1.2 Implementation: `/audit` — OWASP Security Review (Phase 3)
+
+**Agent (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `agents/security-auditor.md` | Sonnet agent, worktree isolation, read-only. 10-step OWASP scan (A01-A10), secret detection, structured findings |
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/audit/SKILL.md` | 8-step command: language detection, dep audit, secret scan, agent invocation, results, optional GitHub issues |
+
+**Scripts (2 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/scan-dependencies.sh` | Multi-language dep audit: npm, pip, bundle, govulncheck, cargo, composer |
+| 2 | `scripts/detect-secrets.sh` | Regex scan for 9 secret patterns with value redaction |
+
+**Template (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/audit-report.json.template` | Schema v1.2.0 audit report structure |
+
+### v1.2 Implementation: Non-Node.js Convention Detection (Phase 4)
+
+**Modified Files**: `scripts/detect-conventions.sh` (language detection, per-language formatter/linter/indent for Python/Ruby/Go/Rust/PHP/Java, +language/package_manager fields), `scripts/extract-project-conventions.sh` (per-language framework/ORM/auth for 6 languages, +language field), `agents/code-auditor.md` (multi-language Step 1, "medium" confidence for supported languages)
+
+### v1.2 Cross-Phase Modifications
+
+**Modified Files**: `.claude-plugin/plugin.json` (v1.2.0), `settings.json` (+9 allowedTools), `scripts/migrate-state.sh` (1.1→1.2 migration with audit config), `templates/config.json.template` (+audit section, schema 1.2.0), `README.md` (9 agents, 14 commands), `CHANGELOG.md` (v1.2.0 entry)
+
+**v1.2 Plugin totals: ~118 files, 149/149 self-test checks, 15 hook bindings, 9 agents, 14 skills, 47 scripts, ~24 templates, 7 Vue components, 4 data loaders**
 
 ---
 
-## Revised Architecture Summary (Session 4)
+## Revised Architecture Summary (Session 4, updated Session 12)
 
-### 5-Agent Topology for v1.0
+### 9-Agent Topology (v1.2)
 
 | Agent | Model | Isolation | Role |
 |---|---|---|---|
-| Session Startup | Haiku | Inline | Environment check, state detection, routing, state migration |
+| Session Startup | Haiku | Inline | Environment check, state detection, handoff detection, progressive hints, routing |
 | Workflow Orchestrator | Sonnet | Inline | Routes between Tier 1/Tier 2, coordinates via Agent Teams API |
 | Stack Scout | Sonnet | Worktree | Read-only research agent, produces TDRs |
 | Builder | Sonnet | Worktree | Design system (Tier 1) + feature implementation (Tier 2) |
 | Verifier | Sonnet | Inline | Test writing, test/build/lint running, Vibe Score calculation |
-
-**Deferred to v1.1:** Performance Coach (standalone with persistent memory), Doc Generator
+| Performance Coach | Sonnet | Inline | Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals |
+| Code Auditor | Sonnet | Worktree | Read-only codebase analysis for existing project onboarding (multi-language) |
+| Security Auditor | Sonnet | Worktree | Read-only OWASP Top 10 security analysis, dependency audit, secret detection |
+| Doc Generator | Sonnet | Inline | Feature docs, CHANGELOG, VitePress sidebar, release notes |
 
 ### Key Architectural Principles (Applied in Session 4)
 
@@ -426,39 +715,76 @@ Integrated into `architecture/implementation-plan.md` (see above).
 
 ---
 
-## Feature Ideas (accumulated from Sessions 3-4)
+## Feature Ideas (accumulated from Sessions 3-4, updated Session 11)
 
-These are potential additions to consider post-v1.0:
+Shipped in v1.1: ~~`/handoff`~~, ~~Progressive onboarding~~, ~~`/cost` infrastructure~~ (in cost-guardrails.sh)
+Shipped in v1.2: ~~`/cost`~~, ~~`/undo`~~, ~~`/audit`~~, ~~Non-Node.js convention detection~~
+
+Remaining ideas for v1.3+:
 
 1. **`/replay`** — Store successful session workflows as reusable templates
-2. **`/audit`** — Security review agent (OWASP Top 10 checks)
-3. **`/cost`** — Real-time token usage tracking + budget alerts
-4. **Opponent processor pattern** — Competing agents debate architecture decisions during TDR
-5. **`/handoff`** — Formalized cross-session context transfer
-6. **Auto-healing CI** — Headless `claude -p` agent auto-fixes failing CI
-7. **`/simplify`** — Integrate Boris's code-simplifier plugin post-implementation
-8. **Progressive onboarding** — Unlock commands gradually (Day 1: setup+new-project only)
-9. **`/undo`** — User-facing rollback to last checkpoint commit
+2. **Opponent processor pattern** — Competing agents debate architecture decisions during TDR
+3. **Auto-healing CI** — Headless `claude -p` agent auto-fixes failing CI
+4. **`/simplify`** — Integrate Boris's code-simplifier plugin post-implementation
 
 ---
 
-## v1.0.0 Release Status
+## v1.2.0 Release Status
 
-**All 6 implementation phases are complete.** The plugin is release-ready.
+**v1.0.0 (6 implementation phases) + v1.1.0 (4 enhancement phases) + v1.2.0 (4 feature phases) are complete.** The plugin is release-ready.
 
-| Metric | Value |
-|---|---|
-| Total files | 78 |
-| Self-test checks | 99/99 passing |
-| Hook bindings | 15 across 6 lifecycle events |
-| Agents | 5 (Session Startup, Workflow Orchestrator, Stack Scout, Builder, Verifier) |
-| Slash commands | 9 (/setup, /new-project, /plan-features, /new-feature, /run-backlog, /idea, /status, /check, /wrap) |
-| Scripts | 26 (12 hook + 14 utility) |
-| Templates | 17 (9 project + 6 test/quality + 1 docs-site + 1 mutation-log) |
-| Sessions | 10 (Sessions 1-4: research + architecture, Sessions 5-10: implementation) |
+| Metric | v1.0.0 | v1.1.0 | v1.2.0 | Delta (1.1→1.2) |
+|---|---|---|---|---|
+| Total files | 78 | ~107 | ~118 | +~11 |
+| Self-test checks | 99/99 | 132/132 | 149/149 | +17 |
+| Hook bindings | 15 | 15 | 15 | — |
+| Agents | 5 | 8 | 9 | +1 (Security Auditor) |
+| Slash commands | 9 | 11 | 14 | +3 (/cost, /undo, /audit) |
+| Scripts | 26 | 41 | 47 | +6 |
+| Templates | 17 | ~23 | ~24 | +1 |
+| Vue components | 2 | 7 | 7 | — |
+| Data loaders | 2 | 4 | 4 | — |
+| Sessions | 10 | 11 | 12 | +1 |
 
-### Next Steps (Post-v1.0)
+### v1.2.0 Features Shipped
+
+| Feature | Status | Key Files |
+|---|---|---|
+| `/cost` — Token Dashboard | Complete | skills/cost/SKILL.md, aggregate-costs.sh, cost-guardrails.sh (multi-model) |
+| `/undo` — Checkpoint Rollback | Complete | skills/undo/SKILL.md, create-checkpoint.sh, list-checkpoints.sh, rollback-checkpoint.sh |
+| `/audit` — OWASP Security Review | Complete | agents/security-auditor.md, skills/audit/SKILL.md, scan-dependencies.sh, detect-secrets.sh, audit-report.json.template |
+| Non-Node.js Conventions | Complete | detect-conventions.sh (6 languages), extract-project-conventions.sh (6 languages), code-auditor.md (multi-language) |
+| Schema Migration 1.1→1.2 | Complete | migrate-state.sh, config.json.template (+audit section) |
+
+### v1.1.0 Features Shipped
+
+| Feature | Status | Key Files |
+|---|---|---|
+| Performance Coach | Complete | agents/performance-coach.md, 3 scripts, 2 templates |
+| Cross-Session Trends | Complete | aggregate-scores.sh, detect-anti-patterns.sh, score-breakdown with trend field |
+| Existing Project Onboarding | Complete | agents/code-auditor.md, skills/onboard/SKILL.md, 4 scripts, 1 template |
+| Doc Generator | Complete | agents/doc-generator.md, 3 scripts |
+| /handoff | Complete | skills/handoff/SKILL.md, generate-handoff.sh, handoff.md.template |
+| Enhanced Dashboard | Complete | 5 Vue components, 2 data loaders, 2 dashboard pages |
+| Progressive Onboarding | Complete | onboarding-hints.sh, welcome.md, session-startup hints |
+| Schema Migration | Complete | migrate-state.sh 1.0->1.1, config/state templates updated |
+| User Feedback | Complete | 4-point satisfaction scale in /wrap Step 9.7 |
+
+### Next Steps (Post-v1.2)
 
 1. **Install and test** — `claude plugin install /path/to/claude-plugin-vibe-os` and run through Tier 1 + Tier 2 workflows on a real project
-2. **Iterate on agent prompts** — budget time for prompt refinement based on real-world usage
-3. **v1.1 roadmap** — Performance Coach, Doc Generator, existing project onboarding, full dashboard, cross-session trends (see v1.1 Roadmap section above)
+2. **Test /onboard on non-Node.js projects** — Try onboarding Python (Django/FastAPI), Go, or Ruby (Rails) projects and verify convention extraction accuracy
+3. **Test /audit** — Run on a real project, verify OWASP findings quality, test dependency audit across package managers
+4. **Test /undo** — Create checkpoints, make changes, verify rollback in both revert and reset modes
+5. **Test /cost** — Verify aggregate cost tracking across multiple sessions
+6. **Test Performance Coach** — Run 5+ sessions to verify trend analysis and mutation proposals
+7. **Iterate on agent prompts** — budget time for prompt refinement based on real-world usage
+
+### Deferred to v1.3
+
+| Feature | Reason |
+|---|---|
+| `/replay` — Reusable session templates | Needs session transcript analysis infrastructure. |
+| `/simplify` — Code simplifier integration | External plugin dependency. |
+| Auto-healing CI — Headless CI fixer | Complex operational considerations. |
+| Opponent processor — Competing TDR agents | Interesting but adds cost. Needs design work. |

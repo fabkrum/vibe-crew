@@ -10,6 +10,8 @@ export default defineConfig({
       { text: "Guide", link: "/system/getting-started" },
       { text: "Kanban", link: "/kanban" },
       { text: "Stats", link: "/stats" },
+      { text: "Trends", link: "/trends" },
+      { text: "Coverage", link: "/coverage" },
     ],
 
     sidebar: {

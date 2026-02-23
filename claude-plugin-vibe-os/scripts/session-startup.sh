@@ -59,6 +59,13 @@ if [[ -f "$BACKLOG_FILE" ]]; then
   DONE_FEATURES=$(jq '[.features[] | select(.column == "done")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
 fi
 
+# --- Check for handoff from previous session ---
+HANDOFF_FILE=""
+HANDOFF_DIR="$PROJECT_ROOT/.vibeos/handoffs"
+if [[ -d "$HANDOFF_DIR" ]]; then
+  HANDOFF_FILE=$(ls -1t "$HANDOFF_DIR"/handoff-*.md 2>/dev/null | head -1)
+fi
+
 # --- Output status summary (3 lines max, under 200 words) ---
 echo "---"
 if [[ "$FOUNDATION" == "false" ]]; then
@@ -78,6 +85,18 @@ else
     echo "  Run /plan-features or /idea to add features to the backlog."
   fi
 fi
+
+# --- Show handoff summary if available ---
+if [[ -n "$HANDOFF_FILE" && -f "$HANDOFF_FILE" ]]; then
+  echo "---"
+  echo "Previous session handoff available: $(basename "$HANDOFF_FILE")"
+  # Extract first next step
+  NEXT_STEP=$(grep -A1 "^## Next Steps" "$HANDOFF_FILE" 2>/dev/null | tail -1 | sed 's/^[0-9]*\. //' || echo "")
+  if [[ -n "$NEXT_STEP" ]]; then
+    echo "  Next: $NEXT_STEP"
+  fi
+fi
+
 echo "---"
 
 exit 0

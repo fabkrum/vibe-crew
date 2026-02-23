@@ -13,12 +13,6 @@ CONFIG_FILE="$VIBEOS_DIR/config.json"
 COST_FILE="$VIBEOS_DIR/session-cost.json"
 SESSIONS_DIR="$VIBEOS_DIR/sessions"
 
-# ── Pricing (Sonnet, per million tokens) ──
-PRICE_INPUT="3.00"
-PRICE_CACHE_CREATE="3.75"
-PRICE_CACHE_READ="0.30"
-PRICE_OUTPUT="15.00"
-
 # ── Helper: floating point math with awk (bc fallback not needed) ──
 calc() {
   awk "BEGIN {printf \"%.6f\", $1}"
@@ -33,6 +27,38 @@ PAYLOAD="$(cat)"
 if [[ -z "$PAYLOAD" ]]; then
   exit 0
 fi
+
+# ── Extract model name from payload ──
+MODEL="$(echo "$PAYLOAD" | jq -r '.model // "unknown"' 2>/dev/null || echo "unknown")"
+
+# ── Pricing (per million tokens, model-specific) ──
+case "$MODEL" in
+  *opus*)
+    PRICE_INPUT="15.00"
+    PRICE_CACHE_CREATE="18.75"
+    PRICE_CACHE_READ="1.50"
+    PRICE_OUTPUT="75.00"
+    ;;
+  *sonnet*)
+    PRICE_INPUT="3.00"
+    PRICE_CACHE_CREATE="3.75"
+    PRICE_CACHE_READ="0.30"
+    PRICE_OUTPUT="15.00"
+    ;;
+  *haiku*)
+    PRICE_INPUT="0.25"
+    PRICE_CACHE_CREATE="0.30"
+    PRICE_CACHE_READ="0.03"
+    PRICE_OUTPUT="1.25"
+    ;;
+  *)
+    # Default to Sonnet pricing for unknown models
+    PRICE_INPUT="3.00"
+    PRICE_CACHE_CREATE="3.75"
+    PRICE_CACHE_READ="0.30"
+    PRICE_OUTPUT="15.00"
+    ;;
+esac
 
 # ── Extract token counts from payload ──
 INPUT_TOKENS="$(echo "$PAYLOAD" | jq -r '.usage.input_tokens // 0' 2>/dev/null || echo 0)"
@@ -60,14 +86,16 @@ SESSION_COST="$(calc "$PREV_COST + $TURN_COST")"
 TURN_COUNT="$(( PREV_TURNS + 1 ))"
 LAST_UPDATED="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-# ── Write updated session cost file ──
+# ── Write updated session cost file (temp-file-then-mv for atomicity) ──
+COST_TMP="$(mktemp "${COST_FILE}.XXXXXX")"
 jq -n \
   --argjson cost "$SESSION_COST" \
   --argjson turns "$TURN_COUNT" \
   --arg updated "$LAST_UPDATED" \
   --argjson turn_cost "$TURN_COST" \
-  '{session_cost_usd: $cost, turn_count: $turns, last_turn_cost_usd: $turn_cost, last_updated: $updated}' \
-  > "$COST_FILE" 2>/dev/null || true
+  --arg model "$MODEL" \
+  '{session_cost_usd: $cost, turn_count: $turns, last_turn_cost_usd: $turn_cost, model: $model, last_updated: $updated}' \
+  > "$COST_TMP" 2>/dev/null && mv "$COST_TMP" "$COST_FILE" || { rm -f "$COST_TMP"; true; }
 
 # ── Read thresholds from config.json ──
 SESSION_WARN="2.00"

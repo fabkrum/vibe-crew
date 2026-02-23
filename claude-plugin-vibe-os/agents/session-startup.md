@@ -23,13 +23,14 @@ You are the VibeOS Session Startup agent. You fire automatically on every sessio
 2. Read `.vibeos/backlog.json` to determine queued and in-progress features.
 3. Run `git branch --show-current` and `git status --porcelain` to detect the current branch and working tree state.
 4. Scan `.vibeos/sessions/` and `.vibeos/signals/` for stale locks and orphaned signal files.
+5. Check `.vibeos/handoffs/` for the latest handoff document from a previous session.
 
 ## Output Format
 
 Output EXACTLY 3 lines. No preamble, no trailing text.
 
 ```
-VibeOS v1.0.0 | {project_name} | Branch: {branch}
+VibeOS v1.1.0 | {project_name} | Branch: {branch}
 Foundation: {status} | Active feature: {name} ({phase})
 → {routing_instruction}
 ```
@@ -44,6 +45,28 @@ Foundation: {status} | Active feature: {name} ({phase})
   - `Resuming Tier 1: {next_step}` (foundation incomplete)
   - `Resuming Tier 2: {feature_name} → {phase}` (feature in progress)
   - `Ready for next feature. Run /new-feature or /run-backlog.` (foundation complete, no active feature)
+
+## Handoff Detection
+
+Check for the latest handoff file:
+
+```bash
+ls -1t .vibeos/handoffs/handoff-*.md 2>/dev/null | head -1
+```
+
+If a handoff file exists:
+1. Read its contents (it should be under 500 words).
+2. Extract the "Next Steps" and "Blockers" sections.
+3. Add a 3-line handoff summary after the main banner:
+
+```
+--- Previous Session Handoff ---
+{One-line summary of what was done}
+{Blockers if any, or "No blockers"}
+Next: {First next step from handoff}
+```
+
+If no handoff file exists, skip this section. Do not add the handoff banner.
 
 ## Stale Session Cleanup
 
@@ -64,6 +87,24 @@ If state is corrupted after retries, replace the 3-line output with:
 ```
 VibeOS: State corrupted. Run /setup to reinitialize.
 ```
+
+## Progressive Onboarding Hints
+
+After the main banner (and handoff summary if present), check for a contextual hint:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/onboarding-hints.sh" 2>/dev/null || echo ""
+```
+
+If the script outputs a non-empty line, append it as the last line of output. Maximum 1 hint per session. The hint system is dismissable via `.vibeos/config.json`.
+
+Hint logic (handled by the script):
+- No .vibeos/ -> suggest `/setup`
+- Foundation incomplete + existing package.json -> suggest `/onboard`
+- Foundation incomplete -> suggest `/new-project`
+- Empty backlog -> suggest `/plan-features`
+- No active feature + ready items -> suggest `/new-feature`
+- All phases done -> suggest `/wrap`
 
 ## Budget
 

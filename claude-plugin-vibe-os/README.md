@@ -63,7 +63,7 @@ enabled by default but work is not blocked if they are unavailable.
 
 ## Commands Reference
 
-VibeOS provides 9 slash commands. Each command is defined in the `skills/`
+VibeOS provides 14 slash commands. Each command is defined in the `skills/`
 directory and invoked directly from the Claude Code prompt.
 
 ### Project Setup
@@ -87,12 +87,27 @@ directory and invoked directly from the Claude Code prompt.
 | `/new-feature "name"` | Start the Tier 2 cycle for a specific feature: plan, design, code, test, docs. Creates a feature branch and claims the task in the backlog. |
 | `/run-backlog` | Autonomously process the next unclaimed feature from the backlog. Equivalent to `/new-feature` but picks the highest-priority item automatically. |
 
+### Onboarding
+
+| Command | Description |
+|---|---|
+| `/onboard` | Onboard an existing project into VibeOS. Analyzes the codebase, extracts conventions, generates a project-specific CLAUDE.md, and initializes state with `foundation.complete = true`. |
+
+### Cost and Safety
+
+| Command | Description |
+|---|---|
+| `/cost` | Display the real-time token cost dashboard: current session cost, daily/weekly/monthly aggregates, threshold proximity, and model pricing reference. |
+| `/undo` | Checkpoint rollback: list VibeOS checkpoints and recent commits, pick a target, and safely revert (pushed) or reset (unpushed) while preserving your working tree. |
+| `/audit` | OWASP Top 10 security review: scan codebase for injection, auth, XSS, misconfig, and 7 more vulnerability categories. Runs dependency audit, secret detection, and optionally creates GitHub issues for critical findings. |
+
 ### Quality and Wrap-Up
 
 | Command | Description |
 |---|---|
 | `/check` | Run the full quality suite: tests, build, lint, type-check. Reports pass/fail status without modifying code. |
-| `/wrap` | End the current session. Generates a session log, calculates the Vibe Score, produces release notes, and proposes CLAUDE.md mutations based on identified anti-patterns. |
+| `/wrap` | End the current session. Generates a session log, calculates the Vibe Score, invokes the Performance Coach for CLAUDE.md mutations, auto-generates a handoff document, and triggers the Doc Generator. |
+| `/handoff` | Generate a structured context transfer document for the next session. Includes state, work done, blockers, next steps, and key decisions. |
 | `/status` | Display current project state: foundation progress, active feature, backlog summary, recent session scores, and context usage. |
 
 ---
@@ -124,15 +139,19 @@ feature:
 
 ### Agents
 
-VibeOS uses 5 specialized agents, each with a dedicated system prompt:
+VibeOS uses 9 specialized agents, each with a dedicated system prompt:
 
 | Agent | Model | Execution | Role |
 |---|---|---|---|
-| Session Startup | Haiku | Inline | Environment check, state detection, routing on every session start. |
+| Session Startup | Haiku | Inline | Environment check, state detection, handoff detection, progressive hints, routing. |
 | Workflow Orchestrator | Sonnet | Inline | Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state. |
 | Stack Scout | Sonnet | Worktree | Read-only research agent. Uses WebSearch, Context7, and Puppeteer to produce Technology Decision Records in an isolated context. |
 | Builder | Sonnet | Worktree | Implements features within TDR boundaries. Runs in a worktree to isolate work-in-progress from the main branch. |
-| Verifier | Sonnet | Inline | Runs quality checks (tests, lint, build, type-check), calculates Vibe Score, proposes CLAUDE.md mutations. |
+| Verifier | Sonnet | Inline | Runs quality checks (tests, lint, build, type-check), calculates Vibe Score. |
+| Performance Coach | Sonnet | Inline | Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals with 7-step guardrailed workflow. |
+| Code Auditor | Sonnet | Worktree | Read-only codebase analysis for existing project onboarding. Extracts conventions, test gaps, and architecture patterns. |
+| Security Auditor | Sonnet | Worktree | Read-only OWASP Top 10 security analysis. Scans for injection, auth, XSS, misconfig, vulnerable dependencies, secrets, and SSRF. |
+| Doc Generator | Sonnet | Inline | Feature documentation, CHANGELOG updates, VitePress sidebar regeneration, release notes. |
 
 ### Hook System
 
@@ -178,6 +197,10 @@ claude-plugin-vibe-os/
     stack-scout.md             # Stack Scout agent prompt
     builder.md                 # Builder agent prompt
     verifier.md                # Verifier agent prompt
+    performance-coach.md       # Performance Coach agent prompt
+    code-auditor.md            # Code Auditor agent prompt
+    security-auditor.md        # Security Auditor agent prompt
+    doc-generator.md           # Doc Generator agent prompt
   skills/
     setup/SKILL.md             # /setup command
     new-project/SKILL.md       # /new-project command
@@ -188,7 +211,12 @@ claude-plugin-vibe-os/
     status/SKILL.md            # /status command
     check/SKILL.md             # /check command
     wrap/SKILL.md              # /wrap command
-  scripts/                     # 28 bash automation scripts
+    onboard/SKILL.md           # /onboard command
+    handoff/SKILL.md           # /handoff command
+    cost/SKILL.md              # /cost command
+    undo/SKILL.md              # /undo command
+    audit/SKILL.md             # /audit command
+  scripts/                     # ~36 bash automation scripts
   templates/                   # Project templates and doc-site scaffold
   LICENSE                      # MIT License
 
@@ -199,6 +227,8 @@ claude-plugin-vibe-os/
   sessions/                    # Session log JSON files
   scores/                      # Vibe Score breakdown JSON files
   releases/                    # Release notes data JSON files
+  handoffs/                    # Cross-session handoff documents
+  mutation-log.json            # CLAUDE.md mutation audit log
 ```
 
 ---

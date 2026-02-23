@@ -172,6 +172,12 @@ Create a feature branch:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/git-branch-create.sh" "feature/<feature-id>"
 ```
 
+Create a checkpoint after branch creation:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/create-checkpoint.sh" "Before backlog feature: <feature-name> (<feature-id>)"
+```
+
 Announce the feature start:
 
 ```

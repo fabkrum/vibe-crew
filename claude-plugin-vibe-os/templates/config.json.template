@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.2.0",
   "terminal": "{{TERMINAL}}",
   "notifications": {
     "enabled": true,
@@ -31,5 +31,23 @@
     "session_warn_usd": 2.00,
     "session_max_usd": 5.00,
     "daily_warn_usd": 20.00
+  },
+  "performance_coach": {
+    "enabled": true,
+    "min_sessions_for_trends": 3,
+    "min_sessions_for_mutations": 5
+  },
+  "doc_generator": {
+    "auto_changelog": true,
+    "auto_feature_docs": true,
+    "auto_sidebar_rebuild": true
+  },
+  "onboarding": {
+    "show_hints": true,
+    "dismissed_hints": []
+  },
+  "audit": {
+    "auto_github_issues": false,
+    "severity_threshold": "high"
   }
 }

@@ -5,6 +5,129 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-23
+
+### Added
+
+#### `/cost` — Real-time Token Cost Dashboard
+
+- `skills/cost/SKILL.md` -- Slash command displaying current session cost, daily/weekly/monthly aggregates, threshold proximity indicators, and model pricing reference table (Opus/Sonnet/Haiku)
+- `scripts/aggregate-costs.sh` -- Scans `.vibeos/sessions/session-*.json` and live `session-cost.json`, computes daily/weekly/monthly/all-time cost totals
+
+#### `/undo` — Checkpoint Rollback
+
+- `skills/undo/SKILL.md` -- Slash command listing VibeOS checkpoints and recent commits, detecting pushed vs unpushed state, and performing safe rollback via `git revert` (pushed) or `git reset --soft` (unpushed)
+- `scripts/create-checkpoint.sh` -- Creates lightweight git tag `vibeos-checkpoint-<ISO-timestamp>` with description
+- `scripts/list-checkpoints.sh` -- Lists `vibeos-checkpoint-*` tags sorted by date with commit hash and subject
+- `scripts/rollback-checkpoint.sh` -- Validates target commit, performs rollback in revert or reset mode, reports summary
+
+#### `/audit` — OWASP Top 10 Security Review
+
+- `agents/security-auditor.md` -- Sonnet agent, worktree isolation, read-only. 10-step OWASP scan (A01-A10): broken access control, cryptographic failures, injection, insecure design, misconfiguration, vulnerable components, auth failures, data integrity, logging gaps, SSRF
+- `skills/audit/SKILL.md` -- Slash command detecting project language, invoking security-auditor agent, formatting findings by severity, optional GitHub issue creation for critical/high findings
+- `scripts/scan-dependencies.sh` -- Multi-language dependency audit: npm audit, pip audit, bundle audit, govulncheck, cargo audit, composer audit. Graceful fallback if tool missing
+- `scripts/detect-secrets.sh` -- Regex scan for AWS keys, API keys, private keys, passwords, JWTs, connection strings, Stripe/GitHub tokens. Redacts actual values in output
+- `templates/audit-report.json.template` -- Schema v1.2.0 report structure with findings array, dependency vulnerabilities, secrets detected, summary counts
+
+#### Non-Node.js Convention Detection
+
+- `scripts/detect-conventions.sh` -- Added language detection from manifests (pyproject.toml, Gemfile, go.mod, Cargo.toml, composer.json, pom.xml/build.gradle). Per-language formatter/linter/naming/indent detection for Python (Black/Ruff, PEP8), Ruby (RuboCop), Go (gofmt, golangci-lint), Rust (rustfmt, clippy), PHP (PHP-CS-Fixer), Java (Checkstyle). Added `language` and `package_manager` to JSON output
+- `scripts/extract-project-conventions.sh` -- Per-language framework/ORM/auth/API detection: Python (Django/Flask/FastAPI, SQLAlchemy), Ruby (Rails, ActiveRecord, Devise), Go (Gin/Echo/Fiber, GORM), Rust (Actix/Axum, Diesel/SeaORM), PHP (Laravel/Symfony, Eloquent/Doctrine), Java (Spring Boot, Hibernate). Added `language` to JSON output
+
+### Changed
+
+- `scripts/cost-guardrails.sh` -- Multi-model pricing via `case` on model name (Opus $15/$75, Sonnet $3/$15, Haiku $0.25/$1.25). Added `model` field to session-cost.json output
+- `skills/new-feature/SKILL.md` -- Added Step 5.5: create checkpoint before feature development
+- `skills/run-backlog/SKILL.md` -- Added checkpoint creation after branch creation in feature claim step
+- `agents/code-auditor.md` -- Updated Step 1 to detect language before reading manifest. Non-Node.js supported languages now get "medium" confidence (was "low")
+- `scripts/migrate-state.sh` -- Added `migrate_1_1_to_1_2()`: adds `audit` config section. Updated version chain to 1.2.0
+- `templates/config.json.template` -- Added `audit: { auto_github_issues: false, severity_threshold: "high" }`. Schema version bumped to 1.2.0
+- `settings.json` -- Added audit and git permissions: npm audit, pip audit, bundle audit, govulncheck, cargo audit, composer audit, git tag, git revert, git reset --soft
+- `.claude-plugin/plugin.json` -- Version bumped to 1.2.0
+- `README.md` -- Updated to 9 agents (was 8), 14 commands (was 11), added /cost + /undo + /audit docs and Security Auditor agent entry
+
+---
+
+## [1.1.0] - 2026-02-23
+
+### Added
+
+#### Performance Coach (Phase 1)
+
+Self-improvement engine with cross-session trend analysis and CLAUDE.md mutation system.
+
+- `agents/performance-coach.md` -- Sonnet agent with persistent MEMORY.md, 7-step mutation workflow, and 5 anti-pattern templates
+- `scripts/aggregate-scores.sh` -- Reads last 10 score files, classifies trends (improving/declining/recurring/plateau/volatile), calculates satisfaction-score correlation
+- `scripts/detect-anti-patterns.sh` -- Scans score history for recurring deduction categories, outputs frequency data
+- `scripts/apply-mutation.sh` -- Appends approved rules to CLAUDE.md "Session Learnings" section, updates mutation-log.json
+- `scripts/check-mutation-eligibility.sh` -- Enforces guardrails: min 5 sessions, 3+ occurrences, max 1/session, no duplicates, 3-rejection cooldown
+- `templates/memory-md.template` -- Persistent Performance Coach memory (anti-patterns, mutations, trends, notes)
+- `templates/mutation-proposal.json.template` -- Structured mutation proposal format
+- `skills/wrap/SKILL.md` -- Added Step 9.5 (Performance Coach invocation), Step 9.7 (4-point user satisfaction feedback)
+- `templates/score-breakdown.json.template` -- Added `user_feedback` (rating 1-4, comment) and `trend` (direction, window_size, average_score) fields
+- `templates/mutation-log.json.template` -- Added `rejection_count`, `cooldown_until`, `confidence` fields
+
+#### Existing Project Onboarding (Phase 2)
+
+Unlocks VibeOS for existing projects with `/onboard` command and Code Auditor agent.
+
+- `agents/code-auditor.md` -- Sonnet agent, read-only worktree analysis, scans dependencies, conventions, test gaps, design system, architecture
+- `skills/onboard/SKILL.md` -- 8-step guided onboarding: dependency detection, convention extraction, test gap analysis, CLAUDE.md generation, state initialization
+- `scripts/detect-conventions.sh` -- Scans naming, imports, formatting, commit format, linters, formatters
+- `scripts/analyze-test-gaps.sh` -- Compares source vs test files, identifies untested modules, estimates coverage
+- `scripts/extract-project-conventions.sh` -- Deep scanner: framework, state management, API patterns, component libraries, auth, database
+- `scripts/generate-onboard-claude-md.sh` -- Generates project-specific CLAUDE.md from onboard findings
+- `templates/onboard-state.json.template` -- Pre-filled state.json for onboarded projects (foundation.complete=true)
+
+#### Doc Generator + /handoff (Phase 3)
+
+Documentation automation and cross-session context transfer.
+
+- `agents/doc-generator.md` -- Sonnet agent for feature docs, CHANGELOG, VitePress sidebar, release notes
+- `scripts/generate-feature-docs.sh` -- Reads backlog, generates markdown feature docs from specs
+- `scripts/update-changelog.sh` -- Parses conventional commits, groups by type, appends to CHANGELOG.md
+- `scripts/rebuild-sidebar.sh` -- Scans docs/features/, outputs VitePress sidebar config
+- `skills/handoff/SKILL.md` -- Structured context transfer: state, work done, blockers, next steps, decisions (<500 words)
+- `templates/handoff.md.template` -- Handoff document template
+- `scripts/generate-handoff.sh` -- Reads state, backlog, commits; produces structured handoff
+- `skills/wrap/SKILL.md` -- Added Step 10.5 (auto-generate handoff, invoke Doc Generator)
+- `agents/session-startup.md` -- Added handoff detection: reads latest from `.vibeos/handoffs/`, includes in banner
+
+#### Enhanced Dashboard (Phase 4)
+
+5 new Vue dashboard components with cross-session data visualization.
+
+- `templates/docs-site/data/scores.data.ts` -- Data loader: reads scores, aggregates trends, top deductions
+- `templates/docs-site/data/agents.data.ts` -- Data loader: reads sessions, extracts agent activity and token usage
+- `templates/docs-site/components/ScoreTrend.vue` -- SVG line chart: Vibe Score over last 20 sessions, trend indicator, target line at 80
+- `templates/docs-site/components/TokenBreakdown.vue` -- Stacked horizontal bars: input/cache/output tokens per session, cost overlay
+- `templates/docs-site/components/CoverageGauge.vue` -- SVG radial gauge: test coverage % with color bands
+- `templates/docs-site/components/FeatureProgress.vue` -- Horizontal bars: features by kanban column, velocity metric
+- `templates/docs-site/components/AgentActivityPanel.vue` -- Agent invocation bars and session timeline with agent chips
+- `templates/docs-site/trends.md` -- Trends dashboard page
+- `templates/docs-site/coverage.md` -- Coverage and progress dashboard page
+- `templates/docs-site/system/welcome.md` -- Dashboard welcome page with guided first-session flow
+
+#### Progressive Onboarding (Phase 4)
+
+Contextual command hints for new users.
+
+- `scripts/onboarding-hints.sh` -- State-aware hint engine: suggests next command based on project phase, respects dismissals
+- `agents/session-startup.md` -- Added progressive onboarding hints (max 1/session, dismissable)
+
+### Changed
+
+- `templates/docs-site/package.json` -- Added `chart.js` and `vue-chartjs` dependencies
+- `templates/docs-site/.vitepress/config.ts` -- Added Trends and Coverage nav items
+- `templates/config.json.template` -- Added `performance_coach`, `doc_generator`, `onboarding` config sections
+- `templates/state.json.template` -- Added `onboarded` (bool) and `onboarded_at` (ISO timestamp) fields
+- `scripts/migrate-state.sh` -- Added 1.0.0 -> 1.1.0 migration (new optional fields with defaults)
+- `scripts/session-startup.sh` -- Added handoff file detection and hint integration
+- `.claude-plugin/plugin.json` -- Version bumped to 1.1.0
+- `README.md` -- Updated agent count (5->8), command count (9->11), added /onboard and /handoff docs
+
+---
+
 ## [1.0.0] - 2026-02-23
 
 ### Added
@@ -124,4 +247,6 @@ Documentation, cleanup utilities, and finalized configurations.
 
 **Total: ~81 files across 6 implementation phases.**
 
+[1.2.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.2.0
+[1.1.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.1.0
 [1.0.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.0.0

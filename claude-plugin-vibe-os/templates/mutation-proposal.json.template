@@ -1,0 +1,8 @@
+{
+  "anti_pattern": "{{ANTI_PATTERN}}",
+  "evidence": "{{EVIDENCE}}",
+  "proposed_rule": "{{PROPOSED_RULE}}",
+  "target_section": "## Session Learnings",
+  "confidence": "{{CONFIDENCE}}",
+  "total_impact_points": 0
+}

@@ -47,7 +47,16 @@
       "Bash(tail *)",
       "Bash(mkdir *)",
       "Bash(cp *)",
-      "Bash(mv *)"
+      "Bash(mv *)",
+      "Bash(npm audit *)",
+      "Bash(pip audit *)",
+      "Bash(bundle audit *)",
+      "Bash(govulncheck *)",
+      "Bash(cargo audit *)",
+      "Bash(composer audit *)",
+      "Bash(git tag *)",
+      "Bash(git revert *)",
+      "Bash(git reset --soft *)"
     ],
     "deniedTools": [
       "Bash(sudo *)",

@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.3.0",
+  "name": "{{WORKFLOW_NAME}}",
+  "description": "{{DESCRIPTION}}",
+  "created_at": "{{TIMESTAMP}}",
+  "source_sessions": [],
+  "phase_order": [
+    "plan",
+    "design",
+    "code",
+    "test",
+    "docs"
+  ],
+  "branch_convention": "feat/{{feature-name}}",
+  "test_strategy": {
+    "unit_framework": "vitest",
+    "e2e_framework": "playwright",
+    "min_coverage": 80
+  },
+  "quality_thresholds": {
+    "min_vibe_score": 70,
+    "required_phases": [
+      "plan",
+      "code",
+      "test"
+    ],
+    "max_prompt_churn": 3
+  },
+  "commit_convention": "conventional",
+  "extraction_metadata": {
+    "source_score": null,
+    "files_modified_count": 0
+  }
+}

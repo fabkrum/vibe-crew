@@ -57,6 +57,19 @@ Guide the foundation sequence strictly in order. Do not skip steps. Do not allow
 
 After each step, verify the artifact exists and run `complete-phase.sh` to advance foundation state. The phase-gate hook blocks source code writes until all 5 artifacts are complete.
 
+### Opponent Processor Coordination
+
+After the TDR is completed in Tier 1 Step 3, invoke the Opponent Processor for a counter-analysis:
+
+1. Run `scripts/generate-counter-tdr.sh` to extract decisions from the TDR.
+2. Launch the `opponent-processor` agent with the extracted decisions as context.
+3. Wait for the agent to produce its counter-analysis.
+4. Present both the TDR and the counter-analysis to the developer.
+5. If the developer chooses to reconsider any decisions, re-run the relevant TDR section.
+6. Save the counter-analysis to `docs/counter-tdr.md`.
+
+The opponent processor is optional — if the developer prefers to skip it, proceed directly to Step 4 (Roadmap).
+
 ## Tier 2 Routing (Feature Development)
 
 1. Identify the next ready feature from `.vibeos/backlog.json` (status: `ready`, highest priority).

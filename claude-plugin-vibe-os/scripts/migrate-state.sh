@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-CURRENT_VERSION="1.2.0"
+CURRENT_VERSION="1.3.0"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 # --- Semver comparison ---
@@ -99,6 +99,43 @@ migrate_1_1_to_1_2() {
   esac
 }
 
+# --- Migration: 1.2.0 -> 1.3.0 ---
+migrate_1_2_to_1_3() {
+  local file="$1"
+  local basename
+  basename=$(basename "$file")
+
+  case "$basename" in
+    config.json)
+      # Add opponent_processor, simplify, and ci_healing config sections
+      jq '. + {
+        opponent_processor: (.opponent_processor // {
+          enabled: true,
+          auto_invoke_after_tdr: true
+        }),
+        simplify: (.simplify // {
+          enabled: true,
+          min_files_for_analysis: 3,
+          auto_revert_on_test_failure: true
+        }),
+        ci_healing: (.ci_healing // {
+          enabled: true,
+          max_attempts: 3,
+          auto_checkpoint: true
+        })
+      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      ;;
+    state.json)
+      # Add active_workflow field
+      jq '. + {active_workflow: (.active_workflow // null)}' \
+        "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      ;;
+    backlog.json)
+      # No structural changes needed for backlog in 1.3.0
+      ;;
+  esac
+}
+
 # --- Migrate a single file ---
 migrate_file() {
   local file="$1"
@@ -127,6 +164,9 @@ migrate_file() {
   fi
   if version_lt "$version" "1.2.0"; then
     migrate_1_1_to_1_2 "$file"
+  fi
+  if version_lt "$version" "1.3.0"; then
+    migrate_1_2_to_1_3 "$file"
   fi
 
   # Update schema_version to current

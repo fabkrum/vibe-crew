@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2.0",
+  "schema_version": "1.3.0",
   "terminal": "{{TERMINAL}}",
   "notifications": {
     "enabled": true,
@@ -49,5 +49,19 @@
   "audit": {
     "auto_github_issues": false,
     "severity_threshold": "high"
+  },
+  "opponent_processor": {
+    "enabled": true,
+    "auto_invoke_after_tdr": true
+  },
+  "simplify": {
+    "enabled": true,
+    "min_files_for_analysis": 3,
+    "auto_revert_on_test_failure": true
+  },
+  "ci_healing": {
+    "enabled": true,
+    "max_attempts": 3,
+    "auto_checkpoint": true
   }
 }

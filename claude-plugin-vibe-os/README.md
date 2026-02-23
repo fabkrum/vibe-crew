@@ -63,7 +63,7 @@ enabled by default but work is not blocked if they are unavailable.
 
 ## Commands Reference
 
-VibeOS provides 14 slash commands. Each command is defined in the `skills/`
+VibeOS provides 17 slash commands. Each command is defined in the `skills/`
 directory and invoked directly from the Claude Code prompt.
 
 ### Project Setup
@@ -100,6 +100,14 @@ directory and invoked directly from the Claude Code prompt.
 | `/cost` | Display the real-time token cost dashboard: current session cost, daily/weekly/monthly aggregates, threshold proximity, and model pricing reference. |
 | `/undo` | Checkpoint rollback: list VibeOS checkpoints and recent commits, pick a target, and safely revert (pushed) or reset (unpushed) while preserving your working tree. |
 | `/audit` | OWASP Top 10 security review: scan codebase for injection, auth, XSS, misconfig, and 7 more vulnerability categories. Runs dependency audit, secret detection, and optionally creates GitHub issues for critical findings. |
+| `/heal` | Auto-heal failing CI: fetch logs from GitHub Actions, diagnose failure category (build/test/lint/dep/env), apply targeted fix (max 3 attempts), verify, and commit. Creates a checkpoint before any changes. |
+
+### Code Quality
+
+| Command | Description |
+|---|---|
+| `/simplify` | Analyze feature code for simplification opportunities: dead code removal, abstraction flattening, API surface reduction, dependency consolidation. Opus-powered read-only analysis with per-suggestion approval and automatic test verification. |
+| `/replay` | Reusable workflow templates from successful sessions. `/replay` lists templates, `/replay --create <name>` extracts from sessions with Vibe Score >= 70, `/replay <name>` loads a template to guide development. |
 
 ### Quality and Wrap-Up
 
@@ -139,7 +147,7 @@ feature:
 
 ### Agents
 
-VibeOS uses 9 specialized agents, each with a dedicated system prompt:
+VibeOS uses 12 specialized agents, each with a dedicated system prompt:
 
 | Agent | Model | Execution | Role |
 |---|---|---|---|
@@ -152,6 +160,9 @@ VibeOS uses 9 specialized agents, each with a dedicated system prompt:
 | Code Auditor | Sonnet | Worktree | Read-only codebase analysis for existing project onboarding. Extracts conventions, test gaps, and architecture patterns. |
 | Security Auditor | Sonnet | Worktree | Read-only OWASP Top 10 security analysis. Scans for injection, auth, XSS, misconfig, vulnerable dependencies, secrets, and SSRF. |
 | Doc Generator | Sonnet | Inline | Feature documentation, CHANGELOG updates, VitePress sidebar regeneration, release notes. |
+| Code Simplifier | Opus | Worktree | Read-only code analysis for simplification: dead code, abstraction flattening, API reduction, dependency consolidation. |
+| CI Healer | Sonnet | Inline | CI failure diagnosis and repair. Categorizes failures (build/test/lint/dep/env), applies targeted fixes with max 3 attempts. |
+| Opponent Processor | Sonnet | Worktree | Devil's advocate for TDR decisions. Generates counter-arguments, debate matrices, and risk assessments for technology choices. |
 
 ### Hook System
 
@@ -188,7 +199,7 @@ claude-plugin-vibe-os/
   .claude-plugin/
     plugin.json                 # Plugin manifest (name, version, entry points)
   .mcp.json                    # Context7 + Puppeteer MCP server config
-  settings.json                # 68 permission rules (allowed + denied tools)
+  settings.json                # 71 permission rules (allowed + denied tools)
   hooks/
     hooks.json                 # 10 hook bindings across 6 lifecycle events
   agents/
@@ -201,6 +212,9 @@ claude-plugin-vibe-os/
     code-auditor.md            # Code Auditor agent prompt
     security-auditor.md        # Security Auditor agent prompt
     doc-generator.md           # Doc Generator agent prompt
+    code-simplifier.md         # Code Simplifier agent prompt
+    ci-healer.md               # CI Healer agent prompt
+    opponent-processor.md      # Opponent Processor agent prompt
   skills/
     setup/SKILL.md             # /setup command
     new-project/SKILL.md       # /new-project command
@@ -216,7 +230,10 @@ claude-plugin-vibe-os/
     cost/SKILL.md              # /cost command
     undo/SKILL.md              # /undo command
     audit/SKILL.md             # /audit command
-  scripts/                     # ~36 bash automation scripts
+    replay/SKILL.md            # /replay command
+    simplify/SKILL.md          # /simplify command
+    heal/SKILL.md              # /heal command
+  scripts/                     # ~52 bash automation scripts
   templates/                   # Project templates and doc-site scaffold
   LICENSE                      # MIT License
 
@@ -229,6 +246,9 @@ claude-plugin-vibe-os/
   releases/                    # Release notes data JSON files
   handoffs/                    # Cross-session handoff documents
   mutation-log.json            # CLAUDE.md mutation audit log
+  workflows/                   # Reusable workflow templates (/replay)
+  simplifications/             # Code simplification reports (/simplify)
+  ci-heals/                    # CI heal reports (/heal)
 ```
 
 ---

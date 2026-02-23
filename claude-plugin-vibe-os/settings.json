@@ -56,7 +56,10 @@
       "Bash(composer audit *)",
       "Bash(git tag *)",
       "Bash(git revert *)",
-      "Bash(git reset --soft *)"
+      "Bash(git reset --soft *)",
+      "Bash(gh run list *)",
+      "Bash(gh run view *)",
+      "Bash(gh run watch *)"
     ],
     "deniedTools": [
       "Bash(sudo *)",

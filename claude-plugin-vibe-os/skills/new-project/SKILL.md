@@ -158,6 +158,39 @@ jq '.foundation.artifacts.tdr.status = "complete" | .foundation.artifacts.tdr.fi
 
 ---
 
+## Step 3.5: Opponent Processor (TDR Challenge)
+
+After the TDR is created, invoke the Opponent Processor to stress-test the technology decisions.
+
+### Run Counter-Analysis
+
+Extract the decisions from the TDR:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-counter-tdr.sh"
+```
+
+Launch the `opponent-processor` agent with the TDR and VISION.md as context. The agent will produce a counter-analysis for each major technology decision.
+
+### Present Both Analyses
+
+Display the original TDR decisions alongside the opponent's counter-arguments. For each decision, show:
+
+1. **Original recommendation** and rationale
+2. **Counter-argument** and alternative
+3. **Debate matrix** (6-criteria comparison table)
+4. **Opponent's verdict**: Keep or Reconsider
+
+Ask the user: "The Opponent Processor has challenged your technology choices. Review the debate above. Would you like to: (keep all / reconsider specific decisions / skip)"
+
+- **keep all**: Proceed with the original TDR as-is.
+- **reconsider specific decisions**: Ask which decision(s) to revisit. For each, re-run the relevant TDR section with the counter-argument in mind. Update the TDR file.
+- **skip**: Proceed without opponent analysis (mark as skipped).
+
+The opponent analysis is saved to `docs/counter-tdr.md` for reference.
+
+---
+
 ## Step 4: Roadmap
 
 Read VISION.md for the core features list and the TDR for technical context:

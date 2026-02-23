@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.3.0",
+  "run_id": null,
+  "branch": "{{BRANCH}}",
+  "started_at": "{{TIMESTAMP}}",
+  "completed_at": null,
+  "checkpoint_tag": null,
+  "attempts": [
+    {
+      "attempt": 1,
+      "diagnosis": {
+        "category": null,
+        "confidence": null,
+        "match_counts": {
+          "build": 0,
+          "test": 0,
+          "lint": 0,
+          "dep": 0,
+          "env": 0
+        },
+        "relevant_lines": [],
+        "summary": null
+      },
+      "fix_description": "",
+      "files_modified": [],
+      "ci_result": null,
+      "commit_sha": null
+    }
+  ],
+  "outcome": "pending",
+  "final_diagnosis": null,
+  "escalation_notes": null
+}

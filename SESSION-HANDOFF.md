@@ -1,6 +1,6 @@
 # VibeOS — Session Handoff
 
-> Updated after Session 12 (February 23, 2026). **v1.2.0 implementation complete.** Top 4 deferred v1.2 items shipped: `/cost` (real-time token dashboard), `/undo` (checkpoint rollback), `/audit` (OWASP Top 10 security review), and non-Node.js convention detection (Python, Ruby, Go, Rust, PHP, Java). Plugin self-test passes **149/149 checks**. Plugin now has **~118 files** total across 12 sessions. Version bumped from 1.1.0 to 1.2.0.
+> Updated after Session 14 (February 23, 2026). **v1.3.0 documentation complete.** Updated `docs/index.html` (1539 → 1813 lines) to document all v1.3.0 features: `/replay`, `/simplify`, `/heal`, and Opponent Processor. Updated agents table (9 → 12), commands table (9 → 17), directory structure, hooks table, state management, and troubleshooting. Plugin has **~134 files** total across 14 sessions.
 
 ---
 
@@ -165,7 +165,7 @@
 - Plugin self-test: **132/132 checks passed** (up from 99 — new agents, skills, scripts, templates)
 - **v1.1.0 complete. All 6 deferred items shipped plus /handoff.**
 
-### Session 12 (Current)
+### Session 12
 - Read session handoff and v1.2 implementation plan
 - Explored entire v1.1 codebase (~107 files) using Explore agent to build full context
 - Implemented all 4 phases of v1.2 in a single session using 4 parallel agents:
@@ -201,6 +201,59 @@
 - Plugin self-test: **149/149 checks passed** (up from 132 — new agent, skills, scripts, template)
 - Verified detect-conventions.sh and extract-project-conventions.sh produce valid JSON with `"unknown"` language in plugin dir (no manifest)
 - **v1.2.0 complete. Top 4 deferred items shipped.**
+
+### Session 13
+- Read session handoff and v1.3 implementation plan
+- Explored entire v1.2 codebase (~118 files) using Explore agent to build full context
+- Implemented all 4 features of v1.3 in a single session using 4 parallel agents:
+  - **Feature A: `/replay` — Reusable Session Workflow Templates** (4 new files)
+    - Created `skills/replay/SKILL.md` — Slash command: list/create/apply workflow templates. Three modes: no args (list), `--create <name>` (extract from sessions with score >= 70), `<name>` (load and guide)
+    - Created `scripts/extract-workflow.sh` — Parse session logs + score files to extract phase order, commit patterns, test strategy, quality thresholds into reusable workflow JSON
+    - Created `scripts/list-workflows.sh` — List `.vibeos/workflows/workflow-*.json` with summaries (name, description, phase count, min score)
+    - Created `templates/workflow.json.template` — Schema v1.3.0 workflow template with phase_order, branch_convention, test_strategy, quality_thresholds
+  - **Feature B: `/simplify` — Code Simplifier** (4 new files)
+    - Created `agents/code-simplifier.md` — Opus agent, worktree isolation, read-only. 4 simplification categories: dead code, abstraction flattening, API simplification, dependency reduction
+    - Created `skills/simplify/SKILL.md` — Slash command: collect feature files, invoke agent, display suggestions with before/after previews, apply with per-suggestion approval, revert on test failure
+    - Created `scripts/collect-feature-files.sh` — Gather files changed on feature branch via `git diff --name-only`, filter to source code extensions only
+    - Created `templates/simplification-report.json.template` — Schema v1.3.0 report with per-suggestion status tracking (pending/applied/rejected/reverted)
+  - **Feature C: `/heal` — Auto-Healing CI** (5 new files)
+    - Created `agents/ci-healer.md` — Sonnet agent, maxTurns 15. Categorizes CI failures (build/test/lint/dep/env), applies targeted minimal fixes
+    - Created `skills/heal/SKILL.md` — Slash command: fetch CI logs, diagnose, create checkpoint, invoke agent, verify, retry loop (max 3 attempts), escalate on failure
+    - Created `scripts/fetch-ci-logs.sh` — Fetch latest failed CI run via `gh run view --log-failed`, truncate to 500 lines, output structured JSON
+    - Created `scripts/diagnose-ci-failure.sh` — Pattern-match CI errors to categorize with confidence rating and relevant line extraction
+    - Created `templates/ci-heal-report.json.template` — Schema v1.3.0 report: attempts array with diagnosis, fix, result per attempt
+  - **Feature D: Opponent Processor — TDR Debate** (3 new files + 2 modifications)
+    - Created `agents/opponent-processor.md` — Sonnet agent, worktree isolation, read-only. Devil's advocate: counter-arguments, debate matrices (6 criteria), risk assessments
+    - Created `scripts/generate-counter-tdr.sh` — Extract technology decisions from TDR markdown, output structured JSON for agent
+    - Created `templates/counter-tdr.md.template` — Counter-analysis format with per-decision debate matrix table
+    - Modified `skills/new-project/SKILL.md` — Added Step 3.5: invoke Opponent Processor after TDR, present both analyses
+    - Modified `agents/workflow-orchestrator.md` — Added Opponent Processor coordination section
+  - **Cross-cutting modifications** (8 files)
+    - `.claude-plugin/plugin.json` — Version bumped 1.2.0 → 1.3.0
+    - `settings.json` — Added 3 allowedTools: `gh run list`, `gh run view`, `gh run watch`
+    - `scripts/migrate-state.sh` — Added `migrate_1_2_to_1_3()`: opponent_processor, simplify, ci_healing config + active_workflow in state. Updated version chain to 1.3.0
+    - `templates/config.json.template` — Added opponent_processor, simplify, ci_healing sections. Schema bumped to 1.3.0
+    - `templates/state.json.template` — Added `active_workflow: null`
+    - `README.md` — Updated to 12 agents (was 9), 17 commands (was 14), added /replay + /simplify + /heal sections
+    - `CHANGELOG.md` — Added full v1.3.0 entry
+    - `SESSION-HANDOFF.md` — Updated with Session 13 details
+- **v1.3.0 complete. All 4 deferred items shipped.**
+
+### Session 14 (Current)
+- Continued from Session 13 (context compacted mid-session)
+- Completed the `docs/index.html` documentation update for v1.3.0 (1539 → 1813 lines, +274 lines)
+- **10 updates to index.html:**
+  1. Hero badge — added `v1.3.0` version tag
+  2. Nav links — added "Advanced" link between "Existing Projects" and "System Deep Dive"
+  3. Table of Contents — added "Advanced Workflows" section with 4 sub-items, updated "9-Agent" → "12-Agent"
+  4. New "Advanced Workflows" section (~130 lines) — full documentation for /replay (3 modes with card grid), /simplify (simplification cycle flow diagram, safety callout), /heal (4-step process, failure category table), Opponent Processor (counter-arguments, debate matrix, risk assessment cards)
+  5. Agents table — rewrote from 9 to 12 agents with accurate names (Builder, Verifier, Code Auditor, Security Auditor, Code Simplifier, CI Healer, Opponent Processor), added "Isolation" column, Opus badge for Code Simplifier
+  6. Slash commands — expanded from 9 commands in 1 table to 17 commands in 6 categorized tables (Project Setup, Planning, Development, Cost & Safety, Code Quality, Quality & Wrap-Up)
+  7. Directory structure — updated counts (52 scripts, 12 agents, 17 skills), added templates dir, 5 new .vibeos/ subdirectories
+  8. Hook system table — updated from 7 to 8 entries with accurate script names (session-startup.sh, sync-state.sh, error-recovery.sh, compact-reinject.sh, restrict-paths.sh, cost-guardrails.sh, claude-md-lint.sh)
+  9. State management table — expanded from 6 to 11 entries (added mutation-log.json, handoffs/, workflows/, simplifications/, ci-heals/)
+  10. Troubleshooting — added 4 new entries: /heal CI log issues, /simplify empty results, /replay session eligibility, stale locks/corrupted state
+- Updated SESSION-HANDOFF.md with Session 14 details
 
 ---
 
@@ -610,11 +663,113 @@ Integrated into `architecture/implementation-plan.md` (see above).
 
 **v1.2 Plugin totals: ~118 files, 149/149 self-test checks, 15 hook bindings, 9 agents, 14 skills, 47 scripts, ~24 templates, 7 Vue components, 4 data loaders**
 
+### v1.3 Implementation: `/replay` — Workflow Templates (Feature A)
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/replay/SKILL.md` | List/create/apply workflow templates from successful sessions (score >= 70) |
+
+**Scripts (2 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/extract-workflow.sh` | Parse session logs + score files → workflow JSON template |
+| 2 | `scripts/list-workflows.sh` | List `.vibeos/workflows/workflow-*.json` with summaries |
+
+**Template (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/workflow.json.template` | Workflow schema: phase_order, branch_convention, test_strategy, quality_thresholds |
+
+### v1.3 Implementation: `/simplify` — Code Simplifier (Feature B)
+
+**Agent (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `agents/code-simplifier.md` | Opus agent, worktree isolation, read-only. 4 simplification categories |
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/simplify/SKILL.md` | Collect files, invoke agent, display suggestions, apply with test verification |
+
+**Script (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/collect-feature-files.sh` | Gather files changed on feature branch via git diff |
+
+**Template (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/simplification-report.json.template` | Report with per-suggestion status tracking |
+
+### v1.3 Implementation: `/heal` — Auto-Healing CI (Feature C)
+
+**Agent (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `agents/ci-healer.md` | Sonnet agent, maxTurns 15. Categorizes and fixes CI failures |
+
+**Skill (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `skills/heal/SKILL.md` | Fetch logs, diagnose, checkpoint, fix loop (max 3), escalate |
+
+**Scripts (2 files)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/fetch-ci-logs.sh` | Fetch failed CI run logs via gh CLI |
+| 2 | `scripts/diagnose-ci-failure.sh` | Pattern-match errors → categorize (build/test/lint/dep/env) |
+
+**Template (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/ci-heal-report.json.template` | Heal report with attempts array |
+
+### v1.3 Implementation: Opponent Processor — TDR Debate (Feature D)
+
+**Agent (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `agents/opponent-processor.md` | Sonnet agent, worktree, read-only. Devil's advocate for TDR decisions |
+
+**Script (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `scripts/generate-counter-tdr.sh` | Extract decisions from TDR → structured JSON |
+
+**Template (1 file)**
+
+| # | File | Purpose |
+|---|---|---|
+| 1 | `templates/counter-tdr.md.template` | Counter-analysis format with debate matrix |
+
+**Modified Files**: `skills/new-project/SKILL.md` (+Step 3.5: Opponent Processor invocation), `agents/workflow-orchestrator.md` (+Opponent Processor coordination section)
+
+### v1.3 Cross-Phase Modifications
+
+**Modified Files**: `.claude-plugin/plugin.json` (v1.3.0), `settings.json` (+3 allowedTools: gh run list/view/watch), `scripts/migrate-state.sh` (1.2→1.3 migration with 3 config sections + active_workflow), `templates/config.json.template` (+opponent_processor, +simplify, +ci_healing, schema 1.3.0), `templates/state.json.template` (+active_workflow), `README.md` (12 agents, 17 commands), `CHANGELOG.md` (v1.3.0 entry), `SESSION-HANDOFF.md` (Session 13)
+
+**v1.3 Plugin totals: ~134 files, 15 hook bindings, 12 agents, 17 skills, 52 scripts, ~28 templates, 7 Vue components, 4 data loaders**
+
 ---
 
-## Revised Architecture Summary (Session 4, updated Session 12)
+## Revised Architecture Summary (Session 4, updated Session 13)
 
-### 9-Agent Topology (v1.2)
+### 12-Agent Topology (v1.3)
 
 | Agent | Model | Isolation | Role |
 |---|---|---|---|
@@ -627,6 +782,9 @@ Integrated into `architecture/implementation-plan.md` (see above).
 | Code Auditor | Sonnet | Worktree | Read-only codebase analysis for existing project onboarding (multi-language) |
 | Security Auditor | Sonnet | Worktree | Read-only OWASP Top 10 security analysis, dependency audit, secret detection |
 | Doc Generator | Sonnet | Inline | Feature docs, CHANGELOG, VitePress sidebar, release notes |
+| Code Simplifier | Opus | Worktree | Read-only code analysis: dead code, abstraction flattening, API reduction, dependency consolidation |
+| CI Healer | Sonnet | Inline | CI failure diagnosis and repair, max 3 attempts, targeted minimal fixes |
+| Opponent Processor | Sonnet | Worktree | Devil's advocate for TDR decisions, debate matrices, risk assessments |
 
 ### Key Architectural Principles (Applied in Session 4)
 
@@ -715,36 +873,41 @@ Integrated into `architecture/implementation-plan.md` (see above).
 
 ---
 
-## Feature Ideas (accumulated from Sessions 3-4, updated Session 11)
+## Feature Ideas (accumulated from Sessions 3-4, updated Session 13)
 
 Shipped in v1.1: ~~`/handoff`~~, ~~Progressive onboarding~~, ~~`/cost` infrastructure~~ (in cost-guardrails.sh)
 Shipped in v1.2: ~~`/cost`~~, ~~`/undo`~~, ~~`/audit`~~, ~~Non-Node.js convention detection~~
+Shipped in v1.3: ~~`/replay`~~, ~~`/simplify`~~, ~~Auto-healing CI~~, ~~Opponent processor~~
 
-Remaining ideas for v1.3+:
-
-1. **`/replay`** — Store successful session workflows as reusable templates
-2. **Opponent processor pattern** — Competing agents debate architecture decisions during TDR
-3. **Auto-healing CI** — Headless `claude -p` agent auto-fixes failing CI
-4. **`/simplify`** — Integrate Boris's code-simplifier plugin post-implementation
+All accumulated feature ideas have been shipped. Future ideas TBD based on real-world usage testing.
 
 ---
 
-## v1.2.0 Release Status
+## v1.3.0 Release Status
 
-**v1.0.0 (6 implementation phases) + v1.1.0 (4 enhancement phases) + v1.2.0 (4 feature phases) are complete.** The plugin is release-ready.
+**v1.0.0 (6 phases) + v1.1.0 (4 phases) + v1.2.0 (4 phases) + v1.3.0 (4 features) are complete.** The plugin is release-ready.
 
-| Metric | v1.0.0 | v1.1.0 | v1.2.0 | Delta (1.1→1.2) |
-|---|---|---|---|---|
-| Total files | 78 | ~107 | ~118 | +~11 |
-| Self-test checks | 99/99 | 132/132 | 149/149 | +17 |
-| Hook bindings | 15 | 15 | 15 | — |
-| Agents | 5 | 8 | 9 | +1 (Security Auditor) |
-| Slash commands | 9 | 11 | 14 | +3 (/cost, /undo, /audit) |
-| Scripts | 26 | 41 | 47 | +6 |
-| Templates | 17 | ~23 | ~24 | +1 |
-| Vue components | 2 | 7 | 7 | — |
-| Data loaders | 2 | 4 | 4 | — |
-| Sessions | 10 | 11 | 12 | +1 |
+| Metric | v1.0.0 | v1.1.0 | v1.2.0 | v1.3.0 | Delta (1.2→1.3) |
+|---|---|---|---|---|---|
+| Total files | 78 | ~107 | ~118 | ~134 | +~16 |
+| Hook bindings | 15 | 15 | 15 | 15 | — |
+| Agents | 5 | 8 | 9 | 12 | +3 (Code Simplifier, CI Healer, Opponent Processor) |
+| Slash commands | 9 | 11 | 14 | 17 | +3 (/replay, /simplify, /heal) |
+| Scripts | 26 | 41 | 47 | 52 | +5 |
+| Templates | 17 | ~23 | ~24 | ~28 | +4 |
+| Vue components | 2 | 7 | 7 | 7 | — |
+| Data loaders | 2 | 4 | 4 | 4 | — |
+| Sessions | 10 | 11 | 12 | 14 | +2 |
+
+### v1.3.0 Features Shipped
+
+| Feature | Status | Key Files |
+|---|---|---|
+| `/replay` — Workflow Templates | Complete | skills/replay/SKILL.md, extract-workflow.sh, list-workflows.sh, workflow.json.template |
+| `/simplify` — Code Simplifier | Complete | agents/code-simplifier.md, skills/simplify/SKILL.md, collect-feature-files.sh, simplification-report.json.template |
+| `/heal` — Auto-Healing CI | Complete | agents/ci-healer.md, skills/heal/SKILL.md, fetch-ci-logs.sh, diagnose-ci-failure.sh, ci-heal-report.json.template |
+| Opponent Processor — TDR Debate | Complete | agents/opponent-processor.md, generate-counter-tdr.sh, counter-tdr.md.template, new-project SKILL.md Step 3.5, workflow-orchestrator.md coordination |
+| Schema Migration 1.2→1.3 | Complete | migrate-state.sh, config.json.template (+3 sections), state.json.template (+active_workflow) |
 
 ### v1.2.0 Features Shipped
 
@@ -770,21 +933,14 @@ Remaining ideas for v1.3+:
 | Schema Migration | Complete | migrate-state.sh 1.0->1.1, config/state templates updated |
 | User Feedback | Complete | 4-point satisfaction scale in /wrap Step 9.7 |
 
-### Next Steps (Post-v1.2)
+### Next Steps (Post-v1.3)
 
 1. **Install and test** — `claude plugin install /path/to/claude-plugin-vibe-os` and run through Tier 1 + Tier 2 workflows on a real project
-2. **Test /onboard on non-Node.js projects** — Try onboarding Python (Django/FastAPI), Go, or Ruby (Rails) projects and verify convention extraction accuracy
-3. **Test /audit** — Run on a real project, verify OWASP findings quality, test dependency audit across package managers
-4. **Test /undo** — Create checkpoints, make changes, verify rollback in both revert and reset modes
-5. **Test /cost** — Verify aggregate cost tracking across multiple sessions
-6. **Test Performance Coach** — Run 5+ sessions to verify trend analysis and mutation proposals
-7. **Iterate on agent prompts** — budget time for prompt refinement based on real-world usage
-
-### Deferred to v1.3
-
-| Feature | Reason |
-|---|---|
-| `/replay` — Reusable session templates | Needs session transcript analysis infrastructure. |
-| `/simplify` — Code simplifier integration | External plugin dependency. |
-| Auto-healing CI — Headless CI fixer | Complex operational considerations. |
-| Opponent processor — Competing TDR agents | Interesting but adds cost. Needs design work. |
+2. **Test /replay** — Create workflow templates from sessions, verify extraction and application
+3. **Test /simplify** — Run on a feature branch, verify per-suggestion approval and test-then-revert flow
+4. **Test /heal** — Trigger with a failing CI run, verify diagnosis, fix attempts, and checkpoint rollback
+5. **Test Opponent Processor** — Run `/new-project` through TDR and verify counter-analysis quality
+6. **Test /onboard on non-Node.js projects** — Try onboarding Python, Go, or Ruby projects
+7. **Test /audit** — Run on a real project, verify OWASP findings quality
+8. **Iterate on agent prompts** — budget time for prompt refinement based on real-world usage
+9. **Documentation site** — docs/index.html is fully updated for v1.3.0; consider publishing to GitHub Pages or deploying VitePress docs-site

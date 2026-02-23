@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-23
+
+### Added
+
+#### `/replay` — Reusable Session Workflow Templates
+
+- `skills/replay/SKILL.md` -- Slash command: list/create/apply workflow templates from successful sessions. `/replay` lists templates, `/replay --create <name>` extracts from sessions with Vibe Score >= 70, `/replay <name>` loads and guides development
+- `scripts/extract-workflow.sh` -- Parse session logs and score files to extract phase order, commit patterns, test strategy, and quality thresholds into a reusable workflow template
+- `scripts/list-workflows.sh` -- List `.vibeos/workflows/workflow-*.json` files with name, description, phase count, and min score summaries
+- `templates/workflow.json.template` -- Schema v1.3.0 workflow template: phase_order, branch_convention, test_strategy, quality_thresholds, commit_convention
+
+#### `/simplify` — Code Simplifier
+
+- `agents/code-simplifier.md` -- Opus agent, worktree isolation, read-only. Analyzes code for 4 simplification categories: dead code removal, abstraction flattening, API surface reduction, dependency consolidation
+- `skills/simplify/SKILL.md` -- Slash command: collect feature files, invoke code-simplifier agent, display suggestions with before/after previews, apply with per-suggestion approval and automatic test verification, revert on test failure
+- `scripts/collect-feature-files.sh` -- Gather source files changed on feature branch via `git diff --name-only`, filter to code files only
+- `templates/simplification-report.json.template` -- Schema v1.3.0 report with per-suggestion status tracking (pending/applied/rejected/reverted)
+
+#### `/heal` — Auto-Healing CI
+
+- `agents/ci-healer.md` -- Sonnet agent, maxTurns 15. Categorizes CI failures (build/test/lint/dep/env) and applies targeted minimal fixes
+- `skills/heal/SKILL.md` -- Slash command: fetch CI logs from GitHub Actions, diagnose failure category, create checkpoint, invoke ci-healer agent, verify fix, retry loop (max 3 attempts), escalate to user on failure
+- `scripts/fetch-ci-logs.sh` -- Fetch latest failed CI run via `gh run view --log-failed`, truncate to 500 lines, output structured JSON
+- `scripts/diagnose-ci-failure.sh` -- Pattern-match CI error logs to categorize as build/test/lint/dep/env with confidence rating and relevant line extraction
+- `templates/ci-heal-report.json.template` -- Schema v1.3.0 report: attempts array with diagnosis, fix description, CI result per attempt
+
+#### Opponent Processor — TDR Debate System
+
+- `agents/opponent-processor.md` -- Sonnet agent, worktree isolation, read-only. Devil's advocate for technology decisions: generates counter-arguments, debate matrices (6 criteria), risk assessments, and Keep/Reconsider verdicts
+- `scripts/generate-counter-tdr.sh` -- Extract technology decisions from TDR markdown, output structured JSON with category, chosen option, and stated rationale per decision
+- `templates/counter-tdr.md.template` -- Counter-analysis format: per-decision devil's advocate position, debate matrix table, risk assessment, recommendation
+
+### Changed
+
+- `skills/new-project/SKILL.md` -- Added Step 3.5: invoke Opponent Processor after TDR creation. Presents both analyses side-by-side, offers keep all / reconsider / skip choice
+- `agents/workflow-orchestrator.md` -- Added Opponent Processor coordination section to Tier 1 routing
+- `.claude-plugin/plugin.json` -- Version bumped to 1.3.0
+- `settings.json` -- Added 3 allowedTools: `gh run list`, `gh run view`, `gh run watch`
+- `scripts/migrate-state.sh` -- Added `migrate_1_2_to_1_3()`: opponent_processor, simplify, ci_healing config sections + active_workflow in state. Updated version chain to 1.3.0
+- `templates/config.json.template` -- Added `opponent_processor`, `simplify`, `ci_healing` config sections. Schema version bumped to 1.3.0
+- `templates/state.json.template` -- Added `active_workflow: null` field
+- `README.md` -- Updated to 12 agents (was 9), 17 commands (was 14). Added /replay, /simplify, /heal sections and 3 new agent entries
+
+---
+
 ## [1.2.0] - 2026-02-23
 
 ### Added
@@ -247,6 +292,7 @@ Documentation, cleanup utilities, and finalized configurations.
 
 **Total: ~81 files across 6 implementation phases.**
 
+[1.3.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.3.0
 [1.2.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.2.0
 [1.1.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.1.0
 [1.0.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.0.0

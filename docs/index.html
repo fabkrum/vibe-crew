@@ -616,6 +616,7 @@
       <li><a href="#warp">Warp Setup</a></li>
       <li><a href="#new-projects">New Projects</a></li>
       <li><a href="#existing-projects">Existing Projects</a></li>
+      <li><a href="#advanced">Advanced</a></li>
       <li><a href="#system">System Deep Dive</a></li>
       <li><a href="#efficiency">Efficiency Guide</a></li>
     </ul>
@@ -624,7 +625,7 @@
 
 <!-- ============ HERO ============ -->
 <header class="hero">
-  <div class="hero-badge">Claude Code Plugin</div>
+  <div class="hero-badge">Claude Code Plugin &middot; v1.3.0</div>
   <h1>VibeOS Documentation</h1>
   <p>The autonomous vibe-coding operating system that turns Claude Code into a full development team. Architecture-first, attention-aware, and self-improving.</p>
   <a href="#install" class="hero-cta">Get Started &darr;</a>
@@ -642,9 +643,17 @@
       <li><a href="#warp">Configuring Warp Terminal</a></li>
       <li><a href="#new-projects">Using VibeOS with New Projects</a></li>
       <li><a href="#existing-projects">Using VibeOS with Existing Projects</a></li>
+      <li><a href="#advanced">Advanced Workflows</a>
+        <ol>
+          <li><a href="#replay">Workflow Templates (/replay)</a></li>
+          <li><a href="#simplify">Code Simplification (/simplify)</a></li>
+          <li><a href="#heal">Auto-Healing CI (/heal)</a></li>
+          <li><a href="#opponent">Opponent Processor (TDR Debate)</a></li>
+        </ol>
+      </li>
       <li><a href="#system">System Deep Dive</a>
         <ol>
-          <li><a href="#agents">The 9-Agent Architecture</a></li>
+          <li><a href="#agents">The 12-Agent Architecture</a></li>
           <li><a href="#hooks">The Hook System</a></li>
           <li><a href="#interrupt">The Interrupt Protocol</a></li>
           <li><a href="#phase-gate">The Phase Gate</a></li>
@@ -797,12 +806,14 @@ claude</code></pre>
   claude-plugin-vibe-os/          # The plugin (don't modify)
     .claude-plugin/
       plugin.json                 # Plugin manifest
-    mcp-servers.json              # Context7 + Puppeteer config
+    .mcp.json                     # Context7 + Puppeteer MCP config
+    settings.json                 # Permission rules (allowed + denied tools)
     hooks/
       hooks.json                  # Event hook bindings
-    scripts/                      # 6 bash automation scripts
-    agents/                       # 9 specialized AI agent prompts
-    commands/                     # 9 slash command definitions
+    scripts/                      # ~52 bash automation scripts
+    agents/                       # 12 specialized AI agent prompts
+    skills/                       # 17 slash command definitions
+    templates/                    # Project templates and doc-site scaffold
 
   .vibeos/                        # Per-project runtime state
     config.json                   # Terminal preference, notification settings
@@ -810,7 +821,12 @@ claude</code></pre>
     backlog.json                  # Feature backlog with specs
     sessions/                     # Session logs (JSON)
     scores/                       # Vibe Score breakdowns (JSON)
-    releases/                     # Release notes data (JSON)</code></pre>
+    releases/                     # Release notes data (JSON)
+    handoffs/                     # Cross-session handoff documents
+    workflows/                    # Reusable workflow templates (/replay)
+    simplifications/              # Code simplification reports (/simplify)
+    ci-heals/                     # CI heal reports (/heal)
+    mutation-log.json             # CLAUDE.md mutation audit log</code></pre>
   </section>
 
   <hr>
@@ -1044,6 +1060,138 @@ Completeness is checked at /wrap, not during work.</span></div>
   <hr>
 
   <!-- ========================== -->
+  <!-- SECTION: ADVANCED          -->
+  <!-- ========================== -->
+  <section class="section" id="advanced">
+    <span class="section-label">v1.3.0</span>
+    <h2>Advanced Workflows</h2>
+    <p>VibeOS v1.3.0 introduces four advanced workflows that extend the development lifecycle: reusable session templates, automated code simplification, self-healing CI, and adversarial review of technology decisions.</p>
+
+    <!-- REPLAY -->
+    <h3 id="replay">Workflow Templates (<code>/replay</code>)</h3>
+    <p>Capture what worked and reuse it. <code>/replay</code> extracts reusable workflow templates from successful sessions (Vibe Score &ge; 70) so you can apply proven patterns to future features.</p>
+
+    <h4>Three modes</h4>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9776;</div>
+        <h4>List templates</h4>
+        <p>Run <code>/replay</code> with no arguments to list all saved workflow templates with their names, descriptions, and quality thresholds.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">+</div>
+        <h4>Create a template</h4>
+        <p>Run <code>/replay --create &lt;name&gt;</code> to extract a template from the most recent high-scoring session. Captures phase order, branch conventions, test strategy, and quality thresholds.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9654;</div>
+        <h4>Apply a template</h4>
+        <p>Run <code>/replay &lt;name&gt;</code> to load a template and have it guide your current feature development with the proven workflow.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">When to create templates</div>
+      <p>After a session scores 90+, create a template. Common examples: "api-feature" for CRUD endpoints, "ui-component" for design-system-aligned components, "data-migration" for schema changes. Templates are stored in <code>.vibeos/workflows/</code>.</p>
+    </div>
+
+    <!-- SIMPLIFY -->
+    <h3 id="simplify">Code Simplification (<code>/simplify</code>)</h3>
+    <p>After building a feature, run <code>/simplify</code> to get an Opus-powered analysis of your code for unnecessary complexity. The agent operates in a read-only worktree &mdash; it analyzes but never modifies your code directly.</p>
+
+    <h4>The simplification cycle</h4>
+    <div class="flow"><span class="highlight">/simplify</span> collects files changed on the feature branch
+    &darr;
+Launches the <span class="highlight">Code Simplifier</span> agent (Opus, worktree, read-only)
+    &darr;
+Agent analyzes four categories:
+  <span class="highlight">Dead code</span> &middot; <span class="highlight">Abstraction flattening</span> &middot; <span class="highlight">API simplification</span> &middot; <span class="highlight">Dependency reduction</span>
+    &darr;
+Presents suggestions one at a time for your approval
+    &darr;
+<span class="muted">Each accepted change is applied and tests re-run</span>
+<span class="muted">If tests fail &rarr; automatic revert</span></div>
+
+    <p>Suggestions are categorized by impact (<strong>high</strong>, <strong>medium</strong>, <strong>low</strong>) and include before/after snippets, estimated line reduction, and confidence ratings. You approve or reject each individually. Reports are saved to <code>.vibeos/simplifications/</code>.</p>
+
+    <div class="callout info">
+      <div class="callout-title">Safe by design</div>
+      <p>The analysis agent cannot write files. Only the <code>/simplify</code> skill applies approved changes in the main session, and every change is verified by running your test suite. Failed tests trigger an automatic revert.</p>
+    </div>
+
+    <!-- HEAL -->
+    <h3 id="heal">Auto-Healing CI (<code>/heal</code>)</h3>
+    <p>When CI fails, run <code>/heal</code> instead of manually debugging logs. The CI Healer fetches the failure logs from GitHub Actions, diagnoses the root cause, and applies targeted fixes &mdash; up to 3 attempts.</p>
+
+    <h4>How it works</h4>
+    <ol class="steps">
+      <li>
+        <h4>Fetch and diagnose</h4>
+        <p><code>/heal</code> runs <code>gh run view --log-failed</code> to retrieve the CI output, then pattern-matches errors to categorize the failure: <strong>build</strong>, <strong>test</strong>, <strong>lint</strong>, <strong>dependency</strong>, or <strong>environment</strong>.</p>
+      </li>
+      <li>
+        <h4>Checkpoint</h4>
+        <p>Before any fix, a git checkpoint is created so all changes can be reverted cleanly if the fix doesn't work.</p>
+      </li>
+      <li>
+        <h4>Fix loop (max 3 attempts)</h4>
+        <p>The CI Healer agent applies the minimum viable fix for the diagnosed failure, then pushes and waits for CI. If CI fails again, it re-diagnoses with the new context and tries a different approach.</p>
+      </li>
+      <li>
+        <h4>Report</h4>
+        <p>A heal report is saved to <code>.vibeos/ci-heals/</code> documenting each attempt, diagnosis, fix, and outcome. If all 3 attempts fail, the healer escalates to you with a summary of what it tried.</p>
+      </li>
+    </ol>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Failure Category</th><th>Common Patterns</th><th>Fix Strategy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Build</strong></td><td>TypeScript errors, missing imports, syntax errors</td><td>Fix the type error or import at its source</td></tr>
+          <tr><td><strong>Test</strong></td><td>Assertion failures, snapshot mismatches, timeouts</td><td>Update assertion/snapshot or fix the logic bug</td></tr>
+          <tr><td><strong>Lint</strong></td><td>ESLint/Prettier violations</td><td>Auto-fix with the project's lint command</td></tr>
+          <tr><td><strong>Dependency</strong></td><td>Missing packages, version conflicts</td><td>Install missing dep or resolve version conflict</td></tr>
+          <tr><td><strong>Environment</strong></td><td>Missing env vars, wrong Node version, permission errors</td><td>Update CI config (YAML/TOML) to match requirements</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- OPPONENT -->
+    <h3 id="opponent">Opponent Processor (TDR Debate)</h3>
+    <p>Every technology decision deserves a devil's advocate. During Tier 1, after the Stack Scout produces the TDR, VibeOS automatically invokes the <strong>Opponent Processor</strong> &mdash; a read-only agent that challenges every decision.</p>
+
+    <h4>What it produces</h4>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#10007;</div>
+        <h4>Counter-arguments</h4>
+        <p>For each technology decision, the opponent generates 2&ndash;3 reasons why the choice might be wrong, citing real-world failure modes and edge cases.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9878;</div>
+        <h4>Debate matrix</h4>
+        <p>A structured comparison table scoring each option across 6 criteria: performance, DX, ecosystem, scalability, learning curve, and lock-in risk.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9888;</div>
+        <h4>Risk assessment</h4>
+        <p>Identifies the highest-risk decisions and recommends which ones deserve extra scrutiny or prototyping before committing.</p>
+      </div>
+    </div>
+
+    <p>After reviewing both the TDR and the counter-analysis, you choose: <strong>keep the original decisions</strong>, <strong>reconsider specific choices</strong>, or <strong>skip</strong> the review. The opponent's analysis is saved alongside the TDR for future reference.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Why adversarial review matters</div>
+      <p>The Stack Scout is optimized to find the best answer quickly. The Opponent Processor is optimized to find where that answer might break. Together, they produce more robust technology decisions than either could alone. This is especially valuable for decisions that are expensive to reverse (database choice, state management, auth provider).</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ========================== -->
   <!-- SECTION: SYSTEM DEEP DIVE  -->
   <!-- ========================== -->
   <section class="section" id="system">
@@ -1052,68 +1200,98 @@ Completeness is checked at /wrap, not during work.</span></div>
     <p>VibeOS is a system of specialized agents, deterministic hooks, and bash scripts that work together to enforce quality, manage attention, and continuously improve your workflow. Here's how every piece fits together.</p>
 
     <!-- AGENTS -->
-    <h3 id="agents">The 9-Agent Architecture</h3>
-    <p>Each agent has a specific role, model selection, tool access, and context budget. Haiku agents handle fast, routine tasks. Sonnet agents handle complex reasoning and implementation.</p>
+    <h3 id="agents">The 12-Agent Architecture</h3>
+    <p>Each agent has a specific role, model selection, tool access, and context budget. Haiku agents handle fast, routine tasks. Sonnet agents handle complex reasoning and implementation. One agent (Code Simplifier) uses Opus for deep analysis.</p>
 
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Agent</th><th>Model</th><th>Role</th><th>When It Runs</th></tr>
+          <tr><th>Agent</th><th>Model</th><th>Isolation</th><th>Role</th><th>When It Runs</th></tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Session Startup</strong></td>
             <td><span class="badge amber">Haiku</span></td>
-            <td>Environment check, state detection, 3-line routing summary</td>
+            <td>Inline</td>
+            <td>Environment check, state detection, handoff detection, routing</td>
             <td>Every session start</td>
           </tr>
           <tr>
             <td><strong>Workflow Orchestrator</strong></td>
             <td><span class="badge purple">Sonnet</span></td>
-            <td>Routes between Tier 1 and Tier 2, coordinates agent handoffs</td>
+            <td>Inline</td>
+            <td>Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state</td>
             <td>Command routing</td>
           </tr>
           <tr>
             <td><strong>Stack Scout</strong></td>
             <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
             <td>Read-only research. Uses WebSearch, Context7, Puppeteer. Produces TDR in isolated context</td>
             <td>Tier 1 architecture step</td>
           </tr>
           <tr>
-            <td><strong>UI Designer</strong></td>
+            <td><strong>Builder</strong></td>
             <td><span class="badge purple">Sonnet</span></td>
-            <td>Design system creation (Tier 1) and component design (Tier 2). Always uses design tokens</td>
-            <td>Foundation + feature UI phases</td>
-          </tr>
-          <tr>
-            <td><strong>Feature Developer</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
-            <td>Implements features within TDR boundaries. Checks Context7 for all library APIs</td>
+            <td>Worktree</td>
+            <td>Implements features within TDR boundaries. Runs in worktree to isolate work-in-progress</td>
             <td>Tier 2 coding phase</td>
           </tr>
           <tr>
-            <td><strong>Test Writer</strong></td>
+            <td><strong>Verifier</strong></td>
             <td><span class="badge purple">Sonnet</span></td>
-            <td>TDD-hybrid: spec tests before code (business logic), implementation tests after (UI)</td>
-            <td>Tier 2 testing phase</td>
-          </tr>
-          <tr>
-            <td><strong>Doc Generator</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
-            <td>Session logs, CHANGELOG, feature docs, release notes. Structured JSON output</td>
-            <td>/wrap + Tier 2 docs phase</td>
+            <td>Inline</td>
+            <td>Runs quality checks (tests, lint, build, type-check), calculates Vibe Score</td>
+            <td>/check, /wrap, /run-backlog</td>
           </tr>
           <tr>
             <td><strong>Performance Coach</strong></td>
             <td><span class="badge purple">Sonnet</span></td>
-            <td>Calculates Vibe Score, identifies token waste, proposes CLAUDE.md mutations</td>
+            <td>Inline</td>
+            <td>Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals</td>
             <td>/wrap session end</td>
           </tr>
           <tr>
-            <td><strong>Quality Check</strong></td>
-            <td><span class="badge amber">Haiku</span></td>
-            <td>Runs tests, build, lint. Auto-detects project type. 60-second timeout per command</td>
-            <td>/check, /wrap, /run-backlog</td>
+            <td><strong>Code Auditor</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Read-only codebase analysis for existing project onboarding. Extracts conventions and patterns</td>
+            <td>/onboard</td>
+          </tr>
+          <tr>
+            <td><strong>Security Auditor</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Read-only OWASP Top 10 security analysis. Scans for injection, auth, XSS, secrets, and more</td>
+            <td>/audit</td>
+          </tr>
+          <tr>
+            <td><strong>Doc Generator</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Inline</td>
+            <td>Feature docs, CHANGELOG, release notes, VitePress sidebar regeneration</td>
+            <td>/wrap + Tier 2 docs phase</td>
+          </tr>
+          <tr>
+            <td><strong>Code Simplifier</strong></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
+            <td>Worktree</td>
+            <td>Read-only analysis: dead code, abstraction flattening, API reduction, dependency consolidation</td>
+            <td>/simplify</td>
+          </tr>
+          <tr>
+            <td><strong>CI Healer</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Inline</td>
+            <td>CI failure diagnosis and repair. Categorizes failures, applies targeted fixes (max 3 attempts)</td>
+            <td>/heal</td>
+          </tr>
+          <tr>
+            <td><strong>Opponent Processor</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Devil's advocate for TDR decisions. Counter-arguments, debate matrices, risk assessments</td>
+            <td>Tier 1 after TDR</td>
           </tr>
         </tbody>
       </table>
@@ -1121,7 +1299,7 @@ Completeness is checked at /wrap, not during work.</span></div>
 
     <div class="callout tip">
       <div class="callout-title">Why isolated agents matter</div>
-      <p>The Stack Scout, Test Writer, and Doc Generator run in separate context windows. All their research tokens, documentation fetches, and analysis stay outside your main session. Only the distilled output enters your primary context &mdash; saving thousands of tokens per session.</p>
+      <p>Agents marked "Worktree" run in separate context windows. All their research tokens, documentation fetches, and analysis stay outside your main session. Only the distilled output enters your primary context &mdash; saving thousands of tokens per session.</p>
     </div>
 
     <!-- HOOKS -->
@@ -1131,20 +1309,26 @@ Completeness is checked at /wrap, not during work.</span></div>
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Hook Event</th><th>Script</th><th>When It Fires</th><th>What It Does</th></tr>
+          <tr><th>Hook Event</th><th>Script(s)</th><th>When It Fires</th><th>What It Does</th></tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>SessionStart</strong></td>
-            <td><code>session-startup.md</code></td>
+            <td><code>session-startup.sh</code>, <code>sync-state.sh</code>, <code>error-recovery.sh</code></td>
             <td>Every Claude Code start</td>
-            <td>Environment check, state detection, route to next action</td>
+            <td>Environment check, state reconciliation, clear stale locks</td>
+          </tr>
+          <tr>
+            <td><strong>SessionStart</strong> (compact)</td>
+            <td><code>compact-reinject.sh</code></td>
+            <td>After context compaction</td>
+            <td>Re-injects project state after context compaction</td>
           </tr>
           <tr>
             <td><strong>PreToolUse</strong> (Write/Edit)</td>
-            <td><code>phase-gate.sh</code></td>
+            <td><code>phase-gate.sh</code>, <code>restrict-paths.sh</code></td>
             <td>Before any file write</td>
-            <td>Blocks source code writes if foundation incomplete</td>
+            <td>Blocks source writes before foundation; validates write targets</td>
           </tr>
           <tr>
             <td><strong>PreToolUse</strong> (Bash)</td>
@@ -1166,15 +1350,15 @@ Completeness is checked at /wrap, not during work.</span></div>
           </tr>
           <tr>
             <td><strong>PostToolUseFailure</strong></td>
-            <td><code>notify.sh</code></td>
+            <td><code>notify.sh error</code></td>
             <td>Any tool execution fails</td>
             <td>Sends error notification</td>
           </tr>
           <tr>
             <td><strong>Stop</strong></td>
-            <td><code>check-context.sh</code></td>
-            <td>Context hits 60% or 80%</td>
-            <td>Warns about context exhaustion risk</td>
+            <td><code>check-context.sh</code>, <code>cost-guardrails.sh</code>, <code>claude-md-lint.sh</code></td>
+            <td>Session ending</td>
+            <td>Context warnings, cost threshold checks, CLAUDE.md validation</td>
           </tr>
         </tbody>
       </table>
@@ -1303,21 +1487,86 @@ Check file path being written:
 
     <!-- COMMANDS -->
     <h3 id="commands">Slash Commands Reference</h3>
+
+    <h4>Project Setup</h4>
     <div class="table-wrap">
       <table>
         <thead>
           <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>/setup</code></td><td>First-time environment configuration</td><td>Once per developer</td></tr>
-          <tr><td><code>/new-project</code></td><td>Create the project foundation (Tier 1)</td><td>Once per project</td></tr>
-          <tr><td><code>/plan-features</code></td><td>Define and prioritize the feature backlog</td><td>Before starting feature work</td></tr>
-          <tr><td><code>/new-feature "name"</code></td><td>Start a feature session on a new branch</td><td>Beginning of each feature</td></tr>
-          <tr><td><code>/run-backlog</code></td><td>Auto-execute features in priority order</td><td>Hands-free batch execution</td></tr>
+          <tr><td><code>/setup</code></td><td>Verify environment (Git, Node, gh, jq, terminal-notifier), detect terminal, initialize <code>.vibeos/</code></td><td>Once per developer</td></tr>
+          <tr><td><code>/new-project</code></td><td>Create the project foundation (Tier 1): VISION.md, design system, TDR, roadmap, CLAUDE.md</td><td>Once per project</td></tr>
+          <tr><td><code>/onboard</code></td><td>Onboard an existing project: analyze codebase, extract conventions, generate CLAUDE.md</td><td>Existing projects entering VibeOS</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Planning</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/plan-features</code></td><td>Define and prioritize the feature backlog in <code>.vibeos/backlog.json</code></td><td>Before starting feature work</td></tr>
           <tr><td><code>/idea "text"</code></td><td>Capture an idea with zero disruption (1 line output)</td><td>Anytime &mdash; mid-session inspiration</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Development</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/new-feature "name"</code></td><td>Start a feature session on a new branch with 5-phase tracking</td><td>Beginning of each feature</td></tr>
+          <tr><td><code>/run-backlog</code></td><td>Auto-execute features in priority order</td><td>Hands-free batch execution</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Cost and Safety</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/cost</code></td><td>Real-time token cost dashboard: session, daily, weekly, monthly aggregates</td><td>Monitor spending</td></tr>
+          <tr><td><code>/undo</code></td><td>Checkpoint rollback: list checkpoints and recent commits, safely revert or reset</td><td>After mistakes or unwanted changes</td></tr>
+          <tr><td><code>/audit</code></td><td>OWASP Top 10 security review: injection, auth, XSS, secrets, dependencies</td><td>Before releases or security reviews</td></tr>
+          <tr><td><code>/heal</code></td><td>Auto-heal failing CI: fetch logs, diagnose, fix (max 3 attempts)</td><td>When CI fails</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Code Quality</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/simplify</code></td><td>Opus-powered code analysis: dead code, abstraction flattening, API reduction</td><td>After feature implementation</td></tr>
+          <tr><td><code>/replay</code></td><td>Reusable workflow templates from successful sessions (Vibe Score &ge; 70)</td><td>Replicate proven workflows</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Quality and Wrap-Up</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/check</code></td><td>Run tests + build + lint + type-check without modifying code</td><td>During development</td></tr>
+          <tr><td><code>/wrap</code></td><td>End session: completeness check, quality gate, Vibe Score, coaching, commit</td><td>End of <strong>every</strong> session</td></tr>
+          <tr><td><code>/handoff</code></td><td>Generate structured context transfer document for the next session</td><td>Before ending a session or switching contexts</td></tr>
           <tr><td><code>/status</code></td><td>Full project dashboard: foundation, backlog, active feature, recent scores</td><td>Start of session or when lost</td></tr>
-          <tr><td><code>/check</code></td><td>Run tests + build + lint (uses fast Haiku model)</td><td>During development</td></tr>
-          <tr><td><code>/wrap</code></td><td>End session: completeness check, quality gate, coaching, commit</td><td>End of <strong>every</strong> session</td></tr>
         </tbody>
       </table>
     </div>
@@ -1328,15 +1577,20 @@ Check file path being written:
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>File</th><th>Purpose</th><th>Updated By</th></tr>
+          <tr><th>File / Directory</th><th>Purpose</th><th>Updated By</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>config.json</code></td><td>Terminal preference, notification settings</td><td>/setup</td></tr>
-          <tr><td><code>state.json</code></td><td>Foundation status + active feature + phase tracking</td><td>All commands</td></tr>
+          <tr><td><code>config.json</code></td><td>Terminal preference, notification settings, feature toggles</td><td>/setup</td></tr>
+          <tr><td><code>state.json</code></td><td>Foundation status + active feature + active workflow + phase tracking</td><td>All commands</td></tr>
           <tr><td><code>backlog.json</code></td><td>Feature backlog with specs, priorities, dependencies</td><td>/plan-features, /idea, /run-backlog</td></tr>
+          <tr><td><code>mutation-log.json</code></td><td>CLAUDE.md mutation audit log with timestamps and diffs</td><td>Performance Coach</td></tr>
           <tr><td><code>sessions/*.json</code></td><td>Session logs with phase data and token metrics</td><td>/wrap</td></tr>
           <tr><td><code>scores/*.json</code></td><td>Vibe Score breakdowns with deductions and bonuses</td><td>Performance Coach</td></tr>
           <tr><td><code>releases/*.json</code></td><td>Release notes data</td><td>Doc Generator</td></tr>
+          <tr><td><code>handoffs/*.md</code></td><td>Cross-session context transfer documents</td><td>/handoff, /wrap</td></tr>
+          <tr><td><code>workflows/*.json</code></td><td>Reusable workflow templates from high-scoring sessions</td><td>/replay --create</td></tr>
+          <tr><td><code>simplifications/*.json</code></td><td>Code simplification reports with per-suggestion status</td><td>/simplify</td></tr>
+          <tr><td><code>ci-heals/*.json</code></td><td>CI heal reports documenting diagnosis and fix attempts</td><td>/heal</td></tr>
         </tbody>
       </table>
     </div>
@@ -1509,6 +1763,35 @@ claude
       <li><strong>Complex features:</strong> Large features naturally have more tool calls and corrections &mdash; the score accounts for this but may seem low</li>
       <li><strong>Override deductions:</strong> If the coach flags something unavoidable, say so during the coaching dialogue &mdash; it factors into the next proposal</li>
     </ul>
+
+    <h3>/heal can't fetch CI logs</h3>
+    <ol>
+      <li>Verify GitHub CLI is authenticated: <code>gh auth status</code></li>
+      <li>Ensure the repo has a remote: <code>git remote -v</code></li>
+      <li>Check that a recent CI run exists: <code>gh run list --limit 5</code></li>
+      <li>If the failure is on a different branch, switch to it first</li>
+    </ol>
+
+    <h3>/simplify shows no suggestions</h3>
+    <ul>
+      <li>The agent only analyzes files changed on the current feature branch vs. the default branch</li>
+      <li>Verify you're on a feature branch (not main/master): <code>git branch --show-current</code></li>
+      <li>Check that source files were changed (config and docs are excluded)</li>
+      <li>The minimum files threshold is configurable in <code>.vibeos/config.json</code> under <code>simplify.min_files_for_analysis</code></li>
+    </ul>
+
+    <h3>/replay can't find eligible sessions</h3>
+    <ul>
+      <li>Only sessions with a Vibe Score &ge; 70 are eligible for template extraction</li>
+      <li>Verify session logs exist in <code>.vibeos/sessions/</code> and score files in <code>.vibeos/scores/</code></li>
+      <li>Run <code>/wrap</code> at the end of sessions to generate the required data</li>
+    </ul>
+
+    <h3>Stale locks or corrupted state</h3>
+    <ol>
+      <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li>
+      <li>This resets any in-progress tasks that were interrupted by a crashed session</li>
+    </ol>
 
     <h3>Git conflicts in .vibeos/</h3>
     <ul>

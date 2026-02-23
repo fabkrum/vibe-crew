@@ -181,6 +181,27 @@ events:
 | PostToolUseFailure | `notify.sh error` | Error notifications on tool failures. |
 | Stop | `check-context.sh`, `cost-guardrails.sh`, `claude-md-lint.sh` | Context usage warnings, cost threshold checks, CLAUDE.md validation. |
 
+### Status Bar
+
+A persistent status line updates after every assistant message, showing six
+data segments at zero token cost:
+
+```
+Opus ▓▓▓▓░░░░░░ 38% | $0.42 | auth-flow · Code | ↑85 | 12m | ⟳0
+```
+
+| Segment | Source | Notes |
+|---|---|---|
+| **Context %** | stdin `context_window.used_percentage` | 10-char progress bar. Green ≤45%, Yellow 46-55%, Red >55%. |
+| **Session cost** | stdin `cost.total_cost_usd` | Formatted as `$X.XX`. |
+| **Feature · Phase** | `.vibeos/state.json` | Feature name truncated to 16 chars. Falls back to "foundation · Tier-1" or "no project". |
+| **Vibe Score** | Latest `.vibeos/scores/score-*.json` | Shows trend suffix: `+` improving, `-` declining. |
+| **Duration** | stdin `cost.total_duration_ms` | Displayed in minutes. |
+| **Compactions** | Latest `.vibeos/sessions/session-*.json` | Count of context compactions this session. |
+
+The script (`scripts/statusline.sh`) gracefully degrades: if `jq` is missing
+it shows "VibeOS"; if `.vibeos/` is absent it shows "no project".
+
 ### Interrupt Protocol
 
 The system stays silent during normal operation. Notifications fire only on
@@ -233,7 +254,7 @@ claude-plugin-vibe-os/
     replay/SKILL.md            # /replay command
     simplify/SKILL.md          # /simplify command
     heal/SKILL.md              # /heal command
-  scripts/                     # ~52 bash automation scripts
+  scripts/                     # ~53 bash automation scripts
   templates/                   # Project templates and doc-site scaffold
   LICENSE                      # MIT License
 

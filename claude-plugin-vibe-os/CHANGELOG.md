@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Status Bar — Persistent Status Line
+
+- `scripts/statusline.sh` -- Status line script rendering 6 data segments (context %, cost, feature · phase, Vibe Score, duration, compaction count). Reads session JSON from stdin and `.vibeos/` state files from disk. ANSI color-coded context bar (green/yellow/red). Graceful fallback if `jq` missing or `.vibeos/` absent. Bash 3.2 compatible
+- `settings.json` -- Added `statusLine` config pointing to `./scripts/statusline.sh`
+- `README.md` -- Added Status Bar section documenting segments, sources, and color thresholds
+
 #### `/replay` — Reusable Session Workflow Templates
 
 - `skills/replay/SKILL.md` -- Slash command: list/create/apply workflow templates from successful sessions. `/replay` lists templates, `/replay --create <name>` extracts from sessions with Vibe Score >= 70, `/replay <name>` loads and guides development

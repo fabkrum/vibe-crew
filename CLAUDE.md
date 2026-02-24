@@ -4,16 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-VibeOS is a Claude Code plugin that transforms Claude Code into an autonomous vibe-coding operating system. It orchestrates multiple Claude Code sessions, manages the full software development lifecycle, and enables non-technical users to build production-grade SaaS applications. The project is currently in the **design and planning phase** — no implementation code exists yet.
+VibeOS is a Claude Code plugin that transforms Claude Code into an autonomous vibe-coding operating system. It orchestrates multiple Claude Code sessions, manages the full software development lifecycle, and enables non-technical users to build production-grade SaaS applications.
 
 ## Repository Structure
 
-This is a documentation-only repository containing the design specification:
+```
+claude-plugin-vibe-os/          # The plugin — install this into your projects
+  .claude-plugin/plugin.json    # Plugin manifest
+  .mcp.json                     # Context7 + Puppeteer MCP config
+  settings.json                 # Permission rules
+  hooks/hooks.json              # Event hook bindings
+  scripts/                      # ~53 bash automation scripts
+  agents/                       # 12 specialized AI agent prompts
+  skills/                       # 17 slash command definitions
+  templates/                    # Project templates and doc-site scaffold
 
-- `vibeos-prompt.md` — Master planning prompt defining the 3-phase approach (Research, Architecture Design, Implementation Plan). This is the primary entry point for understanding the project scope.
-- `docs/vibeos-guide-complete.md` — Complete user-facing guide covering installation, Tier 1 (project foundation) and Tier 2 (feature development) workflows, all 9 slash commands, hook system, agent architecture, Vibe Score system, and team rollout.
-- `docs/VibeOS_ Claude Plugin Architecture Design.pdf` — Technical architecture paper covering the Interrupt Protocol, Performance Coach retrospective system, Research-First Protocol (Stack Scout + TDR), and implementation specs with code samples for hooks and scripts.
-- `docs/vibe-coding-team-guide.docx` — Team guide (Word format).
+architecture/                   # Architecture design docs (contributor reference)
+docs/                           # Companion documentation website (HTML)
+CLAUDE.md                       # This file
+```
 
 ## Core Architecture Concepts
 
@@ -61,29 +70,25 @@ Notifications fire only on three conditions: permission stalls (permission_promp
 
 Starts at 100, applies deductions: prompt churn (-5/sequence), tool loops (-10/loop), low cache utilization (-15), context violations (-20), no tests (-10), no feature spec (-5). Bonuses up to +10 for complete phase artifacts and high cache utilization. The Performance Coach proposes permanent CLAUDE.md rule mutations based on identified anti-patterns.
 
-### Plugin File Structure (target)
+### Per-Project Runtime State
+
+When VibeOS is used in a project, it creates a `.vibeos/` folder:
 
 ```
-claude-plugin-vibe-os/
-  .claude-plugin/plugin.json    # Plugin manifest
-  mcp-servers.json              # Context7 + Puppeteer config
-  hooks/hooks.json              # Event-to-script routing table
-  scripts/                      # 6 bash automation scripts
-  agents/                       # 9 specialized agent prompts
-  commands/                     # 9 slash command definitions
-
-.vibeos/                        # Per-project runtime state
+.vibeos/                        # Per-project runtime state (auto-created)
   config.json                   # Terminal preference, notification settings
   state.json                    # Foundation status + active feature
   backlog.json                  # Feature backlog with specs
   sessions/                     # Session logs (JSON)
   scores/                       # Vibe Score breakdowns (JSON)
   releases/                     # Release notes data (JSON)
+  handoffs/                     # Cross-session handoff documents
+  workflows/                    # Reusable workflow templates (/replay)
 ```
 
-### Slash Commands (target)
+### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`
 
 ## Design Principles
 
@@ -96,12 +101,10 @@ claude-plugin-vibe-os/
 
 ## Current Status
 
-The project needs to proceed through the phases defined in `vibeos-prompt.md`:
-1. **Phase 1: Research** — Create `research/` folder with findings on Claude Code plugin architecture, multi-agent orchestration, git automation, modern SaaS stacks, testing strategies, documentation generation, UX/design systems, and safety/sandboxing.
-2. **Phase 2: Architecture Design** — Create `architecture/` folder with system overview, agent design, workflow design, safety model, docs site design, scoring system, installation design, and tech stack recommendation.
-3. **Phase 3: Implementation Plan** — Phased roadmap from foundation through polish.
-
-No code should be written until the plan is approved by the user.
+VibeOS v1.3.0 — the plugin is feature-complete. The repository contains:
+- The full plugin (`claude-plugin-vibe-os/`) with all agents, hooks, scripts, skills, and templates
+- Architecture design docs (`architecture/`) for contributor reference
+- Companion documentation website (`docs/`) with setup guide, workflows, example sessions, and best practices
 
 ## Key Dependencies
 

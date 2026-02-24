@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+
+# Claude Code local settings
+.claude/
+
+# Node (if running docs-site locally)
+node_modules/
+dist/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

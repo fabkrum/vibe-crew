@@ -954,9 +954,9 @@
 <span class="prompt">&gt;</span> /new-feature "user-auth"
 <span class="output">Created branch: feat/user-auth</span>
 <span class="output">Loaded spec from backlog. 6-phase tracking initialized.</span>
-<span class="output">Phases: [ ] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Docs</span></code></pre>
+<span class="output">Phases: [ ] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
 
-    <h3>The 5 phases</h3>
+    <h3>The 6 phases</h3>
 
     <h4>Phase 1: Plan (~3 min)</h4>
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Plan the user authentication feature"
@@ -969,7 +969,7 @@
 <span class="output">  - Edge cases: expired tokens, deleted accounts, rate limiting</span>
 
 <span class="success">Phase complete: Plan</span>
-<span class="output">Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Docs</span></code></pre>
+<span class="output">Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
 
     <h4>Phase 2: UI Design (~5 min)</h4>
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Design the auth UI components"
@@ -982,7 +982,7 @@
 <span class="output">All colors, spacing, and typography reference CSS custom properties.</span>
 
 <span class="success">Phase complete: UI Design</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [ ] Code  [ ] Test  [ ] Docs</span></code></pre>
+<span class="output">Phases: [x] Plan  [x] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
 
     <h4>Phase 3: Code (~15 min)</h4>
     <p>This is the longest phase. The Builder agent writes the implementation, consulting Context7 for Supabase and Next.js APIs instead of guessing.</p>
@@ -1000,7 +1000,7 @@
 <span class="output">  Creating src/components/auth/OAuthButtons.tsx</span>
 
 <span class="success">Phase complete: Code</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [ ] Test  [ ] Docs</span></code></pre>
+<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
 
     <div class="callout tip">
       <div class="callout-title">Capturing ideas mid-feature</div>
@@ -1022,9 +1022,22 @@
 <span class="success">12 tests passed, 0 failed</span>
 
 <span class="success">Phase complete: Test</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [ ] Docs</span></code></pre>
+<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [ ] Review  [ ] Docs</span></code></pre>
 
-    <h4>Phase 5: Docs (~2 min)</h4>
+    <h4>Phase 5: Review (~3 min)</h4>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /review
+
+<span class="output">Code Reviewer agent activated (read-only worktree).</span>
+<span class="output">Reviewing against: feature spec, TDR constraints, project conventions</span>
+<span class="output">  Checking TDR compliance... OK</span>
+<span class="output">  Checking conventional commit format... OK</span>
+<span class="output">  Checking design system token usage... OK</span>
+<span class="output">  1 warning: LoginForm missing aria-live region for error messages</span>
+
+<span class="success">Phase complete: Review</span>
+<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Review  [ ] Docs</span></code></pre>
+
+    <h4>Phase 6: Docs (~2 min)</h4>
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Generate documentation for user auth"
 
 <span class="output">Updating CHANGELOG.md</span>
@@ -1032,7 +1045,7 @@
 <span class="output">Session log saved to .vibecrew/sessions/</span>
 
 <span class="success">Phase complete: Docs</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Docs</span></code></pre>
+<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Review  [x] Docs</span></code></pre>
 
     <h3>Wrapping up</h3>
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /wrap
@@ -1073,7 +1086,7 @@
       <div class="card">
         <div class="card-icon green">1</div>
         <h4>Tab 1: Trip Creation</h4>
-        <p>Your primary focus. You're actively guiding this feature through the 5 phases, making decisions, reviewing output.</p>
+        <p>Your primary focus. You're actively guiding this feature through the 6 phases, making decisions, reviewing output.</p>
       </div>
       <div class="card">
         <div class="card-icon blue">2</div>
@@ -1581,7 +1594,7 @@ fi</code></pre>
       <div class="card">
         <div class="card-icon green">&#10003;</div>
         <h4>Do this</h4>
-        <p><code>/new-feature "user-auth"</code> &rarr; build all 5 phases &rarr; <code>/wrap</code> &rarr; close session. New session: <code>/new-feature "trip-creation"</code>. Clean context, clean branch, clean score.</p>
+        <p><code>/new-feature "user-auth"</code> &rarr; build all 6 phases &rarr; <code>/wrap</code> &rarr; close session. New session: <code>/new-feature "trip-creation"</code>. Clean context, clean branch, clean score.</p>
       </div>
       <div class="card">
         <div class="card-icon red">&#10007;</div>

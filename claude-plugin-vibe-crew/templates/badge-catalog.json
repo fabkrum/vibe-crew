@@ -30,7 +30,7 @@
     {
       "id": "first-feature",
       "name": "Shipper",
-      "description": "Ship your first feature (all 5 phases)",
+      "description": "Ship your first feature (all 6 phases)",
       "category": "milestone",
       "icon": "package",
       "condition": {

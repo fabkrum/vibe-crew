@@ -84,7 +84,7 @@
     {
       "id": "weekly-ship-week",
       "name": "Ship Week",
-      "description": "Ship 1 complete feature (all 5 phases) this week",
+      "description": "Ship 1 complete feature (all 6 phases) this week",
       "type": "weekly",
       "xp_reward": 50,
       "target_skill": "workflow_discipline",

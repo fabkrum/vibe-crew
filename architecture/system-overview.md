@@ -33,7 +33,7 @@ The plugin is self-contained. All internal path references use the `${CLAUDE_PLU
 claude-plugin-vibe-crew/                      # Plugin root
   .claude-plugin/
     plugin.json                             # Plugin manifest (entry point)
-  agents/                                   # 12 specialized sub-agent definitions
+  agents/                                   # 13 specialized sub-agent definitions
     session-startup.md                      #   Haiku  -- environment check, routing
     workflow-orchestrator.md                 #   Opus   -- tier routing, Agent Teams coordination
     stack-scout.md                          #   Opus   -- read-only research, TDR output
@@ -94,7 +94,7 @@ claude-plugin-vibe-crew/                      # Plugin root
 
 **Key differences from the pre-review design (9 agents):**
 
-- `agents/` contains 12 files. The UI Designer and Feature Developer merged into `builder.md`. The Test Writer, Quality Check, and scoring responsibilities merged into `verifier.md`. New specialized agents added: Performance Coach, Code Auditor, Security Auditor, Code Simplifier, CI Healer, and Opponent Processor.
+- `agents/` contains 13 files. The UI Designer and Feature Developer merged into `builder.md`. The Test Writer, Quality Check, and scoring responsibilities merged into `verifier.md`. New specialized agents added: Performance Coach, Code Auditor, Security Auditor, Code Simplifier, CI Healer, Opponent Processor, and Code Reviewer.
 - `scripts/` includes `compact-reinject.sh` for context re-injection after compaction (see [Section 5.7](#57-context-re-injection-after-compaction)).
 
 ### 1.3 Plugin Manifest
@@ -247,6 +247,7 @@ The topology expands the original 9-agent design to 13 agents, consolidating som
 | 10 | Code Simplifier | Opus | Fork | None | Complexity reduction, refactoring proposals |
 | 11 | CI Healer | Opus | Fork | None | CI/CD failure diagnosis and automated repair |
 | 12 | Opponent Processor | Opus | Fork | None | Adversarial review, edge case discovery |
+| 13 | Code Reviewer | Opus | Worktree | None | Code review against feature spec, TDR compliance, conventions |
 
 ### 2.3 Agent Merging Rationale
 
@@ -256,7 +257,7 @@ The topology expands the original 9-agent design to 13 agents, consolidating som
 
 **Performance Coach and Doc Generator included in v1.0.** Both are now part of the v1.0 agent lineup. The Performance Coach (Opus) handles Vibe Score calculation and CLAUDE.md mutation proposals with persistent cross-session memory. The Doc Generator (Sonnet) handles session logs, CHANGELOG, and feature documentation -- documentation generation is a structured writing task well-suited to Sonnet's capabilities.
 
-**New specialized agents.** Six additional agents extend the system's quality and resilience capabilities: Code Auditor and Security Auditor (both Opus) provide deep review capabilities, Code Simplifier (Opus) proposes complexity reductions, CI Healer (Opus) diagnoses and repairs CI/CD failures, and Opponent Processor (Opus) performs adversarial review to surface edge cases and failure modes.
+**New specialized agents.** Seven additional agents extend the system's quality and resilience capabilities: Code Auditor and Security Auditor (both Opus) provide deep review capabilities, Code Simplifier (Opus) proposes complexity reductions, CI Healer (Opus) diagnoses and repairs CI/CD failures, Opponent Processor (Opus) performs adversarial review to surface edge cases and failure modes, and Code Reviewer (Opus) provides automated code review against the feature spec, TDR compliance, and project conventions.
 
 ### 2.4 Tool Permissions Per Agent
 
@@ -365,9 +366,9 @@ Every agent session follows a five-phase lifecycle. With Agent Teams API, steps 
 
 ### 2.7 Model Selection Rationale
 
-Three models are used across the twelve agents, following an **Opus-first strategy**: Opus is the default for any task requiring reasoning, analysis, or creative output. Haiku handles mechanical tasks, and Sonnet handles structured documentation writing.
+Three models are used across the thirteen agents, following an **Opus-first strategy**: Opus is the default for any task requiring reasoning, analysis, or creative output. Haiku handles mechanical tasks, and Sonnet handles structured documentation writing.
 
-**Opus** (9 agents: Workflow Orchestrator, Stack Scout, Builder, Performance Coach, Code Auditor, Security Auditor, Code Simplifier, CI Healer, Opponent Processor) -- Selected as the primary model for all tasks requiring deep reasoning, architectural judgment, creative design, security analysis, or adversarial thinking. Opus provides the highest quality output for research (Stack Scout), design and code generation (Builder), project coordination (Workflow Orchestrator), code and security review (Code Auditor, Security Auditor), CI failure diagnosis (CI Healer), complexity reduction (Code Simplifier), adversarial review (Opponent Processor), and self-improvement analysis (Performance Coach).
+**Opus** (10 agents: Workflow Orchestrator, Stack Scout, Builder, Performance Coach, Code Auditor, Security Auditor, Code Simplifier, CI Healer, Opponent Processor, Code Reviewer) -- Selected as the primary model for all tasks requiring deep reasoning, architectural judgment, creative design, security analysis, or adversarial thinking. Opus provides the highest quality output for research (Stack Scout), design and code generation (Builder), project coordination (Workflow Orchestrator), code and security review (Code Auditor, Security Auditor, Code Reviewer), CI failure diagnosis (CI Healer), complexity reduction (Code Simplifier), adversarial review (Opponent Processor), and self-improvement analysis (Performance Coach).
 
 **Haiku** (2 agents: Session Startup, Verifier) -- Selected for high-frequency, mechanical tasks. Session Startup runs at the beginning of every session and performs simple routing logic. The Verifier runs tests, build, and lint -- deterministic operations that follow a predictable pattern of executing commands and reporting pass/fail results. Haiku is approximately 60x cheaper per token than Opus, making it cost-effective for tasks that do not benefit from deeper reasoning.
 
@@ -402,12 +403,12 @@ VibeCrew enforces a two-tier workflow that separates project foundation from fea
 ||  [Phase Gate: foundation.complete == true required]            ||
 ||                                                                ||
 ||  TIER 2: FEATURE DEVELOPMENT (Iterative, Per-Feature)          ||
-||  +------+   +--------+   +------+   +------+   +------+       ||
-||  | Plan |-->| Design |-->| Code |-->| Test |-->| Docs |       ||
-||  +------+   +--------+   +------+   +------+   +------+       ||
-||       ^                                              |         ||
-||       |              (next feature)                  |         ||
-||       +----------------------------------------------+         ||
+||  +------+ +--------+ +------+ +------+ +--------+ +------+   ||
+||  | Plan |>| Design |>| Code |>| Test |>| Review |>| Docs |   ||
+||  +------+ +--------+ +------+ +------+ +--------+ +------+   ||
+||       ^                                                |       ||
+||       |              (next feature)                    |       ||
+||       +------------------------------------------------+       ||
 ||                                                                ||
 +==================================================================+
 ```
@@ -1017,10 +1018,29 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 |  /new-feature    Start Tier 2 cycle for a feature                 |
 |  /run-backlog    Automated processing of entire backlog           |
 |                                                                   |
+|  QUALITY                                                          |
+|  /check          Run tests, build, lint (Verifier agent)          |
+|  /review         Code review against spec and TDR                 |
+|  /tdd            Test-driven development cycle                    |
+|  /e2e            Generate Playwright E2E tests                    |
+|  /a11y           Run WCAG 2.1 AA accessibility audit              |
+|  /perf-test      Generate k6 performance test suite               |
+|  /debug          Interactive debugging session                    |
+|                                                                   |
 |  OPERATIONS                                                       |
 |  /status         Project state dashboard (read-only)              |
-|  /check          Run tests, build, lint (Verifier agent)          |
 |  /wrap           End session with scoring, commit                 |
+|  /heal           Diagnose and repair CI failures                  |
+|  /simplify       Dead code detection, complexity reduction        |
+|  /handoff        Generate cross-session context transfer          |
+|  /replay         Re-run a saved workflow template                 |
+|  /audit          Security audit (OWASP Top 10)                    |
+|  /undo           Revert last VibeCrew action                      |
+|                                                                   |
+|  INFO & GAMIFICATION                                              |
+|  /cost           Token usage and cost breakdown                   |
+|  /achievements   View badges, level, streaks, skill tree          |
+|  /quiz           Test your VibeCrew knowledge                     |
 |                                                                   |
 +-------------------------------------------------------------------+
 ```
@@ -1038,6 +1058,21 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 | `/status` | `status` | None | Inline (read-only) | -- | Inherit |
 | `/check` | `check` | None | Fork (Haiku) | Verifier | Haiku |
 | `/wrap` | `wrap` | None | Inline | Verifier | Haiku |
+| `/heal` | `heal` | None | Inline | CI Healer | Opus |
+| `/simplify` | `simplify` | None | Worktree | Code Simplifier | Opus |
+| `/replay` | `replay` | `"workflow-name"` | Inline | Workflow Orchestrator | Opus |
+| `/handoff` | `handoff` | None | Inline | Doc Generator | Sonnet |
+| `/audit` | `audit` | None | Worktree | Security Auditor | Opus |
+| `/cost` | `cost` | None | Inline | -- | Inherit |
+| `/achievements` | `achievements` | None | Inline | -- | Inherit |
+| `/quiz` | `quiz` | None | Inline | -- | Inherit |
+| `/undo` | `undo` | None | Inline | -- | Inherit |
+| `/tdd` | `tdd` | `"component-name"` | Inline | Verifier | Haiku |
+| `/debug` | `debug` | `"issue description"` | Inline | Builder | Opus |
+| `/review` | `review` | None | Worktree | Code Reviewer | Opus |
+| `/e2e` | `e2e` | `"feature-name"` | Inline | Verifier | Haiku |
+| `/perf-test` | `perf-test` | `"endpoint-or-flow"` | Inline | Verifier | Haiku |
+| `/a11y` | `a11y` | None | Inline | Verifier | Haiku |
 
 ### 6.4 Command Details
 

@@ -200,9 +200,9 @@ jq -r '.active_feature.phases_completed | join(",")' .vibecrew/state.json 2>/dev
 ```
 
 Determine:
-- **`phases_completed`**: Array of completed Tier 2 phases (`plan`, `design`, `code`, `test`, `docs`)
-- **`phases_skipped`**: Count of the 5 phases NOT in `phases_completed`. If no active feature, default to 0.
-- **`all_five_phases_complete`**: Boolean, true only if all 5 phases are in `phases_completed`.
+- **`phases_completed`**: Array of completed Tier 2 phases (`plan`, `design`, `code`, `test`, `review`, `docs`)
+- **`phases_skipped`**: Count of the 6 phases NOT in `phases_completed`. If no active feature, default to 0.
+- **`all_six_phases_complete`**: Boolean, true only if all 6 phases are in `phases_completed`.
 
 ### 3.5 Feature spec check
 
@@ -243,11 +243,11 @@ score -= 15 if cache_ratio < 0.30           # low-cache: -15
 score -= 20 if peak_context_pct > 80        # context-violation: -20
 score -= 10 if no_tests                     # no-tests: -10
 score -= 5 if no_spec                       # no-spec: -5
-score -= 3 * min(phases_skipped, 5)         # missing-phase: -3 each, max -15
+score -= 3 * min(phases_skipped, 6)         # missing-phase: -3 each, max -18
 score -= 5 if skipped_code_review           # skipped-review: -5
 
 # Bonuses
-score += 5 if all_five_phases_complete      # all-phases: +5
+score += 5 if all_six_phases_complete       # all-phases: +5
 score += 5 if cache_ratio > 0.70            # high-cache: +5
 score += 3 if test_coverage_pct > 80        # full-coverage: +3
 score += 2 if zero_deductions               # clean-session: +2
@@ -958,7 +958,7 @@ If no features completed, skip Doc Generator invocation and print:
 
 ### 10.1 Update state.json
 
-If the active feature's work is complete (all 5 phases done, or the feature column is `done` or `review`), clear the active feature:
+If the active feature's work is complete (all 6 phases done, or the feature column is `done` or `review`), clear the active feature:
 
 ```bash
 jq '.active_feature = {id: null, name: null, worktree: null, phase: null, phases_completed: []} | .updated_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json

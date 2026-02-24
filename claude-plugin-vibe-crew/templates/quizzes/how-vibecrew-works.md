@@ -9,9 +9,9 @@ questions: 6
 
 ## Q1
 
-VibeCrew uses 12 specialized "agents" instead of one general-purpose AI. Why?
+VibeCrew uses 13 specialized "agents" instead of one general-purpose AI. Why?
 
-- A) It's cheaper to run 12 small models than one large model
+- A) It's cheaper to run 13 small models than one large model
 - B) Each agent is optimized for one job, like specialists on a team — a builder writes code, a verifier runs tests, a scout researches technology
 - C) Multiple agents can share the same conversation history to avoid repeating context
 - D) Claude Code requires at least 10 agents to activate plugin mode

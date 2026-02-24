@@ -58,7 +58,7 @@ Checks foundation is complete, enforces WIP limits, creates a feature branch, in
 /run-backlog
 ```
 
-Picks the highest-priority ready feature, runs all 5 phases (plan, design, code, test, docs), executes quality gates between features, and continues until the backlog is empty or a failure occurs.
+Picks the highest-priority ready feature, runs all 6 phases (plan, design, code, test, review, docs), executes quality gates between features, and continues until the backlog is empty or a failure occurs.
 
 **Guardrails:**
 - Max 3 retries per feature on quality gate failure

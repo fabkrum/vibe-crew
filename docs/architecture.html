@@ -850,7 +850,7 @@
       <div class="card">
         <div class="card-icon purple">&#9632;</div>
         <h4>agents/</h4>
-        <p>12 specialized agent prompt files. Each defines a model, isolation type, tool allowlist, and turn budget. Claude Code spawns them on demand.</p>
+        <p>13 specialized agent prompt files. Each defines a model, isolation type, tool allowlist, and turn budget. Claude Code spawns them on demand.</p>
       </div>
       <div class="card">
         <div class="card-icon green">&#9654;</div>
@@ -875,8 +875,8 @@
   .mcp.json                     # MCP server configuration
   settings.json                 # Permission rules (66 allowed, 22 denied)
   hooks/hooks.json              # Event-to-script routing table
-  scripts/                      # 60+ bash automation scripts
-  agents/                       # 12 specialized agent prompts
+  scripts/                      # ~67 bash automation scripts
+  agents/                       # 13 specialized agent prompts
   skills/                       # 25 slash command definitions
   templates/                    # Badge catalog, challenge pool, quizzes, docs-site</code></pre>
 
@@ -1042,7 +1042,7 @@ args: feature_name
 6. Initialize 6-phase tracking in state.json
 7. Hand off to Builder agent</code></pre>
 
-    <h4>All 20 skills</h4>
+    <h4>All 25 skills</h4>
     <div class="table-wrap">
       <table>
         <thead>
@@ -1068,6 +1068,11 @@ args: feature_name
           <tr><td><code>/handoff</code></td><td>None (script only)</td><td>Generate structured context transfer document for next session</td></tr>
           <tr><td rowspan="2"><strong>Gamification</strong></td><td><code>/achievements</code></td><td>None (script only)</td><td>Level, badges, skill tree, streaks, challenges + visual dashboard link</td></tr>
           <tr><td><code>/quiz</code></td><td>None (inline)</td><td>Interactive knowledge checks with educational explanations (Level 3+)</td></tr>
+          <tr><td rowspan="5"><strong>Testing &amp; Review</strong></td><td><code>/review</code></td><td>Code Reviewer</td><td>Code review against feature spec, TDR compliance, conventions. Findings by severity</td></tr>
+          <tr><td><code>/tdd</code></td><td>Verifier</td><td>Test-driven development cycle: write failing test, implement, verify green</td></tr>
+          <tr><td><code>/e2e</code></td><td>Verifier</td><td>Generate Playwright E2E tests with Page Object Model</td></tr>
+          <tr><td><code>/perf-test</code></td><td>Verifier</td><td>Generate k6 load/stress/spike/soak test suites</td></tr>
+          <tr><td><code>/a11y</code></td><td>Verifier</td><td>WCAG 2.1 AA accessibility audit via axe-core</td></tr>
         </tbody>
       </table>
     </div>
@@ -1156,7 +1161,7 @@ args: feature_name
       <p>Scripts are the <strong>worker bees</strong> of VibeCrew. While agents think and make decisions, scripts do the actual mechanical work: creating files, updating project state, calculating scores, sending notifications. They're small programs that run in milliseconds and always produce the same result for the same input. This makes VibeCrew predictable and reliable &mdash; the creative AI work is separated from the bookkeeping, so nothing gets lost or corrupted.</p>
     </div>
 
-    <p>VibeCrew includes 60+ bash scripts in the <code>scripts/</code> directory. Every state mutation goes through a script &mdash; agents never write <code>.vibecrew/</code> files directly. Scripts are organized by function:</p>
+    <p>VibeCrew includes ~67 bash scripts in the <code>scripts/</code> directory. Every state mutation goes through a script &mdash; agents never write <code>.vibecrew/</code> files directly. Scripts are organized by function:</p>
 
     <h4>Core lifecycle</h4>
     <div class="table-wrap">
@@ -1579,11 +1584,39 @@ Check file path being written:
             <td>-5</td>
             <td>Coding started without a plan artifact</td>
           </tr>
+          <tr>
+            <td><strong>Skipped code review</strong></td>
+            <td>-5</td>
+            <td>No review report in <code>.vibecrew/reviews/</code> for active feature</td>
+          </tr>
+          <tr>
+            <td><strong>Documentation drift</strong></td>
+            <td>-3 per stale doc</td>
+            <td>Source code changed but matching feature docs not updated (max -9)</td>
+          </tr>
         </tbody>
       </table>
     </div>
 
-    <p><strong>Bonuses</strong> (up to +10): +5 for all 5 phases having artifacts, +5 for cache utilization above 50%.</p>
+    <p><strong>Bonuses</strong> (up to +27):</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Good Practice</th><th>Bonus</th><th>Detection</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>All 6 phase artifacts complete</td><td>+5</td><td>All phases have artifacts in state.json</td></tr>
+          <tr><td>High cache utilization (&gt;70%)</td><td>+5</td><td>Cache hit rate above 70%</td></tr>
+          <tr><td>Full test coverage (&gt;80%)</td><td>+3</td><td>From test runner output</td></tr>
+          <tr><td>Clean session (zero deductions)</td><td>+2</td><td>No anti-patterns detected</td></tr>
+          <tr><td>TDD discipline</td><td>+3</td><td>Commits with <code>TDD cycle:</code> trailer detected</td></tr>
+          <tr><td>E2E tests passing</td><td>+3</td><td>Playwright spec files exist and pass</td></tr>
+          <tr><td>Accessibility clean</td><td>+2</td><td>axe-core report with zero critical/serious violations</td></tr>
+          <tr><td>Code review complete</td><td>+2</td><td>Review report exists for active feature</td></tr>
+          <tr><td>Performance baselines</td><td>+2</td><td>k6 results exist for active feature</td></tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="table-wrap">
       <table>
@@ -1657,7 +1690,7 @@ Outputs a &lt;300-token summary:
 
 ## Active Work
 - Feature: user-auth (User Authentication)
-- Phase: Test (3/5 phases complete)
+- Phase: Test (3/6 phases complete)
 - Branch: feat/user-auth
 
 ## Recent Progress

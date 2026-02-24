@@ -86,10 +86,10 @@ if [[ -f "$BACKLOG_FILE" ]]; then
   if [[ -n "$ACTIVE_FEATURE_ID" ]]; then
     FEATURE_COLUMN=$(jq -r --arg id "$ACTIVE_FEATURE_ID" '.features[] | select(.id == $id) | .column' "$BACKLOG_FILE" 2>/dev/null || echo "")
     FEATURE_PHASES=$(jq -r '.active_feature.phases_completed // [] | length' "$STATE_FILE" 2>/dev/null || echo "0")
-    if [[ "$FEATURE_COLUMN" == "done" ]] || [[ "$FEATURE_COLUMN" == "review" && "$FEATURE_PHASES" -ge 5 ]]; then
+    if [[ "$FEATURE_COLUMN" == "done" ]] || [[ "$FEATURE_COLUMN" == "review" && "$FEATURE_PHASES" -ge 6 ]]; then
       XP_SHIP=50
       XP_TOTAL=$((XP_TOTAL + XP_SHIP))
-      BREAKDOWN=$(echo "$BREAKDOWN" | jq --argjson xp "$XP_SHIP" '. + [{"source":"feature_shipped","xp":$xp,"reason":"Feature shipped (all 5 phases)"}]')
+      BREAKDOWN=$(echo "$BREAKDOWN" | jq --argjson xp "$XP_SHIP" '. + [{"source":"feature_shipped","xp":$xp,"reason":"Feature shipped (all 6 phases)"}]')
     fi
   fi
 fi

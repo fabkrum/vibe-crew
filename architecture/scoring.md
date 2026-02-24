@@ -28,7 +28,7 @@ The Vibe Score answers one question: **"How efficient was this session?"** It is
 - **Range:** 0-100 (clamped)
 - **Base score:** 100 (every session starts perfect)
 - **Direction:** Subtractive -- anti-patterns reduce the score from 100
-- **Bonuses:** Quality signals can add points back, up to a maximum of +15
+- **Bonuses:** Quality signals can add points back, up to a maximum of +27
 
 ### Why Subtractive?
 
@@ -61,13 +61,20 @@ score -= 15 * (1 if cache_ratio < 0.30 else 0)                # low-cache: max -
 score -= 20 * (1 if peak_context_pct > 80 else 0)             # context-violation: max -20
 score -= 10 * (1 if no_tests else 0)                           # no-tests: max -10
 score -= 5  * (1 if no_spec else 0)                            # no-spec: max -5
-score -= 3  * min(phases_skipped, 5)                           # missing-phase: -3 each, max -15
+score -= 3  * min(phases_skipped, 6)                           # missing-phase: -3 each, max -18
+score -= 5  * (1 if skipped_review else 0)                     # skipped-review: max -5
+score -= 3  * min(stale_docs, 3)                               # doc-drift: -3 each, max -9
 
 # Apply bonuses
-score += 5  * (1 if all_five_phases_complete else 0)           # all-phases: +5
+score += 5  * (1 if all_six_phases_complete else 0)            # all-phases: +5
 score += 5  * (1 if cache_ratio > 0.70 else 0)                # high-cache: +5
 score += 3  * (1 if test_coverage_pct > 80 else 0)            # full-coverage: +3
 score += 2  * (1 if zero_deductions else 0)                    # clean-session: +2
+score += 3  * (1 if tdd_discipline else 0)                     # tdd-discipline: +3
+score += 3  * (1 if e2e_tests_passing else 0)                  # e2e-passing: +3
+score += 2  * (1 if a11y_clean else 0)                         # a11y-clean: +2
+score += 2  * (1 if review_complete else 0)                    # review-complete: +2
+score += 2  * (1 if perf_baselines else 0)                     # perf-baselines: +2
 
 # Clamp
 score = max(0, min(100, score))
@@ -90,9 +97,9 @@ Each deduction category has a per-category cap. Deductions are applied at most t
 
 **Total deduction caps:**
 
-- Sum of all per-category caps: -15 + -30 + -15 + -20 + -10 + -5 + -15 = **-110** (theoretical maximum if every rule fires at its cap)
-- Practical maximum: **-68** (unlikely that all categories fire simultaneously at cap)
-- Minimum possible score: **0** (clamped). Realistically around **32** in a worst-case session.
+- Sum of all per-category caps: -15 + -30 + -15 + -20 + -10 + -5 + -18 + -5 + -9 = **-127** (theoretical maximum if every rule fires at its cap)
+- Practical maximum: **-75** (unlikely that all categories fire simultaneously at cap)
+- Minimum possible score: **0** (clamped). Realistically around **25** in a worst-case session.
 
 ### 2.3 Bonus Rules
 
@@ -100,16 +107,21 @@ Bonuses reward quality signals. They are applied after deductions but cannot pus
 
 | Category | Points | Detection | Rationale |
 |----------|--------|-----------|-----------|
-| `all-phases` | +5 | All 5 Tier 2 phases completed (Plan, Design, Code, Test, Docs all have artifacts in `state.json`) | Full lifecycle discipline. Features with all phases have lower defect rates. |
+| `all-phases` | +5 | All 6 Tier 2 phases completed (Plan, Design, Code, Test, Review, Docs all have artifacts in `state.json`) | Full lifecycle discipline. Features with all phases have lower defect rates. |
 | `high-cache` | +5 | Cache hit rate above 70% | Session efficiently reusing cached context. Indicates clear prompts and stable conversation structure. |
 | `full-coverage` | +3 | Test coverage above 80% (from test runner output) | High test coverage reduces regression risk and improves confidence in the codebase. |
 | `clean-session` | +2 | Zero deductions applied | Flawless session with no detected anti-patterns. |
+| `tdd-discipline` | +3 | Commits with `TDD cycle:` trailer detected via `detect-tdd-discipline.sh` | Test-driven development produces higher-quality code with fewer regressions. |
+| `e2e-passing` | +3 | Playwright spec files exist and test results show pass | End-to-end tests validate full user flows, catching integration issues unit tests miss. |
+| `a11y-clean` | +2 | axe-core report in `.vibecrew/a11y/` with zero critical/serious violations | Accessible software reaches more users and avoids legal risk. |
+| `review-complete` | +2 | Review report exists in `.vibecrew/reviews/` for active feature | Code review catches defects, enforces conventions, and validates TDR compliance. |
+| `perf-baselines` | +2 | k6 results exist in `.vibecrew/perf-tests/` for active feature | Performance baselines prevent regressions and set expectations for scaling. |
 
-**Maximum total bonuses:** +15. **Maximum possible score:** 100 (clamped).
+**Maximum total bonuses:** +27. **Maximum possible score:** 100 (clamped).
 
 ### 2.4 Why Bonuses Cannot Compensate for Anti-Patterns
 
-Bonuses are capped at +15 total. A session with 3 tool loops (-30) but clean lint and high cache (+7) should still score poorly (77). Bonuses reward completeness; they do not compensate for waste.
+Bonuses are capped at +27 total. A session with 3 tool loops (-30) but clean lint, high cache, and TDD (+13) should still score poorly (83). Bonuses reward completeness; they do not compensate for waste.
 
 ---
 
@@ -197,8 +209,8 @@ For each tool call in the session:
 
 | Metric | Source | Used For |
 |--------|--------|----------|
-| All phases complete | All 5 Tier 2 phases (Plan, Design, Code, Test, Docs) have artifacts in `state.json` | `all-phases` bonus |
-| Phases skipped | Count of Tier 2 phases without artifacts | `missing-phase` deduction (-3 per phase, max -15) |
+| All phases complete | All 6 Tier 2 phases (Plan, Design, Code, Test, Review, Docs) have artifacts in `state.json` | `all-phases` bonus |
+| Phases skipped | Count of Tier 2 phases without artifacts | `missing-phase` deduction (-3 per phase, max -18) |
 | Spec before code | Plan phase has artifacts AND Code phase start timestamp is after Plan phase completion timestamp | `no-spec` deduction (if false) |
 
 **Schema reference:** See [`architecture/schemas.md` Section 3](schemas.md#3-statejson) for the `state.json` feature phase structure.

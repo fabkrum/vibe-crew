@@ -821,8 +821,19 @@
     <h2>System Deep Dive</h2>
     <p>VibeOS is a system of specialized agents, deterministic hooks, and bash scripts that work together to enforce quality, manage attention, and continuously improve your workflow. Here's how every piece fits together.</p>
 
+    <div class="callout info">
+      <div class="callout-title">New to coding? Start here</div>
+      <p>This page explains <em>how VibeOS works under the hood</em>. You don't need to understand all of this to use VibeOS &mdash; just type the slash commands and the system handles the rest. But if you're curious about what's happening behind the scenes, or want to troubleshoot an issue, this page has the answers. Each section starts with a plain-English explanation before diving into technical details.</p>
+    </div>
+
     <!-- PLUGIN MANIFEST -->
     <h3 id="plugin-manifest">Plugin Manifest &amp; Registration</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is a plugin?</div>
+      <p>A <strong>plugin</strong> is an add-on that gives Claude Code new abilities. Think of it like installing an app on your phone &mdash; your phone works fine without it, but the app adds features. VibeOS is a plugin that adds project management, quality enforcement, and specialized AI agents to Claude Code. When you open a project with VibeOS installed, Claude Code reads a small configuration file and automatically loads all the extra features.</p>
+    </div>
+
     <p>VibeOS is a Claude Code plugin. Claude Code auto-detects it from the <code>.claude-plugin/plugin.json</code> manifest in the project root. The manifest registers all system components:</p>
 
     <pre><code><span class="code-label">plugin.json</span>{
@@ -871,6 +882,13 @@
 
     <!-- AGENTS -->
     <h3 id="agents">The 12-Agent Architecture</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What are agents?</div>
+      <p>Think of agents as <strong>specialist team members</strong>, each with a specific job. Instead of one AI doing everything, VibeOS splits work across 12 agents &mdash; just like a real development team has designers, builders, testers, and reviewers. Each agent is an AI "personality" optimized for one task. The Builder writes code. The Verifier runs tests. The Security Auditor checks for vulnerabilities. You never interact with agents directly &mdash; VibeOS picks the right one for each job automatically.</p>
+      <p style="margin-top: 0.5rem;"><strong>Inline vs. Worktree:</strong> Some agents work directly in your project folder ("inline") &mdash; like a colleague sitting at your desk. Others work in a <strong>worktree</strong>, which is an isolated copy of your project files. Think of it as giving that specialist their own private office with a photocopy of all your documents. They can read, analyze, and write without affecting your real files. When they're done, only the finished result comes back to you. This isolation also saves your AI "memory" (context window) &mdash; all of their research stays in their office, not yours.</p>
+    </div>
+
     <p>Each agent has a specific role, model selection, tool access, and context budget. Opus agents handle planning, research, code, security, and analysis &mdash; tasks where mistakes are expensive to fix later. Haiku agents handle fast, mechanical tasks (routing, running shell commands). Sonnet handles template-driven output like documentation.</p>
 
     <div class="table-wrap">
@@ -974,6 +992,12 @@
 
     <!-- SKILLS -->
     <h3 id="skills">Skills System (Slash Commands)</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What are slash commands?</div>
+      <p>Slash commands are the <strong>buttons</strong> you press to make VibeOS do things. You type a command starting with <code>/</code> (like <code>/new-project</code> or <code>/wrap</code>) and VibeOS handles the rest. Each command triggers a specific workflow &mdash; some are simple (like <code>/idea</code> which just saves a note) and some are complex (like <code>/new-project</code> which orchestrates multiple agents over 6 steps). You don't need to know how they work internally, just what they do and when to use them.</p>
+    </div>
+
     <p>Every slash command in VibeOS is implemented as a <strong>skill</strong> &mdash; a <code>SKILL.md</code> file in the <code>skills/</code> directory. Skills are the primary user-facing interface to the system.</p>
 
     <h4>How skills work</h4>
@@ -1048,6 +1072,12 @@ args: feature_name
 
     <!-- HOOKS -->
     <h3 id="hooks">The Hook System</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What are hooks?</div>
+      <p>Hooks are <strong>automatic safety checks</strong> that run behind the scenes. Imagine a building with security guards at every door &mdash; when someone (an AI agent) tries to walk through (write a file, run a command), the guard (hook) checks if they're allowed. If yes, they pass through. If no, they're blocked with a clear message explaining why. Hooks are small programs that run instantly and cost nothing &mdash; they don't use any AI processing power. They're the reason VibeOS can enforce rules like "no source code before the foundation is complete" without you having to remember or check yourself.</p>
+    </div>
+
     <p>Hooks are the enforcement layer. They run as bash scripts triggered by Claude Code lifecycle events. Because they're shell scripts, they consume <strong>zero AI context tokens</strong> &mdash; the most efficient enforcement mechanism possible.</p>
 
     <div class="table-wrap">
@@ -1113,6 +1143,12 @@ args: feature_name
 
     <!-- SCRIPTS -->
     <h3 id="scripts">Scripts Reference</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What are scripts?</div>
+      <p>Scripts are the <strong>worker bees</strong> of VibeOS. While agents think and make decisions, scripts do the actual mechanical work: creating files, updating project state, calculating scores, sending notifications. They're small programs that run in milliseconds and always produce the same result for the same input. This makes VibeOS predictable and reliable &mdash; the creative AI work is separated from the bookkeeping, so nothing gets lost or corrupted.</p>
+    </div>
+
     <p>VibeOS includes 60+ bash scripts in the <code>scripts/</code> directory. Every state mutation goes through a script &mdash; agents never write <code>.vibeos/</code> files directly. Scripts are organized by function:</p>
 
     <h4>Core lifecycle</h4>
@@ -1239,6 +1275,12 @@ args: feature_name
 
     <!-- SETTINGS -->
     <h3 id="settings">Settings &amp; Permissions</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What are permissions?</div>
+      <p>Permissions control <strong>what the AI is and isn't allowed to do</strong> on your computer. VibeOS pre-configures a list of safe operations (reading files, running tests, creating branches) and explicitly blocks dangerous ones (deleting everything, overwriting important data, installing system-wide software). This means the AI can work productively without asking you for permission every 5 seconds, while being physically unable to do anything destructive. It's like giving a contractor a key to the workshop but not the safe.</p>
+    </div>
+
     <p>The <code>settings.json</code> file defines tool-level permission rules enforced by Claude Code <em>before</em> any hook runs. This is the outermost security boundary.</p>
 
     <h4>Allowed tools (66 rules)</h4>
@@ -1285,6 +1327,12 @@ args: feature_name
 
     <!-- MCP SERVERS -->
     <h3 id="mcp-servers">MCP Server Integration</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What are MCP servers?</div>
+      <p>MCP servers are <strong>external tools that give the AI extra abilities</strong>. Normally, the AI can only read your files and run commands. MCP servers connect it to additional services &mdash; like a reference library (Context7, for looking up documentation) or a web browser (Puppeteer, for visiting websites). They're optional: VibeOS works fine without them, but with them, the AI works faster and uses less of its "memory" because it can look things up on demand instead of trying to remember everything.</p>
+    </div>
+
     <p>Two MCP (Model Context Protocol) servers extend the agent's capabilities. Both are optional but strongly recommended for token efficiency.</p>
 
     <div class="card-grid">
@@ -1326,8 +1374,19 @@ args: feature_name
     <h2>Runtime Systems</h2>
     <p>These systems operate during sessions to manage context, attention, quality, cost, and cross-session continuity.</p>
 
+    <div class="callout info">
+      <div class="callout-title">What are runtime systems?</div>
+      <p>Runtime systems are things that happen <strong>while you're working</strong>, in the background. You don't trigger them manually &mdash; they just run. The status bar updates automatically. Notifications fire when the AI needs you. The phase gate silently blocks mistakes. Cost tracking accumulates as you go. Think of them as the dashboard, warning lights, and autopilot in a car: you don't have to think about them, but they're always keeping you informed and safe.</p>
+    </div>
+
     <!-- STATUS BAR -->
     <h3 id="status-bar">The Status Bar</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is the status bar?</div>
+      <p>The status bar is a <strong>thin line of information</strong> at the bottom of your terminal that tells you what's happening at a glance &mdash; like the dashboard in a car showing speed, fuel, and engine status. It shows how much AI "memory" you've used, how much the session costs so far, which feature you're building, your quality score, and how long you've been working. It updates automatically after every AI response and costs nothing extra.</p>
+    </div>
+
     <p>A persistent status line renders after every assistant message, showing six data segments at <strong>zero token cost</strong>. The script (<code>scripts/statusline.sh</code>) is configured via <code>settings.json</code> and runs as a shell command outside the AI context window.</p>
 
     <pre><code><span class="code-label">status bar</span>Opus ▓▓▓▓░░░░░░ 38% | $0.42 | auth-flow &middot; Code | &uarr;85 | 12m | ⟳0</code></pre>
@@ -1379,6 +1438,12 @@ args: feature_name
 
     <!-- INTERRUPT -->
     <h3 id="interrupt">The Interrupt Protocol</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is the Interrupt Protocol?</div>
+      <p>The Interrupt Protocol is VibeOS's <strong>"don't bother me unless it's important" system</strong>. When you have multiple terminal tabs running, you don't want constant notifications from all of them. VibeOS stays completely silent while things are going well. It only pings you in three situations: (1) the AI needs your permission to do something, (2) a task finished and it's waiting for your next instruction, or (3) something broke. This lets you focus on one task and trust that you'll be pulled in only when truly needed.</p>
+    </div>
+
     <p>The Interrupt Protocol is the "Attention Economy" architecture. The terminal stays completely silent during normal operation. Notifications fire <em>only</em> on three conditions:</p>
 
     <div class="card-grid">
@@ -1403,6 +1468,12 @@ args: feature_name
 
     <!-- PHASE GATE -->
     <h3 id="phase-gate">The Phase Gate</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is the phase gate?</div>
+      <p>The phase gate is a <strong>guardrail that prevents you from writing code too early</strong>. Before any code can be written, VibeOS requires you to complete the project foundation: define your vision, choose your technology, plan your design system, and set up the rules. This sounds strict, but it's the most important time-saver in the entire system. Without it, the AI might start writing code using the wrong tools, wrong design, or wrong approach &mdash; and you'd waste hours fixing that. The phase gate checks automatically on every file write, so you can't accidentally skip it.</p>
+    </div>
+
     <p>The phase gate is the architectural enforcement mechanism. It runs as a <code>PreToolUse</code> hook on every Write and Edit operation.</p>
 
     <div class="flow"><span class="highlight">phase-gate.sh</span> receives JSON payload from Claude Code
@@ -1420,6 +1491,12 @@ Check file path being written:
 
     <!-- VIBE SCORE -->
     <h3 id="vibe-score">The Vibe Score &amp; Performance Coach</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is the Vibe Score?</div>
+      <p>The Vibe Score is your <strong>session quality rating</strong>, from 0 to 100. Think of it like a fitness tracker for your coding sessions. At the end of each session, VibeOS reviews how things went: Did you plan before coding? Did you write tests? Did you waste time going back and forth? A high score (90+) means the session was efficient and well-structured. A low score means there's room to improve. The <strong>Performance Coach</strong> then gives you a tip and suggests a new rule that will prevent the same issue next session. Over time, these rules accumulate and your sessions get more efficient automatically &mdash; the system literally learns from your habits.</p>
+    </div>
+
     <p>The Performance Coach runs at the end of every session (triggered by <code>/wrap</code>). It ingests the session transcript, calculates a Vibe Score, and initiates an interactive coaching dialogue.</p>
 
     <h4>How the score is calculated</h4>
@@ -1497,6 +1574,12 @@ Check file path being written:
 
     <!-- COMPACTION -->
     <h3 id="compaction">Context Compaction &amp; Reinject</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is context compaction?</div>
+      <p>The AI has a limited "memory" for each conversation (called the <strong>context window</strong>). As your session gets longer, older messages start taking up too much space. Claude Code handles this by <strong>compacting</strong> (summarizing) older messages to free up room. The problem is: after compaction, the AI might forget what project you're working on or what feature you were building. VibeOS solves this by automatically re-injecting a tiny summary (~300 words) of your project state after every compaction. The AI seamlessly continues without asking "wait, what were we doing?" It's like leaving a sticky note on your desk so you remember where you left off after a break.</p>
+    </div>
+
     <p>When the context window approaches capacity, Claude Code compacts older messages. VibeOS hooks into this event to ensure you never lose track of what you were working on.</p>
 
     <div class="flow"><span class="highlight">Context window reaches ~50% capacity</span>
@@ -1520,6 +1603,12 @@ Outputs a &lt;300-token summary:
 
     <!-- HANDOFF -->
     <h3 id="handoff">The Handoff System</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is a handoff?</div>
+      <p>A handoff is a <strong>briefing document for your next session</strong>. Every time you close a session and open a new one, the AI starts with a blank slate &mdash; it doesn't remember your previous conversation. The handoff document solves this by writing down everything the next session needs to know: what you were working on, what's done, what's blocked, and what to do next. It's like writing a note to your future self (or a colleague taking over your shift). The next session reads this note and picks up exactly where you left off, without wasting time re-explaining everything.</p>
+    </div>
+
     <p>The <code>/handoff</code> command generates a structured context transfer document designed for the next session. This solves the "cold start" problem where a new session has to re-discover what you were working on.</p>
 
     <h4>Handoff document structure</h4>
@@ -1556,6 +1645,12 @@ Outputs a &lt;300-token summary:
 
     <!-- ERROR RECOVERY -->
     <h3 id="error-recovery">Error Recovery</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is error recovery?</div>
+      <p>Sometimes things go wrong: your laptop crashes, you accidentally close a terminal, or the internet drops mid-session. Error recovery is VibeOS's <strong>self-healing system</strong> that runs automatically every time you start a new session. It quietly cleans up any mess left behind &mdash; removing stale lock files, repairing corrupted data, and flagging unresolved issues. You don't need to do anything; it just works. If it finds something it can't fix automatically (like a merge conflict in your code), it tells you what happened and how to resolve it.</p>
+    </div>
+
     <p>The <code>error-recovery.sh</code> script runs at every session start via the SessionStart hook. It silently cleans up problems left by crashed or interrupted sessions.</p>
 
     <div class="card-grid">
@@ -1583,6 +1678,12 @@ Outputs a &lt;300-token summary:
 
     <!-- COST GUARDRAILS -->
     <h3 id="cost-guardrails">Cost Guardrails</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What are cost guardrails?</div>
+      <p>Using AI costs money &mdash; every message you send and every response you receive has a small price tag based on how much text is processed. Cost guardrails are VibeOS's <strong>spending protection system</strong>. They track your costs in real time and warn you when you approach a limit &mdash; like a prepaid phone that warns you when your balance is low. You set the limits yourself (e.g., "$5 per session, $20 per day"), and VibeOS will pause and ask before exceeding them. This prevents surprise bills from long or runaway sessions.</p>
+    </div>
+
     <p>The <code>cost-guardrails.sh</code> script runs on every Stop event. It calculates per-turn costs using model-aware pricing and accumulates totals in <code>.vibeos/session-cost.json</code>.</p>
 
     <h4>How cost tracking works</h4>
@@ -1707,6 +1808,12 @@ Checks against thresholds:
 
     <!-- STATE -->
     <h3 id="state">State Management</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is state management?</div>
+      <p>State is VibeOS's <strong>memory between sessions</strong>. It remembers what features you've planned, which ones are done, your quality scores, session history, and configuration preferences. All of this is stored in a folder called <code>.vibeos/</code> inside your project. Unlike the AI's conversation memory (which resets every session), these files persist forever. They're plain JSON files &mdash; human-readable text &mdash; so you can always open them and see exactly what VibeOS knows about your project.</p>
+    </div>
+
     <p>All VibeOS runtime state lives in <code>.vibeos/</code>:</p>
     <div class="table-wrap">
       <table>
@@ -1746,7 +1853,7 @@ Checks against thresholds:
   <section class="section" id="design-principles">
     <span class="section-label">Philosophy</span>
     <h2>Design Principles</h2>
-    <p>Every architectural decision in VibeOS follows these principles. Understanding them explains <em>why</em> the system works the way it does.</p>
+    <p>Every architectural decision in VibeOS follows these principles. Understanding them explains <em>why</em> the system works the way it does. These aren't just technical choices &mdash; they're the philosophy behind VibeOS. If you ever wonder "why does it work this way?", the answer is usually one of these principles.</p>
 
     <div class="card-grid">
       <div class="card">
@@ -1800,6 +1907,12 @@ Checks against thresholds:
   <section class="section" id="dashboard">
     <span class="section-label">Dashboard</span>
     <h2>VitePress Documentation Dashboard</h2>
+
+    <div class="callout tip">
+      <div class="callout-title">What is the dashboard?</div>
+      <p>The dashboard is a <strong>visual website that VibeOS generates for your project</strong>. It turns all of your session data (scores, features, costs, agent activity) into charts, progress bars, and a kanban board. Think of it as a project management tool that builds itself automatically from your work. You can open it in your browser to see the big picture: how many features are done, how your quality scores are trending, which agents are doing the most work, and how your feature backlog is progressing. Teams find it especially useful for weekly retrospectives.</p>
+    </div>
+
     <p>VibeOS generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 5 interactive Vue dashboard components that visualize cross-session data from <code>.vibeos/</code>.</p>
 
     <div class="card-grid">

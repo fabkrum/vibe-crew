@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeCrew &mdash; Vibe Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10, 10, 11, 0.82); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
+    .nav-brand span { color: var(--color-accent); }
+    .nav-links { display: flex; gap: 0.25rem; list-style: none; }
+    .nav-links a { color: var(--color-text-secondary); text-decoration: none; font-size: 0.85rem; padding: 0.4rem 0.75rem; border-radius: var(--radius-xs); transition: all 0.15s; }
+    .nav-links a:hover { color: var(--color-text); background: var(--color-surface-2); }
+    .nav-links a.active { color: var(--color-accent); background: var(--color-accent-bg); }
+    .main { max-width: var(--max-width); margin: 0 auto; padding: 6rem 2rem 6rem; }
+    .section { margin-bottom: 5rem; }
+    .section-label { display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: 0.75rem; }
+    h2 { font-size: 1.9rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1rem; }
+    h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.75rem; margin-top: 2.5rem; }
+    h4 { font-size: 1.05rem; font-weight: 650; margin-bottom: 0.5rem; margin-top: 2rem; }
+    .section > p, .section > ul, .section > ol { color: var(--color-text-secondary); margin-bottom: 1.25rem; }
+    p { margin-bottom: 1rem; color: var(--color-text-secondary); }
+    strong { color: var(--color-text); font-weight: 600; }
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1.25rem; color: var(--color-text-secondary); }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--color-text-muted); }
+    code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-surface-2); padding: 0.15em 0.45em; border-radius: 4px; color: var(--color-accent); border: 1px solid var(--color-border-subtle); }
+    pre { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; position: relative; }
+    pre code { background: none; padding: 0; border: none; color: var(--color-text-secondary); font-size: 0.85rem; line-height: 1.7; }
+    .code-label { position: absolute; top: 0.5rem; right: 0.75rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); font-family: var(--font-sans); font-weight: 600; }
+    pre.copyable { padding-right: 3.5rem; }
+    pre.copyable .code-label { right: 3.25rem; }
+    .copy-btn { position: absolute; top: 0.6rem; right: 0.6rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-xs); color: var(--color-text-muted); cursor: pointer; transition: all 0.15s; padding: 0; }
+    .copy-btn:hover { color: var(--color-text); border-color: var(--color-accent-dim); background: var(--color-surface-3); }
+    .copy-btn.copied { color: var(--color-green); border-color: rgba(74, 222, 128, 0.3); }
+    .copy-btn svg { width: 16px; height: 16px; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
+    .card:hover { border-color: var(--color-accent-dim); }
+    .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1rem; }
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+    .card h4 { font-size: 1rem; margin-top: 0; margin-bottom: 0.5rem; color: var(--color-text); }
+    .card p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    thead { background: var(--color-surface-2); }
+    th { text-align: left; padding: 0.75rem 1rem; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); border-bottom: 1px solid var(--color-border); white-space: nowrap; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--color-surface); }
+    .callout { border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid; font-size: 0.92rem; }
+    .callout p { margin: 0; color: inherit; }
+    .callout-title { font-weight: 700; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
+    .callout.info { background: var(--color-blue-dim); border-color: rgba(96, 165, 250, 0.2); color: var(--color-blue); }
+    .callout.tip { background: var(--color-green-dim); border-color: rgba(74, 222, 128, 0.2); color: var(--color-green); }
+    .callout.warn { background: var(--color-amber-dim); border-color: rgba(251, 191, 36, 0.2); color: var(--color-amber); }
+    .callout.danger { background: var(--color-red-dim); border-color: rgba(248, 113, 113, 0.2); color: var(--color-red); }
+    .flow { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; color: var(--color-text-secondary); overflow-x: auto; white-space: pre; }
+    .flow .highlight { color: var(--color-accent); font-weight: 600; }
+    .flow .muted { color: var(--color-text-muted); }
+    .toc { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem; }
+    .toc h3 { margin-top: 0; margin-bottom: 1rem; font-size: 1rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .toc ol { padding-left: 1.25rem; margin-bottom: 0; }
+    .toc li { margin-bottom: 0.35rem; }
+    .toc a { color: var(--color-text-secondary); font-size: 0.92rem; transition: color 0.15s; }
+    .toc a:hover { color: var(--color-accent); text-decoration: none; }
+    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border-subtle); color: var(--color-text-muted); font-size: 0.85rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 2rem; text-decoration: none; transition: color 0.15s; }
+    .back-link:hover { color: var(--color-accent); text-decoration: none; }
+    hr { border: none; border-top: 1px solid var(--color-border); margin: 4rem 0; }
+    @media (max-width: 768px) { .nav-links { display: none; } .main { padding: 5rem 1.25rem 4rem; } .card-grid { grid-template-columns: 1fr; } h2 { font-size: 1.5rem; } h3 { font-size: 1.15rem; } pre { padding: 1rem; } }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+    <ul class="nav-links">
+      <li><a href="why.html">Why VibeCrew</a></li>
+      <li><a href="setup.html">Setup</a></li>
+      <li><a href="new-project.html">New Project</a></li>
+      <li><a href="existing-project.html">Existing Project</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="example-session.html">Example Session</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+      <li><a href="warp.html">Warp</a></li>
+      <li><a href="releases.html">Releases</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="main">
+
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#what">What is the Vibe Dashboard</a></li>
+      <li><a href="#start">How to Start It</a></li>
+      <li><a href="#tabs">Dashboard Tabs</a></li>
+      <li><a href="#cli">CLI Alternatives</a></li>
+      <li><a href="#data-flow">Data Flow</a></li>
+      <li><a href="#production">Production Build</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <!-- ============ WHAT IS THE VIBE DASHBOARD ============ -->
+  <section class="section" id="what">
+    <span class="section-label">Overview</span>
+    <h2>What is the Vibe Dashboard</h2>
+    <p>The Vibe Dashboard is a <strong>VitePress-powered documentation site</strong> scaffolded into every VibeCrew project during <code>/setup</code>. It lives in your project's <code>docs/</code> folder and provides a browser-based interface for browsing development metrics, managing your feature backlog, and editing project settings.</p>
+    <p>The dashboard reads live data from <code>.vibecrew/</code> &mdash; the same JSON files that power the CLI commands. It includes 7 tabs: a getting-started guide, a Kanban board, session statistics, Vibe Score trends, test coverage, achievements, and a settings editor.</p>
+
+    <div class="callout info">
+      <div class="callout-title">Not the companion docs you're reading now</div>
+      <p>This page documents the <strong>per-project Vibe Dashboard</strong> that gets scaffolded into your project. It's separate from the VibeCrew companion documentation site (the one you're reading right now).</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ HOW TO START IT ============ -->
+  <section class="section" id="start">
+    <span class="section-label">Getting Started</span>
+    <h2>How to Start It</h2>
+    <p>The dashboard is a standard VitePress site. Start it with three commands from your project root:</p>
+
+    <pre class="copyable" data-copy="cd docs
+npm install
+npm run docs:dev"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd docs
+npm install
+npm run docs:dev</code></pre>
+
+    <p>Then visit <code>http://localhost:5173</code> in your browser. The dashboard loads instantly and hot-reloads when <code>.vibecrew/</code> data changes.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Run it alongside your dev server</div>
+      <p>Open a separate terminal tab for the dashboard. It runs on its own port and doesn't interfere with your application's dev server. In Warp, use a split pane or a dedicated tab.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ DASHBOARD TABS ============ -->
+  <section class="section" id="tabs">
+    <span class="section-label">Features</span>
+    <h2>Dashboard Tabs</h2>
+    <p>The dashboard ships with 7 tabs. Each tab reads from specific <code>.vibecrew/</code> JSON files via VitePress data loaders.</p>
+
+    <h3>Guide</h3>
+    <p>The default landing tab. Contains the same getting-started documentation that's scaffolded into <code>docs/system/getting-started.md</code> &mdash; a quick reference for setup, commands, and workflow.</p>
+
+    <h3 id="tab-kanban">Kanban Board</h3>
+    <p>A 7-column visual board showing every feature in your backlog across its workflow stages:</p>
+    <ul>
+      <li><strong>Backlog</strong> &mdash; Ideas captured via <code>/idea</code> or <code>/plan-features</code></li>
+      <li><strong>Planned</strong> &mdash; Features with written specs, ready to build</li>
+      <li><strong>UI Design</strong> &mdash; In the design phase (Stitch or manual)</li>
+      <li><strong>In Progress</strong> &mdash; Currently being built by the Builder agent</li>
+      <li><strong>Review</strong> &mdash; Code review in progress</li>
+      <li><strong>Testing</strong> &mdash; Running tests and quality checks</li>
+      <li><strong>Done</strong> &mdash; Feature complete, wrapped, and documented</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/backlog.json</code></p>
+
+    <h3 id="tab-stats">Session Statistics</h3>
+    <p>Aggregate metrics across all your development sessions:</p>
+    <ul>
+      <li><strong>Total sessions</strong> &mdash; Number of completed sessions</li>
+      <li><strong>Average Vibe Score</strong> &mdash; Your mean score across all sessions</li>
+      <li><strong>Total tokens</strong> &mdash; Input + output token usage</li>
+      <li><strong>Estimated cost</strong> &mdash; Cumulative API cost</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/sessions/*.json</code></p>
+
+    <h3 id="tab-trends">Trends</h3>
+    <p>Time-series visualizations of your development patterns:</p>
+    <ul>
+      <li><strong>Vibe Score line chart</strong> &mdash; Score trajectory across sessions</li>
+      <li><strong>Token breakdown</strong> &mdash; Input vs. output tokens per session</li>
+      <li><strong>Agent activity</strong> &mdash; Which agents ran and how often</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/scores/*.json</code></p>
+
+    <h3 id="tab-coverage">Coverage</h3>
+    <p>Quality metrics at a glance:</p>
+    <ul>
+      <li><strong>Test coverage gauge</strong> &mdash; Percentage of code covered by tests</li>
+      <li><strong>Feature delivery progress</strong> &mdash; Completed features vs. total backlog</li>
+    </ul>
+
+    <h3 id="tab-achievements">Achievements</h3>
+    <p>The gamification system rendered visually:</p>
+    <ul>
+      <li><strong>Level &amp; XP</strong> &mdash; Your current level and experience points</li>
+      <li><strong>Badges</strong> &mdash; Earned badges with unlock conditions</li>
+      <li><strong>Skill radar</strong> &mdash; Radar chart of your development skills</li>
+      <li><strong>Streak calendar</strong> &mdash; Daily activity streak tracking</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/gamification.json</code></p>
+
+    <h3 id="tab-settings">Settings</h3>
+    <p>A browser-based editor for <code>.vibecrew/config.json</code>. You can modify:</p>
+    <ul>
+      <li><strong>User profile</strong> &mdash; Role, code literacy, autonomy, verbosity, and other profile dimensions</li>
+      <li><strong>Notifications</strong> &mdash; Toggle notification delivery and sound</li>
+      <li><strong>Cost limits</strong> &mdash; Set per-session and per-feature cost caps</li>
+      <li><strong>MCP servers</strong> &mdash; Enable or disable optional MCP integrations</li>
+      <li><strong>Agent behavior</strong> &mdash; Adjust agent-specific settings</li>
+      <li><strong>Gamification</strong> &mdash; Toggle scoring, achievements, and XP display</li>
+    </ul>
+
+    <div class="callout warn">
+      <div class="callout-title">Settings save only works in dev mode</div>
+      <p>When running <code>npm run docs:dev</code>, the Settings tab writes changes directly to <code>.vibecrew/config.json</code>. In a static production build (<code>npm run docs:build</code>), there's no server to handle writes &mdash; the Settings tab displays a read-only view with copyable JSON instead.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ CLI ALTERNATIVES ============ -->
+  <section class="section" id="cli">
+    <span class="section-label">Terminal Equivalents</span>
+    <h2>CLI Alternatives</h2>
+    <p>Every dashboard tab has a terminal equivalent. If you prefer staying in the CLI, these commands show the same data:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dashboard Tab</th><th>CLI Command</th><th>What It Shows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Kanban / Stats</strong></td><td><code>/status</code></td><td>Feature backlog overview, session count, current feature</td></tr>
+          <tr><td><strong>Stats / Trends</strong></td><td><code>/cost</code></td><td>Token usage, API costs, per-session breakdown</td></tr>
+          <tr><td><strong>Achievements</strong></td><td><code>/achievements</code></td><td>Level, XP, badges, streaks, challenges</td></tr>
+          <tr><td><strong>Settings (profile)</strong></td><td><code>/profile</code></td><td>Edit user profile dimensions interactively</td></tr>
+          <tr><td><strong>Coverage</strong></td><td><code>/check</code></td><td>Run tests, lint, type-check, and see coverage</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ DATA FLOW ============ -->
+  <section class="section" id="data-flow">
+    <span class="section-label">Architecture</span>
+    <h2>Data Flow</h2>
+    <p>The dashboard reads data through a simple pipeline:</p>
+
+    <div class="flow"><span class="highlight">.vibecrew/*.json</span>          <span class="muted"># Raw data written by VibeCrew agents</span>
+       |
+<span class="highlight">VitePress data loaders</span>      <span class="muted"># .data.ts files that read and transform JSON</span>
+       |
+<span class="highlight">Vue components</span>             <span class="muted"># Render charts, tables, cards, forms</span>
+       |
+<span class="highlight">Browser</span>                    <span class="muted"># Hot-reloads when data files change</span></div>
+
+    <p>Data loaders run at build time (for static builds) or on each page load (in dev mode). In dev mode, VitePress watches the <code>.vibecrew/</code> directory and triggers hot-reloads when any JSON file changes &mdash; so running <code>/wrap</code> in a Claude Code session updates the dashboard in real time.</p>
+
+    <div class="callout info">
+      <div class="callout-title">No database required</div>
+      <p>All data lives in flat JSON files inside <code>.vibecrew/</code>. There's no database, no backend server, and no external dependencies beyond VitePress itself. The dashboard is a pure static site that reads local files.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ PRODUCTION BUILD ============ -->
+  <section class="section" id="production">
+    <span class="section-label">Deployment</span>
+    <h2>Production Build</h2>
+    <p>To generate a static HTML version of the dashboard:</p>
+
+    <pre class="copyable" data-copy="cd docs
+npm run docs:build"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd docs
+npm run docs:build</code></pre>
+
+    <p>The output goes to <code>docs/.vitepress/dist/</code>. You can deploy this to any static hosting provider (Vercel, Netlify, GitHub Pages) to share project metrics with your team.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Snapshot your metrics</div>
+      <p>A production build captures a point-in-time snapshot of your <code>.vibecrew/</code> data. This is useful for sprint reviews, stakeholder updates, or archiving project history.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ TROUBLESHOOTING ============ -->
+  <section class="section" id="troubleshooting">
+    <span class="section-label">Help</span>
+    <h2>Troubleshooting</h2>
+
+    <h3>Dashboard shows empty/no data</h3>
+    <p>The dashboard reads from <code>.vibecrew/</code> JSON files that are created as you work. If you haven't completed any sessions yet:</p>
+    <ol>
+      <li>Run <code>/new-project</code> to create the project foundation</li>
+      <li>Build at least one feature with <code>/new-feature "name"</code></li>
+      <li>Close the session with <code>/wrap</code> &mdash; this writes session data, scores, and updates the backlog</li>
+    </ol>
+    <p>After your first <code>/wrap</code>, all dashboard tabs will populate with data.</p>
+
+    <h3>Port 5173 is already in use</h3>
+    <p>If another dev server is using port 5173, VitePress will automatically try the next available port (5174, 5175, etc.). Check the terminal output for the actual URL. You can also specify a port explicitly:</p>
+    <pre class="copyable" data-copy="npm run docs:dev -- --port 5200"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>npm run docs:dev -- --port 5200</code></pre>
+
+    <h3>Settings changes don't persist</h3>
+    <p>The Settings tab can only write to <code>.vibecrew/config.json</code> when VitePress is running in dev mode (<code>npm run docs:dev</code>). If you're viewing a static build, Settings shows a read-only view with copyable JSON that you can paste into <code>.vibecrew/config.json</code> manually.</p>
+
+    <h3>Hot-reload isn't working</h3>
+    <ol>
+      <li>Make sure you're running the dev server (<code>npm run docs:dev</code>), not viewing a static build</li>
+      <li>Check that <code>.vibecrew/</code> is in the same project root where you started VitePress</li>
+      <li>Try restarting the dev server &mdash; VitePress occasionally needs a restart after major file structure changes</li>
+    </ol>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
+</footer>
+
+<script>
+document.querySelectorAll('.copy-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var pre = btn.closest('pre');
+    var text = pre.getAttribute('data-copy');
+    navigator.clipboard.writeText(text).then(function() {
+      btn.classList.add('copied');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      }, 2000);
+    });
+  });
+});
+</script>
+</body>
+</html>

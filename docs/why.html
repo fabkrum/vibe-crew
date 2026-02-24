@@ -244,7 +244,7 @@
     /* ---- CARDS ---- */
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
@@ -367,7 +367,7 @@
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .main { padding: 5rem 1.25rem 4rem; }
-      .card-grid { grid-template-columns: 1fr; }
+      .card-grid { grid-template-columns: 1fr !important; }
       h2 { font-size: 1.5rem; }
       h3 { font-size: 1.15rem; }
       pre { padding: 1rem; }
@@ -417,9 +417,6 @@
         <h4>Code Without Architecture</h4>
         <p>Jump straight into code and the AI picks the wrong state library, uses incompatible API patterns, and generates components that ignore your design system. You catch it three features in, when technical debt has compounded.</p>
       </div>
-    </div>
-
-    <div class="card-grid">
       <div class="card">
         <div class="card-icon purple">&#9881;</div>
         <h4>One Size Fits Nobody</h4>

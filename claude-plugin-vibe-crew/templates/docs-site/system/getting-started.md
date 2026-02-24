@@ -64,6 +64,27 @@ Once the foundation is complete, start building:
 /run-backlog            # Autonomous feature loop
 ```
 
+## Viewing the Vibe Dashboard
+
+Your project includes a browser-based dashboard with real-time development metrics:
+
+```bash
+cd docs
+npm install
+npm run docs:dev
+```
+
+Visit `http://localhost:5173` to see:
+
+- **Kanban** — Feature backlog across 7 workflow stages
+- **Stats** — Total sessions, average Vibe Score, token usage, estimated cost
+- **Trends** — Vibe Score history, token breakdown, agent activity over time
+- **Coverage** — Test coverage gauge and feature delivery progress
+- **Achievements** — Level, badges, skill trees, streaks, and challenges
+- **Settings** — Edit your VibeCrew configuration (profile, notifications, cost limits, MCP servers)
+
+Data updates automatically each time you run `/wrap` to close a session.
+
 ## Quick Reference
 
 | Command | Purpose |

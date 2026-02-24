@@ -89,15 +89,23 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/sync-mcp-from-tdr.sh" "<path-to-tdr-file>"
 3. Assign agents via `TaskCreate`:
    - **Builder** for design and code phases.
    - **Verifier** for test phase.
-4. Coordinate handoffs via `SendMessage` — notify Builder when design spec is approved, notify Verifier when code phase completes.
+   - **Code Reviewer** for review phase (after tests pass).
+4. Coordinate handoffs via `SendMessage` — notify Builder when design spec is approved, notify Verifier when code phase completes, notify Code Reviewer when tests pass.
 5. Process completion signals and advance phases.
+
+### Tier 2 Phase Sequence
+
+The full phase sequence is: **Plan → Design → Code → Test → Review → Docs**
+
+The review phase is optional in manual workflows (`/new-feature`) but runs automatically in `/run-backlog`. It earns a +2 Vibe Score bonus when completed.
 
 ## Agent Teams Usage
 
 ```
-TeamCreate: name="feat-{id}-{name}", agents=[builder, verifier]
+TeamCreate: name="feat-{id}-{name}", agents=[builder, verifier, code-reviewer]
 TaskCreate: team="feat-{id}-{name}", agent="builder", task="Implement {feature_name}"
 SendMessage: team="feat-{id}-{name}", agent="verifier", message="Code complete. Begin testing."
+SendMessage: team="feat-{id}-{name}", agent="code-reviewer", message="Tests pass. Begin code review."
 ```
 
 Use teams for Tier 2 feature work. Tier 1 work is sequential and does not require teams — delegate directly.
@@ -109,7 +117,8 @@ Poll `.vibecrew/signals/` for completion and error signals:
 - `builder-complete.signal` — Builder finished code phase. Advance to test. Notify Verifier.
 - `builder-design-complete.signal` — Builder finished design phase. Advance to code.
 - `builder-blocked.signal` — Builder hit unresolvable error. Read signal for details. Notify developer.
-- `verifier-test-complete.signal` — Verifier finished testing. Advance to docs or review.
+- `verifier-test-complete.signal` — Verifier finished testing. Advance to review (if review is enabled) or docs.
+- `reviewer-complete.signal` — Code Reviewer finished review. If verdict is `approve` or `comment-only`, advance to docs. If `request-changes`, route critical findings back to Builder.
 
 After processing each signal:
 1. Run the appropriate `complete-phase.sh` call.
@@ -159,6 +168,14 @@ Active Teams:
 
 Last Signal: {signal_name} at {timestamp}
 ```
+
+## Context Budget: On-Demand Loading
+
+To stay within context limits, load agent and command details on-demand rather than keeping all 13 agent descriptions in memory:
+
+1. **Trigger table** — Use `${CLAUDE_PLUGIN_ROOT}/templates/trigger-table.md` as a compact routing reference (~60 lines) instead of reading all agent files. It maps every slash command to its agent, lists all agents with their models and triggers, and provides the state routing decision table.
+2. **Load agent prompts only when invoking** — Read the full agent `.md` file only when creating a team or delegating a task to that agent.
+3. **State via scripts** — Use `jq` queries and Bash scripts for state inspection instead of reading entire JSON files.
 
 ## Budget
 

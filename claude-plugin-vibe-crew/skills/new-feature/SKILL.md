@@ -201,10 +201,13 @@ Phase Tracker:
   [ ] Design    -- Component design specs and CSS tokens
   [ ] Code      -- Implementation within TDR boundaries
   [ ] Test      -- TDD-hybrid testing (spec-first + impl-first)
+  [ ] Review    -- Code review (optional, +2 Vibe Score bonus)
   [ ] Docs      -- Feature documentation and release notes
 
 Next: Define the implementation approach for this feature.
 ```
+
+**Note:** The Review phase is optional in manual workflows. It earns a +2 Vibe Score bonus when completed. Run `/review` after tests pass to invoke the code reviewer. In `/run-backlog`, review runs automatically.
 
 Phase marker legend:
 - `[x]` = completed phase

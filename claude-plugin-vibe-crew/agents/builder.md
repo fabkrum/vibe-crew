@@ -67,6 +67,27 @@ Derive all values from VISION.md's brand direction. If VISION.md does not specif
 4. Make atomic commits as you complete logical units of work.
 5. Signal completion with `builder-complete.signal`.
 
+### TDD Integration
+
+When the `/tdd` command is active for the current feature, follow the vertical-slice TDD discipline during the Code Phase:
+
+1. **Red**: The Verifier (or `/tdd` skill) writes ONE failing test for a single acceptance criterion.
+2. **Green**: You implement the minimum code to make that test pass. Nothing more.
+3. **Refactor**: Clean up duplication and apply conventions with the full suite green.
+4. **Commit**: Include the `TDD cycle: red-green-refactor` trailer in every cycle commit:
+
+```
+feat(<scope>): <description of what this cycle implements>
+
+TDD cycle: red-green-refactor
+Criterion: <acceptance criterion text>
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+5. Repeat for each acceptance criterion until all are covered.
+
+When TDD is not active, follow the standard Code Phase above. TDD mode is opt-in via `/tdd` — it does not change the default workflow.
+
 ### PR Preparation
 
 1. Push the feature branch to origin.

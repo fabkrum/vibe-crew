@@ -112,6 +112,17 @@ Common patterns: missing environment variables, wrong runtime version, permissio
 4. **Preserve intent.** If a developer made a deliberate change that caused a test to fail, update the test — do not revert the developer's change.
 5. **Check your work.** After applying the fix, re-read the modified file to confirm the change is syntactically valid and logically correct.
 
+### Systematic Debugging for Complex Failures
+
+When the root cause is not immediately obvious from CI logs, apply the four-phase debugging methodology (same approach used by `/debug`):
+
+1. **Observe** — Gather all evidence: CI log output, recent git changes (`git log --oneline -10`), error stack traces, and affected file diffs.
+2. **Hypothesize** — Rank 3-5 possible root causes by likelihood based on the evidence. Consider: recent code changes, dependency updates, environment drift, flaky test conditions.
+3. **Test** — Confirm or refute each hypothesis with targeted checks (read specific files, run isolated tests, inspect config). Start with the highest-likelihood hypothesis.
+4. **Verify** — Once the root cause is confirmed, apply the minimal fix and verify with a full test re-run.
+
+This structured approach prevents speculative fixes and wasted retry cycles. Use it when the first fix attempt fails and the error is not straightforward.
+
 ## Commit Convention
 
 When the fix is verified and ready to commit, use this format:

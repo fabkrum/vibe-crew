@@ -115,7 +115,7 @@ Features to process: N
 Skipped (dependency not met):
   - {name} ({id}) — depends on {dep-id} (not ready/done)
 
-Estimated phases: N features x 5 phases = {N} total steps
+Estimated phases: N features x 6 phases = {N} total steps
 ```
 
 If there are no skipped features, omit the "Skipped" section.
@@ -188,7 +188,7 @@ Announce the feature start:
 
 ### Step 3b: Run Phases Sequentially
 
-Execute each of the five phases in order: **Plan > Design > Code > Test > Docs**
+Execute each of the six phases in order: **Plan > Design > Code > Test > Review > Docs**
 
 Update `state.json` active phase before each phase begins:
 
@@ -233,7 +233,7 @@ jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
    .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
 ```
 
-Report: `  [1/5] Plan — complete`
+Report: `  [1/6] Plan — complete`
 
 ---
 
@@ -273,7 +273,7 @@ jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
    .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
 ```
 
-Report: `  [2/5] Design — complete`
+Report: `  [2/6] Design — complete`
 
 ---
 
@@ -322,7 +322,7 @@ jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
    .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
 ```
 
-Report: `  [3/5] Code — complete`
+Report: `  [3/6] Code — complete`
 
 ---
 
@@ -380,7 +380,46 @@ jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
    .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
 ```
 
-Report: `  [4/5] Test — complete (X passed, Y failed)`
+Report: `  [4/6] Test — complete (X passed, Y failed)`
+
+---
+
+#### Phase 4.5: Review
+
+After tests pass, invoke a structured code review:
+
+1. Run the `/review` skill logic: collect changed files, invoke the `code-reviewer` agent in worktree isolation, and read the review report.
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/detect-review-status.sh"
+```
+
+2. Read the review verdict from `.vibecrew/reviews/`:
+
+```bash
+LATEST_REVIEW=$(ls -1t .vibecrew/reviews/review-<feature-id>-*.json 2>/dev/null | head -1)
+VERDICT=$(jq -r '.verdict // "none"' "$LATEST_REVIEW" 2>/dev/null || echo "none")
+CRITICAL_COUNT=$(jq -r '.stats.critical // 0' "$LATEST_REVIEW" 2>/dev/null || echo "0")
+```
+
+3. **If verdict is `request-changes` with critical findings**, enter a fix cycle:
+   - Read the critical findings from the review report
+   - Apply fixes for each critical finding
+   - Re-run tests to verify fixes don't break anything
+   - Re-invoke the code reviewer for a follow-up review
+   - **Maximum 2 review-fix cycles.** After 2 cycles, proceed to docs with remaining findings noted.
+
+4. **If verdict is `approve` or `comment-only`**, proceed to docs.
+
+Mark review complete:
+
+```bash
+jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+   '(.features[] | select(.id == $id)) |= (if (.phases_completed | index("review")) == null then .phases_completed += ["review"] else . end | .updated_at = $ts)' \
+   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+```
+
+Report: `  [5/6] Review — {verdict} ({critical} critical, {warning} warnings)`
 
 ---
 
@@ -428,13 +467,13 @@ jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
    .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
 ```
 
-Report: `  [5/5] Docs — complete`
+Report: `  [6/6] Docs — complete`
 
 ---
 
 ### Step 3c: Quality Gate (between features)
 
-After completing all five phases for a feature, run the full quality gate. This is the same check that `/check` runs.
+After completing all six phases for a feature, run the full quality gate. This is the same check that `/check` runs.
 
 #### Run quality checks
 
@@ -548,9 +587,14 @@ Deductions:
 - Feature blocked (failed quality gate): -20
 
 Bonuses:
-- All 5 phases completed with artifacts: +5
+- All 6 phases completed with artifacts: +5
 - Zero test failures on first run: +5
 - All acceptance criteria covered by tests: +5
+- TDD discipline (commits with TDD trailer): +3
+- E2E tests passing: +3
+- Accessibility clean (zero critical/serious): +2
+- Code review complete: +2
+- Performance baselines established: +2
 
 Cap the score between 0 and 100.
 
@@ -618,7 +662,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-context.sh" 2>/dev/null || echo "unkno
 ```
 
 Additionally, track feature count as a cost heuristic:
-- Each feature processes ~5 phases with substantial model usage
+- Each feature processes ~6 phases with substantial model usage
 - After processing N features, estimate cost as approximately N * estimated_cost_per_feature
 
 **If approaching `session_warn_usd`** (or context usage exceeds 60%):
@@ -709,7 +753,7 @@ Write to `.vibecrew/sessions/backlog-run-<timestamp>.json`:
       "name": "<feature-name>",
       "result": "completed|blocked|skipped",
       "score": <N>,
-      "phases_completed": ["plan", "design", "code", "test", "docs"],
+      "phases_completed": ["plan", "design", "code", "test", "review", "docs"],
       "retries": <N>,
       "blocked_reason": null
     }

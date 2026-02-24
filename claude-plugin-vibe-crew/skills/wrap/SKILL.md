@@ -244,17 +244,34 @@ score -= 20 if peak_context_pct > 80        # context-violation: -20
 score -= 10 if no_tests                     # no-tests: -10
 score -= 5 if no_spec                       # no-spec: -5
 score -= 3 * min(phases_skipped, 5)         # missing-phase: -3 each, max -15
+score -= 5 if skipped_code_review           # skipped-review: -5
 
 # Bonuses
 score += 5 if all_five_phases_complete      # all-phases: +5
 score += 5 if cache_ratio > 0.70            # high-cache: +5
 score += 3 if test_coverage_pct > 80        # full-coverage: +3
 score += 2 if zero_deductions               # clean-session: +2
+score += 3 if tdd_discipline_detected       # tdd-discipline: +3
+score += 3 if e2e_tests_passing             # e2e-passing: +3
+score += 2 if a11y_clean                    # a11y-clean: +2
+score += 2 if review_completed              # review-complete: +2
+score += 2 if perf_baselines_exist          # perf-baselines: +2
 
 score = clamp(score, 0, 100)
 ```
 
-**Important:** The `zero_deductions` check must happen AFTER applying all deductions. If the total deduction sum is 0, the `clean-session` bonus applies.
+### New metric detection (v1.4.0)
+
+The `calculate-vibe-score.sh` script detects these additional metrics:
+
+- **`skipped_code_review`**: True if an active feature exists, code was written, but no review report is found in `.vibecrew/reviews/`.
+- **`tdd_discipline_detected`**: True if commits with `TDD cycle:` trailer are found in recent git log.
+- **`e2e_tests_passing`**: True if Playwright spec files exist and test results directory exists.
+- **`a11y_clean`**: True if an axe-core report exists in `.vibecrew/a11y/` with zero critical/serious violations.
+- **`review_completed`**: True if a review report exists in `.vibecrew/reviews/` for the active feature.
+- **`perf_baselines_exist`**: True if k6 results exist in `.vibecrew/perf-tests/` for the active feature.
+
+**Important:** The `zero_deductions` check must happen AFTER applying all deductions (including `skipped-review`). If the total deduction sum is 0, the `clean-session` bonus applies.
 
 Determine the rating from the clamped score:
 - 90-100: `"excellent"`

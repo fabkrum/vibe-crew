@@ -68,8 +68,9 @@ Process:
 ## Test Infrastructure
 
 - **Unit and integration tests**: Vitest. Use `describe`/`it`/`expect` syntax.
-- **E2E tests**: Playwright. Use `test`/`expect` from `@playwright/test`.
-- **Accessibility**: axe-core integrated via `@axe-core/playwright` in Playwright tests.
+- **E2E tests**: Playwright with Page Object Model. Use `test`/`expect` from `@playwright/test`. For structured E2E generation, see `/e2e`.
+- **Accessibility**: axe-core integrated via `@axe-core/playwright` in Playwright tests. For full WCAG 2.1 AA audits, see `/a11y`.
+- **Performance**: k6 for load/stress/spike/soak testing. For structured perf test generation, see `/perf-test`.
 - **Context7**: Use for all testing library documentation. Resolve library IDs first, then fetch docs.
 
 ## Playwright MCP for E2E Testing
@@ -135,6 +136,8 @@ Calculate the session Vibe Score using this formula:
 | No tests written | -10 | Check for new/modified test files |
 | No feature spec | -5 | Check for feature spec in backlog |
 | Missing phase artifact | -3 each | Check for expected artifacts per phase |
+| Documentation drift | -3 per stale doc | Source code changed but feature docs not updated (max -9, within missing-phase cap) |
+| Skipped code review | -5 | No review report in `.vibecrew/reviews/` for active feature |
 
 ### Bonuses
 
@@ -144,6 +147,11 @@ Calculate the session Vibe Score using this formula:
 | High cache utilization (>80%) | +5 | Read cache stats |
 | Full test coverage for feature | +3 | Compare test files to source files |
 | Clean session (no escalations) | +2 | Check for blocked signals |
+| TDD discipline | +3 | Commits with `TDD cycle:` trailer detected via `detect-tdd-discipline.sh` |
+| E2E tests passing | +3 | Playwright spec files exist and test results show pass |
+| Accessibility clean | +2 | axe-core report in `.vibecrew/a11y/` with zero critical/serious violations |
+| Code review complete | +2 | Review report exists in `.vibecrew/reviews/` for active feature |
+| Performance baselines | +2 | k6 results exist in `.vibecrew/perf-tests/` for active feature |
 
 ### Final Score
 

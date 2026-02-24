@@ -1,0 +1,277 @@
+{
+  "schema_version": "1.0.0",
+  "servers": {
+    "context7": {
+      "name": "Context7",
+      "description": "Up-to-date documentation for libraries and frameworks",
+      "category": "developer-tools",
+      "patterns": ["context7"],
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "env": {},
+      "docs_url": "https://github.com/nichochar/context7"
+    },
+    "chrome-devtools": {
+      "name": "Chrome DevTools",
+      "description": "Browser automation via Chrome DevTools Protocol",
+      "category": "developer-tools",
+      "patterns": ["chrome-devtools"],
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "env": {},
+      "docs_url": "https://github.com/nichochar/chrome-devtools-mcp"
+    },
+    "playwright": {
+      "name": "Playwright",
+      "description": "End-to-end browser testing and automation",
+      "category": "testing",
+      "patterns": ["playwright"],
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {},
+      "docs_url": "https://playwright.dev/docs/mcp"
+    },
+    "semgrep": {
+      "name": "Semgrep",
+      "description": "Static analysis and code security scanning",
+      "category": "security",
+      "patterns": ["semgrep"],
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/semgrep-mcp@latest"],
+      "env": {},
+      "docs_url": "https://semgrep.dev/docs/"
+    },
+    "sentry": {
+      "name": "Sentry",
+      "description": "Error tracking and performance monitoring",
+      "category": "monitoring",
+      "patterns": ["sentry"],
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.sentry.dev/mcp"],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "Auth token from Sentry settings"
+      },
+      "docs_url": "https://docs.sentry.io/"
+    },
+    "supabase": {
+      "name": "Supabase",
+      "description": "PostgreSQL database, auth, storage, and real-time subscriptions",
+      "category": "database",
+      "patterns": ["supabase"],
+      "command": "npx",
+      "args": ["-y", "supabase-mcp-server@latest"],
+      "env": {
+        "SUPABASE_URL": "Supabase project URL",
+        "SUPABASE_SERVICE_ROLE_KEY": "Service role key from project settings"
+      },
+      "docs_url": "https://supabase.com/docs/guides/getting-started/mcp"
+    },
+    "stripe": {
+      "name": "Stripe",
+      "description": "Payment processing, subscriptions, and billing",
+      "category": "payments",
+      "patterns": ["stripe"],
+      "command": "npx",
+      "args": ["-y", "@stripe/mcp@latest"],
+      "env": {
+        "STRIPE_SECRET_KEY": "Secret key from Stripe dashboard"
+      },
+      "docs_url": "https://docs.stripe.com/mcp"
+    },
+    "vercel": {
+      "name": "Vercel",
+      "description": "Deployment, serverless functions, and edge network",
+      "category": "hosting",
+      "patterns": ["vercel"],
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.vercel.com"],
+      "env": {
+        "VERCEL_TOKEN": "Token from Vercel account settings"
+      },
+      "docs_url": "https://vercel.com/docs"
+    },
+    "figma": {
+      "name": "Figma",
+      "description": "Design file access and design-to-code workflows",
+      "category": "design",
+      "patterns": ["figma"],
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.figma.com/mcp"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "Personal access token from Figma settings"
+      },
+      "docs_url": "https://www.figma.com/developers"
+    },
+    "stitch": {
+      "name": "Google Stitch",
+      "description": "Google API integration proxy for Gemini, Maps, and more",
+      "category": "integration",
+      "patterns": ["stitch"],
+      "command": "npx",
+      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
+      "env": {},
+      "docs_url": "https://github.com/nichochar/stitch-mcp"
+    },
+    "firebase": {
+      "name": "Firebase",
+      "description": "App platform with Firestore, auth, hosting, and cloud functions",
+      "category": "database",
+      "patterns": ["firebase", "firestore"],
+      "command": "npx",
+      "args": ["-y", "firebase-tools@latest", "mcp"],
+      "env": {},
+      "docs_url": "https://firebase.google.com/docs/cli#mcp"
+    },
+    "prisma": {
+      "name": "Prisma",
+      "description": "Type-safe ORM for PostgreSQL, MySQL, SQLite, and more",
+      "category": "database",
+      "patterns": ["prisma", "drizzle"],
+      "command": "npx",
+      "args": ["-y", "prisma", "mcp"],
+      "env": {},
+      "docs_url": "https://www.prisma.io/docs"
+    },
+    "clerk": {
+      "name": "Clerk",
+      "description": "Authentication and user management with prebuilt UI components",
+      "category": "auth",
+      "patterns": ["clerk"],
+      "command": "npx",
+      "args": ["-y", "@clerk/clerk-mcp@latest"],
+      "env": {
+        "CLERK_SECRET_KEY": "Secret key from Clerk dashboard"
+      },
+      "docs_url": "https://clerk.com/docs"
+    },
+    "auth0": {
+      "name": "Auth0",
+      "description": "Identity platform with SSO, MFA, and social login",
+      "category": "auth",
+      "patterns": ["auth0"],
+      "command": "npx",
+      "args": ["-y", "@auth0/auth0-mcp-server", "run"],
+      "env": {},
+      "docs_url": "https://auth0.com/docs"
+    },
+    "netlify": {
+      "name": "Netlify",
+      "description": "Web hosting, serverless functions, and edge deployment",
+      "category": "hosting",
+      "patterns": ["netlify"],
+      "command": "npx",
+      "args": ["-y", "@netlify/mcp"],
+      "env": {},
+      "docs_url": "https://docs.netlify.com/"
+    },
+    "railway": {
+      "name": "Railway",
+      "description": "Infrastructure platform for deploying apps and databases",
+      "category": "hosting",
+      "patterns": ["railway"],
+      "command": "npx",
+      "args": ["-y", "@railway/mcp-server"],
+      "env": {},
+      "docs_url": "https://docs.railway.com/"
+    },
+    "shopify": {
+      "name": "Shopify",
+      "description": "E-commerce platform, storefronts, and Hydrogen framework",
+      "category": "e-commerce",
+      "patterns": ["shopify"],
+      "command": "npx",
+      "args": ["-y", "@shopify/dev-mcp@latest"],
+      "env": {},
+      "docs_url": "https://shopify.dev/docs"
+    },
+    "mongodb": {
+      "name": "MongoDB",
+      "description": "Document database with Atlas cloud and Mongoose ODM support",
+      "category": "database",
+      "patterns": ["mongodb", "mongoose", "mongo"],
+      "command": "npx",
+      "args": ["-y", "mongodb-mcp-server@latest"],
+      "env": {
+        "MDB_MCP_CONNECTION_STRING": "MongoDB connection string (mongodb+srv://...)"
+      },
+      "docs_url": "https://www.mongodb.com/docs/"
+    },
+    "resend": {
+      "name": "Resend",
+      "description": "Email API for transactional and marketing emails",
+      "category": "communication",
+      "patterns": ["resend"],
+      "command": "npx",
+      "args": ["-y", "resend-mcp"],
+      "env": {
+        "RESEND_API_KEY": "API key from Resend dashboard"
+      },
+      "docs_url": "https://resend.com/docs"
+    },
+    "nextjs": {
+      "name": "Next.js DevTools",
+      "description": "Next.js development tools and route inspection",
+      "category": "framework",
+      "patterns": ["next.js", "nextjs"],
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"],
+      "env": {},
+      "docs_url": "https://nextjs.org/docs"
+    },
+    "shadcn-ui": {
+      "name": "shadcn/ui",
+      "description": "Component library with Tailwind CSS and Radix UI primitives",
+      "category": "ui",
+      "patterns": ["shadcn", "shadcn-ui", "shadcn/ui"],
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"],
+      "env": {},
+      "docs_url": "https://ui.shadcn.com/docs"
+    },
+    "terraform": {
+      "name": "Terraform",
+      "description": "Infrastructure as Code for cloud resource provisioning",
+      "category": "infrastructure",
+      "patterns": ["terraform", "hcl"],
+      "command": "npx",
+      "args": ["-y", "terraform-mcp-server"],
+      "env": {},
+      "docs_url": "https://developer.hashicorp.com/terraform/docs"
+    },
+    "kubernetes": {
+      "name": "Kubernetes",
+      "description": "Container orchestration and cluster management",
+      "category": "infrastructure",
+      "patterns": ["kubernetes", "k8s"],
+      "command": "npx",
+      "args": ["-y", "mcp-server-kubernetes"],
+      "env": {},
+      "docs_url": "https://kubernetes.io/docs/"
+    },
+    "neon": {
+      "name": "Neon",
+      "description": "Serverless PostgreSQL with branching and autoscaling",
+      "category": "database",
+      "patterns": ["neon", "neondb"],
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.neon.tech/mcp"],
+      "env": {
+        "NEON_API_KEY": "API key from Neon console"
+      },
+      "docs_url": "https://neon.tech/docs"
+    },
+    "upstash-redis": {
+      "name": "Upstash Redis",
+      "description": "Serverless Redis and Kafka for caching and messaging",
+      "category": "database",
+      "patterns": ["upstash", "redis"],
+      "command": "npx",
+      "args": ["-y", "@upstash/mcp-server@latest"],
+      "env": {
+        "UPSTASH_EMAIL": "Upstash account email",
+        "UPSTASH_API_KEY": "API key from Upstash console"
+      },
+      "docs_url": "https://upstash.com/docs"
+    }
+  }
+}

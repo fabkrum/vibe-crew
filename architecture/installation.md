@@ -238,7 +238,7 @@ jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
 
 ### 3.1 Server Overview
 
-VibeCrew ships with 10 MCP servers. Three are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies.
+VibeCrew ships with 10 MCP servers in `.mcp.json` and a **registry of 25 servers** in `templates/mcp-registry.json`. Three bundled servers are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies. An additional 15 servers can be discovered from the registry and injected into `.mcp.json` based on TDR choices.
 
 | Server | Package | Ships Enabled | Auth Required | Used By |
 |--------|---------|:------------:|---------------|---------|
@@ -255,33 +255,62 @@ VibeCrew ships with 10 MCP servers. Three are enabled by default (no auth requir
 
 ### 3.2 .mcp.json Configuration
 
-The plugin ships `.mcp.json` at its root with all 10 servers. Each has a `disabled` flag controlling activation. The always-enabled servers (Context7, Chrome DevTools, Playwright) require no API keys. Disabled servers are toggled via:
+The plugin ships `.mcp.json` at its root with all 10 bundled servers. Each has a `disabled` flag controlling activation. The always-enabled servers (Context7, Chrome DevTools, Playwright) require no API keys. Three scripts manage MCP servers:
 
 ```bash
-# Enable a server
+# Toggle existing servers
 bash scripts/enable-mcp-server.sh supabase enable
-
-# Disable a server
 bash scripts/enable-mcp-server.sh supabase disable
+
+# Add a new server from the registry (disabled by default)
+bash scripts/add-mcp-server.sh firebase
+
+# Add and enable immediately
+bash scripts/add-mcp-server.sh firebase --enable
+
+# List all 25 registry servers with their current status
+bash scripts/add-mcp-server.sh --list
+
+# Show TDR-based recommendations
+bash scripts/recommend-mcp-servers.sh
+bash scripts/recommend-mcp-servers.sh --json
 ```
 
-This script atomically updates `.mcp.json` and syncs `.vibecrew/config.json`. It warns if required environment variables are not set.
+All three scripts atomically update `.mcp.json` and sync `.vibecrew/config.json`. `enable-mcp-server.sh` warns if required environment variables are not set. `add-mcp-server.sh` is idempotent — adding a server that already exists is a no-op (exit 0).
 
-**Design decisions:** `npx -y` ensures latest versions are fetched automatically. Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy for compatibility with Claude Code's `.mcp.json` schema. Tool approval is managed by agent permissions and `settings.json`, not by MCP server configuration.
+**Design decisions:** `npx -y` ensures latest versions are fetched automatically. Remote servers (Sentry, Vercel, Figma, Neon) use `npx mcp-remote <url>` as a local proxy for compatibility with Claude Code's `.mcp.json` schema. Tool approval is managed by agent permissions and `settings.json`, not by MCP server configuration.
 
-### 3.3 Auto-Enable via TDR
+### 3.3 MCP Server Registry
 
-After TDR approval, the Workflow Orchestrator runs `scripts/sync-mcp-from-tdr.sh` which scans the TDR content (case-insensitive) for technology names and enables matching servers automatically. The mapping:
+The file `templates/mcp-registry.json` is the single source of truth for all known MCP servers. It contains the 10 bundled servers plus 15 additional servers (Firebase, Prisma, Clerk, Auth0, Netlify, Railway, Shopify, MongoDB, Resend, Next.js, shadcn/ui, Terraform, Kubernetes, Neon, Upstash Redis).
 
-| TDR Mention | Server Enabled |
-|-------------|----------------|
-| supabase | supabase |
-| stripe | stripe |
-| vercel | vercel |
-| figma | figma |
-| sentry | sentry |
+Each entry specifies:
+- **`patterns`** — array of search terms for TDR matching (e.g. `["firebase", "firestore"]`)
+- **`command`/`args`** — the npx command and arguments
+- **`env`** — required environment variables (empty object = no auth)
+- **`category`/`docs_url`** — metadata for recommendation display
 
-### 3.4 Graceful Degradation
+### 3.4 Auto-Enable and Discovery via TDR
+
+After TDR approval, the Workflow Orchestrator runs `scripts/sync-mcp-from-tdr.sh` which reads patterns from `templates/mcp-registry.json` and scans the TDR content (case-insensitive). It classifies matches into two buckets:
+
+1. **Enabled** — server already in `.mcp.json` → auto-enables via `enable-mcp-server.sh`
+2. **Recommended** — server not in `.mcp.json` → returned in `servers_recommended` JSON for the orchestrator to present
+
+The Workflow Orchestrator then asks: "Would you like to add any of these MCP servers? (all / pick / skip)". Selected servers are injected via `scripts/add-mcp-server.sh`.
+
+If the registry file is missing, the sync script falls back to hardcoded mappings (supabase, stripe, vercel, figma, sentry) for backward compatibility.
+
+Discovery preferences in `.vibecrew/config.json`:
+
+```json
+"mcp_discovery": {
+  "auto_recommend": true,
+  "auto_add": false
+}
+```
+
+### 3.5 Graceful Degradation
 
 All agents are designed to work without MCP servers. If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token cost). If Chrome DevTools or Playwright is missing, visual debugging is skipped. If any conditional server is unavailable, the agent continues with standard approaches (Bash, grep, file reads). The setup wizard reports all MCP server statuses.
 

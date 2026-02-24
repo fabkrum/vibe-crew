@@ -147,4 +147,4 @@ VibeCrew v1.4.0 — the plugin is feature-complete. The repository contains:
 - Claude Code 2.0+, Git 2.30+, GitHub CLI 2.0+, Node.js 18+
 - `terminal-notifier` (macOS notifications via Homebrew)
 - `jq` (JSON parsing in hook scripts)
-- MCP servers (10 total, all optional): Context7, Chrome DevTools, Playwright (enabled by default); Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, Stitch (conditionally enabled from TDR)
+- MCP servers: 10 bundled in `.mcp.json` (Context7, Chrome DevTools, Playwright enabled by default; Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, Stitch conditionally enabled from TDR) + 15 additional servers in `templates/mcp-registry.json` that can be auto-discovered and injected based on TDR technology choices

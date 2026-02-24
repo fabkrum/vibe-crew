@@ -864,8 +864,8 @@
       </div>
       <div class="card">
         <div class="card-icon blue">&#9673;</div>
-        <h4>.mcp.json</h4>
-        <p>MCP server configuration for 10 servers. 3 enabled by default (Context7, Chrome DevTools, Playwright); 7 conditionally enabled when TDR selects matching technologies (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, Stitch).</p>
+        <h4>.mcp.json + mcp-registry.json</h4>
+        <p>MCP server configuration. 10 bundled servers in <code>.mcp.json</code> (3 enabled by default, 7 conditionally enabled from TDR). A registry of 25 servers in <code>templates/mcp-registry.json</code> enables discovery and injection of additional servers (Firebase, Clerk, MongoDB, etc.) based on TDR technology choices.</p>
       </div>
     </div>
 
@@ -1400,7 +1400,7 @@ args: feature_name
       </div>
     </div>
 
-    <p>Servers are toggled via <code>scripts/enable-mcp-server.sh &lt;name&gt; [enable|disable]</code>. After TDR approval, <code>scripts/sync-mcp-from-tdr.sh</code> auto-enables servers for technologies mentioned in the TDR.</p>
+    <p>Servers are toggled via <code>scripts/enable-mcp-server.sh &lt;name&gt; [enable|disable]</code>. After TDR approval, <code>scripts/sync-mcp-from-tdr.sh</code> auto-enables bundled servers and recommends additional servers from the registry. Run <code>scripts/recommend-mcp-servers.sh</code> to see recommendations, or <code>scripts/add-mcp-server.sh &lt;key&gt;</code> to add a server from the registry (Firebase, Prisma, Clerk, Auth0, Netlify, Railway, Shopify, MongoDB, Resend, Next.js, shadcn/ui, Terraform, Kubernetes, Neon, Upstash Redis).</p>
 
     <div class="callout tip">
       <div class="callout-title">Token savings from Context7</div>

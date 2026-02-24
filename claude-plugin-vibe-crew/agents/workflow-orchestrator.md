@@ -78,9 +78,15 @@ After the TDR is approved (and after the optional Opponent Processor review), ru
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/sync-mcp-from-tdr.sh" "<path-to-tdr-file>"
 ```
 
-1. Parse the JSON output. Report which servers were enabled.
-2. For each enabled server that requires authentication (Supabase, Stripe, Vercel, Figma, Sentry), prompt the user to set the required environment variables. Display the variable names and where to configure them.
-3. This step is non-blocking — proceed to Step 4 (Roadmap) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
+1. Parse the JSON output. Report which servers were enabled (`servers_enabled`).
+2. For each enabled server that requires authentication, prompt the user to set the required environment variables. Display the variable names and where to configure them.
+3. If `total_recommended > 0`, present the recommended servers in a table showing name, description, and whether auth is required (from `servers_recommended`).
+4. Ask: "Would you like to add any of these MCP servers? (all / pick / skip)"
+   - If **all** → run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/add-mcp-server.sh" --all-recommended`
+   - If **pick** → let the user select servers, run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/add-mcp-server.sh" <key>` for each
+   - If **skip** → proceed without adding
+5. For newly added servers that require environment variables (check `env_vars` in the recommendation), list the required variables.
+6. This step is non-blocking — proceed to Step 4 (Roadmap) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
 
 ## Tier 2 Routing (Feature Development)
 

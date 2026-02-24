@@ -57,6 +57,10 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "figma": false,
     "stitch": false
   },
+  "mcp_discovery": {
+    "auto_recommend": true,
+    "auto_add": false
+  },
   "formatting": {
     "auto_format": true,
     "formatter": "prettier"

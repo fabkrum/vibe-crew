@@ -650,9 +650,9 @@ VibeCrew's state is small (kilobytes, not megabytes), rarely queried in complex 
 
 ## 6. MCP Server Dependencies
 
-VibeCrew ships with 10 MCP servers. Three are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh`.
+VibeCrew ships with 10 MCP servers in `.mcp.json` and a **registry of 25 servers** in `templates/mcp-registry.json`. Three bundled servers are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies. An additional 15 servers in the registry can be discovered and injected into `.mcp.json` based on TDR technology choices.
 
-### 6.1 Always-Enabled Servers
+### 6.1 Always-Enabled Servers (bundled)
 
 | Server | Package | Purpose | Used By |
 |--------|---------|---------|---------|
@@ -660,9 +660,9 @@ VibeCrew ships with 10 MCP servers. Three are enabled by default (no auth requir
 | Chrome DevTools | `chrome-devtools-mcp@latest` | Browser debugging and automation for research | Stack Scout |
 | Playwright | `@playwright/mcp@latest` | Interactive E2E browser debugging and visual verification | Verifier |
 
-### 6.2 Conditionally-Enabled Servers
+### 6.2 Conditionally-Enabled Servers (bundled)
 
-These servers ship disabled and are auto-enabled when the TDR mentions the matching technology.
+These servers ship disabled in `.mcp.json` and are auto-enabled when the TDR mentions the matching technology.
 
 | Server | Package | Auth Required | Purpose | Used By |
 |--------|---------|---------------|---------|---------|
@@ -676,19 +676,74 @@ These servers ship disabled and are auto-enabled when the TDR mentions the match
 
 Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy for compatibility.
 
-### 6.3 Configuration
+### 6.3 MCP Server Registry (discoverable)
 
-MCP servers are configured in `.mcp.json` at the plugin root. Each entry has a `disabled` flag that controls activation. Servers are toggled via `scripts/enable-mcp-server.sh <server-name> [enable|disable]`, which updates both `.mcp.json` and `.vibecrew/config.json`.
+The file `templates/mcp-registry.json` is the single source of truth for all known MCP servers. It contains all 10 bundled servers plus 15 additional servers that can be recommended and injected into `.mcp.json` based on TDR technology choices.
 
-### 6.4 Safety Rules
+Each registry entry contains:
+- **`patterns`** — array of case-insensitive search terms for TDR matching (e.g. `["firebase", "firestore"]`)
+- **`command`/`args`** — the npx command to run the server
+- **`env`** — map of required environment variable names to descriptions (empty = no auth required)
+- **`category`** — grouping for recommendation display (database, auth, hosting, etc.)
+- **`docs_url`** — link to official documentation
+
+Additional registry servers (not bundled in `.mcp.json`):
+
+| Server | Patterns | Package | Auth |
+|--------|----------|---------|------|
+| Firebase | firebase, firestore | `firebase-tools@latest mcp` | CLI auth |
+| Prisma | prisma, drizzle | `prisma mcp` | No |
+| Clerk | clerk | `@clerk/clerk-mcp@latest` | `CLERK_SECRET_KEY` |
+| Auth0 | auth0 | `@auth0/auth0-mcp-server run` | CLI init |
+| Netlify | netlify | `@netlify/mcp` | CLI auth |
+| Railway | railway | `@railway/mcp-server` | CLI auth |
+| Shopify | shopify | `@shopify/dev-mcp@latest` | No |
+| MongoDB | mongodb, mongoose, mongo | `mongodb-mcp-server@latest` | `MDB_MCP_CONNECTION_STRING` |
+| Resend | resend | `resend-mcp` | `RESEND_API_KEY` |
+| Next.js | next.js, nextjs | `next-devtools-mcp@latest` | No |
+| shadcn/ui | shadcn, shadcn-ui, shadcn/ui | `shadcn@latest mcp` | No |
+| Terraform | terraform, hcl | `terraform-mcp-server` | No |
+| Kubernetes | kubernetes, k8s | `mcp-server-kubernetes` | kubeconfig |
+| Neon | neon, neondb | `mcp-remote https://mcp.neon.tech/mcp` | `NEON_API_KEY` |
+| Upstash Redis | upstash, redis | `@upstash/mcp-server@latest` | `UPSTASH_EMAIL`, `UPSTASH_API_KEY` |
+
+### 6.4 Configuration
+
+MCP servers are configured in `.mcp.json` at the plugin root. Each entry has a `disabled` flag that controls activation. Three scripts manage MCP servers:
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/enable-mcp-server.sh <name> [enable\|disable]` | Toggle the `disabled` flag on existing `.mcp.json` entries |
+| `scripts/add-mcp-server.sh <key> [--enable]` | Add a new server from the registry into `.mcp.json` |
+| `scripts/recommend-mcp-servers.sh [path] [--json]` | Show TDR-matched servers not yet in `.mcp.json` |
+
+All three scripts sync changes to `.vibecrew/config.json` when it exists.
+
+### 6.5 Safety Rules
 
 - **Supabase MCP** must never be used against production data — only development/staging URLs.
 - **Stripe MCP** must always use test mode keys (`sk_test_*`).
 - **Graceful degradation**: All agents fall back to built-in tools (WebSearch, WebFetch, Bash, grep) when MCP servers are unavailable. No agent hard-fails on MCP unavailability.
 
-### 6.5 Auto-Enable Flow
+### 6.6 Auto-Enable and Discovery Flow
 
-After TDR approval, the Workflow Orchestrator runs `scripts/sync-mcp-from-tdr.sh` which scans the TDR for technology mentions (case-insensitive) and enables matching servers. This is non-blocking — the workflow continues regardless.
+After TDR approval, the Workflow Orchestrator runs `scripts/sync-mcp-from-tdr.sh` which:
+
+1. Reads patterns from `templates/mcp-registry.json` (falls back to hardcoded mappings if registry is missing).
+2. Scans TDR content case-insensitively for each server's pattern array.
+3. **Enables** servers already in `.mcp.json` that match (via `enable-mcp-server.sh`).
+4. **Recommends** servers not yet in `.mcp.json` that match (returned in `servers_recommended` JSON array).
+5. The Workflow Orchestrator presents recommendations and offers: "add all / pick / skip".
+6. Selected servers are injected via `scripts/add-mcp-server.sh`.
+
+This is non-blocking — the workflow continues to the Roadmap step regardless. Discovery preferences are controlled by `mcp_discovery` in `.vibecrew/config.json`:
+
+```json
+"mcp_discovery": {
+  "auto_recommend": true,   // Show recommendations after TDR sync
+  "auto_add": false          // Add all recommended servers without asking
+}
+```
 
 ---
 

@@ -566,7 +566,8 @@ vibecrew-update() {
     <h3>MCP servers not available</h3>
     <ol>
       <li><strong>Default servers (Context7, Chrome DevTools, Playwright):</strong> These should work out of the box via <code>npx</code>. Try restarting Claude Code.</li>
-      <li><strong>Conditional servers (Supabase, Stripe, Vercel, Figma, Sentry):</strong> Set the required environment variables, then run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code>.</li>
+      <li><strong>Bundled conditional servers (Supabase, Stripe, Vercel, Figma, Sentry, etc.):</strong> Set the required environment variables, then run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code>.</li>
+      <li><strong>Registry servers not yet in .mcp.json (Firebase, Clerk, MongoDB, etc.):</strong> Add from the registry with <code>bash scripts/add-mcp-server.sh &lt;key&gt;</code>, or see all available servers with <code>bash scripts/add-mcp-server.sh --list</code>.</li>
       <li>All MCP servers are optional. VibeCrew agents gracefully fall back to built-in tools when servers are unavailable.</li>
     </ol>
 

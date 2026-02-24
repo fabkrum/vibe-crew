@@ -149,7 +149,7 @@ After installation, the user runs `/setup` to initialize the `.vibecrew/` runtim
 
 ### 1.5 MCP Server Configuration
 
-The `.mcp.json` file at the plugin root registers 10 MCP servers. Three ship enabled by default (Context7, Chrome DevTools, Playwright); seven ship disabled and are auto-enabled when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh`.
+The `.mcp.json` file at the plugin root registers 10 bundled MCP servers. Three ship enabled by default (Context7, Chrome DevTools, Playwright); seven ship disabled and are auto-enabled when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh`. An additional 15 servers are defined in `templates/mcp-registry.json` and can be discovered and injected into `.mcp.json` based on TDR technology choices via `scripts/add-mcp-server.sh`.
 
 | Server | Ships Enabled | Purpose |
 |--------|:------------:|---------|

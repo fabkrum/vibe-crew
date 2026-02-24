@@ -92,7 +92,7 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
     "standard": "sonnet"                 // Orchestrator, Builder, Verifier, Stack Scout
   },
 
-  // MCP server toggles (synced by enable-mcp-server.sh)
+  // MCP server toggles (synced by enable-mcp-server.sh and add-mcp-server.sh)
   "mcp_servers": {
     "context7": true,                    // Documentation lookup
     "chrome_devtools": true,             // Browser debugging and automation
@@ -104,6 +104,13 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
     "vercel": false,                     // Deployment management
     "figma": false,                      // Design spec extraction
     "stitch": false                      // Google AI design (experimental)
+    // Additional servers added from registry (e.g. firebase, clerk, mongodb)
+  },
+
+  // MCP discovery preferences (controls TDR-based server recommendations)
+  "mcp_discovery": {
+    "auto_recommend": true,              // Show recommendations after TDR sync
+    "auto_add": false                    // Add all recommended servers without asking
   },
 
   // Code formatting

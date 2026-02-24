@@ -20,6 +20,8 @@ tools:
   - mcp__chrome-devtools__navigate
   - mcp__chrome-devtools__screenshot
   - mcp__chrome-devtools__evaluate
+  - mcp__supabase__list-tables
+  - mcp__supabase__get-table
 disallowedTools:
   - Write
   - Edit
@@ -43,6 +45,7 @@ Execute research in this order. Skip steps only if the information is already av
 3. **Context7 documentation lookup**: Use `mcp__context7__resolve-library-id` to find library IDs, then `mcp__context7__get-library-docs` to retrieve current API documentation. This replaces pasting docs into context.
 4. **Interactive research with Chrome DevTools**: Use Chrome DevTools only when you need to verify claims that cannot be confirmed via search or docs (e.g., checking a live demo, verifying a pricing page, testing a playground). Navigate, screenshot, and evaluate — do not fill forms or create accounts.
 5. **Systematic comparison**: Build a comparison matrix across all options. Score each option against VISION.md criteria.
+6. **Schema inspection** (when Supabase MCP is available): If the project uses Supabase and the MCP server is enabled, use `mcp__supabase__list-tables` and `mcp__supabase__get-table` to inspect the existing database schema. This informs decisions about data modeling, RLS policies, and migration strategies. If the Supabase MCP is unavailable, read migration files from `supabase/migrations/` or skip this step.
 
 ## TDR Output Format
 

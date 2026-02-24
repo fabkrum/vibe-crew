@@ -16,6 +16,17 @@ tools:
   - Grep
   - mcp__context7__resolve-library-id
   - mcp__context7__get-library-docs
+  - mcp__supabase__list-tables
+  - mcp__supabase__get-table
+  - mcp__supabase__execute-sql
+  - mcp__stripe__create_product
+  - mcp__stripe__create_price
+  - mcp__stripe__list_products
+  - mcp__vercel__list-projects
+  - mcp__vercel__get-project
+  - mcp__vercel__list-deployments
+  - mcp__figma__get-file
+  - mcp__figma__get-file-nodes
 maxTurns: 100
 isolation: worktree
 ---
@@ -81,6 +92,39 @@ type(scope): short description
 Acceptance: 3/5 criteria met
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
+
+## Conditional MCP Server Usage
+
+These MCP servers are only available when the TDR selects matching technologies and the servers are enabled via `scripts/enable-mcp-server.sh`. Use them when available; fall back to standard approaches when not.
+
+### Supabase MCP
+
+- Use `mcp__supabase__list-tables` and `mcp__supabase__get-table` to inspect the database schema before writing queries or migrations.
+- Use `mcp__supabase__execute-sql` for running migrations and seed data.
+- **NEVER use Supabase MCP against production data.** Only use with development or staging project URLs.
+- **Fallback:** Read schema from migration files in `supabase/migrations/` or use `supabase db dump` via Bash.
+
+### Stripe MCP
+
+- Use for creating products, prices, and verifying webhook configurations during development.
+- **ALWAYS use test mode keys** (keys starting with `sk_test_`). Never use live keys.
+- **Fallback:** Use `curl` or the Stripe CLI (`stripe` via Bash) for API interactions.
+
+### Vercel MCP
+
+- Use to inspect project configuration, check deployment status, and review environment variables.
+- Useful for diagnosing deployment failures alongside CI Healer.
+- **Fallback:** Use `vercel` CLI via Bash or read `vercel.json` configuration directly.
+
+### Figma MCP
+
+- Use `mcp__figma__get-file` and `mcp__figma__get-file-nodes` to extract design specifications, spacing values, and component structures.
+- Translate Figma tokens to CSS custom properties from `design-system.css`.
+- **Fallback:** Use design specs provided in the feature spec document or ask the developer for screenshots.
+
+### General Fallback Rule
+
+If any MCP tool call fails or the server is unavailable, continue with the standard approach (Context7, Bash commands, file reads). Never hard-fail because an MCP tool is missing.
 
 ## Boundary Rules
 

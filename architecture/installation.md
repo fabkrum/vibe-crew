@@ -238,41 +238,52 @@ jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
 
 ### 3.1 Server Overview
 
-VibeCrew uses two MCP servers. Both are recommended but optional -- the setup wizard checks for them and warns if missing.
+VibeCrew ships with 10 MCP servers. Three are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies.
 
-| Server | Package | Purpose | Used By |
-|--------|---------|---------|---------|
-| Context7 | `@upstash/context7-mcp@latest` | Library documentation lookup on demand | Stack Scout, Builder |
-| Chrome DevTools | `chrome-devtools-mcp@latest` | Browser debugging and automation for research and visual testing | Stack Scout, Verifier |
+| Server | Package | Ships Enabled | Auth Required | Used By |
+|--------|---------|:------------:|---------------|---------|
+| Context7 | `@upstash/context7-mcp@latest` | Yes | No | Stack Scout, Builder, Verifier |
+| Chrome DevTools | `chrome-devtools-mcp@latest` | Yes | No | Stack Scout |
+| Playwright | `@playwright/mcp@latest` | Yes | No | Verifier |
+| Semgrep | `@anthropic-ai/semgrep-mcp@latest` | No | No | Security Auditor |
+| Sentry | `mcp-remote https://mcp.sentry.dev/mcp` | No | `SENTRY_AUTH_TOKEN` | CI Healer |
+| Supabase | `supabase-mcp-server@latest` | No | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Stack Scout, Builder |
+| Stripe | `@stripe/mcp@latest` | No | `STRIPE_SECRET_KEY` | Builder |
+| Vercel | `mcp-remote https://mcp.vercel.com` | No | `VERCEL_TOKEN` | Builder |
+| Figma | `mcp-remote https://mcp.figma.com/mcp` | No | `FIGMA_ACCESS_TOKEN` | Builder |
+| Stitch | `@_davideast/stitch-mcp proxy` | No | No | Builder |
 
 ### 3.2 .mcp.json Configuration
 
-The plugin ships this `.mcp.json` at its root:
+The plugin ships `.mcp.json` at its root with all 10 servers. Each has a `disabled` flag controlling activation. The always-enabled servers (Context7, Chrome DevTools, Playwright) require no API keys. Disabled servers are toggled via:
 
-```json
-{
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"],
-      "env": {},
-      "disabled": false
-    },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
-      "env": {},
-      "disabled": false
-    }
-  }
-}
+```bash
+# Enable a server
+bash scripts/enable-mcp-server.sh supabase enable
+
+# Disable a server
+bash scripts/enable-mcp-server.sh supabase disable
 ```
 
-**Design decisions:** `npx -y` ensures latest versions are fetched automatically. No API keys are required (Context7 uses Upstash's free tier; Chrome DevTools connects to a local browser instance). Tool approval is managed by agent permissions and `settings.json`, not by MCP server configuration.
+This script atomically updates `.mcp.json` and syncs `.vibecrew/config.json`. It warns if required environment variables are not set.
 
-### 3.3 Graceful Degradation
+**Design decisions:** `npx -y` ensures latest versions are fetched automatically. Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy for compatibility with Claude Code's `.mcp.json` schema. Tool approval is managed by agent permissions and `settings.json`, not by MCP server configuration.
 
-If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token cost). If Chrome DevTools is missing, Stack Scout skips browser-based research and Verifier skips visual regression tests. The setup wizard reports MCP server status and provides installation commands if either is missing.
+### 3.3 Auto-Enable via TDR
+
+After TDR approval, the Workflow Orchestrator runs `scripts/sync-mcp-from-tdr.sh` which scans the TDR content (case-insensitive) for technology names and enables matching servers automatically. The mapping:
+
+| TDR Mention | Server Enabled |
+|-------------|----------------|
+| supabase | supabase |
+| stripe | stripe |
+| vercel | vercel |
+| figma | figma |
+| sentry | sentry |
+
+### 3.4 Graceful Degradation
+
+All agents are designed to work without MCP servers. If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token cost). If Chrome DevTools or Playwright is missing, visual debugging is skipped. If any conditional server is unavailable, the agent continues with standard approaches (Bash, grep, file reads). The setup wizard reports all MCP server statuses.
 
 ---
 

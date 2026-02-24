@@ -865,7 +865,7 @@
       <div class="card">
         <div class="card-icon blue">&#9673;</div>
         <h4>.mcp.json</h4>
-        <p>MCP server configuration for Context7 (documentation lookup) and Chrome DevTools (browser debugging and automation).</p>
+        <p>MCP server configuration for 10 servers. 3 enabled by default (Context7, Chrome DevTools, Playwright); 7 conditionally enabled when TDR selects matching technologies (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, Stitch).</p>
       </div>
     </div>
 
@@ -1333,43 +1333,67 @@ args: feature_name
       <p>MCP servers are <strong>external tools that give the AI extra abilities</strong>. Normally, the AI can only read your files and run commands. MCP servers connect it to additional services &mdash; like a reference library (Context7, for looking up documentation) or a web browser (Chrome DevTools, for visiting websites and debugging). They're optional: VibeCrew works fine without them, but with them, the AI works faster and uses less of its "memory" because it can look things up on demand instead of trying to remember everything.</p>
     </div>
 
-    <p>Three MCP (Model Context Protocol) servers extend the agent's capabilities. Context7 and Chrome DevTools are enabled by default. Google Stitch is optional and disabled by default.</p>
+    <p>Ten MCP (Model Context Protocol) servers extend the agent's capabilities. Three ship enabled by default; seven are conditionally enabled when the TDR selects matching technologies.</p>
 
+    <h4>Always Enabled (no auth required)</h4>
     <div class="card-grid">
       <div class="card">
         <div class="card-icon blue">&#9673;</div>
         <h4>Context7</h4>
-        <p><strong>Documentation lookup.</strong> Instead of pasting library docs into chat (~1,500 tokens per paste), agents query Context7 for on-demand API references. Used by the Builder (implementation), Stack Scout (research), and Verifier (testing).</p>
+        <p><strong>Documentation lookup.</strong> Instead of pasting library docs into chat (~1,500 tokens per paste), agents query Context7 for on-demand API references. Used by the Builder, Stack Scout, and Verifier.</p>
       </div>
       <div class="card">
         <div class="card-icon green">&#9673;</div>
         <h4>Chrome DevTools</h4>
-        <p><strong>Browser debugging and automation.</strong> The Stack Scout uses it for web research and screenshot verification during TDR creation. Also available for visual regression testing during the Test phase.</p>
+        <p><strong>Browser debugging and automation.</strong> The Stack Scout uses it for web research and screenshot verification during TDR creation.</p>
       </div>
       <div class="card">
-        <div class="card-icon amber">&#9673;</div>
-        <h4>Google Stitch <span style="font-size:0.75rem;color:var(--color-text-muted);font-weight:400;">(disabled by default)</span></h4>
-        <p><strong>AI-powered UI design.</strong> Generates production-ready HTML/CSS from text prompts via Google Labs' Stitch platform. Used by the Builder agent during the UI Design phase to pull visual designs into the project. Requires Google authentication. See the <a href="setup.html#stitch">setup guide</a>.</p>
+        <div class="card-icon green">&#9673;</div>
+        <h4>Playwright</h4>
+        <p><strong>Interactive E2E testing.</strong> The Verifier uses it for browser debugging, selector exploration, and visual verification during E2E test development. Use <code>npx playwright test</code> for running full suites.</p>
       </div>
     </div>
 
-    <pre><code><span class="code-label">.mcp.json</span>{
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
-    },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"]
-    },
-    "stitch": {
-      "command": "npx",
-      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
-      "disabled": true
-    }
-  }
-}</code></pre>
+    <h4>Conditionally Enabled (auto-enabled from TDR)</h4>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9673;</div>
+        <h4>Semgrep</h4>
+        <p><strong>Static security analysis.</strong> Augments the Security Auditor's manual OWASP scanning with pattern-based vulnerability detection across large codebases. No auth required.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9673;</div>
+        <h4>Sentry</h4>
+        <p><strong>Production error context.</strong> The CI Healer queries Sentry for stack traces and error frequency to enrich CI failure diagnosis. Requires <code>SENTRY_AUTH_TOKEN</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9673;</div>
+        <h4>Supabase</h4>
+        <p><strong>Database schema inspection.</strong> Stack Scout and Builder use it for schema inspection, migrations, and seed data. <strong>Never use against production.</strong> Requires <code>SUPABASE_URL</code> and <code>SUPABASE_SERVICE_ROLE_KEY</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9673;</div>
+        <h4>Stripe</h4>
+        <p><strong>Payment product management.</strong> Builder uses it for creating products, prices, and verifying webhook configurations. <strong>Always use test mode keys.</strong> Requires <code>STRIPE_SECRET_KEY</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9673;</div>
+        <h4>Vercel</h4>
+        <p><strong>Deployment management.</strong> Builder uses it for project configuration, deployment status, and environment variable inspection. Requires <code>VERCEL_TOKEN</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9673;</div>
+        <h4>Figma</h4>
+        <p><strong>Design spec extraction.</strong> Builder uses it to extract design specifications, spacing values, and component structures from Figma files. Requires <code>FIGMA_ACCESS_TOKEN</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9673;</div>
+        <h4>Google Stitch <span style="font-size:0.75rem;color:var(--color-text-muted);font-weight:400;">(experimental)</span></h4>
+        <p><strong>AI-powered UI design.</strong> Generates production-ready HTML/CSS from text prompts via Google Labs' Stitch platform. See the <a href="setup.html#stitch">setup guide</a>.</p>
+      </div>
+    </div>
+
+    <p>Servers are toggled via <code>scripts/enable-mcp-server.sh &lt;name&gt; [enable|disable]</code>. After TDR approval, <code>scripts/sync-mcp-from-tdr.sh</code> auto-enables servers for technologies mentioned in the TDR.</p>
 
     <div class="callout tip">
       <div class="callout-title">Token savings from Context7</div>

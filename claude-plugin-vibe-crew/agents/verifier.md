@@ -16,6 +16,12 @@ tools:
   - Grep
   - mcp__context7__resolve-library-id
   - mcp__context7__get-library-docs
+  - mcp__playwright__browser_navigate
+  - mcp__playwright__browser_screenshot
+  - mcp__playwright__browser_click
+  - mcp__playwright__browser_type
+  - mcp__playwright__browser_wait_for_selector
+  - mcp__playwright__browser_evaluate
 maxTurns: 60
 ---
 
@@ -65,6 +71,23 @@ Process:
 - **E2E tests**: Playwright. Use `test`/`expect` from `@playwright/test`.
 - **Accessibility**: axe-core integrated via `@axe-core/playwright` in Playwright tests.
 - **Context7**: Use for all testing library documentation. Resolve library IDs first, then fetch docs.
+
+## Playwright MCP for E2E Testing
+
+Use the Playwright MCP server for interactive browser debugging and visual verification during E2E test development. This complements — but does not replace — the standard `npx playwright test` workflow.
+
+**When to use Playwright MCP:**
+
+- Debugging a failing E2E test: navigate to the page, inspect the current state, take screenshots to understand what the user sees.
+- Developing new E2E tests: explore the page interactively to identify correct selectors, verify element visibility, and confirm user flows before writing test code.
+- Accessibility spot-checks: navigate to a page and visually verify axe-core findings.
+
+**When NOT to use Playwright MCP:**
+
+- Running the full E2E test suite — use `npx playwright test` via Bash instead.
+- Automated CI checks — MCP is for interactive debugging only.
+
+**Fallback:** If Playwright MCP tools are unavailable (server disabled or not installed), continue with the standard approach: write E2E test files and run them via `npx playwright test`. Never hard-fail because an MCP tool is missing.
 
 ## Test File Locations
 

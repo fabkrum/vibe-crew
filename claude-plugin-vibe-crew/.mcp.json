@@ -12,6 +12,59 @@
       "env": {},
       "disabled": false
     },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {},
+      "disabled": false
+    },
+    "semgrep": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/semgrep-mcp@latest"],
+      "env": {},
+      "disabled": true
+    },
+    "sentry": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.sentry.dev/mcp"],
+      "env": {
+        "SENTRY_AUTH_TOKEN": ""
+      },
+      "disabled": true
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "supabase-mcp-server@latest"],
+      "env": {
+        "SUPABASE_URL": "",
+        "SUPABASE_SERVICE_ROLE_KEY": ""
+      },
+      "disabled": true
+    },
+    "stripe": {
+      "command": "npx",
+      "args": ["-y", "@stripe/mcp@latest"],
+      "env": {
+        "STRIPE_SECRET_KEY": ""
+      },
+      "disabled": true
+    },
+    "vercel": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.vercel.com"],
+      "env": {
+        "VERCEL_TOKEN": ""
+      },
+      "disabled": true
+    },
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.figma.com/mcp"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": ""
+      },
+      "disabled": true
+    },
     "stitch": {
       "command": "npx",
       "args": ["-y", "@_davideast/stitch-mcp", "proxy"],

@@ -70,6 +70,18 @@ After the TDR is completed in Tier 1 Step 3, invoke the Opponent Processor for a
 
 The opponent processor is optional — if the developer prefers to skip it, proceed directly to Step 4 (Roadmap).
 
+### MCP Server Sync
+
+After the TDR is approved (and after the optional Opponent Processor review), run the MCP sync script to auto-enable servers for technologies selected in the TDR:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/sync-mcp-from-tdr.sh" "<path-to-tdr-file>"
+```
+
+1. Parse the JSON output. Report which servers were enabled.
+2. For each enabled server that requires authentication (Supabase, Stripe, Vercel, Figma, Sentry), prompt the user to set the required environment variables. Display the variable names and where to configure them.
+3. This step is non-blocking — proceed to Step 4 (Roadmap) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
+
 ## Tier 2 Routing (Feature Development)
 
 1. Identify the next ready feature from `.vibecrew/backlog.json` (status: `ready`, highest priority).

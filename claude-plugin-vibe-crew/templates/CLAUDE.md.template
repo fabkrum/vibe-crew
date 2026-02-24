@@ -44,6 +44,13 @@
 - Always read existing code before modifying. Understand the pattern before changing it.
 - Reference files instead of inlining content. "Read design-system.css" not paste it.
 
+## MCP Server Rules
+
+- **Playwright MCP** is for interactive E2E debugging and visual verification. Use `npx playwright test` for running full test suites.
+- **Supabase MCP** must NEVER be used against production data. Only use with development or staging project URLs.
+- **Stripe MCP** must ALWAYS use test mode keys (`sk_test_*`). Never use live keys.
+- **Graceful degradation**: If any MCP tool is unavailable, continue with standard approaches (Bash, grep, WebSearch, Context7). Never hard-fail on MCP unavailability.
+
 ## Session Learnings
 
 <!-- VibeCrew appends learnings here during /wrap. Do not edit manually. -->

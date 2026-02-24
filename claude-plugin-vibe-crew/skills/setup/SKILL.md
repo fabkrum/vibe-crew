@@ -61,17 +61,37 @@ If the test succeeds, confirm notifications are working. If it fails (e.g., `ter
 
 ## Step 4: Check MCP Server Availability
 
-Check for Context7 and Chrome DevTools MCP servers. Read the MCP configuration:
+Enumerate all MCP servers from the plugin configuration and display their status:
 
 ```bash
-cat "${CLAUDE_PLUGIN_ROOT}/mcp-servers.json" 2>/dev/null
+jq -r '.mcpServers | to_entries[] | "\(.key)\t\(if .value.disabled then "disabled" else "enabled" end)\t\(.value.env // {} | keys | if length > 0 then join(", ") else "-" end)"' "${CLAUDE_PLUGIN_ROOT}/.mcp.json"
 ```
 
-For each MCP server:
-- **Context7**: Report whether configured. If available, note: "Documentation lookups will use Context7 instead of pasting docs into context."
-- **Chrome DevTools**: Report whether configured. If available, note: "Browser debugging and automation available for UI testing."
+Display the results as a formatted table:
 
-If neither is configured, note: "MCP servers are optional but strongly recommended. See the VibeCrew guide for configuration instructions."
+```
+MCP Servers
+===========
+Server            Status     Auth Required
+------            ------     -------------
+context7          enabled    -
+chrome-devtools   enabled    -
+playwright        enabled    -
+semgrep           disabled   -
+sentry            disabled   SENTRY_AUTH_TOKEN
+supabase          disabled   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+stripe            disabled   STRIPE_SECRET_KEY
+vercel            disabled   VERCEL_TOKEN
+figma             disabled   FIGMA_ACCESS_TOKEN
+stitch            disabled   -
+```
+
+For each enabled server, confirm it is ready to use. For disabled servers that require auth, explain:
+- "Disabled servers are auto-enabled when matching technologies are selected in your TDR."
+- "To manually enable a server, run: `bash ${CLAUDE_PLUGIN_ROOT}/scripts/enable-mcp-server.sh <server-name> enable`"
+- "Set the required environment variables before enabling authenticated servers."
+
+If no servers are enabled, note: "MCP servers are optional but strongly recommended. Context7 and Playwright are enabled by default."
 
 ## Step 5: Initialize .vibecrew/ Directory
 

@@ -650,45 +650,45 @@ VibeCrew's state is small (kilobytes, not megabytes), rarely queried in complex 
 
 ## 6. MCP Server Dependencies
 
-### 6.1 Context7
+VibeCrew ships with 10 MCP servers. Three are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh`.
 
-| Attribute | Value |
-|---|---|
-| **Purpose** | Documentation lookup for AI agents |
-| **Used by** | Stack Scout (research), Builder (implementation), Verifier (test patterns) |
-| **Benefit** | Replaces pasting documentation into the context window, preserving the <50% context budget |
-| **Coverage** | Excellent for Next.js, Supabase, Stripe, Tailwind. Good for Drizzle, shadcn/ui. |
-| **Required** | Strongly recommended but optional. Without it, agents consume more context tokens for documentation lookups. |
+### 6.1 Always-Enabled Servers
 
-### 6.2 Chrome DevTools
+| Server | Package | Purpose | Used By |
+|--------|---------|---------|---------|
+| Context7 | `@upstash/context7-mcp@latest` | Documentation lookup on demand (~1,500 tokens saved per query) | Stack Scout, Builder, Verifier |
+| Chrome DevTools | `chrome-devtools-mcp@latest` | Browser debugging and automation for research | Stack Scout |
+| Playwright | `@playwright/mcp@latest` | Interactive E2E browser debugging and visual verification | Verifier |
 
-| Attribute | Value |
-|---|---|
-| **Purpose** | Browser debugging and automation for research and visual testing |
-| **Used by** | Stack Scout (web research) |
-| **Benefit** | Enables automated browser interactions during research phases. Provides visual verification capabilities. |
-| **Required** | Optional. Stack Scout can use WebSearch + WebFetch as alternatives for research. |
+### 6.2 Conditionally-Enabled Servers
+
+These servers ship disabled and are auto-enabled when the TDR mentions the matching technology.
+
+| Server | Package | Auth Required | Purpose | Used By |
+|--------|---------|---------------|---------|---------|
+| Semgrep | `@anthropic-ai/semgrep-mcp@latest` | No | Static analysis for security scanning | Security Auditor |
+| Sentry | `mcp-remote https://mcp.sentry.dev/mcp` | `SENTRY_AUTH_TOKEN` | Production error context for CI diagnosis | CI Healer |
+| Supabase | `supabase-mcp-server@latest` | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Database schema inspection and migrations | Stack Scout, Builder |
+| Stripe | `@stripe/mcp@latest` | `STRIPE_SECRET_KEY` | Product/price management during development | Builder |
+| Vercel | `mcp-remote https://mcp.vercel.com` | `VERCEL_TOKEN` | Deployment status and project configuration | Builder |
+| Figma | `mcp-remote https://mcp.figma.com/mcp` | `FIGMA_ACCESS_TOKEN` | Design spec extraction | Builder |
+| Stitch | `@_davideast/stitch-mcp proxy` | No | Google AI design platform (experimental) | Builder |
+
+Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy for compatibility.
 
 ### 6.3 Configuration
 
-MCP servers are configured in `mcp-servers.json` at the plugin root:
+MCP servers are configured in `.mcp.json` at the plugin root. Each entry has a `disabled` flag that controls activation. Servers are toggled via `scripts/enable-mcp-server.sh <server-name> [enable|disable]`, which updates both `.mcp.json` and `.vibecrew/config.json`.
 
-```json
-{
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
-    },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"]
-    }
-  }
-}
-```
+### 6.4 Safety Rules
 
-Both servers are toggled via `.vibecrew/config.json` (see `architecture/schemas.md` Section 2, fields `mcp_servers.context7` and `mcp_servers.chrome_devtools`). When a server is disabled, the corresponding agents fall back to built-in tools (WebSearch, WebFetch).
+- **Supabase MCP** must never be used against production data — only development/staging URLs.
+- **Stripe MCP** must always use test mode keys (`sk_test_*`).
+- **Graceful degradation**: All agents fall back to built-in tools (WebSearch, WebFetch, Bash, grep) when MCP servers are unavailable. No agent hard-fails on MCP unavailability.
+
+### 6.5 Auto-Enable Flow
+
+After TDR approval, the Workflow Orchestrator runs `scripts/sync-mcp-from-tdr.sh` which scans the TDR for technology mentions (case-insensitive) and enables matching servers. This is non-blocking — the workflow continues regardless.
 
 ---
 

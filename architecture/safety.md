@@ -611,9 +611,11 @@ Each VibeCrew agent is launched with a tailored tool permission set defined in i
 |-------|-------|---------------|------------------|-----------|
 | Session Startup | Haiku | `Read`, `Bash`, `Glob`, `Grep` | `Write`, `Edit`, `WebSearch`, `WebFetch`, Agent Teams, all MCP | Inline |
 | Workflow Orchestrator | Opus | `Read`, `Bash`, `Glob`, `Grep`, `TeamCreate`, `TaskCreate`, `SendMessage` | `Write`, `Edit`, `WebSearch`, `WebFetch` | Inline |
-| Stack Scout | Opus | `Read`, `Bash`, `Glob`, `Grep`, `WebSearch`, `WebFetch`, Context7 MCP, Chrome DevTools MCP | `Write`, `Edit`, `TeamCreate`, `TaskCreate`, `SendMessage` | Worktree |
-| Builder | Opus | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Chrome DevTools MCP, Agent Teams | Worktree |
-| Verifier | Haiku | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Chrome DevTools MCP, Agent Teams | Inline |
+| Stack Scout | Opus | `Read`, `Bash`, `Glob`, `Grep`, `WebSearch`, `WebFetch`, Context7 MCP, Chrome DevTools MCP, Supabase MCP (read-only) | `Write`, `Edit`, `TeamCreate`, `TaskCreate`, `SendMessage` | Worktree |
+| Builder | Opus | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP, Supabase MCP, Stripe MCP, Vercel MCP, Figma MCP | `WebSearch`, `WebFetch`, Chrome DevTools MCP, Agent Teams | Worktree |
+| Verifier | Haiku | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP, Playwright MCP | `WebSearch`, `WebFetch`, Chrome DevTools MCP, Agent Teams | Inline |
+| Security Auditor | Opus | `Read`, `Bash`, `Glob`, `Grep`, Semgrep MCP | `Write`, `Edit`, all other MCP | Worktree |
+| CI Healer | Opus | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Sentry MCP | `WebSearch`, `WebFetch`, Agent Teams | Inline |
 
 **Orchestrator write permission resolution.** The Orchestrator has `disallowedTools: Write, Edit` to prevent scope creep into source code writing. It needs to update `.vibecrew/` state files (advancing feature phases, processing signals, updating backlog). This is resolved by using `Bash` to run shared scripts that modify `.vibecrew/` state files. For example:
 

@@ -92,10 +92,18 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
     "standard": "sonnet"                 // Orchestrator, Builder, Verifier, Stack Scout
   },
 
-  // MCP server toggles
+  // MCP server toggles (synced by enable-mcp-server.sh)
   "mcp_servers": {
     "context7": true,                    // Documentation lookup
-    "chrome_devtools": true              // Browser debugging and automation
+    "chrome_devtools": true,             // Browser debugging and automation
+    "playwright": true,                  // E2E browser debugging
+    "semgrep": false,                    // Static security analysis
+    "sentry": false,                     // Production error context
+    "supabase": false,                   // Database schema inspection
+    "stripe": false,                     // Payment product management
+    "vercel": false,                     // Deployment management
+    "figma": false,                      // Design spec extraction
+    "stitch": false                      // Google AI design (experimental)
   },
 
   // Code formatting
@@ -135,6 +143,14 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
 | `models.standard` | string | yes | `"sonnet"` | Model for standard agents |
 | `mcp_servers.context7` | boolean | yes | `true` | Context7 MCP enabled |
 | `mcp_servers.chrome_devtools` | boolean | yes | `true` | Chrome DevTools MCP enabled |
+| `mcp_servers.playwright` | boolean | yes | `true` | Playwright MCP enabled |
+| `mcp_servers.semgrep` | boolean | yes | `false` | Semgrep MCP enabled |
+| `mcp_servers.sentry` | boolean | yes | `false` | Sentry MCP enabled |
+| `mcp_servers.supabase` | boolean | yes | `false` | Supabase MCP enabled |
+| `mcp_servers.stripe` | boolean | yes | `false` | Stripe MCP enabled |
+| `mcp_servers.vercel` | boolean | yes | `false` | Vercel MCP enabled |
+| `mcp_servers.figma` | boolean | yes | `false` | Figma MCP enabled |
+| `mcp_servers.stitch` | boolean | yes | `false` | Stitch MCP enabled |
 | `formatting.auto_format` | boolean | yes | `true` | Auto-format on file writes |
 | `formatting.formatter` | enum | yes | `"prettier"` | Formatter to use |
 | `context_warnings.warn_at_percent` | integer | yes | `60` | Warning threshold (%) |

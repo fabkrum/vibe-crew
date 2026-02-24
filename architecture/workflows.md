@@ -59,8 +59,8 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |  <-- OS notification  |     notify.sh "test"          |
  |  "Working!"          |                               |
  |                       |  4. MCP server verification   |
- |                       |     Context7: check           |
- |                       |     Chrome DevTools: check    |
+ |                       |     10 servers enumerated     |
+ |                       |     3 enabled, 7 disabled     |
  |                       |                               |
  |                       |  5. Git verification          |
  |                       |     git status                |
@@ -328,8 +328,7 @@ The phase gate is the enforcement mechanism that prevents source code writes bef
     |    [ ] jq (JSON parsing in hooks)                    |
     |                                                      |
     |  OPTIONAL (informational):                           |
-    |    [ ] Context7 MCP server                           |
-    |    [ ] Chrome DevTools MCP server                     |
+    |    [ ] MCP servers (10 total, 3 enabled by default)    |
     |    [ ] Warp terminal (for deep-link notifications)   |
     |                                                      |
     +------------------------------------------------------+

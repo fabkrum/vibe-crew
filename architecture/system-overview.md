@@ -77,7 +77,7 @@ claude-plugin-vibe-crew/                      # Plugin root
     notify.sh                               #   Notification + PostToolUseFailure: OS alerts
     check-context.sh                        #   Stop: context usage warnings (60%/80%/90%)
   settings.json                             # Default permission rules (allow/deny lists)
-  .mcp.json                                 # MCP server definitions (Context7, Chrome DevTools)
+  .mcp.json                                 # MCP server definitions (10 servers, 3 enabled by default)
   LICENSE
   CHANGELOG.md
 
@@ -149,28 +149,22 @@ After installation, the user runs `/setup` to initialize the `.vibecrew/` runtim
 
 ### 1.5 MCP Server Configuration
 
-The `.mcp.json` file at the plugin root registers external tool providers that agents can call on demand:
+The `.mcp.json` file at the plugin root registers 10 MCP servers. Three ship enabled by default (Context7, Chrome DevTools, Playwright); seven ship disabled and are auto-enabled when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh`.
 
-```json
-{
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"],
-      "env": {},
-      "disabled": false
-    },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
-      "env": {},
-      "disabled": false
-    }
-  }
-}
-```
+| Server | Ships Enabled | Purpose |
+|--------|:------------:|---------|
+| Context7 | Yes | Documentation lookup (~1,500 tokens saved per query) |
+| Chrome DevTools | Yes | Browser debugging and automation for research |
+| Playwright | Yes | Interactive E2E browser debugging |
+| Semgrep | No | Static security analysis (Security Auditor) |
+| Sentry | No | Production error context (CI Healer) |
+| Supabase | No | Database schema inspection (Stack Scout, Builder) |
+| Stripe | No | Payment product management (Builder) |
+| Vercel | No | Deployment management (Builder) |
+| Figma | No | Design spec extraction (Builder) |
+| Stitch | No | Google AI design platform (experimental) |
 
-**Context7** replaces documentation pasting, saving approximately 1,500 tokens per API lookup. **Chrome DevTools** enables browser debugging and automation for the Stack Scout (web research) and visual regression testing. Both are optional but strongly recommended.
+Servers are toggled via `scripts/enable-mcp-server.sh <name> [enable|disable]`. Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy. All agents gracefully degrade when MCP servers are unavailable.
 
 ### 1.6 Path Reference Rule
 

@@ -220,8 +220,8 @@ claude</code></pre>
 
       <li>
         <h4>Install MCP servers (optional but recommended)</h4>
-        <p><strong>Context7</strong> saves ~1,500 tokens per API lookup by fetching documentation on-demand instead of pasting it into chat. <strong>Chrome DevTools</strong> enables browser debugging and automation for research and visual testing. Both are configured in <code>.mcp.json</code> and enabled by default.</p>
-        <p><strong>Google Stitch</strong> (disabled by default) connects to Google's AI design platform to generate production-ready UI designs from text prompts. See <a href="#stitch">Enabling Google Stitch</a> below for setup instructions and the UI design workflow.</p>
+        <p>VibeCrew ships with <strong>10 MCP servers</strong>. Three are enabled by default: <strong>Context7</strong> (documentation lookup, ~1,500 tokens saved per query), <strong>Chrome DevTools</strong> (browser debugging), and <strong>Playwright</strong> (E2E browser testing). All three require no authentication.</p>
+        <p>Seven additional servers ship disabled and are <strong>auto-enabled when your TDR selects matching technologies</strong>: <strong>Semgrep</strong> (security scanning), <strong>Sentry</strong> (error tracking), <strong>Supabase</strong> (database), <strong>Stripe</strong> (payments), <strong>Vercel</strong> (deployment), <strong>Figma</strong> (design), and <strong>Stitch</strong> (Google AI design). Authenticated servers require environment variables &mdash; the setup wizard shows which variables are needed.</p>
       </li>
 
       <li>
@@ -239,7 +239,7 @@ claude</code></pre>
   claude-plugin-vibe-crew/          # The plugin (don't modify)
     .claude-plugin/
       plugin.json                 # Plugin manifest
-    .mcp.json                     # Context7 + Chrome DevTools MCP config
+    .mcp.json                     # MCP server config (10 servers)
     settings.json                 # Permission rules (allowed + denied tools)
     hooks/
       hooks.json                  # Event hook bindings
@@ -565,9 +565,9 @@ vibecrew-update() {
 
     <h3>MCP servers not available</h3>
     <ol>
-      <li><strong>Context7:</strong> Verify it's configured in your Claude Code settings. Try a test query</li>
-      <li><strong>Chrome DevTools:</strong> Ensure the Chrome DevTools MCP server is running and configured</li>
-      <li>Both are optional. VibeCrew works without them &mdash; you just miss the token efficiency benefits</li>
+      <li><strong>Default servers (Context7, Chrome DevTools, Playwright):</strong> These should work out of the box via <code>npx</code>. Try restarting Claude Code.</li>
+      <li><strong>Conditional servers (Supabase, Stripe, Vercel, Figma, Sentry):</strong> Set the required environment variables, then run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code>.</li>
+      <li>All MCP servers are optional. VibeCrew agents gracefully fall back to built-in tools when servers are unavailable.</li>
     </ol>
 
     <h3>Stale locks or corrupted state</h3>

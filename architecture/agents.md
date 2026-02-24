@@ -43,13 +43,17 @@
 
 ## 2. Tool Access Matrix
 
-| Agent | Read | Write | Edit | Bash | Glob | Grep | WebSearch | WebFetch | Context7 | Chrome DevTools | Agent Teams |
-|-------|:----:|:-----:|:----:|:----:|:----:|:----:|:---------:|:--------:|:--------:|:---------:|:-----------:|
-| Session Startup | x | - | - | x | x | x | - | - | - | - | - |
-| Workflow Orchestrator | x | - | - | x | x | x | - | - | - | - | x |
-| Stack Scout | x | - | - | x | x | x | x | x | x | x | - |
-| Builder | x | x | x | x | x | x | - | - | x | - | - |
-| Verifier | x | x | x | x | x | x | - | - | x | - | - |
+| Agent | Read | Write | Edit | Bash | Glob | Grep | WebSearch | WebFetch | Context7 | Chrome DevTools | Playwright | Semgrep | Sentry | Supabase | Stripe | Vercel | Figma | Agent Teams |
+|-------|:----:|:-----:|:----:|:----:|:----:|:----:|:---------:|:--------:|:--------:|:---------:|:----------:|:-------:|:------:|:--------:|:------:|:------:|:-----:|:-----------:|
+| Session Startup | x | - | - | x | x | x | - | - | - | - | - | - | - | - | - | - | - | - |
+| Workflow Orchestrator | x | - | - | x | x | x | - | - | - | - | - | - | - | - | - | - | - | x |
+| Stack Scout | x | - | - | x | x | x | x | x | x | x | - | - | - | x | - | - | - | - |
+| Builder | x | x | x | x | x | x | - | - | x | - | - | - | - | x | x | x | x | - |
+| Verifier | x | x | x | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |
+| Security Auditor | x | - | - | x | x | x | - | - | - | - | - | x | - | - | - | - | - | - |
+| CI Healer | x | x | x | x | x | x | - | - | - | - | - | - | x | - | - | - | - | - |
+
+Note: Conditional MCP servers (Supabase, Stripe, Vercel, Figma, Sentry, Semgrep) only expose tools when enabled. Agents list these tools in frontmatter regardless — they activate when the server is enabled.
 
 **Key changes from v0.9 (9-agent) design:**
 
@@ -331,6 +335,8 @@ tools:
   - mcp__chrome-devtools__navigate
   - mcp__chrome-devtools__screenshot
   - mcp__chrome-devtools__evaluate
+  - mcp__supabase__list-tables
+  - mcp__supabase__get-table
 disallowedTools:
   - Write
   - Edit

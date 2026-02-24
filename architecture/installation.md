@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 2.7 (Revised) | February 2026
 >
-> This document defines how VibeOS installs, configures, and bootstraps itself as a Claude Code plugin. It covers the plugin manifest, dependency management, MCP server configuration, hook wiring, skill registration, agent definitions, first-run setup wizard, configuration format, state file initialization, CLAUDE.md template generation, and state file migration. The target environment is macOS with Warp terminal, serving solo non-technical developers.
+> This document defines how VibeCrew installs, configures, and bootstraps itself as a Claude Code plugin. It covers the plugin manifest, dependency management, MCP server configuration, hook wiring, skill registration, agent definitions, first-run setup wizard, configuration format, state file initialization, CLAUDE.md template generation, and state file migration. The target environment is macOS with Warp terminal, serving solo non-technical developers.
 >
 > **Revision notes:** This revision fixes jq field path inconsistencies (all paths now match [schemas.md](schemas.md)), corrects dependency classification (required vs recommended), updates to the 5-agent topology, adds the `compact-reinject.sh` hook, removes the deferred `coach-retro.sh` hook, adds state file versioning with `schema_version`, and replaces all inline JSON schemas with references to [schemas.md](schemas.md).
 
@@ -28,10 +28,10 @@
 
 ### 1.1 Plugin Layout
 
-VibeOS follows the standard Claude Code plugin convention. The `.claude-plugin/` directory contains only the manifest. All component directories sit at the plugin root.
+VibeCrew follows the standard Claude Code plugin convention. The `.claude-plugin/` directory contains only the manifest. All component directories sit at the plugin root.
 
 ```
-claude-plugin-vibe-os/
+claude-plugin-vibe-crew/
   .claude-plugin/
     plugin.json                  # Plugin manifest (only file in this directory)
   agents/                        # 5 specialized sub-agent definitions
@@ -74,8 +74,8 @@ claude-plugin-vibe-os/
     migrate-state.sh
   templates/
     CLAUDE.md.template           # CLAUDE.md template for new projects
-    config.json.template         # Default .vibeos/config.json
-    state.json.template          # Default .vibeos/state.json
+    config.json.template         # Default .vibecrew/config.json
+    state.json.template          # Default .vibecrew/state.json
   .mcp.json                      # MCP server definitions (Context7, Puppeteer)
   settings.json                  # Default permission rules (deny list)
   LICENSE
@@ -86,15 +86,15 @@ claude-plugin-vibe-os/
 
 ```json
 {
-  "name": "vibe-os",
+  "name": "vibe-crew",
   "version": "1.0.0",
   "description": "Autonomous vibe-coding operating system for Claude Code",
   "author": {
     "name": "Fabian Krumbholz",
     "url": "https://github.com/fabkrum"
   },
-  "homepage": "https://docs.vibeos.dev",
-  "repository": "https://github.com/fabkrum/vibe-os",
+  "homepage": "https://docs.vibecrew.dev",
+  "repository": "https://github.com/fabkrum/vibe-crew",
   "license": "MIT",
   "keywords": ["vibe-coding", "automation", "multi-agent", "sdlc"],
   "agents": "./agents/",
@@ -106,26 +106,26 @@ claude-plugin-vibe-os/
 
 ### 1.3 Installation Methods
 
-VibeOS supports three installation methods at four scope levels.
+VibeCrew supports three installation methods at four scope levels.
 
 **Method 1: Marketplace install (recommended)**
 
 ```bash
-claude plugin install vibe-os@marketplace --scope project
+claude plugin install vibe-crew@marketplace --scope project
 ```
 
 **Method 2: Direct placement (symlink for development)**
 
 ```bash
-ln -s /path/to/claude-plugin-vibe-os /path/to/project/claude-plugin-vibe-os
+ln -s /path/to/claude-plugin-vibe-crew /path/to/project/claude-plugin-vibe-crew
 ```
 
 **Method 3: CLI install with explicit scope**
 
 ```bash
-claude plugin install vibe-os@marketplace --scope user    # all projects
-claude plugin install vibe-os@marketplace --scope project # team-shared
-claude plugin install vibe-os@marketplace --scope local   # gitignored
+claude plugin install vibe-crew@marketplace --scope user    # all projects
+claude plugin install vibe-crew@marketplace --scope project # team-shared
+claude plugin install vibe-crew@marketplace --scope local   # gitignored
 ```
 
 | Scope | Settings File | Use Case |
@@ -135,7 +135,7 @@ claude plugin install vibe-os@marketplace --scope local   # gitignored
 | `local` | `.claude/settings.local.json` | Personal per-project -- gitignored |
 | `managed` | `managed-settings.json` | Enterprise -- read-only, admin-controlled |
 
-After installation, the user runs `/setup` to initialize the `.vibeos/` runtime directory.
+After installation, the user runs `/setup` to initialize the `.vibecrew/` runtime directory.
 
 ### 1.4 Path References
 
@@ -147,12 +147,12 @@ All internal paths use the `${CLAUDE_PLUGIN_ROOT}` environment variable. This re
 
 # Incorrect: breaks after caching
 "./scripts/phase-gate.sh"
-"/Users/dev/claude-plugin-vibe-os/scripts/phase-gate.sh"
+"/Users/dev/claude-plugin-vibe-crew/scripts/phase-gate.sh"
 ```
 
 ### 1.5 Plugin Caching
 
-When installed via the marketplace, Claude Code copies the plugin to `~/.claude/plugins/cache/vibe-os/`. All assets must be self-contained (no external references). Version changes in `plugin.json` trigger cache refresh via `claude plugin update vibe-os`. File permissions are preserved during copy.
+When installed via the marketplace, Claude Code copies the plugin to `~/.claude/plugins/cache/vibe-crew/`. All assets must be self-contained (no external references). Version changes in `plugin.json` trigger cache refresh via `claude plugin update vibe-crew`. File permissions are preserved during copy.
 
 ---
 
@@ -160,7 +160,7 @@ When installed via the marketplace, Claude Code copies the plugin to `~/.claude/
 
 ### 2.1 Required Dependencies
 
-These must be present for VibeOS to function. The setup wizard blocks until all are satisfied.
+These must be present for VibeCrew to function. The setup wizard blocks until all are satisfied.
 
 | Dependency | Minimum Version | Purpose | Installation |
 |------------|----------------|---------|--------------|
@@ -186,7 +186,7 @@ The `scripts/check-deps.sh` script validates all dependencies. It is called by t
 
 ```bash
 #!/usr/bin/env bash
-# check-deps.sh -- Validate all VibeOS dependencies
+# check-deps.sh -- Validate all VibeCrew dependencies
 # Returns JSON with status of each dependency
 # Exit 0: all required dependencies met; Exit 1: required dependency missing
 
@@ -238,7 +238,7 @@ jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
 
 ### 3.1 Server Overview
 
-VibeOS uses two MCP servers. Both are recommended but optional -- the setup wizard checks for them and warns if missing.
+VibeCrew uses two MCP servers. Both are recommended but optional -- the setup wizard checks for them and warns if missing.
 
 | Server | Package | Purpose | Used By |
 |--------|---------|---------|---------|
@@ -280,11 +280,11 @@ If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token
 
 ### 4.1 Complete hooks.json
 
-The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeOS automation scripts.
+The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeCrew automation scripts.
 
 ```json
 {
-  "description": "VibeOS hook system -- lifecycle automation for vibe-coding",
+  "description": "VibeCrew hook system -- lifecycle automation for vibe-coding",
   "hooks": {
     "SessionStart": [
       {
@@ -294,7 +294,7 @@ The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeOS automat
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/session-startup.sh",
             "timeout": 10,
-            "statusMessage": "Initializing VibeOS session..."
+            "statusMessage": "Initializing VibeCrew session..."
           }
         ]
       },
@@ -406,7 +406,7 @@ The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeOS automat
 | Event | Matcher | Script | Purpose | Can Block? |
 |-------|---------|--------|---------|------------|
 | SessionStart | `startup` | `session-startup.sh` | Environment check, state detection, run migrations, route to correct workflow | No |
-| SessionStart | `compact` | `compact-reinject.sh` | Re-inject `.vibeos/state.json` summary after context compaction | No |
+| SessionStart | `compact` | `compact-reinject.sh` | Re-inject `.vibecrew/state.json` summary after context compaction | No |
 | PreToolUse | `Write\|Edit` | `phase-gate.sh` | Block source code writes until `foundation.complete` is `true` | Yes (JSON deny) |
 | PreToolUse | `Write\|Edit` | `restrict-paths.sh` | Sandbox path validation, block writes outside project root | Yes (JSON deny) |
 | PreToolUse | `Bash` | `protect-data.sh` | Block destructive shell commands (rm -rf, force push, DROP TABLE) | Yes (JSON deny) |
@@ -437,7 +437,7 @@ All hooks run as external bash processes at zero token cost. PreToolUse hooks us
 
 ## 5. Skills / Commands
 
-VibeOS exposes nine slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. For full command specifications, invocation control matrix, and SKILL.md examples, see [system-overview.md, Section 6](system-overview.md#6-slash-commands).
+VibeCrew exposes nine slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. For full command specifications, invocation control matrix, and SKILL.md examples, see [system-overview.md, Section 6](system-overview.md#6-slash-commands).
 
 ### 5.1 Command Summary
 
@@ -455,7 +455,7 @@ VibeOS exposes nine slash commands, each implemented as a `SKILL.md` file in the
 
 ### 5.2 Skill Namespacing
 
-Skills are namespaced as `vibe-os:<skill-name>`. Users can invoke with the short form (`/setup`) or fully qualified form (`/vibe-os:setup`).
+Skills are namespaced as `vibe-crew:<skill-name>`. Users can invoke with the short form (`/setup`) or fully qualified form (`/vibe-crew:setup`).
 
 ### 5.3 jq Paths Used by Skills
 
@@ -477,7 +477,7 @@ All `jq` field paths in skill scripts must match the canonical schemas in [schem
 
 ## 6. Agent Definitions
 
-VibeOS v1.0 uses 5 specialized sub-agents, consolidated from the original 9-agent design. For full agent specifications including YAML frontmatter, tool permissions, verification loops, and context budgets, see [agents.md](agents.md).
+VibeCrew v1.0 uses 5 specialized sub-agents, consolidated from the original 9-agent design. For full agent specifications including YAML frontmatter, tool permissions, verification loops, and context budgets, see [agents.md](agents.md).
 
 ### 6.1 Agent Summary
 
@@ -497,7 +497,7 @@ VibeOS v1.0 uses 5 specialized sub-agents, consolidated from the original 9-agen
 
 ### 7.1 Trigger
 
-The `/setup` skill is the first command a user runs after installing VibeOS. It is also triggered automatically by the SessionStart hook if `.vibeos/config.json` does not exist.
+The `/setup` skill is the first command a user runs after installing VibeCrew. It is also triggered automatically by the SessionStart hook if `.vibecrew/config.json` does not exist.
 
 ### 7.2 Setup Flow
 
@@ -521,7 +521,7 @@ Step 3: Detect Terminal
   +--> TERM_PROGRAM = Apple_Terminal? --> "terminal" (standard notifications)
   +--> Otherwise? --> "other" (fallback OSC 9)
   |
-Step 4: Create .vibeos/ Runtime Directory
+Step 4: Create .vibecrew/ Runtime Directory
   |
   +--> Write config.json (preferences from steps 1-3, schema_version: "1.0.0")
   +--> Write state.json (foundation.complete: false, schema_version: "1.0.0")
@@ -540,7 +540,7 @@ Step 5: Report Readiness
 Each step produces a summary table. Missing required dependencies block progress; missing recommended dependencies produce warnings but do not block.
 
 ```
-VibeOS Dependency Check
+VibeCrew Dependency Check
 -----------------------
   REQUIRED
   Claude Code      2.3.1     required 2.0+     PASS
@@ -558,31 +558,31 @@ Terminal Detection: Warp (deep-link notifications enabled)
 
 ### 7.4 Runtime Directory Creation
 
-The wizard creates the `.vibeos/` directory. All JSON files are initialized with `schema_version: "1.0.0"` and follow the canonical schemas defined in [schemas.md](schemas.md).
+The wizard creates the `.vibecrew/` directory. All JSON files are initialized with `schema_version: "1.0.0"` and follow the canonical schemas defined in [schemas.md](schemas.md).
 
 **Files created:**
 
 | File | Schema Reference | Initial State |
 |------|-----------------|---------------|
-| `.vibeos/config.json` | [schemas.md, Section 2](schemas.md#2-configjson) | Detected terminal, default notification/cost settings |
-| `.vibeos/state.json` | [schemas.md, Section 3](schemas.md#3-statejson) | `foundation.complete: false`, all artifacts `pending` |
-| `.vibeos/backlog.json` | [schemas.md, Section 4](schemas.md#4-backlogjson) | Empty `features` array, default `columns` definition |
+| `.vibecrew/config.json` | [schemas.md, Section 2](schemas.md#2-configjson) | Detected terminal, default notification/cost settings |
+| `.vibecrew/state.json` | [schemas.md, Section 3](schemas.md#3-statejson) | `foundation.complete: false`, all artifacts `pending` |
+| `.vibecrew/backlog.json` | [schemas.md, Section 4](schemas.md#4-backlogjson) | Empty `features` array, default `columns` definition |
 
 **Directories created:**
 
 | Directory | Purpose | Git-Tracked |
 |-----------|---------|-------------|
-| `.vibeos/sessions/` | Per-session metadata | No (gitignored) |
-| `.vibeos/scores/` | Vibe Score breakdowns | Optional |
-| `.vibeos/signals/` | Ephemeral inter-agent signals | No (gitignored) |
-| `.vibeos/locks/` | Advisory lock files | No (gitignored) |
+| `.vibecrew/sessions/` | Per-session metadata | No (gitignored) |
+| `.vibecrew/scores/` | Vibe Score breakdowns | Optional |
+| `.vibecrew/signals/` | Ephemeral inter-agent signals | No (gitignored) |
+| `.vibecrew/locks/` | Advisory lock files | No (gitignored) |
 
 ### 7.5 Readiness Report
 
 The final output confirms all checks passed and directs the user to the next step:
 
 ```
-VibeOS Setup Complete
+VibeCrew Setup Complete
 =====================
   Dependencies:     5/5 required passed, 1/1 recommended passed
   MCP Servers:      2/2 available
@@ -603,24 +603,24 @@ The complete `config.json` schema -- including all fields, types, defaults, and 
 
 ### 8.2 Reading Config in Hook Scripts
 
-All hook scripts read config values from `.vibeos/config.json` using `jq`:
+All hook scripts read config values from `.vibecrew/config.json` using `jq`:
 
 ```bash
 # Read notification preference
-NOTIFICATIONS_ENABLED=$(jq -r '.notifications.enabled // true' .vibeos/config.json 2>/dev/null)
+NOTIFICATIONS_ENABLED=$(jq -r '.notifications.enabled // true' .vibecrew/config.json 2>/dev/null)
 
 if [ "$NOTIFICATIONS_ENABLED" = "false" ]; then
   exit 0  # Skip notification
 fi
 
 # Read terminal type
-TERMINAL=$(jq -r '.terminal // "other"' .vibeos/config.json 2>/dev/null)
+TERMINAL=$(jq -r '.terminal // "other"' .vibecrew/config.json 2>/dev/null)
 
 # Read formatter preference
-FORMATTER=$(jq -r '.formatting.formatter // "prettier"' .vibeos/config.json 2>/dev/null)
+FORMATTER=$(jq -r '.formatting.formatter // "prettier"' .vibecrew/config.json 2>/dev/null)
 
 # Read cost limits
-SESSION_MAX=$(jq -r '.cost_limits.session_max_usd // 5.00' .vibeos/config.json 2>/dev/null)
+SESSION_MAX=$(jq -r '.cost_limits.session_max_usd // 5.00' .vibecrew/config.json 2>/dev/null)
 ```
 
 ---
@@ -631,18 +631,18 @@ SESSION_MAX=$(jq -r '.cost_limits.session_max_usd // 5.00' .vibeos/config.json 2
 
 All state files are initialized during `/setup` (Step 4) with `schema_version: "1.0.0"`. Rather than defining schemas inline, this section specifies the initial values that differ from the full schema defaults.
 
-**`.vibeos/state.json`** -- `foundation.complete: false`, all 5 artifacts set to `"pending"`, `active_feature` fields set to `null`, `git.initialized: false`. See [schemas.md, Section 3](schemas.md#3-statejson) for the complete schema.
+**`.vibecrew/state.json`** -- `foundation.complete: false`, all 5 artifacts set to `"pending"`, `active_feature` fields set to `null`, `git.initialized: false`. See [schemas.md, Section 3](schemas.md#3-statejson) for the complete schema.
 
-**`.vibeos/backlog.json`** -- Empty `features` array, default 7-column Kanban definition. See [schemas.md, Section 4](schemas.md#4-backlogjson) for the complete schema.
+**`.vibecrew/backlog.json`** -- Empty `features` array, default 7-column Kanban definition. See [schemas.md, Section 4](schemas.md#4-backlogjson) for the complete schema.
 
-**`.vibeos/config.json`** -- Detected terminal type, MCP availability, default notification/cost settings. See [schemas.md, Section 2](schemas.md#2-configjson) for the complete schema.
+**`.vibecrew/config.json`** -- Detected terminal type, MCP availability, default notification/cost settings. See [schemas.md, Section 2](schemas.md#2-configjson) for the complete schema.
 
 ### 9.2 Session Startup State Check
 
 On every session start, the `session-startup.sh` script performs two tasks:
 
-1. **Migration check:** Calls `migrate-state.sh` to verify `schema_version` on all `.vibeos/*.json` files and apply any pending migrations.
-2. **State routing:** Reads `foundation.complete` from `.vibeos/state.json` and routes the user to the appropriate workflow.
+1. **Migration check:** Calls `migrate-state.sh` to verify `schema_version` on all `.vibecrew/*.json` files and apply any pending migrations.
+2. **State routing:** Reads `foundation.complete` from `.vibecrew/state.json` and routes the user to the appropriate workflow.
 
 ```bash
 # session-startup.sh (excerpt)
@@ -650,13 +650,13 @@ On every session start, the `session-startup.sh` script performs two tasks:
 "${CLAUDE_PLUGIN_ROOT}/scripts/migrate-state.sh"
 
 # Route based on foundation state
-FOUNDATION=$(jq -r '.foundation.complete // false' .vibeos/state.json 2>/dev/null)
-ACTIVE_FEATURE=$(jq -r '.active_feature.name // empty' .vibeos/state.json 2>/dev/null)
+FOUNDATION=$(jq -r '.foundation.complete // false' .vibecrew/state.json 2>/dev/null)
+ACTIVE_FEATURE=$(jq -r '.active_feature.name // empty' .vibecrew/state.json 2>/dev/null)
 
 if [ "$FOUNDATION" = "false" ]; then
   echo "Foundation incomplete. Run /new-project to continue."
 elif [ -n "$ACTIVE_FEATURE" ]; then
-  PHASE=$(jq -r '.active_feature.phase // "unknown"' .vibeos/state.json 2>/dev/null)
+  PHASE=$(jq -r '.active_feature.phase // "unknown"' .vibecrew/state.json 2>/dev/null)
   echo "Active feature: $ACTIVE_FEATURE (phase: $PHASE)"
 else
   echo "Foundation complete. Run /new-feature or /run-backlog to start building."
@@ -770,7 +770,7 @@ The "Session Learnings" section is the mutation target for the Performance Coach
 
 ### 11.1 Overview
 
-All `.vibeos/` JSON files include a top-level `schema_version` field, initialized to `"1.0.0"` by the setup wizard. The migration strategy is defined in [schemas.md, Section 9](schemas.md#9-migration-strategy). This section covers the operational details of how migrations run during installation and session startup.
+All `.vibecrew/` JSON files include a top-level `schema_version` field, initialized to `"1.0.0"` by the setup wizard. The migration strategy is defined in [schemas.md, Section 9](schemas.md#9-migration-strategy). This section covers the operational details of how migrations run during installation and session startup.
 
 ### 11.2 Migration Trigger
 
@@ -787,7 +787,7 @@ The `session-startup.sh` script calls `migrate-state.sh` on every session start.
 #!/usr/bin/env bash
 # migrate-state.sh -- Run state file migrations
 # Called by session-startup.sh on every session start
-# Reads schema_version from each .vibeos/*.json file and applies
+# Reads schema_version from each .vibecrew/*.json file and applies
 # sequential migrations if the version is behind CURRENT_VERSION.
 
 set -euo pipefail
@@ -835,7 +835,7 @@ migrate_file() {
 }
 
 # Run on all state files
-for f in .vibeos/config.json .vibeos/state.json .vibeos/backlog.json; do
+for f in .vibecrew/config.json .vibecrew/state.json .vibecrew/backlog.json; do
   migrate_file "$f"
 done
 ```
@@ -866,7 +866,7 @@ The `/setup` wizard always writes fresh files with the current `schema_version`.
 Verify the plugin loaded correctly with `claude --debug`. Expected output includes:
 
 ```
-[plugin] Loading plugin: vibe-os (1.0.0)
+[plugin] Loading plugin: vibe-crew (1.0.0)
 [plugin] Agents: 5 loaded from ./agents/
 [plugin] Skills: 9 loaded from ./skills/
 [plugin] Hooks: 10 event bindings from ./hooks/hooks.json
@@ -882,18 +882,18 @@ Verify the plugin loaded correctly with `claude --debug`. Expected output includ
 | Hooks not firing | Run `chmod +x scripts/*.sh` |
 | MCP server fails | Install Node.js 18+: `brew install node` |
 | Notifications silent | Install: `brew install terminal-notifier` (recommended) |
-| Phase gate not blocking | Run `/setup` to initialize `.vibeos/state.json` |
+| Phase gate not blocking | Run `/setup` to initialize `.vibecrew/state.json` |
 | Paths broken after install | Use `${CLAUDE_PLUGIN_ROOT}` for all plugin-internal paths |
-| Migration warnings | Update plugin: `claude plugin update vibe-os` |
+| Migration warnings | Update plugin: `claude plugin update vibe-crew` |
 
 ---
 
 ## Summary
 
-The VibeOS installation design follows three principles:
+The VibeCrew installation design follows three principles:
 
 1. **Self-contained.** Every asset the plugin needs -- agents, skills, hooks, scripts, templates, MCP configs -- lives inside the plugin directory. No external dependencies beyond the five required tools.
 
 2. **Defensive.** The setup wizard validates every prerequisite before allowing the user to proceed. Hook scripts use defensive JSON parsing. State files carry `schema_version` for safe migration. Config changes preserve user preferences. Graceful degradation when optional components (MCP servers, terminal-notifier) are missing.
 
-3. **Zero-friction for non-technical users.** One command to install (`claude plugin install vibe-os`). One command to set up (`/setup`). One command to begin (`/new-project`). The wizard guides the user through every step and reports exactly what to do when something is missing.
+3. **Zero-friction for non-technical users.** One command to install (`claude plugin install vibe-crew`). One command to set up (`/setup`). One command to begin (`/new-project`). The wizard guides the user through every step and reports exactly what to do when something is missing.

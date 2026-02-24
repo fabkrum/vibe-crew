@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 02 (Revised) | February 2026
 >
-> This document defines all 5 VibeOS v1.0 agents -- their trigger conditions, input/output contracts, tool permissions, verification loops, context budgets, safety constraints, status reporting mechanisms, and complete YAML frontmatter for their `.md` definition files. Each agent runs as an isolated Claude Code sub-agent with its own context window, as documented in [Research 01: Plugin Architecture](../research/01-claude-code-plugin-architecture.md) and [Research 02: Multi-Agent Orchestration](../research/02-multi-agent-orchestration.md).
+> This document defines all 5 VibeCrew v1.0 agents -- their trigger conditions, input/output contracts, tool permissions, verification loops, context budgets, safety constraints, status reporting mechanisms, and complete YAML frontmatter for their `.md` definition files. Each agent runs as an isolated Claude Code sub-agent with its own context window, as documented in [Research 01: Plugin Architecture](../research/01-claude-code-plugin-architecture.md) and [Research 02: Multi-Agent Orchestration](../research/02-multi-agent-orchestration.md).
 >
 > **v1.0 Consolidation.** This revision reduces the agent count from 9 to 5, following Boris Cherny / Anthropic best practices for multi-agent systems. The primary changes: UI Designer and Feature Developer merge into **Builder**; Test Writer, Quality Check, and Performance Coach scoring merge into **Verifier**; Doc Generator and Performance Coach (as standalone agents) are deferred to v1.1. Every agent now includes an explicit **Verification Loop** -- the single most important practice for reliable agent output.
 
@@ -53,7 +53,7 @@
 
 **Key changes from v0.9 (9-agent) design:**
 
-- **Workflow Orchestrator** now uses Agent Teams API (`TeamCreate`, `TaskCreate`, `SendMessage`) instead of presenting copy-paste commands. Still cannot use `Write` or `Edit` directly -- all `.vibeos/` state mutations go through Bash scripts (see Section 4 for details).
+- **Workflow Orchestrator** now uses Agent Teams API (`TeamCreate`, `TaskCreate`, `SendMessage`) instead of presenting copy-paste commands. Still cannot use `Write` or `Edit` directly -- all `.vibecrew/` state mutations go through Bash scripts (see Section 4 for details).
 - **Builder** inherits the combined tool set of UI Designer and Feature Developer, plus `isolation: worktree` for parallel work.
 - **Verifier** inherits the combined tool set of Test Writer and Quality Check, plus the scoring logic from Performance Coach.
 
@@ -63,7 +63,7 @@
 
 ### Purpose
 
-The Session Startup agent is the entry point for every VibeOS session. It fires automatically on the `SessionStart` hook, performs a rapid environment check, reads project state, detects stale sessions from crashed agents, and produces a routing decision that tells Claude Code which workflow to enter. It runs on Haiku for speed and cost efficiency -- this agent fires on every single session start, so it must be fast and cheap.
+The Session Startup agent is the entry point for every VibeCrew session. It fires automatically on the `SessionStart` hook, performs a rapid environment check, reads project state, detects stale sessions from crashed agents, and produces a routing decision that tells Claude Code which workflow to enter. It runs on Haiku for speed and cost efficiency -- this agent fires on every single session start, so it must be fast and cheap.
 
 ### YAML Frontmatter
 
@@ -71,7 +71,7 @@ The Session Startup agent is the entry point for every VibeOS session. It fires 
 ---
 name: session-startup
 description: >
-  Fires on every session start. Reads .vibeos/state.json, checks git status,
+  Fires on every session start. Reads .vibecrew/state.json, checks git status,
   detects stale sessions, and routes to the appropriate workflow. Use this
   agent automatically on session initialization.
 model: haiku
@@ -100,10 +100,10 @@ The `SessionStart` hook invokes the `session-startup.sh` script, which sets envi
 
 | Source | Data | Format |
 |--------|------|--------|
-| `.vibeos/state.json` | Foundation status, active feature, parallel sessions | JSON (see `architecture/schemas.md` Section 3 for the canonical schema) |
-| `.vibeos/backlog.json` | Feature queue, statuses, dependencies | JSON (see `architecture/schemas.md` Section 4 for the canonical schema) |
-| `.vibeos/signals/` | Pending completion signals from other agents | Signal files (see `architecture/schemas.md` Section 7) |
-| `.vibeos/locks/` | Active advisory locks | Lock directories (see `architecture/schemas.md` Section 8) |
+| `.vibecrew/state.json` | Foundation status, active feature, parallel sessions | JSON (see `architecture/schemas.md` Section 3 for the canonical schema) |
+| `.vibecrew/backlog.json` | Feature queue, statuses, dependencies | JSON (see `architecture/schemas.md` Section 4 for the canonical schema) |
+| `.vibecrew/signals/` | Pending completion signals from other agents | Signal files (see `architecture/schemas.md` Section 7) |
+| `.vibecrew/locks/` | Active advisory locks | Lock directories (see `architecture/schemas.md` Section 8) |
 | `git status` | Working tree state, current branch, uncommitted changes | CLI output |
 | `CLAUDE_ENV_FILE` | Session environment variable file path | Environment variable |
 
@@ -113,14 +113,14 @@ The `SessionStart` hook invokes the `session-startup.sh` script, which sets envi
 |--------|-------------|-------------|
 | Routing decision | Which workflow to enter (Tier 1, Tier 2, resume feature, idle) | stdout (injected into Claude's context) |
 | Environment report | 3-line status summary (foundation, active feature, git branch) | stdout |
-| Environment variables | `VIBEOS_ACTIVE=true`, `VIBEOS_VERSION`, project name | `CLAUDE_ENV_FILE` |
-| Stale session cleanup | Removes crashed session entries from `state.json` | `.vibeos/state.json` |
-| Stale lock cleanup | Removes expired lock directories | `.vibeos/locks/` |
+| Environment variables | `VIBECREW_ACTIVE=true`, `VIBECREW_VERSION`, project name | `CLAUDE_ENV_FILE` |
+| Stale session cleanup | Removes crashed session entries from `state.json` | `.vibecrew/state.json` |
+| Stale lock cleanup | Removes expired lock directories | `.vibecrew/locks/` |
 
 **Output format (stdout, injected into Claude's context):**
 
 ```
-VibeOS v1.0.0 | TravelPack | Branch: feat/user-auth
+VibeCrew v1.0.0 | TravelPack | Branch: feat/user-auth
 Foundation: complete | Active feature: user-authentication (phase: code)
 Routing: Resume Tier 2 feature session -- continue implementing user-authentication.
 ```
@@ -129,11 +129,11 @@ Routing: Resume Tier 2 feature session -- continue implementing user-authenticat
 
 | Step | Action | Retry Behavior |
 |------|--------|----------------|
-| 1. **Verify state files exist** | After reading `.vibeos/state.json` and `backlog.json`, confirm both parsed successfully and contain valid `schema_version` fields | If parse fails, attempt to run `migrate-state.sh` to repair. Max 1 retry. |
-| 2. **Verify routing decision is complete** | After producing the routing decision, verify it contains all three required lines (VibeOS version, foundation status, routing instruction) | If incomplete, re-read state files and regenerate. Max 1 retry. |
+| 1. **Verify state files exist** | After reading `.vibecrew/state.json` and `backlog.json`, confirm both parsed successfully and contain valid `schema_version` fields | If parse fails, attempt to run `migrate-state.sh` to repair. Max 1 retry. |
+| 2. **Verify routing decision is complete** | After producing the routing decision, verify it contains all three required lines (VibeCrew version, foundation status, routing instruction) | If incomplete, re-read state files and regenerate. Max 1 retry. |
 | 3. **Verify stale cleanup succeeded** | After cleaning stale locks and sessions, re-read the locks directory to confirm no stale entries remain | If stale entries persist, log a warning but do not block session start. No retry -- escalate to Orchestrator. |
 
-**Escalation:** If the Session Startup agent cannot produce a valid routing decision after retries, it outputs a fallback message: `"VibeOS: State corrupted. Run /setup to reinitialize."` and exits. This ensures the session always starts, even if state is damaged.
+**Escalation:** If the Session Startup agent cannot produce a valid routing decision after retries, it outputs a fallback message: `"VibeCrew: State corrupted. Run /setup to reinitialize."` and exits. This ensures the session always starts, even if state is damaged.
 
 ### Context Window Budget
 
@@ -162,11 +162,11 @@ The Session Startup agent reports by writing to stdout, which Claude Code inject
 
 ### Purpose
 
-The Workflow Orchestrator is the central coordinator of the VibeOS system. It runs in the primary terminal tab and is responsible for reading project state, processing completion signals from other agents, creating agent teams for feature work, and guiding the developer through the Two-Tier Workflow.
+The Workflow Orchestrator is the central coordinator of the VibeCrew system. It runs in the primary terminal tab and is responsible for reading project state, processing completion signals from other agents, creating agent teams for feature work, and guiding the developer through the Two-Tier Workflow.
 
 The Orchestrator never writes source code. Its job is purely strategic: understand the current state, determine what should happen next, assemble the right team of agents, and communicate progress to the developer. In v1.0, the Orchestrator uses the **Agent Teams API** (`TeamCreate`, `TaskCreate`, `SendMessage`) to coordinate work across agents instead of presenting copy-paste commands.
 
-**Write permission resolution.** The Orchestrator has `disallowedTools: Write, Edit` to prevent scope creep into source code writing. However, it needs to update `.vibeos/` state files (e.g., advancing feature phases, processing signals, updating backlog). This is resolved by using `Bash` to run shared scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`) that modify `.vibeos/` state files. The scripts are the same validated code paths used by all agents, ensuring consistent state mutations regardless of which agent triggers them.
+**Write permission resolution.** The Orchestrator has `disallowedTools: Write, Edit` to prevent scope creep into source code writing. However, it needs to update `.vibecrew/` state files (e.g., advancing feature phases, processing signals, updating backlog). This is resolved by using `Bash` to run shared scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`) that modify `.vibecrew/` state files. The scripts are the same validated code paths used by all agents, ensuring consistent state mutations regardless of which agent triggers them.
 
 ### YAML Frontmatter
 
@@ -177,7 +177,7 @@ description: >
   Main coordinator agent that runs in the primary terminal tab. Reads project
   state, processes completion signals, routes between Tier 1 and Tier 2
   workflows, and coordinates agent teams. Cannot write source code directly.
-  Updates .vibeos/ state via shared Bash scripts. Use this agent for project
+  Updates .vibecrew/ state via shared Bash scripts. Use this agent for project
   coordination and task routing.
 model: opus
 tools:
@@ -203,7 +203,7 @@ maxTurns: 30
 |-----------|---------|
 | **Primary trigger** | Runs as the main agent in Tab 1 (primary terminal) |
 | **On session start** | Session Startup agent routes to Orchestrator when project state requires coordination |
-| **On signal detection** | When completion signals appear in `.vibeos/signals/`, the Orchestrator processes them |
+| **On signal detection** | When completion signals appear in `.vibecrew/signals/`, the Orchestrator processes them |
 | **On user command** | `/status`, `/plan-features`, `/run-backlog`, `/idea` route through the Orchestrator |
 
 ### Input/Output Contract
@@ -212,9 +212,9 @@ maxTurns: 30
 
 | Source | Data | Format |
 |--------|------|--------|
-| `.vibeos/state.json` | Foundation status, active feature, parallel sessions | JSON (see `architecture/schemas.md` Section 3) |
-| `.vibeos/backlog.json` | Feature queue with specs, statuses, dependencies | JSON (see `architecture/schemas.md` Section 4) |
-| `.vibeos/signals/` | Completion signals from other agents | Signal files (see `architecture/schemas.md` Section 7) |
+| `.vibecrew/state.json` | Foundation status, active feature, parallel sessions | JSON (see `architecture/schemas.md` Section 3) |
+| `.vibecrew/backlog.json` | Feature queue with specs, statuses, dependencies | JSON (see `architecture/schemas.md` Section 4) |
+| `.vibecrew/signals/` | Completion signals from other agents | Signal files (see `architecture/schemas.md` Section 7) |
 | Session Startup output | Routing decision and environment report | stdout text |
 | User commands | `/status`, `/plan-features`, `/run-backlog`, `/idea` | Skill invocations |
 
@@ -225,8 +225,8 @@ maxTurns: 30
 | Status report | Comprehensive project state summary | stdout (presented to developer) |
 | Agent team creation | Creates teams with Builder, Verifier, Stack Scout via Agent Teams API | Agent Teams |
 | Task assignments | Assigns design, code, test, research tasks to team members | Agent Teams |
-| Signal processing | Advances feature phases after processing completion signals | `.vibeos/backlog.json` (via `Bash` scripts) |
-| Feature specs | Creates/updates feature specifications during `/plan-features` | `.vibeos/backlog.json` (via `Bash` scripts) |
+| Signal processing | Advances feature phases after processing completion signals | `.vibecrew/backlog.json` (via `Bash` scripts) |
+| Feature specs | Creates/updates feature specifications during `/plan-features` | `.vibecrew/backlog.json` (via `Bash` scripts) |
 | Progress updates | Sends inter-agent coordination messages | Agent Teams (`SendMessage`) |
 
 **Agent Teams API usage:**
@@ -258,7 +258,7 @@ SendMessage({
 
 | Step | Action | Retry Behavior |
 |------|--------|----------------|
-| 1. **Verify signal processing** | After processing a completion signal from `.vibeos/signals/`, re-read `backlog.json` to confirm the feature's column/phase was updated correctly | If state did not update, re-run the `complete-phase.sh` script. Max 2 retries. |
+| 1. **Verify signal processing** | After processing a completion signal from `.vibecrew/signals/`, re-read `backlog.json` to confirm the feature's column/phase was updated correctly | If state did not update, re-run the `complete-phase.sh` script. Max 2 retries. |
 | 2. **Verify team creation** | After calling `TeamCreate`, confirm the team was created by listing active teams | If creation failed, retry once. If still fails, fall back to presenting manual instructions. |
 | 3. **Verify task handoff** | After assigning a task via `TaskCreate`, poll for the agent's first status update within 30 seconds | If no status update, send a `SendMessage` ping. If no response after 60 seconds, notify the developer that the agent may need manual launch. Max 1 retry. |
 | 4. **Verify state consistency** | After any state mutation (phase advance, backlog update), read both `state.json` and `backlog.json` to confirm they are consistent (e.g., active feature phase matches backlog column) | If inconsistent, run `sync-state.sh` to reconcile. Max 1 retry. Log discrepancy to session log. |
@@ -284,7 +284,7 @@ The Orchestrator runs for the duration of the session and accumulates context as
 | **State mutations via scripts only** | When updating `backlog.json` or `state.json`, must use shared scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`) to ensure validated code paths |
 | **Cannot access the internet** | `disallowedTools: WebSearch, WebFetch` -- delegates research to Stack Scout |
 | **Cannot modify design system** | No Write/Edit tools prevents direct file changes |
-| **Agent Teams scoping** | Can only create teams with registered VibeOS agents (session-startup, stack-scout, builder, verifier) |
+| **Agent Teams scoping** | Can only create teams with registered VibeCrew agents (session-startup, stack-scout, builder, verifier) |
 
 ### Status Reporting
 
@@ -360,7 +360,7 @@ isolation: worktree
 | Task prompt | Research question or requirements to evaluate | Text (from Orchestrator via Agent Teams) |
 | `VISION.md` | Project goals, constraints, performance targets | Markdown (read from filesystem) |
 | `CLAUDE.md` | Existing tech stack decisions (if any) | Markdown (read from filesystem) |
-| `.vibeos/backlog.json` | Feature requirements that inform tech choices | JSON (see `architecture/schemas.md` Section 4) |
+| `.vibecrew/backlog.json` | Feature requirements that inform tech choices | JSON (see `architecture/schemas.md` Section 4) |
 
 **Output:**
 
@@ -434,7 +434,7 @@ Research sessions are inherently context-heavy due to web search results, docume
 
 ### Status Reporting
 
-The Stack Scout returns its TDR as the task result when it completes. The Orchestrator receives the TDR text via Agent Teams and decides whether to write it to a file. A signal file is created in `.vibeos/signals/` (see `architecture/schemas.md` Section 7.3 for the research-complete signal schema).
+The Stack Scout returns its TDR as the task result when it completes. The Orchestrator receives the TDR text via Agent Teams and decides whether to write it to a file. A signal file is created in `.vibecrew/signals/` (see `architecture/schemas.md` Section 7.3 for the research-complete signal schema).
 
 If the research exceeds `maxTurns` or the context budget, the agent returns a partial result with a clear indication of what was completed and what remains to be researched.
 
@@ -444,7 +444,7 @@ If the research exceeds `maxTurns` or the context budget, the agent returns a pa
 
 ### Purpose
 
-The Builder is the combined **design and implementation** agent in VibeOS v1.0. It merges the responsibilities of the former UI Designer and Feature Developer agents into a single agent that handles the full creative pipeline:
+The Builder is the combined **design and implementation** agent in VibeCrew v1.0. It merges the responsibilities of the former UI Designer and Feature Developer agents into a single agent that handles the full creative pipeline:
 
 - **Tier 1 (Foundation):** Creates the project's `design-system.css` with HSL color palettes, typography scales, spacing systems, and component tokens.
 - **Tier 2 (Feature Development):** Designs component specifications, implements features within TDR boundaries, creates feature branches, writes application code, and makes conventional commits with `Co-Authored-By` trailers.
@@ -520,8 +520,8 @@ isolation: worktree
 | Conventional commits | Atomic commits with `feat:`, `fix:`, `refactor:` prefixes | Git history |
 | `Co-Authored-By` trailer | `Co-Authored-By: Claude <noreply@anthropic.com>` on every commit | Git commit messages |
 | Branch push | Feature branch pushed to origin | Remote repository |
-| Signal file | `.vibeos/signals/builder-complete.signal` | `.vibeos/signals/` |
-| Phase update | Feature column advanced from `in-progress` to `testing` | `.vibeos/backlog.json` (via `complete-phase.sh`) |
+| Signal file | `.vibecrew/signals/builder-complete.signal` | `.vibecrew/signals/` |
+| Phase update | Feature column advanced from `in-progress` to `testing` | `.vibecrew/backlog.json` (via `complete-phase.sh`) |
 
 **Design system output structure:**
 
@@ -585,7 +585,7 @@ The Builder's verification loop is the most critical in the system. Every code c
 
 **Escalation:** If build or lint verification fails after maximum retries, the Builder:
 1. Creates a WIP commit with current progress: `wip(feature-name): build/lint failing -- see error`
-2. Creates a signal file with the error details: `.vibeos/signals/builder-blocked.signal`
+2. Creates a signal file with the error details: `.vibecrew/signals/builder-blocked.signal`
 3. The Orchestrator notifies the developer of the blockage
 
 ### Context Window Budget
@@ -619,10 +619,10 @@ The Builder is the most context-intensive agent because it must hold the feature
 
 1. **During work:** Makes frequent conventional commits that serve as progress markers. The Orchestrator can inspect `git log` on the feature branch to see progress.
 2. **On design completion (Tier 1):** Reports completion by writing `design-system.css` to the project root. The Orchestrator detects this file's existence to advance the foundation status.
-3. **On design completion (Tier 2):** Creates a signal file: `.vibeos/signals/builder-design-complete.signal` with the component design spec summary.
-4. **On code completion:** Runs the `complete-phase.sh` script to advance the feature from `in-progress` to `testing` in `backlog.json` and creates a signal file: `.vibeos/signals/builder-complete.signal`.
+3. **On design completion (Tier 2):** Creates a signal file: `.vibecrew/signals/builder-design-complete.signal` with the component design spec summary.
+4. **On code completion:** Runs the `complete-phase.sh` script to advance the feature from `in-progress` to `testing` in `backlog.json` and creates a signal file: `.vibecrew/signals/builder-complete.signal`.
 5. **On PR creation:** Creates a pull request via `gh pr create` with a structured description referencing the feature spec and acceptance criteria.
-6. **On blockage:** Creates `.vibeos/signals/builder-blocked.signal` with error details if verification fails after max retries.
+6. **On blockage:** Creates `.vibecrew/signals/builder-blocked.signal` with error details if verification fails after max retries.
 
 ---
 
@@ -630,7 +630,7 @@ The Builder is the most context-intensive agent because it must hold the feature
 
 ### Purpose
 
-The Verifier is the combined **testing, quality validation, and scoring** agent in VibeOS v1.0. It merges the responsibilities of the former Test Writer, Quality Check, and Performance Coach scoring logic into a single agent that handles the full verification pipeline:
+The Verifier is the combined **testing, quality validation, and scoring** agent in VibeCrew v1.0. It merges the responsibilities of the former Test Writer, Quality Check, and Performance Coach scoring logic into a single agent that handles the full verification pipeline:
 
 - **Test writing (TDD-hybrid dual-track):**
   - **Spec-first track (business logic):** Write tests before code. For services, utilities, API routes, and data models, the Verifier produces test files based on the feature spec's acceptance criteria. These tests define the expected behavior and fail initially (red). The Builder then makes them pass (green).
@@ -691,7 +691,7 @@ maxTurns: 60
 | Existing test files | Current test coverage for context | Test source files |
 | `package.json` | Available npm scripts (test, build, lint) | JSON |
 | Session transcript (for `/wrap`) | Full conversation history with token usage per turn | `.claude/sessions/<session-id>.jsonl` |
-| `.vibeos/state.json` | What work was done this session (for scoring) | JSON (see `architecture/schemas.md` Section 3) |
+| `.vibecrew/state.json` | What work was done this session (for scoring) | JSON (see `architecture/schemas.md` Section 3) |
 
 **Output (Testing):**
 
@@ -702,8 +702,8 @@ maxTurns: 60
 | E2E tests | Playwright test files for critical user flows | `e2e/` or `tests/e2e/` |
 | Accessibility tests | axe-core integration within Playwright tests | Embedded in E2E tests |
 | Test run results | Pass/fail output from running the test suite | stdout (reported to Orchestrator) |
-| Signal file | `.vibeos/signals/verifier-test-complete.signal` | `.vibeos/signals/` |
-| Phase update | Feature column advanced from `testing` to `review` | `.vibeos/backlog.json` (via `complete-phase.sh`) |
+| Signal file | `.vibecrew/signals/verifier-test-complete.signal` | `.vibecrew/signals/` |
+| Phase update | Feature column advanced from `testing` to `review` | `.vibecrew/backlog.json` (via `complete-phase.sh`) |
 
 **Output (Quality Check -- `/check`):**
 
@@ -729,8 +729,8 @@ Overall: PASS
 
 | Output | Description | Destination |
 |--------|-------------|-------------|
-| Vibe Score breakdown | Score (0-100) with itemized deductions and bonuses | `.vibeos/scores/score-<date>-<NNN>.json` (see `architecture/schemas.md` Section 6) |
-| Session log | Structured log of the session's activities, token usage, and score | `.vibeos/sessions/session-<date>-<NNN>.json` (see `architecture/schemas.md` Section 5) |
+| Vibe Score breakdown | Score (0-100) with itemized deductions and bonuses | `.vibecrew/scores/score-<date>-<NNN>.json` (see `architecture/schemas.md` Section 6) |
+| Session log | Structured log of the session's activities, token usage, and score | `.vibecrew/sessions/session-<date>-<NNN>.json` (see `architecture/schemas.md` Section 5) |
 | Coaching suggestions | Actionable improvement tips based on session analysis | Included in score breakdown `coaching` field |
 | Session summary | Concise 3-5 line session recap | stdout (presented to developer) |
 | WIP commit | If work is incomplete, creates a WIP commit | Git history |
@@ -788,7 +788,7 @@ The Verifier is unique in that its primary function IS verification. But it stil
 | 3. **Verify spec-first tests fail initially** | For spec-first (TDD) tests written before implementation, confirm they fail with the expected error (not an unexpected crash) | If the test crashes instead of failing predictably, adjust the test setup (mocks, imports) so the failure is clean. Max 2 retries. |
 | 4. **Verify quality check completeness** | After running `/check`, confirm all four categories were executed (tests, build, lint, types). If a category was skipped (e.g., no test script in `package.json`), report it explicitly | If a category was skipped due to missing config, log a warning: "No test script found in package.json -- tests skipped." No retry -- informational. |
 | 5. **Verify Vibe Score calculation** | After computing the Vibe Score, verify that `base_score + sum(deductions) + sum(bonuses)` equals the reported `score` (clamped to 0-100) | If arithmetic is incorrect, recalculate. Max 1 retry. This should never fail if the algorithm is correct. |
-| 6. **Verify score file written** | After writing the score file to `.vibeos/scores/`, re-read it to confirm valid JSON with all required fields per the schema | If the file is invalid, rewrite it. Max 1 retry. |
+| 6. **Verify score file written** | After writing the score file to `.vibecrew/scores/`, re-read it to confirm valid JSON with all required fields per the schema | If the file is invalid, rewrite it. Max 1 retry. |
 
 **Escalation:**
 - **Test failures that indicate implementation bugs:** The Verifier creates a detailed bug report in the signal file, including the failing test name, expected vs. actual behavior, and the relevant source file. It does NOT fix source code -- only test code.
@@ -811,7 +811,7 @@ The Verifier reads both feature specs (for acceptance criteria) and source code 
 | Constraint | Enforcement |
 |------------|-------------|
 | **Cannot modify source code** | Agent prompt instructs: write only test files when in testing mode. If a test reveals a bug, report it -- do not fix the source code |
-| **Can write to specific locations** | Test files: `src/**/__tests__/`, `src/**/*.test.ts`, `e2e/`, `tests/`. Score files: `.vibeos/scores/`. Session logs: `.vibeos/sessions/`. Signal files: `.vibeos/signals/`. |
+| **Can write to specific locations** | Test files: `src/**/__tests__/`, `src/**/*.test.ts`, `e2e/`, `tests/`. Score files: `.vibecrew/scores/`. Session logs: `.vibecrew/sessions/`. Signal files: `.vibecrew/signals/`. |
 | **Cannot modify project state directly** | Agent prompt instructs: use `complete-phase.sh` for phase transitions, never edit `state.json` or `backlog.json` by hand |
 | **Test server isolation** | Agent prompt instructs: run tests against the dedicated test server (port 3001), not the developer's dev server (port 3000) |
 | **No destructive commands** | Blocked by `protect-data.sh` PreToolUse hook |
@@ -823,10 +823,10 @@ The Verifier reads both feature specs (for acceptance criteria) and source code 
 ### Status Reporting
 
 1. **During testing:** Runs the test suite after writing each batch of tests. Reports pass/fail counts.
-2. **On test completion:** Creates a signal file `.vibeos/signals/verifier-test-complete.signal` with test coverage summary. Advances the feature column from `testing` to `review` in `backlog.json`.
+2. **On test completion:** Creates a signal file `.vibecrew/signals/verifier-test-complete.signal` with test coverage summary. Advances the feature column from `testing` to `review` in `backlog.json`.
 3. **On test failure (implementation bug):** Creates a detailed bug report in the signal file, including the failing test name, expected vs. actual behavior, and the relevant source file. The Orchestrator routes this back to the Builder.
 4. **On `/check`:** Prints quality check results to stdout.
-5. **On `/wrap`:** Runs final quality checks, calculates Vibe Score, writes score file to `.vibeos/scores/`, writes session log to `.vibeos/sessions/`, and presents a session summary to the developer.
+5. **On `/wrap`:** Runs final quality checks, calculates Vibe Score, writes score file to `.vibecrew/scores/`, writes session log to `.vibecrew/sessions/`, and presents a session summary to the developer.
 
 ---
 
@@ -917,7 +917,7 @@ builder-complete.signal           reads signal,                 verifier-test-co
                                   advances column,
                                   creates next task
     |                                     |                              |
-    +---- .vibeos/signals/ ---------------+---- .vibeos/signals/ --------+
+    +---- .vibecrew/signals/ ---------------+---- .vibecrew/signals/ --------+
 ```
 
 ### Handoff Sequence for a Complete Feature (v1.0)
@@ -999,7 +999,7 @@ Both agents benefit from filesystem isolation, but for different reasons:
 The Verifier does NOT use `isolation: worktree` because:
 - Tests need to run against the actual project state (not a potentially stale worktree)
 - Quality checks must validate the real build output
-- Vibe Score calculation reads from `.vibeos/` state files that must be current
+- Vibe Score calculation reads from `.vibecrew/` state files that must be current
 
 ### Why Agent Teams API Instead of Copy-Paste Commands?
 
@@ -1020,7 +1020,7 @@ The Agent Teams API (`TeamCreate`, `TaskCreate`, `SendMessage`) solves all three
 2. **Feedback.** `TaskCreate` returns confirmation that the agent started.
 3. **Coordination.** `SendMessage` enables real-time inter-agent communication beyond signal files.
 
-Signal files (`.vibeos/signals/`) are retained as a persistence mechanism -- they survive agent crashes and provide an audit trail. But the primary coordination mechanism is now Agent Teams.
+Signal files (`.vibecrew/signals/`) are retained as a persistence mechanism -- they survive agent crashes and provide an audit trail. But the primary coordination mechanism is now Agent Teams.
 
 ### Why Opus for Orchestrator, Stack Scout, and Builder?
 
@@ -1046,7 +1046,7 @@ The Orchestrator's `disallowedTools: Write, Edit` constraint is retained from v0
 1. **Prevents scope creep.** If the Orchestrator can write files, it will eventually be tempted to "just fix this small thing" instead of delegating to the appropriate specialist agent.
 2. **Enforces delegation.** Every file mutation must go through a specialized agent (Builder for source, Verifier for tests/scores), ensuring that tool restrictions, safety constraints, and verification loops are properly applied.
 3. **State mutations via scripts.** When the Orchestrator needs to update `backlog.json` or process signals, it uses `Bash` to run the shared scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`). This ensures state mutations go through the same validated code paths regardless of which agent triggers them.
-4. **Agent Teams resolves the old contradiction.** In v0.9, `safety.md` listed `Write(.vibeos/*)` as allowed for the Orchestrator while `agents.md` listed `disallowedTools: Write`. The v1.0 resolution is clear: Orchestrator cannot use `Write` or `Edit` tools directly, but CAN use `Bash` to run scripts that modify `.vibeos/` state files. No contradiction.
+4. **Agent Teams resolves the old contradiction.** In v0.9, `safety.md` listed `Write(.vibecrew/*)` as allowed for the Orchestrator while `agents.md` listed `disallowedTools: Write`. The v1.0 resolution is clear: Orchestrator cannot use `Write` or `Edit` tools directly, but CAN use `Bash` to run scripts that modify `.vibecrew/` state files. No contradiction.
 
 ### Why Defer Performance Coach and Doc Generator to v1.1?
 

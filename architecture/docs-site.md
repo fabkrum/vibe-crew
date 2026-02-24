@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 2.5 | February 2026
 >
-> This document defines the architecture of VibeOS's documentation website for v1.0. The scope is intentionally minimal: a Kanban board visualization and a basic stats page, both powered by VitePress data loaders reading `.vibeos/` JSON files.
+> This document defines the architecture of VibeCrew's documentation website for v1.0. The scope is intentionally minimal: a Kanban board visualization and a basic stats page, both powered by VitePress data loaders reading `.vibecrew/` JSON files.
 
 ---
 
@@ -22,13 +22,13 @@
 
 ### 1.1 Why VitePress
 
-VitePress is the documentation framework for the VibeOS docs site. The decision is based on Phase 1 research (Research Document 06) and three requirements:
+VitePress is the documentation framework for the VibeCrew docs site. The decision is based on Phase 1 research (Research Document 06) and three requirements:
 
 | Requirement | VitePress Capability |
 |---|---|
 | **Fast rebuilds** | 3-8 second cold build for 200 pages; 1-3 second incremental rebuilds |
 | **Vue components** | Interactive components embed directly in Markdown via `<script setup>` blocks |
-| **Data loaders** | `.data.js` files execute at build time, support HMR file watching, and inject `.vibeos/` JSON into pages |
+| **Data loaders** | `.data.js` files execute at build time, support HMR file watching, and inject `.vibecrew/` JSON into pages |
 
 ### 1.2 Dependencies
 
@@ -68,23 +68,23 @@ docs/
     dist/                              # Build output (gitignored)
 
   # Data loaders (run at build time, support HMR watching)
-  kanban.data.js                       # Reads .vibeos/backlog.json
-  stats.data.js                        # Reads .vibeos/sessions/*.json
+  kanban.data.js                       # Reads .vibecrew/backlog.json
+  stats.data.js                        # Reads .vibecrew/sessions/*.json
 
   # Pages
   index.md                             # Docs site landing page
   kanban.md                            # Kanban board page
   stats.md                             # Basic statistics page
 
-  # System documentation (how VibeOS works)
+  # System documentation (how VibeCrew works)
   guide/
-    index.md                           # Introduction to VibeOS
+    index.md                           # Introduction to VibeCrew
     installation.md                    # Installation guide
     commands.md                        # Slash command reference
     agents.md                          # Agent reference (9 agents)
     workflows.md                       # Tier 1 + Tier 2 workflow explanations
     hooks.md                           # Hook system reference
-    configuration.md                   # .vibeos/config.json options
+    configuration.md                   # .vibecrew/config.json options
     troubleshooting.md                 # Common issues and solutions
 ```
 
@@ -100,7 +100,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Project Docs',
-  description: 'Auto-generated documentation powered by VibeOS',
+  description: 'Auto-generated documentation powered by VibeCrew',
   lastUpdated: true,
 
   themeConfig: {
@@ -113,7 +113,7 @@ export default defineConfig({
     sidebar: {
       '/guide/': [
         {
-          text: 'VibeOS Guide',
+          text: 'VibeCrew Guide',
           items: [
             { text: 'Introduction', link: '/guide/' },
             { text: 'Installation', link: '/guide/installation' },
@@ -131,7 +131,7 @@ export default defineConfig({
     search: { provider: 'local' },
 
     footer: {
-      message: 'Built with VibeOS',
+      message: 'Built with VibeCrew',
       copyright: 'Auto-generated documentation'
     }
   },
@@ -165,7 +165,7 @@ export default {
 
 ## 4. Kanban Board
 
-The Kanban board is a read-only visualization of the project backlog. It renders data from `.vibeos/backlog.json` and does not provide drag-and-drop or editing capabilities. All mutations to feature state happen through VibeOS slash commands (`/new-feature`, `/run-backlog`, `/plan-features`).
+The Kanban board is a read-only visualization of the project backlog. It renders data from `.vibecrew/backlog.json` and does not provide drag-and-drop or editing capabilities. All mutations to feature state happen through VibeCrew slash commands (`/new-feature`, `/run-backlog`, `/plan-features`).
 
 ### 4.1 Columns
 
@@ -191,7 +191,7 @@ Each card shows:
 
 ### 4.3 Data Source
 
-The board reads from `.vibeos/backlog.json` via `kanban.data.js`. The `backlog.json` schema is defined in `architecture/schemas.md` Section 4. Key fields used:
+The board reads from `.vibecrew/backlog.json` via `kanban.data.js`. The `backlog.json` schema is defined in `architecture/schemas.md` Section 4. Key fields used:
 
 - `columns[]` -- Column definitions with `id`, `title`, `wip_limit`
 - `features[]` -- Feature objects with `name`, `column`, `priority`, `labels`
@@ -388,7 +388,7 @@ The stats page shows four summary metrics derived from session log files. No cha
 
 ### 5.2 Data Source
 
-The stats page reads all session log files from `.vibeos/sessions/*.json` via `stats.data.js`. The session log schema is defined in `architecture/schemas.md` Section 5. Key fields used:
+The stats page reads all session log files from `.vibecrew/sessions/*.json` via `stats.data.js`. The session log schema is defined in `architecture/schemas.md` Section 5. Key fields used:
 
 - `session_id` -- Session identifier
 - `vibe_score` -- Integer 0-100 or null
@@ -540,7 +540,7 @@ import StatsPage from './.vitepress/theme/components/StatsPage.vue'
 
 ## 6. Data Loader Reference
 
-VitePress data loaders are `.data.js` files that execute at build time (or on watched file changes during dev). They bridge `.vibeos/` JSON state and Vue components.
+VitePress data loaders are `.data.js` files that execute at build time (or on watched file changes during dev). They bridge `.vibecrew/` JSON state and Vue components.
 
 ### 6.1 Kanban Data Loader
 
@@ -556,9 +556,9 @@ import { fileURLToPath } from 'url'
 const __dir = dirname(fileURLToPath(import.meta.url))
 
 export default {
-  watch: ['../.vibeos/backlog.json'],
+  watch: ['../.vibecrew/backlog.json'],
   load() {
-    const backlogPath = resolve(__dir, '..', '.vibeos', 'backlog.json')
+    const backlogPath = resolve(__dir, '..', '.vibecrew', 'backlog.json')
 
     if (!existsSync(backlogPath)) {
       return {
@@ -595,9 +595,9 @@ import { fileURLToPath } from 'url'
 const __dir = dirname(fileURLToPath(import.meta.url))
 
 export default {
-  watch: ['../.vibeos/sessions/*.json'],
+  watch: ['../.vibecrew/sessions/*.json'],
   load() {
-    const sessionsDir = resolve(__dir, '..', '.vibeos', 'sessions')
+    const sessionsDir = resolve(__dir, '..', '.vibecrew', 'sessions')
 
     if (!existsSync(sessionsDir)) {
       return []
@@ -622,7 +622,7 @@ export default {
 
 - Both loaders use `import.meta.url` to resolve paths, which is the correct approach for ES modules. The `__dirname` global is not available in ES module scope.
 - Each loader declares a single `watch` array for HMR. During `vitepress dev`, changes to the watched files trigger the loader to re-execute and push updated data to the browser.
-- Both loaders return safe defaults (empty arrays or stub objects) when the `.vibeos/` files do not yet exist. This prevents build failures on first run.
+- Both loaders return safe defaults (empty arrays or stub objects) when the `.vibecrew/` files do not yet exist. This prevents build failures on first run.
 
 ---
 
@@ -643,7 +643,7 @@ The following features are planned for v1.1 but are explicitly **out of scope** 
 
 1. **Minimal v1.0 scope**: The original design specified 7 Vue dashboard components, Chart.js charts, release notes auto-generation, and a dedicated dev server on port 3002. This was cut to 2 components (Kanban board + stats page) following a best-practices review. Ship the core value first; add charts and automation in v1.1.
 
-2. **VitePress over Starlight**: VitePress wins on rebuild speed (3-8s vs. 5-10s) and simplicity. Since VibeOS uses Vue components for interactive pages, the Vue ecosystem alignment is natural.
+2. **VitePress over Starlight**: VitePress wins on rebuild speed (3-8s vs. 5-10s) and simplicity. Since VibeCrew uses Vue components for interactive pages, the Vue ecosystem alignment is natural.
 
 3. **Data loaders over API endpoints**: VitePress data loaders execute at build time and inject data directly into Vue components. This eliminates the need for a runtime API server, keeps the docs site fully static, and supports HMR during development via file watching.
 

@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 2.1 | February 2026
 >
-> High-level architecture of VibeOS as a Claude Code plugin. Covers plugin structure, agent topology, workflow engine, safety layer, context window management, and slash command mapping. All design decisions reference research findings from Phase 1 documents 01, 02, and 08.
+> High-level architecture of VibeCrew as a Claude Code plugin. Covers plugin structure, agent topology, workflow engine, safety layer, context window management, and slash command mapping. All design decisions reference research findings from Phase 1 documents 01, 02, and 08.
 
 ---
 
@@ -23,14 +23,14 @@
 
 ### 1.1 Overview
 
-VibeOS is distributed as a standard Claude Code plugin. It follows the canonical plugin layout established in the official Claude Code documentation: a `.claude-plugin/plugin.json` manifest at the root, with all component directories (`agents/`, `skills/`, `hooks/`, `scripts/`) at the plugin root level -- never nested inside `.claude-plugin/`.
+VibeCrew is distributed as a standard Claude Code plugin. It follows the canonical plugin layout established in the official Claude Code documentation: a `.claude-plugin/plugin.json` manifest at the root, with all component directories (`agents/`, `skills/`, `hooks/`, `scripts/`) at the plugin root level -- never nested inside `.claude-plugin/`.
 
 The plugin is self-contained. All internal path references use the `${CLAUDE_PLUGIN_ROOT}` environment variable, which Claude Code sets to the absolute path of the plugin directory at runtime. This ensures correct resolution regardless of where the plugin is installed (marketplace cache, symlink, or direct placement).
 
 ### 1.2 Complete Directory Tree
 
 ```
-claude-plugin-vibe-os/                      # Plugin root
+claude-plugin-vibe-crew/                      # Plugin root
   .claude-plugin/
     plugin.json                             # Plugin manifest (entry point)
   agents/                                   # 12 specialized sub-agent definitions
@@ -81,7 +81,7 @@ claude-plugin-vibe-os/                      # Plugin root
   LICENSE
   CHANGELOG.md
 
-.vibeos/                                    # Per-project runtime state (created by /setup)
+.vibecrew/                                    # Per-project runtime state (created by /setup)
   config.json                               #   Terminal preference, notification settings
   state.json                                #   Foundation status, active feature, sessions
   backlog.json                              #   Feature backlog with specs and status
@@ -103,15 +103,15 @@ The `plugin.json` manifest is the entry point that Claude Code reads to identify
 
 ```json
 {
-  "name": "vibe-os",
+  "name": "vibe-crew",
   "version": "1.0.0",
   "description": "Autonomous vibe-coding operating system for Claude Code",
   "author": {
     "name": "Fabian Krumbholz",
     "url": "https://github.com/fabkrum"
   },
-  "homepage": "https://docs.vibeos.dev",
-  "repository": "https://github.com/fabkrum/vibe-os",
+  "homepage": "https://docs.vibecrew.dev",
+  "repository": "https://github.com/fabkrum/vibe-crew",
   "license": "MIT",
   "keywords": ["vibe-coding", "automation", "multi-agent", "sdlc"],
   "agents": "./agents/",
@@ -123,19 +123,19 @@ The `plugin.json` manifest is the entry point that Claude Code reads to identify
 
 ### 1.4 Installation Methods
 
-VibeOS supports three installation methods at four scope levels:
+VibeCrew supports three installation methods at four scope levels:
 
 ```
 Method 1: Marketplace install (recommended)
-  claude plugin install vibe-os@marketplace --scope project
+  claude plugin install vibe-crew@marketplace --scope project
 
 Method 2: Direct placement (symlink for development)
-  ln -s /path/to/claude-plugin-vibe-os /path/to/project/claude-plugin-vibe-os
+  ln -s /path/to/claude-plugin-vibe-crew /path/to/project/claude-plugin-vibe-crew
 
 Method 3: CLI install with explicit scope
-  claude plugin install vibe-os@marketplace --scope user    # all projects
-  claude plugin install vibe-os@marketplace --scope project # team-shared
-  claude plugin install vibe-os@marketplace --scope local   # gitignored
+  claude plugin install vibe-crew@marketplace --scope user    # all projects
+  claude plugin install vibe-crew@marketplace --scope project # team-shared
+  claude plugin install vibe-crew@marketplace --scope local   # gitignored
 ```
 
 | Scope | Settings File | Use Case |
@@ -145,7 +145,7 @@ Method 3: CLI install with explicit scope
 | `local` | `.claude/settings.local.json` | Personal per-project -- gitignored |
 | `managed` | `managed-settings.json` | Enterprise -- read-only, admin-controlled |
 
-After installation, the user runs `/setup` to initialize the `.vibeos/` runtime directory in the target project.
+After installation, the user runs `/setup` to initialize the `.vibecrew/` runtime directory in the target project.
 
 ### 1.5 MCP Server Configuration
 
@@ -190,13 +190,13 @@ This is critical because marketplace-installed plugins are cached to `~/.claude/
 
 ### 2.1 The Twelve Agents
 
-VibeOS v1.0 operates through twelve specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
+VibeCrew v1.0 operates through twelve specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
 
 The v1.0 topology expands the original 9-agent design to 12 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding new specialized agents for code quality, security, simplification, CI healing, and adversarial review.
 
 ```
 +------------------------------------------------------------------+
-|                     VIBEOS AGENT TOPOLOGY (v1.0)                  |
+|                     VIBECREW AGENT TOPOLOGY (v1.0)                  |
 +------------------------------------------------------------------+
 |                                                                   |
 |  LIGHTWEIGHT (Haiku)         CORE (Opus)                          |
@@ -276,9 +276,9 @@ Each agent receives only the tools it needs. Read-only agents use `disallowedToo
 | Builder | Read, Write, Edit, Glob, Grep, Bash, Context7 | -- |
 | Verifier | Read, Write, Edit, Glob, Grep, Bash | -- |
 
-### 2.5 Communication: Agent Teams API + `.vibeos/`
+### 2.5 Communication: Agent Teams API + `.vibecrew/`
 
-VibeOS v1.0 uses the **Agent Teams API** (released February 5, 2026) for agent coordination. The Orchestrator creates teams and assigns tasks programmatically -- the developer no longer needs to manually open terminal tabs and paste launch commands.
+VibeCrew v1.0 uses the **Agent Teams API** (released February 5, 2026) for agent coordination. The Orchestrator creates teams and assigns tasks programmatically -- the developer no longer needs to manually open terminal tabs and paste launch commands.
 
 ```
 +-------------------------------------------------------------------+
@@ -299,7 +299,7 @@ VibeOS v1.0 uses the **Agent Teams API** (released February 5, 2026) for agent c
 |       +---> TaskCreate(agent: "verifier",                          |
 |                 task: "Write and run tests for auth feature")      |
 |                                                                    |
-|  Agents coordinate via SendMessage and .vibeos/signals/ payloads   |
+|  Agents coordinate via SendMessage and .vibecrew/signals/ payloads   |
 |                                                                    |
 +-------------------------------------------------------------------+
 |                                                                    |
@@ -311,7 +311,7 @@ VibeOS v1.0 uses the **Agent Teams API** (released February 5, 2026) for agent c
 |          |  write             |  write             |  write         |
 |          v                    v                    v                 |
 |  +--------------------------------------------------------------+  |
-|  |                    .vibeos/ DIRECTORY                         |  |
+|  |                    .vibecrew/ DIRECTORY                         |  |
 |  |                                                              |  |
 |  |  state.json        -- foundation status, active feature      |  |
 |  |  backlog.json      -- feature queue with specs & status      |  |
@@ -345,7 +345,7 @@ VibeOS v1.0 uses the **Agent Teams API** (released February 5, 2026) for agent c
 | Git worktrees | Agent isolation (see [Section 3.6](#36-worktree-based-agent-isolation)) | Persistent | Yes |
 | Commit messages | Structured metadata via conventional commits | Persistent | Yes |
 
-**Agent Teams API vs. manual tabs.** The pre-review design had the Orchestrator presenting copy-paste commands for the developer to launch agents in separate terminal tabs. With Agent Teams API, the Orchestrator calls `TeamCreate` to define a team, `TaskCreate` to assign tasks to specific agents, and `SendMessage` to coordinate progress. The developer remains hands-off during feature execution. Signal files in `.vibeos/signals/` are still used as data payloads for structured results (test reports, TDR summaries) -- the API handles routing while the filesystem handles data.
+**Agent Teams API vs. manual tabs.** The pre-review design had the Orchestrator presenting copy-paste commands for the developer to launch agents in separate terminal tabs. With Agent Teams API, the Orchestrator calls `TeamCreate` to define a team, `TaskCreate` to assign tasks to specific agents, and `SendMessage` to coordinate progress. The developer remains hands-off during feature execution. Signal files in `.vibecrew/signals/` are still used as data payloads for structured results (test reports, TDR summaries) -- the API handles routing while the filesystem handles data.
 
 ### 2.6 Agent Lifecycle
 
@@ -355,14 +355,14 @@ Every agent session follows a five-phase lifecycle. With Agent Teams API, steps 
 1. LAUNCH          Orchestrator calls TaskCreate with agent type and task
        |           Agent starts in its own context window
        v
-2. INITIALIZE      Agent reads .vibeos/state.json and backlog.json
+2. INITIALIZE      Agent reads .vibecrew/state.json and backlog.json
        |           Agent verifies git status (clean tree, correct worktree)
-       v           Agent registers itself in .vibeos/sessions/
+       v           Agent registers itself in .vibecrew/sessions/
 3. EXECUTE         Agent performs its specialized task
        |           Hooks enforce rules (phase gate, sandbox, safety)
        v           Notifications fire on block/complete/error
 4. HANDOFF         Agent writes results to filesystem
-       |           Agent updates .vibeos/state.json and backlog.json
+       |           Agent updates .vibecrew/state.json and backlog.json
        v           Agent creates signal file and sends SendMessage
 5. TERMINATE       Orchestrator receives completion signal
                    /wrap runs Verifier for scoring (Vibe Score calculated)
@@ -391,11 +391,11 @@ This memory enables the self-improvement loop: the Performance Coach identifies 
 
 ### 3.1 Two-Tier System
 
-VibeOS enforces a two-tier workflow that separates project foundation from feature development. This is the architectural core of the system -- Tier 1 must complete before Tier 2 can begin, enforced deterministically by the phase gate hook.
+VibeCrew enforces a two-tier workflow that separates project foundation from feature development. This is the architectural core of the system -- Tier 1 must complete before Tier 2 can begin, enforced deterministically by the phase gate hook.
 
 ```
 +==================================================================+
-||                      VIBEOS WORKFLOW ENGINE                     ||
+||                      VIBECREW WORKFLOW ENGINE                     ||
 +==================================================================+
 ||                                                                ||
 ||  TIER 1: PROJECT FOUNDATION (Sequential, One-Time)             ||
@@ -420,7 +420,7 @@ VibeOS enforces a two-tier workflow that separates project foundation from featu
 
 ### 3.2 Tier 1: Project Foundation
 
-Tier 1 is a sequential, one-time process that creates the five foundation artifacts before any source code is written. The phase gate hook (`phase-gate.sh`) reads `.vibeos/state.json` and blocks all writes to source code paths (`src/`, `app/`, `lib/`, `components/`, `pages/`, `features/`) until `foundation.complete` is `true`.
+Tier 1 is a sequential, one-time process that creates the five foundation artifacts before any source code is written. The phase gate hook (`phase-gate.sh`) reads `.vibecrew/state.json` and blocks all writes to source code paths (`src/`, `app/`, `lib/`, `components/`, `pages/`, `features/`) until `foundation.complete` is `true`.
 
 > **Schema reference:** The `foundation.complete` field is defined in [schemas.md, Section 3: state.json](schemas.md#3-statejson). The phase gate checks this boolean -- not a string status value.
 
@@ -445,7 +445,7 @@ Agent attempts Write to src/app/page.tsx
 PreToolUse hook fires --> phase-gate.sh
     |
     v
-Script reads .vibeos/state.json
+Script reads .vibecrew/state.json
     |
     +--> foundation.complete == true  --> EXIT 0 (allow)
     |
@@ -512,7 +512,7 @@ The `backlog.json` schema -- including feature object fields, Kanban column defi
 
 ### 3.6 Worktree-Based Agent Isolation
 
-VibeOS uses **git worktrees** for agent isolation instead of feature branches alone. Boris Cherny (Anthropic) identifies worktrees as "the single biggest productivity unlock" for multi-agent development. Each agent that writes code operates in its own worktree, providing true filesystem isolation without the overhead of branch switching.
+VibeCrew uses **git worktrees** for agent isolation instead of feature branches alone. Boris Cherny (Anthropic) identifies worktrees as "the single biggest productivity unlock" for multi-agent development. Each agent that writes code operates in its own worktree, providing true filesystem isolation without the overhead of branch switching.
 
 ```
 PROJECT ROOT (./)                   WORKTREES (.claude/worktrees/)
@@ -520,7 +520,7 @@ PROJECT ROOT (./)                   WORKTREES (.claude/worktrees/)
 | main branch      |                | builder-feat-001/                |
 | (clean, stable)  |                |   feat/user-authentication       |
 |                  |                |   (Builder writes here)          |
-| .vibeos/         |                +----------------------------------+
+| .vibecrew/         |                +----------------------------------+
 |   state.json     |<--- shared     | scout-tdr-001/                   |
 |   backlog.json   |     state      |   research/tdr-draft             |
 |   signals/       |                |   (Stack Scout writes here)      |
@@ -538,7 +538,7 @@ PROJECT ROOT (./)                   WORKTREES (.claude/worktrees/)
 | Filesystem isolation | No -- switching branches changes all files | Yes -- each worktree has its own working directory |
 | Parallel agents | Requires `git stash` or careful branch switching | Agents run simultaneously in separate directories |
 | Merge conflicts | Frequent if agents modify overlapping files | Isolated until explicit merge |
-| `.vibeos/` state | Must be branch-independent (complex) | Naturally shared via the main working directory |
+| `.vibecrew/` state | Must be branch-independent (complex) | Naturally shared via the main working directory |
 | Agent recovery | Stash/branch state is fragile | Worktree can be deleted without affecting other work |
 
 **Worktree lifecycle:**
@@ -552,7 +552,7 @@ PROJECT ROOT (./)                   WORKTREES (.claude/worktrees/)
        v
 2. WORK            Builder operates entirely within the worktree
                    All file reads/writes scoped to worktree path
-                   .vibeos/ accessed from main working directory
+                   .vibecrew/ accessed from main working directory
        |
        v
 3. COMMIT          Builder commits to the feature branch within the worktree
@@ -580,7 +580,7 @@ PROJECT ROOT (./)                   WORKTREES (.claude/worktrees/)
 | Agent | Isolation | Reason |
 |-------|-----------|--------|
 | Session Startup | Inline | Reads state only, no file writes |
-| Workflow Orchestrator | Inline | Coordinates via API, writes to `.vibeos/` only |
+| Workflow Orchestrator | Inline | Coordinates via API, writes to `.vibecrew/` only |
 | Verifier | Fork | Runs tests against existing worktree content, writes test files alongside implementation |
 
 ### 3.7 Task Processing Flow (Agent Teams API)
@@ -662,7 +662,7 @@ The Orchestrator itself does not count against the concurrency budget because it
 
 ### 4.1 Design Philosophy
 
-Safety in VibeOS follows one principle: **enforce rules via deterministic bash scripts, not by asking the model to remember them.** Hook scripts run as external processes at zero token cost. They cannot be forgotten, hallucinated away, or ignored due to context exhaustion.
+Safety in VibeCrew follows one principle: **enforce rules via deterministic bash scripts, not by asking the model to remember them.** Hook scripts run as external processes at zero token cost. They cannot be forgotten, hallucinated away, or ignored due to context exhaustion.
 
 The safety layer uses dual enforcement: declarative deny rules in `settings.json` for simple pattern blocking, and PreToolUse hook scripts for complex conditional logic. Both layers run simultaneously on every tool invocation.
 
@@ -680,7 +680,7 @@ FULLY AUTONOMOUS              SUPERVISED                  BLOCKED
  Format code                Create PRs                chmod 777
  Lint / Build               Delete files              DROP TABLE
  Git status/log/diff        Modify package.json       System modifications
- Read .vibeos/              Run dev server             Credential file access
+ Read .vibecrew/              Run dev server             Credential file access
  Context7 lookup            Merge PRs                 Force push / rebase main
  Git add / commit           Database migrations       kill -9
  Create worktrees           Deploy / publish          Fork bombs
@@ -727,7 +727,7 @@ This catches the most common destructive patterns declaratively. The deny list i
 
 Hook scripts provide conditional logic that `settings.json` deny rules cannot express. Two scripts run on every tool invocation:
 
-**`phase-gate.sh`** (matcher: `Write|Edit`) -- Reads `.vibeos/state.json` and blocks source code writes when `foundation.complete` is `false` (see [schemas.md, Section 3: state.json](schemas.md#3-statejson)). Foundation artifacts (VISION.md, design-system.css, TDR, etc.) are allowed through. This enforces the Research-First Protocol: architecture decisions must be made before code is written.
+**`phase-gate.sh`** (matcher: `Write|Edit`) -- Reads `.vibecrew/state.json` and blocks source code writes when `foundation.complete` is `false` (see [schemas.md, Section 3: state.json](schemas.md#3-statejson)). Foundation artifacts (VISION.md, design-system.css, TDR, etc.) are allowed through. This enforces the Research-First Protocol: architecture decisions must be made before code is written.
 
 **`protect-data.sh`** (matcher: `Bash`) -- Inspects the command string via regex and blocks 40+ dangerous patterns across eight categories:
 
@@ -785,15 +785,15 @@ No single layer catches everything. The four layers operate as concentric defens
 
 ### 4.6 Phase Gate Detail
 
-The phase gate is the enforcement mechanism for the Two-Tier Workflow. It reads `foundation.complete` from `.vibeos/state.json` (see [schemas.md, Section 3: state.json](schemas.md#3-statejson)) and applies path-based filtering:
+The phase gate is the enforcement mechanism for the Two-Tier Workflow. It reads `foundation.complete` from `.vibecrew/state.json` (see [schemas.md, Section 3: state.json](schemas.md#3-statejson)) and applies path-based filtering:
 
 ```
 PreToolUse(Write|Edit) fires
     |
     v
-Read .vibeos/state.json
+Read .vibecrew/state.json
     |
-    +--> File does not exist --> DENY "VibeOS not initialized. Run /setup."
+    +--> File does not exist --> DENY "VibeCrew not initialized. Run /setup."
     |
     +--> foundation.complete == true --> ALLOW (exit 0)
     |
@@ -808,7 +808,7 @@ Read .vibeos/state.json
          +--> Path does NOT match --> ALLOW (foundation artifact write)
 ```
 
-Foundation artifacts (VISION.md, design-system.css, docs/, .vibeos/, CLAUDE.md) are always allowed through the phase gate regardless of foundation status, because they are the artifacts being created during Tier 1.
+Foundation artifacts (VISION.md, design-system.css, docs/, .vibecrew/, CLAUDE.md) are always allowed through the phase gate regardless of foundation status, because they are the artifacts being created during Tier 1.
 
 ### 4.7 Known Limitations
 
@@ -826,7 +826,7 @@ These bypass vectors are unlikely in model-generated commands but are documented
 
 ### 5.1 Target: Below 50% Usage
 
-Every VibeOS agent session targets less than 50% context window utilization. This is a safety requirement, not merely a performance optimization. When context usage exceeds 60%, the model begins to lose track of earlier instructions -- including safety constraints, project conventions from CLAUDE.md, and architectural decisions from the TDR. For a non-technical user who cannot recognize degraded output quality, context exhaustion is a silent failure mode.
+Every VibeCrew agent session targets less than 50% context window utilization. This is a safety requirement, not merely a performance optimization. When context usage exceeds 60%, the model begins to lose track of earlier instructions -- including safety constraints, project conventions from CLAUDE.md, and architectural decisions from the TDR. For a non-technical user who cannot recognize degraded output quality, context exhaustion is a silent failure mode.
 
 ### 5.2 Strategy Overview
 
@@ -932,13 +932,13 @@ The hook also checks `stop_hook_active` to prevent infinite loops (a Stop hook t
 
 ### 5.7 Context Re-Injection After Compaction
 
-When Claude Code automatically compacts the conversation to free context space, the agent loses awareness of project state. VibeOS uses the `SessionStart` hook with the `compact` matcher to re-inject critical state after every compaction event.
+When Claude Code automatically compacts the conversation to free context space, the agent loses awareness of project state. VibeCrew uses the `SessionStart` hook with the `compact` matcher to re-inject critical state after every compaction event.
 
 **How it works:**
 
 1. Claude Code detects context usage exceeds its internal threshold and triggers compaction.
 2. After compaction, a `SessionStart` event fires with the `compact` matcher.
-3. The `compact-reinject.sh` script runs, reading `.vibeos/state.json` and outputting a structured summary.
+3. The `compact-reinject.sh` script runs, reading `.vibecrew/state.json` and outputting a structured summary.
 4. The summary is injected into the fresh context, restoring the agent's awareness of foundation status, active feature, and last update time.
 
 **Hook configuration:**
@@ -947,7 +947,7 @@ When Claude Code automatically compacts the conversation to free context space, 
 {
   "event": "SessionStart",
   "matcher": "compact",
-  "command": "cat .vibeos/state.json | jq '{foundation: .foundation.complete, feature: .active_feature, updated: .updated_at}'"
+  "command": "cat .vibecrew/state.json | jq '{foundation: .foundation.complete, feature: .active_feature, updated: .updated_at}'"
 }
 ```
 
@@ -999,19 +999,19 @@ The Vibe Score deducts 15 points when cache utilization drops below 20%, incenti
 
 ### 6.1 Overview
 
-VibeOS exposes nine slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
+VibeCrew exposes nine slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
 
-All VibeOS commands use `disable-model-invocation: true` to prevent Claude from auto-loading them. They are user-triggered workflows, not background capabilities. Two commands (`/status` and `/check`) also allow model invocation for internal use by the Orchestrator.
+All VibeCrew commands use `disable-model-invocation: true` to prevent Claude from auto-loading them. They are user-triggered workflows, not background capabilities. Two commands (`/status` and `/check`) also allow model invocation for internal use by the Orchestrator.
 
 ### 6.2 Command Map
 
 ```
 +-------------------------------------------------------------------+
-|                    VIBEOS SLASH COMMANDS                           |
+|                    VIBECREW SLASH COMMANDS                           |
 +-------------------------------------------------------------------+
 |                                                                   |
 |  SETUP & FOUNDATION                                               |
-|  /setup          First-run wizard: install deps, create .vibeos/  |
+|  /setup          First-run wizard: install deps, create .vibecrew/  |
 |  /new-project    Run Tier 1 foundation (VISION -> CLAUDE.md)      |
 |                                                                   |
 |  PLANNING                                                         |
@@ -1046,7 +1046,7 @@ All VibeOS commands use `disable-model-invocation: true` to prevent Claude from 
 
 ### 6.4 Command Details
 
-**`/setup`** -- First-run installation wizard. Verifies prerequisites (Git 2.30+, GitHub CLI 2.0+, Node.js 18+, jq, terminal-notifier). Creates the `.vibeos/` directory with initial `config.json`, `state.json`, and `backlog.json` (see [schemas.md](schemas.md) for initial file structures). Configures MCP servers. Runs in a forked context to avoid polluting the main session.
+**`/setup`** -- First-run installation wizard. Verifies prerequisites (Git 2.30+, GitHub CLI 2.0+, Node.js 18+, jq, terminal-notifier). Creates the `.vibecrew/` directory with initial `config.json`, `state.json`, and `backlog.json` (see [schemas.md](schemas.md) for initial file structures). Configures MCP servers. Runs in a forked context to avoid polluting the main session.
 
 **`/new-project`** -- Triggers the Tier 1 foundation workflow. Sequentially produces VISION.md, design-system.css, TDR, roadmap, and CLAUDE.md. Sets `foundation.complete` to `true` in `state.json` when all five artifacts are created and approved. This is the command that unlocks Tier 2.
 
@@ -1064,15 +1064,15 @@ All VibeOS commands use `disable-model-invocation: true` to prevent Claude from 
 # Example /status SKILL.md using dynamic injection
 ---
 name: status
-description: Show current VibeOS project status
+description: Show current VibeCrew project status
 disable-model-invocation: false
 ---
 
 ## Current State
 - Git branch: !`git rev-parse --abbrev-ref HEAD`
-- Foundation: !`jq -r '.foundation.complete' .vibeos/state.json 2>/dev/null || echo "not initialized"`
-- Active feature: !`jq -r '.active_feature.name // "none"' .vibeos/state.json 2>/dev/null || echo "none"`
-- Backlog: !`jq '[.features[] | .column] | group_by(.) | map({(.[0]): length}) | add' .vibeos/backlog.json 2>/dev/null || echo "no backlog"`
+- Foundation: !`jq -r '.foundation.complete' .vibecrew/state.json 2>/dev/null || echo "not initialized"`
+- Active feature: !`jq -r '.active_feature.name // "none"' .vibecrew/state.json 2>/dev/null || echo "none"`
+- Backlog: !`jq '[.features[] | .column] | group_by(.) | map({(.[0]): length}) | add' .vibecrew/backlog.json 2>/dev/null || echo "no backlog"`
 ```
 
 **`/check`** -- Runs the Verifier agent in a forked context. Executes `npm test`, `npm run build`, and `npm run lint`. Reports pass/fail results. Used standalone for ad-hoc validation and also called automatically during `/wrap` and `/run-backlog`.
@@ -1114,7 +1114,7 @@ The complete `hooks/hooks.json` routing table:
 | PostToolUseFailure | (all) | `notify.sh` | command | No | Error notifications |
 | Stop | (all) | `check-context.sh` | command | No | Context usage warnings |
 
-**New in v1.0 (post-review):** The `SessionStart` hook with `compact` matcher. This was not present in the pre-review design. It fires after every context compaction event and re-injects a summary of `.vibeos/state.json` so the agent does not lose track of project state. See [Section 5.7](#57-context-re-injection-after-compaction) for details.
+**New in v1.0 (post-review):** The `SessionStart` hook with `compact` matcher. This was not present in the pre-review design. It fires after every context compaction event and re-injects a summary of `.vibecrew/state.json` so the agent does not lose track of project state. See [Section 5.7](#57-context-re-injection-after-compaction) for details.
 
 **Note:** The `SessionEnd` hook for `coach-retro.sh` (Performance Coach retrospective) is handled by the Performance Coach (Opus) during `/wrap`, which calculates Vibe Scores and proposes CLAUDE.md mutations.
 
@@ -1122,7 +1122,7 @@ The complete `hooks/hooks.json` routing table:
 
 ## Appendix B: Interrupt Protocol
 
-VibeOS notifications fire on exactly three conditions. All other operations are silent to preserve Deep Work state:
+VibeCrew notifications fire on exactly three conditions. All other operations are silent to preserve Deep Work state:
 
 | Condition | Hook Event | Sound | Action |
 |-----------|------------|-------|--------|
@@ -1130,6 +1130,6 @@ VibeOS notifications fire on exactly three conditions. All other operations are 
 | Task completion | Notification (`idle_prompt`) | Glass | Warp deep-link to idle tab |
 | Critical failure | PostToolUseFailure | Basso | Warp deep-link to failed tab |
 
-The notification script degrades gracefully: Warp deep-link + terminal-notifier > terminal-notifier without deep-link > osascript > terminal bell > silent log to `.vibeos/notifications.log`.
+The notification script degrades gracefully: Warp deep-link + terminal-notifier > terminal-notifier without deep-link > osascript > terminal bell > silent log to `.vibecrew/notifications.log`.
 
 With the Agent Teams API, the Orchestrator receives `SendMessage` notifications from agents when they complete tasks. OS-level notifications via `notify.sh` still fire for the three conditions above (permission stalls, task completion, critical failures) to alert the human developer. The difference from the pre-review design is that the Orchestrator can now act on completions programmatically instead of waiting for the developer to notice and respond.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeOS — Start a New Project</title>
+  <title>VibeCrew — Start a New Project</title>
   <style>
     :root {
       --color-bg: #0a0a0b;
@@ -763,9 +763,9 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
     <ul class="nav-links">
-      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="why.html">Why VibeCrew</a></li>
       <li><a href="setup.html">Setup</a></li>
       <li><a href="new-project.html" class="active">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
@@ -783,7 +783,7 @@
 
   <section class="section" id="new-projects">
     <span class="section-label">New Projects</span>
-    <h2>Using VibeOS with New Projects</h2>
+    <h2>Using VibeCrew with New Projects</h2>
     <p>New projects follow the <strong>Two-Tier Workflow</strong>. Tier 1 creates the architectural foundation. Tier 2 builds features on top of it. The phase gate enforces this order &mdash; you cannot write source code until the foundation is complete.</p>
 
     <h3>Tier 1: The Project Foundation</h3>
@@ -792,7 +792,7 @@
     <ol class="steps">
       <li>
         <h4>VISION.md &mdash; Define project goals</h4>
-        <p>VibeOS asks: What problem does this solve? Who are the target users? What's the value proposition? What are the constraints? What does success look like?</p>
+        <p>VibeCrew asks: What problem does this solve? Who are the target users? What's the value proposition? What are the constraints? What does success look like?</p>
         <p>The output is <code>VISION.md</code> &mdash; a document every agent reads. When the Feature Developer writes code, it knows who your users are. When the Stack Scout evaluates technologies, it factors in your constraints.</p>
       </li>
       <li>
@@ -803,15 +803,15 @@
         <h4>TDR &mdash; Research and lock the tech stack</h4>
         <p>The <strong>Stack Scout agent</strong> activates. This is a read-only research agent that runs in an <em>isolated context window</em>. It uses WebSearch, Context7, and Puppeteer to evaluate technology options against your requirements, then produces a <strong>Technology Decision Record</strong> at <code>docs/tdr-001-tech-stack.md</code>.</p>
         <p>The TDR documents what was considered, what was chosen, and why. Once approved, every agent works within these boundaries. The research costs 8,000&ndash;15,000 tokens but none of them touch your main session &mdash; only the distilled decision enters your context window.</p>
-        <p><strong>Step 3.5: Opponent Processor</strong> &mdash; Immediately after the TDR, VibeOS invokes the Opponent Processor agent to stress-test every technology decision. You see both the TDR and the counter-analysis side by side, then choose: keep all decisions, reconsider specific ones, or skip. See <a href="#opponent">Opponent Processor</a> for details.</p>
+        <p><strong>Step 3.5: Opponent Processor</strong> &mdash; Immediately after the TDR, VibeCrew invokes the Opponent Processor agent to stress-test every technology decision. You see both the TDR and the counter-analysis side by side, then choose: keep all decisions, reconsider specific ones, or skip. See <a href="#opponent">Opponent Processor</a> for details.</p>
       </li>
       <li>
         <h4>Roadmap &mdash; Map out features</h4>
-        <p>List your planned features in rough priority order. VibeOS generates <code>docs/roadmap.md</code> with priority tiers (Must Have, Should Have, Nice to Have, Out of Scope). This becomes the input for <code>/plan-features</code> later.</p>
+        <p>List your planned features in rough priority order. VibeCrew generates <code>docs/roadmap.md</code> with priority tiers (Must Have, Should Have, Nice to Have, Out of Scope). This becomes the input for <code>/plan-features</code> later.</p>
       </li>
       <li>
         <h4>CLAUDE.md &mdash; Codify project rules</h4>
-        <p>VibeOS synthesizes everything into the master rules file. It includes your tech stack, architecture conventions, design system reference, and a "Session Learnings" section that the Performance Coach populates over time. This is the first file Claude Code reads every session.</p>
+        <p>VibeCrew synthesizes everything into the master rules file. It includes your tech stack, architecture conventions, design system reference, and a "Session Learnings" section that the Performance Coach populates over time. This is the first file Claude Code reads every session.</p>
       </li>
       <li>
         <h4>Git commit &mdash; Version the foundation</h4>
@@ -821,14 +821,14 @@
 
     <div class="callout warn">
       <div class="callout-title">The Phase Gate</div>
-      <p>Until all 6 steps are complete, a PreToolUse hook blocks all writes to source directories (src/, app/, lib/, components/). Configuration files (.vibeos/, CLAUDE.md, docs/) are allowed. This is enforced by <code>phase-gate.sh</code> &mdash; it's a hard block, not a suggestion.</p>
+      <p>Until all 6 steps are complete, a PreToolUse hook blocks all writes to source directories (src/, app/, lib/, components/). Configuration files (.vibecrew/, CLAUDE.md, docs/) are allowed. This is enforced by <code>phase-gate.sh</code> &mdash; it's a hard block, not a suggestion.</p>
     </div>
 
     <h3>Tier 2: Building Features</h3>
     <p>With the foundation in place, you enter the iterative feature loop.</p>
 
     <h4>Planning the backlog</h4>
-    <p>Run <code>/plan-features</code> to create structured specifications for each feature: name, description, acceptance criteria, priority, complexity (S/M/L/XL), and dependencies. These are stored in <code>.vibeos/backlog.json</code>.</p>
+    <p>Run <code>/plan-features</code> to create structured specifications for each feature: name, description, acceptance criteria, priority, complexity (S/M/L/XL), and dependencies. These are stored in <code>.vibecrew/backlog.json</code>.</p>
 
     <h4>Starting a feature</h4>
     <pre><code><span class="code-label">claude code</span>/new-feature "user authentication"</code></pre>
@@ -877,15 +877,15 @@ Completeness is checked at /wrap, not during work.</span></div>
   <section class="section">
     <h3>Phase gate blocks when it shouldn't</h3>
     <ol>
-      <li>Check <code>.vibeos/state.json</code> &mdash; is <code>project_foundation.status</code> set to <code>"complete"</code>?</li>
+      <li>Check <code>.vibecrew/state.json</code> &mdash; is <code>project_foundation.status</code> set to <code>"complete"</code>?</li>
       <li>If any foundation step is null, run <code>/new-project</code> to complete the missing steps</li>
-      <li>The phase gate allows writes to config paths (<code>.vibeos/</code>, <code>CLAUDE.md</code>, <code>docs/</code>). If a legitimate config file is blocked, check the path patterns in <code>phase-gate.sh</code></li>
+      <li>The phase gate allows writes to config paths (<code>.vibecrew/</code>, <code>CLAUDE.md</code>, <code>docs/</code>). If a legitimate config file is blocked, check the path patterns in <code>phase-gate.sh</code></li>
     </ol>
   </section>
 </div>
 
 <footer class="footer">
-  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
   <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
 </footer>
 

@@ -1,8 +1,8 @@
 # Safety Design
 
-> **Architecture Document 2.4 (Revised)** | VibeOS Plugin Safety Model
+> **Architecture Document 2.4 (Revised)** | VibeCrew Plugin Safety Model
 >
-> This document defines the complete safety architecture for VibeOS. Every mechanism described here is enforced deterministically by bash scripts and declarative configuration -- never by relying on the model to "remember" safety rules. The target user is non-technical and may not understand the implications of risky operations. Safety is the non-negotiable foundation layer: without it, a single bad command can destroy data, leak credentials, or corrupt the repository.
+> This document defines the complete safety architecture for VibeCrew. Every mechanism described here is enforced deterministically by bash scripts and declarative configuration -- never by relying on the model to "remember" safety rules. The target user is non-technical and may not understand the implications of risky operations. Safety is the non-negotiable foundation layer: without it, a single bad command can destroy data, leak credentials, or corrupt the repository.
 >
 > **v1.0 Revision Notes.** This revision updates the safety model for the consolidated 5-agent topology (Session Startup, Workflow Orchestrator, Stack Scout, Builder, Verifier), resolves the Orchestrator write permission contradiction from v0.9, adds cost guardrails for unattended execution, adds CLAUDE.md size management to prevent rule bloat, and updates rollback strategies for worktree-based isolation.
 
@@ -27,7 +27,7 @@
 
 ## 1. Three-Tier Trust Model
 
-All operations that VibeOS agents can perform are classified into one of three trust tiers. The tier determines whether the operation proceeds silently, requires a one-time confirmation, or always blocks for explicit user approval. The default posture is conservative: when in doubt, escalate.
+All operations that VibeCrew agents can perform are classified into one of three trust tiers. The tier determines whether the operation proceeds silently, requires a one-time confirmation, or always blocks for explicit user approval. The default posture is conservative: when in doubt, escalate.
 
 ### 1.1 Tier 1 -- Autonomous (Always Proceed)
 
@@ -46,7 +46,7 @@ Operations that are read-only or produce trivially reversible side effects. Thes
 | Git queries | `Bash(git status)`, `Bash(git log *)`, `Bash(git diff *)`, `Bash(git branch)` | Read-only git state |
 | Create feature branches | `Bash(git checkout -b feat/*)`, `Bash(git checkout -b fix/*)` | Non-destructive, reversible |
 | Conventional commits on feature branches | `Bash(git add *)`, `Bash(git commit -m *)` | Versioned and reversible |
-| Modify `.vibeos/` state files via scripts | `Bash(jq ... .vibeos/state.json)` | Plugin state, easily reset |
+| Modify `.vibecrew/` state files via scripts | `Bash(jq ... .vibecrew/state.json)` | Plugin state, easily reset |
 | Write to planning artifacts | `Write`, `Edit` to `docs/`, `CLAUDE.md`, `VISION.md`, `design-system.css` | Non-code, reversible |
 
 **Rationale.** These operations either cannot cause harm (reads) or produce changes that git can trivially undo (commits on feature branches). Requiring approval for these would destroy autonomous workflow fluency.
@@ -65,7 +65,7 @@ Operations that modify the project in standard ways but are part of normal devel
 | Create new files in source directories | `Write` to new path in `src/` | `file-create` | First time only |
 | Run dev server | `Bash(npm run dev)` | `dev-server` | Binds a port |
 
-**Session-scoped approval tracking.** Approvals are recorded in `.vibeos/state.json` (see `architecture/schemas.md` Section 3 for the canonical schema) so hook scripts can check whether an operation type has already been approved this session.
+**Session-scoped approval tracking.** Approvals are recorded in `.vibecrew/state.json` (see `architecture/schemas.md` Section 3 for the canonical schema) so hook scripts can check whether an operation type has already been approved this session.
 
 When a PreToolUse hook encounters a Tier 2 operation, it checks this file. If the approval token exists, the operation proceeds. If not, the hook blocks the operation (exit code 2) and the model presents the approval request to the user.
 
@@ -101,7 +101,7 @@ Auto-approved, silent        Approve once per session       Always ask, every ti
   Run linter/build             Create PRs                    Database migrations
   Git queries                  Delete files (project)        Deploy/publish
   Feature branch commits       Run dev server                Merge to main
-  .vibeos/ state via scripts                                 System modifications
+  .vibecrew/ state via scripts                                 System modifications
   Context7 lookups                                           CLAUDE.md mutations
   Format code                                                Credential access
 ```
@@ -266,7 +266,7 @@ Even if a path resolves within the project root, certain files and directories a
 | `id_rsa`, `id_ed25519`, `id_ecdsa` | Private cryptographic keys |
 | `.npmrc`, `.pypirc` | Package registry authentication tokens |
 
-The deny list is configurable per project via `.vibeos/config.json` (see `architecture/schemas.md` Section 2 for the canonical schema):
+The deny list is configurable per project via `.vibecrew/config.json` (see `architecture/schemas.md` Section 2 for the canonical schema):
 
 ```json
 {
@@ -485,7 +485,7 @@ The `settings.json` file provides declarative, zero-token permission control. It
       "Bash(gh pr list *)",
       "Bash(gh pr view *)",
       "Bash(jq *)",
-      "Bash(cat .vibeos/*)",
+      "Bash(cat .vibecrew/*)",
       "Bash(ls *)",
       "Bash(wc *)",
       "Bash(sort *)",
@@ -603,7 +603,7 @@ Tool executes
 
 ### 4.4 Per-Agent Permission Scoping
 
-Each VibeOS agent is launched with a tailored tool permission set defined in its agent `.md` file (see `architecture/agents.md` for full YAML frontmatter). Agents that do not need write access do not receive it.
+Each VibeCrew agent is launched with a tailored tool permission set defined in its agent `.md` file (see `architecture/agents.md` for full YAML frontmatter). Agents that do not need write access do not receive it.
 
 **v1.0 Five-Agent Tool Permission Table:**
 
@@ -615,14 +615,14 @@ Each VibeOS agent is launched with a tailored tool permission set defined in its
 | Builder | Opus | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Puppeteer MCP, Agent Teams | Worktree |
 | Verifier | Haiku | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Puppeteer MCP, Agent Teams | Inline |
 
-**Orchestrator write permission resolution.** The Orchestrator has `disallowedTools: Write, Edit` to prevent scope creep into source code writing. It needs to update `.vibeos/` state files (advancing feature phases, processing signals, updating backlog). This is resolved by using `Bash` to run shared scripts that modify `.vibeos/` state files. For example:
+**Orchestrator write permission resolution.** The Orchestrator has `disallowedTools: Write, Edit` to prevent scope creep into source code writing. It needs to update `.vibecrew/` state files (advancing feature phases, processing signals, updating backlog). This is resolved by using `Bash` to run shared scripts that modify `.vibecrew/` state files. For example:
 
 ```bash
 # Orchestrator advances a feature phase via Bash (NOT via Write tool)
 Bash("${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh feat-001 code")
 
 # Orchestrator updates state via jq + Bash (NOT via Write tool)
-Bash("jq '.foundation.complete = true' .vibeos/state.json > .vibeos/state.json.tmp && mv .vibeos/state.json.tmp .vibeos/state.json")
+Bash("jq '.foundation.complete = true' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json")
 
 # Orchestrator processes a signal file via Bash (NOT via Write tool)
 Bash("${CLAUDE_PLUGIN_ROOT}/scripts/process-signal.sh builder-complete")
@@ -630,7 +630,7 @@ Bash("${CLAUDE_PLUGIN_ROOT}/scripts/process-signal.sh builder-complete")
 
 The scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`) are the same validated code paths used by all agents. This ensures consistent state mutations regardless of which agent triggers them, while maintaining the Orchestrator's `disallowedTools: Write, Edit` constraint.
 
-**Principle of least privilege.** Stack Scout has no file write access. Session Startup has no file write access. The Orchestrator cannot write files directly -- only via shared Bash scripts that modify `.vibeos/` state. This limits the blast radius if any agent behaves unexpectedly.
+**Principle of least privilege.** Stack Scout has no file write access. Session Startup has no file write access. The Orchestrator cannot write files directly -- only via shared Bash scripts that modify `.vibecrew/` state. This limits the blast radius if any agent behaves unexpectedly.
 
 ---
 
@@ -638,7 +638,7 @@ The scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`) are the 
 
 ### 5.1 Purpose
 
-The phase gate enforces the core VibeOS design principle: **research before code**. It blocks all source code writes until the Tier 1 foundation is complete. This prevents the most expensive mistake in AI-assisted development -- writing code against incorrect architectural decisions, the wrong design system, or an inappropriate technology stack.
+The phase gate enforces the core VibeCrew design principle: **research before code**. It blocks all source code writes until the Tier 1 foundation is complete. This prevents the most expensive mistake in AI-assisted development -- writing code against incorrect architectural decisions, the wrong design system, or an inappropriate technology stack.
 
 ### 5.2 What the Phase Gate Blocks
 
@@ -668,7 +668,7 @@ The phase gate intercepts all Write and Edit operations via a PreToolUse hook. I
 | `design-system.css` | Design tokens and component styles |
 | `roadmap.md` | Feature roadmap with priorities |
 | `tdr/`, `*.tdr.md` | Technology Decision Records |
-| `.vibeos/` | VibeOS state and configuration |
+| `.vibecrew/` | VibeCrew state and configuration |
 | `docs/` | Documentation |
 | `research/` | Research notes |
 | `package.json` | Dependency manifest |
@@ -680,7 +680,7 @@ The phase gate intercepts all Write and Edit operations via a PreToolUse hook. I
 
 ### 5.3 Foundation Completion Criteria
 
-The phase gate reads `foundation.complete` (boolean) from `.vibeos/state.json` to determine whether the foundation is complete. All five Tier 1 artifacts must be present and approved before `foundation.complete` flips to `true`.
+The phase gate reads `foundation.complete` (boolean) from `.vibecrew/state.json` to determine whether the foundation is complete. All five Tier 1 artifacts must be present and approved before `foundation.complete` flips to `true`.
 
 See `architecture/schemas.md` Section 3 for the canonical `state.json` schema, including the `foundation` object with per-artifact `status`, `file`, and `approved_at` fields.
 
@@ -696,7 +696,7 @@ The `foundation.complete` flag is set to `true` only when every artifact has `st
 set -euo pipefail
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-STATE_FILE="$PROJECT_ROOT/.vibeos/state.json"
+STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
 
 # --- Parse input ---
 INPUT=$(cat)
@@ -710,8 +710,8 @@ fi
 
 # --- Check foundation status ---
 if [[ ! -f "$STATE_FILE" ]]; then
-  # No state file -- allow writes to .vibeos/ itself (bootstrap)
-  if [[ "$FILE_PATH" == *".vibeos/"* ]]; then
+  # No state file -- allow writes to .vibecrew/ itself (bootstrap)
+  if [[ "$FILE_PATH" == *".vibecrew/"* ]]; then
     exit 0
   fi
   # Output JSON hookSpecificOutput to deny
@@ -719,7 +719,7 @@ if [[ ! -f "$STATE_FILE" ]]; then
 {
   "hookSpecificOutput": {
     "permissionDecision": "deny",
-    "reason": "VibeOS state not initialized. Run /setup first."
+    "reason": "VibeCrew state not initialized. Run /setup first."
   }
 }
 HOOK_OUTPUT
@@ -747,7 +747,7 @@ ALLOWED_PATTERNS=(
   "VISION.md"
   "design-system.css"
   "roadmap.md"
-  ".vibeos/"
+  ".vibecrew/"
   "docs/"
   "tdr/"
   "research/"
@@ -783,7 +783,7 @@ cat <<HOOK_OUTPUT
 {
   "hookSpecificOutput": {
     "permissionDecision": "deny",
-    "reason": "Cannot write source code before the project foundation is complete.\n\nFile: $FILE_PATH\n\nVibeOS requires these Tier 1 artifacts before any source code:\n  1. VISION.md -- Project goals and target users\n  2. design-system.css -- Design tokens and component styles\n  3. TDR -- Technology Decision Record\n  4. roadmap.md -- Feature roadmap with priorities\n  5. CLAUDE.md -- Project rules and conventions\n\nMissing artifacts:\n$MISSING\n\nComplete all foundation artifacts, then run /status to verify."
+    "reason": "Cannot write source code before the project foundation is complete.\n\nFile: $FILE_PATH\n\nVibeCrew requires these Tier 1 artifacts before any source code:\n  1. VISION.md -- Project goals and target users\n  2. design-system.css -- Design tokens and component styles\n  3. TDR -- Technology Decision Record\n  4. roadmap.md -- Feature roadmap with priorities\n  5. CLAUDE.md -- Project rules and conventions\n\nMissing artifacts:\n$MISSING\n\nComplete all foundation artifacts, then run /status to verify."
   }
 }
 HOOK_OUTPUT
@@ -802,7 +802,7 @@ The phase gate is lifted when the Workflow Orchestrator (via `Bash` script) or t
 set -euo pipefail
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-STATE_FILE="$PROJECT_ROOT/.vibeos/state.json"
+STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
 
 REQUIRED_FILES=("VISION.md" "design-system.css" "CLAUDE.md")
 ALL_PRESENT=true
@@ -848,7 +848,7 @@ fi
 
 ### 6.1 Design Principle
 
-The system stays silent during normal operation and interrupts the user only when blocked, complete, or failed. This is the opposite of most notification systems, which default to noisy and require the user to silence them. VibeOS defaults to silent and notifies only on exception.
+The system stays silent during normal operation and interrupts the user only when blocked, complete, or failed. This is the opposite of most notification systems, which default to noisy and require the user to silence them. VibeCrew defaults to silent and notifies only on exception.
 
 ### 6.2 Three Notification Conditions
 
@@ -868,10 +868,10 @@ Warp Terminal exposes a `WARP_SESSION_ID` environment variable unique to each ta
 if [[ -n "${WARP_SESSION_ID:-}" ]]; then
   DEEP_LINK="warp://session/${WARP_SESSION_ID}"
   terminal-notifier \
-    -title "VibeOS: Approval Needed" \
+    -title "VibeCrew: Approval Needed" \
     -message "Agent blocked. Click to focus the right tab." \
     -sound "Submarine" \
-    -group "vibeos-${WARP_SESSION_ID}" \
+    -group "vibecrew-${WARP_SESSION_ID}" \
     -execute "open '$DEEP_LINK'"
 fi
 ```
@@ -896,7 +896,7 @@ Priority 4: OSC 777 escape sequence
 Priority 5: Terminal bell (printf '\a')
     |         (dock bounce or badge on most terminals)
     v (all else fails)
-Priority 6: Write to .vibeos/notifications.log
+Priority 6: Write to .vibecrew/notifications.log
               (silent but auditable)
 ```
 
@@ -905,7 +905,7 @@ Priority 6: Write to .vibeos/notifications.log
 ```bash
 #!/bin/bash
 # scripts/notify.sh
-# Terminal-adaptive notification system for VibeOS
+# Terminal-adaptive notification system for VibeCrew
 # Fires on: permission_prompt, idle_prompt, PostToolUseFailure
 # Silent on: everything else (preserves Deep Work)
 
@@ -930,18 +930,18 @@ fi
 
 # --- Determine notification content ---
 if [[ "$IS_ERROR" == "true" ]]; then
-  TITLE="VibeOS: Error"
+  TITLE="VibeCrew: Error"
   BODY="A critical tool execution failed. Human intervention required."
   SOUND="Basso"
 else
   case "$TYPE" in
     "permission_prompt")
-      TITLE="VibeOS: Approval Needed"
+      TITLE="VibeCrew: Approval Needed"
       BODY="Agent blocked. Needs your Y/N approval to proceed."
       SOUND="Submarine"
       ;;
     "idle_prompt")
-      TITLE="VibeOS: Task Complete"
+      TITLE="VibeCrew: Task Complete"
       BODY="Agent finished its task. Awaiting new instructions."
       SOUND="Glass"
       ;;
@@ -973,7 +973,7 @@ if command -v terminal-notifier &> /dev/null; then
         -title "$TITLE" \
         -message "$BODY" \
         -sound "$SOUND" \
-        -group "vibeos-${WARP_SESSION_ID}" \
+        -group "vibecrew-${WARP_SESSION_ID}" \
         -execute "open '$DEEP_LINK'" 2>/dev/null || true
       ;;
     "iterm2")
@@ -982,14 +982,14 @@ if command -v terminal-notifier &> /dev/null; then
         -title "$TITLE" \
         -message "$BODY" \
         -sound "$SOUND" \
-        -group "vibeos-iterm" 2>/dev/null || true
+        -group "vibecrew-iterm" 2>/dev/null || true
       ;;
     *)
       terminal-notifier \
         -title "$TITLE" \
         -message "$BODY" \
         -sound "$SOUND" \
-        -group "vibeos-generic" 2>/dev/null || true
+        -group "vibecrew-generic" 2>/dev/null || true
       ;;
   esac
 elif command -v osascript &> /dev/null; then
@@ -1003,7 +1003,7 @@ fi
 
 # Log every notification event to disk
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-LOG_DIR="$PROJECT_ROOT/.vibeos"
+LOG_DIR="$PROJECT_ROOT/.vibecrew"
 if [[ -d "$LOG_DIR" ]]; then
   echo "{\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"type\":\"${TYPE:-error}\",\"title\":\"$TITLE\",\"terminal\":\"$TERMINAL\"}" \
     >> "$LOG_DIR/notifications.log" 2>/dev/null || true
@@ -1064,7 +1064,7 @@ AI agents can make mistakes at scale. Unlike human developers who make small, in
 
 ### 7.2 Strategy 1: Worktree Isolation (Primary)
 
-Worktrees are the primary safety boundary in VibeOS v1.0. Both the Builder and Stack Scout agents run in isolated git worktrees (`isolation: worktree`), meaning their entire filesystem is separate from the main working tree. This provides natural rollback at the granularity of an entire agent operation.
+Worktrees are the primary safety boundary in VibeCrew v1.0. Both the Builder and Stack Scout agents run in isolated git worktrees (`isolation: worktree`), meaning their entire filesystem is separate from the main working tree. This provides natural rollback at the granularity of an entire agent operation.
 
 **How worktrees provide safety:**
 
@@ -1080,7 +1080,7 @@ Main Working Tree (Orchestrator, Verifier)
     |           (read-only research workspace)
     |
     +-- src/                            <-- Untouched by Builder until merge
-    +-- .vibeos/                        <-- Shared state (accessed via main tree)
+    +-- .vibecrew/                        <-- Shared state (accessed via main tree)
 ```
 
 **Safety properties of worktree isolation:**
@@ -1245,7 +1245,7 @@ git log --oneline --grep="^wip(" -5
 
 ### 7.6 Stale Lock Detection and Cleanup
 
-When multiple agents share state files (`.vibeos/state.json`, `.vibeos/backlog.json`), advisory lock files prevent concurrent write conflicts. See `architecture/schemas.md` Section 8 for the canonical lock file schema. Locks can become stale if an agent crashes while holding one.
+When multiple agents share state files (`.vibecrew/state.json`, `.vibecrew/backlog.json`), advisory lock files prevent concurrent write conflicts. See `architecture/schemas.md` Section 8 for the canonical lock file schema. Locks can become stale if an agent crashes while holding one.
 
 **Stale lock detection uses two mechanisms:**
 
@@ -1256,12 +1256,12 @@ When multiple agents share state files (`.vibeos/state.json`, `.vibeos/backlog.j
 ```bash
 #!/bin/bash
 # scripts/cleanup-stale-locks.sh
-# Removes all stale locks from the .vibeos/locks/ directory.
+# Removes all stale locks from the .vibecrew/locks/ directory.
 # Called by Session Startup agent at the beginning of every session.
 
 set -euo pipefail
 
-LOCKS_DIR=".vibeos/locks"
+LOCKS_DIR=".vibecrew/locks"
 STALE_THRESHOLD=1800  # 30 minutes in seconds
 
 if [[ ! -d "$LOCKS_DIR" ]]; then
@@ -1311,7 +1311,7 @@ echo "Lock cleanup complete. Removed $CLEANED stale lock(s)."
 
 ### 7.7 Session State Preservation
 
-All session state is persisted to disk in `.vibeos/`, never stored solely in the context window. This means:
+All session state is persisted to disk in `.vibecrew/`, never stored solely in the context window. This means:
 
 - If the context window is exhausted or the session crashes, state survives.
 - A new session can resume from exactly where the previous session left off.
@@ -1321,11 +1321,11 @@ All session state is persisted to disk in `.vibeos/`, never stored solely in the
 
 | File | Contents | Schema Reference |
 |------|----------|------------------|
-| `.vibeos/state.json` | Foundation status, active feature, current phase | schemas.md Section 3 |
-| `.vibeos/backlog.json` | Feature backlog with specs and priorities | schemas.md Section 4 |
-| `.vibeos/sessions/<id>.json` | Per-session logs (actions, duration, context usage) | schemas.md Section 5 |
-| `.vibeos/scores/<id>.json` | Per-session Vibe Score breakdown | schemas.md Section 6 |
-| `.vibeos/notifications.log` | Notification audit trail | Plain JSON lines |
+| `.vibecrew/state.json` | Foundation status, active feature, current phase | schemas.md Section 3 |
+| `.vibecrew/backlog.json` | Feature backlog with specs and priorities | schemas.md Section 4 |
+| `.vibecrew/sessions/<id>.json` | Per-session logs (actions, duration, context usage) | schemas.md Section 5 |
+| `.vibecrew/scores/<id>.json` | Per-session Vibe Score breakdown | schemas.md Section 6 |
+| `.vibecrew/notifications.log` | Notification audit trail | Plain JSON lines |
 
 ### 7.8 Rollback Decision Matrix
 
@@ -1355,13 +1355,13 @@ Context exhaustion is not merely a performance problem. When an agent operates n
 3. **Degraded reasoning** -- Architectural decisions become inconsistent.
 4. **Hallucinated context** -- The model may "remember" instructions that no longer exist in context.
 
-For non-technical VibeOS users, this is especially dangerous because the output still looks correct. The agent continues producing plausible code that may silently violate safety rules.
+For non-technical VibeCrew users, this is especially dangerous because the output still looks correct. The agent continues producing plausible code that may silently violate safety rules.
 
 ### 8.2 Warning Thresholds
 
 | Threshold | Level | Response |
 |-----------|-------|----------|
-| 60% | Soft warning | Log warning to `.vibeos/state.json`. Feedback message to model. |
+| 60% | Soft warning | Log warning to `.vibecrew/state.json`. Feedback message to model. |
 | 80% | Hard warning | Native OS notification to user via `notify.sh`. Recommend `/wrap`. |
 | 90% | Force stop | Agent should gracefully terminate. Create WIP commit. Start new session. |
 
@@ -1378,13 +1378,13 @@ The `check-context.sh` script fires after each agent turn (Stop hook) and reads 
 set -euo pipefail
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-STATE_FILE="$PROJECT_ROOT/.vibeos/state.json"
-CONFIG_FILE="$PROJECT_ROOT/.vibeos/config.json"
+STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
+CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 CLAUDE_MD="$PROJECT_ROOT/CLAUDE.md"
 
 INPUT=$(cat)
 
-mkdir -p "$PROJECT_ROOT/.vibeos"
+mkdir -p "$PROJECT_ROOT/.vibecrew"
 
 # =====================================================================
 # PART 1: Context Window Monitoring
@@ -1446,7 +1446,7 @@ if (( $(echo "$NEW_SESSION_COST >= $SESSION_MAX" | bc -l 2>/dev/null || echo "0"
   echo "COST HARD LIMIT: Session cost \$${NEW_SESSION_COST} exceeds maximum \$${SESSION_MAX}."
   echo "Agent MUST pause and ask the user before continuing."
   echo "Estimated cost breakdown: input=${INPUT_TOKENS} tokens, output=${OUTPUT_TOKENS} tokens."
-  echo "To increase the limit, edit .vibeos/config.json cost_limits.session_max_usd."
+  echo "To increase the limit, edit .vibecrew/config.json cost_limits.session_max_usd."
   # Fire notification
   NOTIFY_SCRIPT="${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh"
   if [[ -x "$NOTIFY_SCRIPT" ]]; then
@@ -1461,7 +1461,7 @@ fi
 
 # Check daily cost (aggregate from today's session logs)
 TODAY=$(date -u +%Y-%m-%d)
-DAILY_COST=$(find "$PROJECT_ROOT/.vibeos/sessions/" -name "session-${TODAY}-*.json" -exec jq -r '.tokens.estimated_cost_usd // 0' {} \; 2>/dev/null \
+DAILY_COST=$(find "$PROJECT_ROOT/.vibecrew/sessions/" -name "session-${TODAY}-*.json" -exec jq -r '.tokens.estimated_cost_usd // 0' {} \; 2>/dev/null \
   | awk '{sum+=$1} END {printf "%.4f", sum+0}' || echo "0")
 DAILY_TOTAL=$(echo "scale=4; $DAILY_COST + $NEW_SESSION_COST" | bc -l 2>/dev/null || echo "0")
 
@@ -1504,7 +1504,7 @@ Beyond the Stop hook, context safety is enforced architecturally:
 | Subagents for expensive work | Stack Scout runs research in its own worktree and context window, preventing documentation from consuming the main agent's context. |
 | MCP servers instead of pasting | Context7 returns only the relevant documentation snippet, not entire library docs. |
 | Compact diffs | Use `git diff --stat` first, then selectively view specific files. |
-| State on disk | Session state, backlog, and scores are in `.vibeos/`, not in context. |
+| State on disk | Session state, backlog, and scores are in `.vibecrew/`, not in context. |
 | Aggressive summarization | Agents summarize results before reporting back to the Orchestrator. |
 | Worktree isolation | Builder and Stack Scout operate in separate context windows, preventing their work from consuming the Orchestrator's context. |
 
@@ -1526,7 +1526,7 @@ Unattended execution -- particularly via `/run-backlog` which processes multiple
 
 ### 9.3 Configuration
 
-Cost thresholds are configured in `.vibeos/config.json` under the `cost_limits` field (see `architecture/schemas.md` Section 2 for the canonical schema):
+Cost thresholds are configured in `.vibecrew/config.json` under the `cost_limits` field (see `architecture/schemas.md` Section 2 for the canonical schema):
 
 ```json
 {
@@ -1595,7 +1595,7 @@ The `/run-backlog` command processes multiple features unattended. Additional sa
 
 ### 10.1 The Problem
 
-CLAUDE.md is the model's primary instruction file. If it grows without bounds, it consumes an increasing share of the context window on every turn, crowds out actual work, and eventually degrades agent performance. Boris Cherny's own CLAUDE.md is approximately 2,500 tokens (~500 lines). VibeOS must prevent CLAUDE.md from bloating beyond this baseline.
+CLAUDE.md is the model's primary instruction file. If it grows without bounds, it consumes an increasing share of the context window on every turn, crowds out actual work, and eventually degrades agent performance. Boris Cherny's own CLAUDE.md is approximately 2,500 tokens (~500 lines). VibeCrew must prevent CLAUDE.md from bloating beyond this baseline.
 
 The risk is compounded by the self-improving design: the Verifier (v1.0) and the future Performance Coach (v1.1) can propose CLAUDE.md rule mutations. Without size management, every session adds rules and none are ever removed.
 
@@ -1623,7 +1623,7 @@ When the hard limit (600 lines) is exceeded:
 
 During `/wrap`, the Verifier agent can propose removing stale rules from CLAUDE.md. The pruning process:
 
-1. **Identify stale rules.** A rule is considered stale if it has not been triggered (referenced by an agent action or commit message) in the last 5 sessions. The Verifier checks this by scanning the last 5 session logs in `.vibeos/sessions/` for references to each CLAUDE.md rule.
+1. **Identify stale rules.** A rule is considered stale if it has not been triggered (referenced by an agent action or commit message) in the last 5 sessions. The Verifier checks this by scanning the last 5 session logs in `.vibecrew/sessions/` for references to each CLAUDE.md rule.
 
 2. **Respect pinned rules.** Rules marked with `<!-- pinned -->` as an HTML comment are never proposed for removal, regardless of how long they have been dormant. This allows users to protect critical rules that may not trigger frequently but are important safeguards.
 
@@ -1659,7 +1659,7 @@ During `/wrap`, the Verifier agent can propose removing stale rules from CLAUDE.
 
 ### 10.5 Prevention Strategy
 
-Beyond reactive pruning, VibeOS prevents CLAUDE.md bloat proactively:
+Beyond reactive pruning, VibeCrew prevents CLAUDE.md bloat proactively:
 
 | Strategy | Mechanism |
 |----------|-----------|
@@ -1687,7 +1687,7 @@ In v1.0, the Verifier handles CLAUDE.md size management (warning, blocking, prun
 
 ### 11.1 The Problem
 
-AI agents can inadvertently introduce security vulnerabilities into generated code: SQL string concatenation, missing input validation, hardcoded secrets, overly permissive CORS, disabled CSP headers. For non-technical VibeOS users, these vulnerabilities are invisible -- the code works, but the application is exploitable.
+AI agents can inadvertently introduce security vulnerabilities into generated code: SQL string concatenation, missing input validation, hardcoded secrets, overly permissive CORS, disabled CSP headers. For non-technical VibeCrew users, these vulnerabilities are invisible -- the code works, but the application is exploitable.
 
 ### 11.2 Three-Layer Defense
 
@@ -1699,7 +1699,7 @@ AI agents can inadvertently introduce security vulnerabilities into generated co
 
 ### 11.3 CLAUDE.md Security Rules (Generated by Default)
 
-Every project created by VibeOS includes these security rules in its CLAUDE.md:
+Every project created by VibeCrew includes these security rules in its CLAUDE.md:
 
 ```markdown
 ## Security Rules <!-- pinned -->
@@ -1738,7 +1738,7 @@ The Verifier agent (which combines the former Test Writer, Quality Check, and sc
 
 ### 12.1 Adversarial Test Suite
 
-Before deploying VibeOS, the safety system must be tested with adversarial inputs. The test suite verifies that dangerous operations are blocked and safe operations are allowed:
+Before deploying VibeCrew, the safety system must be tested with adversarial inputs. The test suite verifies that dangerous operations are blocked and safe operations are allowed:
 
 ```bash
 #!/bin/bash
@@ -1826,8 +1826,8 @@ echo '{"tool_name":"Write","tool_input":{"file_path":"src/app.tsx"}}' \
 echo '{"tool_name":"Write","tool_input":{"file_path":"VISION.md"}}' \
   | bash scripts/phase-gate.sh 2>/dev/null; assert_allowed "VISION.md during Tier 1" $?
 
-echo '{"tool_name":"Write","tool_input":{"file_path":".vibeos/state.json"}}' \
-  | bash scripts/phase-gate.sh 2>/dev/null; assert_allowed ".vibeos/ during Tier 1" $?
+echo '{"tool_name":"Write","tool_input":{"file_path":".vibecrew/state.json"}}' \
+  | bash scripts/phase-gate.sh 2>/dev/null; assert_allowed ".vibecrew/ during Tier 1" $?
 
 echo ""
 echo "=== worktree isolation ==="
@@ -1936,11 +1936,11 @@ echo "Failed: $FAIL"
 
 ## Appendix A: Complete Hook Configuration
 
-The full `hooks.json` configuration for the VibeOS safety system:
+The full `hooks.json` configuration for the VibeCrew safety system:
 
 ```json
 {
-  "description": "VibeOS safety and lifecycle hooks",
+  "description": "VibeCrew safety and lifecycle hooks",
   "hooks": {
     "PreToolUse": [
       {

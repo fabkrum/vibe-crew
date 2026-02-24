@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 2.3 (Revised) | February 2026
 >
-> This document defines the complete workflow design for VibeOS v1.0, covering five scenarios: new project initialization, existing project onboarding (deferred), the feature lifecycle, the session lifecycle, and parallel work coordination. Each workflow specifies step-by-step sequences, state transitions, agent handoffs via the Agent Teams API, worktree isolation, and hook interactions.
+> This document defines the complete workflow design for VibeCrew v1.0, covering five scenarios: new project initialization, existing project onboarding (deferred), the feature lifecycle, the session lifecycle, and parallel work coordination. Each workflow specifies step-by-step sequences, state transitions, agent handoffs via the Agent Teams API, worktree isolation, and hook interactions.
 >
 > **v1.0 Revision.** This revision aligns with the 5-agent topology (Session Startup, Workflow Orchestrator, Stack Scout, Builder, Verifier), replaces branch-per-agent with worktree-per-agent isolation, replaces copy-paste tab commands with the Agent Teams API, fixes the feature lifecycle contradiction (sequential with verify-fix loops), and defers Workflow 2 (Existing Project Onboarding) to v1.1. All JSON schemas reference `architecture/schemas.md` as the single source of truth.
 
@@ -38,7 +38,7 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |  SessionStart hook fires      |
  |                       |-----> session-startup.sh      |
  |                       |       |                       |
- |                       |       | detect: no .vibeos/   |
+ |                       |       | detect: no .vibecrew/   |
  |                       |       | route: first-time     |
  |                       |<------|                       |
  |                       |                               |
@@ -66,7 +66,7 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |     git status                |
  |                       |     gh auth status            |
  |                       |                               |
- |                       |  6. Scaffold .vibeos/         |
+ |                       |  6. Scaffold .vibecrew/         |
  |                       |     config.json               |
  |                       |     state.json                |
  |                       |     backlog.json              |
@@ -172,7 +172,7 @@ Both Stack Scout and Builder use `isolation: worktree` during the foundation wor
 
     +----------+     /setup     +-----------+
     |   NONE   |--------------->| SCAFFOLDED|
-    |(no state)|                |(.vibeos/  |
+    |(no state)|                |(.vibecrew/  |
     +----------+                | created)  |
                                 +-----+-----+
                                       | /new-project
@@ -294,7 +294,7 @@ The phase gate is the enforcement mechanism that prevents source code writes bef
               |                    |
          Foundation           Source code
          artifact?            path?
-         (.vibeos/,           (src/, app/,
+         (.vibecrew/,           (src/, app/,
           CLAUDE.md,           lib/, etc.)
           VISION.md,                |
           docs/,                    v
@@ -350,7 +350,7 @@ The phase gate is the enforcement mechanism that prevents source code writes bef
 
 ## 2. Workflow 2: Existing Project Onboarding (Deferred to v1.1)
 
-Existing project onboarding -- adapting VibeOS to a project that already has source code, dependencies, and possibly tests -- is **deferred to v1.1**. This workflow requires infrastructure not yet built in v1.0:
+Existing project onboarding -- adapting VibeCrew to a project that already has source code, dependencies, and possibly tests -- is **deferred to v1.1**. This workflow requires infrastructure not yet built in v1.0:
 
 - **Codebase audit agent** (reverse-engineer TDR from existing dependencies, detect test frameworks, extract design tokens from CSS)
 - **Pattern extraction** (analyze file structure conventions, naming patterns, import styles to generate CLAUDE.md)
@@ -358,7 +358,7 @@ Existing project onboarding -- adapting VibeOS to a project that already has sou
 
 For v1.0, users with existing projects should manually:
 
-1. Run `/setup` to scaffold `.vibeos/`
+1. Run `/setup` to scaffold `.vibecrew/`
 2. Run `/new-project` and answer the foundation questions (the TDR step can document the existing stack rather than choosing a new one)
 3. Proceed with the standard foundation workflow
 
@@ -837,7 +837,7 @@ See `architecture/schemas.md` Section 4 for the canonical `backlog.json` schema 
 
 ### 4.1 Overview
 
-Every Claude Code session running under VibeOS follows a predictable lifecycle: startup (environment check and routing), work phase (hook-enforced execution), and shutdown (quality check, scoring, and cleanup). The lifecycle applies to the Orchestrator session and to all agent sub-sessions spawned via Agent Teams.
+Every Claude Code session running under VibeCrew follows a predictable lifecycle: startup (environment check and routing), work phase (hook-enforced execution), and shutdown (quality check, scoring, and cleanup). The lifecycle applies to the Orchestrator session and to all agent sub-sessions spawned via Agent Teams.
 
 ### 4.2 End-to-End Session Flow
 
@@ -864,22 +864,22 @@ Every Claude Code session running under VibeOS follows a predictable lifecycle: 
     |       |     is outdated                                  |
     |       |                                                  |
     |       +-- 3. Stale session detection                     |
-    |       |     Check .vibeos/sessions/ for crashed sessions |
+    |       |     Check .vibecrew/sessions/ for crashed sessions |
     |       |     Remove entries for dead processes             |
     |       |                                                  |
     |       +-- 4. Stale lock cleanup                          |
-    |       |     Sweep .vibeos/locks/                         |
+    |       |     Sweep .vibecrew/locks/                         |
     |       |     Remove expired locks (>30s timeout)          |
     |       |                                                  |
     |       +-- 5. Signal processing                           |
-    |       |     Check .vibeos/signals/ for pending signals   |
+    |       |     Check .vibecrew/signals/ for pending signals   |
     |       |     Report pending handoffs                      |
     |       |                                                  |
     |       +-- 6. State detection + routing                   |
-    |       |     Read .vibeos/state.json                      |
+    |       |     Read .vibecrew/state.json                      |
     |       |                                                  |
     |       |     +-------------------------------------+      |
-    |       |     | No .vibeos/?                        |      |
+    |       |     | No .vibecrew/?                        |      |
     |       |     | -> "Run /setup"                     |      |
     |       |     |                                     |      |
     |       |     | Foundation incomplete?              |      |
@@ -947,7 +947,7 @@ Every Claude Code session running under VibeOS follows a predictable lifecycle: 
     |  STEP 3: Vibe Score calculation (Verifier)               |
     |    a. Calculate Vibe Score (0-100)                        |
     |    b. Present score + top observation                     |
-    |    c. Write score to .vibeos/scores/                      |
+    |    c. Write score to .vibecrew/scores/                      |
     |    d. Provide coaching suggestions                        |
     |    (See architecture/scoring.md for methodology)          |
     |    (See architecture/schemas.md Section 6 for schema)    |
@@ -955,7 +955,7 @@ Every Claude Code session running under VibeOS follows a predictable lifecycle: 
     |       |                                                  |
     |       v                                                  |
     |  STEP 4: Session log                                     |
-    |    Verifier writes to .vibeos/sessions/<id>.json         |
+    |    Verifier writes to .vibecrew/sessions/<id>.json         |
     |    (See architecture/schemas.md Section 5 for schema)    |
     |                                                          |
     |       |                                                  |
@@ -1002,8 +1002,8 @@ When Claude Code compacts the context window (automatic or manual), the session 
               v
     Post-compaction, the following state is preserved:
     1. CLAUDE.md (always in system prompt)
-    2. .vibeos/state.json (on disk, re-readable)
-    3. .vibeos/backlog.json (on disk, re-readable)
+    2. .vibecrew/state.json (on disk, re-readable)
+    3. .vibecrew/backlog.json (on disk, re-readable)
     4. Git branch + commit history (on disk)
     5. Agent worktree contents (on disk)
 
@@ -1081,7 +1081,7 @@ The Interrupt Protocol fires notifications on exactly three conditions. All othe
     |  Trigger: Claude Code hits a permission prompt           |
     |           (Y/N approval gate)                            |
     |  Notification:                                           |
-    |    Title: "VibeOS: Approval Needed"                      |
+    |    Title: "VibeCrew: Approval Needed"                      |
     |    Body:  "Agent needs Y/N -- <action description>"      |
     |    Sound: Default                                        |
     |    Action: Deep-link to Warp tab (if Warp)               |
@@ -1092,7 +1092,7 @@ The Interrupt Protocol fires notifications on exactly three conditions. All othe
     |  Trigger: Agent reaches idle state after completing      |
     |           a task (no more autonomous work to do)         |
     |  Notification:                                           |
-    |    Title: "VibeOS: Task Complete"                        |
+    |    Title: "VibeCrew: Task Complete"                        |
     |    Body:  "<agent-type> finished <task-description>"     |
     |    Sound: Glass                                          |
     |    Action: Deep-link to Warp tab (if Warp)               |
@@ -1102,7 +1102,7 @@ The Interrupt Protocol fires notifications on exactly three conditions. All othe
     |  Hook: PostToolUseFailure                                |
     |  Trigger: A tool execution fails with a fatal error      |
     |  Notification:                                           |
-    |    Title: "VibeOS: Error"                                |
+    |    Title: "VibeCrew: Error"                                |
     |    Body:  "<tool-name> failed: <error-summary>"          |
     |    Sound: Basso                                          |
     |    Action: Deep-link to Warp tab (if Warp)               |
@@ -1166,7 +1166,7 @@ The Verifier calculates the Vibe Score during `/wrap`. See `architecture/scoring
 
 ### 5.1 Overview
 
-VibeOS v1.0 supports parallel work through **worktree-per-agent isolation** and the **Agent Teams API**. The Orchestrator autonomously creates agent teams and assigns tasks -- the developer no longer needs to manually open tabs and paste commands. Multiple features can progress in parallel because each Builder instance works in its own git worktree, preventing filesystem conflicts entirely.
+VibeCrew v1.0 supports parallel work through **worktree-per-agent isolation** and the **Agent Teams API**. The Orchestrator autonomously creates agent teams and assigns tasks -- the developer no longer needs to manually open tabs and paste commands. Multiple features can progress in parallel because each Builder instance works in its own git worktree, preventing filesystem conflicts entirely.
 
 ### 5.2 Worktree-Per-Agent Model
 
@@ -1350,7 +1350,7 @@ Feature branches are named after features, not agents. The worktree path identif
 
 ### 5.6 File-Level Advisory Locks
 
-When two agents must modify the same `.vibeos/` state file concurrently, VibeOS uses `mkdir`-based atomic locks. See `architecture/schemas.md` Section 8 for the lock file schema.
+When two agents must modify the same `.vibecrew/` state file concurrently, VibeCrew uses `mkdir`-based atomic locks. See `architecture/schemas.md` Section 8 for the lock file schema.
 
 ```
     +----------------------------------------------------------+
@@ -1359,21 +1359,21 @@ When two agents must modify the same `.vibeos/` state file concurrently, VibeOS 
     |                                                          |
     |  Agent A wants to write to backlog.json:                 |
     |                                                          |
-    |  1. mkdir .vibeos/locks/backlog-json/                    |
+    |  1. mkdir .vibecrew/locks/backlog-json/                    |
     |     POSIX-atomic: succeeds or fails, no race             |
     |                                                          |
     |  2. Success? Write lock metadata:                        |
-    |     .vibeos/locks/backlog-json/info.json                 |
+    |     .vibecrew/locks/backlog-json/info.json                 |
     |     (See architecture/schemas.md Section 8)              |
     |                                                          |
     |  3. Perform the write operation.                         |
     |                                                          |
-    |  4. rm -rf .vibeos/locks/backlog-json/                   |
+    |  4. rm -rf .vibecrew/locks/backlog-json/                   |
     |     Lock released.                                       |
     |                                                          |
     |  Agent B tries concurrently:                             |
     |                                                          |
-    |  1. mkdir .vibeos/locks/backlog-json/                    |
+    |  1. mkdir .vibecrew/locks/backlog-json/                    |
     |     FAILS (directory already exists)                     |
     |                                                          |
     |  2. Check lock metadata:                                 |
@@ -1392,7 +1392,7 @@ When two agents must modify the same `.vibeos/` state file concurrently, VibeOS 
 
 ### 5.7 Signal Files as Persistence Layer
 
-Signal files (`.vibeos/signals/`) complement the Agent Teams API by providing a persistence layer that survives agent crashes. The primary coordination mechanism is Agent Teams (`SendMessage`), but signal files serve as durable receipts.
+Signal files (`.vibecrew/signals/`) complement the Agent Teams API by providing a persistence layer that survives agent crashes. The primary coordination mechanism is Agent Teams (`SendMessage`), but signal files serve as durable receipts.
 
 See `architecture/schemas.md` Section 7 for signal file schemas.
 
@@ -1408,7 +1408,7 @@ See `architecture/schemas.md` Section 7 for signal file schemas.
     |                                                          |
     |  SECONDARY: Signal files (durable)                       |
     |  ---------                                               |
-    |  Agents also write .vibeos/signals/<event>.signal        |
+    |  Agents also write .vibecrew/signals/<event>.signal        |
     |  files as durable receipts. If an agent crashes after    |
     |  sending a SendMessage but before the Orchestrator       |
     |  processes it, the signal file persists on disk.          |
@@ -1466,8 +1466,8 @@ See `architecture/schemas.md` Section 7 for signal file schemas.
     |                                                          |
     |  LAYER 4: File-Level Locks (shared state files only)     |
     |  -------------------------------------------------------  |
-    |  .vibeos/state.json   -> advisory lock during updates    |
-    |  .vibeos/backlog.json -> advisory lock during updates    |
+    |  .vibecrew/state.json   -> advisory lock during updates    |
+    |  .vibecrew/backlog.json -> advisory lock during updates    |
     |                                                          |
     |  LAYER 5: Conflict Detection at PR Time                  |
     |  -------------------------------------------------------  |
@@ -1503,7 +1503,7 @@ The `config.json` `concurrency.max_parallel_agents` setting (default: 3) limits 
       |              |                  |                  |
       |  /setup      |  /new-project   |  artifacts      |  Phase gate
       |  creates     |  begins          |  created one    |  unlocked.
-      |  .vibeos/    |  foundation      |  by one via     |  Source code
+      |  .vibecrew/    |  foundation      |  by one via     |  Source code
       |              |  workflow via     |  Agent Teams    |  writes
       |              |  Agent Teams     |                 |  allowed.
 ```
@@ -1542,12 +1542,12 @@ The `config.json` `concurrency.max_parallel_agents` setting (default: 3) limits 
 
 ```
     +----------------------------------------------------------------+
-    |                    VIBEOS MASTER STATE DIAGRAM                  |
+    |                    VIBECREW MASTER STATE DIAGRAM                  |
     +----------------------------------------------------------------+
     |                                                                |
     |  ENVIRONMENT                                                   |
     |  ===========                                                   |
-    |  [no plugin] --/setup--> [plugin installed, .vibeos/ created]  |
+    |  [no plugin] --/setup--> [plugin installed, .vibecrew/ created]  |
     |                                                                |
     |  FOUNDATION                                                    |
     |  ==========                                                    |
@@ -1578,8 +1578,8 @@ The `config.json` `concurrency.max_parallel_agents` setting (default: 3) limits 
     |  Worktrees:     .claude/worktrees/<agent>-<task>/ per agent    |
     |  Branches:      <type>/<feature-slug> per feature              |
     |  Agent Teams:   TeamCreate, TaskCreate, SendMessage            |
-    |  Signals:       .vibeos/signals/ (durable persistence layer)   |
-    |  Locks:         .vibeos/locks/ (mkdir-atomic, timeout-based)   |
+    |  Signals:       .vibecrew/signals/ (durable persistence layer)   |
+    |  Locks:         .vibecrew/locks/ (mkdir-atomic, timeout-based)   |
     |  Orchestrator:  Autonomous coordination via Agent Teams API    |
     |                                                                |
     +----------------------------------------------------------------+
@@ -1704,7 +1704,7 @@ Every operation across all workflows must be safe to re-run. This is the fundame
 
 ### 7.4 Graceful Degradation Priority
 
-When errors cannot be automatically recovered, VibeOS degrades gracefully in this priority order:
+When errors cannot be automatically recovered, VibeCrew degrades gracefully in this priority order:
 
 1. **Preserve committed work.** Git commits are durable. Always commit before doing anything risky. Worktrees preserve even uncommitted work on disk.
 2. **Preserve state files.** `state.json` and `backlog.json` reflect the last known-good state. Update only after successful operations.
@@ -1719,11 +1719,11 @@ When errors cannot be automatically recovered, VibeOS degrades gracefully in thi
 
 | Document | Relevance |
 |----------|-----------|
-| `architecture/schemas.md` | Canonical JSON schemas for all `.vibeos/` files (state, backlog, sessions, scores, signals, locks) |
+| `architecture/schemas.md` | Canonical JSON schemas for all `.vibecrew/` files (state, backlog, sessions, scores, signals, locks) |
 | `architecture/system-overview.md` | Plugin structure, agent topology, safety layer |
 | `architecture/agents.md` | Per-agent specs (5 agents: triggers, contracts, worktree isolation, verification loops) |
 | `architecture/safety.md` | Blocked operations, approval gates, rollback |
 | `architecture/scoring.md` | Vibe Score calculation methodology |
 | `research/02-multi-agent-orchestration.md` | Communication patterns, locks, signals, Agent Teams research |
 | `research/03-git-automation.md` | Worktrees, conventional commits, PR creation |
-| `docs/vibeos-guide-complete.md` | User-facing workflow descriptions |
+| `docs/vibecrew-guide-complete.md` | User-facing workflow descriptions |

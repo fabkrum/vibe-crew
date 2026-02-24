@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-VibeOS is a Claude Code plugin that transforms Claude Code into an autonomous vibe-coding operating system. It orchestrates multiple Claude Code sessions, manages the full software development lifecycle, and enables non-technical users to build production-grade SaaS applications.
+VibeCrew is a Claude Code plugin that transforms Claude Code into an autonomous vibe-coding operating system. It orchestrates multiple Claude Code sessions, manages the full software development lifecycle, and enables non-technical users to build production-grade SaaS applications.
 
 ## Repository Structure
 
 ```
-claude-plugin-vibe-os/          # The plugin — install this into your projects
+claude-plugin-vibe-crew/          # The plugin — install this into your projects
   .claude-plugin/plugin.json    # Plugin manifest
   .mcp.json                     # Context7 + Puppeteer MCP config
   settings.json                 # Permission rules
@@ -72,10 +72,10 @@ Starts at 100, applies deductions: prompt churn (-5/sequence), tool loops (-10/l
 
 ### Per-Project Runtime State
 
-When VibeOS is used in a project, it creates a `.vibeos/` folder:
+When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
 
 ```
-.vibeos/                        # Per-project runtime state (auto-created)
+.vibecrew/                        # Per-project runtime state (auto-created)
   config.json                   # Terminal preference, notification settings
   state.json                    # Foundation status + active feature
   backlog.json                  # Feature backlog with specs
@@ -101,8 +101,8 @@ When VibeOS is used in a project, it creates a `.vibeos/` folder:
 
 ## Current Status
 
-VibeOS v1.3.0 — the plugin is feature-complete. The repository contains:
-- The full plugin (`claude-plugin-vibe-os/`) with all agents, hooks, scripts, skills, and templates
+VibeCrew v1.3.0 — the plugin is feature-complete. The repository contains:
+- The full plugin (`claude-plugin-vibe-crew/`) with all agents, hooks, scripts, skills, and templates
 - Architecture design docs (`architecture/`) for contributor reference
 - Companion documentation website (`docs/`) with setup guide, workflows, example sessions, and best practices
 

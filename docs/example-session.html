@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeOS — Example Session</title>
+  <title>VibeCrew — Example Session</title>
   <style>
     :root {
       --color-bg: #0a0a0b;
@@ -702,9 +702,9 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
     <ul class="nav-links">
-      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="why.html">Why VibeCrew</a></li>
       <li><a href="setup.html">Setup</a></li>
       <li><a href="new-project.html">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
@@ -731,7 +731,7 @@
       <li><a href="#dev-servers">Running Dev &amp; Test Servers</a></li>
       <li><a href="#companion-docs">Using the Companion Docs Website</a></li>
       <li><a href="#capturing-ideas">Capturing Ideas for the Backlog</a></li>
-      <li><a href="#full-week">A Full Week with VibeOS</a></li>
+      <li><a href="#full-week">A Full Week with VibeCrew</a></li>
       <li><a href="#best-practices">Best Practices &amp; Guardrails</a></li>
     </ol>
   </div>
@@ -740,10 +740,10 @@
   <section class="section" id="terminal-setup">
     <span class="section-label">Getting Oriented</span>
     <h2>Terminal Setup &mdash; How Many Windows?</h2>
-    <p>VibeOS is designed for parallel work across multiple terminal tabs. The number of tabs depends on your experience level and what you're doing.</p>
+    <p>VibeCrew is designed for parallel work across multiple terminal tabs. The number of tabs depends on your experience level and what you're doing.</p>
 
     <h3>Starter layout: 1 tab</h3>
-    <p>If you're new to VibeOS, start with a single terminal. Run <code>/setup</code>, <code>/new-project</code>, and your first few features sequentially. Learn the rhythm before adding parallelism.</p>
+    <p>If you're new to VibeCrew, start with a single terminal. Run <code>/setup</code>, <code>/new-project</code>, and your first few features sequentially. Learn the rhythm before adding parallelism.</p>
 
     <div class="terminal-grid">
       <div class="terminal-window" style="grid-column: 1 / -1;">
@@ -755,7 +755,7 @@
         </div>
         <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
 <span class="output">Session startup agent detects project state...</span>
-<span class="accent">VibeOS v1.3.0 | Foundation: complete | Feature: user-auth (Code phase)</span>
+<span class="accent">VibeCrew v1.3.0 | Foundation: complete | Feature: user-auth (Code phase)</span>
 <span class="output">Ready. Type /status for full dashboard.</span></div>
       </div>
     </div>
@@ -809,7 +809,7 @@
 
     <div class="callout warn">
       <div class="callout-title">Each tab is an independent Claude Code session</div>
-      <p>Every tab runs its own context window. They share the filesystem (git branches, <code>.vibeos/</code> state, <code>CLAUDE.md</code>) but not conversation history. This is by design &mdash; it means research in one tab doesn't consume context in another. But it also means you need to coordinate via branches: each feature gets its own branch.</p>
+      <p>Every tab runs its own context window. They share the filesystem (git branches, <code>.vibecrew/</code> state, <code>CLAUDE.md</code>) but not conversation history. This is by design &mdash; it means research in one tab doesn't consume context in another. But it also means you need to coordinate via branches: each feature gets its own branch.</p>
     </div>
   </section>
 
@@ -826,17 +826,17 @@
 
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
 <span class="output"># Session startup agent runs automatically</span>
-<span class="accent">VibeOS v1.3.0 | No project detected. Run /new-project to begin.</span>
+<span class="accent">VibeCrew v1.3.0 | No project detected. Run /new-project to begin.</span>
 
 <span class="prompt">&gt;</span> /new-project</code></pre>
 
-    <p>VibeOS now walks you through 6 steps. You answer questions, it produces artifacts.</p>
+    <p>VibeCrew now walks you through 6 steps. You answer questions, it produces artifacts.</p>
 
     <div class="timeline">
       <div class="timeline-item done">
         <div class="timeline-time">~3 min</div>
         <div class="timeline-title">Step 1: VISION.md</div>
-        <p class="timeline-desc">You describe TripFlow: a collaborative trip planner for groups. Target users are friend groups planning vacations. Key constraint: mobile-first. VibeOS produces <code>VISION.md</code>.</p>
+        <p class="timeline-desc">You describe TripFlow: a collaborative trip planner for groups. Target users are friend groups planning vacations. Key constraint: mobile-first. VibeCrew produces <code>VISION.md</code>.</p>
       </div>
       <div class="timeline-item done">
         <div class="timeline-time">~5 min</div>
@@ -856,12 +856,12 @@
       <div class="timeline-item done">
         <div class="timeline-time">~5 min</div>
         <div class="timeline-title">Step 4: Roadmap</div>
-        <p class="timeline-desc">You list features: user auth, trip creation, itinerary builder, group invites, expense splitting. VibeOS organizes them into priority tiers in <code>docs/roadmap.md</code>.</p>
+        <p class="timeline-desc">You list features: user auth, trip creation, itinerary builder, group invites, expense splitting. VibeCrew organizes them into priority tiers in <code>docs/roadmap.md</code>.</p>
       </div>
       <div class="timeline-item done">
         <div class="timeline-time">~2 min</div>
         <div class="timeline-title">Step 5: CLAUDE.md</div>
-        <p class="timeline-desc">VibeOS synthesizes everything: tech stack rules, design system reference, file conventions, testing strategy. The master rules file is ready.</p>
+        <p class="timeline-desc">VibeCrew synthesizes everything: tech stack rules, design system reference, file conventions, testing strategy. The master rules file is ready.</p>
       </div>
       <div class="timeline-item done">
         <div class="timeline-time">~1 min</div>
@@ -889,12 +889,12 @@
     <p>Before building features, invest one session in creating structured specifications. This session is short (15&ndash;20 min) and pays for itself immediately.</p>
 
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
-<span class="accent">VibeOS v1.3.0 | Foundation: complete | No active feature</span>
+<span class="accent">VibeCrew v1.3.0 | Foundation: complete | No active feature</span>
 <span class="output">Ready. 5 features in roadmap, 0 planned.</span>
 
 <span class="prompt">&gt;</span> /plan-features</code></pre>
 
-    <p>VibeOS reads your roadmap and walks through each feature. For each one, you provide or confirm:</p>
+    <p>VibeCrew reads your roadmap and walks through each feature. For each one, you provide or confirm:</p>
 
     <ul>
       <li><strong>Name and description</strong> &mdash; one sentence</li>
@@ -904,7 +904,7 @@
       <li><strong>Dependencies</strong> &mdash; which features must exist first?</li>
     </ul>
 
-    <p>The output is <code>.vibeos/backlog.json</code> &mdash; a structured file that <code>/new-feature</code> and <code>/run-backlog</code> read to determine what to build next.</p>
+    <p>The output is <code>.vibecrew/backlog.json</code> &mdash; a structured file that <code>/new-feature</code> and <code>/run-backlog</code> read to determine what to build next.</p>
 
     <pre><code><span class="code-label">backlog.json (excerpt)</span>{
   "features": [
@@ -948,7 +948,7 @@
 
     <h3>Starting the feature</h3>
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
-<span class="accent">VibeOS v1.3.0 | Foundation: complete | No active feature</span>
+<span class="accent">VibeCrew v1.3.0 | Foundation: complete | No active feature</span>
 <span class="output">Next in backlog: user-auth (P0, M complexity)</span>
 
 <span class="prompt">&gt;</span> /new-feature "user-auth"
@@ -1029,7 +1029,7 @@
 
 <span class="output">Updating CHANGELOG.md</span>
 <span class="output">Updating docs/features/user-auth.md with implementation notes</span>
-<span class="output">Session log saved to .vibeos/sessions/</span>
+<span class="output">Session log saved to .vibecrew/sessions/</span>
 
 <span class="success">Phase complete: Docs</span>
 <span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Docs</span></code></pre>
@@ -1066,7 +1066,7 @@
   <section class="section" id="parallel-features">
     <span class="section-label">Advanced</span>
     <h2>Day 4: Building Multiple Features in Parallel</h2>
-    <p>Once you've shipped a couple of features sequentially and feel comfortable with the rhythm, try parallel execution. This is where VibeOS's multi-session design really shines.</p>
+    <p>Once you've shipped a couple of features sequentially and feel comfortable with the rhythm, try parallel execution. This is where VibeCrew's multi-session design really shines.</p>
 
     <h3>The setup: 3 tabs</h3>
     <div class="card-grid">
@@ -1137,7 +1137,7 @@
       </div>
       <div class="card">
         <h4>Build sequentially when:</h4>
-        <p>Feature B depends on Feature A's code, you're working on core shared infrastructure (auth, database schema, API layer), or you're learning VibeOS. Merge conflicts from parallel branches cost more time than they save.</p>
+        <p>Feature B depends on Feature A's code, you're working on core shared infrastructure (auth, database schema, API layer), or you're learning VibeCrew. Merge conflicts from parallel branches cost more time than they save.</p>
       </div>
     </div>
   </section>
@@ -1148,7 +1148,7 @@
   <section class="section" id="dev-servers">
     <span class="section-label">Practical</span>
     <h2>Running Dev &amp; Test Servers</h2>
-    <p>While VibeOS builds your code, you'll want to see it running in the browser. Here's how to set up a dedicated tab for your dev server and run tests against it.</p>
+    <p>While VibeCrew builds your code, you'll want to see it running in the browser. Here's how to set up a dedicated tab for your dev server and run tests against it.</p>
 
     <h3>Dedicated dev server tab</h3>
     <p>Keep one terminal tab exclusively for your development server. This tab runs outside Claude Code &mdash; it's just a normal shell running your framework's dev command.</p>
@@ -1174,10 +1174,10 @@
           <div class="terminal-dot red"></div>
           <div class="terminal-dot yellow"></div>
           <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab &mdash; VibeOS Session</span>
+          <span class="terminal-title">Tab &mdash; VibeCrew Session</span>
         </div>
         <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
-<span class="accent">VibeOS v1.3.0 | Feature: user-auth (Code phase)</span>
+<span class="accent">VibeCrew v1.3.0 | Feature: user-auth (Code phase)</span>
 
 <span class="prompt">&gt;</span> <span class="cmd">"Implement the login page"</span>
 <span class="output">Builder agent working...</span>
@@ -1189,11 +1189,11 @@
 
     <div class="callout tip">
       <div class="callout-title">Hot reload is your friend</div>
-      <p>Next.js, Vite, and most modern frameworks hot-reload when files change. As VibeOS writes code in one tab, your browser updates in real time. Keep your browser and dev server tab visible alongside your Claude Code tab to watch the UI take shape as it's built.</p>
+      <p>Next.js, Vite, and most modern frameworks hot-reload when files change. As VibeCrew writes code in one tab, your browser updates in real time. Keep your browser and dev server tab visible alongside your Claude Code tab to watch the UI take shape as it's built.</p>
     </div>
 
     <h3>Running tests during development</h3>
-    <p>VibeOS runs tests automatically during the Test phase and when you use <code>/check</code> or <code>/wrap</code>. But you can also run a test watcher in a separate tab for continuous feedback.</p>
+    <p>VibeCrew runs tests automatically during the Test phase and when you use <code>/check</code> or <code>/wrap</code>. But you can also run a test watcher in a separate tab for continuous feedback.</p>
 
     <div class="terminal-grid three-col">
       <div class="terminal-window">
@@ -1226,7 +1226,7 @@
           <div class="terminal-dot red"></div>
           <div class="terminal-dot yellow"></div>
           <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab &mdash; VibeOS Session</span>
+          <span class="terminal-title">Tab &mdash; VibeCrew Session</span>
         </div>
         <div class="terminal-body"><span class="accent">Building: user-auth</span>
 <span class="output">Code phase active</span>
@@ -1257,9 +1257,9 @@ npm run lint             <span class="output"># ESLint</span>
 npx tsc --noEmit         <span class="output"># TypeScript type check</span></code></pre>
 
     <h3>Using <code>/check</code> to validate everything at once</h3>
-    <p>Instead of running each command manually, use <code>/check</code> inside your VibeOS session. The Verifier agent runs the full quality gate: build, tests, lint, and type check &mdash; in one shot.</p>
+    <p>Instead of running each command manually, use <code>/check</code> inside your VibeCrew session. The Verifier agent runs the full quality gate: build, tests, lint, and type check &mdash; in one shot.</p>
 
-    <pre><code><span class="code-label">VibeOS Tab</span><span class="prompt">&gt;</span> /check
+    <pre><code><span class="code-label">VibeCrew Tab</span><span class="prompt">&gt;</span> /check
 
 <span class="output">Verifier running quality gate...</span>
 <span class="success">  Build:  passed (3.2s)</span>
@@ -1270,7 +1270,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
 
     <div class="callout info">
       <div class="callout-title">Recommended tab layout for active development</div>
-      <p>For the best workflow, arrange your screen like this: <strong>Browser</strong> (left half) showing <code>localhost:3000</code>, <strong>VibeOS tab</strong> (right top) for building, <strong>Dev server tab</strong> (right bottom) to monitor for errors. If using Warp, create a <strong>Launch Configuration</strong> that opens this layout automatically (see <a href="warp.html">Warp Tips</a>).</p>
+      <p>For the best workflow, arrange your screen like this: <strong>Browser</strong> (left half) showing <code>localhost:3000</code>, <strong>VibeCrew tab</strong> (right top) for building, <strong>Dev server tab</strong> (right bottom) to monitor for errors. If using Warp, create a <strong>Launch Configuration</strong> that opens this layout automatically (see <a href="warp.html">Warp Tips</a>).</p>
     </div>
   </section>
 
@@ -1280,14 +1280,14 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
   <section class="section" id="companion-docs">
     <span class="section-label">Reference</span>
     <h2>Using the Companion Docs Website</h2>
-    <p>You're reading it right now. The VibeOS documentation site is your reference companion during every session. Here's how to get the most out of it.</p>
+    <p>You're reading it right now. The VibeCrew documentation site is your reference companion during every session. Here's how to get the most out of it.</p>
 
     <h3>What's in each page</h3>
     <div class="card-grid">
       <div class="card">
         <div class="card-icon purple">&#9733;</div>
-        <h4><a href="why.html">Why VibeOS</a></h4>
-        <p>Start here if you're explaining VibeOS to a teammate or reminding yourself of the core philosophy. Covers the three problems (attention, tokens, architecture) and design principles.</p>
+        <h4><a href="why.html">Why VibeCrew</a></h4>
+        <p>Start here if you're explaining VibeCrew to a teammate or reminding yourself of the core philosophy. Covers the three problems (attention, tokens, architecture) and design principles.</p>
       </div>
       <div class="card">
         <div class="card-icon green">&#9881;</div>
@@ -1302,7 +1302,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       <div class="card">
         <div class="card-icon amber">&#8635;</div>
         <h4><a href="existing-project.html">Existing Projects</a></h4>
-        <p>How to bring VibeOS into a codebase that already has code. Code auditing, convention extraction, and backlog mapping from existing issues.</p>
+        <p>How to bring VibeCrew into a codebase that already has code. Code auditing, convention extraction, and backlog mapping from existing issues.</p>
       </div>
     </div>
 
@@ -1315,7 +1315,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       <div class="card">
         <div class="card-icon purple">&#9632;</div>
         <h4><a href="architecture.html">Architecture Deep Dive</a></h4>
-        <p>Technical details: the 12-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em>how</em> VibeOS works under the hood.</p>
+        <p>Technical details: the 12-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em>how</em> VibeCrew works under the hood.</p>
       </div>
       <div class="card">
         <div class="card-icon blue">&#9000;</div>
@@ -1325,7 +1325,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       <div class="card">
         <div class="card-icon green">&#9998;</div>
         <h4><a href="releases.html">Release Notes</a></h4>
-        <p>Complete changelog across all versions. Check here after updating VibeOS to see what's new and whether any workflow changes are needed.</p>
+        <p>Complete changelog across all versions. Check here after updating VibeCrew to see what's new and whether any workflow changes are needed.</p>
       </div>
     </div>
 
@@ -1341,7 +1341,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       </li>
       <li>
         <h4>Share pages with teammates</h4>
-        <p>Each page is self-contained. Send a teammate the <a href="setup.html">Setup Guide</a> link to onboard them, or the <a href="why.html">Why VibeOS</a> page to explain the philosophy before they dive in.</p>
+        <p>Each page is self-contained. Send a teammate the <a href="setup.html">Setup Guide</a> link to onboard them, or the <a href="why.html">Why VibeCrew</a> page to explain the philosophy before they dive in.</p>
       </li>
     </ol>
 
@@ -1357,7 +1357,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
   <section class="section" id="capturing-ideas">
     <span class="section-label">Workflow Tip</span>
     <h2>Capturing Ideas for the Backlog</h2>
-    <p>Ideas come at the worst times &mdash; mid-implementation, during testing, while reviewing code. VibeOS gives you two tools to capture without losing flow.</p>
+    <p>Ideas come at the worst times &mdash; mid-implementation, during testing, while reviewing code. VibeCrew gives you two tools to capture without losing flow.</p>
 
     <h3><code>/idea</code> &mdash; instant capture</h3>
     <p>The fastest way. One line in, one line out. Zero context consumed. Use it anytime, in any tab.</p>
@@ -1371,7 +1371,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
 <span class="prompt">&gt;</span> /idea "rate limiting on auth endpoints"
 <span class="output">Added to backlog: "rate limiting on auth endpoints" (unplanned)</span></code></pre>
 
-    <p>Ideas land in <code>.vibeos/backlog.json</code> with status <code>"unplanned"</code>. They sit there until your next planning session.</p>
+    <p>Ideas land in <code>.vibecrew/backlog.json</code> with status <code>"unplanned"</code>. They sit there until your next planning session.</p>
 
     <h3><code>/plan-features</code> &mdash; structured planning</h3>
     <p>When you've accumulated several ideas, run <code>/plan-features</code> to promote them to structured specs with acceptance criteria, priority, and complexity. This is best done in a dedicated planning session (see <a href="#planning-session">Day 2</a> above).</p>
@@ -1396,7 +1396,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
   <!-- ============ FULL WEEK ============ -->
   <section class="section" id="full-week">
     <span class="section-label">The Big Picture</span>
-    <h2>A Full Week with VibeOS</h2>
+    <h2>A Full Week with VibeCrew</h2>
     <p>Here's what a productive week looks like from start to finish, building TripFlow from zero to a working MVP.</p>
 
     <div class="card-grid">
@@ -1447,7 +1447,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
   <section class="section" id="best-practices">
     <span class="section-label">Habits</span>
     <h2>Best Practices &amp; Guardrails</h2>
-    <p>VibeOS enforces many rules automatically through hooks, but some habits need to be built by you. These tips prevent the most common mistakes that cost time, tokens, and Vibe Score points.</p>
+    <p>VibeCrew enforces many rules automatically through hooks, but some habits need to be built by you. These tips prevent the most common mistakes that cost time, tokens, and Vibe Score points.</p>
 
     <!-- ---- GUARDRAIL 1: AUTO-WRAP ---- -->
     <h3>Never close a tab without wrapping</h3>
@@ -1459,15 +1459,15 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
     <h4>Option 2: Shell exit reminder</h4>
     <p>Add a trap to your shell config that fires when the terminal is about to close:</p>
     <pre><code><span class="code-label">.zshrc</span><span class="accent"># Remind to /wrap before closing</span>
-vibeos_exit_check() {
-  if [ -f ".vibeos/state.json" ]; then
+vibecrew_exit_check() {
+  if [ -f ".vibecrew/state.json" ]; then
     echo ""
-    echo "<span class="warn">Warning: Did you /wrap your VibeOS session?</span>"
+    echo "<span class="warn">Warning: Did you /wrap your VibeCrew session?</span>"
     echo "<span class="output">Run /wrap to save your Vibe Score and session log.</span>"
     echo ""
   fi
 }
-trap vibeos_exit_check EXIT</code></pre>
+trap vibecrew_exit_check EXIT</code></pre>
 
     <h4>Option 3: Lightweight Stop hook (automatic)</h4>
     <p>Extend the existing <code>Stop</code> hook to run a basic quality gate and save what it can. This runs automatically when Claude Code exits &mdash; even if you forget.</p>
@@ -1477,7 +1477,7 @@ trap vibeos_exit_check EXIT</code></pre>
 <span class="output"># but captures the basics.</span>
 
 SESSION_ID=$(date +%Y%m%d-%H%M%S)
-LOG_DIR=".vibeos/sessions"
+LOG_DIR=".vibecrew/sessions"
 mkdir -p "$LOG_DIR"
 
 <span class="accent"># Save basic session metadata</span>
@@ -1511,16 +1511,16 @@ fi</code></pre>
 <span class="output">  Uncommitted files: 4</span>
 <span class="output">  Session log: partial (auto-wrap-lite)</span>
 <span class="output">Recommendation: Review uncommitted changes, then continue or /wrap.</span>
-<span class="accent">VibeOS v1.3.0 | Feature: trip-creation (Code phase)</span></code></pre>
+<span class="accent">VibeCrew v1.3.0 | Feature: trip-creation (Code phase)</span></code></pre>
 
     <div class="callout tip">
       <div class="callout-title">This is automatic</div>
-      <p>You don't need to configure anything. The Session Startup agent reads <code>.vibeos/sessions/</code> on every launch and flags incomplete sessions. It's one of the reasons every session should start with <code>claude</code> (not by resuming a detached process).</p>
+      <p>You don't need to configure anything. The Session Startup agent reads <code>.vibecrew/sessions/</code> on every launch and flags incomplete sessions. It's one of the reasons every session should start with <code>claude</code> (not by resuming a detached process).</p>
     </div>
 
     <!-- ---- GUARDRAIL 3: BRANCH GUARD ---- -->
     <h3>Never build features on main</h3>
-    <p>VibeOS creates a feature branch automatically when you run <code>/new-feature</code>. But if you skip that and start coding directly, you might be on <code>main</code>. The phase gate hook can catch this.</p>
+    <p>VibeCrew creates a feature branch automatically when you run <code>/new-feature</code>. But if you skip that and start coding directly, you might be on <code>main</code>. The phase gate hook can catch this.</p>
 
     <pre><code><span class="code-label">What happens if you try</span><span class="prompt">&gt;</span> "Add a login form to the homepage"
 
@@ -1632,18 +1632,18 @@ fi</code></pre>
 <span class="success">[x] Docs</span>        <span class="output">&rarr; commit: "docs(auth): changelog and feature documentation"</span></code></pre>
 
     <div class="callout tip">
-      <div class="callout-title">VibeOS handles this automatically</div>
+      <div class="callout-title">VibeCrew handles this automatically</div>
       <p>The Builder and Verifier agents commit at phase boundaries by default. But if you're guiding the session manually (typing prompts instead of letting agents drive), remember to commit after each phase. The phase-gate hook tracks which phases are complete, so commits also serve as progress checkpoints.</p>
     </div>
 
     <!-- ---- GUARDRAIL 10: BACKUP STATE ---- -->
-    <h3>Commit your <code>.vibeos/</code> folder</h3>
-    <p>The <code>.vibeos/</code> folder contains your project state: backlog, session logs, scores, and config. If you lose it, you lose your history. Commit it to your repo so it's backed up and shared with teammates.</p>
+    <h3>Commit your <code>.vibecrew/</code> folder</h3>
+    <p>The <code>.vibecrew/</code> folder contains your project state: backlog, session logs, scores, and config. If you lose it, you lose your history. Commit it to your repo so it's backed up and shared with teammates.</p>
 
-    <pre><code><span class="code-label">.gitignore</span><span class="accent"># DO commit .vibeos/ (project state)</span>
+    <pre><code><span class="code-label">.gitignore</span><span class="accent"># DO commit .vibecrew/ (project state)</span>
 <span class="output"># DON'T commit sensitive runtime data</span>
-.vibeos/sessions/*.tmp
-.vibeos/cache/</code></pre>
+.vibecrew/sessions/*.tmp
+.vibecrew/cache/</code></pre>
 
     <h3>Quick reference: the 10 habits</h3>
     <div class="flow"><span class="green"> 1.</span> Always <span class="green">/wrap</span> before closing a tab
@@ -1655,14 +1655,14 @@ fi</code></pre>
 <span class="green"> 7.</span> Wrap up at <span class="amber">60% context</span> &mdash; don't push to 80%+
 <span class="green"> 8.</span> Run <span class="green">/plan-features</span> weekly to process ideas
 <span class="green"> 9.</span> Commit at every phase boundary
-<span class="green">10.</span> Keep <span class="highlight">.vibeos/</span> in version control</div>
+<span class="green">10.</span> Keep <span class="highlight">.vibecrew/</span> in version control</div>
 
   </section>
 
 </div>
 
 <footer class="footer">
-  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
   <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
 </footer>
 

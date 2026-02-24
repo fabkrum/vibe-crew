@@ -1,6 +1,6 @@
-# VibeOS Implementation Plan
+# VibeCrew Implementation Plan
 
-> Phased roadmap for building the VibeOS Claude Code plugin from foundation through polish. Each phase builds on the previous, with clear deliverables, acceptance criteria, and risk assessment.
+> Phased roadmap for building the VibeCrew Claude Code plugin from foundation through polish. Each phase builds on the previous, with clear deliverables, acceptance criteria, and risk assessment.
 >
 > **v1.0 scope:** 5 agents, 9 skills, Agent Teams API coordination, worktree-based isolation. Total: 16-23 sessions, ~60-70 files. Performance Coach, Doc Generator, and existing project onboarding are deferred to v1.1.
 
@@ -11,7 +11,7 @@
 - **Session** = one Claude Code session (typically 30-90 minutes of focused work before context pressure).
 - **Effort estimates** assume a single developer working with Claude Code.
 - **Deliverable counts** are approximate -- some phases may split or merge files during implementation.
-- **Schema references** point to `architecture/schemas.md`, the single source of truth for all `.vibeos/` JSON file schemas.
+- **Schema references** point to `architecture/schemas.md`, the single source of truth for all `.vibecrew/` JSON file schemas.
 
 ---
 
@@ -68,7 +68,7 @@ Phase 4: Documentation    Phase 6: Polish <---+
 
 ### Goal
 
-Build the plugin skeleton, safety layer, session startup hook, and runtime state directory. This phase produces a plugin that installs cleanly, enforces safety rules via deterministic bash scripts, and initializes the `.vibeos/` state directory. No agents or slash commands yet -- just the structural spine and protective shell.
+Build the plugin skeleton, safety layer, session startup hook, and runtime state directory. This phase produces a plugin that installs cleanly, enforces safety rules via deterministic bash scripts, and initializes the `.vibecrew/` state directory. No agents or slash commands yet -- just the structural spine and protective shell.
 
 ### Key Deliverables (~14 files)
 
@@ -86,7 +86,7 @@ Build the plugin skeleton, safety layer, session startup hook, and runtime state
 | 10 | `scripts/check-context.sh` | Stop hook: monitors context window usage, warns at 60%/80%/90% thresholds |
 | 11 | `settings.json` | Declarative deny rules: 40+ blocked command patterns (defense in depth alongside hook scripts) |
 | 12 | `.mcp.json` | MCP server configuration for Context7 and Puppeteer |
-| 13 | `scripts/init-vibeos-state.sh` | Creates `.vibeos/` directory with initial config.json, state.json, backlog.json (schemas per `architecture/schemas.md`) |
+| 13 | `scripts/init-vibecrew-state.sh` | Creates `.vibecrew/` directory with initial config.json, state.json, backlog.json (schemas per `architecture/schemas.md`) |
 | 14 | `LICENSE` | MIT license |
 
 ### Dependencies
@@ -95,12 +95,12 @@ None. This is the starting point.
 
 ### Acceptance Criteria
 
-1. **Plugin installs cleanly**: `claude plugin install /path/to/claude-plugin-vibe-os` succeeds. Claude Code detects the plugin on next session start.
+1. **Plugin installs cleanly**: `claude plugin install /path/to/claude-plugin-vibe-crew` succeeds. Claude Code detects the plugin on next session start.
 2. **Hooks bind correctly**: All registered hooks appear with correct event-to-script mappings.
 3. **Safety layer blocks dangerous commands**: `rm -rf /`, `git push --force origin main`, `DROP TABLE`, `sudo`, and `chmod 777` are all blocked with exit code 2 and descriptive messages.
 4. **Path restriction works**: Writes outside the project root are blocked. Writes to `.git/` internals are blocked.
-5. **Phase gate enforces Tier 1**: Writes to `src/`, `app/`, `lib/`, `components/` are blocked when `foundation.complete` is `false`. Writes to `.vibeos/`, `CLAUDE.md`, `VISION.md`, and `docs/` are always allowed.
-6. **State directory initializes**: `init-vibeos-state.sh` creates the full `.vibeos/` tree with valid JSON files matching the schemas in `architecture/schemas.md`.
+5. **Phase gate enforces Tier 1**: Writes to `src/`, `app/`, `lib/`, `components/` are blocked when `foundation.complete` is `false`. Writes to `.vibecrew/`, `CLAUDE.md`, `VISION.md`, and `docs/` are always allowed.
+6. **State directory initializes**: `init-vibecrew-state.sh` creates the full `.vibecrew/` tree with valid JSON files matching the schemas in `architecture/schemas.md`.
 7. **Context re-injection works**: After a compaction event, the compact-reinject.sh script outputs a valid JSON summary of project state.
 8. **Notifications degrade gracefully**: Warp deep-link > terminal-notifier > osascript > terminal bell > silent log.
 
@@ -135,7 +135,7 @@ Define all five agent prompts, implement the first five slash commands (/setup, 
 | 3 | `agents/stack-scout.md` | Opus agent: read-only research with WebSearch, Context7, Puppeteer. `isolation: worktree`. |
 | 4 | `agents/builder.md` | Opus agent: design system (Tier 1) + component design + feature implementation (Tier 2). `isolation: worktree`. |
 | 5 | `agents/verifier.md` | Haiku agent: TDD-hybrid testing, quality checks, Vibe Score calculation |
-| 6 | `skills/setup/SKILL.md` | /setup: interactive wizard -- terminal selection, notification test, MCP verification, .vibeos/ init |
+| 6 | `skills/setup/SKILL.md` | /setup: interactive wizard -- terminal selection, notification test, MCP verification, .vibecrew/ init |
 | 7 | `skills/new-project/SKILL.md` | /new-project: guided 5-step Tier 1 foundation -- VISION.md, design-system.css, TDR, roadmap, CLAUDE.md |
 | 8 | `skills/status/SKILL.md` | /status: read-only dashboard with dynamic context injection |
 | 9 | `skills/idea/SKILL.md` | /idea: zero-disruption backlog capture. Exactly one line of output. |
@@ -159,8 +159,8 @@ Phase 1 must be complete. All hook scripts and the plugin manifest must be funct
 
 ### Acceptance Criteria
 
-1. **Session Startup runs on every session**: Opens Claude Code in a VibeOS project, Session Startup activates automatically, prints a 3-line status summary under 200 words.
-2. **/setup completes full wizard**: Terminal selection, notification test, MCP verification, .vibeos/ initialization. Config persisted to `.vibeos/config.json`.
+1. **Session Startup runs on every session**: Opens Claude Code in a VibeCrew project, Session Startup activates automatically, prints a 3-line status summary under 200 words.
+2. **/setup completes full wizard**: Terminal selection, notification test, MCP verification, .vibecrew/ initialization. Config persisted to `.vibecrew/config.json`.
 3. **/new-project produces all 5 foundation artifacts**: VISION.md, design-system.css, TDR, roadmap.md, and CLAUDE.md created. `state.json` updated to `foundation.complete: true`. Phase gate unlocks.
 4. **Stack Scout runs in isolated worktree**: Research tokens stay outside the main session. Only the TDR result returns to the parent context.
 5. **/status is read-only**: Dashboard with no side effects -- no state mutations, no file writes, no git operations.
@@ -174,7 +174,7 @@ Phase 1 must be complete. All hook scripts and the plugin manifest must be funct
 - **TeamCreate**: Orchestrator creates teams for feature development (e.g., `feat-001-user-auth`).
 - **TaskCreate**: Orchestrator assigns design/code tasks to Builder, research tasks to Stack Scout.
 - **SendMessage**: Orchestrator sends coordination messages and receives completion notifications.
-- **Signal files** (`.vibeos/signals/`): Agents write structured payloads for handoff data (TDR summaries, test results). See `architecture/schemas.md` Section 7.
+- **Signal files** (`.vibecrew/signals/`): Agents write structured payloads for handoff data (TDR summaries, test results). See `architecture/schemas.md` Section 7.
 
 ### Risk Assessment
 
@@ -227,7 +227,7 @@ Phase 2 must be complete. All 5 agents must be defined and the Agent Teams coord
 5. **Vibe Score calculates correctly**: Score 0-100 with itemized deductions/bonuses matching the formula in `architecture/schemas.md` Section 6.
 6. **/new-feature creates a full feature session**: Branch, worktree, phase tracker initialization, feature spec loading, agent handoff.
 7. **/run-backlog executes autonomously**: Picks features in priority order, respects dependencies, runs quality gates between features, stops on failure or completion.
-8. **Session logs are persisted**: After /wrap, valid JSON exists in `.vibeos/sessions/` matching the session log schema.
+8. **Session logs are persisted**: After /wrap, valid JSON exists in `.vibecrew/sessions/` matching the session log schema.
 
 ### Agent Teams Integration Points
 
@@ -261,29 +261,29 @@ Build a minimal VitePress documentation site with a Kanban board (reading from b
 | 1 | `templates/docs-site/package.json` | VitePress dependencies and scripts (dev, build, preview) |
 | 2 | `templates/docs-site/.vitepress/config.ts` | VitePress configuration: site title, navigation, sidebar, port 3002 |
 | 3 | `templates/docs-site/index.md` | Documentation site homepage with project overview |
-| 4 | `templates/docs-site/system/getting-started.md` | System docs: VibeOS installation and setup guide |
+| 4 | `templates/docs-site/system/getting-started.md` | System docs: VibeCrew installation and setup guide |
 | 5 | `templates/docs-site/system/commands.md` | System docs: all 9 slash command references |
 | 6 | `templates/docs-site/components/KanbanBoard.vue` | Kanban board reading from backlog.json -- columns for idea, planned, in-progress, testing, review, done |
 | 7 | `templates/docs-site/components/StatsPage.vue` | Basic statistics: total sessions, features completed, average Vibe Score, total tokens |
-| 8 | `templates/docs-site/data/backlog.data.ts` | VitePress data loader: reads .vibeos/backlog.json, maps features to Kanban columns |
-| 9 | `templates/docs-site/data/sessions.data.ts` | VitePress data loader: reads .vibeos/sessions/*.json, aggregates session statistics |
+| 8 | `templates/docs-site/data/backlog.data.ts` | VitePress data loader: reads .vibecrew/backlog.json, maps features to Kanban columns |
+| 9 | `templates/docs-site/data/sessions.data.ts` | VitePress data loader: reads .vibecrew/sessions/*.json, aggregates session statistics |
 | 10 | `scripts/update-docs.sh` | PostToolUse helper: triggers VitePress rebuild after documentation changes |
 
 ### Dependencies
 
-Phase 3 must be complete. The `.vibeos/` state files (sessions, scores, backlog) must have defined schemas and working read/write paths.
+Phase 3 must be complete. The `.vibecrew/` state files (sessions, scores, backlog) must have defined schemas and working read/write paths.
 
 ### Acceptance Criteria
 
 1. **VitePress site builds and serves**: `npm run docs:dev` starts on port 3002 without errors.
 2. **Kanban board reads backlog.json**: Features appear in correct columns based on their `column` field. Read-only display, no drag-and-drop.
-3. **Stats page displays real data**: With sample `.vibeos/` data, the stats page renders session count, feature count, average Vibe Score, and total tokens.
-4. **Data loaders handle empty state**: When `.vibeos/` directories are empty, zero-state messages appear instead of errors.
+3. **Stats page displays real data**: With sample `.vibecrew/` data, the stats page renders session count, feature count, average Vibe Score, and total tokens.
+4. **Data loaders handle empty state**: When `.vibecrew/` directories are empty, zero-state messages appear instead of errors.
 5. **System docs are accurate**: Getting-started guide and command reference match the actual plugin behavior.
 
 ### Agent Teams Integration Points
 
-None directly. The docs site reads from `.vibeos/` state files that are populated by agents during normal workflow.
+None directly. The docs site reads from `.vibecrew/` state files that are populated by agents during normal workflow.
 
 ### Risk Assessment
 
@@ -300,7 +300,7 @@ None directly. The docs site reads from `.vibeos/` state files that are populate
 
 ### Goal
 
-Build the intelligence features that make VibeOS self-aware: context re-injection after compaction (building on the Phase 1 compact-reinject.sh), cost guardrails (session and daily spend tracking), CLAUDE.md size monitoring and pruning recommendations, and enhanced session analysis. This phase makes the system smarter about resource management.
+Build the intelligence features that make VibeCrew self-aware: context re-injection after compaction (building on the Phase 1 compact-reinject.sh), cost guardrails (session and daily spend tracking), CLAUDE.md size monitoring and pruning recommendations, and enhanced session analysis. This phase makes the system smarter about resource management.
 
 ### Key Deliverables (~8 files)
 
@@ -309,7 +309,7 @@ Build the intelligence features that make VibeOS self-aware: context re-injectio
 | 1 | `scripts/compact-reinject.sh` (enhanced) | Enhanced re-injection: includes active feature context, recent commits, and worktree state alongside foundation status |
 | 2 | `scripts/cost-guardrails.sh` | Monitors session cost against `config.json` limits (`session_warn_usd`, `session_max_usd`, `daily_warn_usd`). Warns or pauses agent. |
 | 3 | `scripts/claude-md-lint.sh` | Validates CLAUDE.md: checks line count (<500), detects duplicate rules, flags inlined documentation, reports bloat |
-| 4 | `scripts/migrate-state.sh` | Schema migration: reads `schema_version` from each .vibeos/ file, applies sequential migrations (see `architecture/schemas.md` Section 9) |
+| 4 | `scripts/migrate-state.sh` | Schema migration: reads `schema_version` from each .vibecrew/ file, applies sequential migrations (see `architecture/schemas.md` Section 9) |
 | 5 | `scripts/sync-state.sh` | Reconciles state.json and backlog.json when inconsistencies are detected (e.g., active feature mismatch) |
 | 6 | `templates/mutation-log.json.template` | Log for future CLAUDE.md mutations: timestamp, session_id, proposed_rule, reasoning. Prepares data structure for v1.1 Performance Coach. |
 | 7 | `scripts/error-recovery.sh` | Common error recovery: stale lock cleanup, port conflict resolution, orphaned process cleanup, git state recovery |
@@ -356,9 +356,9 @@ End-to-end testing across the full workflow (Tier 1 foundation through Tier 2 fe
 |---|------|---------|
 | 1 | `README.md` | Plugin README: installation, quick start, command reference, architecture overview, troubleshooting |
 | 2 | `CHANGELOG.md` | Plugin changelog following Keep a Changelog format |
-| 3 | `scripts/uninstall.sh` | Clean removal: removes plugin files, optionally .vibeos/. Does not touch source code. |
+| 3 | `scripts/uninstall.sh` | Clean removal: removes plugin files, optionally .vibecrew/. Does not touch source code. |
 | 4 | `scripts/extract-design-system.sh` | Uses Puppeteer MCP to extract color, typography, spacing from a reference URL. Outputs design-system.css tokens. |
-| 5 | `templates/gitignore-additions.template` | Recommended .gitignore additions for VibeOS projects (.vibeos/config.json, signals/, locks/) |
+| 5 | `templates/gitignore-additions.template` | Recommended .gitignore additions for VibeCrew projects (.vibecrew/config.json, signals/, locks/) |
 | 6 | `templates/CONTRIBUTING.md.template` | Contribution guide for plugin development |
 | 7 | `hooks/hooks.json` (finalized) | Final hook routing table with all bindings verified and tested |
 | 8 | `scripts/notify.sh` (finalized) | Finalized notification: full Warp deep-linking, iTerm2 OSC 9, VS Code, Terminal.app fallback |
@@ -407,7 +407,7 @@ All previous phases must be complete.
 - 5 agent `.md` files
 - 9 skill `SKILL.md` files
 - ~8 hook/automation scripts (session-startup.sh, compact-reinject.sh, phase-gate.sh, protect-data.sh, restrict-paths.sh, format-code.sh, notify.sh, check-context.sh)
-- ~8 utility scripts (init-vibeos-state.sh, complete-phase.sh, claim-task.sh, update-backlog.sh, calculate-vibe-score.sh, cost-guardrails.sh, validate-plugin.sh, etc.)
+- ~8 utility scripts (init-vibecrew-state.sh, complete-phase.sh, claim-task.sh, update-backlog.sh, calculate-vibe-score.sh, cost-guardrails.sh, validate-plugin.sh, etc.)
 - ~10 templates (JSON schemas, CSS, markdown)
 - ~10 docs-site files (VitePress config, 2 Vue components, 2 data loaders, markdown pages)
 - ~5 supporting files (README, CHANGELOG, LICENSE, settings.json, .mcp.json, plugin.json)
@@ -465,7 +465,7 @@ These principles govern all implementation work across all phases.
 
 3. **Bash scripts must be idempotent.** Every script in `scripts/` must be safe to run multiple times. No "already exists" errors, no duplicate entries, no corrupted state.
 
-4. **JSON schemas are contracts.** The `.vibeos/` schemas defined in `architecture/schemas.md` are the data contracts between agents, scripts, and the docs site. Changing a schema requires updating all consumers.
+4. **JSON schemas are contracts.** The `.vibecrew/` schemas defined in `architecture/schemas.md` are the data contracts between agents, scripts, and the docs site. Changing a schema requires updating all consumers.
 
 5. **Fail open, not closed.** If a hook script encounters an unexpected error (jq not installed, malformed JSON, missing file), it should exit 0 and log a warning -- not exit 2 and block the operation. Exception: safety scripts (protect-data.sh, restrict-paths.sh) fail closed.
 

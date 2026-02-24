@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeOS — Warp Terminal Tips &amp; Tricks</title>
+  <title>VibeCrew — Warp Terminal Tips &amp; Tricks</title>
   <style>
     :root {
       --color-bg: #0a0a0b;
@@ -563,9 +563,9 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
     <ul class="nav-links">
-      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="why.html">Why VibeCrew</a></li>
       <li><a href="setup.html">Setup</a></li>
       <li><a href="new-project.html">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
@@ -584,7 +584,7 @@
   <div class="toc">
     <h3>On This Page</h3>
     <ol>
-      <li><a href="#why-warp">Why Warp for VibeOS</a></li>
+      <li><a href="#why-warp">Why Warp for VibeCrew</a></li>
       <li><a href="#install">Quick Install</a></li>
       <li><a href="#deep-linking">Deep-Linking &amp; Notifications</a></li>
       <li><a href="#launch-config">The Ideal Window Layout</a></li>
@@ -603,8 +603,8 @@
   <!-- ============ WHY WARP ============ -->
   <section class="section" id="why-warp">
     <span class="section-label">Overview</span>
-    <h2>Why Warp for VibeOS</h2>
-    <p>VibeOS works with any terminal. But Warp unlocks capabilities that directly improve multi-session AI development: structured output blocks for reviewing agent work, launch configurations for instant workspace setup, Warp Drive for sharing workflows across your team, and session restoration so you never lose your layout.</p>
+    <h2>Why Warp for VibeCrew</h2>
+    <p>VibeCrew works with any terminal. But Warp unlocks capabilities that directly improve multi-session AI development: structured output blocks for reviewing agent work, launch configurations for instant workspace setup, Warp Drive for sharing workflows across your team, and session restoration so you never lose your layout.</p>
 
     <div class="card-grid">
       <div class="card">
@@ -615,12 +615,12 @@
       <div class="card">
         <div class="card-icon green">&#9632;</div>
         <h4>Launch Configurations</h4>
-        <p>Save your 3-tab VibeOS layout as a YAML file. One click and your workspace opens with the right tabs, directories, and startup commands.</p>
+        <p>Save your 3-tab VibeCrew layout as a YAML file. One click and your workspace opens with the right tabs, directories, and startup commands.</p>
       </div>
       <div class="card">
         <div class="card-icon blue">&#9632;</div>
         <h4>Warp Drive</h4>
-        <p>Share VibeOS workflows, environment variables, and runbook notebooks across your team. Everyone gets the same tooling, instantly synced.</p>
+        <p>Share VibeCrew workflows, environment variables, and runbook notebooks across your team. Everyone gets the same tooling, instantly synced.</p>
       </div>
       <div class="card">
         <div class="card-icon amber">&#9632;</div>
@@ -629,7 +629,7 @@
       </div>
     </div>
 
-    <p>This page is the single reference for everything Warp + VibeOS &mdash; from installation through advanced features.</p>
+    <p>This page is the single reference for everything Warp + VibeCrew &mdash; from installation through advanced features.</p>
   </section>
 
   <hr>
@@ -653,7 +653,7 @@
       </li>
       <li>
         <h4>Install terminal-notifier</h4>
-        <p>Required for VibeOS's <code>notify.sh</code> hook script to send macOS banner notifications.</p>
+        <p>Required for VibeCrew's <code>notify.sh</code> hook script to send macOS banner notifications.</p>
         <pre class="copyable" data-copy="brew install terminal-notifier"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>brew install terminal-notifier</code></pre>
       </li>
       <li>
@@ -662,7 +662,7 @@
       </li>
       <li>
         <h4>Verify</h4>
-        <p>Run VibeOS setup wizard which sends a test notification.</p>
+        <p>Run VibeCrew setup wizard which sends a test notification.</p>
         <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">claude code</span>/setup</code></pre>
       </li>
     </ol>
@@ -674,7 +674,7 @@
   <section class="section" id="deep-linking">
     <span class="section-label">Notifications</span>
     <h2>Deep-Linking &amp; Notifications</h2>
-    <p>The killer feature of Warp for VibeOS: when a notification fires, clicking it takes you to the <em>exact tab</em> that needs attention &mdash; no hunting through multiple sessions.</p>
+    <p>The killer feature of Warp for VibeCrew: when a notification fires, clicking it takes you to the <em>exact tab</em> that needs attention &mdash; no hunting through multiple sessions.</p>
 
     <h3>Terminal comparison</h3>
     <div class="table-wrap">
@@ -692,7 +692,7 @@
     </div>
 
     <h3>How it works</h3>
-    <p>Warp exposes a <code>WARP_SESSION_ID</code> environment variable for each terminal tab. VibeOS captures this value and constructs a <code>warp://session/&lt;id&gt;</code> URI. When the <code>notify.sh</code> script fires a notification, it passes this URI to <code>terminal-notifier</code>'s <code>-execute</code> flag. Clicking the macOS banner executes the deep link, which brings Warp to the foreground and switches to the exact tab.</p>
+    <p>Warp exposes a <code>WARP_SESSION_ID</code> environment variable for each terminal tab. VibeCrew captures this value and constructs a <code>warp://session/&lt;id&gt;</code> URI. When the <code>notify.sh</code> script fires a notification, it passes this URI to <code>terminal-notifier</code>'s <code>-execute</code> flag. Clicking the macOS banner executes the deep link, which brings Warp to the foreground and switches to the exact tab.</p>
 
     <div class="flow"><span class="muted">Agent blocks on permission</span>
     &darr;
@@ -713,7 +713,7 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
 
     <div class="callout info">
       <div class="callout-title">Using a different terminal?</div>
-      <p>VibeOS works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
+      <p>VibeCrew works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
     </div>
   </section>
 
@@ -723,12 +723,12 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
   <section class="section" id="launch-config">
     <span class="section-label">Window Layout</span>
     <h2>The Ideal Window Layout</h2>
-    <p>Warp Launch Configurations let you save a complete terminal layout &mdash; windows, tabs, panes, working directories, and startup commands &mdash; as a YAML file. Open it with one click and your entire VibeOS workspace is ready.</p>
+    <p>Warp Launch Configurations let you save a complete terminal layout &mdash; windows, tabs, panes, working directories, and startup commands &mdash; as a YAML file. Open it with one click and your entire VibeCrew workspace is ready.</p>
 
-    <h3>Recommended: 3-tab VibeOS layout</h3>
-    <p>Save this file to <code>~/.warp/launch_configurations/vibeos.yaml</code>. It creates the layout from the <a href="example-session.html#terminal-setup">Example Session</a> guide.</p>
+    <h3>Recommended: 3-tab VibeCrew layout</h3>
+    <p>Save this file to <code>~/.warp/launch_configurations/vibecrew.yaml</code>. It creates the layout from the <a href="example-session.html#terminal-setup">Example Session</a> guide.</p>
 
-    <pre class="copyable" data-copy="name: VibeOS
+    <pre class="copyable" data-copy="name: VibeCrew
 windows:
   - tabs:
       - title: Feature A
@@ -748,7 +748,7 @@ windows:
         layout:
           cwd: /path/to/your-project
           commands:
-            - exec: claude"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibeos.yaml</span>name: VibeOS
+            - exec: claude"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibecrew.yaml</span>name: VibeCrew
 windows:
   - tabs:
       - title: Feature A
@@ -770,7 +770,7 @@ windows:
           commands:
             - exec: claude</code></pre>
 
-    <p>Launch it via Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>) &rarr; "Launch Configuration" &rarr; "VibeOS". Three Claude Code sessions start in parallel, each in its own colored tab.</p>
+    <p>Launch it via Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>) &rarr; "Launch Configuration" &rarr; "VibeCrew". Three Claude Code sessions start in parallel, each in its own colored tab.</p>
 
     <div class="callout tip">
       <div class="callout-title">Color-code your tabs</div>
@@ -780,10 +780,10 @@ windows:
     <h3>Advanced: split-pane layout</h3>
     <p>If you prefer panes over tabs, this layout splits a single window into three regions. The main feature pane takes 2/3 of the width, with a secondary feature and utility pane stacked on the right.</p>
 
-    <pre class="copyable" data-copy="name: VibeOS Split
+    <pre class="copyable" data-copy="name: VibeCrew Split
 windows:
   - tabs:
-      - title: VibeOS
+      - title: VibeCrew
         layout:
           split_direction: vertical
           panes:
@@ -796,10 +796,10 @@ windows:
                 - cwd: /path/to/your-project
                   commands:
                     - exec: claude
-                - cwd: /path/to/your-project"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibeos-split.yaml</span>name: VibeOS Split
+                - cwd: /path/to/your-project"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibecrew-split.yaml</span>name: VibeCrew Split
 windows:
   - tabs:
-      - title: VibeOS
+      - title: VibeCrew
         layout:
           split_direction: vertical
           panes:
@@ -826,7 +826,7 @@ windows:
   <section class="section" id="keyboard">
     <span class="section-label">Speed</span>
     <h2>Essential Keyboard Shortcuts</h2>
-    <p>These are the shortcuts that matter most when running multiple VibeOS sessions. macOS shortcuts shown &mdash; on Windows/Linux, replace <kbd>CMD</kbd> with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>.</p>
+    <p>These are the shortcuts that matter most when running multiple VibeCrew sessions. macOS shortcuts shown &mdash; on Windows/Linux, replace <kbd>CMD</kbd> with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>.</p>
 
     <h3>Tab navigation</h3>
     <div class="table-wrap">
@@ -897,7 +897,7 @@ windows:
     <h2>Working with Blocks</h2>
     <p>Warp's block model is exceptionally useful for AI-assisted development. Every command and its output are grouped into a discrete block that you can navigate, search, copy, filter, and share independently.</p>
 
-    <h3>Why blocks matter for VibeOS</h3>
+    <h3>Why blocks matter for VibeCrew</h3>
     <p>When Claude Code implements a feature, it produces dozens of commands with hundreds of lines of output. In a traditional terminal, this is one endless scroll. In Warp, each command is a navigable block.</p>
 
     <div class="card-grid">
@@ -939,15 +939,15 @@ windows:
   <section class="section" id="warp-drive">
     <span class="section-label">Team Collaboration</span>
     <h2>Warp Drive for Teams</h2>
-    <p>Warp Drive is a cloud-synced knowledge base built into the terminal. It stores four types of objects: <strong>Workflows</strong>, <strong>Notebooks</strong>, <strong>Prompts</strong>, and <strong>Environment Variables</strong>. For VibeOS teams, it's the best way to standardize tooling.</p>
+    <p>Warp Drive is a cloud-synced knowledge base built into the terminal. It stores four types of objects: <strong>Workflows</strong>, <strong>Notebooks</strong>, <strong>Prompts</strong>, and <strong>Environment Variables</strong>. For VibeCrew teams, it's the best way to standardize tooling.</p>
 
-    <h3>Shared VibeOS workflows</h3>
-    <p>Warp Workflows are parameterized command templates. Create one for common VibeOS operations and share it with your team via a Team Workspace.</p>
+    <h3>Shared VibeCrew workflows</h3>
+    <p>Warp Workflows are parameterized command templates. Create one for common VibeCrew operations and share it with your team via a Team Workspace.</p>
 
     <h4>Example: Start a feature</h4>
     <p>Create this as a Warp Workflow (via Command Palette &rarr; "Create a New Personal Workflow"):</p>
 
-    <pre><code><span class="code-label">warp workflow</span>Name:    VibeOS: Start Feature
+    <pre><code><span class="code-label">warp workflow</span>Name:    VibeCrew: Start Feature
 Command: cd {{project_path}} &amp;&amp; claude -p '/new-feature "{{feature_name}}"'</code></pre>
 
     <p>Arguments use <code>{{double_curly_braces}}</code> syntax. When you run the workflow via <kbd>CMD</kbd>+<kbd>P</kbd>, Warp prompts you to fill in each argument. Press <kbd>Shift</kbd>+<kbd>Tab</kbd> to cycle between them.</p>
@@ -960,22 +960,22 @@ Command: cd {{project_path}} &amp;&amp; claude -p '/new-feature "{{feature_name}
         </thead>
         <tbody>
           <tr>
-            <td><strong>VibeOS: Start Feature</strong></td>
+            <td><strong>VibeCrew: Start Feature</strong></td>
             <td><code>cd {{project}} &amp;&amp; claude -p '/new-feature "{{name}}"'</code></td>
             <td>Start a feature session with one command</td>
           </tr>
           <tr>
-            <td><strong>VibeOS: Quick Status</strong></td>
+            <td><strong>VibeCrew: Quick Status</strong></td>
             <td><code>cd {{project}} &amp;&amp; claude -p '/status'</code></td>
             <td>Check project state without entering interactive mode</td>
           </tr>
           <tr>
-            <td><strong>VibeOS: Heal CI</strong></td>
+            <td><strong>VibeCrew: Heal CI</strong></td>
             <td><code>cd {{project}} &amp;&amp; claude -p '/heal'</code></td>
             <td>Fix CI failures in one shot</td>
           </tr>
           <tr>
-            <td><strong>VibeOS: Run Backlog</strong></td>
+            <td><strong>VibeCrew: Run Backlog</strong></td>
             <td><code>cd {{project}} &amp;&amp; claude -p '/run-backlog'</code></td>
             <td>Fire-and-forget batch execution</td>
           </tr>
@@ -988,12 +988,12 @@ Command: cd {{project_path}} &amp;&amp; claude -p '/new-feature "{{feature_name}
 
     <pre><code><span class="code-label">dynamic enum</span>Argument: feature_name
 Type:     Dynamic Enum
-Command:  jq -r '.features[].id' .vibeos/backlog.json</code></pre>
+Command:  jq -r '.features[].id' .vibecrew/backlog.json</code></pre>
 
     <p>Now when you run the workflow, Warp shows a dropdown of your actual backlog features instead of a free-text field. No typos, no guessing.</p>
 
     <h4>Sharing with your team</h4>
-    <p>Move a workflow from your Personal Workspace to the Team Workspace in Warp Drive. It syncs in real-time to all team members. Everyone gets the same standardized VibeOS commands.</p>
+    <p>Move a workflow from your Personal Workspace to the Team Workspace in Warp Drive. It syncs in real-time to all team members. Everyone gets the same standardized VibeCrew commands.</p>
   </section>
 
   <hr>
@@ -1002,14 +1002,14 @@ Command:  jq -r '.features[].id' .vibeos/backlog.json</code></pre>
   <section class="section" id="notebooks">
     <span class="section-label">Documentation</span>
     <h2>Notebooks as Runbooks</h2>
-    <p>Warp Notebooks combine Markdown text with executable command blocks. They're the perfect format for VibeOS onboarding guides and operational runbooks that your team can execute step-by-step, directly in the terminal.</p>
+    <p>Warp Notebooks combine Markdown text with executable command blocks. They're the perfect format for VibeCrew onboarding guides and operational runbooks that your team can execute step-by-step, directly in the terminal.</p>
 
     <h3>Create a team onboarding notebook</h3>
     <p>Open Warp Drive, click <strong>+</strong> &rarr; <strong>New Notebook</strong>. Mix documentation with executable commands:</p>
 
-    <pre><code><span class="code-label">notebook example</span>### VibeOS Setup for New Team Members
+    <pre><code><span class="code-label">notebook example</span>### VibeCrew Setup for New Team Members
 
-Welcome! Follow these steps to set up VibeOS on your machine.
+Welcome! Follow these steps to set up VibeCrew on your machine.
 
 **Step 1: Install dependencies**
 &gt; brew install terminal-notifier jq gh
@@ -1018,7 +1018,7 @@ Welcome! Follow these steps to set up VibeOS on your machine.
 &gt; git clone {{repo_url}}
 &gt; cd {{project_name}}
 
-**Step 3: Run VibeOS setup**
+**Step 3: Run VibeCrew setup**
 &gt; claude
 Then type:
 &gt; /setup
@@ -1100,17 +1100,17 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000</code></pre>
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Capability</th><th>Warp AI</th><th>Claude Code + VibeOS</th></tr>
+          <tr><th>Capability</th><th>Warp AI</th><th>Claude Code + VibeCrew</th></tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Quick command help</strong></td>
             <td>Warp Agent Mode explains errors, suggests fixes for failed commands</td>
-            <td>Not its purpose &mdash; VibeOS is for full feature development</td>
+            <td>Not its purpose &mdash; VibeCrew is for full feature development</td>
           </tr>
           <tr>
             <td><strong>Feature development</strong></td>
-            <td>Warp Dispatch can run autonomously but lacks VibeOS's architecture enforcement</td>
+            <td>Warp Dispatch can run autonomously but lacks VibeCrew's architecture enforcement</td>
             <td>Full lifecycle: foundation, TDR, 5-phase cycle, Vibe Score, self-improving rules</td>
           </tr>
           <tr>
@@ -1136,8 +1136,8 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000</code></pre>
       </div>
       <div class="card">
         <div class="card-icon purple">&#9632;</div>
-        <h4>Use Claude Code + VibeOS for</h4>
-        <p>Everything involving your project: feature development, architecture decisions, code reviews, testing, CI healing. VibeOS provides the structure, scoring, and learning system that Warp AI doesn't have.</p>
+        <h4>Use Claude Code + VibeCrew for</h4>
+        <p>Everything involving your project: feature development, architecture decisions, code reviews, testing, CI healing. VibeCrew provides the structure, scoring, and learning system that Warp AI doesn't have.</p>
       </div>
     </div>
 
@@ -1153,7 +1153,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000</code></pre>
   <section class="section" id="themes">
     <span class="section-label">Comfort</span>
     <h2>Themes for Long Sessions</h2>
-    <p>VibeOS sessions can run for hours. A good theme reduces eye strain and makes block boundaries, errors, and highlights easier to scan.</p>
+    <p>VibeCrew sessions can run for hours. A good theme reduces eye strain and makes block boundaries, errors, and highlights easier to scan.</p>
 
     <h3>Recommended settings</h3>
     <ul>
@@ -1166,7 +1166,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000</code></pre>
     <h3>Custom themes</h3>
     <p>Create a YAML file in <code>~/.warp/themes/</code>. Warp also has a <strong>Theme Creator</strong> that generates a matching color palette from any background image.</p>
 
-    <pre><code><span class="code-label">~/.warp/themes/vibeos-dark.yaml</span>name: VibeOS Dark
+    <pre><code><span class="code-label">~/.warp/themes/vibecrew-dark.yaml</span>name: VibeCrew Dark
 accent: '#a78bfa'
 background: '#0a0a0b'
 foreground: '#fafafa'
@@ -1191,7 +1191,7 @@ terminal_colors:
     cyan: '#a5f3fc'
     white: '#ffffff'</code></pre>
 
-    <p>This theme matches the VibeOS documentation color palette. The accent color is the same purple used throughout the docs and status bar.</p>
+    <p>This theme matches the VibeCrew documentation color palette. The accent color is the same purple used throughout the docs and status bar.</p>
   </section>
 
   <hr>
@@ -1213,13 +1213,13 @@ terminal_colors:
 
     <h3>What doesn't get restored</h3>
     <ul>
-      <li><strong>Running processes.</strong> Claude Code sessions end when Warp quits. You'll need to restart them. This is why <code>/wrap</code> before closing is critical &mdash; it saves your progress to <code>.vibeos/</code> state files that survive restarts</li>
+      <li><strong>Running processes.</strong> Claude Code sessions end when Warp quits. You'll need to restart them. This is why <code>/wrap</code> before closing is critical &mdash; it saves your progress to <code>.vibecrew/</code> state files that survive restarts</li>
       <li><strong>Bookmarks.</strong> Block bookmarks are per-session only</li>
     </ul>
 
     <div class="callout tip">
       <div class="callout-title">The restart workflow</div>
-      <p>Always <code>/wrap</code> before quitting Warp. When you reopen, your tabs and directories are restored. Start Claude Code in each tab (<code>claude</code>) and the Session Startup agent reads the latest handoff document &mdash; it knows exactly where you left off. The combination of Warp session restore + VibeOS handoffs means you lose zero context across restarts.</p>
+      <p>Always <code>/wrap</code> before quitting Warp. When you reopen, your tabs and directories are restored. Start Claude Code in each tab (<code>claude</code>) and the Session Startup agent reads the latest handoff document &mdash; it knows exactly where you left off. The combination of Warp session restore + VibeCrew handoffs means you lose zero context across restarts.</p>
     </div>
 
     <h3>Configuration</h3>
@@ -1236,12 +1236,12 @@ terminal_colors:
     <h2>Voice Input with Wispr Flow</h2>
     <p>Typing prompts is the slowest part of working with Claude Code. <strong>Wispr Flow</strong> is an AI-powered voice dictation app for macOS (and Windows/iOS) that lets you speak your prompts directly into Warp &mdash; or any text field. It's roughly <strong>4&times; faster than typing</strong> and works inside any app, including your terminal.</p>
 
-    <h3>Why it works so well with VibeOS</h3>
+    <h3>Why it works so well with VibeCrew</h3>
     <div class="card-grid">
       <div class="card">
         <div class="card-icon purple">&#9632;</div>
         <h4>Natural-language prompts</h4>
-        <p>VibeOS commands like <code>/idea "..."</code> and <code>/new-feature "..."</code> take plain English descriptions. Speaking them is faster and often produces better, more detailed prompts than typing.</p>
+        <p>VibeCrew commands like <code>/idea "..."</code> and <code>/new-feature "..."</code> take plain English descriptions. Speaking them is faster and often produces better, more detailed prompts than typing.</p>
       </div>
       <div class="card">
         <div class="card-icon green">&#9632;</div>
@@ -1277,7 +1277,7 @@ terminal_colors:
 </div>
 
 <footer class="footer">
-  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
   <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
 </footer>
 

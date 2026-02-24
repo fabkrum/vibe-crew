@@ -1,0 +1,56 @@
+# =============================================================================
+# VibeCrew .gitignore Additions
+# =============================================================================
+# Recommended additions for projects managed by VibeCrew.
+# Copy the relevant lines into your project's .gitignore file.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# VibeCrew runtime state (do NOT commit)
+# These files are local to your machine and session. They contain terminal
+# preferences, ephemeral inter-agent signals, advisory locks, and transient
+# logs that have no value in version control.
+# -----------------------------------------------------------------------------
+.vibecrew/config.json
+.vibecrew/signals/
+.vibecrew/locks/
+.vibecrew/notifications.log
+.vibecrew/session-cost.json
+
+# -----------------------------------------------------------------------------
+# VibeCrew state that SHOULD be committed
+# These files track project-level state that is valuable to the team.
+# They are listed here commented out so you do not accidentally ignore them.
+# Do NOT uncomment these lines.
+# -----------------------------------------------------------------------------
+# .vibecrew/state.json        — project foundation status and active feature
+# .vibecrew/backlog.json      — feature backlog with specs and priorities
+# .vibecrew/sessions/         — session history logs (audit trail)
+# .vibecrew/scores/           — vibe score breakdowns (quality tracking)
+# .vibecrew/releases/         — release notes data
+
+# -----------------------------------------------------------------------------
+# Common development artifacts
+# -----------------------------------------------------------------------------
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+.output/
+coverage/
+*.log
+.env
+.env.local
+.env.*.local
+
+# -----------------------------------------------------------------------------
+# IDE and editor files
+# -----------------------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

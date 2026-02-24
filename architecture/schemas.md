@@ -1,6 +1,6 @@
-# VibeOS Canonical Schemas
+# VibeCrew Canonical Schemas
 
-> **This is the single source of truth for all `.vibeos/` JSON file schemas.**
+> **This is the single source of truth for all `.vibecrew/` JSON file schemas.**
 > All other architecture documents MUST reference this file rather than defining schemas inline.
 > Schema version: `1.0.0`
 
@@ -33,7 +33,7 @@
 
 ### Schema Version Contract
 
-Every `.vibeos/` JSON file includes a top-level `schema_version` field. When VibeOS reads a file:
+Every `.vibecrew/` JSON file includes a top-level `schema_version` field. When VibeCrew reads a file:
 
 1. If `schema_version` matches the current version → use as-is
 2. If `schema_version` is older → run migration (see [Section 9](#9-migration-strategy))
@@ -43,7 +43,7 @@ Every `.vibeos/` JSON file includes a top-level `schema_version` field. When Vib
 ### File Locations
 
 ```
-.vibeos/
+.vibecrew/
 ├── config.json                          # User preferences (per-project)
 ├── state.json                           # Project state + active feature
 ├── backlog.json                         # Feature backlog with specs
@@ -349,7 +349,7 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 
 Per-session activity records. Created by Session Startup agent at session start, updated by `/wrap` command at session end.
 
-**File pattern:** `.vibeos/sessions/session-<YYYY-MM-DD>-<NNN>.json`
+**File pattern:** `.vibecrew/sessions/session-<YYYY-MM-DD>-<NNN>.json`
 
 ```jsonc
 {
@@ -452,7 +452,7 @@ Per-session activity records. Created by Session Startup agent at session start,
 
 Per-session Vibe Score breakdown. Created by `/wrap` command (Verifier agent calculates score).
 
-**File pattern:** `.vibeos/scores/score-<YYYY-MM-DD>-<NNN>.json`
+**File pattern:** `.vibecrew/scores/score-<YYYY-MM-DD>-<NNN>.json`
 
 ```jsonc
 {
@@ -577,7 +577,7 @@ final_score = clamp(base_score + sum(deductions) + sum(bonuses), 0, 100)
 
 Ephemeral inter-agent communication. Created by one agent, consumed (read + deleted) by another. Used within Agent Teams coordination.
 
-**File pattern:** `.vibeos/signals/<source-agent>-<event>.signal`
+**File pattern:** `.vibecrew/signals/<source-agent>-<event>.signal`
 
 Signal files are JSON but use the `.signal` extension to distinguish them from persistent state.
 
@@ -668,12 +668,12 @@ Created by Stack Scout after completing a TDR. Consumed by Orchestrator.
 
 Atomic locks to prevent concurrent writes to the same resource. Uses `mkdir`-based locking (atomic on all filesystems).
 
-**Directory pattern:** `.vibeos/locks/<resource-name>/`
+**Directory pattern:** `.vibecrew/locks/<resource-name>/`
 
 ### Lock Structure
 
 ```
-.vibeos/locks/state-json/
+.vibecrew/locks/state-json/
 └── info.json
 ```
 
@@ -683,25 +683,25 @@ Atomic locks to prevent concurrent writes to the same resource. Uses `mkdir`-bas
   "locked_by": "builder",               // Agent name
   "pid": 12345,                          // Process ID of locking agent
   "locked_at": "2026-02-23T14:30:00Z",
-  "target_file": ".vibeos/state.json",   // File being protected
+  "target_file": ".vibecrew/state.json",   // File being protected
   "timeout_seconds": 30                  // Auto-release after this duration
 }
 ```
 
 ### Lock Protocol
 
-1. **Acquire:** `mkdir .vibeos/locks/<name>` — succeeds atomically or fails if exists
+1. **Acquire:** `mkdir .vibecrew/locks/<name>` — succeeds atomically or fails if exists
 2. **Write metadata:** Create `info.json` inside the lock directory
 3. **Do work:** Read/modify the protected file
-4. **Release:** `rm -rf .vibeos/locks/<name>`
+4. **Release:** `rm -rf .vibecrew/locks/<name>`
 5. **Stale detection:** If `locked_at + timeout_seconds` has passed, any agent may break the lock
 
 ### Lockable Resources
 
 | Lock Name | Protects | Typical Holder |
 |-----------|----------|----------------|
-| `state-json` | `.vibeos/state.json` | Orchestrator, Builder |
-| `backlog-json` | `.vibeos/backlog.json` | Orchestrator |
+| `state-json` | `.vibecrew/state.json` | Orchestrator, Builder |
+| `backlog-json` | `.vibecrew/backlog.json` | Orchestrator |
 | `session-active` | Active session log | Session Startup |
 
 ---
@@ -718,7 +718,7 @@ Atomic locks to prevent concurrent writes to the same resource. Uses `mkdir`-bas
 
 State file migrations are handled by the Session Startup agent on every session start:
 
-1. Read `schema_version` from each `.vibeos/*.json` file
+1. Read `schema_version` from each `.vibecrew/*.json` file
 2. If version < current, apply migrations sequentially (1.0.0 → 1.1.0 → 1.2.0)
 3. Write migrated file with updated `schema_version`
 4. Log migration in session log
@@ -752,7 +752,7 @@ migrate_file() {
 }
 
 # Run on all state files
-for f in .vibeos/config.json .vibeos/state.json .vibeos/backlog.json; do
+for f in .vibecrew/config.json .vibecrew/state.json .vibecrew/backlog.json; do
   [ -f "$f" ] && migrate_file "$f"
 done
 ```
@@ -768,9 +768,9 @@ done
 
 ## 10. Gamification State
 
-Persistent progression state for the gamification system. Created by `/setup` (via `init-vibeos-state.sh`). Updated by gamification scripts during `/wrap`.
+Persistent progression state for the gamification system. Created by `/setup` (via `init-vibecrew-state.sh`). Updated by gamification scripts during `/wrap`.
 
-**File location:** `.vibeos/gamification.json`
+**File location:** `.vibecrew/gamification.json`
 
 ```jsonc
 {
@@ -891,7 +891,7 @@ XP_needed = floor(100 * 1.15^(level - 1))
 
 | Level | Feature Unlocked |
 |-------|-----------------|
-| 1 | Base VibeOS |
+| 1 | Base VibeCrew |
 | 2 | Daily challenges |
 | 3 | `/quiz` command |
 | 5 | Weekly challenges, skill tree in `/achievements` |

@@ -1,6 +1,6 @@
 # Vibe Score System
 
-> **Architecture Document 2.6** | VibeOS Plugin | v1.0
+> **Architecture Document 2.6** | VibeCrew Plugin | v1.0
 >
 > This document defines the Vibe Score system -- a per-session metric (0-100) that measures developer-AI collaboration efficiency. The Verifier agent calculates the score during the `/wrap` command. Score file schemas are defined in [`architecture/schemas.md` Section 6](schemas.md#6-score-files); this document provides the rationale, detection methods, metric collection, coaching output format, and v1.1 roadmap.
 
@@ -192,7 +192,7 @@ For each tool call in the session:
 
 ### 3.5 Phase Completion Metrics
 
-**Source:** `.vibeos/state.json` -- the feature's phase tracking object.
+**Source:** `.vibecrew/state.json` -- the feature's phase tracking object.
 
 | Metric | Source | Used For |
 |--------|--------|----------|
@@ -374,7 +374,7 @@ The Performance Coach is defined in [`architecture/agents.md`](agents.md). In v1
 
 ### 6.2 Cross-Session Trend Analysis
 
-The Performance Coach reads historical score files from `.vibeos/scores/` to identify trends across the last 10 sessions:
+The Performance Coach reads historical score files from `.vibecrew/scores/` to identify trends across the last 10 sessions:
 
 | Trend | Signal | Coach Response |
 |-------|--------|----------------|

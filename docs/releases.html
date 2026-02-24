@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeOS — Release Notes</title>
+  <title>VibeCrew — Release Notes</title>
   <style>
     :root {
       --color-bg: #0a0a0b;
@@ -401,9 +401,9 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
     <ul class="nav-links">
-      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="why.html">Why VibeCrew</a></li>
       <li><a href="setup.html">Setup</a></li>
       <li><a href="new-project.html">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
@@ -422,7 +422,7 @@
   <section class="section">
     <span class="section-label">Changelog</span>
     <h2>Release Notes</h2>
-    <p>All notable changes to VibeOS, following <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a> and <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+    <p>All notable changes to VibeCrew, following <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a> and <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
   </section>
 
   <div class="version-nav">
@@ -439,7 +439,7 @@
     <div class="release-header">
       <h2>v1.3.0</h2>
       <span class="release-date">2026-02-23</span>
-      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.3.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.3.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
     </div>
 
     <div class="change-category">
@@ -449,7 +449,7 @@
     <div class="feature-group">
       <h4>Status Bar &mdash; Persistent Status Line</h4>
       <ul class="file-list">
-        <li><code>scripts/statusline.sh</code> &mdash; <span class="file-desc">Status line script rendering 6 data segments (context %, cost, feature &middot; phase, Vibe Score, duration, compaction count). Reads session JSON from stdin and <code>.vibeos/</code> state files from disk. ANSI color-coded context bar (green/yellow/red). Graceful fallback if <code>jq</code> missing or <code>.vibeos/</code> absent. Bash 3.2 compatible</span></li>
+        <li><code>scripts/statusline.sh</code> &mdash; <span class="file-desc">Status line script rendering 6 data segments (context %, cost, feature &middot; phase, Vibe Score, duration, compaction count). Reads session JSON from stdin and <code>.vibecrew/</code> state files from disk. ANSI color-coded context bar (green/yellow/red). Graceful fallback if <code>jq</code> missing or <code>.vibecrew/</code> absent. Bash 3.2 compatible</span></li>
         <li><code>settings.json</code> &mdash; <span class="file-desc">Added <code>statusLine</code> config pointing to <code>./scripts/statusline.sh</code></span></li>
         <li><code>README.md</code> &mdash; <span class="file-desc">Added Status Bar section documenting segments, sources, and color thresholds</span></li>
       </ul>
@@ -460,7 +460,7 @@
       <ul class="file-list">
         <li><code>skills/replay/SKILL.md</code> &mdash; <span class="file-desc">Slash command: list/create/apply workflow templates from successful sessions. <code>/replay</code> lists templates, <code>/replay --create &lt;name&gt;</code> extracts from sessions with Vibe Score &gt;= 70, <code>/replay &lt;name&gt;</code> loads and guides development</span></li>
         <li><code>scripts/extract-workflow.sh</code> &mdash; <span class="file-desc">Parse session logs and score files to extract phase order, commit patterns, test strategy, and quality thresholds into a reusable workflow template</span></li>
-        <li><code>scripts/list-workflows.sh</code> &mdash; <span class="file-desc">List <code>.vibeos/workflows/workflow-*.json</code> files with name, description, phase count, and min score summaries</span></li>
+        <li><code>scripts/list-workflows.sh</code> &mdash; <span class="file-desc">List <code>.vibecrew/workflows/workflow-*.json</code> files with name, description, phase count, and min score summaries</span></li>
         <li><code>templates/workflow.json.template</code> &mdash; <span class="file-desc">Schema v1.3.0 workflow template: phase_order, branch_convention, test_strategy, quality_thresholds, commit_convention</span></li>
       </ul>
     </div>
@@ -518,7 +518,7 @@
     <div class="release-header">
       <h2>v1.2.0</h2>
       <span class="release-date">2026-02-23</span>
-      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.2.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.2.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
     </div>
 
     <div class="change-category">
@@ -529,16 +529,16 @@
       <h4>/cost &mdash; Real-time Token Cost Dashboard</h4>
       <ul class="file-list">
         <li><code>skills/cost/SKILL.md</code> &mdash; <span class="file-desc">Slash command displaying current session cost, daily/weekly/monthly aggregates, threshold proximity indicators, and model pricing reference table (Opus/Sonnet/Haiku)</span></li>
-        <li><code>scripts/aggregate-costs.sh</code> &mdash; <span class="file-desc">Scans <code>.vibeos/sessions/session-*.json</code> and live <code>session-cost.json</code>, computes daily/weekly/monthly/all-time cost totals</span></li>
+        <li><code>scripts/aggregate-costs.sh</code> &mdash; <span class="file-desc">Scans <code>.vibecrew/sessions/session-*.json</code> and live <code>session-cost.json</code>, computes daily/weekly/monthly/all-time cost totals</span></li>
       </ul>
     </div>
 
     <div class="feature-group">
       <h4>/undo &mdash; Checkpoint Rollback</h4>
       <ul class="file-list">
-        <li><code>skills/undo/SKILL.md</code> &mdash; <span class="file-desc">Slash command listing VibeOS checkpoints and recent commits, detecting pushed vs unpushed state, and performing safe rollback via <code>git revert</code> (pushed) or <code>git reset --soft</code> (unpushed)</span></li>
-        <li><code>scripts/create-checkpoint.sh</code> &mdash; <span class="file-desc">Creates lightweight git tag <code>vibeos-checkpoint-&lt;ISO-timestamp&gt;</code> with description</span></li>
-        <li><code>scripts/list-checkpoints.sh</code> &mdash; <span class="file-desc">Lists <code>vibeos-checkpoint-*</code> tags sorted by date with commit hash and subject</span></li>
+        <li><code>skills/undo/SKILL.md</code> &mdash; <span class="file-desc">Slash command listing VibeCrew checkpoints and recent commits, detecting pushed vs unpushed state, and performing safe rollback via <code>git revert</code> (pushed) or <code>git reset --soft</code> (unpushed)</span></li>
+        <li><code>scripts/create-checkpoint.sh</code> &mdash; <span class="file-desc">Creates lightweight git tag <code>vibecrew-checkpoint-&lt;ISO-timestamp&gt;</code> with description</span></li>
+        <li><code>scripts/list-checkpoints.sh</code> &mdash; <span class="file-desc">Lists <code>vibecrew-checkpoint-*</code> tags sorted by date with commit hash and subject</span></li>
         <li><code>scripts/rollback-checkpoint.sh</code> &mdash; <span class="file-desc">Validates target commit, performs rollback in revert or reset mode, reports summary</span></li>
       </ul>
     </div>
@@ -586,7 +586,7 @@
     <div class="release-header">
       <h2>v1.1.0</h2>
       <span class="release-date">2026-02-23</span>
-      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.1.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.1.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
     </div>
 
     <div class="change-category">
@@ -612,7 +612,7 @@
 
     <div class="feature-group">
       <h4>Existing Project Onboarding (Phase 2)</h4>
-      <p>Unlocks VibeOS for existing projects with <code>/onboard</code> command and Code Auditor agent.</p>
+      <p>Unlocks VibeCrew for existing projects with <code>/onboard</code> command and Code Auditor agent.</p>
       <ul class="file-list">
         <li><code>agents/code-auditor.md</code> &mdash; <span class="file-desc">Opus agent, read-only worktree analysis, scans dependencies, conventions, test gaps, design system, architecture</span></li>
         <li><code>skills/onboard/SKILL.md</code> &mdash; <span class="file-desc">8-step guided onboarding: dependency detection, convention extraction, test gap analysis, CLAUDE.md generation, state initialization</span></li>
@@ -636,7 +636,7 @@
         <li><code>templates/handoff.md.template</code> &mdash; <span class="file-desc">Handoff document template</span></li>
         <li><code>scripts/generate-handoff.sh</code> &mdash; <span class="file-desc">Reads state, backlog, commits; produces structured handoff</span></li>
         <li><code>skills/wrap/SKILL.md</code> &mdash; <span class="file-desc">Added Step 10.5 (auto-generate handoff, invoke Doc Generator)</span></li>
-        <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Added handoff detection: reads latest from <code>.vibeos/handoffs/</code>, includes in banner</span></li>
+        <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Added handoff detection: reads latest from <code>.vibecrew/handoffs/</code>, includes in banner</span></li>
       </ul>
     </div>
 
@@ -689,7 +689,7 @@
     <div class="release-header">
       <h2>v1.0.0</h2>
       <span class="release-date">2026-02-23</span>
-      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.0.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.0.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
     </div>
 
     <div class="change-category">
@@ -711,12 +711,12 @@
         <li><code>scripts/check-context.sh</code> &mdash; <span class="file-desc">Context usage warnings at 60% and 80% thresholds</span></li>
         <li><code>scripts/sandbox.sh</code> &mdash; <span class="file-desc">Sandboxed command execution wrapper</span></li>
         <li><code>scripts/check-deps.sh</code> &mdash; <span class="file-desc">Dependency verification (Git, Node, gh, jq, terminal-notifier)</span></li>
-        <li><code>scripts/init-vibeos-state.sh</code> &mdash; <span class="file-desc">Initializes <code>.vibeos/</code> state directory with config, state, and backlog</span></li>
+        <li><code>scripts/init-vibecrew-state.sh</code> &mdash; <span class="file-desc">Initializes <code>.vibecrew/</code> state directory with config, state, and backlog</span></li>
         <li><code>scripts/migrate-state.sh</code> &mdash; <span class="file-desc">State schema migration for version upgrades</span></li>
         <li><code>settings.json</code> &mdash; <span class="file-desc">68 permission rules (50 allowed tools, 18 denied tools)</span></li>
         <li><code>.mcp.json</code> &mdash; <span class="file-desc">MCP server configuration for Context7 and Puppeteer</span></li>
         <li><code>LICENSE</code> &mdash; <span class="file-desc">MIT license</span></li>
-        <li><code>templates/config.json.template</code> &mdash; <span class="file-desc">Default <code>.vibeos/config.json</code> scaffold</span></li>
+        <li><code>templates/config.json.template</code> &mdash; <span class="file-desc">Default <code>.vibecrew/config.json</code> scaffold</span></li>
       </ul>
     </div>
 
@@ -777,8 +777,8 @@
       <ul class="file-list">
         <li><code>templates/docs-site/package.json</code> &mdash; <span class="file-desc">VitePress project manifest</span></li>
         <li><code>templates/docs-site/.vitepress/config.ts</code> &mdash; <span class="file-desc">VitePress site configuration (nav, sidebar, theme)</span></li>
-        <li><code>templates/docs-site/data/sessions.data.ts</code> &mdash; <span class="file-desc">Data loader for <code>.vibeos/sessions/</code> JSON files</span></li>
-        <li><code>templates/docs-site/data/backlog.data.ts</code> &mdash; <span class="file-desc">Data loader for <code>.vibeos/backlog.json</code></span></li>
+        <li><code>templates/docs-site/data/sessions.data.ts</code> &mdash; <span class="file-desc">Data loader for <code>.vibecrew/sessions/</code> JSON files</span></li>
+        <li><code>templates/docs-site/data/backlog.data.ts</code> &mdash; <span class="file-desc">Data loader for <code>.vibecrew/backlog.json</code></span></li>
         <li><code>templates/docs-site/components/KanbanBoard.vue</code> &mdash; <span class="file-desc">Vue component for feature backlog kanban view</span></li>
         <li><code>templates/docs-site/components/StatsPage.vue</code> &mdash; <span class="file-desc">Vue component for session stats and Vibe Score charts</span></li>
         <li><code>templates/docs-site/index.md</code> &mdash; <span class="file-desc">Documentation site landing page</span></li>
@@ -797,7 +797,7 @@
         <li><code>scripts/compact-reinject.sh</code> &mdash; <span class="file-desc">Enhanced context compaction handler (re-injects project state, active feature, and phase after compaction)</span></li>
         <li><code>scripts/cost-guardrails.sh</code> &mdash; <span class="file-desc">Session cost threshold checks with configurable limits</span></li>
         <li><code>scripts/claude-md-lint.sh</code> &mdash; <span class="file-desc">Validates CLAUDE.md size, structure, and rule quality</span></li>
-        <li><code>scripts/sync-state.sh</code> &mdash; <span class="file-desc">Reconciles <code>.vibeos/state.json</code> with filesystem (detects missing artifacts, repairs drift)</span></li>
+        <li><code>scripts/sync-state.sh</code> &mdash; <span class="file-desc">Reconciles <code>.vibecrew/state.json</code> with filesystem (detects missing artifacts, repairs drift)</span></li>
         <li><code>scripts/error-recovery.sh</code> &mdash; <span class="file-desc">Clears stale locks, repairs corrupted JSON, resets interrupted tasks</span></li>
         <li><code>scripts/validate-plugin.sh</code> &mdash; <span class="file-desc">Validates plugin structure (required files, hook bindings, agent refs, permission rules)</span></li>
         <li><code>templates/mutation-log.json.template</code> &mdash; <span class="file-desc">Audit log for CLAUDE.md mutations proposed by Performance Coach</span></li>
@@ -810,9 +810,9 @@
       <ul class="file-list">
         <li><code>README.md</code> &mdash; <span class="file-desc">Project README with install guide, command reference, architecture overview, and troubleshooting</span></li>
         <li><code>CHANGELOG.md</code> &mdash; <span class="file-desc">This changelog</span></li>
-        <li><code>scripts/uninstall.sh</code> &mdash; <span class="file-desc">Clean uninstall (removes plugin registration, preserves <code>.vibeos/</code> project state)</span></li>
+        <li><code>scripts/uninstall.sh</code> &mdash; <span class="file-desc">Clean uninstall (removes plugin registration, preserves <code>.vibecrew/</code> project state)</span></li>
         <li><code>scripts/extract-design-system.sh</code> &mdash; <span class="file-desc">Extracts design tokens from existing CSS/Tailwind config into design-system.css</span></li>
-        <li><code>templates/gitignore-additions.template</code> &mdash; <span class="file-desc">Recommended .gitignore entries for <code>.vibeos/</code> runtime files</span></li>
+        <li><code>templates/gitignore-additions.template</code> &mdash; <span class="file-desc">Recommended .gitignore entries for <code>.vibecrew/</code> runtime files</span></li>
         <li><code>templates/CONTRIBUTING.md.template</code> &mdash; <span class="file-desc">Contribution guidelines scaffold for generated projects</span></li>
         <li><code>hooks/hooks.json</code> &mdash; <span class="file-desc">Finalized hook bindings with all 10 entries across 6 lifecycle events</span></li>
         <li><code>scripts/notify.sh</code> &mdash; <span class="file-desc">Finalized notification script with Warp deep-link support and error routing</span></li>
@@ -824,7 +824,7 @@
 </div>
 
 <footer class="footer">
-  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
   <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
 </footer>
 

@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 2.8 (Revised) | February 2026
 >
-> This document recommends the technology stacks for VibeOS-generated SaaS projects, the documentation site, test infrastructure, internal state storage, and MCP server dependencies. Every recommendation is informed by Phase 1 research (Documents 04-07) and scored against weighted criteria optimized for AI-assisted, solo-developer workflows.
+> This document recommends the technology stacks for VibeCrew-generated SaaS projects, the documentation site, test infrastructure, internal state storage, and MCP server dependencies. Every recommendation is informed by Phase 1 research (Documents 04-07) and scored against weighted criteria optimized for AI-assisted, solo-developer workflows.
 >
 > **v1.0 Revision Notes.** This revision fixes the score calculation (8.4 -> 8.7), removes all inline JSON schemas in favor of references to `architecture/schemas.md`, clarifies signal file consumption semantics, updates agent references to the 5 v1.0 agents (see `architecture/agents.md`), and simplifies the docs site stack to match `architecture/docs-site.md`.
 
@@ -49,9 +49,9 @@
 
 #### Framework: Next.js 15 (App Router)
 
-**Why Next.js wins for VibeOS-generated projects:**
+**Why Next.js wins for VibeCrew-generated projects:**
 
-1. **Widest Context7 coverage.** Next.js has the most comprehensive AI-accessible documentation of any full-stack framework. The Stack Scout can resolve the majority of API questions via Context7 without pasting documentation into the context window, preserving VibeOS's <50% context budget.
+1. **Widest Context7 coverage.** Next.js has the most comprehensive AI-accessible documentation of any full-stack framework. The Stack Scout can resolve the majority of API questions via Context7 without pasting documentation into the context window, preserving VibeCrew's <50% context budget.
 
 2. **Largest training corpus.** With 6M+ weekly npm downloads and 128K+ GitHub stars, React + Next.js has the largest representation in AI training data. Claude produces working Next.js code on the first attempt for common patterns (routing, data fetching, form handling) with an estimated error rate of 5-10%, compared to 15-20% for SvelteKit.
 
@@ -89,7 +89,7 @@
 
 **Why Tailwind v4 wins:**
 
-1. **CSS-first configuration via `@theme`.** Tailwind v4 eliminates `tailwind.config.js` entirely. All design tokens are defined in CSS using the `@theme` directive, which aligns perfectly with VibeOS's single-file design system approach (`design-system.css`):
+1. **CSS-first configuration via `@theme`.** Tailwind v4 eliminates `tailwind.config.js` entirely. All design tokens are defined in CSS using the `@theme` directive, which aligns perfectly with VibeCrew's single-file design system approach (`design-system.css`):
 
    ```css
    @import "tailwindcss";
@@ -217,7 +217,7 @@
 
 2. **Edge Functions.** V8-isolate-based edge compute with <50ms cold starts, deployed to Vercel's global CDN.
 
-3. **Preview deployments.** Every PR gets an automatic preview URL with a bot comment. This integrates perfectly with VibeOS's workflow -- the user can preview features before merging.
+3. **Preview deployments.** Every PR gets an automatic preview URL with a bot comment. This integrates perfectly with VibeCrew's workflow -- the user can preview features before merging.
 
 4. **Generous free tier.** 100 GB bandwidth, 100 hours serverless compute, unlimited deployments on the Hobby plan. Sufficient to build and launch without cost.
 
@@ -378,8 +378,8 @@ The v1.0 docs site includes exactly 2 custom Vue components:
 
 | Component | Purpose | Data Source |
 |---|---|---|
-| **KanbanBoard** | Read-only visualization of the project backlog | `.vibeos/backlog.json` via data loader |
-| **StatsPage** | Four summary metric cards (sessions, Vibe Score, tokens, cost) | `.vibeos/sessions/*.json` via data loader |
+| **KanbanBoard** | Read-only visualization of the project backlog | `.vibecrew/backlog.json` via data loader |
+| **StatsPage** | Four summary metric cards (sessions, Vibe Score, tokens, cost) | `.vibecrew/sessions/*.json` via data loader |
 
 No charts, no dedicated dev server port, no auto-rebuild hooks. Charts and additional automation are deferred to v1.1. See `architecture/docs-site.md` for the full specification including Vue component code, data loaders, CSS, and the v1.1 roadmap.
 
@@ -444,7 +444,7 @@ No charts, no dedicated dev server port, no auto-rebuild hooks. Charts and addit
 
 #### axe-core (Accessibility Testing)
 
-axe-core is the industry-standard automated accessibility engine (Deque Systems). It catches approximately 57% of WCAG violations automatically -- the highest coverage of any automated tool. It integrates at two levels in VibeOS:
+axe-core is the industry-standard automated accessibility engine (Deque Systems). It catches approximately 57% of WCAG violations automatically -- the highest coverage of any automated tool. It integrates at two levels in VibeCrew:
 
 1. **Component-level:** `vitest-axe` in unit tests
 2. **E2E-level:** `@axe-core/playwright` for full-page scans
@@ -476,7 +476,7 @@ coverage: {
 
 ### 4.4 TDD-Hybrid Approach
 
-VibeOS uses a dual-track testing strategy:
+VibeCrew uses a dual-track testing strategy:
 
 | Scenario | Approach | Agent |
 |---|---|---|
@@ -488,7 +488,7 @@ VibeOS uses a dual-track testing strategy:
 
 ### 4.5 Dual Server Architecture
 
-Running E2E tests against the development server creates flakiness (HMR noise, port conflicts, data isolation issues). VibeOS uses a dual-server setup:
+Running E2E tests against the development server creates flakiness (HMR noise, port conflicts, data isolation issues). VibeCrew uses a dual-server setup:
 
 ```
 Port 3000  ->  Dev server (Vite with HMR)
@@ -552,13 +552,13 @@ project/
 
 ### 5.1 Design Decision: File-Based JSON
 
-VibeOS uses plain JSON files in the `.vibeos/` directory for all internal state. No database is needed.
+VibeCrew uses plain JSON files in the `.vibecrew/` directory for all internal state. No database is needed.
 
 **Rationale:**
 
 1. **Inspectable.** Any developer (or AI agent) can read state by opening a file. No query language, no connection setup, no driver dependencies.
 
-2. **Debuggable.** When something goes wrong, `cat .vibeos/state.json` shows exactly what the system thinks is happening.
+2. **Debuggable.** When something goes wrong, `cat .vibecrew/state.json` shows exactly what the system thinks is happening.
 
 3. **Persistent across sessions.** JSON files survive process crashes, terminal closures, and system reboots.
 
@@ -570,10 +570,10 @@ VibeOS uses plain JSON files in the `.vibeos/` directory for all internal state.
 
 ### 5.2 Directory Structure
 
-All `.vibeos/` JSON schemas are defined in `architecture/schemas.md`. This section describes only the directory layout and file purposes. See `architecture/schemas.md` for field-level definitions, validation rules, and migration strategy.
+All `.vibecrew/` JSON schemas are defined in `architecture/schemas.md`. This section describes only the directory layout and file purposes. See `architecture/schemas.md` for field-level definitions, validation rules, and migration strategy.
 
 ```
-.vibeos/
+.vibecrew/
   config.json              # User preferences (committed) — schemas.md Section 2
   state.json               # Project state + active feature (committed) — schemas.md Section 3
   backlog.json             # Feature backlog with specs (committed) — schemas.md Section 4
@@ -613,19 +613,19 @@ When multiple agents need to write to a shared file (e.g., `state.json`, `backlo
 
 ```bash
 # Acquire lock (atomic on all filesystems)
-while ! mkdir ".vibeos/locks/state-json" 2>/dev/null; do
+while ! mkdir ".vibecrew/locks/state-json" 2>/dev/null; do
   sleep 0.1
 done
 
 # Write metadata
-echo '{"locked_by":"builder","locked_at":"..."}' > .vibeos/locks/state-json/info.json
+echo '{"locked_by":"builder","locked_at":"..."}' > .vibecrew/locks/state-json/info.json
 
 # Critical section: read, modify, write state.json
-STATE=$(cat .vibeos/state.json)
-echo "$STATE" | jq '.active_feature.id = "feat-002"' > .vibeos/state.json
+STATE=$(cat .vibecrew/state.json)
+echo "$STATE" | jq '.active_feature.id = "feat-002"' > .vibecrew/state.json
 
 # Release lock
-rm -rf ".vibeos/locks/state-json"
+rm -rf ".vibecrew/locks/state-json"
 ```
 
 **Why `mkdir` over `flock`:** `mkdir` is atomic on all filesystems (macOS HFS+/APFS, Linux ext4/btrfs, NFS). `flock` does not work on NFS and has inconsistent behavior across platforms.
@@ -634,7 +634,7 @@ Lock files are gitignored. Stale locks (from crashed sessions) are cleaned up by
 
 ### 5.5 Why Not a Database?
 
-| Criterion | File-based JSON (.vibeos/) | SQLite | Redis |
+| Criterion | File-based JSON (.vibecrew/) | SQLite | Redis |
 |---|---|---|---|
 | Inspectability | Open file, read JSON | Requires SQLite CLI | Requires redis-cli |
 | Setup | None (mkdir) | Install driver | Install + run server |
@@ -642,9 +642,9 @@ Lock files are gitignored. Stale locks (from crashed sessions) are cleaned up by
 | Git compatibility | Natural (JSON files commit) | Binary file (cannot diff) | Not applicable |
 | Port allocation | None | None | Requires port (6379) |
 | Dependencies | jq (hook scripts only) | better-sqlite3 or similar | ioredis or similar |
-| Suitability | **Best for VibeOS** | Overkill | Overkill |
+| Suitability | **Best for VibeCrew** | Overkill | Overkill |
 
-VibeOS's state is small (kilobytes, not megabytes), rarely queried in complex ways (no joins, no aggregations), and benefits enormously from human readability. File-based JSON is the right tool for this job.
+VibeCrew's state is small (kilobytes, not megabytes), rarely queried in complex ways (no joins, no aggregations), and benefits enormously from human readability. File-based JSON is the right tool for this job.
 
 ---
 
@@ -688,14 +688,14 @@ MCP servers are configured in `mcp-servers.json` at the plugin root:
 }
 ```
 
-Both servers are toggled via `.vibeos/config.json` (see `architecture/schemas.md` Section 2, fields `mcp_servers.context7` and `mcp_servers.puppeteer`). When a server is disabled, the corresponding agents fall back to built-in tools (WebSearch, WebFetch).
+Both servers are toggled via `.vibecrew/config.json` (see `architecture/schemas.md` Section 2, fields `mcp_servers.context7` and `mcp_servers.puppeteer`). When a server is disabled, the corresponding agents fall back to built-in tools (WebSearch, WebFetch).
 
 ---
 
 ## Summary: Complete Technology Map
 
 ```
-VibeOS-Generated SaaS Project
+VibeCrew-Generated SaaS Project
 |
 |- Application Layer
 |   |- Framework:    Next.js 15 (App Router, RSC, Server Actions, PPR)
@@ -739,8 +739,8 @@ VibeOS-Generated SaaS Project
 |   |- Search:       MiniSearch (built-in)
 |   |- Components:   KanbanBoard.vue, StatsPage.vue
 |
-|- VibeOS Runtime
-|   |- State:        File-based JSON (.vibeos/) — see schemas.md
+|- VibeCrew Runtime
+|   |- State:        File-based JSON (.vibecrew/) — see schemas.md
 |   |- Communication: Signal files (.signal) + mkdir locks
 |   |- Hooks:        Bash scripts (zero-token enforcement)
 |   |- MCP Servers:  Context7 (docs) + Puppeteer (browser)

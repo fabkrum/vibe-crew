@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeOS — Setup Guide</title>
+  <title>VibeCrew — Setup Guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -122,9 +122,9 @@
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
     <ul class="nav-links">
-      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="why.html">Why VibeCrew</a></li>
       <li><a href="setup.html" class="active">Setup</a></li>
       <li><a href="new-project.html">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
@@ -154,7 +154,7 @@
   <section class="section" id="install">
     <span class="section-label">Getting Started</span>
     <h2>Installation from Scratch</h2>
-    <p>A complete walkthrough from zero to a fully operational VibeOS environment.</p>
+    <p>A complete walkthrough from zero to a fully operational VibeCrew environment.</p>
 
     <h3>Prerequisites</h3>
     <p>Verify these are installed before proceeding:</p>
@@ -188,33 +188,33 @@ brew install gh &amp;&amp; gh auth login</code></pre>
 
       <li>
         <h4>Add the plugin to your project</h4>
-        <p>The recommended approach is a <strong>central clone + symlink</strong>, especially if you'll use VibeOS across multiple projects. See <a href="#multi-project">Multi-Project Setup</a> below for the full guide.</p>
+        <p>The recommended approach is a <strong>central clone + symlink</strong>, especially if you'll use VibeCrew across multiple projects. See <a href="#multi-project">Multi-Project Setup</a> below for the full guide.</p>
         <pre class="copyable" data-copy="# Recommended: Central clone + symlink (see Multi-Project Setup below)
 mkdir -p ~/claude-plugins && cd ~/claude-plugins
-git clone https://github.com/fabkrum/vibe-os.git
+git clone https://github.com/fabkrum/vibe-crew.git
 cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span># Recommended: Central clone + symlink (see Multi-Project Setup below)
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span># Recommended: Central clone + symlink (see Multi-Project Setup below)
 mkdir -p ~/claude-plugins &amp;&amp; cd ~/claude-plugins
-git clone https://github.com/fabkrum/vibe-os.git
+git clone https://github.com/fabkrum/vibe-crew.git
 cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os</code></pre>
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre>
         <p>For alternative approaches (direct copy, git submodule), see the <a href="#multi-project">comparison table</a> in the Multi-Project section.</p>
       </li>
 
       <li>
         <h4>Verify plugin detection</h4>
-        <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeOS automatically.</p>
+        <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeCrew automatically.</p>
         <pre class="copyable" data-copy="cd /path/to/your-project
 claude"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd /path/to/your-project
 claude</code></pre>
-        <p>You should see the VibeOS session startup agent run on first launch.</p>
+        <p>You should see the VibeCrew session startup agent run on first launch.</p>
       </li>
 
       <li>
         <h4>Run the setup wizard</h4>
         <p>Inside Claude Code, run:</p>
         <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">claude code</span>/setup</code></pre>
-        <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibeos/</code> runtime directory.</p>
+        <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibecrew/</code> runtime directory.</p>
       </li>
 
       <li>
@@ -234,7 +234,7 @@ claude</code></pre>
 
     <h3>Resulting Directory Structure</h3>
     <pre><code><span class="code-label">tree</span>your-project/
-  claude-plugin-vibe-os/          # The plugin (don't modify)
+  claude-plugin-vibe-crew/          # The plugin (don't modify)
     .claude-plugin/
       plugin.json                 # Plugin manifest
     .mcp.json                     # Context7 + Puppeteer MCP config
@@ -246,7 +246,7 @@ claude</code></pre>
     skills/                       # 17 slash command definitions
     templates/                    # Project templates and doc-site scaffold
 
-  .vibeos/                        # Per-project runtime state
+  .vibecrew/                        # Per-project runtime state
     config.json                   # Terminal preference, notification settings
     state.json                    # Foundation status + active feature
     backlog.json                  # Feature backlog with specs
@@ -266,50 +266,50 @@ claude</code></pre>
   <section class="section" id="multi-project">
     <span class="section-label">Recommended</span>
     <h2>Multi-Project Setup</h2>
-    <p>Most users work on multiple projects. Instead of copying VibeOS into every project, install it once and share it. This gives you a single source of truth, instant updates across all projects, and zero duplication.</p>
+    <p>Most users work on multiple projects. Instead of copying VibeCrew into every project, install it once and share it. This gives you a single source of truth, instant updates across all projects, and zero duplication.</p>
 
     <h3>How it works</h3>
     <div class="flow"><span class="highlight">Central install</span> (one copy on your machine)
-  ~/claude-plugins/vibe-os/            <span class="muted"># the plugin &mdash; shared by all projects</span>
+  ~/claude-plugins/vibe-crew/            <span class="muted"># the plugin &mdash; shared by all projects</span>
 
 <span class="highlight">Per-project</span> (symlink + local state)
   ~/projects/tripflow/
-    claude-plugin-vibe-os &rarr;           <span class="muted"># symlink to central install</span>
-    .vibeos/                             <span class="muted"># project-specific state</span>
+    claude-plugin-vibe-crew &rarr;           <span class="muted"># symlink to central install</span>
+    .vibecrew/                             <span class="muted"># project-specific state</span>
 
   ~/projects/saas-dashboard/
-    claude-plugin-vibe-os &rarr;           <span class="muted"># same symlink, different project</span>
-    .vibeos/                             <span class="muted"># its own state</span>
+    claude-plugin-vibe-crew &rarr;           <span class="muted"># same symlink, different project</span>
+    .vibecrew/                             <span class="muted"># its own state</span>
 
   ~/projects/mobile-app/
-    claude-plugin-vibe-os &rarr;           <span class="muted"># same symlink, different project</span>
-    .vibeos/                             <span class="muted"># its own state</span></div>
+    claude-plugin-vibe-crew &rarr;           <span class="muted"># same symlink, different project</span>
+    .vibecrew/                             <span class="muted"># its own state</span></div>
 
-    <p>The plugin code (agents, hooks, scripts, commands) lives in one place. Each project gets its own <code>.vibeos/</code> folder with its own backlog, session logs, scores, and config. Projects are fully isolated from each other.</p>
+    <p>The plugin code (agents, hooks, scripts, commands) lives in one place. Each project gets its own <code>.vibecrew/</code> folder with its own backlog, session logs, scores, and config. Projects are fully isolated from each other.</p>
 
     <h3>Step-by-step</h3>
     <ol class="steps">
       <li>
-        <h4>Clone VibeOS to a central location</h4>
+        <h4>Clone VibeCrew to a central location</h4>
         <p>Pick a permanent home for the plugin. <code>~/claude-plugins/</code> is a good convention.</p>
         <pre class="copyable" data-copy="mkdir -p ~/claude-plugins
 cd ~/claude-plugins
-git clone https://github.com/fabkrum/vibe-os.git"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>mkdir -p ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>mkdir -p ~/claude-plugins
 cd ~/claude-plugins
-git clone https://github.com/fabkrum/vibe-os.git</code></pre>
+git clone https://github.com/fabkrum/vibe-crew.git</code></pre>
       </li>
 
       <li>
         <h4>Symlink into your first project</h4>
         <p>Create a symbolic link from your project to the central install. Use an absolute path so the link works regardless of where you open the terminal.</p>
         <pre class="copyable" data-copy="cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os</code></pre>
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre>
       </li>
 
       <li>
         <h4>Run <code>/setup</code> in the project</h4>
-        <p>Start Claude Code and run the setup wizard. This creates the <code>.vibeos/</code> folder with project-specific state. Each project runs <code>/setup</code> once.</p>
+        <p>Start Claude Code and run the setup wizard. This creates the <code>.vibecrew/</code> folder with project-specific state. Each project runs <code>/setup</code> once.</p>
         <pre class="copyable" data-copy="claude"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>claude
 <span class="code-label">claude code</span>/setup</code></pre>
       </li>
@@ -318,40 +318,40 @@ ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os</co
         <h4>Repeat for each new project</h4>
         <p>For every new project, just create the symlink and run <code>/setup</code>. Two commands, under 30 seconds.</p>
         <pre class="copyable" data-copy="cd ~/projects/another-project
-ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/projects/another-project
-ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os</code></pre>
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/projects/another-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre>
       </li>
     </ol>
 
-    <h3>Updating VibeOS across all projects</h3>
+    <h3>Updating VibeCrew across all projects</h3>
     <p>Since every project symlinks to the same central location, updating is one command:</p>
-    <pre class="copyable" data-copy="cd ~/claude-plugins/vibe-os && git pull"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/claude-plugins/vibe-os &amp;&amp; git pull</code></pre>
+    <pre class="copyable" data-copy="cd ~/claude-plugins/vibe-crew && git pull"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/claude-plugins/vibe-crew &amp;&amp; git pull</code></pre>
     <p>Every project picks up the changes instantly. No need to copy files, run installers, or touch individual projects. Check the <a href="releases.html">Release Notes</a> after updating to see what changed.</p>
 
     <div class="callout tip">
       <div class="callout-title">Make it even faster with a shell alias</div>
-      <p>Add this to your <code>~/.zshrc</code> to create new VibeOS projects in one command:</p>
+      <p>Add this to your <code>~/.zshrc</code> to create new VibeCrew projects in one command:</p>
     </div>
     <pre class="copyable" data-copy="# Add to ~/.zshrc
-vibeos-init() {
-  ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os
-  echo &quot;VibeOS linked. Run 'claude' then '/setup' to initialize.&quot;
+vibecrew-init() {
+  ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
+  echo &quot;VibeCrew linked. Run 'claude' then '/setup' to initialize.&quot;
 }
 
-vibeos-update() {
-  (cd ~/claude-plugins/vibe-os && git pull)
-  echo &quot;VibeOS updated to $(cd ~/claude-plugins/vibe-os && git describe --tags 2>/dev/null || git log -1 --format=%h)&quot;
+vibecrew-update() {
+  (cd ~/claude-plugins/vibe-crew && git pull)
+  echo &quot;VibeCrew updated to $(cd ~/claude-plugins/vibe-crew && git describe --tags 2>/dev/null || git log -1 --format=%h)&quot;
 }"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">.zshrc</span># Add to ~/.zshrc
-vibeos-init() {
-  ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os
-  echo "VibeOS linked. Run 'claude' then '/setup' to initialize."
+vibecrew-init() {
+  ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
+  echo "VibeCrew linked. Run 'claude' then '/setup' to initialize."
 }
 
-vibeos-update() {
-  (cd ~/claude-plugins/vibe-os &amp;&amp; git pull)
-  echo "VibeOS updated to $(cd ~/claude-plugins/vibe-os &amp;&amp; git describe --tags 2>/dev/null || git log -1 --format=%h)"
+vibecrew-update() {
+  (cd ~/claude-plugins/vibe-crew &amp;&amp; git pull)
+  echo "VibeCrew updated to $(cd ~/claude-plugins/vibe-crew &amp;&amp; git describe --tags 2>/dev/null || git log -1 --format=%h)"
 }</code></pre>
-    <p>Then for any new project: <code>cd ~/projects/new-project &amp;&amp; vibeos-init</code></p>
+    <p>Then for any new project: <code>cd ~/projects/new-project &amp;&amp; vibecrew-init</code></p>
 
     <h3>Git and symlinks</h3>
     <p>By default, Git tracks symlinks as tiny pointer files (not the target contents). This means:</p>
@@ -362,7 +362,7 @@ vibeos-update() {
 
     <div class="callout info">
       <div class="callout-title">For teams: standardize the path</div>
-      <p>Agree on a team-wide convention like <code>~/claude-plugins/vibe-os/</code>. If everyone uses the same path, symlinks work across the entire team with zero config. Document this in your project's README or onboarding guide.</p>
+      <p>Agree on a team-wide convention like <code>~/claude-plugins/vibe-crew/</code>. If everyone uses the same path, symlinks work across the entire team with zero config. Document this in your project's README or onboarding guide.</p>
     </div>
 
     <h3>Comparing installation approaches</h3>
@@ -396,7 +396,7 @@ vibeos-update() {
 
     <div class="callout warn">
       <div class="callout-title">Don't mix approaches</div>
-      <p>Pick one method and stick with it. If some projects use symlinks and others use submodules, updates become confusing and you risk running different VibeOS versions across projects without realizing it.</p>
+      <p>Pick one method and stick with it. If some projects use symlinks and others use submodules, updates become confusing and you risk running different VibeCrew versions across projects without realizing it.</p>
     </div>
 
     <h3>What's shared vs. what's project-specific</h3>
@@ -408,7 +408,7 @@ vibeos-update() {
       </div>
       <div class="card">
         <div class="card-icon green">&#9751;</div>
-        <h4>Project-specific (<code>.vibeos/</code>)</h4>
+        <h4>Project-specific (<code>.vibecrew/</code>)</h4>
         <p>Backlog, session logs, Vibe Scores, config, state, handoffs, workflows. Each project has its own isolated state folder that's never shared.</p>
       </div>
     </div>
@@ -416,12 +416,12 @@ vibeos-update() {
       <div class="card">
         <div class="card-icon blue">&#9997;</div>
         <h4>Project-specific (project root)</h4>
-        <p><code>CLAUDE.md</code>, <code>VISION.md</code>, <code>design-system.css</code>, TDR, roadmap. These are created by VibeOS during the foundation phase and are unique to each project.</p>
+        <p><code>CLAUDE.md</code>, <code>VISION.md</code>, <code>design-system.css</code>, TDR, roadmap. These are created by VibeCrew during the foundation phase and are unique to each project.</p>
       </div>
       <div class="card">
         <div class="card-icon amber">&#9881;</div>
         <h4>Machine-specific (<code>~/.zshrc</code>)</h4>
-        <p>Shell aliases (<code>vibeos-init</code>, <code>vibeos-update</code>), shell traps, Warp Terminal config. Each developer sets these up once on their machine.</p>
+        <p>Shell aliases (<code>vibecrew-init</code>, <code>vibecrew-update</code>), shell traps, Warp Terminal config. Each developer sets these up once on their machine.</p>
       </div>
     </div>
   </section>
@@ -431,7 +431,7 @@ vibeos-update() {
   <section class="section" id="warp">
     <span class="section-label">Terminal Setup</span>
     <h2>Warp Terminal</h2>
-    <p>Warp is the recommended terminal for VibeOS. It provides tab deep-linking (click a notification and land on the exact session that needs attention), structured output blocks, Launch Configurations for instant workspace setup, and session restoration.</p>
+    <p>Warp is the recommended terminal for VibeCrew. It provides tab deep-linking (click a notification and land on the exact session that needs attention), structured output blocks, Launch Configurations for instant workspace setup, and session restoration.</p>
 
     <p>Everything you need &mdash; installation, deep-linking setup, keyboard shortcuts, Warp Drive, window layouts, and more &mdash; is covered on the dedicated Warp page:</p>
 
@@ -439,7 +439,7 @@ vibeos-update() {
 
     <div class="callout info" style="margin-top: 1.5rem;">
       <div class="callout-title">Using a different terminal?</div>
-      <p>VibeOS works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
+      <p>VibeCrew works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
     </div>
   </section>
 
@@ -454,7 +454,7 @@ vibeos-update() {
       <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li>
       <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li>
       <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li>
-      <li>Check VibeOS config: verify <code>.vibeos/config.json</code> has <code>"notifications": true</code></li>
+      <li>Check VibeCrew config: verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code></li>
       <li>Warp deep-links not working: see the <a href="warp.html#deep-linking">deep-linking guide</a> on the Warp page</li>
     </ol>
 
@@ -462,7 +462,7 @@ vibeos-update() {
     <ol>
       <li><strong>Context7:</strong> Verify it's configured in your Claude Code settings. Try a test query</li>
       <li><strong>Puppeteer:</strong> Ensure the Puppeteer MCP server is running and configured</li>
-      <li>Both are optional. VibeOS works without them &mdash; you just miss the token efficiency benefits</li>
+      <li>Both are optional. VibeCrew works without them &mdash; you just miss the token efficiency benefits</li>
     </ol>
 
     <h3>Stale locks or corrupted state</h3>
@@ -475,7 +475,7 @@ vibeos-update() {
 </div>
 
 <footer class="footer">
-  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
   <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
 </footer>
 

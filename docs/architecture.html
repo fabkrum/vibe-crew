@@ -770,7 +770,9 @@
       <li><a href="new-project.html">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
       <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="example-session.html">Example Session</a></li>
       <li><a href="architecture.html" class="active">Architecture</a></li>
+      <li><a href="warp.html">Warp</a></li>
       <li><a href="releases.html">Releases</a></li>
     </ul>
   </div>
@@ -785,16 +787,30 @@
     <ol>
       <li><a href="#system">System Deep Dive</a>
         <ol>
+          <li><a href="#plugin-manifest">Plugin Manifest &amp; Registration</a></li>
           <li><a href="#agents">The 12-Agent Architecture</a></li>
+          <li><a href="#skills">Skills System (Slash Commands)</a></li>
           <li><a href="#hooks">The Hook System</a></li>
+          <li><a href="#scripts">Scripts Reference</a></li>
+          <li><a href="#settings">Settings &amp; Permissions</a></li>
+          <li><a href="#mcp-servers">MCP Server Integration</a></li>
+        </ol>
+      </li>
+      <li><a href="#runtime">Runtime Systems</a>
+        <ol>
           <li><a href="#status-bar">The Status Bar</a></li>
           <li><a href="#interrupt">The Interrupt Protocol</a></li>
           <li><a href="#phase-gate">The Phase Gate</a></li>
           <li><a href="#vibe-score">The Vibe Score &amp; Performance Coach</a></li>
-          <li><a href="#commands">Slash Commands Reference</a></li>
-          <li><a href="#state">State Management</a></li>
+          <li><a href="#compaction">Context Compaction &amp; Reinject</a></li>
+          <li><a href="#handoff">The Handoff System</a></li>
+          <li><a href="#error-recovery">Error Recovery</a></li>
+          <li><a href="#cost-guardrails">Cost Guardrails</a></li>
         </ol>
       </li>
+      <li><a href="#commands">Slash Commands Reference</a></li>
+      <li><a href="#state">State Management</a></li>
+      <li><a href="#design-principles">Design Principles</a></li>
       <li><a href="#dashboard">VitePress Documentation Dashboard</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ol>
@@ -805,9 +821,57 @@
     <h2>System Deep Dive</h2>
     <p>VibeOS is a system of specialized agents, deterministic hooks, and bash scripts that work together to enforce quality, manage attention, and continuously improve your workflow. Here's how every piece fits together.</p>
 
+    <!-- PLUGIN MANIFEST -->
+    <h3 id="plugin-manifest">Plugin Manifest &amp; Registration</h3>
+    <p>VibeOS is a Claude Code plugin. Claude Code auto-detects it from the <code>.claude-plugin/plugin.json</code> manifest in the project root. The manifest registers all system components:</p>
+
+    <pre><code><span class="code-label">plugin.json</span>{
+  "name": "vibe-os",
+  "version": "1.3.0",
+  "description": "Autonomous vibe-coding operating system",
+  "agents": "./agents/",
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}</code></pre>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9632;</div>
+        <h4>agents/</h4>
+        <p>12 specialized agent prompt files. Each defines a model, isolation type, tool allowlist, and turn budget. Claude Code spawns them on demand.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9654;</div>
+        <h4>skills/</h4>
+        <p>20 slash command definitions. Each is a <code>SKILL.md</code> file with YAML frontmatter that registers the command name, description, and arguments.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9881;</div>
+        <h4>hooks/</h4>
+        <p>Event-to-script routing table. 10 hook matchers across 6 lifecycle events, triggering bash scripts for zero-token enforcement.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9673;</div>
+        <h4>.mcp.json</h4>
+        <p>MCP server configuration for Context7 (documentation lookup) and Puppeteer (browser automation).</p>
+      </div>
+    </div>
+
+    <h4>Plugin file structure</h4>
+    <pre><code><span class="code-label">layout</span>claude-plugin-vibe-os/
+  .claude-plugin/plugin.json    # Plugin manifest (entry point)
+  .mcp.json                     # MCP server configuration
+  settings.json                 # Permission rules (66 allowed, 22 denied)
+  hooks/hooks.json              # Event-to-script routing table
+  scripts/                      # 60+ bash automation scripts
+  agents/                       # 12 specialized agent prompts
+  skills/                       # 20 slash command definitions
+  templates/                    # Badge catalog, challenge pool, quizzes, docs-site</code></pre>
+
     <!-- AGENTS -->
     <h3 id="agents">The 12-Agent Architecture</h3>
-    <p>Each agent has a specific role, model selection, tool access, and context budget. Haiku agents handle fast, routine tasks. Sonnet agents handle complex reasoning and implementation. One agent (Code Simplifier) uses Opus for deep analysis.</p>
+    <p>Each agent has a specific role, model selection, tool access, and context budget. Opus agents handle planning, research, code, security, and analysis &mdash; tasks where mistakes are expensive to fix later. Haiku agents handle fast, mechanical tasks (routing, running shell commands). Sonnet handles template-driven output like documentation.</p>
 
     <div class="table-wrap">
       <table>
@@ -824,49 +888,49 @@
           </tr>
           <tr>
             <td><strong>Workflow Orchestrator</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Inline</td>
             <td>Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state</td>
             <td>Command routing</td>
           </tr>
           <tr>
             <td><strong>Stack Scout</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Worktree</td>
             <td>Read-only research. Uses WebSearch, Context7, Puppeteer. Produces TDR in isolated context</td>
             <td>Tier 1 architecture step</td>
           </tr>
           <tr>
             <td><strong>Builder</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Worktree</td>
             <td>Implements features within TDR boundaries. Runs in worktree to isolate work-in-progress</td>
             <td>Tier 2 coding phase</td>
           </tr>
           <tr>
             <td><strong>Verifier</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge amber">Haiku</span></td>
             <td>Inline</td>
-            <td>Runs quality checks (tests, lint, build, type-check), calculates Vibe Score</td>
+            <td>Runs quality checks (tests, lint, build, type-check). Executes deterministic shell commands and reports results</td>
             <td>/check, /wrap, /run-backlog</td>
           </tr>
           <tr>
             <td><strong>Performance Coach</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Inline</td>
             <td>Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals</td>
             <td>/wrap session end</td>
           </tr>
           <tr>
             <td><strong>Code Auditor</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Worktree</td>
             <td>Read-only codebase analysis for existing project onboarding. Extracts conventions and patterns</td>
             <td>/onboard</td>
           </tr>
           <tr>
             <td><strong>Security Auditor</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Worktree</td>
             <td>Read-only OWASP Top 10 security analysis. Scans for injection, auth, XSS, secrets, and more</td>
             <td>/audit</td>
@@ -887,14 +951,14 @@
           </tr>
           <tr>
             <td><strong>CI Healer</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Inline</td>
             <td>CI failure diagnosis and repair. Categorizes failures, applies targeted fixes (max 3 attempts)</td>
             <td>/heal</td>
           </tr>
           <tr>
             <td><strong>Opponent Processor</strong></td>
-            <td><span class="badge purple">Sonnet</span></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Worktree</td>
             <td>Devil's advocate for TDR decisions. Counter-arguments, debate matrices, risk assessments</td>
             <td>Tier 1 after TDR</td>
@@ -906,6 +970,80 @@
     <div class="callout tip">
       <div class="callout-title">Why isolated agents matter</div>
       <p>Agents marked "Worktree" run in separate context windows. All their research tokens, documentation fetches, and analysis stay outside your main session. Only the distilled output enters your primary context &mdash; saving thousands of tokens per session.</p>
+    </div>
+
+    <!-- SKILLS -->
+    <h3 id="skills">Skills System (Slash Commands)</h3>
+    <p>Every slash command in VibeOS is implemented as a <strong>skill</strong> &mdash; a <code>SKILL.md</code> file in the <code>skills/</code> directory. Skills are the primary user-facing interface to the system.</p>
+
+    <h4>How skills work</h4>
+    <div class="flow"><span class="highlight">User types:</span> /new-feature "user-auth"
+    &darr;
+Claude Code discovers <span class="highlight">skills/new-feature/SKILL.md</span>
+    &darr;
+Reads YAML frontmatter:
+  name: new-feature
+  description: Start a new feature
+  args: feature_name
+    &darr;
+Expands SKILL.md body as agent instructions
+    &darr;
+<span class="highlight">Skill executes:</span> precondition checks, state mutations, agent handoffs
+    &darr;
+<span class="muted">Results written to .vibeos/ state files</span></div>
+
+    <h4>Skill definition format</h4>
+    <p>Each skill is a Markdown file with YAML frontmatter. The body contains the full workflow: preconditions, step-by-step execution, error handling, state mutations, and agent handoffs.</p>
+
+    <pre><code><span class="code-label">skills/new-feature/SKILL.md</span>---
+name: new-feature
+description: Start a new feature session on a dedicated branch
+args: feature_name
+---
+
+# /new-feature workflow
+
+1. Check foundation is complete (read state.json)
+2. Check WIP limits (max 2 in-progress features)
+3. Find or create feature in backlog.json
+4. Create git branch: feat/{feature_name}
+5. Create safety checkpoint
+6. Initialize 5-phase tracking in state.json
+7. Hand off to Builder agent</code></pre>
+
+    <h4>All 20 skills</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Skill</th><th>Agent(s) Invoked</th><th>Key Behavior</th></tr>
+        </thead>
+        <tbody>
+          <tr><td rowspan="3"><strong>Setup</strong></td><td><code>/setup</code></td><td>Session Startup</td><td>Verify dependencies, detect terminal, initialize <code>.vibeos/</code></td></tr>
+          <tr><td><code>/new-project</code></td><td>Orchestrator, Stack Scout, Builder, Opponent</td><td>6-step foundation: VISION, design system, TDR, roadmap, CLAUDE.md, commit</td></tr>
+          <tr><td><code>/onboard</code></td><td>Code Auditor</td><td>Existing project analysis, convention extraction, CLAUDE.md generation</td></tr>
+          <tr><td rowspan="3"><strong>Planning</strong></td><td><code>/plan-features</code></td><td>Orchestrator</td><td>Define backlog specs: acceptance criteria, priority, complexity, dependencies</td></tr>
+          <tr><td><code>/idea "text"</code></td><td>None (script only)</td><td>1-line capture to backlog.json with status "unplanned". Zero context cost</td></tr>
+          <tr><td><code>/status</code></td><td>None (script only)</td><td>Full project dashboard: foundation, backlog, active feature, recent scores</td></tr>
+          <tr><td rowspan="3"><strong>Development</strong></td><td><code>/new-feature "name"</code></td><td>Builder</td><td>Branch creation, checkpoint, 5-phase tracking, WIP limit enforcement</td></tr>
+          <tr><td><code>/run-backlog</code></td><td>Builder, Verifier</td><td>Auto-execute features by priority. Stops on failure for human review</td></tr>
+          <tr><td><code>/check</code></td><td>Verifier</td><td>Run tests + build + lint + type-check without modifying code</td></tr>
+          <tr><td rowspan="2"><strong>Quality</strong></td><td><code>/simplify</code></td><td>Code Simplifier</td><td>Read-only analysis: dead code, abstractions, API surface. You approve each change</td></tr>
+          <tr><td><code>/replay</code></td><td>None (script only)</td><td>Create, list, or apply workflow templates from high-scoring sessions</td></tr>
+          <tr><td rowspan="4"><strong>Safety</strong></td><td><code>/cost</code></td><td>None (script only)</td><td>Real-time cost dashboard: session, daily, weekly, monthly aggregates + pricing table</td></tr>
+          <tr><td><code>/undo</code></td><td>None (script only)</td><td>List checkpoints and recent commits, safely revert or reset</td></tr>
+          <tr><td><code>/audit</code></td><td>Security Auditor</td><td>OWASP Top 10 scan: injection, auth, XSS, secrets, dependencies</td></tr>
+          <tr><td><code>/heal</code></td><td>CI Healer</td><td>Fetch CI logs, diagnose failure, apply fix (max 3 attempts)</td></tr>
+          <tr><td rowspan="2"><strong>Session</strong></td><td><code>/wrap</code></td><td>Verifier, Performance Coach, Doc Generator</td><td>Quality gate, Vibe Score, coaching, commit, session log, gamification pipeline</td></tr>
+          <tr><td><code>/handoff</code></td><td>None (script only)</td><td>Generate structured context transfer document for next session</td></tr>
+          <tr><td rowspan="2"><strong>Gamification</strong></td><td><code>/achievements</code></td><td>None (script only)</td><td>Level, badges, skill tree, streaks, challenges + visual dashboard link</td></tr>
+          <tr><td><code>/quiz</code></td><td>None (inline)</td><td>Interactive knowledge checks with educational explanations (Level 3+)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Script-only skills vs. agent-driven skills</div>
+      <p>Some skills (like <code>/idea</code>, <code>/status</code>, <code>/cost</code>) are pure script execution &mdash; they read/write JSON files and produce output with zero AI token cost. Others (like <code>/new-project</code>, <code>/wrap</code>) orchestrate multiple agents across the full workflow. The distinction keeps costs down: cheap operations stay cheap.</p>
     </div>
 
     <!-- HOOKS -->
@@ -972,6 +1110,221 @@
 
     <h4>How hooks enforce behavior</h4>
     <p>When Claude Code encounters a lifecycle event, it checks <code>hooks.json</code> for matching entries, passes a JSON payload to the script via stdin, and reads the exit code. <strong>Exit 0</strong> = allow the operation. <strong>Exit 2</strong> = block the operation. This gives hooks the power to both observe (PostToolUse) and control (PreToolUse) agent behavior.</p>
+
+    <!-- SCRIPTS -->
+    <h3 id="scripts">Scripts Reference</h3>
+    <p>VibeOS includes 60+ bash scripts in the <code>scripts/</code> directory. Every state mutation goes through a script &mdash; agents never write <code>.vibeos/</code> files directly. Scripts are organized by function:</p>
+
+    <h4>Core lifecycle</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Purpose</th><th>Triggered By</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>session-startup.sh</code></td><td>Environment check, state detection, routing on every session start</td><td>SessionStart hook</td></tr>
+          <tr><td><code>sync-state.sh</code></td><td>Reconcile state.json with git branch and filesystem reality</td><td>SessionStart hook</td></tr>
+          <tr><td><code>error-recovery.sh</code></td><td>Clear stale locks, clean temp files, detect orphaned processes</td><td>SessionStart hook</td></tr>
+          <tr><td><code>compact-reinject.sh</code></td><td>Re-inject project state (&lt;300 tokens) after context compaction</td><td>SessionStart (compact)</td></tr>
+          <tr><td><code>statusline.sh</code></td><td>Render status bar: context %, cost, feature, score, duration</td><td>Every assistant message</td></tr>
+          <tr><td><code>notify.sh</code></td><td>Native OS notification with terminal-specific deep-linking</td><td>Notification / Failure hooks</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Feature &amp; phase management</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>update-backlog.sh</code></td><td>Add, reorder, update backlog items across Kanban columns (backlog, planned, ready, in-progress, testing, review, done)</td></tr>
+          <tr><td><code>complete-phase.sh</code></td><td>Advance feature to next phase with timestamp validation</td></tr>
+          <tr><td><code>claim-task.sh</code></td><td>Mark a feature as claimed by a specific agent</td></tr>
+          <tr><td><code>create-checkpoint.sh</code></td><td>Create a git tag checkpoint before risky operations</td></tr>
+          <tr><td><code>rollback-checkpoint.sh</code></td><td>Revert to a saved checkpoint tag</td></tr>
+          <tr><td><code>list-checkpoints.sh</code></td><td>List available rollback points</td></tr>
+          <tr><td><code>git-branch-create.sh</code></td><td>Create and validate feature branches</td></tr>
+          <tr><td><code>git-commit-validate.sh</code></td><td>Validate conventional commit format</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Quality &amp; scoring</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>calculate-vibe-score.sh</code></td><td>Pre-calculate 10+ scoring metrics: phase completion, spec existence, test coverage, context usage, token efficiency</td></tr>
+          <tr><td><code>aggregate-scores.sh</code></td><td>Cross-session trend analysis for Performance Coach</td></tr>
+          <tr><td><code>check-mutation-eligibility.sh</code></td><td>Determine if a CLAUDE.md rule mutation is warranted based on patterns</td></tr>
+          <tr><td><code>apply-mutation.sh</code></td><td>Atomically apply approved CLAUDE.md mutations with audit logging</td></tr>
+          <tr><td><code>analyze-test-gaps.sh</code></td><td>Identify untested modules and coverage gaps</td></tr>
+          <tr><td><code>claude-md-lint.sh</code></td><td>Validate CLAUDE.md size (&lt;5000 lines) and structure</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Project analysis</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>detect-conventions.sh</code></td><td>Detect language, package manager, formatting style (semicolons, quotes, imports)</td></tr>
+          <tr><td><code>extract-project-conventions.sh</code></td><td>Deep analysis: framework, state management, API style, error handling, auth, database</td></tr>
+          <tr><td><code>extract-design-system.sh</code></td><td>Extract CSS variables, color palettes, typography, component library from existing projects</td></tr>
+          <tr><td><code>detect-secrets.sh</code></td><td>Scan for hardcoded secrets (AWS keys, API tokens, private keys)</td></tr>
+          <tr><td><code>scan-dependencies.sh</code></td><td>Multi-language vulnerability scanning (npm audit, pip-audit, cargo-audit, etc.)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Documentation &amp; CI</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>generate-feature-docs.sh</code></td><td>Auto-generate feature documentation from backlog specs</td></tr>
+          <tr><td><code>generate-release-notes.sh</code></td><td>Generate release notes from conventional commits</td></tr>
+          <tr><td><code>update-changelog.sh</code></td><td>Update CHANGELOG.md from git history</td></tr>
+          <tr><td><code>rebuild-sidebar.sh</code></td><td>Regenerate VitePress sidebar navigation</td></tr>
+          <tr><td><code>diagnose-ci-failure.sh</code></td><td>Parse CI logs and categorize failures (build, test, lint, dependency, environment)</td></tr>
+          <tr><td><code>fetch-ci-logs.sh</code></td><td>Retrieve CI logs via GitHub CLI for analysis</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Gamification</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>award-xp.sh</code></td><td>Calculate XP from session metrics (session +10, clean +25, phase +5, feature +50, foundation +100)</td></tr>
+          <tr><td><code>check-level-up.sh</code></td><td>Detect level progression and trigger notifications</td></tr>
+          <tr><td><code>check-badges.sh</code></td><td>Detect unlocked achievements and award XP bonuses</td></tr>
+          <tr><td><code>distribute-skill-xp.sh</code></td><td>Distribute skill-specific XP based on session activities</td></tr>
+          <tr><td><code>update-streak.sh</code></td><td>Streak counter with grace periods (weekends auto-grace, 2 grace days/month)</td></tr>
+          <tr><td><code>refresh-challenges.sh</code></td><td>Rotate daily/weekly challenges, weighted toward weakest skill domain</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>State &amp; configuration</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Script</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>init-vibeos-state.sh</code></td><td>Initialize <code>.vibeos/</code> directory with all config files (idempotent)</td></tr>
+          <tr><td><code>migrate-state.sh</code></td><td>Migrate state.json across schema versions (1.0.0 &rarr; 1.3.0)</td></tr>
+          <tr><td><code>generate-handoff.sh</code></td><td>Create cross-session handoff documents</td></tr>
+          <tr><td><code>detect-terminal.sh</code></td><td>Detect terminal type (Warp, iTerm, VS Code, Terminal.app) for notification routing</td></tr>
+          <tr><td><code>cost-guardrails.sh</code></td><td>Per-turn cost tracking, threshold monitoring, historical aggregation</td></tr>
+          <tr><td><code>aggregate-costs.sh</code></td><td>Calculate session, daily, weekly, monthly cost totals</td></tr>
+          <tr><td><code>check-deps.sh</code></td><td>Verify system dependencies (Git, Node.js, jq, terminal-notifier)</td></tr>
+          <tr><td><code>validate-plugin.sh</code></td><td>Verify plugin structure and hook configuration</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SETTINGS -->
+    <h3 id="settings">Settings &amp; Permissions</h3>
+    <p>The <code>settings.json</code> file defines tool-level permission rules enforced by Claude Code <em>before</em> any hook runs. This is the outermost security boundary.</p>
+
+    <h4>Allowed tools (66 rules)</h4>
+    <p>Standard development operations are pre-approved so the agent can work without constant permission prompts:</p>
+    <ul>
+      <li><strong>File operations</strong> &mdash; All Read, Write, Edit, Glob, Grep</li>
+      <li><strong>npm scripts</strong> &mdash; test, lint, build, format, type-check, audit</li>
+      <li><strong>Git operations</strong> &mdash; status, log, diff, add, commit, checkout, branch, worktree, revert, reset --soft, tags</li>
+      <li><strong>GitHub CLI</strong> &mdash; pr create/list/view, run list/view/watch</li>
+      <li><strong>Shell utilities</strong> &mdash; jq, cat, ls, wc, sort, head, tail, mkdir, cp, mv</li>
+      <li><strong>Security audits</strong> &mdash; npm audit, pip audit, bundle audit, govulncheck, cargo audit, composer audit</li>
+    </ul>
+
+    <h4>Denied tools (22 rules)</h4>
+    <p>Destructive operations are blocked at the permission layer &mdash; even if an agent tries to run them:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9888;</div>
+        <h4>Elevation</h4>
+        <p><code>sudo</code>, <code>su</code>, <code>doas</code>, <code>pkexec</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#9888;</div>
+        <h4>Force operations</h4>
+        <p><code>git push --force</code>, <code>git push -f</code>, <code>git reset --hard</code>, <code>git clean -f</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#9888;</div>
+        <h4>Destructive</h4>
+        <p><code>rm -rf /</code>, <code>rm -rf ~</code>, <code>rm -rf $HOME</code>, <code>chmod 777</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#9888;</div>
+        <h4>System modifications</h4>
+        <p><code>npm install -g</code>, <code>kill -9</code>, <code>systemctl</code>, <code>crontab</code>, <code>mkfs</code>, <code>dd</code></p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-title">Two layers of protection</div>
+      <p>The <code>settings.json</code> permission rules are the first layer (enforced by Claude Code). The <code>protect-data.sh</code> PreToolUse hook is the second layer (catches patterns like <code>DROP TABLE</code> that aren't tool-level commands). Together they form a defense-in-depth system.</p>
+    </div>
+
+    <!-- MCP SERVERS -->
+    <h3 id="mcp-servers">MCP Server Integration</h3>
+    <p>Two MCP (Model Context Protocol) servers extend the agent's capabilities. Both are optional but strongly recommended for token efficiency.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon blue">&#9673;</div>
+        <h4>Context7</h4>
+        <p><strong>Documentation lookup.</strong> Instead of pasting library docs into chat (~1,500 tokens per paste), agents query Context7 for on-demand API references. Used by the Builder (implementation), Stack Scout (research), and Verifier (testing).</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9673;</div>
+        <h4>Puppeteer</h4>
+        <p><strong>Browser automation.</strong> The Stack Scout uses it for web research and screenshot verification during TDR creation. Also available for visual regression testing during the Test phase.</p>
+      </div>
+    </div>
+
+    <pre><code><span class="code-label">.mcp.json</span>{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/puppeteer-mcp@latest"]
+    }
+  }
+}</code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">Token savings from Context7</div>
+      <p>A single session might query Supabase auth docs, Next.js routing docs, and Tailwind utility references. Without Context7, that's ~4,500 tokens of pasted documentation. With Context7, the agent fetches exactly what it needs on demand &mdash; and those tokens are served from the MCP server, not your context window. The Performance Coach tracks this and deducts points (-15) for low cache utilization when Context7 isn't being used.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="runtime">
+    <span class="section-label">Runtime</span>
+    <h2>Runtime Systems</h2>
+    <p>These systems operate during sessions to manage context, attention, quality, cost, and cross-session continuity.</p>
 
     <!-- STATUS BAR -->
     <h3 id="status-bar">The Status Bar</h3>
@@ -1142,8 +1495,119 @@ Check file path being written:
       <p>Session 1: paste docs, score 78, rule added. Session 2: AI reads rule, uses Context7, score 89, new rule proposed. Session 3: two rules active, score 94. Each session is more efficient than the last. Mistakes are identified, codified, and permanently prevented.</p>
     </div>
 
+    <!-- COMPACTION -->
+    <h3 id="compaction">Context Compaction &amp; Reinject</h3>
+    <p>When the context window approaches capacity, Claude Code compacts older messages. VibeOS hooks into this event to ensure you never lose track of what you were working on.</p>
+
+    <div class="flow"><span class="highlight">Context window reaches ~50% capacity</span>
+    &darr;
+Claude Code triggers context compaction (older messages compressed)
+    &darr;
+<span class="highlight">SessionStart "compact"</span> hook fires
+    &darr;
+<span class="highlight">compact-reinject.sh</span> executes (5-second timeout)
+    &darr;
+Outputs a &lt;300-token summary:
+  &bull; Foundation status (complete/incomplete + missing steps)
+  &bull; Active feature (name, branch, current phase, phases completed)
+  &bull; Backlog summary (by Kanban column)
+  &bull; Recent commits (last 5)
+  &bull; CLAUDE.md summary (line count, section count)
+    &darr;
+<span class="muted">Agent seamlessly continues with full project awareness</span></div>
+
+    <p>This mechanism is why sessions can survive multiple compactions without degradation. The &lt;300-token reinject costs less than a single follow-up clarification question.</p>
+
+    <!-- HANDOFF -->
+    <h3 id="handoff">The Handoff System</h3>
+    <p>The <code>/handoff</code> command generates a structured context transfer document designed for the next session. This solves the "cold start" problem where a new session has to re-discover what you were working on.</p>
+
+    <h4>Handoff document structure</h4>
+    <pre><code><span class="code-label">handoff-2026-02-24-001.md</span># Session Handoff &mdash; 2026-02-24
+
+## Active Work
+- Feature: user-auth (User Authentication)
+- Phase: Test (3/5 phases complete)
+- Branch: feat/user-auth
+
+## Recent Progress
+- Implemented Supabase auth client
+- Created login/signup pages
+- Added route middleware
+
+## Blockers
+- OAuth callback URL needs env var NEXT_PUBLIC_SUPABASE_URL
+
+## Next Steps
+- Write tests for auth middleware
+- Add error states to login form
+- Complete docs phase
+
+## Decisions Made
+- Using Supabase Auth (not NextAuth) per TDR
+- Middleware-based route protection (not per-page)</code></pre>
+
+    <p>Handoff documents are stored in <code>.vibeos/handoffs/</code> and are also generated automatically by <code>/wrap</code>. The Session Startup agent reads the most recent handoff to orient the new session.</p>
+
+    <div class="callout info">
+      <div class="callout-title">Token savings from handoffs</div>
+      <p>Without a handoff, re-establishing context costs ~2,000 tokens of explanation: "I was working on auth, I'm on the feat/user-auth branch, I finished the code phase, I still need to..." With a handoff, the startup agent reads a structured file and produces a 3-line status banner. The session starts immediately productive.</p>
+    </div>
+
+    <!-- ERROR RECOVERY -->
+    <h3 id="error-recovery">Error Recovery</h3>
+    <p>The <code>error-recovery.sh</code> script runs at every session start via the SessionStart hook. It silently cleans up problems left by crashed or interrupted sessions.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon amber">&#128274;</div>
+        <h4>Stale lock cleanup</h4>
+        <p>Removes <code>.vibeos/locks/*/</code> directories older than 60 seconds. Prevents deadlocks from crashed multi-agent operations.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#128196;</div>
+        <h4>Temp file cleanup</h4>
+        <p>Removes temporary files from failed atomic write operations (the <code>.tmp</code> files left behind when <code>mv</code> never executed).</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9881;</div>
+        <h4>Git state validation</h4>
+        <p>Checks for unresolved merge conflicts and detached HEAD state. Reports issues but doesn't auto-resolve &mdash; those need human judgment.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9654;</div>
+        <h4>Orphaned process detection</h4>
+        <p>Lists orphaned agent processes from previous sessions. Reports but doesn't kill &mdash; avoids terminating intentional background work.</p>
+      </div>
+    </div>
+
+    <!-- COST GUARDRAILS -->
+    <h3 id="cost-guardrails">Cost Guardrails</h3>
+    <p>The <code>cost-guardrails.sh</code> script runs on every Stop event. It calculates per-turn costs using model-aware pricing and accumulates totals in <code>.vibeos/session-cost.json</code>.</p>
+
+    <h4>How cost tracking works</h4>
+    <div class="flow"><span class="highlight">Stop hook fires</span> after every assistant turn
+    &darr;
+<span class="highlight">cost-guardrails.sh</span> reads token counts from hook JSON payload:
+  input_tokens, cache_creation_input_tokens, cache_read_input_tokens, output_tokens
+    &darr;
+Calculates USD cost using per-model pricing (Opus/Sonnet/Haiku)
+    &darr;
+Accumulates in <span class="highlight">.vibeos/session-cost.json</span>
+    &darr;
+Checks against thresholds:
+  Session warning ($2.00) &rarr; emit cost warning
+  Session max ($5.00)     &rarr; agent MUST pause and ask permission
+  Daily warning ($20.00)  &rarr; emit daily spend alert</div>
+
+    <p>All thresholds are configurable in <code>.vibeos/config.json</code> under <code>cost_limits</code>. The <code>/cost</code> command reads this data to display the full financial picture.</p>
+  </section>
+
+  <hr>
+
+  <section class="section">
     <!-- COMMANDS -->
-    <h3 id="commands">Slash Commands Reference</h3>
+    <h3 id="commands" style="margin-top:0">Slash Commands Reference</h3>
 
     <h4>Project Setup</h4>
     <div class="table-wrap">
@@ -1275,6 +1739,60 @@ Check file path being written:
 
     <h4>State schema migration</h4>
     <p>When VibeOS is upgraded, <code>scripts/migrate-state.sh</code> automatically detects the current schema version and applies incremental migrations (1.0.0 &rarr; 1.1.0 &rarr; 1.2.0 &rarr; 1.3.0). New fields are added with sensible defaults. No manual migration is needed.</p>
+  </section>
+
+  <hr>
+
+  <section class="section" id="design-principles">
+    <span class="section-label">Philosophy</span>
+    <h2>Design Principles</h2>
+    <p>Every architectural decision in VibeOS follows these principles. Understanding them explains <em>why</em> the system works the way it does.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9632;</div>
+        <h4>Fail-open design</h4>
+        <p>All scripts exit 0 on error. A failing hook script never blocks your session &mdash; it silently degrades. The system reports the problem but lets you keep working. Sessions are too expensive to block with infrastructure issues.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9632;</div>
+        <h4>Hooks over suggestions</h4>
+        <p>Rules are enforced via deterministic bash scripts (zero tokens) rather than relying on the model to remember instructions. A hook that exits 2 <em>physically blocks</em> the operation. An instruction in CLAUDE.md can be forgotten or misinterpreted.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>Atomic state mutations</h4>
+        <p>All state mutations use the temp file + <code>mv</code> pattern. Scripts write to <code>file.tmp</code>, then <code>mv file.tmp file.json</code>. This prevents corruption from partial writes &mdash; critical when multiple agents may update state concurrently.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9632;</div>
+        <h4>Advisory locking</h4>
+        <p>Multi-agent state access uses <code>mkdir</code>-based advisory locks with 30&ndash;60 second timeouts. If a lock is stale (crashed process), <code>error-recovery.sh</code> cleans it up at session start. No deadlocks possible.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9632;</div>
+        <h4>Research before code</h4>
+        <p>The phase gate enforces architecture decisions (TDR) before any source code writes are allowed. The 15&ndash;30 minutes spent on the foundation prevents hours of rework from wrong assumptions.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9632;</div>
+        <h4>Human attention is the bottleneck</h4>
+        <p>The system stays completely silent during normal operation. It interrupts only when blocked, complete, or failed. Every notification is actionable &mdash; no noise, no status updates, no progress bars.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9632;</div>
+        <h4>Context window discipline</h4>
+        <p>Target &lt;50% context usage. Worktree agents isolate expensive research. MCP servers replace pasting documentation. Warnings at 60% and 80%. Compaction reinject preserves project awareness.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>Self-improving</h4>
+        <p>Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules. The system gets more efficient with every session. Mistakes are identified, codified, and prevented &mdash; recursively.</p>
+      </div>
+    </div>
   </section>
 
   <hr>

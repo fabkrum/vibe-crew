@@ -4,7 +4,7 @@ description: >
   CI failure diagnosis and repair agent. Reads CI logs, categorizes failures
   (build, test, lint, dependency, environment), and applies targeted fixes.
   Limited to 3 fix attempts per invocation.
-model: sonnet
+model: opus
 tools:
   - Read
   - Write

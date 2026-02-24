@@ -65,6 +65,13 @@
     pre { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; position: relative; }
     pre code { background: none; padding: 0; border: none; color: var(--color-text-secondary); font-size: 0.85rem; line-height: 1.7; }
     .code-label { position: absolute; top: 0.5rem; right: 0.75rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); font-family: var(--font-sans); font-weight: 600; }
+    /* ---- COPY BUTTON ---- */
+    pre.copyable { padding-right: 3.5rem; }
+    pre.copyable .code-label { right: 3.25rem; }
+    .copy-btn { position: absolute; top: 0.6rem; right: 0.6rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-xs); color: var(--color-text-muted); cursor: pointer; transition: all 0.15s; padding: 0; }
+    .copy-btn:hover { color: var(--color-text); border-color: var(--color-accent-dim); background: var(--color-surface-3); }
+    .copy-btn.copied { color: var(--color-green); border-color: rgba(74, 222, 128, 0.3); }
+    .copy-btn svg { width: 16px; height: 16px; }
     .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
     .card:hover { border-color: var(--color-accent-dim); }
@@ -122,7 +129,9 @@
       <li><a href="new-project.html">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
       <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="example-session.html">Example Session</a></li>
       <li><a href="architecture.html">Architecture</a></li>
+      <li><a href="warp.html">Warp</a></li>
       <li><a href="releases.html">Releases</a></li>
     </ul>
   </div>
@@ -136,7 +145,7 @@
     <h3>On This Page</h3>
     <ol>
       <li><a href="#install">Installation from Scratch</a></li>
-      <li><a href="#warp">Configuring Warp Terminal</a></li>
+      <li><a href="#warp">Warp Terminal</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ol>
   </div>
@@ -171,14 +180,22 @@
       <li>
         <h4>Install system dependencies</h4>
         <p>These are needed for notifications, JSON parsing in hooks, and PR automation.</p>
-        <pre><code><span class="code-label">bash</span>brew install terminal-notifier jq
+        <pre class="copyable" data-copy="brew install terminal-notifier jq
+brew install gh && gh auth login"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>brew install terminal-notifier jq
 brew install gh &amp;&amp; gh auth login</code></pre>
       </li>
 
       <li>
         <h4>Add the plugin to your project</h4>
         <p>Copy or symlink the VibeOS plugin directory into your project root. Symlinking is recommended for teams so updates propagate automatically.</p>
-        <pre><code><span class="code-label">bash</span># Option A: Direct copy
+        <pre class="copyable" data-copy="# Option A: Direct copy
+cp -r /path/to/claude-plugin-vibe-os/ ./claude-plugin-vibe-os/
+
+# Option B: Symlink (recommended for teams)
+ln -s /path/to/claude-plugin-vibe-os ./claude-plugin-vibe-os
+
+# Option C: Git submodule (best for version control)
+git submodule add <repo-url> claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span># Option A: Direct copy
 cp -r /path/to/claude-plugin-vibe-os/ ./claude-plugin-vibe-os/
 
 # Option B: Symlink (recommended for teams)
@@ -191,7 +208,8 @@ git submodule add &lt;repo-url&gt; claude-plugin-vibe-os</code></pre>
       <li>
         <h4>Verify plugin detection</h4>
         <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeOS automatically.</p>
-        <pre><code><span class="code-label">bash</span>cd /path/to/your-project
+        <pre class="copyable" data-copy="cd /path/to/your-project
+claude"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd /path/to/your-project
 claude</code></pre>
         <p>You should see the VibeOS session startup agent run on first launch.</p>
       </li>
@@ -199,7 +217,7 @@ claude</code></pre>
       <li>
         <h4>Run the setup wizard</h4>
         <p>Inside Claude Code, run:</p>
-        <pre><code><span class="code-label">claude code</span>/setup</code></pre>
+        <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">claude code</span>/setup</code></pre>
         <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibeos/</code> runtime directory.</p>
       </li>
 
@@ -250,70 +268,14 @@ claude</code></pre>
 
   <section class="section" id="warp">
     <span class="section-label">Terminal Setup</span>
-    <h2>Configuring Warp Terminal</h2>
-    <p>Warp provides the best VibeOS experience thanks to its deep-link support. When a notification fires, you click it and land on the <em>exact tab</em> that needs your attention &mdash; no hunting through 15 open sessions.</p>
+    <h2>Warp Terminal</h2>
+    <p>Warp is the recommended terminal for VibeOS. It provides tab deep-linking (click a notification and land on the exact session that needs attention), structured output blocks, Launch Configurations for instant workspace setup, and session restoration.</p>
 
-    <h3>Why Warp Is Recommended</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Terminal</th><th>Notification Method</th><th>Tab Deep-Link</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Warp</strong></td><td>OSC 777 + macOS banner</td><td>Yes &mdash; click goes to exact tab</td></tr>
-          <tr><td>iTerm2</td><td>OSC 9 + macOS banner</td><td>No</td></tr>
-          <tr><td>VS Code Terminal</td><td>macOS banner</td><td>No</td></tr>
-          <tr><td>Terminal.app</td><td>macOS banner</td><td>No</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <p>Everything you need &mdash; installation, deep-linking setup, keyboard shortcuts, Warp Drive, window layouts, and more &mdash; is covered on the dedicated Warp page:</p>
 
-    <h3>How Deep-Linking Works</h3>
-    <p>Warp exposes a <code>WARP_SESSION_ID</code> environment variable for each terminal tab. VibeOS captures this value and constructs a <code>warp://session/&lt;id&gt;</code> URI. When the <code>notify.sh</code> script fires a notification, it passes this URI to <code>terminal-notifier</code>'s <code>-execute</code> flag. Clicking the macOS banner executes the deep link, which brings Warp to the foreground and switches to the exact tab.</p>
+    <p style="margin-top: 1.5rem;"><a href="warp.html" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--color-accent-bg); border: 1px solid var(--color-accent-dim); color: var(--color-accent); padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; transition: all 0.15s;">Warp Tips &amp; Tricks &rarr;</a></p>
 
-    <div class="flow"><span class="muted">Agent blocks on permission</span>
-    &darr;
-<span class="highlight">notify.sh</span> reads JSON from stdin, extracts notification_type
-    &darr;
-Captures <span class="highlight">$WARP_SESSION_ID</span> from environment
-    &darr;
-Constructs deep link: <span class="highlight">warp://session/$SESSION_ID</span>
-    &darr;
-Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '$DEEP_LINK'"
-    &darr;
-<span class="muted">You click the notification &rarr; Warp focuses the exact tab</span></div>
-
-    <h3>Setup Steps for Warp</h3>
-    <ol class="steps">
-      <li>
-        <h4>Install Warp</h4>
-        <p>Download from <strong>warp.dev</strong> and complete the initial setup. Warp runs on macOS and Linux.</p>
-      </li>
-      <li>
-        <h4>Enable desktop notifications in Warp</h4>
-        <p>Open Warp Settings &rarr; Features &rarr; ensure <strong>Desktop Notifications</strong> is enabled.</p>
-      </li>
-      <li>
-        <h4>Verify WARP_SESSION_ID</h4>
-        <p>In any Warp tab, run:</p>
-        <pre><code><span class="code-label">bash</span>echo $WARP_SESSION_ID</code></pre>
-        <p>This should return a UUID. If it's empty, update Warp to the latest version.</p>
-      </li>
-      <li>
-        <h4>Allow macOS notifications</h4>
-        <p>Go to <strong>System Settings &rarr; Notifications &rarr; terminal-notifier</strong> and ensure "Allow Notifications" is on. Set the alert style to <strong>Banners</strong> or <strong>Alerts</strong>.</p>
-      </li>
-      <li>
-        <h4>Select Warp during /setup</h4>
-        <p>When the VibeOS setup wizard asks "Which terminal do you use?", select <strong>Warp</strong>. This is stored in <code>.vibeos/config.json</code> and determines how notifications are dispatched.</p>
-      </li>
-      <li>
-        <h4>Test the full loop</h4>
-        <p>The setup wizard sends a test notification. Click it &mdash; you should be taken back to the exact Warp tab where Claude Code is running.</p>
-      </li>
-    </ol>
-
-    <div class="callout info">
+    <div class="callout info" style="margin-top: 1.5rem;">
       <div class="callout-title">Using a different terminal?</div>
       <p>VibeOS works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
     </div>
@@ -331,7 +293,7 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
       <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li>
       <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li>
       <li>Check VibeOS config: verify <code>.vibeos/config.json</code> has <code>"notifications": true</code></li>
-      <li>Warp deep-links not working: run <code>echo $WARP_SESSION_ID</code> &mdash; should return a UUID</li>
+      <li>Warp deep-links not working: see the <a href="warp.html#deep-linking">deep-linking guide</a> on the Warp page</li>
     </ol>
 
     <h3>MCP servers not available</h3>
@@ -355,5 +317,21 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
   <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
 </footer>
 
+<script>
+document.querySelectorAll('.copy-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var pre = btn.closest('pre');
+    var text = pre.getAttribute('data-copy');
+    navigator.clipboard.writeText(text).then(function() {
+      btn.classList.add('copied');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      }, 2000);
+    });
+  });
+});
+</script>
 </body>
 </html>

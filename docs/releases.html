@@ -408,7 +408,9 @@
       <li><a href="new-project.html">New Project</a></li>
       <li><a href="existing-project.html">Existing Project</a></li>
       <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="example-session.html">Example Session</a></li>
       <li><a href="architecture.html">Architecture</a></li>
+      <li><a href="warp.html">Warp</a></li>
       <li><a href="releases.html" class="active">Releases</a></li>
     </ul>
   </div>
@@ -476,7 +478,7 @@
     <div class="feature-group">
       <h4>/heal &mdash; Auto-Healing CI</h4>
       <ul class="file-list">
-        <li><code>agents/ci-healer.md</code> &mdash; <span class="file-desc">Sonnet agent, maxTurns 15. Categorizes CI failures (build/test/lint/dep/env) and applies targeted minimal fixes</span></li>
+        <li><code>agents/ci-healer.md</code> &mdash; <span class="file-desc">Opus agent, maxTurns 15. Categorizes CI failures (build/test/lint/dep/env) and applies targeted minimal fixes</span></li>
         <li><code>skills/heal/SKILL.md</code> &mdash; <span class="file-desc">Slash command: fetch CI logs from GitHub Actions, diagnose failure category, create checkpoint, invoke ci-healer agent, verify fix, retry loop (max 3 attempts), escalate to user on failure</span></li>
         <li><code>scripts/fetch-ci-logs.sh</code> &mdash; <span class="file-desc">Fetch latest failed CI run via <code>gh run view --log-failed</code>, truncate to 500 lines, output structured JSON</span></li>
         <li><code>scripts/diagnose-ci-failure.sh</code> &mdash; <span class="file-desc">Pattern-match CI error logs to categorize as build/test/lint/dep/env with confidence rating and relevant line extraction</span></li>
@@ -487,7 +489,7 @@
     <div class="feature-group">
       <h4>Opponent Processor &mdash; TDR Debate System</h4>
       <ul class="file-list">
-        <li><code>agents/opponent-processor.md</code> &mdash; <span class="file-desc">Sonnet agent, worktree isolation, read-only. Devil's advocate for technology decisions: generates counter-arguments, debate matrices (6 criteria), risk assessments, and Keep/Reconsider verdicts</span></li>
+        <li><code>agents/opponent-processor.md</code> &mdash; <span class="file-desc">Opus agent, worktree isolation, read-only. Devil's advocate for technology decisions: generates counter-arguments, debate matrices (6 criteria), risk assessments, and Keep/Reconsider verdicts</span></li>
         <li><code>scripts/generate-counter-tdr.sh</code> &mdash; <span class="file-desc">Extract technology decisions from TDR markdown, output structured JSON with category, chosen option, and stated rationale per decision</span></li>
         <li><code>templates/counter-tdr.md.template</code> &mdash; <span class="file-desc">Counter-analysis format: per-decision devil's advocate position, debate matrix table, risk assessment, recommendation</span></li>
       </ul>
@@ -544,7 +546,7 @@
     <div class="feature-group">
       <h4>/audit &mdash; OWASP Top 10 Security Review</h4>
       <ul class="file-list">
-        <li><code>agents/security-auditor.md</code> &mdash; <span class="file-desc">Sonnet agent, worktree isolation, read-only. 10-step OWASP scan (A01-A10): broken access control, cryptographic failures, injection, insecure design, misconfiguration, vulnerable components, auth failures, data integrity, logging gaps, SSRF</span></li>
+        <li><code>agents/security-auditor.md</code> &mdash; <span class="file-desc">Opus agent, worktree isolation, read-only. 10-step OWASP scan (A01-A10): broken access control, cryptographic failures, injection, insecure design, misconfiguration, vulnerable components, auth failures, data integrity, logging gaps, SSRF</span></li>
         <li><code>skills/audit/SKILL.md</code> &mdash; <span class="file-desc">Slash command detecting project language, invoking security-auditor agent, formatting findings by severity, optional GitHub issue creation for critical/high findings</span></li>
         <li><code>scripts/scan-dependencies.sh</code> &mdash; <span class="file-desc">Multi-language dependency audit: npm audit, pip audit, bundle audit, govulncheck, cargo audit, composer audit. Graceful fallback if tool missing</span></li>
         <li><code>scripts/detect-secrets.sh</code> &mdash; <span class="file-desc">Regex scan for AWS keys, API keys, private keys, passwords, JWTs, connection strings, Stripe/GitHub tokens. Redacts actual values in output</span></li>
@@ -595,7 +597,7 @@
       <h4>Performance Coach (Phase 1)</h4>
       <p>Self-improvement engine with cross-session trend analysis and CLAUDE.md mutation system.</p>
       <ul class="file-list">
-        <li><code>agents/performance-coach.md</code> &mdash; <span class="file-desc">Sonnet agent with persistent MEMORY.md, 7-step mutation workflow, and 5 anti-pattern templates</span></li>
+        <li><code>agents/performance-coach.md</code> &mdash; <span class="file-desc">Opus agent with persistent MEMORY.md, 7-step mutation workflow, and 5 anti-pattern templates</span></li>
         <li><code>scripts/aggregate-scores.sh</code> &mdash; <span class="file-desc">Reads last 10 score files, classifies trends (improving/declining/recurring/plateau/volatile), calculates satisfaction-score correlation</span></li>
         <li><code>scripts/detect-anti-patterns.sh</code> &mdash; <span class="file-desc">Scans score history for recurring deduction categories, outputs frequency data</span></li>
         <li><code>scripts/apply-mutation.sh</code> &mdash; <span class="file-desc">Appends approved rules to CLAUDE.md "Session Learnings" section, updates mutation-log.json</span></li>
@@ -612,7 +614,7 @@
       <h4>Existing Project Onboarding (Phase 2)</h4>
       <p>Unlocks VibeOS for existing projects with <code>/onboard</code> command and Code Auditor agent.</p>
       <ul class="file-list">
-        <li><code>agents/code-auditor.md</code> &mdash; <span class="file-desc">Sonnet agent, read-only worktree analysis, scans dependencies, conventions, test gaps, design system, architecture</span></li>
+        <li><code>agents/code-auditor.md</code> &mdash; <span class="file-desc">Opus agent, read-only worktree analysis, scans dependencies, conventions, test gaps, design system, architecture</span></li>
         <li><code>skills/onboard/SKILL.md</code> &mdash; <span class="file-desc">8-step guided onboarding: dependency detection, convention extraction, test gap analysis, CLAUDE.md generation, state initialization</span></li>
         <li><code>scripts/detect-conventions.sh</code> &mdash; <span class="file-desc">Scans naming, imports, formatting, commit format, linters, formatters</span></li>
         <li><code>scripts/analyze-test-gaps.sh</code> &mdash; <span class="file-desc">Compares source vs test files, identifies untested modules, estimates coverage</span></li>
@@ -626,7 +628,7 @@
       <h4>Doc Generator + /handoff (Phase 3)</h4>
       <p>Documentation automation and cross-session context transfer.</p>
       <ul class="file-list">
-        <li><code>agents/doc-generator.md</code> &mdash; <span class="file-desc">Sonnet agent for feature docs, CHANGELOG, VitePress sidebar, release notes</span></li>
+        <li><code>agents/doc-generator.md</code> &mdash; <span class="file-desc">Sonnet agent for feature docs, CHANGELOG, VitePress sidebar, release notes (template-driven output)</span></li>
         <li><code>scripts/generate-feature-docs.sh</code> &mdash; <span class="file-desc">Reads backlog, generates markdown feature docs from specs</span></li>
         <li><code>scripts/update-changelog.sh</code> &mdash; <span class="file-desc">Parses conventional commits, groups by type, appends to CHANGELOG.md</span></li>
         <li><code>scripts/rebuild-sidebar.sh</code> &mdash; <span class="file-desc">Scans docs/features/, outputs VitePress sidebar config</span></li>
@@ -723,10 +725,10 @@
       <p>Agent definitions, project templates, and primary slash commands.</p>
       <ul class="file-list">
         <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Session Startup agent prompt (Haiku model, inline execution)</span></li>
-        <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">Workflow Orchestrator agent prompt (Sonnet model, inline execution)</span></li>
-        <li><code>agents/stack-scout.md</code> &mdash; <span class="file-desc">Stack Scout agent prompt (Sonnet model, worktree execution)</span></li>
-        <li><code>agents/builder.md</code> &mdash; <span class="file-desc">Builder agent prompt (Sonnet model, worktree execution)</span></li>
-        <li><code>agents/verifier.md</code> &mdash; <span class="file-desc">Verifier agent prompt (Sonnet model, inline execution)</span></li>
+        <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">Workflow Orchestrator agent prompt (Opus model, inline execution)</span></li>
+        <li><code>agents/stack-scout.md</code> &mdash; <span class="file-desc">Stack Scout agent prompt (Opus model, worktree execution)</span></li>
+        <li><code>agents/builder.md</code> &mdash; <span class="file-desc">Builder agent prompt (Opus model, worktree execution)</span></li>
+        <li><code>agents/verifier.md</code> &mdash; <span class="file-desc">Verifier agent prompt (Haiku model, inline execution)</span></li>
         <li><code>templates/VISION.md.template</code> &mdash; <span class="file-desc">Product vision document scaffold</span></li>
         <li><code>templates/design-system.css.template</code> &mdash; <span class="file-desc">Design tokens (colors, typography, spacing, components)</span></li>
         <li><code>templates/tdr.md.template</code> &mdash; <span class="file-desc">Technology Decision Record scaffold</span></li>

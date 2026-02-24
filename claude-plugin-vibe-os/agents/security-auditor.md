@@ -5,7 +5,7 @@ description: >
   broken auth, sensitive data exposure, XXE, access control issues,
   misconfigurations, insecure dependencies, deserialization, logging gaps,
   and SSRF vulnerabilities. Read-only — never modifies files.
-model: sonnet
+model: opus
 isolation: worktree
 tools:
   - Read

@@ -27,10 +27,10 @@
 | # | Agent | Model | Trigger | Context Budget | Isolation | maxTurns |
 |---|-------|-------|---------|----------------|-----------|----------|
 | 1 | Session Startup | Haiku | `SessionStart` hook | <10% | Inline | 5 |
-| 2 | Workflow Orchestrator | Sonnet | Primary tab (always running) | <40% | Inline | 30 |
-| 3 | Stack Scout | Sonnet | Delegated by Orchestrator for research | <45% | Worktree | 50 |
-| 4 | Builder | Sonnet | Delegated for design and code phases | <45% | Worktree | 100 |
-| 5 | Verifier | Sonnet | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | 60 |
+| 2 | Workflow Orchestrator | Opus | Primary tab (always running) | <40% | Inline | 30 |
+| 3 | Stack Scout | Opus | Delegated by Orchestrator for research | <45% | Worktree | 50 |
+| 4 | Builder | Opus | Delegated for design and code phases | <45% | Worktree | 100 |
+| 5 | Verifier | Haiku | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | 60 |
 
 ### Agents Deferred to v1.1
 
@@ -179,7 +179,7 @@ description: >
   workflows, and coordinates agent teams. Cannot write source code directly.
   Updates .vibeos/ state via shared Bash scripts. Use this agent for project
   coordination and task routing.
-model: sonnet
+model: opus
 tools:
   - Read
   - Bash
@@ -318,7 +318,7 @@ description: >
   modify source files. Works in an isolated worktree to prevent filesystem
   side effects. Use proactively for architecture research before any
   implementation begins.
-model: sonnet
+model: opus
 tools:
   - Read
   - Glob
@@ -462,7 +462,7 @@ description: >
   documentation. Works in an isolated worktree for parallel development.
   Handles component design specs, source code implementation, conventional
   commits, and PR preparation.
-model: sonnet
+model: opus
 tools:
   - Read
   - Write
@@ -653,7 +653,7 @@ description: >
   Runs tests, build, lint, and type checks. Calculates Vibe Score during /wrap.
   Uses Vitest for unit/integration, Playwright for E2E, axe-core for
   accessibility, and Context7 for testing library documentation.
-model: sonnet
+model: haiku
 tools:
   - Read
   - Write
@@ -857,14 +857,14 @@ The following diagram shows how agents interact during a typical feature develop
      | +------------------+ |   |   | +---------------------------+ |
      | | Workflow          | |   |   | | Workflow                  | |
      | | Orchestrator      |<+---+   | | Orchestrator              | |
-     | | (Sonnet)          | |       | | (Sonnet)                  | |
+     | | (Opus)            | |       | | (Opus)                    | |
      | +--+--------+------+ |       | +--+------+------+----------+ |
      |    |        |        |       |    |      |      |            |
      |    |        |        |       |    |      |      |            |
      |    v        v        |       |    v      v      v            |
      | Stack    Builder     |       | Stack  Builder  Verifier      |
-     | Scout    (Sonnet)    |       | Scout  (Son.)   (Sonnet)      |
-     | (Son.)   [worktree]  |       | (Son.) [wktree]               |
+     | Scout    (Opus)      |       | Scout  (Opus)   (Haiku)       |
+     | (Opus)   [worktree]  |       | (Opus) [wktree]               |
      | [wktree]             |       | [wktree]                      |
      |                      |       |                               |
      |  Creates:            |       |  Builder: design + code       |
@@ -954,7 +954,7 @@ The v1.0 consolidation from 9 to 5 agents follows Boris Cherny's recommendation 
 
 4. **Context window efficiency.** A Builder that does both design and implementation avoids duplicating the context setup (reading VISION.md, design-system.css, CLAUDE.md, feature spec) that both UI Designer and Feature Developer needed independently. This saves an estimated 5,000-8,000 tokens per feature.
 
-5. **Model cost remains optimized.** Haiku is still used for Session Startup (the most frequent agent). Sonnet handles all other agents. The consolidation does not change model selection -- it reduces the number of Sonnet sessions needed per feature.
+5. **Model cost remains optimized.** Haiku is used for Session Startup (the most frequent agent) and Verifier (focused quality checks). Opus handles the Workflow Orchestrator, Stack Scout, and Builder, providing stronger reasoning for coordination, research, and implementation. The consolidation reduces the number of agent sessions needed per feature.
 
 ### Why Merge UI Designer + Feature Developer into Builder?
 
@@ -1022,13 +1022,22 @@ The Agent Teams API (`TeamCreate`, `TaskCreate`, `SendMessage`) solves all three
 
 Signal files (`.vibeos/signals/`) are retained as a persistence mechanism -- they survive agent crashes and provide an audit trail. But the primary coordination mechanism is now Agent Teams.
 
-### Why Sonnet for All Non-Startup Agents Instead of Mixed Models?
+### Why Opus for Orchestrator, Stack Scout, and Builder?
 
-All non-startup agents run on Sonnet because:
+The three agents with the highest reasoning demands run on Opus:
 
-1. **Consistent capability.** All agents need sufficient reasoning for their verification loops. A Haiku-based Verifier might miss subtle test quality issues.
-2. **v0.9 Quality Check was Haiku.** It worked for simple pass/fail but could not handle the expanded Verifier role (test writing, scoring, coaching). Upgrading to Sonnet is necessary.
-3. **Cost difference is marginal.** The Quality Check (Haiku) fired frequently but consumed few tokens per run. The Verifier (Sonnet) fires less frequently (once per phase, not once per check) but does more per invocation. Total cost is comparable.
+1. **Workflow Orchestrator (Opus).** The coordinator must reason about project state, agent handoffs, signal processing, and multi-step workflow routing. Opus provides stronger planning and strategic reasoning for these coordination decisions.
+2. **Stack Scout (Opus).** Research and technology evaluation require deep comparative analysis across multiple sources. Opus produces higher-quality Technology Decision Records with more nuanced trade-off assessments.
+3. **Builder (Opus).** Design and implementation benefit from Opus's superior code generation, architectural reasoning, and ability to maintain coherence across complex feature implementations.
+
+### Why Haiku for Verifier?
+
+The Verifier runs on Haiku because its workload is primarily mechanical:
+
+1. **Structured validation.** Running tests, builds, lints, and type checks are deterministic operations. The agent reads pass/fail output and reports results -- this does not require deep reasoning.
+2. **Vibe Score calculation is algorithmic.** The scoring formula is well-defined (base score + deductions + bonuses). Haiku can execute this arithmetic reliably.
+3. **Cost efficiency.** The Verifier fires frequently (every phase transition, every `/check`, every `/wrap`). Using Haiku for these frequent invocations keeps costs proportional to value.
+4. **v0.9 Quality Check was Haiku.** The original Quality Check agent ran on Haiku successfully for pass/fail validation. While the Verifier's scope expanded to include test writing and scoring, the core operations remain structured enough for Haiku.
 
 ### Why the Orchestrator Still Cannot Write Files?
 

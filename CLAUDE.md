@@ -22,19 +22,24 @@ This is a documentation-only repository containing the design specification:
 - **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css, TDR (Technology Decision Record), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook.
 - **Tier 2 (Feature Development)**: Iterative 5-phase cycle (Plan > UI Design > Code > Test > Docs) for each feature. Phases can be worked in any order.
 
-### Agent Topology (9 agents)
+### Agent Topology (12 agents)
 
-| Agent | Model | Role |
-|---|---|---|
-| Session Startup | Haiku | Environment check, state detection, routing on every session start |
-| Workflow Orchestrator | Sonnet | Routes between Tier 1/Tier 2, coordinates agent handoffs |
-| Stack Scout | Sonnet | Read-only research agent (WebSearch, Context7, Puppeteer) that produces TDRs in isolated context |
-| UI Designer | Sonnet | Design system creation (Tier 1) and component design (Tier 2) |
-| Feature Developer | Sonnet | Implements features within TDR boundaries |
-| Test Writer | Sonnet | TDD-hybrid: spec tests before code (business logic), implementation tests after (UI) |
-| Doc Generator | Sonnet | Session logs, CHANGELOG, feature docs, release notes |
-| Performance Coach | Sonnet | Calculates Vibe Score (0-100), proposes CLAUDE.md mutations |
-| Quality Check | Haiku | Runs tests/build/lint for `/check`, `/wrap`, `/run-backlog` |
+Opus agents handle planning, research, code, security, and analysis — tasks where mistakes are expensive to fix later. Haiku agents handle fast, mechanical tasks (routing, running shell commands). Sonnet handles template-driven output like documentation.
+
+| Agent | Model | Isolation | Role |
+|---|---|---|---|
+| Session Startup | Haiku | Inline | Environment check, state detection, routing on every session start |
+| Workflow Orchestrator | Opus | Inline | Routes between Tier 1/Tier 2, coordinates agent handoffs |
+| Stack Scout | Opus | Worktree | Read-only research agent (WebSearch, Context7, Puppeteer) that produces TDRs in isolated context |
+| Builder | Opus | Worktree | Implements features within TDR boundaries |
+| Verifier | Haiku | Inline | Runs tests/build/lint/type-check for `/check`, `/wrap`, `/run-backlog` |
+| Performance Coach | Opus | Inline | Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals |
+| Code Auditor | Opus | Worktree | Read-only codebase analysis for existing project onboarding |
+| Security Auditor | Opus | Worktree | OWASP Top 10 security analysis (read-only) |
+| Doc Generator | Sonnet | Inline | Session logs, CHANGELOG, feature docs, release notes |
+| Code Simplifier | Opus | Worktree | Dead code detection, abstraction flattening, API surface reduction |
+| CI Healer | Opus | Inline | CI failure diagnosis and repair (max 3 attempts) |
+| Opponent Processor | Opus | Worktree | Devil's advocate for TDR decisions, debate matrices, risk assessments |
 
 ### Hook System (zero-token enforcement via bash scripts)
 

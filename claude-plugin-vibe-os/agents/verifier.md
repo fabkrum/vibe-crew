@@ -6,7 +6,7 @@ description: >
   Runs tests, build, lint, and type checks. Calculates Vibe Score during /wrap.
   Uses Vitest for unit/integration, Playwright for E2E, axe-core for
   accessibility, and Context7 for testing library documentation.
-model: opus
+model: haiku
 tools:
   - Read
   - Write

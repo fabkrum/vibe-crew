@@ -4,7 +4,7 @@ description: >
   Devil's advocate agent for technology decisions. Operates in worktree
   isolation (read-only). Generates counter-arguments, identifies risks,
   and produces a debate matrix for each TDR decision.
-model: sonnet
+model: opus
 isolation: worktree
 tools:
   - Read

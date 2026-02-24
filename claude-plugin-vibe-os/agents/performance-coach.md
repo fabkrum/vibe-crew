@@ -4,7 +4,7 @@ description: >
   Self-improvement engine. Analyzes cross-session Vibe Score trends, detects
   recurring anti-patterns from MEMORY.md, and proposes CLAUDE.md mutations
   using a 7-step guardrailed workflow. Invoked by /wrap after Verifier scoring.
-model: sonnet
+model: opus
 memory: project
 tools:
   - Read

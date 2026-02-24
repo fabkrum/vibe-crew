@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeOS — Example Session</title>
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border) transparent;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ---- NAV ---- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-brand span {
+      color: var(--color-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-xs);
+      transition: all 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+      background: var(--color-surface-2);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      padding: 10rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: var(--color-accent-bg);
+      border: 1px solid rgba(167, 139, 250, 0.15);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--color-accent);
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    /* ---- MAIN ---- */
+    .main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 6rem 2rem 6rem;
+    }
+
+    /* ---- SECTIONS ---- */
+    .section {
+      margin-bottom: 5rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .section > p,
+    .section > ul,
+    .section > ol {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    li::marker {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- CODE ---- */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--color-surface-2);
+      padding: 0.15em 0.45em;
+      border-radius: 4px;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    pre {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .code-label {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+
+    /* ---- CARDS ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--color-accent-dim);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+
+    .card h4 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    /* ---- CALLOUT ---- */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid;
+      font-size: 0.92rem;
+    }
+
+    .callout p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.info {
+      background: var(--color-blue-dim);
+      border-color: rgba(96, 165, 250, 0.2);
+      color: var(--color-blue);
+    }
+
+    .callout.tip {
+      background: var(--color-green-dim);
+      border-color: rgba(74, 222, 128, 0.2);
+      color: var(--color-green);
+    }
+
+    .callout.warn {
+      background: var(--color-amber-dim);
+      border-color: rgba(251, 191, 36, 0.2);
+      color: var(--color-amber);
+    }
+
+    .callout.danger {
+      background: var(--color-red-dim);
+      border-color: rgba(248, 113, 113, 0.2);
+      color: var(--color-red);
+    }
+
+    /* ---- FLOW DIAGRAM ---- */
+    .flow {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .flow .highlight {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .flow .muted {
+      color: var(--color-text-muted);
+    }
+
+    .flow .green {
+      color: var(--color-green);
+      font-weight: 600;
+    }
+
+    .flow .amber {
+      color: var(--color-amber);
+      font-weight: 600;
+    }
+
+    .flow .blue {
+      color: var(--color-blue);
+      font-weight: 600;
+    }
+
+    /* ---- STEP LIST ---- */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 3.5rem;
+      margin-bottom: 2rem;
+      min-height: 2.25rem;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.25rem;
+      height: 2.25rem;
+      background: var(--color-accent-bg);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-accent);
+    }
+
+    .steps li h4 {
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    .steps li p {
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ---- BADGE ---- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
+    .badge.green { background: var(--color-green-dim); color: var(--color-green); }
+    .badge.amber { background: var(--color-amber-dim); color: var(--color-amber); }
+    .badge.blue { background: var(--color-blue-dim); color: var(--color-blue); }
+
+    /* ---- TERMINAL LAYOUT ---- */
+    .terminal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .terminal-grid.three-col {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .terminal-window {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: var(--color-surface-2);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+
+    .terminal-title {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      font-family: var(--font-mono);
+      margin-left: 0.5rem;
+    }
+
+    .terminal-body {
+      padding: 1rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: var(--color-text-secondary);
+      white-space: pre-wrap;
+    }
+
+    .terminal-body .prompt {
+      color: var(--color-green);
+    }
+
+    .terminal-body .cmd {
+      color: var(--color-text);
+    }
+
+    .terminal-body .output {
+      color: var(--color-text-muted);
+    }
+
+    .terminal-body .accent {
+      color: var(--color-accent);
+    }
+
+    .terminal-body .warn {
+      color: var(--color-amber);
+    }
+
+    .terminal-body .success {
+      color: var(--color-green);
+    }
+
+    /* ---- TIMELINE ---- */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.5rem;
+      top: 0.5rem;
+      bottom: 0.5rem;
+      width: 2px;
+      background: var(--color-border);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+      padding-left: 1.5rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.75rem;
+      top: 0.55rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      border: 2px solid var(--color-bg);
+    }
+
+    .timeline-item.done::before {
+      background: var(--color-green);
+    }
+
+    .timeline-item.active::before {
+      background: var(--color-amber);
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+    }
+
+    .timeline-time {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-title {
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    /* ---- DIVIDER ---- */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 4rem 0;
+    }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .toc ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    .toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    .toc a {
+      color: var(--color-text-secondary);
+      font-size: 0.92rem;
+      transition: color 0.15s;
+    }
+
+    .toc a:hover {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .main { padding: 6rem 1.25rem 4rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .terminal-grid { grid-template-columns: 1fr; }
+      .terminal-grid.three-col { grid-template-columns: 1fr; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.15rem; }
+      pre { padding: 1rem; }
+      .steps li { padding-left: 3rem; }
+    }
+
+    .nav-links a.active { color: var(--color-accent); background: var(--color-accent-bg); }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 2rem; text-decoration: none; transition: color 0.15s; }
+    .back-link:hover { color: var(--color-accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <ul class="nav-links">
+      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="setup.html">Setup</a></li>
+      <li><a href="new-project.html">New Project</a></li>
+      <li><a href="existing-project.html">Existing Project</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="example-session.html" class="active">Example Session</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+      <li><a href="warp.html">Warp</a></li>
+      <li><a href="releases.html">Releases</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="main">
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#terminal-setup">Terminal Setup &mdash; How Many Windows?</a></li>
+      <li><a href="#day-one">Day 1: Project Foundation (Tier 1)</a></li>
+      <li><a href="#planning-session">Day 2: Planning Session</a></li>
+      <li><a href="#feature-session">Day 3: Building a Feature (Tier 2)</a></li>
+      <li><a href="#parallel-features">Day 4: Building Multiple Features in Parallel</a></li>
+      <li><a href="#dev-servers">Running Dev &amp; Test Servers</a></li>
+      <li><a href="#companion-docs">Using the Companion Docs Website</a></li>
+      <li><a href="#capturing-ideas">Capturing Ideas for the Backlog</a></li>
+      <li><a href="#full-week">A Full Week with VibeOS</a></li>
+      <li><a href="#best-practices">Best Practices &amp; Guardrails</a></li>
+    </ol>
+  </div>
+
+  <!-- ============ TERMINAL SETUP ============ -->
+  <section class="section" id="terminal-setup">
+    <span class="section-label">Getting Oriented</span>
+    <h2>Terminal Setup &mdash; How Many Windows?</h2>
+    <p>VibeOS is designed for parallel work across multiple terminal tabs. The number of tabs depends on your experience level and what you're doing.</p>
+
+    <h3>Starter layout: 1 tab</h3>
+    <p>If you're new to VibeOS, start with a single terminal. Run <code>/setup</code>, <code>/new-project</code>, and your first few features sequentially. Learn the rhythm before adding parallelism.</p>
+
+    <div class="terminal-grid">
+      <div class="terminal-window" style="grid-column: 1 / -1;">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab 1 &mdash; Main Session</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
+<span class="output">Session startup agent detects project state...</span>
+<span class="accent">VibeOS v1.3.0 | Foundation: complete | Feature: user-auth (Code phase)</span>
+<span class="output">Ready. Type /status for full dashboard.</span></div>
+      </div>
+    </div>
+
+    <h3>Recommended layout: 2&ndash;3 tabs</h3>
+    <p>Once comfortable, use 2&ndash;3 tabs. This is the sweet spot for most developers. One tab builds a feature while another handles planning, research, or a second feature.</p>
+
+    <div class="terminal-grid three-col">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab 1 &mdash; Feature A</span>
+        </div>
+        <div class="terminal-body"><span class="accent">Building: user-auth</span>
+<span class="output">Code phase active</span>
+<span class="output">Builder agent working...</span></div>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab 2 &mdash; Feature B</span>
+        </div>
+        <div class="terminal-body"><span class="accent">Building: trip-creation</span>
+<span class="output">Plan phase active</span>
+<span class="output">Writing feature spec...</span></div>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab 3 &mdash; Quick Tasks</span>
+        </div>
+        <div class="terminal-body"><span class="accent">Utility session</span>
+<span class="output">/idea, /status, /check</span>
+<span class="output">/heal (if CI fails)</span></div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">How notifications keep this manageable</div>
+      <p>You don't need to watch all tabs. The Interrupt Protocol sends a native OS notification when any tab needs you (permission prompt, task complete, or error). Click the notification to jump directly to that tab. Work in your active tab until you're interrupted &mdash; that's the whole system.</p>
+    </div>
+
+    <h3>Power layout: 4+ tabs</h3>
+    <p>Experienced users can run 4 or more tabs. Two feature tabs, one for planning/backlog, and one for auditing or CI healing. Beyond 4, the bottleneck shifts to code review rather than building &mdash; you'll have more PRs to review than you can keep up with.</p>
+
+    <div class="callout warn">
+      <div class="callout-title">Each tab is an independent Claude Code session</div>
+      <p>Every tab runs its own context window. They share the filesystem (git branches, <code>.vibeos/</code> state, <code>CLAUDE.md</code>) but not conversation history. This is by design &mdash; it means research in one tab doesn't consume context in another. But it also means you need to coordinate via branches: each feature gets its own branch.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ DAY 1: FOUNDATION ============ -->
+  <section class="section" id="day-one">
+    <span class="section-label">Example Walkthrough</span>
+    <h2>Day 1: Project Foundation (Tier 1)</h2>
+    <p>Let's build a travel planning SaaS called <strong>TripFlow</strong>. Day 1 is entirely Tier 1 &mdash; no source code, only architecture. This takes one session, typically 20&ndash;40 minutes.</p>
+
+    <h3>The session</h3>
+    <p>Open a single terminal tab.</p>
+
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
+<span class="output"># Session startup agent runs automatically</span>
+<span class="accent">VibeOS v1.3.0 | No project detected. Run /new-project to begin.</span>
+
+<span class="prompt">&gt;</span> /new-project</code></pre>
+
+    <p>VibeOS now walks you through 6 steps. You answer questions, it produces artifacts.</p>
+
+    <div class="timeline">
+      <div class="timeline-item done">
+        <div class="timeline-time">~3 min</div>
+        <div class="timeline-title">Step 1: VISION.md</div>
+        <p class="timeline-desc">You describe TripFlow: a collaborative trip planner for groups. Target users are friend groups planning vacations. Key constraint: mobile-first. VibeOS produces <code>VISION.md</code>.</p>
+      </div>
+      <div class="timeline-item done">
+        <div class="timeline-time">~5 min</div>
+        <div class="timeline-title">Step 2: design-system.css</div>
+        <p class="timeline-desc">You pick a warm blue primary color, Inter font, 8px radius. The UI Designer agent generates 80+ CSS custom properties: colors, typography, spacing, shadows, breakpoints.</p>
+      </div>
+      <div class="timeline-item done">
+        <div class="timeline-time">~15 min</div>
+        <div class="timeline-title">Step 3: TDR (Technology Decision Record)</div>
+        <p class="timeline-desc">The Stack Scout agent launches in a <strong>separate context window</strong>. It researches Next.js vs. Remix vs. SvelteKit, compares auth solutions, evaluates databases. You can work on something else while it runs. It produces <code>docs/tdr-001-tech-stack.md</code> recommending Next.js + Supabase + Tailwind.</p>
+      </div>
+      <div class="timeline-item done">
+        <div class="timeline-time">~3 min</div>
+        <div class="timeline-title">Step 3.5: Opponent Processor</div>
+        <p class="timeline-desc">The Opponent challenges the TDR: "Supabase row-level security has sharp edges with complex group permissions." You review both sides and decide to keep the choices. The counter-analysis is saved for reference.</p>
+      </div>
+      <div class="timeline-item done">
+        <div class="timeline-time">~5 min</div>
+        <div class="timeline-title">Step 4: Roadmap</div>
+        <p class="timeline-desc">You list features: user auth, trip creation, itinerary builder, group invites, expense splitting. VibeOS organizes them into priority tiers in <code>docs/roadmap.md</code>.</p>
+      </div>
+      <div class="timeline-item done">
+        <div class="timeline-time">~2 min</div>
+        <div class="timeline-title">Step 5: CLAUDE.md</div>
+        <p class="timeline-desc">VibeOS synthesizes everything: tech stack rules, design system reference, file conventions, testing strategy. The master rules file is ready.</p>
+      </div>
+      <div class="timeline-item done">
+        <div class="timeline-time">~1 min</div>
+        <div class="timeline-title">Step 6: Git commit</div>
+        <p class="timeline-desc"><code>git commit -m "plan: project foundation"</code> &mdash; Phase gate unlocks. Source code writes are now allowed.</p>
+      </div>
+    </div>
+
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /wrap
+<span class="success">Vibe Score: 95/100</span>
+<span class="output">Session logged. Foundation complete. You can now run /plan-features or /new-feature.</span></code></pre>
+
+    <div class="callout info">
+      <div class="callout-title">Why this matters</div>
+      <p>Every session after this starts with Claude reading <code>CLAUDE.md</code>. It knows your stack is Next.js + Supabase + Tailwind. It knows your design tokens. It knows your file conventions. You never explain these again. The 30 minutes you spent on the foundation saves hours of corrections across every future session.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ DAY 2: PLANNING ============ -->
+  <section class="section" id="planning-session">
+    <span class="section-label">Planning</span>
+    <h2>Day 2: Planning Session</h2>
+    <p>Before building features, invest one session in creating structured specifications. This session is short (15&ndash;20 min) and pays for itself immediately.</p>
+
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
+<span class="accent">VibeOS v1.3.0 | Foundation: complete | No active feature</span>
+<span class="output">Ready. 5 features in roadmap, 0 planned.</span>
+
+<span class="prompt">&gt;</span> /plan-features</code></pre>
+
+    <p>VibeOS reads your roadmap and walks through each feature. For each one, you provide or confirm:</p>
+
+    <ul>
+      <li><strong>Name and description</strong> &mdash; one sentence</li>
+      <li><strong>Acceptance criteria</strong> &mdash; when is this feature "done"?</li>
+      <li><strong>Priority</strong> &mdash; P0 (must have) through P3 (nice to have)</li>
+      <li><strong>Complexity</strong> &mdash; S / M / L / XL</li>
+      <li><strong>Dependencies</strong> &mdash; which features must exist first?</li>
+    </ul>
+
+    <p>The output is <code>.vibeos/backlog.json</code> &mdash; a structured file that <code>/new-feature</code> and <code>/run-backlog</code> read to determine what to build next.</p>
+
+    <pre><code><span class="code-label">backlog.json (excerpt)</span>{
+  "features": [
+    {
+      "id": "user-auth",
+      "name": "User Authentication",
+      "priority": "P0",
+      "complexity": "M",
+      "status": "planned",
+      "acceptance_criteria": [
+        "Users can sign up with email/password",
+        "Users can sign in with Google OAuth",
+        "Protected routes redirect to login",
+        "Session persists across page refresh"
+      ],
+      "dependencies": []
+    },
+    {
+      "id": "trip-creation",
+      "name": "Trip Creation",
+      "priority": "P0",
+      "complexity": "M",
+      "status": "planned",
+      "dependencies": ["user-auth"]
+    }
+  ]
+}</code></pre>
+
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /wrap
+<span class="success">Vibe Score: 92/100</span>
+<span class="output">5 features planned. Backlog ready for /new-feature or /run-backlog.</span></code></pre>
+  </section>
+
+  <hr>
+
+  <!-- ============ DAY 3: FEATURE SESSION ============ -->
+  <section class="section" id="feature-session">
+    <span class="section-label">Building</span>
+    <h2>Day 3: Building a Feature (Tier 2)</h2>
+    <p>This is where most of your time goes. A feature session follows the 5-phase cycle: Plan, UI Design, Code, Test, Docs. Here's a complete walkthrough of building "User Authentication" in a single session.</p>
+
+    <h3>Starting the feature</h3>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
+<span class="accent">VibeOS v1.3.0 | Foundation: complete | No active feature</span>
+<span class="output">Next in backlog: user-auth (P0, M complexity)</span>
+
+<span class="prompt">&gt;</span> /new-feature "user-auth"
+<span class="output">Created branch: feat/user-auth</span>
+<span class="output">Loaded spec from backlog. 5-phase tracking initialized.</span>
+<span class="output">Phases: [ ] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Docs</span></code></pre>
+
+    <h3>The 5 phases</h3>
+
+    <h4>Phase 1: Plan (~3 min)</h4>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Plan the user authentication feature"
+
+<span class="output">Writing feature spec at docs/features/user-auth.md</span>
+<span class="output">  - Email/password signup with Supabase Auth</span>
+<span class="output">  - Google OAuth via Supabase provider</span>
+<span class="output">  - Middleware for protected routes</span>
+<span class="output">  - Session handling with Supabase SSR helpers</span>
+<span class="output">  - Edge cases: expired tokens, deleted accounts, rate limiting</span>
+
+<span class="success">Phase complete: Plan</span>
+<span class="output">Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Docs</span></code></pre>
+
+    <h4>Phase 2: UI Design (~5 min)</h4>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Design the auth UI components"
+
+<span class="output">Designing components using design-system.css tokens:</span>
+<span class="output">  - LoginForm: email input, password input, submit, OAuth buttons</span>
+<span class="output">  - SignupForm: extends LoginForm with name field, confirm password</span>
+<span class="output">  - AuthLayout: centered card layout, responsive breakpoints</span>
+<span class="output">  - ProtectedRoute: redirect wrapper component</span>
+<span class="output">All colors, spacing, and typography reference CSS custom properties.</span>
+
+<span class="success">Phase complete: UI Design</span>
+<span class="output">Phases: [x] Plan  [x] UI Design  [ ] Code  [ ] Test  [ ] Docs</span></code></pre>
+
+    <h4>Phase 3: Code (~15 min)</h4>
+    <p>This is the longest phase. The Builder agent writes the implementation, consulting Context7 for Supabase and Next.js APIs instead of guessing.</p>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Implement user authentication"
+
+<span class="output">Builder agent activated. Working within TDR boundaries.</span>
+<span class="output">  Checking Context7 for Supabase Auth API...</span>
+<span class="output">  Creating src/lib/supabase/client.ts</span>
+<span class="output">  Creating src/lib/supabase/server.ts</span>
+<span class="output">  Creating src/app/(auth)/login/page.tsx</span>
+<span class="output">  Creating src/app/(auth)/signup/page.tsx</span>
+<span class="output">  Creating src/middleware.ts</span>
+<span class="output">  Creating src/components/auth/LoginForm.tsx</span>
+<span class="output">  Creating src/components/auth/SignupForm.tsx</span>
+<span class="output">  Creating src/components/auth/OAuthButtons.tsx</span>
+
+<span class="success">Phase complete: Code</span>
+<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [ ] Test  [ ] Docs</span></code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">Capturing ideas mid-feature</div>
+      <p>While building auth, you realize you'll need a "forgot password" flow. Don't start building it now &mdash; that's scope creep. Capture it instantly:</p>
+    </div>
+
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /idea "forgot password flow with email reset link"
+<span class="output">Added to backlog: "forgot password flow with email reset link" (unplanned)</span></code></pre>
+    <p>One line of output. Zero context spent. The idea is safe. Back to work.</p>
+
+    <h4>Phase 4: Test (~8 min)</h4>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Write tests for user authentication"
+
+<span class="output">Writing tests (TDD-hybrid approach):</span>
+<span class="output">  Creating src/__tests__/auth/login.test.tsx</span>
+<span class="output">  Creating src/__tests__/auth/signup.test.tsx</span>
+<span class="output">  Creating src/__tests__/auth/middleware.test.ts</span>
+<span class="output">  Running test suite...</span>
+<span class="success">12 tests passed, 0 failed</span>
+
+<span class="success">Phase complete: Test</span>
+<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [ ] Docs</span></code></pre>
+
+    <h4>Phase 5: Docs (~2 min)</h4>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Generate documentation for user auth"
+
+<span class="output">Updating CHANGELOG.md</span>
+<span class="output">Updating docs/features/user-auth.md with implementation notes</span>
+<span class="output">Session log saved to .vibeos/sessions/</span>
+
+<span class="success">Phase complete: Docs</span>
+<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Docs</span></code></pre>
+
+    <h3>Wrapping up</h3>
+    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /wrap
+
+<span class="output">Running quality gate...</span>
+<span class="success">  Build: passed</span>
+<span class="success">  Tests: 12/12 passed</span>
+<span class="success">  Lint: 0 errors</span>
+<span class="success">  Types: 0 errors</span>
+
+<span class="output">Performance Coach analysis:</span>
+<span class="success">  Vibe Score: 91/100</span>
+<span class="output">  Deductions: -5 (1 prompt refinement), -4 (minor context overhead)</span>
+<span class="output">  Bonus: +0</span>
+<span class="output">  Coaching: "Consider writing test stubs before implementation</span>
+<span class="output">   next time to catch edge cases earlier."</span>
+<span class="output">  Proposed CLAUDE.md rule: "Write test file stubs with describe</span>
+<span class="output">   blocks before implementing features."</span>
+<span class="output">  Accept rule? (y/n)</span>
+
+<span class="prompt">&gt;</span> y
+
+<span class="output">Rule added to CLAUDE.md [Session Learnings].</span>
+<span class="output">Committed: feat(auth): implement user authentication</span>
+<span class="output">Branch feat/user-auth ready for PR.</span></code></pre>
+  </section>
+
+  <hr>
+
+  <!-- ============ DAY 4: PARALLEL ============ -->
+  <section class="section" id="parallel-features">
+    <span class="section-label">Advanced</span>
+    <h2>Day 4: Building Multiple Features in Parallel</h2>
+    <p>Once you've shipped a couple of features sequentially and feel comfortable with the rhythm, try parallel execution. This is where VibeOS's multi-session design really shines.</p>
+
+    <h3>The setup: 3 tabs</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">1</div>
+        <h4>Tab 1: Trip Creation</h4>
+        <p>Your primary focus. You're actively guiding this feature through the 5 phases, making decisions, reviewing output.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">2</div>
+        <h4>Tab 2: Itinerary Builder</h4>
+        <p>Running more autonomously. You started <code>/new-feature "itinerary-builder"</code> and let the agents work. You check in when notifications fire.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">3</div>
+        <h4>Tab 3: Utility</h4>
+        <p>Quick commands: <code>/idea</code> to capture thoughts, <code>/status</code> to check progress, <code>/check</code> to run quality gates, <code>/heal</code> if CI breaks.</p>
+      </div>
+    </div>
+
+    <h3>How a parallel session flows</h3>
+
+    <div class="flow"><span class="highlight">9:00</span>  Open Tab 1. <span class="green">/new-feature "trip-creation"</span>
+       Open Tab 2. <span class="green">/new-feature "itinerary-builder"</span>
+
+<span class="highlight">9:05</span>  Tab 1: You guide the Plan phase for trip-creation.
+       Tab 2: Agent writes the feature spec autonomously.
+
+<span class="highlight">9:10</span>  <span class="amber">Notification:</span> "Tab 2 &mdash; Plan phase complete. Ready for review."
+       You glance at the spec, approve it. Tab 2 moves to UI Design.
+
+<span class="highlight">9:12</span>  Tab 1: You finish the plan, start UI Design.
+       Tab 2: Agent designs components autonomously.
+
+<span class="highlight">9:20</span>  <span class="amber">Notification:</span> "Tab 2 &mdash; needs permission to create files."
+       Click notification. Approve file creation. Tab 2 continues.
+
+<span class="highlight">9:25</span>  Tab 1: Code phase starts. Builder agent working.
+       You switch to Tab 3: <span class="green">/status</span>
+       <span class="muted">Dashboard: trip-creation (Code), itinerary-builder (Code)</span>
+
+<span class="highlight">9:30</span>  <span class="amber">Notification:</span> "Tab 1 &mdash; Code phase complete."
+       You review the code, start the Test phase.
+
+<span class="highlight">9:35</span>  While Tab 1 runs tests, you capture an idea:
+       Tab 3: <span class="green">/idea "add map view to itinerary with Mapbox"</span>
+
+<span class="highlight">9:45</span>  Tab 1: All phases done. <span class="green">/wrap</span> &rarr; Score 88
+       Tab 2: Still in Test phase.
+
+<span class="highlight">9:50</span>  <span class="amber">Notification:</span> "Tab 2 &mdash; Tests complete. Docs phase done."
+       Switch to Tab 2. <span class="green">/wrap</span> &rarr; Score 85
+
+<span class="highlight">9:55</span>  Two features shipped in under an hour.
+       Tab 3: <span class="green">/status</span>
+       <span class="muted">Dashboard: 4/5 features done, 1 remaining.</span></div>
+
+    <div class="callout info">
+      <div class="callout-title">Can I run /run-backlog across multiple tabs?</div>
+      <p>Yes, but carefully. <code>/run-backlog</code> picks the next planned feature from the backlog automatically. If you run it in two tabs simultaneously, they'll pick different features (the backlog is file-locked to prevent duplicates). This is the fastest way to burn through a backlog, but each tab's work should be reviewed when it completes.</p>
+    </div>
+
+    <h3>When to build in parallel vs. sequentially</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Build in parallel when:</h4>
+        <p>Features are independent (no shared components), you're comfortable with the workflow, and you can context-switch without confusion. Best for: CRUD features, isolated pages, utility features.</p>
+      </div>
+      <div class="card">
+        <h4>Build sequentially when:</h4>
+        <p>Feature B depends on Feature A's code, you're working on core shared infrastructure (auth, database schema, API layer), or you're learning VibeOS. Merge conflicts from parallel branches cost more time than they save.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ DEV & TEST SERVERS ============ -->
+  <section class="section" id="dev-servers">
+    <span class="section-label">Practical</span>
+    <h2>Running Dev &amp; Test Servers</h2>
+    <p>While VibeOS builds your code, you'll want to see it running in the browser. Here's how to set up a dedicated tab for your dev server and run tests against it.</p>
+
+    <h3>Dedicated dev server tab</h3>
+    <p>Keep one terminal tab exclusively for your development server. This tab runs outside Claude Code &mdash; it's just a normal shell running your framework's dev command.</p>
+
+    <div class="terminal-grid">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab &mdash; Dev Server</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">npm run dev</span>
+
+<span class="output">  ▲ Next.js 15.1.0</span>
+<span class="output">  - Local:    </span><span class="success">http://localhost:3000</span>
+<span class="output">  - Network:  http://192.168.1.42:3000</span>
+
+<span class="output">  ✓ Ready in 1.2s</span></div>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab &mdash; VibeOS Session</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
+<span class="accent">VibeOS v1.3.0 | Feature: user-auth (Code phase)</span>
+
+<span class="prompt">&gt;</span> <span class="cmd">"Implement the login page"</span>
+<span class="output">Builder agent working...</span>
+<span class="output">  Creating src/app/(auth)/login/page.tsx</span>
+
+<span class="muted"># Hot-reload updates your browser automatically</span></div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Hot reload is your friend</div>
+      <p>Next.js, Vite, and most modern frameworks hot-reload when files change. As VibeOS writes code in one tab, your browser updates in real time. Keep your browser and dev server tab visible alongside your Claude Code tab to watch the UI take shape as it's built.</p>
+    </div>
+
+    <h3>Running tests during development</h3>
+    <p>VibeOS runs tests automatically during the Test phase and when you use <code>/check</code> or <code>/wrap</code>. But you can also run a test watcher in a separate tab for continuous feedback.</p>
+
+    <div class="terminal-grid three-col">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab &mdash; Dev Server</span>
+        </div>
+        <div class="terminal-body"><span class="output">  ▲ Next.js 15.1.0</span>
+<span class="output">  - Local: </span><span class="success">http://localhost:3000</span>
+<span class="output">  ✓ Ready</span></div>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab &mdash; Test Watcher</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">npm run test:watch</span>
+
+<span class="output"> PASS  src/__tests__/auth/login.test.tsx</span>
+<span class="output"> PASS  src/__tests__/auth/signup.test.tsx</span>
+<span class="success"> Tests: 12 passed, 12 total</span>
+<span class="output"> Watching for changes...</span></div>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Tab &mdash; VibeOS Session</span>
+        </div>
+        <div class="terminal-body"><span class="accent">Building: user-auth</span>
+<span class="output">Code phase active</span>
+<span class="output">Builder agent working...</span>
+
+<span class="muted"># Tests re-run as files change</span></div>
+      </div>
+    </div>
+
+    <h3>Common dev server commands by framework</h3>
+    <pre><code><span class="code-label">Reference</span><span class="accent"># Next.js</span>
+npm run dev              <span class="output"># starts on localhost:3000</span>
+
+<span class="accent"># Vite (React, Vue, Svelte)</span>
+npm run dev              <span class="output"># starts on localhost:5173</span>
+
+<span class="accent"># Supabase (local development)</span>
+npx supabase start       <span class="output"># starts local Supabase on localhost:54321</span>
+npx supabase studio      <span class="output"># opens database UI on localhost:54323</span>
+
+<span class="accent"># Testing</span>
+npm run test             <span class="output"># single run</span>
+npm run test:watch       <span class="output"># watch mode &mdash; re-runs on file changes</span>
+npm run test:coverage    <span class="output"># with coverage report</span>
+
+<span class="accent"># Linting &amp; type checking</span>
+npm run lint             <span class="output"># ESLint</span>
+npx tsc --noEmit         <span class="output"># TypeScript type check</span></code></pre>
+
+    <h3>Using <code>/check</code> to validate everything at once</h3>
+    <p>Instead of running each command manually, use <code>/check</code> inside your VibeOS session. The Verifier agent runs the full quality gate: build, tests, lint, and type check &mdash; in one shot.</p>
+
+    <pre><code><span class="code-label">VibeOS Tab</span><span class="prompt">&gt;</span> /check
+
+<span class="output">Verifier running quality gate...</span>
+<span class="success">  Build:  passed (3.2s)</span>
+<span class="success">  Tests:  24/24 passed (8.1s)</span>
+<span class="success">  Lint:   0 errors, 2 warnings</span>
+<span class="success">  Types:  0 errors</span>
+<span class="output">All gates passed. Ready for /wrap.</span></code></pre>
+
+    <div class="callout info">
+      <div class="callout-title">Recommended tab layout for active development</div>
+      <p>For the best workflow, arrange your screen like this: <strong>Browser</strong> (left half) showing <code>localhost:3000</code>, <strong>VibeOS tab</strong> (right top) for building, <strong>Dev server tab</strong> (right bottom) to monitor for errors. If using Warp, create a <strong>Launch Configuration</strong> that opens this layout automatically (see <a href="warp.html">Warp Tips</a>).</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ COMPANION DOCS ============ -->
+  <section class="section" id="companion-docs">
+    <span class="section-label">Reference</span>
+    <h2>Using the Companion Docs Website</h2>
+    <p>You're reading it right now. The VibeOS documentation site is your reference companion during every session. Here's how to get the most out of it.</p>
+
+    <h3>What's in each page</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9733;</div>
+        <h4><a href="why.html">Why VibeOS</a></h4>
+        <p>Start here if you're explaining VibeOS to a teammate or reminding yourself of the core philosophy. Covers the three problems (attention, tokens, architecture) and design principles.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9881;</div>
+        <h4><a href="setup.html">Setup Guide</a></h4>
+        <p>Your first-time installation checklist. System dependencies, plugin install, MCP server configuration, notification testing. Bookmark this &mdash; you'll revisit it when onboarding teammates.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#10010;</div>
+        <h4><a href="new-project.html">New Project</a></h4>
+        <p>The complete Tier 1 &amp; Tier 2 workflow reference. Foundation steps, the 5-phase feature cycle, phase gate enforcement, and all slash commands with examples.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#8635;</div>
+        <h4><a href="existing-project.html">Existing Projects</a></h4>
+        <p>How to bring VibeOS into a codebase that already has code. Code auditing, convention extraction, and backlog mapping from existing issues.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9654;</div>
+        <h4><a href="workflow.html">Detailed Workflow</a></h4>
+        <p>Advanced commands (<code>/replay</code>, <code>/simplify</code>, <code>/heal</code>), the Opponent Processor, cost tracking, Vibe Score breakdown, and efficiency tips. Read this once you've completed your first few features.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9632;</div>
+        <h4><a href="architecture.html">Architecture Deep Dive</a></h4>
+        <p>Technical details: the 12-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em>how</em> VibeOS works under the hood.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9000;</div>
+        <h4><a href="warp.html">Warp Tips</a></h4>
+        <p>Warp Terminal-specific setup: Launch Configurations, keyboard shortcuts, Warp Drive for sharing, Notebooks for annotating sessions, and theme recommendations.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9998;</div>
+        <h4><a href="releases.html">Release Notes</a></h4>
+        <p>Complete changelog across all versions. Check here after updating VibeOS to see what's new and whether any workflow changes are needed.</p>
+      </div>
+    </div>
+
+    <h3>How to use the docs during a session</h3>
+    <ol class="steps">
+      <li>
+        <h4>Keep the docs open in a browser tab</h4>
+        <p>Open the docs site alongside your development browser tab. When you're waiting for the Builder agent to finish, reference the docs instead of guessing at commands or workflow steps.</p>
+      </li>
+      <li>
+        <h4>Use the right page for your current phase</h4>
+        <p>Starting a new project? Open <a href="new-project.html">New Project</a>. Building features? This page (Example Session) has the full walkthrough. Hit a CI failure? The <a href="workflow.html">Workflow</a> page covers <code>/heal</code> in detail.</p>
+      </li>
+      <li>
+        <h4>Share pages with teammates</h4>
+        <p>Each page is self-contained. Send a teammate the <a href="setup.html">Setup Guide</a> link to onboard them, or the <a href="why.html">Why VibeOS</a> page to explain the philosophy before they dive in.</p>
+      </li>
+    </ol>
+
+    <div class="callout tip">
+      <div class="callout-title">Quick reference cheat sheet</div>
+      <p><strong>Stuck?</strong> &rarr; <a href="workflow.html">Workflow</a> page for commands. <strong>Error?</strong> &rarr; <code>/heal</code> in your session, then check <a href="architecture.html">Architecture</a> for how hooks work. <strong>New teammate?</strong> &rarr; Send them <a href="setup.html">Setup</a> then <a href="new-project.html">New Project</a>. <strong>Updating?</strong> &rarr; Check <a href="releases.html">Release Notes</a> first.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ CAPTURING IDEAS ============ -->
+  <section class="section" id="capturing-ideas">
+    <span class="section-label">Workflow Tip</span>
+    <h2>Capturing Ideas for the Backlog</h2>
+    <p>Ideas come at the worst times &mdash; mid-implementation, during testing, while reviewing code. VibeOS gives you two tools to capture without losing flow.</p>
+
+    <h3><code>/idea</code> &mdash; instant capture</h3>
+    <p>The fastest way. One line in, one line out. Zero context consumed. Use it anytime, in any tab.</p>
+
+    <pre><code><span class="code-label">any tab</span><span class="prompt">&gt;</span> /idea "add dark mode toggle to settings page"
+<span class="output">Added to backlog: "add dark mode toggle to settings page" (unplanned)</span>
+
+<span class="prompt">&gt;</span> /idea "export trip itinerary as PDF"
+<span class="output">Added to backlog: "export trip itinerary as PDF" (unplanned)</span>
+
+<span class="prompt">&gt;</span> /idea "rate limiting on auth endpoints"
+<span class="output">Added to backlog: "rate limiting on auth endpoints" (unplanned)</span></code></pre>
+
+    <p>Ideas land in <code>.vibeos/backlog.json</code> with status <code>"unplanned"</code>. They sit there until your next planning session.</p>
+
+    <h3><code>/plan-features</code> &mdash; structured planning</h3>
+    <p>When you've accumulated several ideas, run <code>/plan-features</code> to promote them to structured specs with acceptance criteria, priority, and complexity. This is best done in a dedicated planning session (see <a href="#planning-session">Day 2</a> above).</p>
+
+    <h3>The capture habit</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">&#10003;</div>
+        <h4>Do this</h4>
+        <p>See something? <code>/idea "short description"</code> immediately. Don't stop to elaborate. Don't open the backlog file. Don't discuss it with the agent. Capture and continue.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#10007;</div>
+        <h4>Don't do this</h4>
+        <p>"Actually, let me also build dark mode real quick." Mid-feature diversions wreck your Vibe Score (prompt churn, context waste) and leave you with two half-finished features instead of one shipped one.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ FULL WEEK ============ -->
+  <section class="section" id="full-week">
+    <span class="section-label">The Big Picture</span>
+    <h2>A Full Week with VibeOS</h2>
+    <p>Here's what a productive week looks like from start to finish, building TripFlow from zero to a working MVP.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">Mo</div>
+        <h4>Monday: Foundation</h4>
+        <p><strong>1 tab, 1 session.</strong> Run <code>/new-project</code>. Complete all 6 foundation steps. Run <code>/plan-features</code> to spec out your first 5 features. End with <code>/wrap</code>. Total: ~45 min.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">Tu</div>
+        <h4>Tuesday: First features</h4>
+        <p><strong>1 tab, 2 sessions.</strong> Build user-auth in session 1. Build trip-creation in session 2. <code>/wrap</code> after each. Capture 3 ideas with <code>/idea</code> along the way. Total: ~2 hours.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">We</div>
+        <h4>Wednesday: Parallel</h4>
+        <p><strong>2 tabs, 2 sessions each.</strong> Build itinerary-builder and group-invites in parallel. Use Tab 3 for <code>/status</code> checks and <code>/idea</code> captures. Total: ~2 hours, 2 features shipped.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">Th</div>
+        <h4>Thursday: Final feature + cleanup</h4>
+        <p><strong>2 tabs.</strong> Tab 1: Build expense-splitting. Tab 2: Run <code>/simplify</code> on earlier features to reduce complexity. Run <code>/heal</code> if CI has issues. Total: ~1.5 hours.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">Fr</div>
+        <h4>Friday: Polish + review</h4>
+        <p><strong>1 tab.</strong> Run <code>/status</code> to see the full picture. Review Vibe Score trends. Plan next week's features from the ideas you captured. Review and merge PRs. <code>/wrap</code> to close the week. Total: ~1 hour.</p>
+      </div>
+    </div>
+
+    <h4>Week summary</h4>
+    <div class="flow"><span class="highlight">Features shipped:</span>  5 (user-auth, trip-creation, itinerary-builder, group-invites, expense-splitting)
+<span class="highlight">Sessions:</span>           8
+<span class="highlight">Average Vibe Score:</span> 89
+<span class="highlight">Ideas captured:</span>     12 (ready for next week's /plan-features)
+<span class="highlight">CLAUDE.md rules:</span>    3 new rules added by Performance Coach
+<span class="highlight">Total active time:</span>  ~8 hours across 5 days</div>
+
+    <div class="callout tip">
+      <div class="callout-title">The compounding effect</div>
+      <p>Week 2 is faster than Week 1. The 3 CLAUDE.md rules from this week prevent token waste next week. Your <code>/replay</code> templates capture what worked. The Performance Coach learns your patterns. By Week 4, you're shipping at nearly double the pace of Week 1 &mdash; not because you're working harder, but because the system is eliminating waste automatically.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ============ BEST PRACTICES & GUARDRAILS ============ -->
+  <section class="section" id="best-practices">
+    <span class="section-label">Habits</span>
+    <h2>Best Practices &amp; Guardrails</h2>
+    <p>VibeOS enforces many rules automatically through hooks, but some habits need to be built by you. These tips prevent the most common mistakes that cost time, tokens, and Vibe Score points.</p>
+
+    <!-- ---- GUARDRAIL 1: AUTO-WRAP ---- -->
+    <h3>Never close a tab without wrapping</h3>
+    <p>Closing a terminal kills the Claude Code session instantly &mdash; there's no chance to run <code>/wrap</code>. You lose the Performance Coach analysis, Vibe Score, session log, and any uncommitted work. Set up guardrails to prevent this.</p>
+
+    <h4>Option 1: Warp close confirmation</h4>
+    <p>Warp Terminal can warn you before closing a tab that has a running process. Go to <strong>Settings &rarr; Features &rarr; "Warn before closing a tab with a running process"</strong> and enable it. You'll get a confirmation dialog every time you try to close a tab with Claude Code running.</p>
+
+    <h4>Option 2: Shell exit reminder</h4>
+    <p>Add a trap to your shell config that fires when the terminal is about to close:</p>
+    <pre><code><span class="code-label">.zshrc</span><span class="accent"># Remind to /wrap before closing</span>
+vibeos_exit_check() {
+  if [ -f ".vibeos/state.json" ]; then
+    echo ""
+    echo "<span class="warn">Warning: Did you /wrap your VibeOS session?</span>"
+    echo "<span class="output">Run /wrap to save your Vibe Score and session log.</span>"
+    echo ""
+  fi
+}
+trap vibeos_exit_check EXIT</code></pre>
+
+    <h4>Option 3: Lightweight Stop hook (automatic)</h4>
+    <p>Extend the existing <code>Stop</code> hook to run a basic quality gate and save what it can. This runs automatically when Claude Code exits &mdash; even if you forget.</p>
+    <pre><code><span class="code-label">scripts/auto-wrap-lite.sh</span><span class="accent">#!/bin/bash</span>
+<span class="output"># Runs on session Stop event &mdash; lightweight /wrap fallback</span>
+<span class="output"># Cannot run agent tasks (Performance Coach, Vibe Score)</span>
+<span class="output"># but captures the basics.</span>
+
+SESSION_ID=$(date +%Y%m%d-%H%M%S)
+LOG_DIR=".vibeos/sessions"
+mkdir -p "$LOG_DIR"
+
+<span class="accent"># Save basic session metadata</span>
+echo "{
+  \"id\": \"$SESSION_ID\",
+  \"type\": \"auto-wrap-lite\",
+  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+  \"branch\": \"$(git branch --show-current 2>/dev/null)\",
+  \"uncommitted_files\": $(git status --porcelain 2>/dev/null | wc -l | tr -d ' '),
+  \"note\": \"Session ended without /wrap\"
+}" > "$LOG_DIR/$SESSION_ID.json"
+
+<span class="accent"># Warn if there are uncommitted changes</span>
+DIRTY=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+if [ "$DIRTY" -gt 0 ]; then
+  echo "<span class="warn">auto-wrap-lite: $DIRTY uncommitted files on $(git branch --show-current)</span>"
+fi</code></pre>
+
+    <div class="callout info">
+      <div class="callout-title">Use all three together</div>
+      <p>These aren't mutually exclusive. Warp's confirmation is your first line of defense, the shell trap is a visual reminder if you bypass it, and the Stop hook is the automatic fallback that always runs. Layer them for maximum safety.</p>
+    </div>
+
+    <!-- ---- GUARDRAIL 2: STALE SESSION ---- -->
+    <h3>Detect unwrapped sessions on startup</h3>
+    <p>The Session Startup agent already checks project state when you run <code>claude</code>. It can also detect if the last session ended without <code>/wrap</code> by checking the session logs. If it finds an unwrapped session, it warns you and offers to run a retroactive analysis.</p>
+
+    <pre><code><span class="code-label">What you'll see</span><span class="prompt">$</span> <span class="cmd">claude</span>
+<span class="warn">Warning: Previous session (2026-02-24 14:32) ended without /wrap.</span>
+<span class="output">  Branch: feat/trip-creation</span>
+<span class="output">  Uncommitted files: 4</span>
+<span class="output">  Session log: partial (auto-wrap-lite)</span>
+<span class="output">Recommendation: Review uncommitted changes, then continue or /wrap.</span>
+<span class="accent">VibeOS v1.3.0 | Feature: trip-creation (Code phase)</span></code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">This is automatic</div>
+      <p>You don't need to configure anything. The Session Startup agent reads <code>.vibeos/sessions/</code> on every launch and flags incomplete sessions. It's one of the reasons every session should start with <code>claude</code> (not by resuming a detached process).</p>
+    </div>
+
+    <!-- ---- GUARDRAIL 3: BRANCH GUARD ---- -->
+    <h3>Never build features on main</h3>
+    <p>VibeOS creates a feature branch automatically when you run <code>/new-feature</code>. But if you skip that and start coding directly, you might be on <code>main</code>. The phase gate hook can catch this.</p>
+
+    <pre><code><span class="code-label">What happens if you try</span><span class="prompt">&gt;</span> "Add a login form to the homepage"
+
+<span class="warn">Phase gate blocked: You're on the 'main' branch.</span>
+<span class="output">Source code writes are only allowed on feature branches (feat/*).</span>
+<span class="output">Run /new-feature "feature-name" to create a branch and start building.</span></code></pre>
+
+    <div class="callout warn">
+      <div class="callout-title">Why this matters</div>
+      <p>Building on <code>main</code> means no PR, no code review, no isolation from other work. If something goes wrong, you can't just delete the branch &mdash; you have to revert commits on main. The branch guard prevents this entire class of mistakes.</p>
+    </div>
+
+    <!-- ---- GUARDRAIL 4: DIRTY TREE ---- -->
+    <h3>Handle uncommitted changes before starting</h3>
+    <p>Starting a new feature with uncommitted changes from a previous feature is a recipe for tangled commits and merge conflicts. The Session Startup agent checks for this.</p>
+
+    <pre><code><span class="code-label">What you'll see</span><span class="prompt">$</span> <span class="cmd">claude</span>
+<span class="warn">Warning: 7 uncommitted files detected on feat/user-auth.</span>
+<span class="output">  Modified: src/components/auth/LoginForm.tsx</span>
+<span class="output">  Modified: src/lib/supabase/client.ts</span>
+<span class="output">  ... and 5 more</span>
+<span class="output">Options:</span>
+<span class="output">  1. Continue working on feat/user-auth</span>
+<span class="output">  2. Commit changes and start a new feature</span>
+<span class="output">  3. Stash changes and start fresh</span></code></pre>
+
+    <!-- ---- GUARDRAIL 5: PR REVIEW ---- -->
+    <h3>Review PRs before building more features</h3>
+    <p>It's tempting to keep shipping features, but unreviewed PRs pile up fast &mdash; especially in parallel mode. Stale PRs lead to merge conflicts and integration bugs. Build a cadence: <strong>review first, then build</strong>.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">&#10003;</div>
+        <h4>Good cadence</h4>
+        <p>Morning: review and merge yesterday's PRs. Then start new features. Use <code>/status</code> to see open PRs. Keep the PR queue under 3 at all times.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#10007;</div>
+        <h4>Danger zone</h4>
+        <p>5+ unmerged PRs across different feature branches. Each new feature increases the chance of conflicts. Merging becomes a full-day task instead of 10 minutes per PR.</p>
+      </div>
+    </div>
+
+    <pre><code><span class="code-label">Quick PR check</span><span class="prompt">&gt;</span> /status
+
+<span class="accent">Open PRs:</span>
+<span class="success">  #12 feat/user-auth        &mdash; approved, ready to merge</span>
+<span class="warn">  #13 feat/trip-creation    &mdash; review requested, 2 days old</span>
+<span class="output">  #14 feat/itinerary-builder &mdash; draft, tests passing</span>
+
+<span class="output">Recommendation: Merge #12, review #13 before starting new work.</span></code></pre>
+
+    <!-- ---- GUARDRAIL 6: ONE FEATURE PER SESSION ---- -->
+    <h3>One feature per session, no exceptions</h3>
+    <p>This is the single most impactful habit. Each Claude Code session has a finite context window. Cramming two features into one session means both get less attention, more token waste, and lower Vibe Scores.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">&#10003;</div>
+        <h4>Do this</h4>
+        <p><code>/new-feature "user-auth"</code> &rarr; build all 5 phases &rarr; <code>/wrap</code> &rarr; close session. New session: <code>/new-feature "trip-creation"</code>. Clean context, clean branch, clean score.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#10007;</div>
+        <h4>Don't do this</h4>
+        <p>"While I'm here, let me also start trip-creation." Mid-session feature switches waste context recapping the new feature, leave the first feature half-wrapped, and confuse the Performance Coach analysis.</p>
+      </div>
+    </div>
+
+    <!-- ---- GUARDRAIL 7: CONTEXT BUDGET ---- -->
+    <h3>Watch your context budget</h3>
+    <p>The <code>check-context.sh</code> Stop hook warns at 60% and 80% context usage, but don't wait for the warning. Check proactively with <code>/status</code>, especially during long Code phases.</p>
+
+    <pre><code><span class="code-label">Context warnings</span><span class="prompt">&gt;</span> /status
+
+<span class="output">Context usage: </span><span class="warn">62%</span><span class="output"> (warning threshold: 60%)</span>
+<span class="output">Estimated remaining: ~15 tool calls</span>
+<span class="output">Recommendation: Finish current phase, then /wrap.</span>
+<span class="output">  Don't start a new phase in this session.</span></code></pre>
+
+    <div class="callout warn">
+      <div class="callout-title">What happens at high context usage</div>
+      <p>Above 70%, Claude Code starts losing early conversation context. It may forget your design decisions, repeat questions, or generate code that contradicts earlier choices. Above 85%, quality degrades significantly. The rule: <strong>if you're past 60%, wrap up and start fresh</strong>. A new session with full context is always better than pushing a depleted one.</p>
+    </div>
+
+    <!-- ---- GUARDRAIL 8: WEEKLY PLANNING ---- -->
+    <h3>Weekly planning ritual</h3>
+    <p>Every week, ideas accumulate in your backlog via <code>/idea</code>. If you don't process them, the backlog becomes a graveyard of forgotten thoughts. Set a recurring ritual.</p>
+
+    <div class="flow"><span class="highlight">Every Friday (or Monday morning):</span>
+
+<span class="green">1.</span> Run <span class="green">/status</span> to see the full picture
+<span class="green">2.</span> Run <span class="green">/plan-features</span> to promote unplanned ideas to specs
+<span class="green">3.</span> Review Vibe Score trends &mdash; are scores going up or down?
+<span class="green">4.</span> Review CLAUDE.md rules added by Performance Coach
+<span class="green">5.</span> Merge any remaining PRs
+<span class="green">6.</span> <span class="green">/wrap</span> to close the week
+
+<span class="muted">Total: ~30 minutes. Sets up the entire next week.</span></div>
+
+    <!-- ---- GUARDRAIL 9: COMMIT OFTEN ---- -->
+    <h3>Commit at every phase boundary</h3>
+    <p>Don't wait until <code>/wrap</code> to commit. Each phase completion (Plan, UI Design, Code, Test, Docs) is a natural commit point. If something goes wrong in a later phase, you can roll back to the last clean phase instead of losing everything.</p>
+
+    <pre><code><span class="code-label">Natural commit points</span><span class="success">[x] Plan</span>        <span class="output">&rarr; commit: "plan(auth): feature spec and acceptance criteria"</span>
+<span class="success">[x] UI Design</span>   <span class="output">&rarr; commit: "design(auth): component wireframes and token usage"</span>
+<span class="success">[x] Code</span>        <span class="output">&rarr; commit: "feat(auth): implement login, signup, and middleware"</span>
+<span class="success">[x] Test</span>        <span class="output">&rarr; commit: "test(auth): 12 tests covering auth flows"</span>
+<span class="success">[x] Docs</span>        <span class="output">&rarr; commit: "docs(auth): changelog and feature documentation"</span></code></pre>
+
+    <div class="callout tip">
+      <div class="callout-title">VibeOS handles this automatically</div>
+      <p>The Builder and Verifier agents commit at phase boundaries by default. But if you're guiding the session manually (typing prompts instead of letting agents drive), remember to commit after each phase. The phase-gate hook tracks which phases are complete, so commits also serve as progress checkpoints.</p>
+    </div>
+
+    <!-- ---- GUARDRAIL 10: BACKUP STATE ---- -->
+    <h3>Commit your <code>.vibeos/</code> folder</h3>
+    <p>The <code>.vibeos/</code> folder contains your project state: backlog, session logs, scores, and config. If you lose it, you lose your history. Commit it to your repo so it's backed up and shared with teammates.</p>
+
+    <pre><code><span class="code-label">.gitignore</span><span class="accent"># DO commit .vibeos/ (project state)</span>
+<span class="output"># DON'T commit sensitive runtime data</span>
+.vibeos/sessions/*.tmp
+.vibeos/cache/</code></pre>
+
+    <h3>Quick reference: the 10 habits</h3>
+    <div class="flow"><span class="green"> 1.</span> Always <span class="green">/wrap</span> before closing a tab
+<span class="green"> 2.</span> Let Session Startup detect stale sessions
+<span class="green"> 3.</span> Never build on <span class="highlight">main</span> &mdash; always use feature branches
+<span class="green"> 4.</span> Resolve uncommitted changes before starting new work
+<span class="green"> 5.</span> Review &amp; merge PRs before building more features
+<span class="green"> 6.</span> One feature per session, no exceptions
+<span class="green"> 7.</span> Wrap up at <span class="amber">60% context</span> &mdash; don't push to 80%+
+<span class="green"> 8.</span> Run <span class="green">/plan-features</span> weekly to process ideas
+<span class="green"> 9.</span> Commit at every phase boundary
+<span class="green">10.</span> Keep <span class="highlight">.vibeos/</span> in version control</div>
+
+  </section>
+
+</div>
+
+<footer class="footer">
+  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
+</footer>
+
+</body>
+</html>

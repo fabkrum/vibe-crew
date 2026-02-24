@@ -1146,28 +1146,29 @@ VibeOS uses 9 specialized agents, each with a specific role, model selection, an
 
 | Model | Cost | Speed | Used For |
 |---|---|---|---|
-| **Haiku** | Lowest | Fastest | Routine checks: session startup, quality validation |
-| **Sonnet** | Medium | Fast | Core work: coding, testing, design, research, coaching |
+| **Opus** | Highest | Deliberate | Planning, research, code writing, analysis — where mistakes are expensive |
+| **Haiku** | Lowest | Fastest | Mechanical/routing tasks: session startup, quality validation |
+| **Sonnet** | Medium | Fast | Template-driven documentation |
 
-Haiku is used for agents that run frequently and need to be fast (session startup runs every session, quality check runs on every `/check`). Sonnet handles the heavy lifting.
+Opus is used for all agents that plan, research, write code, or analyze — because mistakes in these areas are expensive to fix. Haiku handles mechanical and routing tasks that run frequently and need to be fast. Sonnet powers template-driven documentation generation.
 
 ### Agent Roster
 
 **Session Startup** (Haiku) — Runs automatically on every session start. Checks for first-time setup, reads git status, loads project state, presents a 3-sentence summary, routes to the next action. Token budget: under 200 words of output.
 
-**Workflow Orchestrator** (Sonnet) — Runs when routing between Tier 1 and Tier 2. Reads project state, determines which workflow is appropriate, coordinates handoffs between agents. Never writes source code itself — always delegates.
+**Workflow Orchestrator** (Opus) — Runs when routing between Tier 1 and Tier 2. Reads project state, determines which workflow is appropriate, coordinates handoffs between agents. Never writes source code itself — always delegates.
 
-**Stack Scout** (Sonnet) — Runs during Tier 1 architecture step. Has access to WebSearch, WebFetch, Context7 MCP, and Puppeteer MCP. Researches technology options, evaluates trade-offs, generates the TDR. Read-only — never creates source files, only documentation. Runs in a separate context window, keeping research tokens out of the main session.
+**Stack Scout** (Opus) — Runs during Tier 1 architecture step. Has access to WebSearch, WebFetch, Context7 MCP, and Puppeteer MCP. Researches technology options, evaluates trade-offs, generates the TDR. Read-only — never creates source files, only documentation. Runs in a separate context window, keeping research tokens out of the main session.
 
-**UI Designer** (Sonnet) — Runs during Tier 1 (design system) and Tier 2 (component design). Creates design systems, designs components, ensures accessibility. Always uses design tokens — never hardcoded values.
+**UI Designer** (Opus) — Runs during Tier 1 (design system) and Tier 2 (component design). Creates design systems, designs components, ensures accessibility. Always uses design tokens — never hardcoded values.
 
-**Feature Developer** (Sonnet) — Runs during Tier 2 coding phase. Implements features within TDR boundaries. Checks Context7 before using any library API — no guessing at signatures.
+**Feature Developer** (Opus) — Runs during Tier 2 coding phase. Implements features within TDR boundaries. Checks Context7 before using any library API — no guessing at signatures.
 
-**Test Writer** (Sonnet) — Runs during Tier 2 testing phase. Writes spec tests for business logic (TDD — before implementation), writes implementation tests for UI (after implementation). Tests behavior, not implementation — tests should survive refactoring.
+**Test Writer** (Opus) — Runs during Tier 2 testing phase. Writes spec tests for business logic (TDD — before implementation), writes implementation tests for UI (after implementation). Tests behavior, not implementation — tests should survive refactoring.
 
 **Doc Generator** (Sonnet) — Runs during `/wrap` and Tier 2 documentation phase. Creates session logs, CHANGELOG entries, feature docs, release notes. Structured JSON output for session logs and release notes (feeds the companion web app).
 
-**Performance Coach** (Sonnet) — Runs during `/wrap`. Calculates Vibe Score, provides coaching, proposes CLAUDE.md mutations. One actionable tip per session — specific, not generic.
+**Performance Coach** (Opus) — Runs during `/wrap`. Calculates Vibe Score, provides coaching, proposes CLAUDE.md mutations. One actionable tip per session — specific, not generic.
 
 **Quality Check** (Haiku) — Runs during `/check`, `/wrap`, and `/run-backlog` quality gates. Auto-detects project type, runs tests/build/lint, reports results. Fast execution with 60-second timeout per command.
 

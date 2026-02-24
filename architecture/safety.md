@@ -610,10 +610,10 @@ Each VibeOS agent is launched with a tailored tool permission set defined in its
 | Agent | Model | Allowed Tools | Disallowed Tools | Isolation |
 |-------|-------|---------------|------------------|-----------|
 | Session Startup | Haiku | `Read`, `Bash`, `Glob`, `Grep` | `Write`, `Edit`, `WebSearch`, `WebFetch`, Agent Teams, all MCP | Inline |
-| Workflow Orchestrator | Sonnet | `Read`, `Bash`, `Glob`, `Grep`, `TeamCreate`, `TaskCreate`, `SendMessage` | `Write`, `Edit`, `WebSearch`, `WebFetch` | Inline |
-| Stack Scout | Sonnet | `Read`, `Bash`, `Glob`, `Grep`, `WebSearch`, `WebFetch`, Context7 MCP, Puppeteer MCP | `Write`, `Edit`, `TeamCreate`, `TaskCreate`, `SendMessage` | Worktree |
-| Builder | Sonnet | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Puppeteer MCP, Agent Teams | Worktree |
-| Verifier | Sonnet | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Puppeteer MCP, Agent Teams | Inline |
+| Workflow Orchestrator | Opus | `Read`, `Bash`, `Glob`, `Grep`, `TeamCreate`, `TaskCreate`, `SendMessage` | `Write`, `Edit`, `WebSearch`, `WebFetch` | Inline |
+| Stack Scout | Opus | `Read`, `Bash`, `Glob`, `Grep`, `WebSearch`, `WebFetch`, Context7 MCP, Puppeteer MCP | `Write`, `Edit`, `TeamCreate`, `TaskCreate`, `SendMessage` | Worktree |
+| Builder | Opus | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Puppeteer MCP, Agent Teams | Worktree |
+| Verifier | Haiku | `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, Context7 MCP | `WebSearch`, `WebFetch`, Puppeteer MCP, Agent Teams | Inline |
 
 **Orchestrator write permission resolution.** The Orchestrator has `disallowedTools: Write, Edit` to prevent scope creep into source code writing. It needs to update `.vibeos/` state files (advancing feature phases, processing signals, updating backlog). This is resolved by using `Bash` to run shared scripts that modify `.vibeos/` state files. For example:
 
@@ -1422,10 +1422,10 @@ CACHE_CREATION=$(echo "$INPUT" | jq -r '.usage.cache_creation_input_tokens // 0'
 CACHE_READ=$(echo "$INPUT" | jq -r '.usage.cache_read_input_tokens // 0' 2>/dev/null || echo "0")
 OUTPUT_TOKENS=$(echo "$INPUT" | jq -r '.usage.output_tokens // 0' 2>/dev/null || echo "0")
 
-# Sonnet pricing (per million tokens) -- conservative estimate
-# Input: $3.00, Cache write: $3.75, Cache read: $0.30, Output: $15.00
-# Using Sonnet as the default since most agents run on Sonnet
-COST_USD=$(echo "scale=4; ($INPUT_TOKENS * 3.00 + $CACHE_CREATION * 3.75 + $CACHE_READ * 0.30 + $OUTPUT_TOKENS * 15.00) / 1000000" \
+# Opus pricing (per million tokens) -- conservative estimate
+# Input: $15.00, Cache write: $18.75, Cache read: $1.50, Output: $75.00
+# Using Opus as the default since most agents run on Opus
+COST_USD=$(echo "scale=4; ($INPUT_TOKENS * 15.00 + $CACHE_CREATION * 18.75 + $CACHE_READ * 1.50 + $OUTPUT_TOKENS * 75.00) / 1000000" \
   | bc -l 2>/dev/null || echo "0")
 
 # Read cost limits from config.json (see architecture/schemas.md Section 2)
@@ -1542,16 +1542,16 @@ Users can adjust these thresholds to match their budget. Setting `session_max_us
 
 ### 9.4 Cost Estimation Model
 
-Cost is estimated from token usage in the hook payload using conservative Sonnet pricing (the model used by most agents):
+Cost is estimated from token usage in the hook payload using conservative Opus pricing (the model used by most agents):
 
 | Token Type | Cost per Million | Notes |
 |------------|-----------------|-------|
-| Input tokens | $3.00 | Standard input processing |
-| Cache creation tokens | $3.75 | First-time cache write |
-| Cache read tokens | $0.30 | Subsequent reads from cache |
-| Output tokens | $15.00 | Generated text |
+| Input tokens | $15.00 | Standard input processing |
+| Cache creation tokens | $18.75 | First-time cache write |
+| Cache read tokens | $1.50 | Subsequent reads from cache |
+| Output tokens | $75.00 | Generated text |
 
-**Important.** These are estimates. Actual costs depend on the model used (Haiku is cheaper than Sonnet), current Anthropic pricing, and whether prompt caching is active. The estimates are deliberately conservative (using Sonnet pricing for all agents) to err on the side of caution.
+**Important.** These are estimates. Actual costs depend on the model used (Haiku is cheaper than Opus), current Anthropic pricing, and whether prompt caching is active. The estimates are deliberately conservative (using Opus pricing for all agents) to err on the side of caution.
 
 ### 9.5 Implementation
 

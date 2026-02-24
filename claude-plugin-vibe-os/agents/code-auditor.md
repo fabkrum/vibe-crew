@@ -5,7 +5,7 @@ description: >
   structure, conventions, dependencies, test coverage gaps, and design system
   tokens. Produces structured findings for /onboard to generate CLAUDE.md and
   initialize VibeOS state. Never modifies files.
-model: sonnet
+model: opus
 isolation: worktree
 tools:
   - Read

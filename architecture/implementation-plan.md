@@ -22,10 +22,10 @@
 | # | Agent | Model | Isolation | Role |
 |---|-------|-------|-----------|------|
 | 1 | Session Startup | Haiku | Inline | Environment check, state detection, routing |
-| 2 | Workflow Orchestrator | Sonnet | Inline | Tier routing, Agent Teams coordination |
-| 3 | Stack Scout | Sonnet | Worktree | Read-only research, TDR output |
-| 4 | Builder | Sonnet | Worktree | Merged UI Designer + Feature Developer |
-| 5 | Verifier | Sonnet | Inline | Merged Test Writer + Quality Check + scoring |
+| 2 | Workflow Orchestrator | Opus | Inline | Tier routing, Agent Teams coordination |
+| 3 | Stack Scout | Opus | Worktree | Read-only research, TDR output |
+| 4 | Builder | Opus | Worktree | Merged UI Designer + Feature Developer |
+| 5 | Verifier | Haiku | Inline | Merged Test Writer + Quality Check + scoring |
 
 ### Timeline Summary
 
@@ -131,10 +131,10 @@ Define all five agent prompts, implement the first five slash commands (/setup, 
 | # | File | Purpose |
 |---|------|---------|
 | 1 | `agents/session-startup.md` | Haiku agent: environment check, state detection, 3-line status summary, routing |
-| 2 | `agents/workflow-orchestrator.md` | Sonnet agent: Tier 1/Tier 2 routing, Agent Teams coordination, state management |
-| 3 | `agents/stack-scout.md` | Sonnet agent: read-only research with WebSearch, Context7, Puppeteer. `isolation: worktree`. |
-| 4 | `agents/builder.md` | Sonnet agent: design system (Tier 1) + component design + feature implementation (Tier 2). `isolation: worktree`. |
-| 5 | `agents/verifier.md` | Sonnet agent: TDD-hybrid testing, quality checks, Vibe Score calculation |
+| 2 | `agents/workflow-orchestrator.md` | Opus agent: Tier 1/Tier 2 routing, Agent Teams coordination, state management |
+| 3 | `agents/stack-scout.md` | Opus agent: read-only research with WebSearch, Context7, Puppeteer. `isolation: worktree`. |
+| 4 | `agents/builder.md` | Opus agent: design system (Tier 1) + component design + feature implementation (Tier 2). `isolation: worktree`. |
+| 5 | `agents/verifier.md` | Haiku agent: TDD-hybrid testing, quality checks, Vibe Score calculation |
 | 6 | `skills/setup/SKILL.md` | /setup: interactive wizard -- terminal selection, notification test, MCP verification, .vibeos/ init |
 | 7 | `skills/new-project/SKILL.md` | /new-project: guided 5-step Tier 1 foundation -- VISION.md, design-system.css, TDR, roadmap, CLAUDE.md |
 | 8 | `skills/status/SKILL.md` | /status: read-only dashboard with dynamic context injection |

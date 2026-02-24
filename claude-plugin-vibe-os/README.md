@@ -152,17 +152,17 @@ VibeOS uses 12 specialized agents, each with a dedicated system prompt:
 | Agent | Model | Execution | Role |
 |---|---|---|---|
 | Session Startup | Haiku | Inline | Environment check, state detection, handoff detection, progressive hints, routing. |
-| Workflow Orchestrator | Sonnet | Inline | Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state. |
-| Stack Scout | Sonnet | Worktree | Read-only research agent. Uses WebSearch, Context7, and Puppeteer to produce Technology Decision Records in an isolated context. |
-| Builder | Sonnet | Worktree | Implements features within TDR boundaries. Runs in a worktree to isolate work-in-progress from the main branch. |
-| Verifier | Sonnet | Inline | Runs quality checks (tests, lint, build, type-check), calculates Vibe Score. |
-| Performance Coach | Sonnet | Inline | Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals with 7-step guardrailed workflow. |
-| Code Auditor | Sonnet | Worktree | Read-only codebase analysis for existing project onboarding. Extracts conventions, test gaps, and architecture patterns. |
-| Security Auditor | Sonnet | Worktree | Read-only OWASP Top 10 security analysis. Scans for injection, auth, XSS, misconfig, vulnerable dependencies, secrets, and SSRF. |
+| Workflow Orchestrator | Opus | Inline | Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state. |
+| Stack Scout | Opus | Worktree | Read-only research agent. Uses WebSearch, Context7, and Puppeteer to produce Technology Decision Records in an isolated context. |
+| Builder | Opus | Worktree | Implements features within TDR boundaries. Runs in a worktree to isolate work-in-progress from the main branch. |
+| Verifier | Haiku | Inline | Runs quality checks (tests, lint, build, type-check), calculates Vibe Score. |
+| Performance Coach | Opus | Inline | Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals with 7-step guardrailed workflow. |
+| Code Auditor | Opus | Worktree | Read-only codebase analysis for existing project onboarding. Extracts conventions, test gaps, and architecture patterns. |
+| Security Auditor | Opus | Worktree | Read-only OWASP Top 10 security analysis. Scans for injection, auth, XSS, misconfig, vulnerable dependencies, secrets, and SSRF. |
 | Doc Generator | Sonnet | Inline | Feature documentation, CHANGELOG updates, VitePress sidebar regeneration, release notes. |
 | Code Simplifier | Opus | Worktree | Read-only code analysis for simplification: dead code, abstraction flattening, API reduction, dependency consolidation. |
-| CI Healer | Sonnet | Inline | CI failure diagnosis and repair. Categorizes failures (build/test/lint/dep/env), applies targeted fixes with max 3 attempts. |
-| Opponent Processor | Sonnet | Worktree | Devil's advocate for TDR decisions. Generates counter-arguments, debate matrices, and risk assessments for technology choices. |
+| CI Healer | Opus | Inline | CI failure diagnosis and repair. Categorizes failures (build/test/lint/dep/env), applies targeted fixes with max 3 attempts. |
+| Opponent Processor | Opus | Worktree | Devil's advocate for TDR decisions. Generates counter-arguments, debate matrices, and risk assessments for technology choices. |
 
 ### Hook System
 

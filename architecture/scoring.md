@@ -365,7 +365,7 @@ The following features are deferred from v1.0 and planned for v1.1 when the Perf
 
 In v1.1, a dedicated Performance Coach agent replaces the Verifier's scoring responsibilities:
 
-- **Model:** Sonnet
+- **Model:** Opus
 - **Isolation:** Inline (runs in the main context)
 - **Memory:** `memory: project` -- persistent cross-session memory stored at `.claude/agent-memory/performance-coach/MEMORY.md`
 - **Trigger:** Invoked by `/wrap` after the Verifier completes quality checks

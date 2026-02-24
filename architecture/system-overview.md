@@ -33,12 +33,19 @@ The plugin is self-contained. All internal path references use the `${CLAUDE_PLU
 claude-plugin-vibe-os/                      # Plugin root
   .claude-plugin/
     plugin.json                             # Plugin manifest (entry point)
-  agents/                                   # 5 specialized sub-agent definitions
+  agents/                                   # 12 specialized sub-agent definitions
     session-startup.md                      #   Haiku  -- environment check, routing
-    workflow-orchestrator.md                 #   Sonnet -- tier routing, Agent Teams coordination
-    stack-scout.md                          #   Sonnet -- read-only research, TDR output
-    builder.md                              #   Sonnet -- merged UI Designer + Feature Developer
-    verifier.md                             #   Sonnet -- merged Test Writer + Quality Check + scoring
+    workflow-orchestrator.md                 #   Opus   -- tier routing, Agent Teams coordination
+    stack-scout.md                          #   Opus   -- read-only research, TDR output
+    builder.md                              #   Opus   -- merged UI Designer + Feature Developer
+    verifier.md                             #   Haiku  -- merged Test Writer + Quality Check
+    performance-coach.md                    #   Opus   -- session analysis, CLAUDE.md mutations
+    code-auditor.md                         #   Opus   -- code quality review, anti-pattern detection
+    security-auditor.md                     #   Opus   -- security analysis, vulnerability scanning
+    doc-generator.md                        #   Sonnet -- session logs, CHANGELOG, feature docs
+    code-simplifier.md                      #   Opus   -- complexity reduction, refactoring
+    ci-healer.md                            #   Opus   -- CI/CD failure diagnosis and repair
+    opponent-processor.md                   #   Opus   -- adversarial review, edge case discovery
   skills/                                   # 9 slash commands (SKILL.md per command)
     setup/
       SKILL.md                              #   /setup -- first-run installation wizard
@@ -87,7 +94,7 @@ claude-plugin-vibe-os/                      # Plugin root
 
 **Key differences from the pre-review design (9 agents):**
 
-- `agents/` contains 5 files, not 9. The UI Designer and Feature Developer merged into `builder.md`. The Test Writer, Quality Check, and scoring responsibilities merged into `verifier.md`. Performance Coach and Doc Generator are deferred to v1.1.
+- `agents/` contains 12 files. The UI Designer and Feature Developer merged into `builder.md`. The Test Writer, Quality Check, and scoring responsibilities merged into `verifier.md`. New specialized agents added: Performance Coach, Code Auditor, Security Auditor, Code Simplifier, CI Healer, and Opponent Processor.
 - `scripts/` includes `compact-reinject.sh` for context re-injection after compaction (see [Section 5.7](#57-context-re-injection-after-compaction)).
 
 ### 1.3 Plugin Manifest
@@ -181,45 +188,52 @@ This is critical because marketplace-installed plugins are cached to `~/.claude/
 
 ## 2. Agent Topology
 
-### 2.1 The Five Agents
+### 2.1 The Twelve Agents
 
-VibeOS v1.0 operates through five specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
+VibeOS v1.0 operates through twelve specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
 
-The v1.0 topology consolidates the original 9-agent design into 5 agents, following the principle of reducing coordination overhead while preserving separation of concerns. Two agents are deferred to v1.1: Performance Coach (standalone session analysis with persistent memory) and Doc Generator (CHANGELOG, feature docs, release notes).
+The v1.0 topology expands the original 9-agent design to 12 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding new specialized agents for code quality, security, simplification, CI healing, and adversarial review.
 
 ```
 +------------------------------------------------------------------+
 |                     VIBEOS AGENT TOPOLOGY (v1.0)                  |
 +------------------------------------------------------------------+
 |                                                                   |
-|  LIGHTWEIGHT (Haiku)         CORE (Sonnet)                        |
+|  LIGHTWEIGHT (Haiku)         CORE (Opus)                          |
 |  +-------------------+      +----------------------------+        |
 |  | Session Startup   |----->| Workflow Orchestrator       |        |
 |  | (every session)   |      | (routing, Agent Teams API) |        |
 |  +-------------------+      +----------------------------+        |
 |                                |                                  |
-|                                |  TeamCreate / TaskCreate          |
-|                                |  SendMessage                     |
-|                                |                                  |
-|                      +---------+---------+---------+              |
-|                      |                   |         |              |
-|                      v                   v         v              |
-|              +---------------+  +--------+--+  +--------+        |
-|              | Stack Scout   |  | Builder    |  |Verifier|        |
-|              | (research,    |  | (design +  |  |(test + |        |
-|              |  TDR output)  |  |  code)     |  | check  |        |
-|              |               |  |            |  | + score|        |
-|              | isolation:    |  | isolation: |  |  )     |        |
-|              |  worktree     |  |  worktree  |  +--------+        |
-|              +---------------+  +------------+                    |
+|  MECHANICAL (Haiku)            |  TeamCreate / TaskCreate          |
+|  +-------------------+        |  SendMessage                     |
+|  | Verifier          |        |                                  |
+|  | (test + check)    |        |                                  |
+|  +-------------------+        |                                  |
+|                      +---------+----+----+----+----+----+        |
+|                      |              |    |    |    |    |         |
+|                      v              v    v    v    v    v         |
+|              +---------------+  +--+--+ +--+ +--+ +--+ +------+  |
+|              | Stack Scout   |  |Build| |CA| |SA| |CS| | CI   |  |
+|              | (research,    |  |(des+| |  | |  | |  | |Healer|  |
+|              |  TDR output)  |  |code)| |  | |  | |  | |      |  |
+|              | Opus          |  |Opus | |Op| |Op| |Op| |Opus  |  |
+|              +---------------+  +-----+ +--+ +--+ +--+ +------+  |
 |                                                                   |
-|  v1.1 (deferred):                                                 |
 |  +----------------------------+  +----------------------------+   |
-|  | Performance Coach           |  | Doc Generator              |  |
+|  | Performance Coach (Opus)    |  | Doc Generator (Sonnet)     |  |
 |  | (project memory, scoring,   |  | (CHANGELOG, feature docs,  |  |
 |  |  CLAUDE.md mutations)       |  |  release notes)             |  |
 |  +----------------------------+  +----------------------------+   |
 |                                                                   |
+|  +----------------------------+                                   |
+|  | Opponent Processor (Opus)   |                                  |
+|  | (adversarial review,        |                                  |
+|  |  edge case discovery)       |                                  |
+|  +----------------------------+                                   |
+|                                                                   |
++------------------------------------------------------------------+
+|  CA = Code Auditor, SA = Security Auditor, CS = Code Simplifier  |
 +------------------------------------------------------------------+
 ```
 
@@ -228,25 +242,27 @@ The v1.0 topology consolidates the original 9-agent design into 5 agents, follow
 | # | Agent | Model | Isolation | Memory | Primary Role |
 |---|-------|-------|-----------|--------|-------------|
 | 1 | Session Startup | Haiku | Inline | None | Environment check, state detection, routing |
-| 2 | Workflow Orchestrator | Sonnet | Inline | None | Routes between Tier 1/Tier 2, coordinates via Agent Teams API |
-| 3 | Stack Scout | Sonnet | Worktree | None | Read-only research agent producing TDRs |
-| 4 | Builder | Sonnet | Worktree | None | Merged UI Designer + Feature Developer: design system, component design, feature implementation |
-| 5 | Verifier | Sonnet | Fork | None | Merged Test Writer + Quality Check + scoring: tests, build, lint, Vibe Score |
-
-**v1.1 additions (deferred):**
-
-| # | Agent | Model | Isolation | Memory | Primary Role |
-|---|-------|-------|-----------|--------|-------------|
-| 6 | Performance Coach | Sonnet | Fork | Project | Standalone session analysis, CLAUDE.md mutations |
-| 7 | Doc Generator | Sonnet | Fork | None | Session logs, CHANGELOG, feature docs, release notes |
+| 2 | Workflow Orchestrator | Opus | Inline | None | Routes between Tier 1/Tier 2, coordinates via Agent Teams API |
+| 3 | Stack Scout | Opus | Worktree | None | Read-only research agent producing TDRs |
+| 4 | Builder | Opus | Worktree | None | Merged UI Designer + Feature Developer: design system, component design, feature implementation |
+| 5 | Verifier | Haiku | Fork | None | Merged Test Writer + Quality Check: tests, build, lint |
+| 6 | Performance Coach | Opus | Fork | Project | Session analysis, Vibe Score, CLAUDE.md mutations |
+| 7 | Code Auditor | Opus | Fork | None | Code quality review, anti-pattern detection |
+| 8 | Security Auditor | Opus | Fork | None | Security analysis, vulnerability scanning |
+| 9 | Doc Generator | Sonnet | Fork | None | Session logs, CHANGELOG, feature docs, release notes |
+| 10 | Code Simplifier | Opus | Fork | None | Complexity reduction, refactoring proposals |
+| 11 | CI Healer | Opus | Fork | None | CI/CD failure diagnosis and automated repair |
+| 12 | Opponent Processor | Opus | Fork | None | Adversarial review, edge case discovery |
 
 ### 2.3 Agent Merging Rationale
 
 **Builder = UI Designer + Feature Developer.** The original design separated design from code, but in practice the design phase produces CSS custom properties and component specs that flow directly into implementation. Running both in one agent eliminates the handoff cost (reading design output, re-establishing context) and reduces the number of worktrees. The Builder handles both `design-system.css` creation during Tier 1 and component implementation during Tier 2.
 
-**Verifier = Test Writer + Quality Check + Scoring.** The original design had Test Writer (Sonnet) authoring tests and Quality Check (Haiku) running them. Separating authoring from running created unnecessary coordination: the runner needed to report failures back to the author. Merging them into a single Verifier agent means test authoring, execution, lint, build, and Vibe Score calculation happen in one context with full access to failure details. The Verifier uses Sonnet because test authoring requires analytical reasoning.
+**Verifier = Test Writer + Quality Check.** The original design had Test Writer (Sonnet) authoring tests and Quality Check (Haiku) running them. Separating authoring from running created unnecessary coordination: the runner needed to report failures back to the author. Merging them into a single Verifier agent means test authoring, execution, lint, and build happen in one context with full access to failure details. The Verifier uses Haiku because test execution and lint/build runs are mechanical tasks that do not require deep reasoning -- they follow deterministic patterns of running commands and reporting pass/fail results.
 
-**Performance Coach and Doc Generator deferred.** Both provide value but are not critical for v1.0 feature flow. The Verifier absorbs Vibe Score calculation. Documentation generation and CLAUDE.md mutation proposals are deferred to v1.1 when persistent agent memory (`memory: project`) is fully exercised.
+**Performance Coach and Doc Generator included in v1.0.** Both are now part of the v1.0 agent lineup. The Performance Coach (Opus) handles Vibe Score calculation and CLAUDE.md mutation proposals with persistent cross-session memory. The Doc Generator (Sonnet) handles session logs, CHANGELOG, and feature documentation -- documentation generation is a structured writing task well-suited to Sonnet's capabilities.
+
+**New specialized agents.** Six additional agents extend the system's quality and resilience capabilities: Code Auditor and Security Auditor (both Opus) provide deep review capabilities, Code Simplifier (Opus) proposes complexity reductions, CI Healer (Opus) diagnoses and repairs CI/CD failures, and Opponent Processor (Opus) performs adversarial review to surface edge cases and failure modes.
 
 ### 2.4 Tool Permissions Per Agent
 
@@ -355,17 +371,19 @@ Every agent session follows a five-phase lifecycle. With Agent Teams API, steps 
 
 ### 2.7 Model Selection Rationale
 
-Two models are used across the five agents to balance capability against cost:
+Three models are used across the twelve agents, following an **Opus-first strategy**: Opus is the default for any task requiring reasoning, analysis, or creative output. Haiku handles mechanical tasks, and Sonnet handles structured documentation writing.
 
-**Haiku** (1 agent: Session Startup) -- Selected for the highest-frequency, lowest-complexity task. Session Startup runs at the beginning of every session and performs simple routing logic. Haiku is approximately 10-20x cheaper per token than Sonnet.
+**Opus** (9 agents: Workflow Orchestrator, Stack Scout, Builder, Performance Coach, Code Auditor, Security Auditor, Code Simplifier, CI Healer, Opponent Processor) -- Selected as the primary model for all tasks requiring deep reasoning, architectural judgment, creative design, security analysis, or adversarial thinking. Opus provides the highest quality output for research (Stack Scout), design and code generation (Builder), project coordination (Workflow Orchestrator), code and security review (Code Auditor, Security Auditor), CI failure diagnosis (CI Healer), complexity reduction (Code Simplifier), adversarial review (Opponent Processor), and self-improvement analysis (Performance Coach).
 
-**Sonnet** (4 agents: Workflow Orchestrator, Stack Scout, Builder, Verifier) -- Selected for tasks requiring analytical, creative, or synthesis capabilities. Research (Stack Scout), design and code generation (Builder), test design and quality verification (Verifier), and project coordination (Workflow Orchestrator) all require the reasoning depth that Sonnet provides.
+**Haiku** (2 agents: Session Startup, Verifier) -- Selected for high-frequency, mechanical tasks. Session Startup runs at the beginning of every session and performs simple routing logic. The Verifier runs tests, build, and lint -- deterministic operations that follow a predictable pattern of executing commands and reporting pass/fail results. Haiku is approximately 60x cheaper per token than Opus, making it cost-effective for tasks that do not benefit from deeper reasoning.
 
-### 2.8 v1.1 Persistent Memory (Performance Coach)
+**Sonnet** (1 agent: Doc Generator) -- Selected for structured documentation writing. Generating session logs, CHANGELOG entries, feature documentation, and release notes is a well-defined writing task that benefits from Sonnet's strong language capabilities without requiring the full reasoning depth of Opus. Sonnet is approximately 15x cheaper per token than Opus, providing a good balance of quality and cost for documentation tasks.
 
-Deferred to v1.1: The Performance Coach will be the only agent with persistent cross-session memory, configured via the `memory: project` frontmatter field. This will store learnings in `.claude/agent-memory/performance-coach/MEMORY.md`, which is automatically injected into the agent's system prompt on subsequent invocations.
+### 2.8 Persistent Memory (Performance Coach)
 
-This memory enables the self-improvement loop: the Performance Coach identifies anti-patterns across sessions (e.g., "prompt churn on API calls" or "repeated lint failures on import ordering") and proposes permanent CLAUDE.md rule mutations to prevent recurrence. In v1.0, the Verifier provides basic scoring and coaching suggestions as part of `/wrap`, but without persistent memory across sessions.
+The Performance Coach is the only agent with persistent cross-session memory, configured via the `memory: project` frontmatter field. This stores learnings in `.claude/agent-memory/performance-coach/MEMORY.md`, which is automatically injected into the agent's system prompt on subsequent invocations.
+
+This memory enables the self-improvement loop: the Performance Coach identifies anti-patterns across sessions (e.g., "prompt churn on API calls" or "repeated lint failures on import ordering") and proposes permanent CLAUDE.md rule mutations to prevent recurrence. Running on Opus ensures the highest quality analysis for these high-impact, cross-session improvement decisions.
 
 ---
 
@@ -450,7 +468,7 @@ Tier 2 is an iterative 5-phase cycle applied to each feature in the backlog. Pha
 | **Test** | Verifier | Implementation, acceptance criteria | Unit tests, integration tests, accessibility tests |
 | **Docs** | Workflow Orchestrator (inline) | All phase outputs | Feature documentation, CHANGELOG entry (v1.0 minimal) |
 
-In v1.0, the Builder handles both the Design and Code phases. The Verifier handles Test. Docs are handled inline by the Orchestrator with minimal output; the full Doc Generator agent is deferred to v1.1.
+In v1.0, the Builder handles both the Design and Code phases. The Verifier handles Test. The Doc Generator handles the Docs phase.
 
 ### 3.4 Feature State Machine
 
@@ -829,9 +847,10 @@ Every VibeOS agent session targets less than 50% context window utilization. Thi
 |  (fetch docs on demand        per lookup      lookup replaces   |
 |  instead of pasting)                          pasting docs      |
 |                                                                  |
-|  Haiku for lightweight        10-20x cheaper  Session Startup    |
-|  agents (routing does         per token       uses Haiku         |
-|  not need Sonnet)                                                |
+|  Haiku for mechanical         ~60x cheaper    Session Startup    |
+|  agents (routing and          per token       and Verifier use   |
+|  test execution do not        vs Opus         Haiku              |
+|  need Opus reasoning)                                            |
 |                                                                  |
 |  Context re-injection         Prevents state  SessionStart hook  |
 |  after compaction             loss after      with "compact"     |
@@ -887,13 +906,15 @@ Without Context7, an agent needing API documentation must either paste the docum
 
 CLAUDE.md includes the rule: "Always use Context7 MCP for API documentation lookups. Never paste documentation into the conversation."
 
-### 5.5 Haiku for Lightweight Agents
+### 5.5 Haiku for Mechanical Agents
 
-One agent uses Haiku instead of Sonnet:
+Two agents use Haiku instead of Opus:
 
 - **Session Startup** runs at the beginning of every session. It reads state.json, checks the environment, and routes to the appropriate workflow. This is simple conditional logic that does not require advanced reasoning.
 
-In v1.0, the Quality Check responsibilities are absorbed by the Verifier (Sonnet). While this uses a more expensive model for test running, it eliminates the coordination overhead of a separate agent and allows the Verifier to immediately reason about test failures.
+- **Verifier** runs tests, build, and lint commands. These are mechanical tasks that follow a deterministic pattern: execute a command, parse the output, report pass/fail results. Haiku handles this efficiently at approximately 60x lower cost per token than Opus.
+
+The Opus-first strategy reserves the most capable model for tasks that benefit from deep reasoning (research, code generation, security analysis, adversarial review), while Haiku handles the high-frequency, low-complexity tasks where cost efficiency matters most.
 
 ### 5.6 Stop Hook: Context Warnings
 
@@ -961,7 +982,7 @@ Rules for keeping CLAUDE.md lean:
 3. Use imperative language ("Always use X", "Never do Y")
 4. 20-40 high-impact rules, not 200 minor ones
 5. Review monthly -- remove stale rules, consolidate duplicates
-6. In v1.1, Performance Coach proposes mutations; bloat is pruned in the same cycle
+6. Performance Coach proposes mutations; bloat is pruned in the same cycle
 
 ### 5.9 Cache Utilization as Efficiency Signal
 
@@ -1014,14 +1035,14 @@ All VibeOS commands use `disable-model-invocation: true` to prevent Claude from 
 | Command | Skill Name | Arguments | Context | Agent | Model |
 |---------|-----------|-----------|---------|-------|-------|
 | `/setup` | `setup` | None | Fork (general-purpose) | -- | Inherit |
-| `/new-project` | `new-project` | None | Inline | Workflow Orchestrator | Sonnet |
-| `/plan-features` | `plan-features` | None | Inline | Workflow Orchestrator | Sonnet |
-| `/new-feature` | `new-feature` | `"feature-name"` | Fork (general-purpose) | Builder | Sonnet |
-| `/run-backlog` | `run-backlog` | None | Inline | Workflow Orchestrator | Sonnet |
+| `/new-project` | `new-project` | None | Inline | Workflow Orchestrator | Opus |
+| `/plan-features` | `plan-features` | None | Inline | Workflow Orchestrator | Opus |
+| `/new-feature` | `new-feature` | `"feature-name"` | Fork (general-purpose) | Builder | Opus |
+| `/run-backlog` | `run-backlog` | None | Inline | Workflow Orchestrator | Opus |
 | `/idea` | `idea` | `"description text"` | Inline | -- | Inherit |
 | `/status` | `status` | None | Inline (read-only) | -- | Inherit |
-| `/check` | `check` | None | Fork (Sonnet) | Verifier | Sonnet |
-| `/wrap` | `wrap` | None | Inline | Verifier | Sonnet |
+| `/check` | `check` | None | Fork (Haiku) | Verifier | Haiku |
+| `/wrap` | `wrap` | None | Inline | Verifier | Haiku |
 
 ### 6.4 Command Details
 
@@ -1056,7 +1077,7 @@ disable-model-invocation: false
 
 **`/check`** -- Runs the Verifier agent in a forked context. Executes `npm test`, `npm run build`, and `npm run lint`. Reports pass/fail results. Used standalone for ad-hoc validation and also called automatically during `/wrap` and `/run-backlog`.
 
-**`/wrap`** -- Ends the current session gracefully. Runs `/check` to verify quality. Triggers the Verifier to calculate the Vibe Score and analyze session metrics. In v1.0, the Verifier provides basic coaching suggestions inline. Creates a WIP commit for incomplete features or a conventional commit for completed work. Updates session logs and score history. (In v1.1, the Performance Coach will handle coaching and CLAUDE.md mutation proposals as a standalone agent with persistent memory.)
+**`/wrap`** -- Ends the current session gracefully. Runs `/check` to verify quality. Triggers the Performance Coach (Opus) to calculate the Vibe Score, analyze session metrics, and propose CLAUDE.md mutations based on identified anti-patterns. Creates a WIP commit for incomplete features or a conventional commit for completed work. Updates session logs and score history.
 
 ### 6.5 Invocation Control Matrix
 
@@ -1095,7 +1116,7 @@ The complete `hooks/hooks.json` routing table:
 
 **New in v1.0 (post-review):** The `SessionStart` hook with `compact` matcher. This was not present in the pre-review design. It fires after every context compaction event and re-injects a summary of `.vibeos/state.json` so the agent does not lose track of project state. See [Section 5.7](#57-context-re-injection-after-compaction) for details.
 
-**Removed from v1.0 (deferred to v1.1):** The `SessionEnd` hook for `coach-retro.sh` (Performance Coach retrospective). In v1.0, scoring is handled by the Verifier during `/wrap`.
+**Note:** The `SessionEnd` hook for `coach-retro.sh` (Performance Coach retrospective) is handled by the Performance Coach (Opus) during `/wrap`, which calculates Vibe Scores and proposes CLAUDE.md mutations.
 
 ---
 

@@ -34,7 +34,7 @@ Guided 5-step workflow that creates VISION.md, design-system.css, Technology Dec
 /plan-features
 ```
 
-Interactive planning session that populates the backlog with feature specs, acceptance criteria, priorities, and dependencies. Features move from "idea" to "planned" to "ready".
+Interactive planning session that populates the backlog with feature specs, acceptance criteria, priorities, and dependencies. Features move from "idea" to "planning" to "planned".
 
 ## /new-feature
 

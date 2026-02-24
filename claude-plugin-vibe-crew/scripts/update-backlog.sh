@@ -220,7 +220,7 @@ fi
 
 # Validate column values
 if [[ "$FIELD_PATH" == "column" ]]; then
-  VALID_COLUMNS=("idea" "planned" "ready" "in-progress" "testing" "review" "done")
+  VALID_COLUMNS=("idea" "planning" "planned" "in-progress" "testing" "review" "done")
   COLUMN_VALID=false
   for c in "${VALID_COLUMNS[@]}"; do
     if [[ "$c" == "$VALUE" ]]; then

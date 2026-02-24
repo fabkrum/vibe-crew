@@ -69,7 +69,7 @@ Search the backlog for an existing feature or create a new entry.
 2. Search for a feature whose `name` matches the user-provided feature name using **case-insensitive partial matching**.
 3. **If a match is found:**
    - Check its `column` value:
-     - If `"ready"` or `"planned"`: use that feature's `id` and `spec`. Report:
+     - If `"planned"` or `"planning"`: use that feature's `id` and `spec`. Report:
        > Found existing feature: **{name}** ({id})
      - If `"in-progress"`, `"testing"`, `"review"`, or `"done"`: report and stop:
        > Feature '{name}' is already in '{column}' status.

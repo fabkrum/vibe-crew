@@ -507,7 +507,7 @@ All `jq` field paths in skill scripts must match the canonical schemas in [schem
 | `.active_feature.name` | [schemas.md, Section 3](schemas.md#3-statejson) | String or `null` |
 | `.active_feature.phase` | [schemas.md, Section 3](schemas.md#3-statejson) | Enum or `null` |
 | `.features \| length` | [schemas.md, Section 4](schemas.md#4-backlogjson) | Integer |
-| `.features[] \| select(.column == "ready")` | [schemas.md, Section 4](schemas.md#4-backlogjson) | Feature objects |
+| `.features[] \| select(.column == "planned")` | [schemas.md, Section 4](schemas.md#4-backlogjson) | Feature objects |
 | `.notifications.enabled` | [schemas.md, Section 2](schemas.md#2-configjson) | Boolean |
 | `.cost_limits.session_max_usd` | [schemas.md, Section 2](schemas.md#2-configjson) | Number |
 

@@ -55,7 +55,7 @@ READY_FEATURES=0
 DONE_FEATURES=0
 if [[ -f "$BACKLOG_FILE" ]]; then
   TOTAL_FEATURES=$(jq '.features | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
-  READY_FEATURES=$(jq '[.features[] | select(.column == "ready")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+  READY_FEATURES=$(jq '[.features[] | select(.column == "planned")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
   DONE_FEATURES=$(jq '[.features[] | select(.column == "done")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
 fi
 

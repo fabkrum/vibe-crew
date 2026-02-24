@@ -213,15 +213,11 @@
   <section class="section" id="start">
     <span class="section-label">Getting Started</span>
     <h2>How to Start It</h2>
-    <p>The dashboard is a standard VitePress site. Start it with three commands from your project root:</p>
+    <p>Launch the dashboard with a single command from your project root. The script auto-installs dependencies if needed and opens your browser automatically:</p>
 
-    <pre class="copyable" data-copy="cd docs
-npm install
-npm run docs:dev"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd docs
-npm install
-npm run docs:dev</code></pre>
+    <pre class="copyable" data-copy="bash scripts/start-dashboard.sh"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>bash scripts/start-dashboard.sh</code></pre>
 
-    <p>Then visit <code>http://localhost:5173</code> in your browser. The dashboard loads instantly and hot-reloads when <code>.vibecrew/</code> data changes.</p>
+    <p>The script checks for missing <code>node_modules</code>, runs <code>npm install</code> if necessary, starts the VitePress dev server, and opens <code>http://localhost:5173</code> in your default browser. The dashboard hot-reloads when <code>.vibecrew/</code> data changes.</p>
 
     <div class="callout tip">
       <div class="callout-title">Run it alongside your dev server</div>
@@ -241,16 +237,17 @@ npm run docs:dev</code></pre>
     <p>The default landing tab. Contains the same getting-started documentation that's scaffolded into <code>docs/system/getting-started.md</code> &mdash; a quick reference for setup, commands, and workflow.</p>
 
     <h3 id="tab-kanban">Kanban Board</h3>
-    <p>A 7-column visual board showing every feature in your backlog across its workflow stages:</p>
+    <p>A 7-column interactive board showing every feature in your backlog across its workflow stages:</p>
     <ul>
-      <li><strong>Backlog</strong> &mdash; Ideas captured via <code>/idea</code> or <code>/plan-features</code></li>
-      <li><strong>Planned</strong> &mdash; Features with written specs, ready to build</li>
-      <li><strong>UI Design</strong> &mdash; In the design phase (Stitch or manual)</li>
-      <li><strong>In Progress</strong> &mdash; Currently being built by the Builder agent</li>
-      <li><strong>Review</strong> &mdash; Code review in progress</li>
+      <li><strong>Ideas</strong> &mdash; Raw ideas captured via <code>/idea</code> or the + button on the dashboard</li>
+      <li><strong>Planning</strong> &mdash; Features actively being planned (specs in progress)</li>
+      <li><strong>Planned</strong> &mdash; Features with complete specs, ready to build</li>
+      <li><strong>In Development</strong> &mdash; Currently being built by the Builder agent</li>
       <li><strong>Testing</strong> &mdash; Running tests and quality checks</li>
+      <li><strong>Review</strong> &mdash; Code review in progress</li>
       <li><strong>Done</strong> &mdash; Feature complete, wrapped, and documented</li>
     </ul>
+    <p>Add ideas via the + button, drag cards between columns, click to edit specs, and launch Warp sessions with action buttons. A live session bar shows real-time Claude Code status (model, context usage, cost).</p>
     <p>Data source: <code>.vibecrew/backlog.json</code></p>
 
     <h3 id="tab-stats">Session Statistics</h3>
@@ -301,8 +298,8 @@ npm run docs:dev</code></pre>
     </ul>
 
     <div class="callout warn">
-      <div class="callout-title">Settings save only works in dev mode</div>
-      <p>When running <code>npm run docs:dev</code>, the Settings tab writes changes directly to <code>.vibecrew/config.json</code>. In a static production build (<code>npm run docs:build</code>), there's no server to handle writes &mdash; the Settings tab displays a read-only view with copyable JSON instead.</p>
+      <div class="callout-title">Interactive features require dev mode</div>
+      <p>When running <code>npm run docs:dev</code>, interactive features (adding ideas, dragging cards, editing specs, saving settings) write changes directly to <code>.vibecrew/</code> files. In a static production build (<code>npm run docs:build</code>), the board renders read-only.</p>
     </div>
   </section>
 
@@ -347,6 +344,8 @@ npm run docs:dev</code></pre>
 <span class="highlight">Browser</span>                    <span class="muted"># Hot-reloads when data files change</span></div>
 
     <p>Data loaders run at build time (for static builds) or on each page load (in dev mode). In dev mode, VitePress watches the <code>.vibecrew/</code> directory and triggers hot-reloads when any JSON file changes &mdash; so running <code>/wrap</code> in a Claude Code session updates the dashboard in real time.</p>
+
+    <p>In dev mode, the dashboard also provides API endpoints for CRUD operations and uses Vite's built-in WebSocket for real-time push updates when <code>.vibecrew/</code> files change.</p>
 
     <div class="callout info">
       <div class="callout-title">No database required</div>
@@ -393,6 +392,9 @@ npm run docs:build</code></pre>
     <h3>Port 5173 is already in use</h3>
     <p>If another dev server is using port 5173, VitePress will automatically try the next available port (5174, 5175, etc.). Check the terminal output for the actual URL. You can also specify a port explicitly:</p>
     <pre class="copyable" data-copy="npm run docs:dev -- --port 5200"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>npm run docs:dev -- --port 5200</code></pre>
+
+    <h3>Drag-and-drop not working</h3>
+    <p>Interactive features (drag-and-drop, adding ideas, editing cards) only work when running the dev server. Static builds render the board read-only.</p>
 
     <h3>Settings changes don't persist</h3>
     <p>The Settings tab can only write to <code>.vibecrew/config.json</code> when VitePress is running in dev mode (<code>npm run docs:dev</code>). If you're viewing a static build, Settings shows a read-only view with copyable JSON that you can paste into <code>.vibecrew/config.json</code> manually.</p>

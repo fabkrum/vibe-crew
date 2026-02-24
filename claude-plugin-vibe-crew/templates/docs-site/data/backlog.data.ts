@@ -8,8 +8,8 @@ const defaultBacklog = {
   schema_version: '1.0.0',
   columns: [
     { id: 'idea', title: 'Ideas', wip_limit: null },
+    { id: 'planning', title: 'Planning', wip_limit: 2 },
     { id: 'planned', title: 'Planned', wip_limit: 5 },
-    { id: 'ready', title: 'Ready', wip_limit: 3 },
     { id: 'in-progress', title: 'In Development', wip_limit: 1 },
     { id: 'testing', title: 'Testing', wip_limit: 1 },
     { id: 'review', title: 'Review', wip_limit: 2 },

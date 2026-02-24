@@ -152,7 +152,23 @@ State directory:   .vibecrew/ <created/existing>
 Setup complete! Run /new-project to start building your foundation.
 ```
 
-## Step 8: Prompt for Profile
+## Step 8: Launch Dashboard
+
+After the summary, check if the docs site has been scaffolded and launch the dashboard:
+
+```bash
+if [[ -f "$PROJECT_ROOT/docs/package.json" ]]; then
+  echo "Launching Vibe Dashboard..."
+  nohup bash "${CLAUDE_PLUGIN_ROOT}/scripts/start-dashboard.sh" --no-open &>/dev/null &
+  sleep 2
+  DASH_PORT=$(jq -r '.port // 5173' "$PROJECT_ROOT/.vibecrew/dashboard.pid" 2>/dev/null || echo "5173")
+  echo "Dashboard: http://localhost:$DASH_PORT"
+fi
+```
+
+If the docs site does not exist yet (first setup before `/new-project`), skip this step. The dashboard will be launched after the docs site is scaffolded during project creation.
+
+## Step 9: Prompt for Profile
 
 After the summary, check if the user has completed the profile interview:
 

@@ -26,16 +26,16 @@ Foundation must be complete. Run /new-project first.
 
 Do NOT proceed. Do NOT offer alternatives.
 
-### Check 2: Verify backlog has ready features
+### Check 2: Verify backlog has planned features
 
 ```bash
-jq '[.features[] | select(.column == "ready")] | length' .vibecrew/backlog.json 2>/dev/null || echo "0"
+jq '[.features[] | select(.column == "planned")] | length' .vibecrew/backlog.json 2>/dev/null || echo "0"
 ```
 
 If the count is `0`, stop and output EXACTLY:
 
 ```
-No features in the 'ready' column. Use /plan-features to prepare features.
+No features in the 'planned' column. Use /plan-features to prepare features.
 ```
 
 Do NOT proceed. Do NOT offer alternatives.
@@ -87,10 +87,10 @@ Do NOT proceed until this is resolved.
 
 ## Step 2: Build Execution Plan
 
-### Gather ready features sorted by priority
+### Gather planned features sorted by priority
 
 ```bash
-jq -r '[.features[] | select(.column == "ready")] | sort_by(.priority) | .[] | "\(.priority)\t\(.id)\t\(.name)\t\(.dependencies // [] | join(","))"' .vibecrew/backlog.json
+jq -r '[.features[] | select(.column == "planned")] | sort_by(.priority) | .[] | "\(.priority)\t\(.id)\t\(.name)\t\(.dependencies // [] | join(","))"' .vibecrew/backlog.json
 ```
 
 ### Resolve dependency ordering
@@ -99,13 +99,13 @@ After sorting by priority, verify dependency ordering:
 
 1. Parse the `dependencies` array for each feature.
 2. If feature B depends on feature A, feature A MUST appear before feature B in the execution plan, regardless of priority number.
-3. If a feature depends on another feature that is NOT in the `ready` column and NOT in `done` or `review` column, mark that feature as **skipped** with reason "dependency not met".
+3. If a feature depends on another feature that is NOT in the `planned` column and NOT in `done` or `review` column, mark that feature as **skipped** with reason "dependency not met".
 
 ### Check for unresolvable dependencies
 
 ```bash
 jq -r '
-  [.features[] | select(.column == "ready")] as $ready |
+  [.features[] | select(.column == "planned")] as $ready |
   [.features[] | select(.column == "done" or .column == "review")] as $completed |
   ($ready | map(.id)) + ($completed | map(.id)) as $available |
   $ready[] | select(.dependencies != null and (.dependencies | length > 0)) |

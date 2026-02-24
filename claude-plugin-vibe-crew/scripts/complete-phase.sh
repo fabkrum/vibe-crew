@@ -225,7 +225,7 @@ fi
 determine_next_column() {
   local phase="$1"
   case "$phase" in
-    plan)   echo "in-progress" ;;
+    plan)   echo "planned" ;;
     design) echo "in-progress" ;;
     code)   echo "testing" ;;
     test)   echo "review" ;;

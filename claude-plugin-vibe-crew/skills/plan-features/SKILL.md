@@ -198,18 +198,18 @@ During the planning loop, the user can say:
 
 After all features have been planned (or the user says "stop"), evaluate which features are ready for development:
 
-A feature is **ready** if:
-1. It has `column: "planned"`
+A feature is **ready to build** if:
+1. It has `column: "planning"`
 2. It has at least 3 acceptance criteria
 3. It has a non-empty UI description
 4. It has a non-empty business logic description
-5. All features listed in its `dependencies` array have `column: "done"` or `column: "ready"` or `column: "active"`
+5. All features listed in its `dependencies` array have `column: "done"` or `column: "planned"` or `column: "active"`
 
-For each feature that meets all criteria, move it to `ready`:
+For each feature that meets all criteria, move it to `planned`:
 
 ```bash
 jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (.column = "ready" | .updated_at = $ts)' \
+   '(.features[] | select(.id == $id)) |= (.column = "planned" | .updated_at = $ts)' \
    .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
 ```
 

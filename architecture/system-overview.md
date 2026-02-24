@@ -485,25 +485,26 @@ Every feature in `backlog.json` progresses through a seven-state lifecycle. Tran
 > **Schema reference:** The feature object schema and Kanban column definitions are in [schemas.md, Section 4: backlog.json](schemas.md#4-backlogjson).
 
 ```
-    idea --> planned --> ready --> in-progress --> testing --> review --> done
-     |         |          |           |              |          |
-     |         |          |           |              |          |
-   /idea   /plan-     deps met    agent         tests pass   PR merged
-           features   + claimed   completes     + PR created  by user
-                      by agent    coding
+    idea --> planning --> planned --> in-progress --> testing --> review --> done
+     |          |           |           |              |          |
+     |          |           |           |              |          |
+   /idea   /plan-      spec done    agent         tests pass   PR merged
+           features    + deps met   completes     + PR created  by user
+                       + claimed    coding
+                       by agent
 ```
 
 | State | Description | Transition Trigger | Next State |
 |-------|-------------|--------------------|------------|
-| `idea` | Raw concept captured via `/idea` | User runs `/plan-features` | `planned` |
-| `planned` | Has description, no acceptance criteria yet | Orchestrator writes spec | `ready` |
-| `ready` | Has acceptance criteria, all dependencies in `done` state | Agent claims via lock | `in-progress` |
+| `idea` | Raw concept captured via `/idea` | User runs `/plan-features` or drags in dashboard | `planning` |
+| `planning` | Actively being planned, spec in progress | Orchestrator writes spec, acceptance criteria defined | `planned` |
+| `planned` | Spec done, ready to build, all dependencies in `done` state | Agent claims via lock | `in-progress` |
 | `in-progress` | Agent is actively implementing (design or code phase) | Builder completes coding | `testing` |
 | `testing` | Code complete, tests being written and run | Verifier passes all tests, PR created | `review` |
 | `review` | Pull request open, awaiting human merge | User merges PR | `done` |
 | `done` | Merged to main, feature shipped | (terminal state) | -- |
 
-**Dependency resolution:** A feature cannot transition from `planned` to `ready` until all features listed in its dependency relationships have reached the `done` state. This prevents agents from starting work on features that require infrastructure not yet available.
+**Dependency resolution:** A feature cannot transition from `planning` to `planned` until all features listed in its dependency relationships have reached the `done` state. This prevents agents from starting work on features that require infrastructure not yet available.
 
 ### 3.5 Backlog Reference
 
@@ -511,7 +512,7 @@ The `backlog.json` schema -- including feature object fields, Kanban column defi
 
 | Field | Purpose |
 |-------|---------|
-| `features[].column` | Current Kanban state (`idea`, `planned`, `ready`, `in-progress`, `testing`, `review`, `done`) |
+| `features[].column` | Current Kanban state (`idea`, `planning`, `planned`, `in-progress`, `testing`, `review`, `done`) |
 | `features[].priority` | Lower number = higher priority. Used by `/run-backlog` to select next task |
 | `features[].spec.acceptance_criteria` | Requirements that the Verifier validates against |
 | `features[].worktree` | Git worktree path when a Builder agent is actively working on the feature |
@@ -604,7 +605,7 @@ When a feature moves through its lifecycle, the Workflow Orchestrator coordinate
 |       |                                                          |
 |       v                                                          |
 |  1. Read backlog.json                                            |
-|  2. Find highest-priority "ready" task (deps satisfied)          |
+|  2. Find highest-priority "planned" task (deps satisfied)        |
 |  3. No tasks? --> Exit with summary                              |
 |  4. Claim task (acquire lock, set column = "in-progress")        |
 |  5. TeamCreate("feat-<id>-<name>")                               |
@@ -1100,11 +1101,11 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 
 **`/new-project`** -- Triggers the Tier 1 foundation workflow. Sequentially produces VISION.md, design-system.css, TDR, roadmap, and CLAUDE.md. Sets `foundation.complete` to `true` in `state.json` when all five artifacts are created and approved. This is the command that unlocks Tier 2.
 
-**`/plan-features`** -- Interactive planning session. Reads the roadmap, asks clarifying questions about each feature, and populates `backlog.json` with feature specs including acceptance criteria, priorities, and dependency relationships. Features start in `planned` column and advance to `ready` when dependencies are met.
+**`/plan-features`** -- Interactive planning session. Reads the roadmap, asks clarifying questions about each feature, and populates `backlog.json` with feature specs including acceptance criteria, priorities, and dependency relationships. Features move from `idea` to `planning` when planning begins, and advance to `planned` when specs are complete and dependencies are met.
 
 **`/new-feature "name"`** -- Starts a Tier 2 feature cycle. Verifies foundation is complete (reads `foundation.complete` from `state.json`). Looks up the named feature in `backlog.json` (or creates a new entry). Creates a worktree via `git worktree add`. Initializes the 6-phase tracker. Uses `TaskCreate` to launch the appropriate agent for the current phase.
 
-**`/run-backlog`** -- Automated batch processing. Repeatedly claims the next `ready` task from the backlog, creates a team via `TeamCreate`, and runs it through all six phases (Plan, Design, Code, Test, Review, Docs) using agent coordination. Continues until the backlog is empty or context is exhausted. Ideal for overnight or unattended runs.
+**`/run-backlog`** -- Automated batch processing. Repeatedly claims the next `planned` task from the backlog, creates a team via `TeamCreate`, and runs it through all six phases (Plan, Design, Code, Test, Review, Docs) using agent coordination. Continues until the backlog is empty or context is exhausted. Ideal for overnight or unattended runs.
 
 **`/profile`** -- User profile interview. Presents 8 questions covering role, code literacy, autonomy preference, PR review style, verbosity, gamification preference, learning style, and risk tolerance. Users can answer all questions (~2 minutes), pick a preset (Builder, Explorer, or Founder), or skip for balanced defaults. Saves to `config.json` under `user_profile`. All agents read the profile via `scripts/read-profile.sh` and adapt their communication style, approval gates, and output depth accordingly. Re-running `/profile` shows the current profile and lets users update any dimension.
 

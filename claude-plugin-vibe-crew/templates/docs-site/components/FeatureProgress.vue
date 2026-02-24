@@ -13,8 +13,8 @@ const features = computed(() => (data.features || []) as Feature[]);
 
 const columnOrder = [
   "idea",
+  "planning",
   "planned",
-  "ready",
   "in-progress",
   "testing",
   "review",
@@ -23,8 +23,8 @@ const columnOrder = [
 
 const columnColors: Record<string, string> = {
   idea: "#6b7280",
-  planned: "#8b5cf6",
-  ready: "#3b82f6",
+  planning: "#8b5cf6",
+  planned: "#3b82f6",
   "in-progress": "#f97316",
   testing: "#eab308",
   review: "#06b6d4",

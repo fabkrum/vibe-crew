@@ -375,11 +375,11 @@ The feature lifecycle is the iterative Tier 2 workflow. A feature progresses thr
 **Key design resolution.** Phases are **sequential by default** but can be **re-entered** via verify-fix loops. If the Verifier finds bugs during testing, it sends the feature back to `in-progress` for the Builder to fix. The column progression is:
 
 ```
-idea -> planned -> ready -> in-progress -> testing -> review -> done
-                                  ^            |
-                                  |            |
-                                  +-- fix -----+
-                                  (verify-fix loop)
+idea -> planning -> planned -> in-progress -> testing -> review -> done
+                                    ^            |
+                                    |            |
+                                    +-- fix -----+
+                                    (verify-fix loop)
 ```
 
 ### 3.2 Feature State Machine
@@ -390,19 +390,22 @@ idea -> planned -> ready -> in-progress -> testing -> review -> done
     /idea "text"                              /plan-features
    +----------+    Orchestrator refines     +--------------+
    |          |    specs, sets acceptance   |              |
-   |   IDEA   |--------------------------->|   PLANNED    |
-   |          |    criteria                |              |
-   +----------+                            +------+-------+
+   |   IDEA   |--------------------------->|  PLANNING    |
+   |          |    criteria                |  (actively   |
+   +----------+                            |  planning)   |
+                                           +------+-------+
                                                   |
-                                    Dependencies met?
+                                    Spec populated?
                                     Acceptance criteria set?
                                                   |
                                            Yes    |
                                                   v
                                           +--------------+
                                           |              |
-                                          |    READY     |
-                                          |              |
+                                          |   PLANNED    |
+                                          |  (spec done, |
+                                          |  ready to    |
+                                          |  build)      |
                                           +------+-------+
                                                  |
                               /new-feature "name" or /run-backlog
@@ -535,11 +538,12 @@ Phases within `in-progress` are **sequential by default** with verify-fix loops 
     |                                                      |
     |  5. Update backlog.json via Bash scripts:            |
     |     - Promoted ideas: column "idea" -> "planned"     |
-    |     - Refined features: column "planned" -> "ready"  |
+    |     - Refined features: column "idea" -> "planning"   |
+    |     - Spec complete: column "planning" -> "planned"  |
     |       (if deps met and criteria set)                 |
     |                                                      |
     |  6. Display backlog summary:                         |
-    |     "Backlog: 2 ready, 3 planned, 1 idea"           |
+    |     "Backlog: 2 planned, 3 planning, 1 idea"        |
     |                                                      |
     +------------------------------------------------------+
 ```
@@ -568,7 +572,7 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |  3. FIND OR CREATE SPEC       |
  |                       |  Search backlog.json for      |
  |                       |  matching feature name        |
- |                       |  +-- Found (column: ready):   |
+ |                       |  +-- Found (column: planned):  |
  |                       |  |   Load spec + criteria     |
  |                       |  +-- Not found:               |
  |                       |      Quick plan via           |
@@ -760,7 +764,7 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     |    v                                                     |
     |  +----------------------+                                |
     |  | Read backlog.json    |                                |
-    |  | Find next "ready"    |                                |
+    |  | Find next "planned"  |                                |
     |  | task (priority order,|                                |
     |  | deps satisfied)      |                                |
     |  +----------+-----------+                                |
@@ -821,9 +825,9 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
 | From | To | Trigger | Agent | Condition |
 |------|----|---------|-------|-----------|
 | -- | `idea` | `/idea "text"` | Orchestrator | None |
-| `idea` | `planned` | `/plan-features` | Orchestrator | User refines spec |
-| `planned` | `ready` | `/plan-features` | Orchestrator | Acceptance criteria set, dependencies identified |
-| `ready` | `in-progress` | `/new-feature` or `/run-backlog` | Orchestrator (delegates to Builder) | All dependencies in `done` column, WIP limit not reached |
+| `idea` | `planning` | `/plan-features` or user drags in dashboard | Orchestrator | User initiates planning |
+| `planning` | `planned` | `/plan-features` | Orchestrator | Acceptance criteria set, dependencies identified |
+| `planned` | `in-progress` | `/new-feature` or `/run-backlog` | Orchestrator (delegates to Builder) | All dependencies in `done` column, WIP limit not reached |
 | `in-progress` | `testing` | Code phase complete | Builder signals Orchestrator | Builder verify loop passes (build + lint) |
 | `testing` | `in-progress` | Verify-fix loop | Verifier signals Orchestrator | Tests fail, bugs need fixing (max 3 loops) |
 | `testing` | `review` | Tests pass, PR created | Verifier signals, Builder creates PR | All tests pass, quality gate passes |
@@ -1627,15 +1631,15 @@ All telemetry data uses anonymous project aliases. The registry maps real paths 
     FEATURE STATES (sequential with verify-fix loops)
     =================================================
 
-    idea --> planned --> ready --> in-progress --> testing --> review --> done
-     |          |          |           |    ^         |          |         |
-     | /idea    | refine   | deps met  | /new-feat   | code     | tests   | PR
-     | command  | specs +  | criteria  | Builder     | done     | pass    | merged
-     |          | criteria | set       | worktree    |          | PR      |
-     |          |          |           |             |          | created |
-     |          |          |           +-- fix ------+          |         |
-     |          |          |           (verify-fix loop,        |         |
-     |          |          |            max 3 iterations)       |         |
+    idea --> planning --> planned --> in-progress --> testing --> review --> done
+     |          |           |           |    ^         |          |         |
+     | /idea    | refine    | deps met  | /new-feat   | code     | tests   | PR
+     | command  | specs +   | spec done | Builder     | done     | pass    | merged
+     |          | criteria  | ready to  | worktree    |          | PR      |
+     |          |           | build     |             |          | created |
+     |          |           |           +-- fix ------+          |         |
+     |          |           |           (verify-fix loop,        |         |
+     |          |           |            max 3 iterations)       |         |
 ```
 
 ### 6.3 Session State Transitions
@@ -1672,7 +1676,7 @@ All telemetry data uses anonymous project aliases. The registry maps real paths 
     |                                                                |
     |  BACKLOG (per feature, sequential with verify-fix loops)       |
     |  =======================================================      |
-    |  [idea] --> [planned] --> [ready] --> [in-progress]            |
+    |  [idea] --> [planning] --> [planned] --> [in-progress]          |
     |                                       |    ^                   |
     |                                       v    | fix               |
     |                           [done] <-- [review] <-- [testing]   |
@@ -1715,7 +1719,7 @@ All telemetry data uses anonymous project aliases. The registry maps real paths 
 | **Feature** | Verify-fix loop exceeds 3 iterations | Iteration counter | Pause feature, notify developer for manual intervention |
 | **Feature** | Tests fail at quality gate | Verifier reports failure | Stop backlog execution; developer intervenes |
 | **Feature** | Merge conflict when merging worktree | Rebase/merge fails | Notification to developer; manual resolution |
-| **Feature** | Dependency not yet complete | Dependency check fails | Skip feature, try next ready task |
+| **Feature** | Dependency not yet complete | Dependency check fails | Skip feature, try next planned task |
 | **Session** | Context hits 80% | check-context.sh hook | Force wrap; new session picks up from committed state |
 | **Session** | Agent crashes without `/wrap` | Stale session detection | Clean up session entry; worktree has committed work |
 | **Session** | Context compacted | Claude Code compaction | Agent re-reads state.json, backlog.json, and git log to recover context |
@@ -1796,7 +1800,7 @@ Every operation across all workflows must be safe to re-run. This is the fundame
     |                                                          |
     |  Backlog updates:                                        |
     |    Read current state first. Only write if the           |
-    |    transition is valid (e.g., ready -> in-progress       |
+    |    transition is valid (e.g., planned -> in-progress      |
     |    but not done -> in-progress).                         |
     |                                                          |
     |  Signal file creation:                                   |

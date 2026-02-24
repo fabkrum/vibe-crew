@@ -302,7 +302,7 @@ Feature backlog. Created by `/plan-features`. Modified by `/new-feature`, `/idea
   "columns": [
     { "id": "idea",        "title": "Ideas",          "wip_limit": null },
     { "id": "planned",     "title": "Planned",        "wip_limit": 5 },
-    { "id": "ready",       "title": "Ready",          "wip_limit": 3 },
+    { "id": "planning",    "title": "Planning",       "wip_limit": 2 },
     { "id": "in-progress", "title": "In Development", "wip_limit": 1 },
     { "id": "testing",     "title": "Testing",        "wip_limit": 1 },
     { "id": "review",      "title": "Review",         "wip_limit": 2 },
@@ -344,14 +344,14 @@ Feature backlog. Created by `/plan-features`. Modified by `/new-feature`, `/idea
 ### Feature Column Flow (Kanban State Machine)
 
 ```
-idea → planned → ready → in-progress → testing → review → done
+idea → planning → planned → in-progress → testing → review → done
 ```
 
 | Transition | Trigger |
 |-----------|---------|
-| `idea → planned` | `/plan-features` or user moves manually |
-| `planned → ready` | Spec populated (acceptance criteria defined) |
-| `ready → in-progress` | `/new-feature` or `/run-backlog` picks it up |
+| `idea → planning` | `/plan-features` or user drags in dashboard |
+| `planning → planned` | Spec populated (acceptance criteria defined) |
+| `planned → in-progress` | `/new-feature` or `/run-backlog` picks it up |
 | `in-progress → testing` | Builder agent completes code phase |
 | `testing → review` | Verifier agent passes all tests |
 | `review → done` | User approves via `/wrap` |

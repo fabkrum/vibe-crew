@@ -167,7 +167,7 @@ export default {
 
 ## 4. Kanban Board
 
-The Kanban board is a read-only visualization of the project backlog. It renders data from `.vibecrew/backlog.json` and does not provide drag-and-drop or editing capabilities. All mutations to feature state happen through VibeCrew slash commands (`/new-feature`, `/run-backlog`, `/plan-features`).
+The Kanban board is an interactive visualization of the project backlog. It renders data from `.vibecrew/backlog.json` and supports drag-and-drop reordering, an add-idea form, card editing, and Warp terminal launch actions in dev mode. In static builds it falls back to a read-only display. State mutations are persisted through the Vite dev server middleware endpoint (`/api/save-backlog`).
 
 ### 4.1 Columns
 
@@ -177,7 +177,7 @@ The board renders 7 columns matching the feature column flow defined in `archite
 |---|---|---|
 | Ideas | `idea` | None |
 | Planned | `planned` | 5 |
-| Ready | `ready` | 3 |
+| Planning | `planning` | 2 |
 | In Development | `in-progress` | 1 |
 | Testing | `testing` | 1 |
 | Review | `review` | 2 |
@@ -568,7 +568,7 @@ export default {
         columns: [
           { id: 'idea', title: 'Ideas', wip_limit: null },
           { id: 'planned', title: 'Planned', wip_limit: 5 },
-          { id: 'ready', title: 'Ready', wip_limit: 3 },
+          { id: 'planning', title: 'Planning', wip_limit: 2 },
           { id: 'in-progress', title: 'In Development', wip_limit: 1 },
           { id: 'testing', title: 'Testing', wip_limit: 1 },
           { id: 'review', title: 'Review', wip_limit: 2 },
@@ -682,8 +682,8 @@ The following features are planned for v1.1 but are explicitly **out of scope** 
 
 4. **`import.meta.url` over `__dirname`**: VitePress config and data loaders use ES modules. The `__dirname` global does not exist in ES module scope. All path resolution uses `dirname(fileURLToPath(import.meta.url))`.
 
-5. **Read-only Kanban board**: The web Kanban board is a visualization, not an editor. All state mutations happen through slash commands. This prevents the docs site from becoming a mutation surface that could conflict with agent operations.
+5. **Interactive Kanban board**: The web Kanban board supports drag-and-drop column transitions, an add-idea form, inline card editing, and Warp terminal launch actions when running in dev mode. In static builds (no dev server), the board falls back to a read-only display. All mutations go through the Vite dev server middleware (`/api/save-backlog`), which performs atomic writes to `backlog.json`. This keeps the docs site as a safe mutation surface that cannot conflict with agent operations because the middleware acquires the same advisory locks used by CLI scripts.
 
-6. **No dedicated port allocation**: The v1.0 docs site uses VitePress defaults. Users run `npx vitepress dev docs` when they want to preview. A dedicated port (3002) with `strictPort` and background process management is deferred to v1.1.
+6. **One-command dashboard launch**: The `scripts/start-dashboard.sh` script provides one-command launch with smart port detection. It finds an available port starting from 5173, starts VitePress dev, opens the browser, and prints the URL. Users no longer need to remember the VitePress CLI invocation.
 
 7. **Schema references over inline definitions**: All JSON schemas are defined in `architecture/schemas.md` and referenced from this document. This eliminates duplicate schema definitions that can drift out of sync.

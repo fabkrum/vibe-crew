@@ -8,6 +8,7 @@ import StatsPage from "../../components/StatsPage.vue";
 import TokenBreakdown from "../../components/TokenBreakdown.vue";
 import AchievementsBoard from "../../components/AchievementsBoard.vue";
 import SettingsPanel from "../../components/SettingsPanel.vue";
+import LiveSessionPanel from "../../components/LiveSessionPanel.vue";
 
 export default {
   extends: DefaultTheme,
@@ -21,5 +22,6 @@ export default {
     app.component("TokenBreakdown", TokenBreakdown);
     app.component("AchievementsBoard", AchievementsBoard);
     app.component("SettingsPanel", SettingsPanel);
+    app.component("LiveSessionPanel", LiveSessionPanel);
   },
 };

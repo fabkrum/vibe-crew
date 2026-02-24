@@ -99,14 +99,14 @@ fi
 # Has backlog, no active feature
 ACTIVE_FEATURE=$(jq -r '.active_feature.id // empty' "$STATE_FILE" 2>/dev/null || echo "")
 if [[ -z "$ACTIVE_FEATURE" ]]; then
-  READY_COUNT=$(jq '[.features[] | select(.column == "ready")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+  READY_COUNT=$(jq '[.features[] | select(.column == "planned")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
   if [[ "$READY_COUNT" -gt 0 ]]; then
     if ! is_dismissed "new-feature"; then
-      HINT="Tip: $READY_COUNT features ready. Run /new-feature \"name\" or /run-backlog to start building."
+      HINT="Tip: $READY_COUNT features planned. Run /new-feature \"name\" or /run-backlog to start building."
     fi
   else
     if ! is_dismissed "plan-features-refine"; then
-      HINT="Tip: No features ready. Run /plan-features to refine and prioritize your backlog."
+      HINT="Tip: No features planned. Run /plan-features to refine and prioritize your backlog."
     fi
   fi
   echo "$HINT"

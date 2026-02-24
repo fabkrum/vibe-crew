@@ -194,7 +194,7 @@ BACKLOG=$(cat "$BACKLOG_FILE")
 # =============================================================================
 
 if [[ -n "$FEATURE_ID" ]]; then
-  # Specific feature requested -- verify it exists and is in "ready" column
+  # Specific feature requested -- verify it exists and is in "planned" column
   FEATURE_JSON=$(echo "$BACKLOG" | jq --arg id "$FEATURE_ID" \
     '[.features[] | select(.id == $id)] | .[0] // null')
 
@@ -205,13 +205,13 @@ if [[ -n "$FEATURE_ID" ]]; then
   fi
 
   FEATURE_COLUMN=$(echo "$FEATURE_JSON" | jq -r '.column // "unknown"')
-  if [[ "$FEATURE_COLUMN" != "ready" ]]; then
-    echo "ERROR: Feature '$FEATURE_ID' is in column '$FEATURE_COLUMN', not 'ready'." >&2
+  if [[ "$FEATURE_COLUMN" != "planned" ]]; then
+    echo "ERROR: Feature '$FEATURE_ID' is in column '$FEATURE_COLUMN', not 'planned'." >&2
     release_lock
     exit 1
   fi
 else
-  # Auto-select: find highest-priority ready feature
+  # Auto-select: find highest-priority planned feature
 
   # Check WIP limit first
   WIP_LIMIT=$(echo "$BACKLOG" | jq \
@@ -225,14 +225,14 @@ else
     exit 1
   fi
 
-  # Get all ready features sorted by priority (lowest number = highest priority)
+  # Get all planned features sorted by priority (lowest number = highest priority)
   READY_FEATURES=$(echo "$BACKLOG" | jq \
-    '[.features[] | select(.column == "ready")] | sort_by(.priority // 999)')
+    '[.features[] | select(.column == "planned")] | sort_by(.priority // 999)')
 
   READY_COUNT=$(echo "$READY_FEATURES" | jq 'length')
 
   if [[ "$READY_COUNT" -eq 0 ]]; then
-    echo "No ready features."
+    echo "No planned features."
     release_lock
     exit 0
   fi

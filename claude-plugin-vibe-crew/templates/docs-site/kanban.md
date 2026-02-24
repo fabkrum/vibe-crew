@@ -10,10 +10,12 @@ import KanbanBoard from './components/KanbanBoard.vue'
 
 # Project Kanban Board
 
-Real-time view of your feature backlog. Features are organized by workflow stage and sorted by priority within each column.
+Interactive view of your feature backlog. Add ideas, drag cards between columns, click to edit specs, and launch Warp sessions with action buttons.
+
+<LiveSessionPanel />
 
 <KanbanBoard :data="data" />
 
 ::: tip
-This board is read-only. Use `/new-feature`, `/plan-features`, and `/run-backlog` to move features through the pipeline.
+Add ideas via the **+** button, drag cards to move them, and click any card to view or edit details. Action buttons launch Warp terminal sessions with the right command pre-filled. Interactive features require the dev server (`npm run docs:dev`).
 :::

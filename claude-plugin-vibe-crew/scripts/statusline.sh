@@ -90,6 +90,11 @@ fi
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 
+# Sidecar write: persist raw session JSON for dashboard
+if [[ -d "$VIBECREW_DIR" ]]; then
+  echo "$INPUT" > "$VIBECREW_DIR/live-session.json" 2>/dev/null || true
+fi
+
 # Feature + phase from state.json
 FEATURE=""
 PHASE=""

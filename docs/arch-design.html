@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeCrew — Design &amp; Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --color-bg: #0a0a0b;
+  --color-surface: #111113;
+  --color-surface-2: #18181b;
+  --color-surface-3: #1e1e22;
+  --color-border: #27272a;
+  --color-border-subtle: #1e1e22;
+  --color-text: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  --color-accent: #a78bfa;
+  --color-accent-dim: #7c3aed;
+  --color-accent-bg: rgba(167, 139, 250, 0.08);
+  --color-green: #4ade80;
+  --color-green-dim: rgba(74, 222, 128, 0.1);
+  --color-amber: #fbbf24;
+  --color-amber-dim: rgba(251, 191, 36, 0.1);
+  --color-red: #f87171;
+  --color-red-dim: rgba(248, 113, 113, 0.1);
+  --color-blue: #60a5fa;
+  --color-blue-dim: rgba(96, 165, 250, 0.1);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --max-width: 860px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* ---- SIDEBAR ---- */
+.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+.sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
+.sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
+.sidebar-header .nav-brand span { color: var(--color-accent); }
+.sidebar-nav { padding: 1rem 0; }
+.sidebar-group { padding: 0 0 0.5rem; }
+.sidebar-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; cursor: pointer; transition: color 0.15s; }
+.sidebar-label:hover { color: var(--color-text-secondary); }
+.sidebar-label::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform 0.2s; }
+.sidebar-group.collapsed .sidebar-label::after { transform: rotate(-90deg); }
+.sidebar-group.collapsed .sidebar-link { display: none; }
+.sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
+.sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
+.sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
+.mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
+.mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
+.mobile-bar .nav-brand span { color: var(--color-accent); }
+.hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
+.layout { margin-left: 260px; }
+
+/* ---- MAIN ---- */
+.main { max-width: var(--max-width); margin: 0 auto; padding: 3rem 2rem 6rem; }
+.section { margin-bottom: 5rem; }
+.section-label { display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: 0.75rem; }
+h2 { font-size: 1.9rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1rem; }
+h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.75rem; margin-top: 2.5rem; }
+h4 { font-size: 1.05rem; font-weight: 650; margin-bottom: 0.5rem; margin-top: 2rem; }
+.section > p, .section > ul, .section > ol { color: var(--color-text-secondary); margin-bottom: 1.25rem; }
+p { margin-bottom: 1rem; color: var(--color-text-secondary); }
+strong { color: var(--color-text); font-weight: 600; }
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { padding-left: 1.5rem; margin-bottom: 1.25rem; color: var(--color-text-secondary); }
+li { margin-bottom: 0.4rem; }
+li::marker { color: var(--color-text-muted); }
+code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-surface-2); padding: 0.15em 0.45em; border-radius: 4px; color: var(--color-accent); border: 1px solid var(--color-border-subtle); }
+pre { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; position: relative; }
+pre code { background: none; padding: 0; border: none; color: var(--color-text-secondary); font-size: 0.85rem; line-height: 1.7; }
+
+/* ---- CARDS ---- */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
+.card:hover { border-color: var(--color-accent-dim); }
+.card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1rem; }
+.card-icon.purple { background: var(--color-accent-bg); }
+.card-icon.green { background: var(--color-green-dim); }
+.card-icon.amber { background: var(--color-amber-dim); }
+.card-icon.blue { background: var(--color-blue-dim); }
+.card-icon.red { background: var(--color-red-dim); }
+.card h4 { font-size: 1rem; margin-top: 0; margin-bottom: 0.5rem; color: var(--color-text); }
+.card p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0; }
+
+/* ---- TABLES ---- */
+.table-wrap { overflow-x: auto; margin-bottom: 1.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+thead { background: var(--color-surface-2); }
+th { text-align: left; padding: 0.75rem 1rem; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); border-bottom: 1px solid var(--color-border); white-space: nowrap; }
+td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--color-surface); }
+
+/* ---- CALLOUTS ---- */
+.callout { border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid; font-size: 0.92rem; }
+.callout p { margin: 0; color: inherit; }
+.callout-title { font-weight: 700; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
+.callout.info { background: var(--color-blue-dim); border-color: rgba(96, 165, 250, 0.2); color: var(--color-blue); }
+.callout.tip { background: var(--color-green-dim); border-color: rgba(74, 222, 128, 0.2); color: var(--color-green); }
+
+/* ---- STEPS ---- */
+.steps { counter-reset: step; list-style: none; padding-left: 0; }
+.steps li { counter-increment: step; position: relative; padding-left: 3.5rem; margin-bottom: 2rem; min-height: 2.25rem; }
+.steps li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 2.25rem; height: 2.25rem; background: var(--color-accent-bg); border: 1px solid rgba(167, 139, 250, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: var(--color-accent); }
+.steps li h4 { margin-top: 0; margin-bottom: 0.25rem; }
+.steps li p { font-size: 0.92rem; margin-bottom: 0.5rem; }
+
+/* ---- DIVIDER ---- */
+hr { border: none; border-top: 1px solid var(--color-border); margin: 4rem 0; }
+
+/* ---- FOOTER ---- */
+.footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border-subtle); color: var(--color-text-muted); font-size: 0.85rem; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
+  body.sidebar-open .sidebar { transform: translateX(0); }
+  body.sidebar-open .sidebar-overlay { display: block; }
+  .mobile-bar { display: flex; }
+  .layout { margin-left: 0; padding-top: 52px; }
+  .main { padding: 2rem 1.25rem 4rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.15rem; }
+  pre { padding: 1rem; }
+  .steps li { padding-left: 3rem; }
+}
+  </style>
+</head>
+<body>
+
+<div class="mobile-bar">
+  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
+  </button>
+  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-group">
+      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
+      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
+      <a href="setup.html" class="sidebar-link">Setup</a>
+      <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
+      <a href="example-session.html" class="sidebar-link">Example Session</a>
+      <a href="warp.html" class="sidebar-link">Warp</a>
+      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
+      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
+      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
+      <a href="personalization.html" class="sidebar-link">Personalization</a>
+      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
+      <a href="architecture.html" class="sidebar-link">Overview</a>
+      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
+      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
+      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
+      <a href="arch-design.html" class="sidebar-link active">Design &amp; Operations</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
+      <a href="releases.html" class="sidebar-link">Release Notes</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
+
+<div class="layout">
+<main class="main">
+
+  <section class="section" id="design-principles">
+    <span class="section-label">Philosophy</span>
+    <h2>Design Principles</h2>
+    <p>Every architectural decision in VibeCrew follows these principles. Understanding them explains <em>why</em> the system works the way it does. These aren't just technical choices &mdash; they're the philosophy behind VibeCrew. If you ever wonder "why does it work this way?", the answer is usually one of these principles.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9632;</div>
+        <h4>Fail-open design</h4>
+        <p>All scripts exit 0 on error. A failing hook script never blocks your session &mdash; it silently degrades. The system reports the problem but lets you keep working. Sessions are too expensive to block with infrastructure issues.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9632;</div>
+        <h4>Hooks over suggestions</h4>
+        <p>Rules are enforced via deterministic bash scripts (zero tokens) rather than relying on the model to remember instructions. A hook that exits 2 <em>physically blocks</em> the operation. An instruction in CLAUDE.md can be forgotten or misinterpreted.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>Atomic state mutations</h4>
+        <p>All state mutations use the temp file + <code>mv</code> pattern. Scripts write to <code>file.tmp</code>, then <code>mv file.tmp file.json</code>. This prevents corruption from partial writes &mdash; critical when multiple agents may update state concurrently.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9632;</div>
+        <h4>Advisory locking</h4>
+        <p>Multi-agent state access uses <code>mkdir</code>-based advisory locks with 30&ndash;60 second timeouts. If a lock is stale (crashed process), <code>error-recovery.sh</code> cleans it up at session start. No deadlocks possible.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9632;</div>
+        <h4>Research before code</h4>
+        <p>The phase gate enforces architecture decisions (TDR) before any source code writes are allowed. The 15&ndash;30 minutes spent on the foundation prevents hours of rework from wrong assumptions.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9632;</div>
+        <h4>Human attention is the bottleneck</h4>
+        <p>The system stays completely silent during normal operation. It interrupts only when blocked, complete, or failed. Every notification is actionable &mdash; no noise, no status updates, no progress bars.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9632;</div>
+        <h4>Context window discipline</h4>
+        <p>Target &lt;50% context usage. Worktree agents isolate expensive research. MCP servers replace pasting documentation. Warnings at 60% and 80%. Compaction reinject preserves project awareness.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>Self-improving</h4>
+        <p>Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules. The system gets more efficient with every session. Mistakes are identified, codified, and prevented &mdash; recursively.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="dashboard">
+    <span class="section-label">Dashboard</span>
+    <h2>VitePress Documentation Dashboard</h2>
+
+    <div class="callout tip">
+      <div class="callout-title">What is the dashboard?</div>
+      <p>The dashboard is a <strong>visual website that VibeCrew generates for your project</strong>. It turns all of your session data (scores, features, costs, agent activity) into charts, progress bars, and a kanban board. Think of it as a project management tool that builds itself automatically from your work. You can open it in your browser to see the big picture: how many features are done, how your quality scores are trending, which agents are doing the most work, and how your feature backlog is progressing. Teams find it especially useful for weekly retrospectives.</p>
+    </div>
+
+    <p>VibeCrew generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 6 interactive Vue dashboard components that visualize cross-session data from <code>.vibecrew/</code>.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9650;</div>
+        <h4>ScoreTrend.vue</h4>
+        <p>SVG line chart showing Vibe Score over the last 20 sessions with a trend indicator and target line at 80. Powered by <code>scores.data.ts</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>TokenBreakdown.vue</h4>
+        <p>Stacked horizontal bars showing input, cache, and output tokens per session with cost overlay. Reveals cache utilization trends.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9675;</div>
+        <h4>CoverageGauge.vue</h4>
+        <p>SVG radial gauge displaying test coverage percentage with green/yellow/red color bands.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9776;</div>
+        <h4>FeatureProgress.vue</h4>
+        <p>Horizontal bars showing features by Kanban column (planned, in-progress, done) with velocity metric calculated from session history.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon amber">&#9881;</div>
+        <h4>SettingsPanel.vue</h4>
+        <p>Interactive configuration editor with radio pills, toggles, and number inputs. Reads and writes <code>.vibecrew/config.json</code> including all user profile dimensions. Powered by <code>config.data.ts</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#9881;</div>
+        <h4>AgentActivityPanel.vue</h4>
+        <p>Agent invocation frequency bars and a session timeline with agent chips. Shows which agents are most active and their token consumption. Powered by <code>agents.data.ts</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9654;</div>
+        <h4>KanbanBoard.vue</h4>
+        <p>Interactive kanban view of the feature backlog from <code>.vibecrew/backlog.json</code>. Features move through columns as they progress through the Tier 2 cycle.</p>
+      </div>
+    </div>
+
+    <h3>Dashboard pages</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Page</th><th>Components</th><th>Data Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Trends</strong> (<code>trends.md</code>)</td><td>ScoreTrend, TokenBreakdown</td><td><code>scores.data.ts</code>, <code>sessions.data.ts</code></td></tr>
+          <tr><td><strong>Coverage</strong> (<code>coverage.md</code>)</td><td>CoverageGauge, FeatureProgress</td><td><code>sessions.data.ts</code>, <code>backlog.data.ts</code></td></tr>
+          <tr><td><strong>Stats</strong> (<code>stats.md</code>)</td><td>StatsPage (composite)</td><td><code>sessions.data.ts</code></td></tr>
+          <tr><td><strong>Kanban</strong> (<code>kanban.md</code>)</td><td>KanbanBoard</td><td><code>backlog.data.ts</code></td></tr>
+          <tr><td><strong>Settings</strong> (<code>settings.md</code>)</td><td>SettingsPanel</td><td><code>config.data.ts</code></td></tr>
+          <tr><td><strong>Welcome</strong> (<code>system/welcome.md</code>)</td><td>Guided first-session flow</td><td>&mdash;</td></tr>
+          <tr><td><strong>Commands</strong> (<code>system/commands.md</code>)</td><td>Full slash command reference</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The <code>scripts/update-docs.sh</code> script copies live session data into the <code>docs-site/</code> directory for static builds. The Doc Generator agent (<code>/wrap</code>) updates the CHANGELOG, regenerates the VitePress sidebar via <code>rebuild-sidebar.sh</code>, and produces feature documentation from backlog specs.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Dashboard as a team tool</div>
+      <p>Deploy the docs site to your internal infrastructure. The score trend chart and agent activity panel are especially valuable for team retrospectives &mdash; they reveal patterns that individual developers might miss.</p>
+    </div>
+  </section>
+
+  <section class="section" id="telemetry">
+    <span class="section-label">Meta</span>
+    <h2>Cross-Project Telemetry</h2>
+    <p>VibeCrew includes a cross-project telemetry system for self-improvement. Projects automatically register with the central plugin during <code>/setup</code>, contributing anonymized performance data.</p>
+
+    <h3>How It Works</h3>
+    <ol class="steps">
+      <li><strong>Auto-Registration</strong> &mdash; During <code>/setup</code>, each project registers with the central VibeCrew plugin. An anonymous alias (project-001, project-002, etc.) replaces the real project path.</li>
+      <li><strong>Data Collection</strong> &mdash; The <code>collect-telemetry.sh</code> script reads <code>.vibecrew/</code> data from all registered projects: Vibe Scores, agent usage, session costs, MCP adoption, test metrics, and mutation patterns.</li>
+      <li><strong>Aggregation</strong> &mdash; Anonymized data is aggregated into <code>telemetry/aggregate.json</code> at the plugin root.</li>
+      <li><strong>Analysis</strong> &mdash; The System Reviewer agent (via <code>/system-review</code>) analyzes the aggregate to identify cross-project patterns, unused components, and systemic friction.</li>
+    </ol>
+
+    <h3>Privacy</h3>
+    <p>Telemetry is strictly local &mdash; no data leaves your machine. Project names, file paths, code, and credentials are never included. Only aggregate performance metrics are collected, keyed by anonymous aliases.</p>
+
+    <h3>The <code>/system-review</code> Command</h3>
+    <p>Run from the VibeCrew repository to trigger a comprehensive plugin audit:</p>
+    <ul>
+      <li><strong>Internal audit</strong> &mdash; model routing, context budgets, pattern consistency, unused components</li>
+      <li><strong>Telemetry analysis</strong> &mdash; usage patterns, quality trends, cost analysis, systemic issues</li>
+      <li><strong>External research</strong> &mdash; Anthropic updates, new MCP servers, community patterns</li>
+      <li><strong>Proposals</strong> &mdash; prioritized improvement recommendations with effort estimates</li>
+    </ul>
+    <p>Reports are saved to <code>reviews/</code> in both markdown and JSON format.</p>
+  </section>
+
+  <hr>
+
+  <section class="section" id="troubleshooting">
+    <span class="section-label">Help</span>
+    <h2>Troubleshooting</h2>
+
+    <h3>Stale locks or corrupted state</h3>
+    <ol>
+      <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li>
+      <li>This resets any in-progress tasks that were interrupted by a crashed session</li>
+    </ol>
+
+    <h3>Git conflicts in .vibecrew/</h3>
+    <ul>
+      <li><code>state.json</code>: Resolve by keeping the most recent active feature</li>
+      <li><code>backlog.json</code>: Merge the feature arrays</li>
+      <li><code>scores/</code> and <code>sessions/</code>: Rarely conflict &mdash; they're timestamped per-developer</li>
+    </ul>
+  </section>
+
+</main>
+
+  <footer class="footer">
+    <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+    <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
+  </footer>
+</div>
+
+</body>
+</html>

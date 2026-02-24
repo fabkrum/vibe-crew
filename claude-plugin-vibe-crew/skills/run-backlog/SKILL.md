@@ -40,7 +40,7 @@ No features in the 'ready' column. Use /plan-features to prepare features.
 
 Do NOT proceed. Do NOT offer alternatives.
 
-### Check 3: Load configuration
+### Check 3: Load configuration and user profile
 
 ```bash
 cat .vibecrew/config.json 2>/dev/null || echo '{"error": "no config"}'
@@ -52,6 +52,21 @@ Extract the following values from `config.json`. Use these defaults if missing:
 - `session_warn_usd`: `5.00`
 - `session_max_usd`: `10.00`
 - `max_retries`: `3`
+
+Read the user profile for autonomy preference:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+Store the `autonomy` value. This determines checkpoint frequency during the backlog run:
+
+| `full_auto` | No pauses between features. Skip the confirmation prompt in Step 2. Process all features continuously. Only stop for blockers or cost limits. |
+| `checkpoints` | Pause for confirmation before starting the backlog run (current behavior). No pauses between features. |
+| `collaborative` | Pause before each feature. Show what will be built and ask: "Proceed with {name}? (yes / skip / stop)" |
+| `supervised` | Pause before each phase within each feature. Show what the phase will do and ask for confirmation. |
+
+If no profile exists or `interview_completed` is `false`, use `checkpoints` behavior.
 
 ### Check 4: Verify no feature is currently in-progress
 
@@ -122,7 +137,9 @@ If there are no skipped features, omit the "Skipped" section.
 
 ### Ask for confirmation
 
-Ask the user: **"Start automated backlog processing? (yes/no)"**
+**If `autonomy` = `full_auto`:** Skip this prompt entirely. Proceed directly to Step 3.
+
+**Otherwise:** Ask the user: **"Start automated backlog processing? (yes/no)"**
 
 - If `yes`: proceed to Step 3.
 - If `no`: stop immediately. Output "Backlog run cancelled." and exit.

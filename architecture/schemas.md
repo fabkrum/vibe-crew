@@ -168,6 +168,16 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
 | `cost_limits.session_warn_usd` | number | yes | `2.00` | Session cost warning |
 | `cost_limits.session_max_usd` | number | yes | `5.00` | Session cost hard limit |
 | `cost_limits.daily_warn_usd` | number | yes | `20.00` | Daily cost warning |
+| `user_profile.interview_completed` | boolean | yes | `false` | Profile interview done |
+| `user_profile.role` | enum\|null | yes | `null` | `developer\|technical_pm\|designer\|non_technical\|learner` |
+| `user_profile.code_literacy` | enum | yes | `"conversational"` | `fluent\|conversational\|basic\|none` |
+| `user_profile.autonomy` | enum | yes | `"checkpoints"` | `full_auto\|checkpoints\|collaborative\|supervised` |
+| `user_profile.pr_review` | enum | yes | `"review"` | `auto_merge\|summary\|review\|walkthrough` |
+| `user_profile.verbosity` | enum | yes | `"standard"` | `minimal\|standard\|detailed\|educational` |
+| `user_profile.gamification_preference` | enum | yes | `"full"` | `full\|light\|score_only\|disabled` |
+| `user_profile.learning` | enum | yes | `"reference_docs"` | `none\|reference_docs\|inline\|teach` |
+| `user_profile.risk_tolerance` | enum | yes | `"balanced"` | `conservative\|balanced\|progressive\|experimental` |
+| `user_profile.updated_at` | string\|null | yes | `null` | ISO 8601 timestamp of last profile update |
 
 ---
 
@@ -744,13 +754,14 @@ Atomic locks to prevent concurrent writes to the same resource. Uses `mkdir`-bas
 | Version | Changes | Migration |
 |---------|---------|-----------|
 | `1.0.0` | Initial release | N/A |
+| `1.4.0` | Added `user_profile` section to `config.json` | `migrate_1_3_to_1_4()` — injects `user_profile` with balanced defaults |
 
 ### Migration Mechanism
 
 State file migrations are handled by the Session Startup agent on every session start:
 
 1. Read `schema_version` from each `.vibecrew/*.json` file
-2. If version < current, apply migrations sequentially (1.0.0 → 1.1.0 → 1.2.0)
+2. If version < current, apply migrations sequentially (1.0.0 → … → 1.4.0)
 3. Write migrated file with updated `schema_version`
 4. Log migration in session log
 
@@ -761,7 +772,7 @@ Migration functions are defined in `scripts/migrate-state.sh`:
 # migrate-state.sh — Run state file migrations
 # Called by Session Startup agent on every session start
 
-CURRENT_VERSION="1.0.0"
+CURRENT_VERSION="1.4.0"
 
 migrate_file() {
   local file="$1"
@@ -772,10 +783,10 @@ migrate_file() {
     return 0  # Up to date
   fi
 
-  # Future migrations go here:
-  # if version_lt "$version" "1.1.0"; then
-  #   migrate_1_0_to_1_1 "$file"
-  # fi
+  # 1.3.0 → 1.4.0: Add user_profile to config.json
+  if version_lt "$version" "1.4.0"; then
+    migrate_1_3_to_1_4 "$file"
+  fi
 
   # Update schema_version
   local tmp="${file}.tmp"

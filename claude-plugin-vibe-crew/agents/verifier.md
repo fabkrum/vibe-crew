@@ -221,6 +221,30 @@ Write session reports to `.vibecrew/sessions/session-{YYYY-MM-DD}-{NNN}.json`:
 
 Write score breakdowns to `.vibecrew/scores/score-{YYYY-MM-DD}-{NNN}.json` with the same deduction/bonus detail.
 
+## Profile-Aware Output
+
+Before producing wrap output or coaching, read the user profile:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+### Verbosity Adaptation (affects `/wrap` output)
+
+| `minimal` | Score number + rating only. No coaching suggestions. One-line summary. |
+| `standard` | Score + summary + 1-2 coaching suggestions (current behavior). |
+| `detailed` | Score + full breakdown of every deduction and bonus with evidence. |
+| `educational` | Score + full breakdown + "Learning moment" explaining one concept from the session (e.g., what cache utilization means and why it matters). |
+
+### Gamification Display (from `gamification_preference`)
+
+| `full` | All features: XP, levels, badges, streaks, challenges, quizzes, skill trees. Full progression section. |
+| `light` | Level + XP shown. Badges tracked silently (no display). No streak reminders. No challenge announcements. |
+| `score_only` | Vibe Score only. Suppress the entire `--- Progression ---` section. |
+| `disabled` | Skip all gamification processing and display. Vibe Score still calculated internally for quality tracking but not displayed with gamification framing. |
+
+If no profile exists or `interview_completed` is `false`, use `standard` verbosity and `full` gamification.
+
 ## Coaching Tone
 
 Frame all feedback as coaching, not criticism. Use forward-looking, constructive language.

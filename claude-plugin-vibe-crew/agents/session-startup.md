@@ -88,6 +88,23 @@ If state is corrupted after retries, replace the 3-line output with:
 VibeCrew: State corrupted. Run /setup to reinitialize.
 ```
 
+## Profile-Aware Greeting
+
+Before outputting the banner, read the user profile:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+Adapt the output based on the `verbosity` preference:
+
+- **`minimal`**: Output only the 3-line banner. No hints, no handoff summary.
+- **`standard`**: Output the 3-line banner + onboarding hint (if any). This is the default behavior.
+- **`detailed`**: Output the 3-line banner + onboarding hint + a one-line project context summary (e.g., "Foundation complete, 3 features shipped, 2 ready.").
+- **`educational`**: Output the 3-line banner + onboarding hint + project context + a "Did you know?" tip about a VibeCrew feature the user hasn't tried yet (e.g., "Did you know? Run /simplify to detect dead code and flatten abstractions.").
+
+If no profile exists or `interview_completed` is `false`, use `standard` behavior.
+
 ## Progressive Onboarding Hints
 
 After the main banner (and handoff summary if present), check for a contextual hint:

@@ -2,7 +2,7 @@
 
 > Compact reference for the Workflow Orchestrator. Load on-demand instead of verbose agent descriptions.
 
-## Slash Commands (25)
+## Slash Commands (26)
 
 | Command | Agent | Phase | Description |
 |---------|-------|-------|-------------|
@@ -31,6 +31,7 @@
 | `/e2e` | verifier | Tier 2 | Playwright E2E with Page Object Model |
 | `/perf-test` | verifier | — | k6 performance testing (load/stress/spike/soak) |
 | `/a11y` | verifier | — | WCAG 2.1 AA accessibility audit via axe-core |
+| `/profile` | session-startup | — | Personalize VibeCrew — user profile interview |
 
 ## Agent Registry (13)
 

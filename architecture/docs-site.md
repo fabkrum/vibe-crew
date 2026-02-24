@@ -75,6 +75,7 @@ docs/
   index.md                             # Docs site landing page
   kanban.md                            # Kanban board page
   stats.md                             # Basic statistics page
+  settings.md                          # Settings panel (config.json editor)
 
   # System documentation (how VibeCrew works)
   guide/
@@ -107,7 +108,8 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/' },
       { text: 'Kanban', link: '/kanban' },
-      { text: 'Stats', link: '/stats' }
+      { text: 'Stats', link: '/stats' },
+      { text: 'Settings', link: '/settings' }
     ],
 
     sidebar: {
@@ -618,7 +620,38 @@ export default {
 }
 ```
 
-### 6.3 Notes on Data Loaders
+### 6.3 Config Data Loader
+
+```javascript
+// docs/data/config.data.ts
+// Reads config.json for the Settings panel component.
+// Schema: templates/config.json.template
+
+import { readFileSync, existsSync } from 'node:fs'
+import { resolve, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dir = dirname(fileURLToPath(import.meta.url))
+
+export default {
+  watch: ['../../.vibecrew/config.json'],
+  load() {
+    const projectRoot = resolve(__dir, '../..')
+    const configPath = resolve(projectRoot, '.vibecrew/config.json')
+
+    if (!existsSync(configPath)) {
+      return defaultConfig // Full default from config.json.template
+    }
+
+    const raw = readFileSync(configPath, 'utf-8')
+    return deepMerge(defaultConfig, JSON.parse(raw))
+  }
+}
+```
+
+The config loader deep-merges parsed JSON with template defaults so that missing keys (from older schema versions) always have fallback values. The `watch` path triggers HMR when the config is changed externally (e.g., via `/profile` in the CLI). The component writes back through a Vite dev server middleware endpoint (`/api/save-config`), which performs atomic writes (temp file + rename) to prevent partial reads.
+
+### 6.4 Notes on Data Loaders
 
 - Both loaders use `import.meta.url` to resolve paths, which is the correct approach for ES modules. The `__dirname` global is not available in ES module scope.
 - Each loader declares a single `watch` array for HMR. During `vitepress dev`, changes to the watched files trigger the loader to re-execute and push updated data to the browser.

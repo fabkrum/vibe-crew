@@ -51,6 +51,20 @@ if [[ ! -f "$STATE_FILE" ]]; then
   exit 0
 fi
 
+# Profile not completed (check before foundation, after state exists)
+PROFILE_DONE="true"
+if [[ -f "$CONFIG_FILE" ]]; then
+  PROFILE_DONE=$(jq -r '.user_profile.interview_completed // false' "$CONFIG_FILE" 2>/dev/null || echo "false")
+fi
+
+if [[ "$PROFILE_DONE" == "false" ]]; then
+  if ! is_dismissed "profile"; then
+    HINT="Tip: Run /profile to personalize VibeCrew to your workflow."
+    echo "$HINT"
+    exit 0
+  fi
+fi
+
 # Foundation not complete
 FOUNDATION=$(jq -r '.foundation.complete // false' "$STATE_FILE" 2>/dev/null || echo "false")
 if [[ "$FOUNDATION" == "false" ]]; then

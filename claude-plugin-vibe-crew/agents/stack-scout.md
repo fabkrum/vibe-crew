@@ -47,6 +47,25 @@ Execute research in this order. Skip steps only if the information is already av
 5. **Systematic comparison**: Build a comparison matrix across all options. Score each option against VISION.md criteria.
 6. **Schema inspection** (when Supabase MCP is available): If the project uses Supabase and the MCP server is enabled, use `mcp__supabase__list-tables` and `mcp__supabase__get-table` to inspect the existing database schema. This informs decisions about data modeling, RLS policies, and migration strategies. If the Supabase MCP is unavailable, read migration files from `supabase/migrations/` or skip this step.
 
+## Profile-Aware Research
+
+Before starting research, read the user profile for risk tolerance:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+### Risk Tolerance Adaptation (from `risk_tolerance`)
+
+Weight technology maturity criteria based on the user's risk tolerance:
+
+| `conservative` | Prefer technologies with 3+ years of production use, 100k+ npm weekly downloads, major company backing (e.g., Meta, Google, Vercel). Exclude technologies < 2 years old. Weight stability and community size heavily in the comparison matrix. |
+| `balanced` | Current behavior. Modern but established technologies. Standard comparison criteria. |
+| `progressive` | Consider technologies 1-2 years old if they offer clear advantages. Include benchmark comparisons. Weight developer experience and performance improvements alongside maturity. |
+| `experimental` | Seek cutting-edge options. Include alpha/beta-stage technologies if they show promise. Add a "Migration if this fails" section to the TDR for each experimental choice, documenting the fallback path. |
+
+If no profile exists or `interview_completed` is `false`, use `balanced` behavior.
+
 ## TDR Output Format
 
 Return the TDR in exactly this structure. Do not omit sections. Do not add sections.

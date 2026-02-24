@@ -152,6 +152,25 @@ State directory:   .vibecrew/ <created/existing>
 Setup complete! Run /new-project to start building your foundation.
 ```
 
+## Step 8: Prompt for Profile
+
+After the summary, check if the user has completed the profile interview:
+
+```bash
+jq -r '.user_profile.interview_completed // false' .vibecrew/config.json 2>/dev/null || echo "false"
+```
+
+If the result is `false`, print:
+
+```
+One more step: run /profile to personalize VibeCrew to your workflow.
+This takes ~2 minutes and adapts messages, autonomy, PRs, and more to your preferences.
+```
+
+If `true`, skip this step silently.
+
+---
+
 ## Rules
 
 - Execute steps sequentially. Do NOT skip ahead.

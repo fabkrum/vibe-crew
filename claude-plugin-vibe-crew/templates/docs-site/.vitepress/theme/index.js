@@ -7,6 +7,7 @@ import AgentActivityPanel from "../../components/AgentActivityPanel.vue";
 import StatsPage from "../../components/StatsPage.vue";
 import TokenBreakdown from "../../components/TokenBreakdown.vue";
 import AchievementsBoard from "../../components/AchievementsBoard.vue";
+import SettingsPanel from "../../components/SettingsPanel.vue";
 
 export default {
   extends: DefaultTheme,
@@ -19,5 +20,6 @@ export default {
     app.component("StatsPage", StatsPage);
     app.component("TokenBreakdown", TokenBreakdown);
     app.component("AchievementsBoard", AchievementsBoard);
+    app.component("SettingsPanel", SettingsPanel);
   },
 };

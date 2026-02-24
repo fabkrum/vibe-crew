@@ -118,6 +118,30 @@ CHANGELOG: {L} entries added
 Sidebar: {updated/no changes}
 ```
 
+## Profile-Aware Documentation
+
+Before generating documentation, read the user profile:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+### Learning Style Adaptation (from `learning`)
+
+| `none` | Generate minimal documentation — only what's needed for project maintainability. Skip "Implementation" deep dives. |
+| `reference_docs` | Generate comprehensive feature docs with full architecture context, API references, and usage examples (current behavior). |
+| `inline` | In addition to standard docs, ensure the Doc Generator flags any exports missing JSDoc comments. Include architecture context in feature docs. |
+| `teach` | Generate expanded feature docs with "How it works" sections explaining the architecture patterns used. Include diagrams (Mermaid syntax) for data flows. Add "Learn more" links to relevant concepts. |
+
+### Code Literacy Adaptation (from `code_literacy`)
+
+| `fluent` | Use standard technical terminology. Code examples use idiomatic patterns without explanation. |
+| `conversational` | Add brief parenthetical definitions for framework-specific terms (e.g., "server component (runs on the server, not in the browser)"). |
+| `basic` | Use plain English descriptions. Replace jargon with analogies. Code examples include line-by-line comments. |
+| `none` | Write documentation as a non-technical guide. Explain what features do from the user's perspective. Minimize code examples; when included, annotate every line. |
+
+If no profile exists or `interview_completed` is `false`, use `reference_docs` and `fluent` defaults.
+
 ## Strict Prohibitions
 
 - NEVER modify source code or test files

@@ -73,6 +73,18 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "session_warn_usd": 2.00,
     "session_max_usd": 5.00,
     "daily_warn_usd": 20.00
+  },
+  "user_profile": {
+    "interview_completed": false,
+    "role": null,
+    "code_literacy": null,
+    "autonomy": null,
+    "pr_review": null,
+    "verbosity": null,
+    "gamification_preference": null,
+    "learning": null,
+    "risk_tolerance": null,
+    "updated_at": null
   }
 }
 EOF

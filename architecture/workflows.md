@@ -875,7 +875,11 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |       |     Check .vibecrew/signals/ for pending signals   |
     |       |     Report pending handoffs                      |
     |       |                                                  |
-    |       +-- 6. State detection + routing                   |
+    |       +-- 6. Load user profile                            |
+    |       |     Run scripts/read-profile.sh                    |
+    |       |     Adapt greeting verbosity from profile          |
+    |       |                                                  |
+    |       +-- 7. State detection + routing                   |
     |       |     Read .vibecrew/state.json                      |
     |       |                                                  |
     |       |     +-------------------------------------+      |
@@ -894,7 +898,7 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |       |     |    Run /new-feature or /status."    |      |
     |       |     +-------------------------------------+      |
     |       |                                                  |
-    |       +-- 7. Output routing decision                     |
+    |       +-- 8. Output routing decision                     |
     |             3-line status injected into context           |
     |                                                          |
     |  ========= PHASE 2: WORK =========                      |

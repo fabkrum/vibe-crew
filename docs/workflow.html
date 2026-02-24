@@ -794,6 +794,7 @@
       </li>
       <li><a href="#cost-system">Cost Tracking &amp; Safety</a></li>
       <li><a href="#multi-lang">Multi-Language Support</a></li>
+      <li><a href="#profile">User Profile &amp; Personalization</a></li>
       <li><a href="#gamification">Gamification System</a></li>
       <li><a href="#efficiency">Maximizing Efficiency</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
@@ -1134,6 +1135,67 @@ Results feed into <span class="highlight">Code Auditor</span> and <span class="h
     <div class="callout info">
       <div class="callout-title">Non-Node.js confidence levels</div>
       <p>Node.js/TypeScript projects receive &ldquo;high&rdquo; confidence from the Code Auditor due to deeper ecosystem integration. Other languages receive &ldquo;medium&rdquo; confidence &mdash; the core workflow (Tier 1 foundation, Tier 2 cycle, Vibe Score, hooks) works identically, but framework-specific patterns may need manual refinement in CLAUDE.md.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="profile">
+    <span class="section-label">Personalization</span>
+    <h2>User Profile &amp; Personalization</h2>
+    <p>Most AI coding tools treat every user the same. A non-technical founder gets the same commit messages and unexplained technical decisions as a senior developer. Beginners feel overwhelmed. Experienced developers find the output too verbose. VibeCrew solves this with an adaptive profile system.</p>
+
+    <h3>Getting Started</h3>
+    <p>Run <code>/profile</code> after setup. You can answer 8 quick questions (~2 minutes) or pick a preset:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon blue">&#9881;</div>
+        <h4>Builder</h4>
+        <p>For developers. Full autonomy, minimal output, no gamification. VibeCrew stays out of your way and just builds.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9733;</div>
+        <h4>Explorer</h4>
+        <p>For learners. Collaborative mode, detailed explanations, full gamification. Every step is a teaching moment.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9998;</div>
+        <h4>Founder</h4>
+        <p>For non-technical users. Checkpoint approvals, standard output, light gamification. You stay in control without needing to read code.</p>
+      </div>
+    </div>
+
+    <p>You can also skip the interview entirely and use balanced defaults. Run <code>/profile</code> anytime to change your preferences.</p>
+
+    <h3>What Gets Personalized</h3>
+    <p>The profile adapts 8 dimensions across every agent in the system:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>What It Controls</th><th>Options</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Verbosity</strong></td><td>How much detail in messages, coaching, session summaries</td><td>Minimal &middot; Standard &middot; Detailed &middot; Educational</td></tr>
+          <tr><td><strong>Autonomy</strong></td><td>How often VibeCrew pauses for approval</td><td>Full Auto &middot; Checkpoints &middot; Collaborative &middot; Supervised</td></tr>
+          <tr><td><strong>PR Review</strong></td><td>How code changes are merged</td><td>Auto-merge &middot; Summary &middot; Full Review &middot; Walkthrough</td></tr>
+          <tr><td><strong>Code Literacy</strong></td><td>How technical the language in reviews, errors, and docs is</td><td>Fluent &middot; Conversational &middot; Basic &middot; None</td></tr>
+          <tr><td><strong>Gamification</strong></td><td>XP, badges, streaks, challenges display</td><td>All In &middot; Light Touch &middot; Score Only &middot; Disabled</td></tr>
+          <tr><td><strong>Learning Style</strong></td><td>How much the system explains and teaches</td><td>Don&rsquo;t Explain &middot; Reference Docs &middot; Inline &middot; Teach Me</td></tr>
+          <tr><td><strong>Risk Tolerance</strong></td><td>How adventurous technology choices are in TDR research</td><td>Conservative &middot; Balanced &middot; Progressive &middot; Experimental</td></tr>
+          <tr><td><strong>Role</strong></td><td>Sets smart defaults for other dimensions</td><td>Developer &middot; Technical PM &middot; Designer &middot; Founder &middot; Learner</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Evolving Over Time</h3>
+    <p>Your profile isn&rsquo;t locked in. As you gain experience, your needs change. A learner who started with educational verbosity and collaborative autonomy might switch to standard and checkpoints after a few projects. A founder who initially needed walkthrough PRs might move to summary PRs once they&rsquo;re comfortable with the process.</p>
+    <p>Run <code>/profile</code> again at any point to update your preferences. The system shows your current settings, lets you change any dimension, and immediately adapts every agent to match. You always have exactly the system that works best for you right now.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Profile Hint</div>
+      <p>If you haven&rsquo;t completed the profile interview yet, VibeCrew will gently remind you on session start: &ldquo;Tip: Run /profile to personalize VibeCrew to your workflow.&rdquo; Dismiss it if you prefer the defaults.</p>
     </div>
   </section>
 

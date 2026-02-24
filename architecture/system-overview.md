@@ -1054,6 +1054,9 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 |  /achievements   View badges, level, streaks, skill tree          |
 |  /quiz           Test your VibeCrew knowledge                     |
 |                                                                   |
+|  PERSONALIZATION                                                   |
+|  /profile        User profile interview — adapts all agents        |
+|                                                                   |
 |  META                                                              |
 |  /system-review  Plugin self-audit, telemetry, ecosystem research |
 |                                                                   |
@@ -1088,6 +1091,8 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 | `/e2e` | `e2e` | `"feature-name"` | Inline | Verifier | Haiku |
 | `/perf-test` | `perf-test` | `"endpoint-or-flow"` | Inline | Verifier | Haiku |
 | `/a11y` | `a11y` | None | Inline | Verifier | Haiku |
+| `/profile` | `profile` | None | Inline | -- | Inherit |
+| `/system-review` | `system-review` | None | Worktree | System Reviewer | Opus |
 
 ### 6.4 Command Details
 
@@ -1100,6 +1105,8 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 **`/new-feature "name"`** -- Starts a Tier 2 feature cycle. Verifies foundation is complete (reads `foundation.complete` from `state.json`). Looks up the named feature in `backlog.json` (or creates a new entry). Creates a worktree via `git worktree add`. Initializes the 6-phase tracker. Uses `TaskCreate` to launch the appropriate agent for the current phase.
 
 **`/run-backlog`** -- Automated batch processing. Repeatedly claims the next `ready` task from the backlog, creates a team via `TeamCreate`, and runs it through all six phases (Plan, Design, Code, Test, Review, Docs) using agent coordination. Continues until the backlog is empty or context is exhausted. Ideal for overnight or unattended runs.
+
+**`/profile`** -- User profile interview. Presents 8 questions covering role, code literacy, autonomy preference, PR review style, verbosity, gamification preference, learning style, and risk tolerance. Users can answer all questions (~2 minutes), pick a preset (Builder, Explorer, or Founder), or skip for balanced defaults. Saves to `config.json` under `user_profile`. All agents read the profile via `scripts/read-profile.sh` and adapt their communication style, approval gates, and output depth accordingly. Re-running `/profile` shows the current profile and lets users update any dimension.
 
 **`/idea "text"`** -- Quick capture. Appends a new feature entry to `backlog.json` with column `idea` and the provided text as the description. No acceptance criteria, no priority, no dependencies -- those are added during `/plan-features`. This command is intentionally lightweight for capturing thoughts without breaking flow.
 
@@ -1137,6 +1144,7 @@ disable-model-invocation: false
 | `/status` | Yes | Yes | Description always in context |
 | `/check` | Yes | Yes | Description always in context |
 | `/wrap` | Yes | No | Only on invocation |
+| `/profile` | Yes | No | Only on invocation |
 
 Commands with `disable-model-invocation: true` are invisible to Claude until the user types the slash command. This prevents accidental invocation and keeps the context budget clean -- only `/status` and `/check` descriptions consume context tokens passively.
 

@@ -219,6 +219,13 @@ claude</code></pre>
       </li>
 
       <li>
+        <h4>Personalize your experience (optional)</h4>
+        <p>Run the profile interview to adapt VibeCrew to your workflow. This takes about 2 minutes, or pick a preset (Builder, Explorer, Founder) for instant configuration.</p>
+        <pre class="copyable" data-copy="/profile"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">claude code</span>/profile</code></pre>
+        <p>This personalizes message verbosity, autonomy level, PR format, code comments, gamification, and more. You can update it anytime by running <code>/profile</code> again. See <a href="workflow.html#profile">User Profile &amp; Personalization</a> for full details.</p>
+      </li>
+
+      <li>
         <h4>Install MCP servers (optional but recommended)</h4>
         <p>VibeCrew ships with <strong>10 MCP servers</strong>. Three are enabled by default: <strong>Context7</strong> (documentation lookup, ~1,500 tokens saved per query), <strong>Chrome DevTools</strong> (browser debugging), and <strong>Playwright</strong> (E2E browser testing). All three require no authentication.</p>
         <p>Seven additional servers ship disabled and are <strong>auto-enabled when your TDR selects matching technologies</strong>: <strong>Semgrep</strong> (security scanning), <strong>Sentry</strong> (error tracking), <strong>Supabase</strong> (database), <strong>Stripe</strong> (payments), <strong>Vercel</strong> (deployment), <strong>Figma</strong> (design), and <strong>Stitch</strong> (Google AI design). Authenticated servers require environment variables &mdash; the setup wizard shows which variables are needed.</p>

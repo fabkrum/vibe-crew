@@ -14,9 +14,9 @@ claude-plugin-vibe-crew/          # The plugin — install this into your projec
   .mcp.json                     # MCP server config (10 servers)
   settings.json                 # Permission rules
   hooks/hooks.json              # Event hook bindings
-  scripts/                      # ~67 bash automation scripts
+  scripts/                      # ~70 bash automation scripts
   agents/                       # 14 specialized AI agent prompts
-  skills/                       # 26 slash command definitions
+  skills/                       # 27 slash command definitions
   templates/                    # Project templates and doc-site scaffold
 
 architecture/                   # Architecture design docs (contributor reference)
@@ -78,7 +78,7 @@ When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
 
 ```
 .vibecrew/                        # Per-project runtime state (auto-created)
-  config.json                   # Terminal preference, notification settings
+  config.json                   # Terminal preference, notification settings (editable via dashboard Settings page)
   state.json                    # Foundation status + active feature
   backlog.json                  # Feature backlog with specs
   sessions/                     # Session logs (JSON)
@@ -94,7 +94,34 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`
+
+### User Profile System
+
+The `/profile` command runs an 8-question interview (or offers presets) that stores user preferences in `.vibecrew/config.json` under the `user_profile` key. Every agent reads the profile via `scripts/read-profile.sh` and adapts behavior accordingly.
+
+**8 Dimensions:**
+- `role` — developer, technical_pm, designer, non_technical, learner
+- `code_literacy` — fluent, conversational, basic, none
+- `autonomy` — full_auto, checkpoints, collaborative, supervised
+- `pr_review` — auto_merge, summary, review, walkthrough
+- `verbosity` — minimal, standard, detailed, educational
+- `gamification_preference` — full, light, score_only, disabled
+- `learning` — none, reference_docs, inline, teach
+- `risk_tolerance` — conservative, balanced, progressive, experimental
+
+**Presets:** Builder (developer defaults), Explorer (learner defaults), Founder (non-technical defaults).
+
+**Agent Adaptations:**
+- Session Startup: greeting depth from `verbosity`
+- Workflow Orchestrator: approval gates from `autonomy`, explanation depth from `verbosity`
+- Builder: commit messages from `verbosity`, code comments from `code_literacy`, PR format from `pr_review`
+- Verifier: coaching output from `verbosity`, gamification display from `gamification_preference`
+- Stack Scout: technology maturity criteria from `risk_tolerance`
+- Doc Generator: documentation depth from `learning` and `code_literacy`
+- Code Reviewer: finding explanations from `code_literacy`, review thoroughness from `pr_review`
+
+**Scripts:** `read-profile.sh` (universal reader with defaults), `save-profile.sh` (writer with gamification sync)
 
 ## Design Principles
 
@@ -142,7 +169,7 @@ The Performance Coach can propose a CLAUDE.md mutation if documentation drift re
 
 ## Current Status
 
-VibeCrew v1.4.0 — the plugin is feature-complete. The repository contains:
+VibeCrew v1.5.0 — the plugin is feature-complete. The repository contains:
 - The full plugin (`claude-plugin-vibe-crew/`) with all agents, hooks, scripts, skills, and templates
 - Architecture design docs (`architecture/`) for contributor reference
 - Companion documentation website (`docs/`) with setup guide, workflows, example sessions, and best practices

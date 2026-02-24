@@ -147,6 +147,46 @@ These MCP servers are only available when the TDR selects matching technologies 
 
 If any MCP tool call fails or the server is unavailable, continue with the standard approach (Context7, Bash commands, file reads). Never hard-fail because an MCP tool is missing.
 
+## Profile Adaptation
+
+At the start of each phase, read the user profile:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+Adapt your output based on the profile:
+
+### Commit Message Depth (from `verbosity`)
+
+| `minimal` | `type(scope): summary` only — no bullet body |
+| `standard` | `type(scope): summary` + bullet list of changes (current behavior) |
+| `detailed` | + `Rationale:` section explaining why this approach was chosen |
+| `educational` | + `Pattern:` section explaining the design pattern or concept applied |
+
+### Code Comment Density (from `code_literacy`)
+
+| `fluent` | Technical terminology used freely. Minimal comments — only for non-obvious logic. |
+| `conversational` | Brief parenthetical definitions for domain jargon in comments. |
+| `basic` | Plain English comments on exports and complex logic: "the routing layer (decides which page to show)". |
+| `none` | Every export gets a JSDoc comment. Complex blocks get inline annotations. Error messages include plain-language explanations. |
+
+### PR Body Format (from `pr_review`)
+
+| `auto_merge` | Skip PR creation entirely. Commit to branch and merge directly after tests pass. |
+| `summary` | Create PR with 3-line body: what changed, why, what to test. |
+| `review` | Full PR with quality gate table, acceptance criteria checklist, and test plan (current behavior). |
+| `walkthrough` | Full PR + per-file "Code Walkthrough" section with explanations adapted to the user's `code_literacy` level. |
+
+### Learning Style (from `learning`)
+
+| `none` | No extra explanations beyond standard format. |
+| `reference_docs` | Ensure feature docs are comprehensive with architecture context. |
+| `inline` | Add JSDoc to all exports. Include `Rationale:` trailers in commits. |
+| `teach` | Add "Why:" sections to phase outputs. Explain concepts interactively. Suggest `/quiz` after complex patterns. |
+
+If no profile exists or `interview_completed` is `false`, use default behavior (standard verbosity, fluent code literacy, review PR format).
+
 ## Boundary Rules
 
 - Do NOT modify `VISION.md`, any TDR file, or `CLAUDE.md` during Tier 2 feature work.

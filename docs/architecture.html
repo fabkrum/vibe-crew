@@ -1887,6 +1887,18 @@ Checks against thresholds:
       </table>
     </div>
 
+    <h4>Personalization</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/profile</code></td><td>8-question interview (or pick a preset) that adapts every agent's communication style, autonomy level, PR workflow, gamification display, and learning mode to your preferences</td><td>After <code>/setup</code>, or anytime your preferences change</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- STATE -->
     <h3 id="state">State Management</h3>
 
@@ -1902,7 +1914,7 @@ Checks against thresholds:
           <tr><th>File / Directory</th><th>Purpose</th><th>Updated By</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>config.json</code></td><td>Terminal preference, notification settings, feature toggles</td><td>/setup</td></tr>
+          <tr><td><code>config.json</code></td><td>Terminal preference, notification settings, feature toggles, user profile</td><td>/setup, /profile</td></tr>
           <tr><td><code>state.json</code></td><td>Foundation status + active feature + active workflow + phase tracking</td><td>All commands</td></tr>
           <tr><td><code>backlog.json</code></td><td>Feature backlog with specs, priorities, dependencies</td><td>/plan-features, /idea, /run-backlog</td></tr>
           <tr><td><code>gamification.json</code></td><td>XP, level, badges, skill tree, streaks, challenges, quiz progress</td><td>/wrap (gamification pipeline)</td></tr>
@@ -1994,7 +2006,7 @@ Checks against thresholds:
       <p>The dashboard is a <strong>visual website that VibeCrew generates for your project</strong>. It turns all of your session data (scores, features, costs, agent activity) into charts, progress bars, and a kanban board. Think of it as a project management tool that builds itself automatically from your work. You can open it in your browser to see the big picture: how many features are done, how your quality scores are trending, which agents are doing the most work, and how your feature backlog is progressing. Teams find it especially useful for weekly retrospectives.</p>
     </div>
 
-    <p>VibeCrew generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 5 interactive Vue dashboard components that visualize cross-session data from <code>.vibecrew/</code>.</p>
+    <p>VibeCrew generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 6 interactive Vue dashboard components that visualize cross-session data from <code>.vibecrew/</code>.</p>
 
     <div class="card-grid">
       <div class="card">
@@ -2021,6 +2033,11 @@ Checks against thresholds:
 
     <div class="card-grid">
       <div class="card">
+        <div class="card-icon amber">&#9881;</div>
+        <h4>SettingsPanel.vue</h4>
+        <p>Interactive configuration editor with radio pills, toggles, and number inputs. Reads and writes <code>.vibecrew/config.json</code> including all user profile dimensions. Powered by <code>config.data.ts</code>.</p>
+      </div>
+      <div class="card">
         <div class="card-icon red">&#9881;</div>
         <h4>AgentActivityPanel.vue</h4>
         <p>Agent invocation frequency bars and a session timeline with agent chips. Shows which agents are most active and their token consumption. Powered by <code>agents.data.ts</code>.</p>
@@ -2043,6 +2060,7 @@ Checks against thresholds:
           <tr><td><strong>Coverage</strong> (<code>coverage.md</code>)</td><td>CoverageGauge, FeatureProgress</td><td><code>sessions.data.ts</code>, <code>backlog.data.ts</code></td></tr>
           <tr><td><strong>Stats</strong> (<code>stats.md</code>)</td><td>StatsPage (composite)</td><td><code>sessions.data.ts</code></td></tr>
           <tr><td><strong>Kanban</strong> (<code>kanban.md</code>)</td><td>KanbanBoard</td><td><code>backlog.data.ts</code></td></tr>
+          <tr><td><strong>Settings</strong> (<code>settings.md</code>)</td><td>SettingsPanel</td><td><code>config.data.ts</code></td></tr>
           <tr><td><strong>Welcome</strong> (<code>system/welcome.md</code>)</td><td>Guided first-session flow</td><td>&mdash;</td></tr>
           <tr><td><strong>Commands</strong> (<code>system/commands.md</code>)</td><td>Full slash command reference</td><td>&mdash;</td></tr>
         </tbody>

@@ -183,6 +183,37 @@ To stay within context limits, load agent and command details on-demand rather t
 2. **Load agent prompts only when invoking** — Read the full agent `.md` file only when creating a team or delegating a task to that agent.
 3. **State via scripts** — Use `jq` queries and Bash scripts for state inspection instead of reading entire JSON files.
 
+## Profile-Aware Communication
+
+At the start of any orchestration sequence, read the user profile:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+Adapt your behavior based on the profile:
+
+### Autonomy Adaptation
+
+| Component | `full_auto` | `checkpoints` | `collaborative` | `supervised` |
+|-----------|------------|---------------|-----------------|-------------|
+| Foundation artifacts | Auto-approve all | Approve per artifact | Explain then approve | Show examples, explain reasoning |
+| TDR decisions | Auto-select best | Recommend + approve | Side-by-side comparison | Full debate matrix |
+| Opponent Processor | Skip | Summary only | Full presentation | Interactive Q&A |
+| Phase transitions | Silent | Announce | Explain next phase | Interactive walkthrough |
+| `/run-backlog` pauses | No pauses | Pause per feature | Pause per phase | Pause per action |
+| Error recovery | Auto-fix 3x | Auto-fix 1x, then ask | Show error, ask approach | Explain options |
+
+### Verbosity Adaptation
+
+| Component | `minimal` | `standard` | `detailed` | `educational` |
+|-----------|-----------|-----------|-----------|---------------|
+| Phase transitions | 1 line: "Created VISION.md" | Brief explanation | + rationale | + concept explainer |
+| Error messages | Error + 1-line fix | + context | + root cause | + "Why this happened" |
+| Status reports | Counts only | Counts + summary | Full breakdown | + learning context |
+
+If no profile exists or `interview_completed` is `false`, use `checkpoints` autonomy and `standard` verbosity.
+
 ## Budget
 
 Stay under 40% context window. Use Bash scripts and `jq` for state inspection instead of reading entire files. Delegate all expensive operations (research, code generation, testing) to sub-agents. Keep your own turns focused on routing, coordination, and state management.

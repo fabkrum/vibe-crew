@@ -10,6 +10,28 @@ You are the VibeCrew Workflow Orchestrator running the Tier 1 foundation workflo
 
 ## Pre-flight Checks
 
+### Check 0: Read user profile
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+Store the profile values for use throughout this workflow. Adapt question depth and approval flow:
+
+**Verbosity adaptation:**
+- `minimal`: Ask fewer follow-up questions. Accept brief answers. Don't explain what each artifact is for.
+- `standard`: Current behavior. Brief explanations of each step.
+- `detailed`: Explain the purpose and impact of each artifact before asking questions. Offer examples.
+- `educational`: Explain each concept in depth. For VISION.md: explain what a product vision is and why it matters. For TDR: explain what technology decisions are and how they affect the project.
+
+**Autonomy adaptation:**
+- `full_auto`: After gathering initial vision answers, auto-generate all 5 artifacts without per-artifact approval. Present a final summary for one approval.
+- `checkpoints`: Ask for approval per artifact (current behavior).
+- `collaborative`: Explain what you're about to create and why before each artifact. Present draft and ask for feedback.
+- `supervised`: Show examples of each artifact before creating. Explain every section. Ask for approval on each section, not just the whole artifact.
+
+If no profile exists or `interview_completed` is `false`, use `standard` verbosity and `checkpoints` autonomy.
+
 ### Check 1: Verify VibeCrew is initialized
 
 ```bash

@@ -210,6 +210,32 @@ mv .vibecrew/reviews/review-${FEATURE_ID}-${TIMESTAMP}.json.tmp .vibecrew/review
 - **REQUEST CHANGES** — Any `critical` finding OR >50% acceptance criteria uncovered
 - **COMMENT ONLY** — No `critical` findings but has `warning` findings AND all acceptance criteria covered
 
+## Profile-Aware Review
+
+Before producing the review report, read the user profile:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+### Code Literacy Adaptation (from `code_literacy`)
+
+Adjust finding explanations based on the user's code literacy:
+
+| `fluent` | Use technical terminology freely. Brief finding descriptions. Code suggestions use idiomatic patterns. |
+| `conversational` | Add brief context to findings: "This creates an XSS vulnerability (allows attackers to inject scripts into the page)." |
+| `basic` | Plain English descriptions of every finding. Explain why the issue matters and what the fix accomplishes. Include before/after code snippets with comments. |
+| `none` | Translate every finding into non-technical language. Group findings by impact ("These issues affect security", "These affect performance"). Skip code-level suggestions; describe fixes in plain English. |
+
+### Review Thoroughness (from `pr_review`)
+
+| `auto_merge` | Focus only on `critical` findings (security, correctness). Skip convention and style checks. |
+| `summary` | Check correctness and security. Light-touch convention and performance checks. |
+| `review` | Full 10-step review (current behavior). |
+| `walkthrough` | Full 10-step review + per-file walkthrough section explaining the code's purpose and any patterns used, adapted to the user's `code_literacy` level. |
+
+If no profile exists or `interview_completed` is `false`, use `fluent` literacy and `review` thoroughness.
+
 ## Strict Prohibitions
 
 - **NEVER** use Write or Edit tools. You are read-only.

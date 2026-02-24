@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-CURRENT_VERSION="1.3.0"
+CURRENT_VERSION="1.4.0"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 # --- Semver comparison ---
@@ -136,6 +136,39 @@ migrate_1_2_to_1_3() {
   esac
 }
 
+# --- Migration: 1.3.0 -> 1.4.0 ---
+migrate_1_3_to_1_4() {
+  local file="$1"
+  local basename
+  basename=$(basename "$file")
+
+  case "$basename" in
+    config.json)
+      # Add user_profile section with null defaults
+      jq '. + {
+        user_profile: (.user_profile // {
+          interview_completed: false,
+          role: null,
+          code_literacy: null,
+          autonomy: null,
+          pr_review: null,
+          verbosity: null,
+          gamification_preference: null,
+          learning: null,
+          risk_tolerance: null,
+          updated_at: null
+        })
+      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      ;;
+    state.json)
+      # No structural changes needed for state in 1.4.0
+      ;;
+    backlog.json)
+      # No structural changes needed for backlog in 1.4.0
+      ;;
+  esac
+}
+
 # --- Migrate a single file ---
 migrate_file() {
   local file="$1"
@@ -167,6 +200,9 @@ migrate_file() {
   fi
   if version_lt "$version" "1.3.0"; then
     migrate_1_2_to_1_3 "$file"
+  fi
+  if version_lt "$version" "1.4.0"; then
+    migrate_1_3_to_1_4 "$file"
   fi
 
   # Update schema_version to current

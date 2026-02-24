@@ -21,7 +21,18 @@ test -d ".vibecrew" && echo "initialized" || echo "missing"
 If `.vibecrew/` does not exist, stop immediately and tell the user:
 "VibeCrew is not initialized. Run /setup first."
 
-### 1.2 Read project state
+### 1.2 Read user profile
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
+
+Store the profile for use in later steps. Key values:
+- `pr_review`: Determines PR creation behavior in Step 8.
+- `gamification_preference`: Controls progression display in Step 9.7.
+- `verbosity`: Controls coaching output depth in Step 9.
+
+### 1.3 Read project state
 
 ```bash
 cat .vibecrew/state.json
@@ -36,7 +47,7 @@ Parse the following from `state.json`:
 
 Store these values for use in later steps.
 
-### 1.3 Read backlog context
+### 1.4 Read backlog context
 
 ```bash
 cat .vibecrew/backlog.json 2>/dev/null || echo '{"features": []}'
@@ -47,7 +58,7 @@ If an active feature exists, find its entry in the backlog and extract:
 - `phases_completed` -- needed for phase completion metrics
 - `column` -- current Kanban column
 
-### 1.4 Detect existing session log
+### 1.5 Detect existing session log
 
 Check if a session log was started for this session by the Session Startup agent:
 
@@ -574,7 +585,39 @@ If the commit fails (e.g., pre-commit hook failure), report the error and sugges
 
 ---
 
-## Step 8: Optional PR
+## Step 8: PR Creation (Profile-Aware)
+
+Read the `pr_review` value from the profile loaded in Step 1.2.
+
+### If `pr_review` = `auto_merge`
+
+Skip PR creation entirely. If on a feature branch, merge directly to the default branch after tests pass:
+
+```bash
+DEFAULT_BRANCH=$(jq -r '.git.default_branch // "main"' .vibecrew/state.json 2>/dev/null || echo "main")
+git checkout "$DEFAULT_BRANCH" && git merge --no-ff "$(git branch --show-current)" && git branch -d "$(git rev-parse --abbrev-ref @{-1})"
+```
+
+Print: "Auto-merged to {default_branch}. PR skipped per profile."
+
+If the merge fails, fall back to creating a PR with summary format.
+
+### If `pr_review` = `summary`
+
+Auto-create a PR with a brief 3-line body. Do not ask the user:
+
+```bash
+gh pr create --title "<type>(<scope>): <summary>" --body "$(cat <<'PR_EOF'
+- <what changed>
+- <why>
+- <what to test>
+PR_EOF
+)"
+```
+
+Report the PR URL.
+
+### If `pr_review` = `review` or profile not set
 
 Ask the user:
 
@@ -584,7 +627,11 @@ Create a pull request? (yes/no)
 
 Wait for the user's response.
 
-### If yes:
+### If `pr_review` = `walkthrough`
+
+Auto-create a detailed PR with a per-file walkthrough section. Adapt walkthrough explanations to the user's `code_literacy` level. Do not ask — always create.
+
+### If yes (for `review` mode):
 
 Determine the PR details:
 
@@ -841,13 +888,22 @@ After the Performance Coach completes, print one of:
 
 After the Performance Coach completes, run the gamification processing pipeline to award XP, check badges, update streaks, and process challenges.
 
-### 9.7.1 Check if gamification is enabled
+### 9.7.1 Check gamification preference
+
+Read the `gamification_preference` from the profile loaded in Step 1.2. Also check the config flag:
 
 ```bash
 jq -r '.gamification.enabled // true' .vibecrew/config.json 2>/dev/null || echo "true"
 ```
 
-If `false`, skip this step entirely and proceed to Step 10.
+Apply gamification display rules based on the profile preference:
+
+- **`disabled`** (or config `enabled` = `false`): Skip all gamification processing and display. Proceed to Step 10.
+- **`score_only`**: Run gamification pipeline internally but suppress the `--- Progression ---` section entirely. Only show the Vibe Score.
+- **`light`**: Show Level + XP summary. Skip badge announcements, streak reminders, and challenge notifications.
+- **`full`**: Show everything — XP, levels, badges, streaks, challenges, quizzes (current behavior).
+
+If preference is `disabled`, skip this step entirely and proceed to Step 10.
 
 ### 9.7.2 Run gamification pipeline
 

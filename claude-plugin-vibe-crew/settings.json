@@ -63,7 +63,10 @@
       "Bash(git reset --soft *)",
       "Bash(gh run list *)",
       "Bash(gh run view *)",
-      "Bash(gh run watch *)"
+      "Bash(gh run watch *)",
+      "Bash(k6 *)",
+      "Bash(npx k6 *)",
+      "Bash(npx @axe-core/playwright *)"
     ],
     "deniedTools": [
       "Bash(sudo *)",

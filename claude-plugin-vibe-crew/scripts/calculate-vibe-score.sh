@@ -178,7 +178,72 @@ else
   LINT_CLEAN=true
 fi
 
-# --- 6. Output JSON ---
+# --- 7. TDD discipline detection ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TDD_DETECTED=false
+TDD_CYCLE_COUNT=0
+
+if [[ -x "$SCRIPT_DIR/detect-tdd-discipline.sh" ]]; then
+  TDD_OUTPUT=$(bash "$SCRIPT_DIR/detect-tdd-discipline.sh" "$PROJECT_ROOT" 2>/dev/null || echo '{}')
+  TDD_DETECTED=$(echo "$TDD_OUTPUT" | jq -r '.discipline_detected // false' 2>/dev/null || echo "false")
+  TDD_CYCLE_COUNT=$(echo "$TDD_OUTPUT" | jq -r '.cycle_count // 0' 2>/dev/null || echo "0")
+fi
+
+# --- 8. E2E test detection ---
+E2E_EXISTS=false
+E2E_PASSED=false
+
+E2E_FILES=$(find "$PROJECT_ROOT" \
+  -type f \( -name "*.spec.ts" -o -name "*.spec.js" \) \
+  -path "*/e2e/*" \
+  -not -path "*/node_modules/*" \
+  2>/dev/null || true)
+
+if [[ -n "$E2E_FILES" ]]; then
+  E2E_EXISTS=true
+  # Check if Playwright results exist from recent run
+  if [[ -d "$PROJECT_ROOT/test-results" ]] || [[ -d "$PROJECT_ROOT/playwright-report" ]]; then
+    E2E_PASSED=true
+  fi
+fi
+
+# --- 9. a11y check detection ---
+A11Y_CLEAN=false
+A11Y_EXISTS=false
+
+if [[ -d "$PROJECT_ROOT/.vibecrew/a11y" ]]; then
+  LATEST_A11Y=$(ls -1t "$PROJECT_ROOT/.vibecrew/a11y"/audit-*.json 2>/dev/null | head -1)
+  if [[ -n "$LATEST_A11Y" && -f "$LATEST_A11Y" ]]; then
+    A11Y_EXISTS=true
+    CRITICAL_COUNT=$(jq -r '.summary.critical // 0' "$LATEST_A11Y" 2>/dev/null || echo "0")
+    SERIOUS_COUNT=$(jq -r '.summary.serious // 0' "$LATEST_A11Y" 2>/dev/null || echo "0")
+    if [[ "$CRITICAL_COUNT" -eq 0 && "$SERIOUS_COUNT" -eq 0 ]]; then
+      A11Y_CLEAN=true
+    fi
+  fi
+fi
+
+# --- 10. Code review detection ---
+REVIEW_COMPLETED=false
+REVIEW_FINDINGS=0
+
+if [[ -x "$SCRIPT_DIR/detect-review-status.sh" ]]; then
+  REVIEW_OUTPUT=$(bash "$SCRIPT_DIR/detect-review-status.sh" "$PROJECT_ROOT" 2>/dev/null || echo '{}')
+  REVIEW_COMPLETED=$(echo "$REVIEW_OUTPUT" | jq -r '.review_completed // false' 2>/dev/null || echo "false")
+  REVIEW_FINDINGS=$(echo "$REVIEW_OUTPUT" | jq -r '.findings_count // 0' 2>/dev/null || echo "0")
+fi
+
+# --- 11. Performance baseline detection ---
+PERF_BASELINES_EXIST=false
+PERF_TEST_TYPES="[]"
+
+if [[ -x "$SCRIPT_DIR/detect-perf-baselines.sh" ]]; then
+  PERF_OUTPUT=$(bash "$SCRIPT_DIR/detect-perf-baselines.sh" "$PROJECT_ROOT" 2>/dev/null || echo '{}')
+  PERF_BASELINES_EXIST=$(echo "$PERF_OUTPUT" | jq -r '.baselines_exist // false' 2>/dev/null || echo "false")
+  PERF_TEST_TYPES=$(echo "$PERF_OUTPUT" | jq -c '.test_types // []' 2>/dev/null || echo "[]")
+fi
+
+# --- 12. Output JSON ---
 # Use jq to construct proper JSON (handles escaping)
 jq -n \
   --argjson tests_exist "$TESTS_EXIST" \
@@ -192,6 +257,16 @@ jq -n \
   --argjson phases_completed "$PHASES_COMPLETED" \
   --argjson phases_skipped "$PHASES_SKIPPED" \
   --argjson all_phases_complete "$ALL_PHASES_COMPLETE" \
+  --argjson tdd_detected "$TDD_DETECTED" \
+  --argjson tdd_cycle_count "$TDD_CYCLE_COUNT" \
+  --argjson e2e_exists "$E2E_EXISTS" \
+  --argjson e2e_passed "$E2E_PASSED" \
+  --argjson a11y_exists "$A11Y_EXISTS" \
+  --argjson a11y_clean "$A11Y_CLEAN" \
+  --argjson review_completed "$REVIEW_COMPLETED" \
+  --argjson review_findings "$REVIEW_FINDINGS" \
+  --argjson perf_baselines_exist "$PERF_BASELINES_EXIST" \
+  --argjson perf_test_types "$PERF_TEST_TYPES" \
   '{
     tests_exist: $tests_exist,
     tests_passed: $tests_passed,
@@ -203,5 +278,15 @@ jq -n \
     has_spec: $has_spec,
     phases_completed: $phases_completed,
     phases_skipped: $phases_skipped,
-    all_phases_complete: $all_phases_complete
+    all_phases_complete: $all_phases_complete,
+    tdd_detected: $tdd_detected,
+    tdd_cycle_count: $tdd_cycle_count,
+    e2e_exists: $e2e_exists,
+    e2e_passed: $e2e_passed,
+    a11y_exists: $a11y_exists,
+    a11y_clean: $a11y_clean,
+    review_completed: $review_completed,
+    review_findings: $review_findings,
+    perf_baselines_exist: $perf_baselines_exist,
+    perf_test_types: $perf_test_types
   }'

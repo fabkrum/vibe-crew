@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeOS — Release Notes</title>
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border) transparent;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ---- NAV ---- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-brand span {
+      color: var(--color-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-xs);
+      transition: all 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+      background: var(--color-surface-2);
+    }
+
+    .nav-links a.active {
+      color: var(--color-accent);
+      background: var(--color-accent-bg);
+    }
+
+    /* ---- MAIN ---- */
+    .main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 6rem 2rem 6rem;
+    }
+
+    /* ---- SECTIONS ---- */
+    .section {
+      margin-bottom: 5rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .section > p,
+    .section > ul,
+    .section > ol {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    li::marker {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- CODE ---- */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--color-surface-2);
+      padding: 0.15em 0.45em;
+      border-radius: 4px;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    pre {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .code-label {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+
+    /* ---- CARDS ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--color-accent-dim);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+
+    .card h4 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    /* ---- CALLOUT ---- */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid;
+      font-size: 0.92rem;
+    }
+
+    .callout p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.info {
+      background: var(--color-blue-dim);
+      border-color: rgba(96, 165, 250, 0.2);
+      color: var(--color-blue);
+    }
+
+    .callout.tip {
+      background: var(--color-green-dim);
+      border-color: rgba(74, 222, 128, 0.2);
+      color: var(--color-green);
+    }
+
+    .callout.warn {
+      background: var(--color-amber-dim);
+      border-color: rgba(251, 191, 36, 0.2);
+      color: var(--color-amber);
+    }
+
+    .callout.danger {
+      background: var(--color-red-dim);
+      border-color: rgba(248, 113, 113, 0.2);
+      color: var(--color-red);
+    }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ---- NAV BACK LINK ---- */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .back-link:hover {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    /* ---- RELEASE NOTES ---- */
+    .release { margin-bottom: 4rem; }
+    .release-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .release-header h2 { margin-bottom: 0; }
+    .release-date { font-size: 0.9rem; color: var(--color-text-muted); font-family: var(--font-mono); }
+    .release-tag { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; font-family: var(--font-mono); text-decoration: none; }
+    .release-tag:hover { text-decoration: none; }
+    .change-category { margin-top: 2rem; margin-bottom: 1rem; }
+    .change-category h3 { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .change-badge { display: inline-flex; align-items: center; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .change-badge.added { background: var(--color-green-dim); color: var(--color-green); }
+    .change-badge.changed { background: var(--color-amber-dim); color: var(--color-amber); }
+    .feature-group { margin-top: 1.5rem; margin-bottom: 1rem; }
+    .feature-group h4 { color: var(--color-text); margin-top: 0; }
+    .file-list { list-style: none; padding-left: 0; }
+    .file-list li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.9rem; color: var(--color-text-secondary); }
+    .file-list li:last-child { border-bottom: none; }
+    .file-list code { font-size: 0.8em; }
+    .file-list .file-desc { color: var(--color-text-muted); }
+    .version-nav { display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .version-nav a { display: inline-flex; align-items: center; padding: 0.4rem 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-xs); color: var(--color-text-secondary); text-decoration: none; font-size: 0.85rem; font-family: var(--font-mono); transition: all 0.15s; }
+    .version-nav a:hover { border-color: var(--color-accent-dim); color: var(--color-accent); text-decoration: none; }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .main { padding: 5rem 1.25rem 4rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.15rem; }
+      pre { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <ul class="nav-links">
+      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="setup.html">Setup</a></li>
+      <li><a href="new-project.html">New Project</a></li>
+      <li><a href="existing-project.html">Existing Project</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+      <li><a href="releases.html" class="active">Releases</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="main">
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+  <section class="section">
+    <span class="section-label">Changelog</span>
+    <h2>Release Notes</h2>
+    <p>All notable changes to VibeOS, following <a href="https://keepachangelog.com/en/1.1.0/">Keep a Changelog</a> and <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+  </section>
+
+  <div class="version-nav">
+    <a href="#v1.3.0">v1.3.0</a>
+    <a href="#v1.2.0">v1.2.0</a>
+    <a href="#v1.1.0">v1.1.0</a>
+    <a href="#v1.0.0">v1.0.0</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.3.0                                                       -->
+  <!-- ============================================================ -->
+  <div class="release" id="v1.3.0">
+    <div class="release-header">
+      <h2>v1.3.0</h2>
+      <span class="release-date">2026-02-23</span>
+      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.3.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Status Bar &mdash; Persistent Status Line</h4>
+      <ul class="file-list">
+        <li><code>scripts/statusline.sh</code> &mdash; <span class="file-desc">Status line script rendering 6 data segments (context %, cost, feature &middot; phase, Vibe Score, duration, compaction count). Reads session JSON from stdin and <code>.vibeos/</code> state files from disk. ANSI color-coded context bar (green/yellow/red). Graceful fallback if <code>jq</code> missing or <code>.vibeos/</code> absent. Bash 3.2 compatible</span></li>
+        <li><code>settings.json</code> &mdash; <span class="file-desc">Added <code>statusLine</code> config pointing to <code>./scripts/statusline.sh</code></span></li>
+        <li><code>README.md</code> &mdash; <span class="file-desc">Added Status Bar section documenting segments, sources, and color thresholds</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/replay &mdash; Reusable Session Workflow Templates</h4>
+      <ul class="file-list">
+        <li><code>skills/replay/SKILL.md</code> &mdash; <span class="file-desc">Slash command: list/create/apply workflow templates from successful sessions. <code>/replay</code> lists templates, <code>/replay --create &lt;name&gt;</code> extracts from sessions with Vibe Score &gt;= 70, <code>/replay &lt;name&gt;</code> loads and guides development</span></li>
+        <li><code>scripts/extract-workflow.sh</code> &mdash; <span class="file-desc">Parse session logs and score files to extract phase order, commit patterns, test strategy, and quality thresholds into a reusable workflow template</span></li>
+        <li><code>scripts/list-workflows.sh</code> &mdash; <span class="file-desc">List <code>.vibeos/workflows/workflow-*.json</code> files with name, description, phase count, and min score summaries</span></li>
+        <li><code>templates/workflow.json.template</code> &mdash; <span class="file-desc">Schema v1.3.0 workflow template: phase_order, branch_convention, test_strategy, quality_thresholds, commit_convention</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/simplify &mdash; Code Simplifier</h4>
+      <ul class="file-list">
+        <li><code>agents/code-simplifier.md</code> &mdash; <span class="file-desc">Opus agent, worktree isolation, read-only. Analyzes code for 4 simplification categories: dead code removal, abstraction flattening, API surface reduction, dependency consolidation</span></li>
+        <li><code>skills/simplify/SKILL.md</code> &mdash; <span class="file-desc">Slash command: collect feature files, invoke code-simplifier agent, display suggestions with before/after previews, apply with per-suggestion approval and automatic test verification, revert on test failure</span></li>
+        <li><code>scripts/collect-feature-files.sh</code> &mdash; <span class="file-desc">Gather source files changed on feature branch via <code>git diff --name-only</code>, filter to code files only</span></li>
+        <li><code>templates/simplification-report.json.template</code> &mdash; <span class="file-desc">Schema v1.3.0 report with per-suggestion status tracking (pending/applied/rejected/reverted)</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/heal &mdash; Auto-Healing CI</h4>
+      <ul class="file-list">
+        <li><code>agents/ci-healer.md</code> &mdash; <span class="file-desc">Sonnet agent, maxTurns 15. Categorizes CI failures (build/test/lint/dep/env) and applies targeted minimal fixes</span></li>
+        <li><code>skills/heal/SKILL.md</code> &mdash; <span class="file-desc">Slash command: fetch CI logs from GitHub Actions, diagnose failure category, create checkpoint, invoke ci-healer agent, verify fix, retry loop (max 3 attempts), escalate to user on failure</span></li>
+        <li><code>scripts/fetch-ci-logs.sh</code> &mdash; <span class="file-desc">Fetch latest failed CI run via <code>gh run view --log-failed</code>, truncate to 500 lines, output structured JSON</span></li>
+        <li><code>scripts/diagnose-ci-failure.sh</code> &mdash; <span class="file-desc">Pattern-match CI error logs to categorize as build/test/lint/dep/env with confidence rating and relevant line extraction</span></li>
+        <li><code>templates/ci-heal-report.json.template</code> &mdash; <span class="file-desc">Schema v1.3.0 report: attempts array with diagnosis, fix description, CI result per attempt</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Opponent Processor &mdash; TDR Debate System</h4>
+      <ul class="file-list">
+        <li><code>agents/opponent-processor.md</code> &mdash; <span class="file-desc">Sonnet agent, worktree isolation, read-only. Devil's advocate for technology decisions: generates counter-arguments, debate matrices (6 criteria), risk assessments, and Keep/Reconsider verdicts</span></li>
+        <li><code>scripts/generate-counter-tdr.sh</code> &mdash; <span class="file-desc">Extract technology decisions from TDR markdown, output structured JSON with category, chosen option, and stated rationale per decision</span></li>
+        <li><code>templates/counter-tdr.md.template</code> &mdash; <span class="file-desc">Counter-analysis format: per-decision devil's advocate position, debate matrix table, risk assessment, recommendation</span></li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge changed">Changed</span></h3>
+    </div>
+
+    <ul class="file-list">
+      <li><code>skills/new-project/SKILL.md</code> &mdash; <span class="file-desc">Added Step 3.5: invoke Opponent Processor after TDR creation. Presents both analyses side-by-side, offers keep all / reconsider / skip choice</span></li>
+      <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">Added Opponent Processor coordination section to Tier 1 routing</span></li>
+      <li><code>.claude-plugin/plugin.json</code> &mdash; <span class="file-desc">Version bumped to 1.3.0</span></li>
+      <li><code>settings.json</code> &mdash; <span class="file-desc">Added 3 allowedTools: <code>gh run list</code>, <code>gh run view</code>, <code>gh run watch</code></span></li>
+      <li><code>scripts/migrate-state.sh</code> &mdash; <span class="file-desc">Added <code>migrate_1_2_to_1_3()</code>: opponent_processor, simplify, ci_healing config sections + active_workflow in state. Updated version chain to 1.3.0</span></li>
+      <li><code>templates/config.json.template</code> &mdash; <span class="file-desc">Added <code>opponent_processor</code>, <code>simplify</code>, <code>ci_healing</code> config sections. Schema version bumped to 1.3.0</span></li>
+      <li><code>templates/state.json.template</code> &mdash; <span class="file-desc">Added <code>active_workflow: null</code> field</span></li>
+      <li><code>README.md</code> &mdash; <span class="file-desc">Updated to 12 agents (was 9), 17 commands (was 14). Added /replay, /simplify, /heal sections and 3 new agent entries</span></li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.2.0                                                       -->
+  <!-- ============================================================ -->
+  <div class="release" id="v1.2.0">
+    <div class="release-header">
+      <h2>v1.2.0</h2>
+      <span class="release-date">2026-02-23</span>
+      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.2.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>/cost &mdash; Real-time Token Cost Dashboard</h4>
+      <ul class="file-list">
+        <li><code>skills/cost/SKILL.md</code> &mdash; <span class="file-desc">Slash command displaying current session cost, daily/weekly/monthly aggregates, threshold proximity indicators, and model pricing reference table (Opus/Sonnet/Haiku)</span></li>
+        <li><code>scripts/aggregate-costs.sh</code> &mdash; <span class="file-desc">Scans <code>.vibeos/sessions/session-*.json</code> and live <code>session-cost.json</code>, computes daily/weekly/monthly/all-time cost totals</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/undo &mdash; Checkpoint Rollback</h4>
+      <ul class="file-list">
+        <li><code>skills/undo/SKILL.md</code> &mdash; <span class="file-desc">Slash command listing VibeOS checkpoints and recent commits, detecting pushed vs unpushed state, and performing safe rollback via <code>git revert</code> (pushed) or <code>git reset --soft</code> (unpushed)</span></li>
+        <li><code>scripts/create-checkpoint.sh</code> &mdash; <span class="file-desc">Creates lightweight git tag <code>vibeos-checkpoint-&lt;ISO-timestamp&gt;</code> with description</span></li>
+        <li><code>scripts/list-checkpoints.sh</code> &mdash; <span class="file-desc">Lists <code>vibeos-checkpoint-*</code> tags sorted by date with commit hash and subject</span></li>
+        <li><code>scripts/rollback-checkpoint.sh</code> &mdash; <span class="file-desc">Validates target commit, performs rollback in revert or reset mode, reports summary</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/audit &mdash; OWASP Top 10 Security Review</h4>
+      <ul class="file-list">
+        <li><code>agents/security-auditor.md</code> &mdash; <span class="file-desc">Sonnet agent, worktree isolation, read-only. 10-step OWASP scan (A01-A10): broken access control, cryptographic failures, injection, insecure design, misconfiguration, vulnerable components, auth failures, data integrity, logging gaps, SSRF</span></li>
+        <li><code>skills/audit/SKILL.md</code> &mdash; <span class="file-desc">Slash command detecting project language, invoking security-auditor agent, formatting findings by severity, optional GitHub issue creation for critical/high findings</span></li>
+        <li><code>scripts/scan-dependencies.sh</code> &mdash; <span class="file-desc">Multi-language dependency audit: npm audit, pip audit, bundle audit, govulncheck, cargo audit, composer audit. Graceful fallback if tool missing</span></li>
+        <li><code>scripts/detect-secrets.sh</code> &mdash; <span class="file-desc">Regex scan for AWS keys, API keys, private keys, passwords, JWTs, connection strings, Stripe/GitHub tokens. Redacts actual values in output</span></li>
+        <li><code>templates/audit-report.json.template</code> &mdash; <span class="file-desc">Schema v1.2.0 report structure with findings array, dependency vulnerabilities, secrets detected, summary counts</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Non-Node.js Convention Detection</h4>
+      <ul class="file-list">
+        <li><code>scripts/detect-conventions.sh</code> &mdash; <span class="file-desc">Added language detection from manifests (pyproject.toml, Gemfile, go.mod, Cargo.toml, composer.json, pom.xml/build.gradle). Per-language formatter/linter/naming/indent detection for Python (Black/Ruff, PEP8), Ruby (RuboCop), Go (gofmt, golangci-lint), Rust (rustfmt, clippy), PHP (PHP-CS-Fixer), Java (Checkstyle). Added <code>language</code> and <code>package_manager</code> to JSON output</span></li>
+        <li><code>scripts/extract-project-conventions.sh</code> &mdash; <span class="file-desc">Per-language framework/ORM/auth/API detection: Python (Django/Flask/FastAPI, SQLAlchemy), Ruby (Rails, ActiveRecord, Devise), Go (Gin/Echo/Fiber, GORM), Rust (Actix/Axum, Diesel/SeaORM), PHP (Laravel/Symfony, Eloquent/Doctrine), Java (Spring Boot, Hibernate). Added <code>language</code> to JSON output</span></li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge changed">Changed</span></h3>
+    </div>
+
+    <ul class="file-list">
+      <li><code>scripts/cost-guardrails.sh</code> &mdash; <span class="file-desc">Multi-model pricing via <code>case</code> on model name (Opus $15/$75, Sonnet $3/$15, Haiku $0.25/$1.25). Added <code>model</code> field to session-cost.json output</span></li>
+      <li><code>skills/new-feature/SKILL.md</code> &mdash; <span class="file-desc">Added Step 5.5: create checkpoint before feature development</span></li>
+      <li><code>skills/run-backlog/SKILL.md</code> &mdash; <span class="file-desc">Added checkpoint creation after branch creation in feature claim step</span></li>
+      <li><code>agents/code-auditor.md</code> &mdash; <span class="file-desc">Updated Step 1 to detect language before reading manifest. Non-Node.js supported languages now get "medium" confidence (was "low")</span></li>
+      <li><code>scripts/migrate-state.sh</code> &mdash; <span class="file-desc">Added <code>migrate_1_1_to_1_2()</code>: adds <code>audit</code> config section. Updated version chain to 1.2.0</span></li>
+      <li><code>templates/config.json.template</code> &mdash; <span class="file-desc">Added <code>audit: { auto_github_issues: false, severity_threshold: "high" }</code>. Schema version bumped to 1.2.0</span></li>
+      <li><code>settings.json</code> &mdash; <span class="file-desc">Added audit and git permissions: npm audit, pip audit, bundle audit, govulncheck, cargo audit, composer audit, git tag, git revert, git reset --soft</span></li>
+      <li><code>.claude-plugin/plugin.json</code> &mdash; <span class="file-desc">Version bumped to 1.2.0</span></li>
+      <li><code>README.md</code> &mdash; <span class="file-desc">Updated to 9 agents (was 8), 14 commands (was 11), added /cost + /undo + /audit docs and Security Auditor agent entry</span></li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.1.0                                                       -->
+  <!-- ============================================================ -->
+  <div class="release" id="v1.1.0">
+    <div class="release-header">
+      <h2>v1.1.0</h2>
+      <span class="release-date">2026-02-23</span>
+      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.1.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Performance Coach (Phase 1)</h4>
+      <p>Self-improvement engine with cross-session trend analysis and CLAUDE.md mutation system.</p>
+      <ul class="file-list">
+        <li><code>agents/performance-coach.md</code> &mdash; <span class="file-desc">Sonnet agent with persistent MEMORY.md, 7-step mutation workflow, and 5 anti-pattern templates</span></li>
+        <li><code>scripts/aggregate-scores.sh</code> &mdash; <span class="file-desc">Reads last 10 score files, classifies trends (improving/declining/recurring/plateau/volatile), calculates satisfaction-score correlation</span></li>
+        <li><code>scripts/detect-anti-patterns.sh</code> &mdash; <span class="file-desc">Scans score history for recurring deduction categories, outputs frequency data</span></li>
+        <li><code>scripts/apply-mutation.sh</code> &mdash; <span class="file-desc">Appends approved rules to CLAUDE.md "Session Learnings" section, updates mutation-log.json</span></li>
+        <li><code>scripts/check-mutation-eligibility.sh</code> &mdash; <span class="file-desc">Enforces guardrails: min 5 sessions, 3+ occurrences, max 1/session, no duplicates, 3-rejection cooldown</span></li>
+        <li><code>templates/memory-md.template</code> &mdash; <span class="file-desc">Persistent Performance Coach memory (anti-patterns, mutations, trends, notes)</span></li>
+        <li><code>templates/mutation-proposal.json.template</code> &mdash; <span class="file-desc">Structured mutation proposal format</span></li>
+        <li><code>skills/wrap/SKILL.md</code> &mdash; <span class="file-desc">Added Step 9.5 (Performance Coach invocation), Step 9.7 (4-point user satisfaction feedback)</span></li>
+        <li><code>templates/score-breakdown.json.template</code> &mdash; <span class="file-desc">Added <code>user_feedback</code> (rating 1-4, comment) and <code>trend</code> (direction, window_size, average_score) fields</span></li>
+        <li><code>templates/mutation-log.json.template</code> &mdash; <span class="file-desc">Added <code>rejection_count</code>, <code>cooldown_until</code>, <code>confidence</code> fields</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Existing Project Onboarding (Phase 2)</h4>
+      <p>Unlocks VibeOS for existing projects with <code>/onboard</code> command and Code Auditor agent.</p>
+      <ul class="file-list">
+        <li><code>agents/code-auditor.md</code> &mdash; <span class="file-desc">Sonnet agent, read-only worktree analysis, scans dependencies, conventions, test gaps, design system, architecture</span></li>
+        <li><code>skills/onboard/SKILL.md</code> &mdash; <span class="file-desc">8-step guided onboarding: dependency detection, convention extraction, test gap analysis, CLAUDE.md generation, state initialization</span></li>
+        <li><code>scripts/detect-conventions.sh</code> &mdash; <span class="file-desc">Scans naming, imports, formatting, commit format, linters, formatters</span></li>
+        <li><code>scripts/analyze-test-gaps.sh</code> &mdash; <span class="file-desc">Compares source vs test files, identifies untested modules, estimates coverage</span></li>
+        <li><code>scripts/extract-project-conventions.sh</code> &mdash; <span class="file-desc">Deep scanner: framework, state management, API patterns, component libraries, auth, database</span></li>
+        <li><code>scripts/generate-onboard-claude-md.sh</code> &mdash; <span class="file-desc">Generates project-specific CLAUDE.md from onboard findings</span></li>
+        <li><code>templates/onboard-state.json.template</code> &mdash; <span class="file-desc">Pre-filled state.json for onboarded projects (foundation.complete=true)</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Doc Generator + /handoff (Phase 3)</h4>
+      <p>Documentation automation and cross-session context transfer.</p>
+      <ul class="file-list">
+        <li><code>agents/doc-generator.md</code> &mdash; <span class="file-desc">Sonnet agent for feature docs, CHANGELOG, VitePress sidebar, release notes</span></li>
+        <li><code>scripts/generate-feature-docs.sh</code> &mdash; <span class="file-desc">Reads backlog, generates markdown feature docs from specs</span></li>
+        <li><code>scripts/update-changelog.sh</code> &mdash; <span class="file-desc">Parses conventional commits, groups by type, appends to CHANGELOG.md</span></li>
+        <li><code>scripts/rebuild-sidebar.sh</code> &mdash; <span class="file-desc">Scans docs/features/, outputs VitePress sidebar config</span></li>
+        <li><code>skills/handoff/SKILL.md</code> &mdash; <span class="file-desc">Structured context transfer: state, work done, blockers, next steps, decisions (&lt;500 words)</span></li>
+        <li><code>templates/handoff.md.template</code> &mdash; <span class="file-desc">Handoff document template</span></li>
+        <li><code>scripts/generate-handoff.sh</code> &mdash; <span class="file-desc">Reads state, backlog, commits; produces structured handoff</span></li>
+        <li><code>skills/wrap/SKILL.md</code> &mdash; <span class="file-desc">Added Step 10.5 (auto-generate handoff, invoke Doc Generator)</span></li>
+        <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Added handoff detection: reads latest from <code>.vibeos/handoffs/</code>, includes in banner</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Enhanced Dashboard (Phase 4)</h4>
+      <p>5 new Vue dashboard components with cross-session data visualization.</p>
+      <ul class="file-list">
+        <li><code>templates/docs-site/data/scores.data.ts</code> &mdash; <span class="file-desc">Data loader: reads scores, aggregates trends, top deductions</span></li>
+        <li><code>templates/docs-site/data/agents.data.ts</code> &mdash; <span class="file-desc">Data loader: reads sessions, extracts agent activity and token usage</span></li>
+        <li><code>templates/docs-site/components/ScoreTrend.vue</code> &mdash; <span class="file-desc">SVG line chart: Vibe Score over last 20 sessions, trend indicator, target line at 80</span></li>
+        <li><code>templates/docs-site/components/TokenBreakdown.vue</code> &mdash; <span class="file-desc">Stacked horizontal bars: input/cache/output tokens per session, cost overlay</span></li>
+        <li><code>templates/docs-site/components/CoverageGauge.vue</code> &mdash; <span class="file-desc">SVG radial gauge: test coverage % with color bands</span></li>
+        <li><code>templates/docs-site/components/FeatureProgress.vue</code> &mdash; <span class="file-desc">Horizontal bars: features by kanban column, velocity metric</span></li>
+        <li><code>templates/docs-site/components/AgentActivityPanel.vue</code> &mdash; <span class="file-desc">Agent invocation bars and session timeline with agent chips</span></li>
+        <li><code>templates/docs-site/trends.md</code> &mdash; <span class="file-desc">Trends dashboard page</span></li>
+        <li><code>templates/docs-site/coverage.md</code> &mdash; <span class="file-desc">Coverage and progress dashboard page</span></li>
+        <li><code>templates/docs-site/system/welcome.md</code> &mdash; <span class="file-desc">Dashboard welcome page with guided first-session flow</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Progressive Onboarding (Phase 4)</h4>
+      <p>Contextual command hints for new users.</p>
+      <ul class="file-list">
+        <li><code>scripts/onboarding-hints.sh</code> &mdash; <span class="file-desc">State-aware hint engine: suggests next command based on project phase, respects dismissals</span></li>
+        <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Added progressive onboarding hints (max 1/session, dismissable)</span></li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge changed">Changed</span></h3>
+    </div>
+
+    <ul class="file-list">
+      <li><code>templates/docs-site/package.json</code> &mdash; <span class="file-desc">Added <code>chart.js</code> and <code>vue-chartjs</code> dependencies</span></li>
+      <li><code>templates/docs-site/.vitepress/config.ts</code> &mdash; <span class="file-desc">Added Trends and Coverage nav items</span></li>
+      <li><code>templates/config.json.template</code> &mdash; <span class="file-desc">Added <code>performance_coach</code>, <code>doc_generator</code>, <code>onboarding</code> config sections</span></li>
+      <li><code>templates/state.json.template</code> &mdash; <span class="file-desc">Added <code>onboarded</code> (bool) and <code>onboarded_at</code> (ISO timestamp) fields</span></li>
+      <li><code>scripts/migrate-state.sh</code> &mdash; <span class="file-desc">Added 1.0.0 -&gt; 1.1.0 migration (new optional fields with defaults)</span></li>
+      <li><code>scripts/session-startup.sh</code> &mdash; <span class="file-desc">Added handoff file detection and hint integration</span></li>
+      <li><code>.claude-plugin/plugin.json</code> &mdash; <span class="file-desc">Version bumped to 1.1.0</span></li>
+      <li><code>README.md</code> &mdash; <span class="file-desc">Updated agent count (5-&gt;8), command count (9-&gt;11), added /onboard and /handoff docs</span></li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.0.0                                                       -->
+  <!-- ============================================================ -->
+  <div class="release" id="v1.0.0">
+    <div class="release-header">
+      <h2>v1.0.0</h2>
+      <span class="release-date">2026-02-23</span>
+      <a href="https://github.com/fabkrum/vibe-os/releases/tag/v1.0.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Phase 1 &mdash; Foundation (17 files)</h4>
+      <p>Plugin scaffold and core infrastructure.</p>
+      <ul class="file-list">
+        <li><code>.claude-plugin/plugin.json</code> &mdash; <span class="file-desc">Plugin manifest with name, version, author, and entry points</span></li>
+        <li><code>hooks/hooks.json</code> &mdash; <span class="file-desc">Hook system with 10 bindings across 6 lifecycle events (SessionStart, PreToolUse, PostToolUse, Notification, PostToolUseFailure, Stop)</span></li>
+        <li><code>scripts/session-startup.sh</code> &mdash; <span class="file-desc">Session initialization and environment detection</span></li>
+        <li><code>scripts/phase-gate.sh</code> &mdash; <span class="file-desc">Blocks source code writes until Tier 1 foundation is complete</span></li>
+        <li><code>scripts/restrict-paths.sh</code> &mdash; <span class="file-desc">Validates write targets against allowed directories</span></li>
+        <li><code>scripts/protect-data.sh</code> &mdash; <span class="file-desc">Blocks dangerous bash commands (rm -rf, force push, DROP TABLE, sudo)</span></li>
+        <li><code>scripts/format-code.sh</code> &mdash; <span class="file-desc">Auto-formats files after Write/Edit via Prettier</span></li>
+        <li><code>scripts/notify.sh</code> &mdash; <span class="file-desc">Native OS notifications via terminal-notifier with Warp deep-linking</span></li>
+        <li><code>scripts/check-context.sh</code> &mdash; <span class="file-desc">Context usage warnings at 60% and 80% thresholds</span></li>
+        <li><code>scripts/sandbox.sh</code> &mdash; <span class="file-desc">Sandboxed command execution wrapper</span></li>
+        <li><code>scripts/check-deps.sh</code> &mdash; <span class="file-desc">Dependency verification (Git, Node, gh, jq, terminal-notifier)</span></li>
+        <li><code>scripts/init-vibeos-state.sh</code> &mdash; <span class="file-desc">Initializes <code>.vibeos/</code> state directory with config, state, and backlog</span></li>
+        <li><code>scripts/migrate-state.sh</code> &mdash; <span class="file-desc">State schema migration for version upgrades</span></li>
+        <li><code>settings.json</code> &mdash; <span class="file-desc">68 permission rules (50 allowed tools, 18 denied tools)</span></li>
+        <li><code>.mcp.json</code> &mdash; <span class="file-desc">MCP server configuration for Context7 and Puppeteer</span></li>
+        <li><code>LICENSE</code> &mdash; <span class="file-desc">MIT license</span></li>
+        <li><code>templates/config.json.template</code> &mdash; <span class="file-desc">Default <code>.vibeos/config.json</code> scaffold</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Phase 2 &mdash; Core Agents (22 files)</h4>
+      <p>Agent definitions, project templates, and primary slash commands.</p>
+      <ul class="file-list">
+        <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Session Startup agent prompt (Haiku model, inline execution)</span></li>
+        <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">Workflow Orchestrator agent prompt (Sonnet model, inline execution)</span></li>
+        <li><code>agents/stack-scout.md</code> &mdash; <span class="file-desc">Stack Scout agent prompt (Sonnet model, worktree execution)</span></li>
+        <li><code>agents/builder.md</code> &mdash; <span class="file-desc">Builder agent prompt (Sonnet model, worktree execution)</span></li>
+        <li><code>agents/verifier.md</code> &mdash; <span class="file-desc">Verifier agent prompt (Sonnet model, inline execution)</span></li>
+        <li><code>templates/VISION.md.template</code> &mdash; <span class="file-desc">Product vision document scaffold</span></li>
+        <li><code>templates/design-system.css.template</code> &mdash; <span class="file-desc">Design tokens (colors, typography, spacing, components)</span></li>
+        <li><code>templates/tdr.md.template</code> &mdash; <span class="file-desc">Technology Decision Record scaffold</span></li>
+        <li><code>templates/roadmap.md.template</code> &mdash; <span class="file-desc">Phased delivery plan scaffold</span></li>
+        <li><code>templates/CLAUDE.md.template</code> &mdash; <span class="file-desc">Project-specific Claude Code rules scaffold</span></li>
+        <li><code>templates/state.json.template</code> &mdash; <span class="file-desc">Foundation status and active feature state</span></li>
+        <li><code>templates/backlog.json.template</code> &mdash; <span class="file-desc">Feature backlog with specs and priorities</span></li>
+        <li><code>templates/feature-spec.md.template</code> &mdash; <span class="file-desc">Individual feature specification scaffold</span></li>
+        <li><code>skills/setup/SKILL.md</code> &mdash; <span class="file-desc"><code>/setup</code> command (environment check, state initialization)</span></li>
+        <li><code>skills/new-project/SKILL.md</code> &mdash; <span class="file-desc"><code>/new-project</code> command (Tier 1 foundation workflow)</span></li>
+        <li><code>skills/status/SKILL.md</code> &mdash; <span class="file-desc"><code>/status</code> command (project state display)</span></li>
+        <li><code>skills/idea/SKILL.md</code> &mdash; <span class="file-desc"><code>/idea</code> command (quick backlog capture)</span></li>
+        <li><code>skills/plan-features/SKILL.md</code> &mdash; <span class="file-desc"><code>/plan-features</code> command (backlog definition and prioritization)</span></li>
+        <li><code>scripts/claim-task.sh</code> &mdash; <span class="file-desc">Claims a backlog task and sets it as active feature</span></li>
+        <li><code>scripts/complete-phase.sh</code> &mdash; <span class="file-desc">Marks a Tier 2 phase as complete and advances workflow</span></li>
+        <li><code>scripts/update-backlog.sh</code> &mdash; <span class="file-desc">Updates backlog.json with new items or status changes</span></li>
+        <li><code>scripts/detect-terminal.sh</code> &mdash; <span class="file-desc">Detects terminal type (Warp, iTerm2, Terminal.app) for notification routing</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Phase 3 &mdash; Quality Layer (15 files)</h4>
+      <p>Remaining slash commands, test infrastructure templates, and quality scripts.</p>
+      <ul class="file-list">
+        <li><code>skills/check/SKILL.md</code> &mdash; <span class="file-desc"><code>/check</code> command (run tests, build, lint, type-check)</span></li>
+        <li><code>skills/wrap/SKILL.md</code> &mdash; <span class="file-desc"><code>/wrap</code> command (session log, Vibe Score, release notes, CLAUDE.md mutations)</span></li>
+        <li><code>skills/new-feature/SKILL.md</code> &mdash; <span class="file-desc"><code>/new-feature</code> command (Tier 2 feature development cycle)</span></li>
+        <li><code>skills/run-backlog/SKILL.md</code> &mdash; <span class="file-desc"><code>/run-backlog</code> command (autonomous backlog processing)</span></li>
+        <li><code>templates/vitest.config.ts.template</code> &mdash; <span class="file-desc">Vitest configuration scaffold</span></li>
+        <li><code>templates/playwright.config.ts.template</code> &mdash; <span class="file-desc">Playwright E2E test configuration scaffold</span></li>
+        <li><code>templates/axe-config.ts.template</code> &mdash; <span class="file-desc">axe accessibility testing configuration scaffold</span></li>
+        <li><code>templates/test-utils.ts.template</code> &mdash; <span class="file-desc">Shared test utilities (render helpers, mock factories, fixtures)</span></li>
+        <li><code>templates/session-log.json.template</code> &mdash; <span class="file-desc">Session log data structure</span></li>
+        <li><code>templates/score-breakdown.json.template</code> &mdash; <span class="file-desc">Vibe Score breakdown data structure</span></li>
+        <li><code>scripts/calculate-vibe-score.sh</code> &mdash; <span class="file-desc">Vibe Score calculation (deductions for churn, loops, violations; bonuses for artifacts and cache)</span></li>
+        <li><code>scripts/generate-release-notes.sh</code> &mdash; <span class="file-desc">Generates release notes from session logs and git history</span></li>
+        <li><code>scripts/git-branch-create.sh</code> &mdash; <span class="file-desc">Creates feature/fix branches with naming conventions</span></li>
+        <li><code>scripts/git-commit-validate.sh</code> &mdash; <span class="file-desc">Validates commit messages against conventional commit format</span></li>
+        <li><code>scripts/update-backlog.sh</code> &mdash; <span class="file-desc">Backlog state management (also listed in Phase 2; extended here with phase-tracking)</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Phase 4 &mdash; Documentation (12 files)</h4>
+      <p>VitePress documentation site scaffold with live data integration.</p>
+      <ul class="file-list">
+        <li><code>templates/docs-site/package.json</code> &mdash; <span class="file-desc">VitePress project manifest</span></li>
+        <li><code>templates/docs-site/.vitepress/config.ts</code> &mdash; <span class="file-desc">VitePress site configuration (nav, sidebar, theme)</span></li>
+        <li><code>templates/docs-site/data/sessions.data.ts</code> &mdash; <span class="file-desc">Data loader for <code>.vibeos/sessions/</code> JSON files</span></li>
+        <li><code>templates/docs-site/data/backlog.data.ts</code> &mdash; <span class="file-desc">Data loader for <code>.vibeos/backlog.json</code></span></li>
+        <li><code>templates/docs-site/components/KanbanBoard.vue</code> &mdash; <span class="file-desc">Vue component for feature backlog kanban view</span></li>
+        <li><code>templates/docs-site/components/StatsPage.vue</code> &mdash; <span class="file-desc">Vue component for session stats and Vibe Score charts</span></li>
+        <li><code>templates/docs-site/index.md</code> &mdash; <span class="file-desc">Documentation site landing page</span></li>
+        <li><code>templates/docs-site/kanban.md</code> &mdash; <span class="file-desc">Kanban board page (renders KanbanBoard component)</span></li>
+        <li><code>templates/docs-site/stats.md</code> &mdash; <span class="file-desc">Stats dashboard page (renders StatsPage component)</span></li>
+        <li><code>templates/docs-site/system/commands.md</code> &mdash; <span class="file-desc">Full slash command reference</span></li>
+        <li><code>templates/docs-site/system/getting-started.md</code> &mdash; <span class="file-desc">Installation and first-project guide</span></li>
+        <li><code>scripts/update-docs.sh</code> &mdash; <span class="file-desc">Copies session data into docs-site for static build</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Phase 5 &mdash; Intelligence Layer (7 files)</h4>
+      <p>Enhanced automation scripts for self-improvement and operational safety.</p>
+      <ul class="file-list">
+        <li><code>scripts/compact-reinject.sh</code> &mdash; <span class="file-desc">Enhanced context compaction handler (re-injects project state, active feature, and phase after compaction)</span></li>
+        <li><code>scripts/cost-guardrails.sh</code> &mdash; <span class="file-desc">Session cost threshold checks with configurable limits</span></li>
+        <li><code>scripts/claude-md-lint.sh</code> &mdash; <span class="file-desc">Validates CLAUDE.md size, structure, and rule quality</span></li>
+        <li><code>scripts/sync-state.sh</code> &mdash; <span class="file-desc">Reconciles <code>.vibeos/state.json</code> with filesystem (detects missing artifacts, repairs drift)</span></li>
+        <li><code>scripts/error-recovery.sh</code> &mdash; <span class="file-desc">Clears stale locks, repairs corrupted JSON, resets interrupted tasks</span></li>
+        <li><code>scripts/validate-plugin.sh</code> &mdash; <span class="file-desc">Validates plugin structure (required files, hook bindings, agent refs, permission rules)</span></li>
+        <li><code>templates/mutation-log.json.template</code> &mdash; <span class="file-desc">Audit log for CLAUDE.md mutations proposed by Performance Coach</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Phase 6 &mdash; Polish (8 files)</h4>
+      <p>Documentation, cleanup utilities, and finalized configurations.</p>
+      <ul class="file-list">
+        <li><code>README.md</code> &mdash; <span class="file-desc">Project README with install guide, command reference, architecture overview, and troubleshooting</span></li>
+        <li><code>CHANGELOG.md</code> &mdash; <span class="file-desc">This changelog</span></li>
+        <li><code>scripts/uninstall.sh</code> &mdash; <span class="file-desc">Clean uninstall (removes plugin registration, preserves <code>.vibeos/</code> project state)</span></li>
+        <li><code>scripts/extract-design-system.sh</code> &mdash; <span class="file-desc">Extracts design tokens from existing CSS/Tailwind config into design-system.css</span></li>
+        <li><code>templates/gitignore-additions.template</code> &mdash; <span class="file-desc">Recommended .gitignore entries for <code>.vibeos/</code> runtime files</span></li>
+        <li><code>templates/CONTRIBUTING.md.template</code> &mdash; <span class="file-desc">Contribution guidelines scaffold for generated projects</span></li>
+        <li><code>hooks/hooks.json</code> &mdash; <span class="file-desc">Finalized hook bindings with all 10 entries across 6 lifecycle events</span></li>
+        <li><code>scripts/notify.sh</code> &mdash; <span class="file-desc">Finalized notification script with Warp deep-link support and error routing</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="text-align:center; color:var(--color-text-muted); margin-top:3rem;"><strong>Total: ~81 files across 6 implementation phases.</strong></p>
+</div>
+
+<footer class="footer">
+  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
+</footer>
+
+</body>
+</html>

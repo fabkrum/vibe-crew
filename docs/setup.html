@@ -145,6 +145,7 @@
     <h3>On This Page</h3>
     <ol>
       <li><a href="#install">Installation from Scratch</a></li>
+      <li><a href="#multi-project">Multi-Project Setup (Recommended)</a></li>
       <li><a href="#warp">Warp Terminal</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ol>
@@ -187,22 +188,17 @@ brew install gh &amp;&amp; gh auth login</code></pre>
 
       <li>
         <h4>Add the plugin to your project</h4>
-        <p>Copy or symlink the VibeOS plugin directory into your project root. Symlinking is recommended for teams so updates propagate automatically.</p>
-        <pre class="copyable" data-copy="# Option A: Direct copy
-cp -r /path/to/claude-plugin-vibe-os/ ./claude-plugin-vibe-os/
-
-# Option B: Symlink (recommended for teams)
-ln -s /path/to/claude-plugin-vibe-os ./claude-plugin-vibe-os
-
-# Option C: Git submodule (best for version control)
-git submodule add <repo-url> claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span># Option A: Direct copy
-cp -r /path/to/claude-plugin-vibe-os/ ./claude-plugin-vibe-os/
-
-# Option B: Symlink (recommended for teams)
-ln -s /path/to/claude-plugin-vibe-os ./claude-plugin-vibe-os
-
-# Option C: Git submodule (best for version control)
-git submodule add &lt;repo-url&gt; claude-plugin-vibe-os</code></pre>
+        <p>The recommended approach is a <strong>central clone + symlink</strong>, especially if you'll use VibeOS across multiple projects. See <a href="#multi-project">Multi-Project Setup</a> below for the full guide.</p>
+        <pre class="copyable" data-copy="# Recommended: Central clone + symlink (see Multi-Project Setup below)
+mkdir -p ~/claude-plugins && cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-os.git
+cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span># Recommended: Central clone + symlink (see Multi-Project Setup below)
+mkdir -p ~/claude-plugins &amp;&amp; cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-os.git
+cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os</code></pre>
+        <p>For alternative approaches (direct copy, git submodule), see the <a href="#multi-project">comparison table</a> in the Multi-Project section.</p>
       </li>
 
       <li>
@@ -262,6 +258,172 @@ claude</code></pre>
     simplifications/              # Code simplification reports (/simplify)
     ci-heals/                     # CI heal reports (/heal)
     mutation-log.json             # CLAUDE.md mutation audit log</code></pre>
+  </section>
+
+  <hr>
+
+  <!-- ============ MULTI-PROJECT SETUP ============ -->
+  <section class="section" id="multi-project">
+    <span class="section-label">Recommended</span>
+    <h2>Multi-Project Setup</h2>
+    <p>Most users work on multiple projects. Instead of copying VibeOS into every project, install it once and share it. This gives you a single source of truth, instant updates across all projects, and zero duplication.</p>
+
+    <h3>How it works</h3>
+    <div class="flow"><span class="highlight">Central install</span> (one copy on your machine)
+  ~/claude-plugins/vibe-os/            <span class="muted"># the plugin &mdash; shared by all projects</span>
+
+<span class="highlight">Per-project</span> (symlink + local state)
+  ~/projects/tripflow/
+    claude-plugin-vibe-os &rarr;           <span class="muted"># symlink to central install</span>
+    .vibeos/                             <span class="muted"># project-specific state</span>
+
+  ~/projects/saas-dashboard/
+    claude-plugin-vibe-os &rarr;           <span class="muted"># same symlink, different project</span>
+    .vibeos/                             <span class="muted"># its own state</span>
+
+  ~/projects/mobile-app/
+    claude-plugin-vibe-os &rarr;           <span class="muted"># same symlink, different project</span>
+    .vibeos/                             <span class="muted"># its own state</span></div>
+
+    <p>The plugin code (agents, hooks, scripts, commands) lives in one place. Each project gets its own <code>.vibeos/</code> folder with its own backlog, session logs, scores, and config. Projects are fully isolated from each other.</p>
+
+    <h3>Step-by-step</h3>
+    <ol class="steps">
+      <li>
+        <h4>Clone VibeOS to a central location</h4>
+        <p>Pick a permanent home for the plugin. <code>~/claude-plugins/</code> is a good convention.</p>
+        <pre class="copyable" data-copy="mkdir -p ~/claude-plugins
+cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-os.git"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>mkdir -p ~/claude-plugins
+cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-os.git</code></pre>
+      </li>
+
+      <li>
+        <h4>Symlink into your first project</h4>
+        <p>Create a symbolic link from your project to the central install. Use an absolute path so the link works regardless of where you open the terminal.</p>
+        <pre class="copyable" data-copy="cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os</code></pre>
+      </li>
+
+      <li>
+        <h4>Run <code>/setup</code> in the project</h4>
+        <p>Start Claude Code and run the setup wizard. This creates the <code>.vibeos/</code> folder with project-specific state. Each project runs <code>/setup</code> once.</p>
+        <pre class="copyable" data-copy="claude"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>claude
+<span class="code-label">claude code</span>/setup</code></pre>
+      </li>
+
+      <li>
+        <h4>Repeat for each new project</h4>
+        <p>For every new project, just create the symlink and run <code>/setup</code>. Two commands, under 30 seconds.</p>
+        <pre class="copyable" data-copy="cd ~/projects/another-project
+ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/projects/another-project
+ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os</code></pre>
+      </li>
+    </ol>
+
+    <h3>Updating VibeOS across all projects</h3>
+    <p>Since every project symlinks to the same central location, updating is one command:</p>
+    <pre class="copyable" data-copy="cd ~/claude-plugins/vibe-os && git pull"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd ~/claude-plugins/vibe-os &amp;&amp; git pull</code></pre>
+    <p>Every project picks up the changes instantly. No need to copy files, run installers, or touch individual projects. Check the <a href="releases.html">Release Notes</a> after updating to see what changed.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Make it even faster with a shell alias</div>
+      <p>Add this to your <code>~/.zshrc</code> to create new VibeOS projects in one command:</p>
+    </div>
+    <pre class="copyable" data-copy="# Add to ~/.zshrc
+vibeos-init() {
+  ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os
+  echo &quot;VibeOS linked. Run 'claude' then '/setup' to initialize.&quot;
+}
+
+vibeos-update() {
+  (cd ~/claude-plugins/vibe-os && git pull)
+  echo &quot;VibeOS updated to $(cd ~/claude-plugins/vibe-os && git describe --tags 2>/dev/null || git log -1 --format=%h)&quot;
+}"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">.zshrc</span># Add to ~/.zshrc
+vibeos-init() {
+  ln -s ~/claude-plugins/vibe-os/claude-plugin-vibe-os ./claude-plugin-vibe-os
+  echo "VibeOS linked. Run 'claude' then '/setup' to initialize."
+}
+
+vibeos-update() {
+  (cd ~/claude-plugins/vibe-os &amp;&amp; git pull)
+  echo "VibeOS updated to $(cd ~/claude-plugins/vibe-os &amp;&amp; git describe --tags 2>/dev/null || git log -1 --format=%h)"
+}</code></pre>
+    <p>Then for any new project: <code>cd ~/projects/new-project &amp;&amp; vibeos-init</code></p>
+
+    <h3>Git and symlinks</h3>
+    <p>By default, Git tracks symlinks as tiny pointer files (not the target contents). This means:</p>
+    <ul>
+      <li><strong>Your project repo stays small</strong> &mdash; only the symlink is committed, not the entire plugin</li>
+      <li><strong>Teammates need their own central install</strong> &mdash; the symlink points to your local path, so each person clones the plugin to the same location or updates the symlink</li>
+    </ul>
+
+    <div class="callout info">
+      <div class="callout-title">For teams: standardize the path</div>
+      <p>Agree on a team-wide convention like <code>~/claude-plugins/vibe-os/</code>. If everyone uses the same path, symlinks work across the entire team with zero config. Document this in your project's README or onboarding guide.</p>
+    </div>
+
+    <h3>Comparing installation approaches</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Approach</th><th>Best For</th><th>Update Method</th><th>Duplication</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Central clone + symlink</strong></td>
+            <td>Solo devs, small teams</td>
+            <td><code>git pull</code> once &rarr; all projects updated</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><strong>Git submodule</strong></td>
+            <td>Teams needing pinned versions</td>
+            <td><code>git submodule update</code> per project</td>
+            <td>Full copy per project</td>
+          </tr>
+          <tr>
+            <td><strong>Direct copy</strong></td>
+            <td>Quick experiments, air-gapped</td>
+            <td>Manual copy per project</td>
+            <td>Full copy per project</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-title">Don't mix approaches</div>
+      <p>Pick one method and stick with it. If some projects use symlinks and others use submodules, updates become confusing and you risk running different VibeOS versions across projects without realizing it.</p>
+    </div>
+
+    <h3>What's shared vs. what's project-specific</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#8644;</div>
+        <h4>Shared (via symlink)</h4>
+        <p>Agent prompts, hook scripts, slash commands, plugin manifest, MCP config, templates. These are the same across all projects and update together.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9751;</div>
+        <h4>Project-specific (<code>.vibeos/</code>)</h4>
+        <p>Backlog, session logs, Vibe Scores, config, state, handoffs, workflows. Each project has its own isolated state folder that's never shared.</p>
+      </div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon blue">&#9997;</div>
+        <h4>Project-specific (project root)</h4>
+        <p><code>CLAUDE.md</code>, <code>VISION.md</code>, <code>design-system.css</code>, TDR, roadmap. These are created by VibeOS during the foundation phase and are unique to each project.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9881;</div>
+        <h4>Machine-specific (<code>~/.zshrc</code>)</h4>
+        <p>Shell aliases (<code>vibeos-init</code>, <code>vibeos-update</code>), shell traps, Warp Terminal config. Each developer sets these up once on their machine.</p>
+      </div>
+    </div>
   </section>
 
   <hr>

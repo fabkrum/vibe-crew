@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeCrew — Advanced Features</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    /* ---- SIDEBAR ---- */
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
+    .sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
+    .sidebar-header .nav-brand span { color: var(--color-accent); }
+    .sidebar-nav { padding: 1rem 0; }
+    .sidebar-group { padding: 0 0 0.5rem; }
+    .sidebar-label { display: block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; }
+    .sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
+    .sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
+    .sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
+
+    /* ---- MOBILE BAR ---- */
+    .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
+    .mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
+    .mobile-bar .nav-brand span { color: var(--color-accent); }
+    .hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
+
+    /* ---- LAYOUT ---- */
+    .layout { margin-left: 260px; }
+
+    /* ---- MAIN ---- */
+    .main { max-width: var(--max-width); margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+    /* ---- SECTIONS ---- */
+    .section { margin-bottom: 5rem; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .section > p,
+    .section > ul,
+    .section > ol {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    li::marker {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- CODE ---- */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--color-surface-2);
+      padding: 0.15em 0.45em;
+      border-radius: 4px;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    pre {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .code-label {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+
+    /* ---- CARDS ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--color-accent-dim);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+
+    .card h4 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    /* ---- TABLES ---- */
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background: var(--color-surface-2);
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+      color: var(--color-text-secondary);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--color-surface);
+    }
+
+    /* ---- CALLOUT ---- */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid;
+      font-size: 0.92rem;
+    }
+
+    .callout p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.info {
+      background: var(--color-blue-dim);
+      border-color: rgba(96, 165, 250, 0.2);
+      color: var(--color-blue);
+    }
+
+    .callout.tip {
+      background: var(--color-green-dim);
+      border-color: rgba(74, 222, 128, 0.2);
+      color: var(--color-green);
+    }
+
+    .callout.warn {
+      background: var(--color-amber-dim);
+      border-color: rgba(251, 191, 36, 0.2);
+      color: var(--color-amber);
+    }
+
+    .callout.danger {
+      background: var(--color-red-dim);
+      border-color: rgba(248, 113, 113, 0.2);
+      color: var(--color-red);
+    }
+
+    /* ---- FLOW DIAGRAM ---- */
+    .flow {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .flow .highlight {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .flow .muted {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- STEP LIST ---- */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 3.5rem;
+      margin-bottom: 2rem;
+      min-height: 2.25rem;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.25rem;
+      height: 2.25rem;
+      background: var(--color-accent-bg);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-accent);
+    }
+
+    .steps li h4 {
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    .steps li p {
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ---- BADGE ---- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
+    .badge.green { background: var(--color-green-dim); color: var(--color-green); }
+    .badge.amber { background: var(--color-amber-dim); color: var(--color-amber); }
+
+    /* ---- DIVIDER ---- */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 4rem 0;
+    }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .toc ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    .toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    .toc a {
+      color: var(--color-text-secondary);
+      font-size: 0.92rem;
+      transition: color 0.15s;
+    }
+
+    .toc a:hover {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
+      body.sidebar-open .sidebar { transform: translateX(0); }
+      body.sidebar-open .sidebar-overlay { display: block; }
+      .mobile-bar { display: flex; }
+      .layout { margin-left: 0; padding-top: 52px; }
+      .card-grid { grid-template-columns: 1fr; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.15rem; }
+      pre { padding: 1rem; }
+      .steps li { padding-left: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="mobile-bar">
+  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
+  </button>
+  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-group">
+      <div class="sidebar-label">Intro</div>
+      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
+      <a href="architecture.html" class="sidebar-link">Architecture</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Getting Started</div>
+      <a href="setup.html" class="sidebar-link">Setup</a>
+      <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
+      <a href="example-session.html" class="sidebar-link">Example Session</a>
+      <a href="warp.html" class="sidebar-link">Warp</a>
+      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Workflows</div>
+      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
+      <a href="advanced-features.html" class="sidebar-link active">Advanced Features</a>
+      <a href="personalization.html" class="sidebar-link">Personalization</a>
+      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Releases</div>
+      <a href="releases.html" class="sidebar-link">Release Notes</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
+
+<div class="layout">
+  <div class="main">
+
+    <div class="toc">
+      <h3>On This Page</h3>
+      <ol>
+        <li><a href="#advanced">Advanced Workflows</a>
+          <ol>
+            <li><a href="#replay">Workflow Templates (/replay)</a></li>
+            <li><a href="#simplify">Code Simplification (/simplify)</a></li>
+            <li><a href="#heal">Auto-Healing CI (/heal)</a></li>
+            <li><a href="#opponent">Opponent Processor (TDR Debate)</a></li>
+          </ol>
+        </li>
+        <li><a href="#cost-system">Cost Tracking &amp; Safety</a></li>
+        <li><a href="#multi-lang">Multi-Language Support</a></li>
+      </ol>
+    </div>
+
+    <section class="section" id="advanced">
+      <span class="section-label">v1.4.0</span>
+      <h2>Advanced Workflows</h2>
+      <p>VibeCrew v1.4.0 introduced four advanced workflows that extend the development lifecycle: reusable session templates, automated code simplification, self-healing CI, and adversarial review of technology decisions.</p>
+
+      <!-- REPLAY -->
+      <h3 id="replay">Workflow Templates (<code>/replay</code>)</h3>
+      <p>Capture what worked and reuse it. <code>/replay</code> extracts reusable workflow templates from successful sessions (Vibe Score &ge; 70) so you can apply proven patterns to future features.</p>
+
+      <h4>Three modes</h4>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon purple">&#9776;</div>
+          <h4>List templates</h4>
+          <p>Run <code>/replay</code> with no arguments to list all saved workflow templates with their names, descriptions, and quality thresholds.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">+</div>
+          <h4>Create a template</h4>
+          <p>Run <code>/replay --create &lt;name&gt;</code> to extract a template from the most recent high-scoring session. Captures phase order, branch conventions, test strategy, and quality thresholds.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue">&#9654;</div>
+          <h4>Apply a template</h4>
+          <p>Run <code>/replay &lt;name&gt;</code> to load a template and have it guide your current feature development with the proven workflow.</p>
+        </div>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-title">When to create templates</div>
+        <p>After a session scores 90+, create a template. Common examples: "api-feature" for CRUD endpoints, "ui-component" for design-system-aligned components, "data-migration" for schema changes. Templates are stored in <code>.vibecrew/workflows/</code>.</p>
+      </div>
+
+      <!-- SIMPLIFY -->
+      <h3 id="simplify">Code Simplification (<code>/simplify</code>)</h3>
+      <p>After building a feature, run <code>/simplify</code> to get an Opus-powered analysis of your code for unnecessary complexity. The agent operates in a read-only worktree &mdash; it analyzes but never modifies your code directly.</p>
+
+      <h4>The simplification cycle</h4>
+      <div class="flow"><span class="highlight">/simplify</span> collects files changed on the feature branch
+    &darr;
+Launches the <span class="highlight">Code Simplifier</span> agent (Opus, worktree, read-only)
+    &darr;
+Agent analyzes four categories:
+  <span class="highlight">Dead code</span> &middot; <span class="highlight">Abstraction flattening</span> &middot; <span class="highlight">API simplification</span> &middot; <span class="highlight">Dependency reduction</span>
+    &darr;
+Presents suggestions one at a time for your approval
+    &darr;
+<span class="muted">Each accepted change is applied and tests re-run</span>
+<span class="muted">If tests fail &rarr; automatic revert</span></div>
+
+      <p>Suggestions are categorized by impact (<strong>high</strong>, <strong>medium</strong>, <strong>low</strong>) and include before/after snippets, estimated line reduction, and confidence ratings. You approve or reject each individually. Reports are saved to <code>.vibecrew/simplifications/</code>.</p>
+
+      <div class="callout info">
+        <div class="callout-title">Safe by design</div>
+        <p>The analysis agent cannot write files. Only the <code>/simplify</code> skill applies approved changes in the main session, and every change is verified by running your test suite. Failed tests trigger an automatic revert.</p>
+      </div>
+
+      <!-- HEAL -->
+      <h3 id="heal">Auto-Healing CI (<code>/heal</code>)</h3>
+      <p>When CI fails, run <code>/heal</code> instead of manually debugging logs. The CI Healer fetches the failure logs from GitHub Actions, diagnoses the root cause, and applies targeted fixes &mdash; up to 3 attempts.</p>
+
+      <h4>How it works</h4>
+      <ol class="steps">
+        <li>
+          <h4>Fetch and diagnose</h4>
+          <p><code>/heal</code> runs <code>gh run view --log-failed</code> to retrieve the CI output, then pattern-matches errors to categorize the failure: <strong>build</strong>, <strong>test</strong>, <strong>lint</strong>, <strong>dependency</strong>, or <strong>environment</strong>.</p>
+        </li>
+        <li>
+          <h4>Checkpoint</h4>
+          <p>Before any fix, a git checkpoint is created so all changes can be reverted cleanly if the fix doesn't work.</p>
+        </li>
+        <li>
+          <h4>Fix loop (max 3 attempts)</h4>
+          <p>The CI Healer agent applies the minimum viable fix for the diagnosed failure, then pushes and waits for CI. If CI fails again, it re-diagnoses with the new context and tries a different approach.</p>
+        </li>
+        <li>
+          <h4>Report</h4>
+          <p>A heal report is saved to <code>.vibecrew/ci-heals/</code> documenting each attempt, diagnosis, fix, and outcome. If all 3 attempts fail, the healer escalates to you with a summary of what it tried.</p>
+        </li>
+      </ol>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Failure Category</th><th>Common Patterns</th><th>Fix Strategy</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Build</strong></td><td>TypeScript errors, missing imports, syntax errors</td><td>Fix the type error or import at its source</td></tr>
+            <tr><td><strong>Test</strong></td><td>Assertion failures, snapshot mismatches, timeouts</td><td>Update assertion/snapshot or fix the logic bug</td></tr>
+            <tr><td><strong>Lint</strong></td><td>ESLint/Prettier violations</td><td>Auto-fix with the project's lint command</td></tr>
+            <tr><td><strong>Dependency</strong></td><td>Missing packages, version conflicts</td><td>Install missing dep or resolve version conflict</td></tr>
+            <tr><td><strong>Environment</strong></td><td>Missing env vars, wrong Node version, permission errors</td><td>Update CI config (YAML/TOML) to match requirements</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- OPPONENT -->
+      <h3 id="opponent">Opponent Processor (TDR Debate)</h3>
+      <p>Every technology decision deserves a devil's advocate. During Tier 1, after the Stack Scout produces the TDR, VibeCrew automatically invokes the <strong>Opponent Processor</strong> &mdash; a read-only agent that challenges every decision.</p>
+
+      <h4>What it produces</h4>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon red">&#10007;</div>
+          <h4>Counter-arguments</h4>
+          <p>For each technology decision, the opponent generates 2&ndash;3 reasons why the choice might be wrong, citing real-world failure modes and edge cases.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon amber">&#9878;</div>
+          <h4>Debate matrix</h4>
+          <p>A structured comparison table scoring each option across 6 criteria: performance, DX, ecosystem, scalability, learning curve, and lock-in risk.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue">&#9888;</div>
+          <h4>Risk assessment</h4>
+          <p>Identifies the highest-risk decisions and recommends which ones deserve extra scrutiny or prototyping before committing.</p>
+        </div>
+      </div>
+
+      <p>After reviewing both the TDR and the counter-analysis, you choose: <strong>keep the original decisions</strong>, <strong>reconsider specific choices</strong>, or <strong>skip</strong> the review. The opponent's analysis is saved alongside the TDR for future reference.</p>
+
+      <div class="callout tip">
+        <div class="callout-title">Why adversarial review matters</div>
+        <p>The Stack Scout is optimized to find the best answer quickly. The Opponent Processor is optimized to find where that answer might break. Together, they produce more robust technology decisions than either could alone. This is especially valuable for decisions that are expensive to reverse (database choice, state management, auth provider).</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <section class="section" id="cost-system">
+      <span class="section-label">Cost &amp; Safety</span>
+      <h2>Cost Tracking &amp; Safety</h2>
+      <p>VibeCrew provides real-time cost visibility and multi-layered safety enforcement. Cost tracking runs at zero token cost via hook scripts, and safety hooks block destructive operations before they execute.</p>
+
+      <!-- COST DASHBOARD -->
+      <h3 id="cost-dashboard">Cost Dashboard (<code>/cost</code>)</h3>
+      <p>Run <code>/cost</code> at any time to see a complete financial picture of your AI usage.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon green">$</div>
+          <h4>Current Session</h4>
+          <p>Live cost, turn count, model name, and last-updated timestamp. Read from <code>.vibecrew/session-cost.json</code> which is updated after every assistant turn.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue">&#9650;</div>
+          <h4>Aggregates</h4>
+          <p>Daily, weekly, monthly, and all-time totals calculated by <code>aggregate-costs.sh</code> from session log files in <code>.vibecrew/sessions/</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon amber">&#9632;</div>
+          <h4>Threshold Status</h4>
+          <p>Visual progress bars showing proximity to session warning, session max, and daily warning limits. Configurable in <code>.vibecrew/config.json</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon purple">&#9881;</div>
+          <h4>Pricing Reference</h4>
+          <p>Per-model pricing table for Opus, Sonnet, and Haiku showing input, cache write, cache read, and output costs per million tokens.</p>
+        </div>
+      </div>
+
+      <h4>Model pricing (per million tokens)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Model</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Opus</strong></td><td>$15.00</td><td>$18.75</td><td>$1.50</td><td>$75.00</td></tr>
+            <tr><td><strong>Sonnet</strong></td><td>$3.00</td><td>$3.75</td><td>$0.30</td><td>$15.00</td></tr>
+            <tr><td><strong>Haiku</strong></td><td>$0.25</td><td>$0.30</td><td>$0.03</td><td>$1.25</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- COST GUARDRAILS -->
+      <h3 id="cost-guardrails">Cost Guardrails</h3>
+      <p>The <code>cost-guardrails.sh</code> hook runs on every Stop event, calculating per-turn costs with model-aware pricing and accumulating totals in <code>.vibecrew/session-cost.json</code>.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Threshold</th><th>Default</th><th>Config Key</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Session Warning</strong></td>
+              <td>$2.00</td>
+              <td><code>cost_limits.session_warn_usd</code></td>
+              <td>Emits a cost warning to the agent</td>
+            </tr>
+            <tr>
+              <td><strong>Session Hard Limit</strong></td>
+              <td>$5.00</td>
+              <td><code>cost_limits.session_max_usd</code></td>
+              <td>Agent MUST pause and ask for permission to continue</td>
+            </tr>
+            <tr>
+              <td><strong>Daily Warning</strong></td>
+              <td>$20.00</td>
+              <td><code>cost_limits.daily_warn_usd</code></td>
+              <td>Emits a daily spend warning</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Daily totals are calculated by summing <code>estimated_cost_usd</code> from all session files matching today&rsquo;s date, plus the live session cost. All thresholds are configurable in <code>.vibecrew/config.json</code>.</p>
+
+      <!-- SAFETY HOOKS -->
+      <h3 id="safety-hooks">Safety Hooks</h3>
+      <p>Three layers of protection run as PreToolUse hooks, blocking operations before they execute:</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon red">&#9632;</div>
+          <h4>protect-data.sh</h4>
+          <p>Blocks destructive bash commands: <code>rm -rf</code>, <code>git push --force</code>, <code>DROP TABLE</code>, <code>sudo</code>, <code>kill -9</code>, <code>chmod 777</code>, and more. 18 denied tool patterns in <code>settings.json</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon amber">&#9632;</div>
+          <h4>phase-gate.sh</h4>
+          <p>Blocks source code writes (<code>src/</code>, <code>app/</code>, <code>lib/</code>, <code>components/</code>) until all Tier 1 foundation artifacts exist. Allows config and docs writes always.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue">&#9632;</div>
+          <h4>restrict-paths.sh</h4>
+          <p>Validates that write targets are within the project directory and match allowed path patterns. Prevents accidental writes to system files or other projects.</p>
+        </div>
+      </div>
+
+      <h4>Permission rules</h4>
+      <p><code>settings.json</code> defines 71+ permission rules: 53 allowed tool patterns (npm, git, gh, jq, standard dev tools) and 18 denied patterns (sudo, force push, hard reset, kill -9, mkfs, dd). These are enforced at the Claude Code level before any hook runs.</p>
+
+      <div class="callout warn">
+        <div class="callout-title">Checkpoint safety net</div>
+        <p>Both <code>/heal</code> and <code>/new-feature</code> create a git checkpoint (<code>vibecrew-checkpoint-&lt;timestamp&gt;</code>) before making changes. If anything goes wrong, <code>/undo</code> can roll back to any checkpoint. Checkpoints are lightweight git tags that don&rsquo;t add repository overhead.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <section class="section" id="multi-lang">
+      <span class="section-label">Language Support</span>
+      <h2>Multi-Language Support</h2>
+      <p>While VibeCrew was designed with JavaScript/TypeScript projects in mind, it supports 7 languages for onboarding, convention detection, security auditing, and dependency scanning.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Language</th><th>Manifest</th><th>Formatter</th><th>Linter</th><th>Framework Detection</th><th>Dep Audit</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Node.js / TypeScript</strong></td>
+              <td><code>package.json</code></td>
+              <td>Prettier</td>
+              <td>ESLint</td>
+              <td>React, Next.js, Vue, Svelte, Express, Prisma</td>
+              <td><code>npm audit</code></td>
+            </tr>
+            <tr>
+              <td><strong>Python</strong></td>
+              <td><code>pyproject.toml</code></td>
+              <td>Black, Ruff</td>
+              <td>Ruff, Flake8</td>
+              <td>Django, Flask, FastAPI, SQLAlchemy</td>
+              <td><code>pip audit</code></td>
+            </tr>
+            <tr>
+              <td><strong>Ruby</strong></td>
+              <td><code>Gemfile</code></td>
+              <td>RuboCop</td>
+              <td>RuboCop</td>
+              <td>Rails, ActiveRecord, Devise</td>
+              <td><code>bundle audit</code></td>
+            </tr>
+            <tr>
+              <td><strong>Go</strong></td>
+              <td><code>go.mod</code></td>
+              <td>gofmt</td>
+              <td>golangci-lint</td>
+              <td>Gin, Echo, Fiber, GORM</td>
+              <td><code>govulncheck</code></td>
+            </tr>
+            <tr>
+              <td><strong>Rust</strong></td>
+              <td><code>Cargo.toml</code></td>
+              <td>rustfmt</td>
+              <td>clippy</td>
+              <td>Actix, Axum, Diesel, SeaORM</td>
+              <td><code>cargo audit</code></td>
+            </tr>
+            <tr>
+              <td><strong>PHP</strong></td>
+              <td><code>composer.json</code></td>
+              <td>PHP-CS-Fixer</td>
+              <td>PHPStan</td>
+              <td>Laravel, Symfony, Eloquent, Doctrine</td>
+              <td><code>composer audit</code></td>
+            </tr>
+            <tr>
+              <td><strong>Java</strong></td>
+              <td><code>pom.xml</code> / <code>build.gradle</code></td>
+              <td>Checkstyle</td>
+              <td>Checkstyle</td>
+              <td>Spring Boot, Hibernate</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>How language detection works</h3>
+      <div class="flow"><span class="highlight">detect-conventions.sh</span> scans project root for manifests
+    &darr;
+Identifies language from: <span class="highlight">package.json</span>, <span class="highlight">pyproject.toml</span>, <span class="highlight">Gemfile</span>, <span class="highlight">go.mod</span>, <span class="highlight">Cargo.toml</span>, <span class="highlight">composer.json</span>, <span class="highlight">pom.xml</span>
+    &darr;
+<span class="highlight">extract-project-conventions.sh</span> detects per-language:
+  framework, ORM, auth library, API patterns, naming conventions
+    &darr;
+Results feed into <span class="highlight">Code Auditor</span> and <span class="highlight">CLAUDE.md generation</span></div>
+
+      <h3>Where language support applies</h3>
+      <ul>
+        <li><strong><code>/onboard</code></strong> &mdash; Code Auditor detects language, conventions, frameworks, and test gaps for all 7 languages</li>
+        <li><strong><code>/audit</code></strong> &mdash; Security Auditor runs language-specific dependency audit tools and adapts OWASP scanning patterns</li>
+        <li><strong>PostToolUse formatting</strong> &mdash; <code>format-code.sh</code> auto-formats with the correct tool: Prettier (JS/TS), Black (Python), rustfmt (Rust), gofmt (Go)</li>
+        <li><strong><code>/new-project</code></strong> &mdash; Stack Scout research adapts to the detected or chosen language ecosystem</li>
+      </ul>
+
+      <div class="callout info">
+        <div class="callout-title">Non-Node.js confidence levels</div>
+        <p>Node.js/TypeScript projects receive &ldquo;high&rdquo; confidence from the Code Auditor due to deeper ecosystem integration. Other languages receive &ldquo;medium&rdquo; confidence &mdash; the core workflow (Tier 1 foundation, Tier 2 cycle, Vibe Score, hooks) works identically, but framework-specific patterns may need manual refinement in CLAUDE.md.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="footer">
+    <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+    <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
+  </footer>
+</div>
+
+</body>
+</html>

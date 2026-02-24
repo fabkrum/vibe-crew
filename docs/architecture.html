@@ -52,62 +52,26 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ---- NAV ---- */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(10, 10, 11, 0.82);
-      backdrop-filter: blur(16px) saturate(1.4);
-      -webkit-backdrop-filter: blur(16px) saturate(1.4);
-      border-bottom: 1px solid var(--color-border-subtle);
-    }
-
-    .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: var(--color-text);
-      text-decoration: none;
-    }
-
-    .nav-brand span {
-      color: var(--color-accent);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 0.25rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--color-text-secondary);
-      text-decoration: none;
-      font-size: 0.85rem;
-      padding: 0.4rem 0.75rem;
-      border-radius: var(--radius-xs);
-      transition: all 0.15s;
-    }
-
-    .nav-links a:hover {
-      color: var(--color-text);
-      background: var(--color-surface-2);
-    }
+    /* ---- SIDEBAR ---- */
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
+    .sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
+    .sidebar-header .nav-brand span { color: var(--color-accent); }
+    .sidebar-nav { padding: 1rem 0; }
+    .sidebar-group { padding: 0 0 0.5rem; }
+    .sidebar-label { display: block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; }
+    .sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
+    .sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
+    .sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
+    /* ---- MOBILE BAR ---- */
+    .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
+    .mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
+    .mobile-bar .nav-brand span { color: var(--color-accent); }
+    .hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
+    /* ---- LAYOUT ---- */
+    .layout { margin-left: 260px; }
 
     /* ---- HERO ---- */
     .hero {
@@ -187,7 +151,7 @@
     .main {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding: 6rem 2rem 6rem;
+      padding: 3rem 2rem 6rem;
     }
 
     /* ---- SECTIONS ---- */
@@ -589,9 +553,12 @@
 
     /* ---- RESPONSIVE ---- */
     @media (max-width: 768px) {
-      .nav-links { display: none; }
-      .hero { padding: 8rem 1.5rem 3rem; }
-      .main { padding: 6rem 1.25rem 4rem; }
+      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
+      body.sidebar-open .sidebar { transform: translateX(0); }
+      body.sidebar-open .sidebar-overlay { display: block; }
+      .mobile-bar { display: flex; }
+      .layout { margin-left: 0; padding-top: 52px; }
+      .main { padding: 2rem 1.25rem 4rem; }
       .card-grid { grid-template-columns: 1fr; }
       h2 { font-size: 1.5rem; }
       h3 { font-size: 1.15rem; }
@@ -754,33 +721,54 @@
       /* keep dark — this is a terminal-culture product */
     }
 
-    .nav-links a.active { color: var(--color-accent); background: var(--color-accent-bg); }
-    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 2rem; text-decoration: none; transition: color 0.15s; }
-    .back-link:hover { color: var(--color-accent); text-decoration: none; }
   </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-inner">
+<div class="mobile-bar">
+  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
+  </button>
+  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+</div>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
     <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-    <ul class="nav-links">
-      <li><a href="why.html">Why VibeCrew</a></li>
-      <li><a href="setup.html">Setup</a></li>
-      <li><a href="new-project.html">New Project</a></li>
-      <li><a href="existing-project.html">Existing Project</a></li>
-      <li><a href="workflow.html">Workflow</a></li>
-      <li><a href="example-session.html">Example Session</a></li>
-      <li><a href="architecture.html" class="active">Architecture</a></li>
-      <li><a href="warp.html">Warp</a></li>
-      <li><a href="releases.html">Releases</a></li>
-    </ul>
   </div>
-</nav>
+  <nav class="sidebar-nav">
+    <div class="sidebar-group">
+      <div class="sidebar-label">Intro</div>
+      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
+      <a href="architecture.html" class="sidebar-link active">Architecture</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Getting Started</div>
+      <a href="setup.html" class="sidebar-link">Setup</a>
+      <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
+      <a href="example-session.html" class="sidebar-link">Example Session</a>
+      <a href="warp.html" class="sidebar-link">Warp</a>
+      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Workflows</div>
+      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
+      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
+      <a href="personalization.html" class="sidebar-link">Personalization</a>
+      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-label">Releases</div>
+      <a href="releases.html" class="sidebar-link">Release Notes</a>
+    </div>
+  </nav>
+</aside>
 
+<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
+
+<div class="layout">
 <div class="main">
-
-  <a href="index.html" class="back-link">&larr; Back to Home</a>
 
   <div class="toc">
     <h3>On This Page</h3>
@@ -2128,6 +2116,7 @@ Checks against thresholds:
   <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
   <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
 </footer>
+</div>
 
 </body>
 </html>

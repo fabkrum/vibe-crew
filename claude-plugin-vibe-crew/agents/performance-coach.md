@@ -114,6 +114,9 @@ Select from these 5 anti-pattern templates:
 **5. Missing Phase Artifacts**
 > "Complete all 5 Tier 2 phases (plan, design, code, test, docs) for every feature. Do not skip the test or docs phases even for small features."
 
+**6. Documentation Drift**
+> "Always update feature documentation in the same session as code changes. Run the Doc Generator before wrapping to ensure docs reflect the current implementation."
+
 Customize the template with session-specific evidence (deduction counts, affected sessions, token impact).
 
 Write the proposal to a temp file:

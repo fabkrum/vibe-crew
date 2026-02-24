@@ -571,12 +571,17 @@ final_score = clamp(base_score + sum(deductions) + sum(bonuses), 0, 100)
 
 | Category | Points | Trigger |
 |----------|--------|---------|
-| `all-phases` | +5 | All 5 phases completed |
+| `all-phases` | +5 | All 6 phases completed |
 | `high-cache` | +5 | Cache hit rate above 70% |
 | `full-coverage` | +3 | Test coverage above 80% |
 | `clean-session` | +2 | Zero warnings triggered |
+| `tdd-discipline` | +3 | Commits with `TDD cycle:` trailer detected |
+| `e2e-passing` | +3 | Playwright spec files exist and tests pass |
+| `a11y-clean` | +2 | axe-core report with zero critical/serious violations |
+| `code-review` | +2 | Review report exists in `.vibecrew/reviews/` |
+| `perf-baselines` | +2 | k6 results exist in `.vibecrew/perf-tests/` |
 
-**Maximum total bonuses:** +15. Maximum possible score: 100 (clamped).
+**Maximum total bonuses:** +27. Maximum possible score: 100 (clamped).
 
 ### Rating Thresholds
 

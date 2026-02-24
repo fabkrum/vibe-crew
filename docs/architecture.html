@@ -788,7 +788,7 @@
       <li><a href="#system">System Deep Dive</a>
         <ol>
           <li><a href="#plugin-manifest">Plugin Manifest &amp; Registration</a></li>
-          <li><a href="#agents">The 12-Agent Architecture</a></li>
+          <li><a href="#agents">The 13-Agent Architecture</a></li>
           <li><a href="#skills">Skills System (Slash Commands)</a></li>
           <li><a href="#hooks">The Hook System</a></li>
           <li><a href="#scripts">Scripts Reference</a></li>
@@ -877,15 +877,15 @@
   hooks/hooks.json              # Event-to-script routing table
   scripts/                      # 60+ bash automation scripts
   agents/                       # 12 specialized agent prompts
-  skills/                       # 20 slash command definitions
+  skills/                       # 25 slash command definitions
   templates/                    # Badge catalog, challenge pool, quizzes, docs-site</code></pre>
 
     <!-- AGENTS -->
-    <h3 id="agents">The 12-Agent Architecture</h3>
+    <h3 id="agents">The 13-Agent Architecture</h3>
 
     <div class="callout tip">
       <div class="callout-title">What are agents?</div>
-      <p>Think of agents as <strong>specialist team members</strong>, each with a specific job. Instead of one AI doing everything, VibeCrew splits work across 12 agents &mdash; just like a real development team has designers, builders, testers, and reviewers. Each agent is an AI "personality" optimized for one task. The Builder writes code. The Verifier runs tests. The Security Auditor checks for vulnerabilities. You never interact with agents directly &mdash; VibeCrew picks the right one for each job automatically.</p>
+      <p>Think of agents as <strong>specialist team members</strong>, each with a specific job. Instead of one AI doing everything, VibeCrew splits work across 13 agents &mdash; just like a real development team has designers, builders, testers, and reviewers. Each agent is an AI "personality" optimized for one task. The Builder writes code. The Verifier runs tests. The Security Auditor checks for vulnerabilities. You never interact with agents directly &mdash; VibeCrew picks the right one for each job automatically.</p>
       <p style="margin-top: 0.5rem;"><strong>Inline vs. Worktree:</strong> Some agents work directly in your project folder ("inline") &mdash; like a colleague sitting at your desk. Others work in a <strong>worktree</strong>, which is an isolated copy of your project files. Think of it as giving that specialist their own private office with a photocopy of all your documents. They can read, analyze, and write without affecting your real files. When they're done, only the finished result comes back to you. This isolation also saves your AI "memory" (context window) &mdash; all of their research stays in their office, not yours.</p>
     </div>
 
@@ -981,6 +981,13 @@
             <td>Devil's advocate for TDR decisions. Counter-arguments, debate matrices, risk assessments</td>
             <td>Tier 1 after TDR</td>
           </tr>
+          <tr>
+            <td><strong>Code Reviewer</strong></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
+            <td>Worktree</td>
+            <td>Read-only code review against feature spec, TDR compliance, conventions, security, performance</td>
+            <td>/review, /run-backlog</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -1032,7 +1039,7 @@ args: feature_name
 3. Find or create feature in backlog.json
 4. Create git branch: feat/{feature_name}
 5. Create safety checkpoint
-6. Initialize 5-phase tracking in state.json
+6. Initialize 6-phase tracking in state.json
 7. Hand off to Builder agent</code></pre>
 
     <h4>All 20 skills</h4>
@@ -1048,7 +1055,7 @@ args: feature_name
           <tr><td rowspan="3"><strong>Planning</strong></td><td><code>/plan-features</code></td><td>Orchestrator</td><td>Define backlog specs: acceptance criteria, priority, complexity, dependencies</td></tr>
           <tr><td><code>/idea "text"</code></td><td>None (script only)</td><td>1-line capture to backlog.json with status "unplanned". Zero context cost</td></tr>
           <tr><td><code>/status</code></td><td>None (script only)</td><td>Full project dashboard: foundation, backlog, active feature, recent scores</td></tr>
-          <tr><td rowspan="3"><strong>Development</strong></td><td><code>/new-feature "name"</code></td><td>Builder</td><td>Branch creation, checkpoint, 5-phase tracking, WIP limit enforcement</td></tr>
+          <tr><td rowspan="3"><strong>Development</strong></td><td><code>/new-feature "name"</code></td><td>Builder</td><td>Branch creation, checkpoint, 6-phase tracking, WIP limit enforcement</td></tr>
           <tr><td><code>/run-backlog</code></td><td>Builder, Verifier</td><td>Auto-execute features by priority. Stops on failure for human review</td></tr>
           <tr><td><code>/check</code></td><td>Verifier</td><td>Run tests + build + lint + type-check without modifying code</td></tr>
           <tr><td rowspan="2"><strong>Quality</strong></td><td><code>/simplify</code></td><td>Code Simplifier</td><td>Read-only analysis: dead code, abstractions, API surface. You approve each change</td></tr>
@@ -1778,7 +1785,7 @@ Checks against thresholds:
           <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>/new-feature "name"</code></td><td>Start a feature session on a new branch with 5-phase tracking</td><td>Beginning of each feature</td></tr>
+          <tr><td><code>/new-feature "name"</code></td><td>Start a feature session on a new branch with 6-phase tracking</td><td>Beginning of each feature</td></tr>
           <tr><td><code>/run-backlog</code></td><td>Auto-execute features in priority order</td><td>Hands-free batch execution</td></tr>
         </tbody>
       </table>

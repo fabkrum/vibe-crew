@@ -12,13 +12,13 @@ questions: 5
 What is the key structural difference between Tier 1 and Tier 2 workflows in VibeCrew?
 
 - A) Tier 1 uses Sonnet models while Tier 2 uses Haiku models to save costs on repetitive work
-- B) Tier 1 is a sequential, one-time foundation process; Tier 2 is an iterative 5-phase cycle repeated for every feature
+- B) Tier 1 is a sequential, one-time foundation process; Tier 2 is an iterative 6-phase cycle repeated for every feature
 - C) Tier 1 handles backend development while Tier 2 handles frontend development
 - D) Tier 1 runs automatically on session start; Tier 2 requires manual invocation with /new-feature
 
 **Answer:** B
 
-**Explanation:** Tier 1 is a one-time sequential process — you complete it once per project to produce the five foundation artifacts (VISION.md, design-system.css, TDR, roadmap, CLAUDE.md). After Tier 1 is complete, every new feature follows the Tier 2 cycle: Plan, UI Design, Code, Test, and Docs. The phases in Tier 2 can be worked in any order within a feature, but the Tier 1 gate must be passed before any Tier 2 work can begin.
+**Explanation:** Tier 1 is a one-time sequential process — you complete it once per project to produce the five foundation artifacts (VISION.md, design-system.css, TDR, roadmap, CLAUDE.md). After Tier 1 is complete, every new feature follows the Tier 2 cycle: Plan, UI Design, Code, Test, Review, and Docs. The Review phase is optional in manual workflows but automatic in /run-backlog. The Tier 1 gate must be passed before any Tier 2 work can begin.
 
 ---
 
@@ -39,16 +39,16 @@ What does the /wrap command do, and when should you use it?
 
 ## Q3
 
-What are the 5 phases of the Tier 2 feature development cycle, in their default sequence?
+What are the 6 phases of the Tier 2 feature development cycle, in their default sequence?
 
-- A) Research, Spec, Build, Review, Deploy
-- B) Plan, UI Design, Code, Test, Docs
-- C) Design, Implement, Validate, Document, Release
-- D) Spec, Prototype, Code, QA, Merge
+- A) Research, Spec, Build, Review, Deploy, Document
+- B) Plan, UI Design, Code, Test, Review, Docs
+- C) Design, Implement, Validate, Review, Document, Release
+- D) Spec, Prototype, Code, QA, Merge, Docs
 
 **Answer:** B
 
-**Explanation:** The Tier 2 cycle has five phases: Plan (feature spec and acceptance criteria), UI Design (component design aligned to the design system), Code (feature implementation within TDR boundaries), Test (spec-first for business logic, implementation-first for UI), and Docs (session logs, CHANGELOG entry, feature documentation). While these phases have a natural flow, VibeCrew allows working them in any order within a single feature to accommodate different working styles.
+**Explanation:** The Tier 2 cycle has six phases: Plan (feature spec and acceptance criteria), UI Design (component design aligned to the design system), Code (feature implementation within TDR boundaries), Test (spec-first for business logic, implementation-first for UI), Review (code review against feature spec — optional in manual workflow, automatic in /run-backlog), and Docs (session logs, CHANGELOG entry, feature documentation). While these phases have a natural flow, VibeCrew allows working them in any order within a single feature to accommodate different working styles.
 
 ---
 

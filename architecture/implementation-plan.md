@@ -262,7 +262,7 @@ Build a minimal VitePress documentation site with a Kanban board (reading from b
 | 2 | `templates/docs-site/.vitepress/config.ts` | VitePress configuration: site title, navigation, sidebar, port 3002 |
 | 3 | `templates/docs-site/index.md` | Documentation site homepage with project overview |
 | 4 | `templates/docs-site/system/getting-started.md` | System docs: VibeCrew installation and setup guide |
-| 5 | `templates/docs-site/system/commands.md` | System docs: all 9 slash command references |
+| 5 | `templates/docs-site/system/commands.md` | System docs: all 25 slash command references |
 | 6 | `templates/docs-site/components/KanbanBoard.vue` | Kanban board reading from backlog.json -- columns for idea, planned, in-progress, testing, review, done |
 | 7 | `templates/docs-site/components/StatsPage.vue` | Basic statistics: total sessions, features completed, average Vibe Score, total tokens |
 | 8 | `templates/docs-site/data/backlog.data.ts` | VitePress data loader: reads .vibecrew/backlog.json, maps features to Kanban columns |
@@ -370,12 +370,12 @@ All previous phases must be complete.
 ### Acceptance Criteria
 
 1. **End-to-end Tier 1 works**: A fresh project runs /setup -> /new-project and produces all 5 foundation artifacts. Phase gate unlocks. Zero manual intervention required after initial user inputs.
-2. **End-to-end Tier 2 works**: A feature goes from /new-feature through all 5 phases (plan, design, code, test, docs) and produces a PR. Quality gate passes.
+2. **End-to-end Tier 2 works**: A feature goes from /new-feature through all 6 phases (plan, design, code, test, review, docs) and produces a PR. Quality gate passes.
 3. **Plugin self-test passes**: `validate-plugin.sh` confirms all files exist, scripts are executable, hooks reference valid scripts.
 4. **README is complete**: Installation (<5 minutes), quick start, command reference, architecture overview, troubleshooting section.
 5. **Uninstall is clean**: `uninstall.sh` removes all plugin files without affecting project source code.
 6. **Edge cases handled**: Stale lock files, port conflicts, orphaned processes, git merge conflicts, missing MCP servers, missing formatters -- all detected and handled gracefully.
-7. **All 9 slash commands work**: /setup, /new-project, /plan-features, /new-feature, /run-backlog, /idea, /status, /check, /wrap all produce correct behavior.
+7. **All 25 slash commands work**: /setup, /new-project, /plan-features, /new-feature, /run-backlog, /idea, /status, /check, /wrap, /onboard, /handoff, /cost, /undo, /audit, /replay, /simplify, /heal, /tdd, /debug, /review, /e2e, /perf-test, /a11y, /achievements, /quiz all produce correct behavior.
 
 ### Agent Teams Integration Points
 

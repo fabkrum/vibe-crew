@@ -40,7 +40,7 @@ claude-plugin-vibe-crew/
     stack-scout.md
     builder.md
     verifier.md
-  skills/                        # 9 slash command definitions
+  skills/                        # 25 slash command definitions
     setup/
       SKILL.md
     new-project/
@@ -61,7 +61,7 @@ claude-plugin-vibe-crew/
       SKILL.md
   hooks/
     hooks.json                   # Event-to-script routing table
-  scripts/                       # 7 bash automation scripts
+  scripts/                       # ~67 bash automation scripts
     session-startup.sh
     compact-reinject.sh
     phase-gate.sh
@@ -448,7 +448,7 @@ All hooks run as external bash processes at zero token cost. PreToolUse hooks us
 
 ## 5. Skills / Commands
 
-VibeCrew exposes nine slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. For full command specifications, invocation control matrix, and SKILL.md examples, see [system-overview.md, Section 6](system-overview.md#6-slash-commands).
+VibeCrew exposes 25 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. For full command specifications, invocation control matrix, and SKILL.md examples, see [system-overview.md, Section 6](system-overview.md#6-slash-commands).
 
 ### 5.1 Command Summary
 

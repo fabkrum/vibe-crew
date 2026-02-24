@@ -102,9 +102,9 @@ Workflow Templates
 
   Name            Description                     Phases   Min Score   Created
   ──────────────  ──────────────────────────────  ───────  ─────────   ──────────
-  full-feature    Complete 5-phase workflow         5/5       70       2026-02-20
-  quick-fix       Bug fix with test and docs        3/5       75       2026-02-18
-  prototype       Rapid code-first iteration        2/5       70       2026-02-15
+  full-feature    Complete 6-phase workflow         6/6       70       2026-02-20
+  quick-fix       Bug fix with test and docs        3/6       75       2026-02-18
+  prototype       Rapid code-first iteration        2/6       70       2026-02-15
 
 Total: N templates
 

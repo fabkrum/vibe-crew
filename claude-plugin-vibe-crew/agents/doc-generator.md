@@ -98,11 +98,12 @@ Output: `.vibecrew/releases/release-{date}.json`
 
 When invoked by `/wrap`, execute in this order:
 
-1. Check for completed features that lack documentation
-2. Generate feature docs for any undocumented completed features
-3. Update CHANGELOG.md with new commits since last update
-4. Rebuild VitePress sidebar if any docs were added
-5. Report what was generated
+1. **Detect documentation drift**: Compare source files modified this session (`git diff --name-only`) against existing feature docs. Identify features with code changes but stale or missing documentation.
+2. **Update drifted docs**: For any feature whose source code changed this session, update the matching feature doc to reflect the current implementation — new endpoints, changed props, modified behavior, updated acceptance criteria status.
+3. **Generate missing docs**: For completed features (column = `done` or `review`) that lack documentation entirely, generate a full feature doc page.
+4. **Update CHANGELOG.md** with new commits since last update.
+5. **Rebuild VitePress sidebar** if any docs were added or removed.
+6. **Report drift resolution**: Include drift stats in the output summary.
 
 ## Output Format
 
@@ -110,8 +111,10 @@ After completing documentation tasks, output a summary:
 
 ```
 --- Doc Generator ---
-Feature docs: {N} generated ({feature names})
-CHANGELOG: {M} entries added
+Drift detected: {N} features with stale docs
+Docs updated: {M} ({feature names})
+Docs generated: {K} new ({feature names})
+CHANGELOG: {L} entries added
 Sidebar: {updated/no changes}
 ```
 

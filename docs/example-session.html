@@ -755,7 +755,7 @@
         </div>
         <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
 <span class="output">Session startup agent detects project state...</span>
-<span class="accent">VibeCrew v1.3.0 | Foundation: complete | Feature: user-auth (Code phase)</span>
+<span class="accent">VibeCrew v1.4.0 | Foundation: complete | Feature: user-auth (Code phase)</span>
 <span class="output">Ready. Type /status for full dashboard.</span></div>
       </div>
     </div>
@@ -826,7 +826,7 @@
 
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
 <span class="output"># Session startup agent runs automatically</span>
-<span class="accent">VibeCrew v1.3.0 | No project detected. Run /new-project to begin.</span>
+<span class="accent">VibeCrew v1.4.0 | No project detected. Run /new-project to begin.</span>
 
 <span class="prompt">&gt;</span> /new-project</code></pre>
 
@@ -889,7 +889,7 @@
     <p>Before building features, invest one session in creating structured specifications. This session is short (15&ndash;20 min) and pays for itself immediately.</p>
 
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
-<span class="accent">VibeCrew v1.3.0 | Foundation: complete | No active feature</span>
+<span class="accent">VibeCrew v1.4.0 | Foundation: complete | No active feature</span>
 <span class="output">Ready. 5 features in roadmap, 0 planned.</span>
 
 <span class="prompt">&gt;</span> /plan-features</code></pre>
@@ -944,16 +944,16 @@
   <section class="section" id="feature-session">
     <span class="section-label">Building</span>
     <h2>Day 3: Building a Feature (Tier 2)</h2>
-    <p>This is where most of your time goes. A feature session follows the 5-phase cycle: Plan, UI Design, Code, Test, Docs. Here's a complete walkthrough of building "User Authentication" in a single session.</p>
+    <p>This is where most of your time goes. A feature session follows the 6-phase cycle: Plan, UI Design, Code, Test, Review, Docs. Here's a complete walkthrough of building "User Authentication" in a single session.</p>
 
     <h3>Starting the feature</h3>
     <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
-<span class="accent">VibeCrew v1.3.0 | Foundation: complete | No active feature</span>
+<span class="accent">VibeCrew v1.4.0 | Foundation: complete | No active feature</span>
 <span class="output">Next in backlog: user-auth (P0, M complexity)</span>
 
 <span class="prompt">&gt;</span> /new-feature "user-auth"
 <span class="output">Created branch: feat/user-auth</span>
-<span class="output">Loaded spec from backlog. 5-phase tracking initialized.</span>
+<span class="output">Loaded spec from backlog. 6-phase tracking initialized.</span>
 <span class="output">Phases: [ ] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Docs</span></code></pre>
 
     <h3>The 5 phases</h3>
@@ -1177,7 +1177,7 @@
           <span class="terminal-title">Tab &mdash; VibeCrew Session</span>
         </div>
         <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
-<span class="accent">VibeCrew v1.3.0 | Feature: user-auth (Code phase)</span>
+<span class="accent">VibeCrew v1.4.0 | Feature: user-auth (Code phase)</span>
 
 <span class="prompt">&gt;</span> <span class="cmd">"Implement the login page"</span>
 <span class="output">Builder agent working...</span>
@@ -1297,7 +1297,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       <div class="card">
         <div class="card-icon blue">&#10010;</div>
         <h4><a href="new-project.html">New Project</a></h4>
-        <p>The complete Tier 1 &amp; Tier 2 workflow reference. Foundation steps, the 5-phase feature cycle, phase gate enforcement, and all slash commands with examples.</p>
+        <p>The complete Tier 1 &amp; Tier 2 workflow reference. Foundation steps, the 6-phase feature cycle, phase gate enforcement, and all slash commands with examples.</p>
       </div>
       <div class="card">
         <div class="card-icon amber">&#8635;</div>
@@ -1315,7 +1315,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       <div class="card">
         <div class="card-icon purple">&#9632;</div>
         <h4><a href="architecture.html">Architecture Deep Dive</a></h4>
-        <p>Technical details: the 12-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em>how</em> VibeCrew works under the hood.</p>
+        <p>Technical details: the 13-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em>how</em> VibeCrew works under the hood.</p>
       </div>
       <div class="card">
         <div class="card-icon blue">&#9000;</div>
@@ -1511,7 +1511,7 @@ fi</code></pre>
 <span class="output">  Uncommitted files: 4</span>
 <span class="output">  Session log: partial (auto-wrap-lite)</span>
 <span class="output">Recommendation: Review uncommitted changes, then continue or /wrap.</span>
-<span class="accent">VibeCrew v1.3.0 | Feature: trip-creation (Code phase)</span></code></pre>
+<span class="accent">VibeCrew v1.4.0 | Feature: trip-creation (Code phase)</span></code></pre>
 
     <div class="callout tip">
       <div class="callout-title">This is automatic</div>

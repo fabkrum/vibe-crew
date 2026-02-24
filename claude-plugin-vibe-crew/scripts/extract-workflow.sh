@@ -127,8 +127,8 @@ for session_file in "${SESSION_FILES[@]}"; do
 done
 
 # --- Determine phase order ---
-# Default to the standard 5-phase order, filtered to phases actually completed
-DEFAULT_ORDER='["plan","design","code","test","docs"]'
+# Default to the standard 6-phase order, filtered to phases actually completed
+DEFAULT_ORDER='["plan","design","code","test","review","docs"]'
 PHASE_COUNT=$(echo "$PHASES_FOUND" | jq 'length' 2>/dev/null || echo "0")
 
 if [[ "$PHASE_COUNT" -eq 0 ]]; then

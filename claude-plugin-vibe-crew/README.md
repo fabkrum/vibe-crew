@@ -56,13 +56,13 @@ in your browser, or browse them on GitHub:
 |---|---|
 | [Why VibeCrew](../docs/why.html) | The three problems VibeCrew solves, core design philosophy, and principles. |
 | [Setup Guide](../docs/setup.html) | Step-by-step installation, multi-project setup, Warp Terminal config. |
-| [New Project](../docs/new-project.html) | Two-Tier Workflow: foundation (Tier 1) and 5-phase feature cycle (Tier 2). |
+| [New Project](../docs/new-project.html) | Two-Tier Workflow: foundation (Tier 1) and 6-phase feature cycle (Tier 2). |
 | [Existing Project](../docs/existing-project.html) | Onboard an existing codebase: code auditing, convention extraction, backlog mapping. |
 | [Detailed Workflow](../docs/workflow.html) | Advanced commands, Opponent Processor, cost tracking, Vibe Score, efficiency tips. |
 | [Example Session](../docs/example-session.html) | Full walkthrough: Day 1 foundation through parallel features, dev servers, best practices. |
-| [Architecture](../docs/architecture.html) | 12-agent system, hooks, interrupt protocol, state management, VitePress dashboard. |
+| [Architecture](../docs/architecture.html) | 13-agent system, hooks, interrupt protocol, state management, VitePress dashboard. |
 | [Warp Tips](../docs/warp.html) | Launch Configurations, keyboard shortcuts, Warp Drive, Notebooks, themes. |
-| [Release Notes](../docs/releases.html) | Complete changelog from v1.0.0 through v1.3.0. |
+| [Release Notes](../docs/releases.html) | Complete changelog from v1.0.0 through v1.4.0. |
 
 > **Tip:** To browse the docs locally, open `docs/index.html` in your browser.
 
@@ -84,7 +84,7 @@ in your browser, or browse them on GitHub:
 
 ## Commands Reference
 
-VibeCrew provides 17 slash commands. Each command is defined in the `skills/`
+VibeCrew provides 25 slash commands. Each command is defined in the `skills/`
 directory and invoked directly from the Claude Code prompt.
 
 ### Project Setup
@@ -105,8 +105,8 @@ directory and invoked directly from the Claude Code prompt.
 
 | Command | Description |
 |---|---|
-| `/new-feature "name"` | Start the Tier 2 cycle for a specific feature: plan, design, code, test, docs. Creates a feature branch and claims the task in the backlog. |
-| `/run-backlog` | Autonomously process the next unclaimed feature from the backlog. Equivalent to `/new-feature` but picks the highest-priority item automatically. |
+| `/new-feature "name"` | Start the Tier 2 cycle for a specific feature: plan, design, code, test, review (optional), docs. Creates a feature branch and claims the task in the backlog. |
+| `/run-backlog` | Autonomously process the next unclaimed feature from the backlog. Equivalent to `/new-feature` but picks the highest-priority item automatically. Includes automatic code review. |
 
 ### Onboarding
 
@@ -127,6 +127,12 @@ directory and invoked directly from the Claude Code prompt.
 
 | Command | Description |
 |---|---|
+| `/tdd` | Vertical-slice TDD workflow: red-green-refactor cycles with automatic commit trailers. Plans test interfaces, writes one failing test, implements minimal code, refactors. |
+| `/debug` | Four-phase systematic debugging: observe, hypothesize, test, verify. Generates ranked root cause hypotheses and saves reports to `.vibecrew/debug-reports/`. |
+| `/review` | Structured code review against feature spec. Invokes Code Reviewer agent in worktree isolation. Findings classified as critical/warning/info. Optional in manual workflow, automatic in `/run-backlog`. |
+| `/e2e` | Playwright E2E test generation with Page Object Model. Scaffolds Playwright if missing, generates accessible-first locators, runs with trace-on-failure. |
+| `/perf-test` | k6 performance testing: load, stress, spike, soak profiles. Scaffolds k6 scripts from template, parses p95/p99 latency and error rates. |
+| `/a11y` | WCAG 2.1 AA accessibility audit via axe-core + Playwright. Scans for violations by severity, checks keyboard navigation and ARIA attributes. |
 | `/simplify` | Analyze feature code for simplification opportunities: dead code removal, abstraction flattening, API surface reduction, dependency consolidation. Opus-powered read-only analysis with per-suggestion approval and automatic test verification. |
 | `/replay` | Reusable workflow templates from successful sessions. `/replay` lists templates, `/replay --create <name>` extracts from sessions with Vibe Score >= 70, `/replay <name>` loads a template to guide development. |
 
@@ -157,18 +163,19 @@ produces five artifacts before any source code is written:
 A phase gate hook (`phase-gate.sh`) blocks all Write and Edit operations on
 source code files until every foundation artifact is present.
 
-**Tier 2 -- Feature Development** is an iterative 5-phase cycle for each
+**Tier 2 -- Feature Development** is an iterative 6-phase cycle for each
 feature:
 
 1. **Plan** -- feature spec, acceptance criteria, task breakdown
 2. **Design** -- UI/component design aligned to the design system
 3. **Code** -- implementation within TDR boundaries
 4. **Test** -- unit tests (Vitest), E2E tests (Playwright), accessibility (axe)
-5. **Docs** -- feature documentation, CHANGELOG entry, session log
+5. **Review** -- code review against spec (optional in manual workflow, automatic in `/run-backlog`)
+6. **Docs** -- feature documentation, CHANGELOG entry, session log
 
 ### Agents
 
-VibeCrew uses 12 specialized agents, each with a dedicated system prompt:
+VibeCrew uses 13 specialized agents, each with a dedicated system prompt:
 
 | Agent | Model | Execution | Role |
 |---|---|---|---|
@@ -184,6 +191,7 @@ VibeCrew uses 12 specialized agents, each with a dedicated system prompt:
 | Code Simplifier | Opus | Worktree | Read-only code analysis for simplification: dead code, abstraction flattening, API reduction, dependency consolidation. |
 | CI Healer | Opus | Inline | CI failure diagnosis and repair. Categorizes failures (build/test/lint/dep/env), applies targeted fixes with max 3 attempts. |
 | Opponent Processor | Opus | Worktree | Devil's advocate for TDR decisions. Generates counter-arguments, debate matrices, and risk assessments for technology choices. |
+| Code Reviewer | Opus | Worktree | Read-only code review against feature spec, TDR compliance, conventions, security surface, and performance anti-patterns. |
 
 ### Hook System
 
@@ -257,6 +265,7 @@ claude-plugin-vibe-crew/
     code-simplifier.md         # Code Simplifier agent prompt
     ci-healer.md               # CI Healer agent prompt
     opponent-processor.md      # Opponent Processor agent prompt
+    code-reviewer.md           # Code Reviewer agent prompt
   skills/
     setup/SKILL.md             # /setup command
     new-project/SKILL.md       # /new-project command
@@ -275,7 +284,15 @@ claude-plugin-vibe-crew/
     replay/SKILL.md            # /replay command
     simplify/SKILL.md          # /simplify command
     heal/SKILL.md              # /heal command
-  scripts/                     # ~53 bash automation scripts
+    tdd/SKILL.md               # /tdd command
+    debug/SKILL.md             # /debug command
+    review/SKILL.md            # /review command
+    e2e/SKILL.md               # /e2e command
+    perf-test/SKILL.md         # /perf-test command
+    a11y/SKILL.md              # /a11y command
+    achievements/SKILL.md      # /achievements command
+    quiz/SKILL.md              # /quiz command
+  scripts/                     # ~67 bash automation scripts
   templates/                   # Project templates and doc-site scaffold
   LICENSE                      # MIT License
 
@@ -291,6 +308,10 @@ claude-plugin-vibe-crew/
   workflows/                   # Reusable workflow templates (/replay)
   simplifications/             # Code simplification reports (/simplify)
   ci-heals/                    # CI heal reports (/heal)
+  reviews/                     # Code review reports (/review)
+  debug-reports/               # Debug session reports (/debug)
+  a11y/                        # Accessibility audit reports (/a11y)
+  perf-tests/                  # Performance test results (/perf-test)
 ```
 
 ---

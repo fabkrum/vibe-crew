@@ -46,7 +46,7 @@ claude-plugin-vibe-crew/                      # Plugin root
     code-simplifier.md                      #   Opus   -- complexity reduction, refactoring
     ci-healer.md                            #   Opus   -- CI/CD failure diagnosis and repair
     opponent-processor.md                   #   Opus   -- adversarial review, edge case discovery
-  skills/                                   # 9 slash commands (SKILL.md per command)
+  skills/                                   # 25 slash commands (SKILL.md per command)
     setup/
       SKILL.md                              #   /setup -- first-run installation wizard
     new-project/
@@ -67,7 +67,7 @@ claude-plugin-vibe-crew/                      # Plugin root
       SKILL.md                              #   /wrap -- session end with coaching
   hooks/
     hooks.json                              # Event-to-script routing table
-  scripts/                                  # 7 bash automation scripts
+  scripts/                                  # ~67 bash automation scripts
     session-startup.sh                      #   SessionStart: env check, state detection
     compact-reinject.sh                     #   SessionStart(compact): re-inject state after compaction
     phase-gate.sh                           #   PreToolUse(Write|Edit): foundation enforcement
@@ -182,11 +182,11 @@ This is critical because marketplace-installed plugins are cached to `~/.claude/
 
 ## 2. Agent Topology
 
-### 2.1 The Twelve Agents
+### 2.1 The Thirteen Agents
 
-VibeCrew v1.0 operates through twelve specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
+VibeCrew operates through thirteen specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
 
-The v1.0 topology expands the original 9-agent design to 12 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding new specialized agents for code quality, security, simplification, CI healing, and adversarial review.
+The topology expands the original 9-agent design to 13 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding specialized agents for code quality, security, simplification, CI healing, adversarial review, and code review.
 
 ```
 +------------------------------------------------------------------+
@@ -450,9 +450,9 @@ Script reads .vibecrew/state.json
 
 ### 3.3 Tier 2: Feature Development
 
-Tier 2 is an iterative 5-phase cycle applied to each feature in the backlog. Phases run sequentially per feature but multiple features can be in different phases simultaneously across different agent worktrees.
+Tier 2 is an iterative 6-phase cycle applied to each feature in the backlog. Phases run sequentially per feature but multiple features can be in different phases simultaneously across different agent worktrees.
 
-**The 5 phases (v1.0 agent mapping):**
+**The 6 phases (agent mapping):**
 
 | Phase | Agent | Inputs | Outputs |
 |-------|-------|--------|---------|
@@ -460,9 +460,10 @@ Tier 2 is an iterative 5-phase cycle applied to each feature in the backlog. Pha
 | **Design** | Builder | Feature spec, design-system.css | Component mockups, layout specifications |
 | **Code** | Builder | Feature spec, design output, TDR | Implementation in worktree |
 | **Test** | Verifier | Implementation, acceptance criteria | Unit tests, integration tests, accessibility tests |
-| **Docs** | Workflow Orchestrator (inline) | All phase outputs | Feature documentation, CHANGELOG entry (v1.0 minimal) |
+| **Review** | Code Reviewer | Implementation, feature spec, TDR | Review report with findings (critical/warning/info) |
+| **Docs** | Doc Generator | All phase outputs | Feature documentation, CHANGELOG entry |
 
-In v1.0, the Builder handles both the Design and Code phases. The Verifier handles Test. The Doc Generator handles the Docs phase.
+The Builder handles both the Design and Code phases. The Verifier handles Test. The Code Reviewer handles Review (optional in manual workflow, automatic in `/run-backlog`). The Doc Generator handles the Docs phase.
 
 ### 3.4 Feature State Machine
 
@@ -993,7 +994,7 @@ The Vibe Score deducts 15 points when cache utilization drops below 20%, incenti
 
 ### 6.1 Overview
 
-VibeCrew exposes nine slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
+VibeCrew exposes 25 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
 
 All VibeCrew commands use `disable-model-invocation: true` to prevent Claude from auto-loading them. They are user-triggered workflows, not background capabilities. Two commands (`/status` and `/check`) also allow model invocation for internal use by the Orchestrator.
 
@@ -1046,9 +1047,9 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 
 **`/plan-features`** -- Interactive planning session. Reads the roadmap, asks clarifying questions about each feature, and populates `backlog.json` with feature specs including acceptance criteria, priorities, and dependency relationships. Features start in `planned` column and advance to `ready` when dependencies are met.
 
-**`/new-feature "name"`** -- Starts a Tier 2 feature cycle. Verifies foundation is complete (reads `foundation.complete` from `state.json`). Looks up the named feature in `backlog.json` (or creates a new entry). Creates a worktree via `git worktree add`. Initializes the 5-phase tracker. Uses `TaskCreate` to launch the appropriate agent for the current phase.
+**`/new-feature "name"`** -- Starts a Tier 2 feature cycle. Verifies foundation is complete (reads `foundation.complete` from `state.json`). Looks up the named feature in `backlog.json` (or creates a new entry). Creates a worktree via `git worktree add`. Initializes the 6-phase tracker. Uses `TaskCreate` to launch the appropriate agent for the current phase.
 
-**`/run-backlog`** -- Automated batch processing. Repeatedly claims the next `ready` task from the backlog, creates a team via `TeamCreate`, and runs it through all five phases (Plan, Design, Code, Test, Docs) using agent coordination. Continues until the backlog is empty or context is exhausted. Ideal for overnight or unattended runs.
+**`/run-backlog`** -- Automated batch processing. Repeatedly claims the next `ready` task from the backlog, creates a team via `TeamCreate`, and runs it through all six phases (Plan, Design, Code, Test, Review, Docs) using agent coordination. Continues until the backlog is empty or context is exhausted. Ideal for overnight or unattended runs.
 
 **`/idea "text"`** -- Quick capture. Appends a new feature entry to `backlog.json` with column `idea` and the provided text as the description. No acceptance criteria, no priority, no dependencies -- those are added during `/plan-features`. This command is intentionally lightweight for capturing thoughts without breaking flow.
 

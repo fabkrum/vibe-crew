@@ -753,10 +753,15 @@ Overall: PASS
 | No tests | Feature completed without test files | -10 |
 | No feature spec | Development started without acceptance criteria | -5 |
 | Missing phase | Any Tier 2 phase skipped | -3 per phase |
-| **Bonus: all phases** | All 5 phases completed | +5 |
+| **Bonus: all phases** | All 6 phases completed | +5 |
 | **Bonus: high cache** | `cache_read_input_tokens` > 70% of `input_tokens` | +5 |
 | **Bonus: full coverage** | Test coverage above 80% | +3 |
 | **Bonus: clean session** | Zero warnings triggered | +2 |
+| **Bonus: TDD discipline** | Commits with `TDD cycle:` trailer detected | +3 |
+| **Bonus: E2E passing** | Playwright spec files exist and tests pass | +3 |
+| **Bonus: a11y clean** | axe-core report with zero critical/serious violations | +2 |
+| **Bonus: code review** | Review report exists in `.vibecrew/reviews/` | +2 |
+| **Bonus: perf baselines** | k6 results exist in `.vibecrew/perf-tests/` | +2 |
 | **Floor** | Minimum score | 0 |
 | **Ceiling** | Maximum score | 100 |
 

@@ -426,10 +426,119 @@
   </section>
 
   <div class="version-nav">
+    <a href="#v1.4.0">v1.4.0</a>
     <a href="#v1.3.0">v1.3.0</a>
     <a href="#v1.2.0">v1.2.0</a>
     <a href="#v1.1.0">v1.1.0</a>
     <a href="#v1.0.0">v1.0.0</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.4.0                                                       -->
+  <!-- ============================================================ -->
+  <div class="release" id="v1.4.0">
+    <div class="release-header">
+      <h2>v1.4.0</h2>
+      <span class="release-date">2026-02-24</span>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.4.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>/tdd &mdash; Vertical-Slice TDD Workflow</h4>
+      <ul class="file-list">
+        <li><code>skills/tdd/SKILL.md</code> &mdash; <span class="file-desc">Red-green-refactor TDD with planning phase (interface signatures, behaviors, DI points). One failing test at a time, minimal implementation, refactor with full suite green. Commits with <code>TDD cycle: red-green-refactor</code> trailer. Discipline score (0-10)</span></li>
+        <li><code>scripts/detect-tdd-discipline.sh</code> &mdash; <span class="file-desc">Search git log for TDD cycle trailers, output JSON with discipline_detected and cycle_count</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/debug &mdash; Systematic Debugging</h4>
+      <ul class="file-list">
+        <li><code>skills/debug/SKILL.md</code> &mdash; <span class="file-desc">Four-phase debugging: Observe (gather evidence, reproduce), Hypothesize (3-5 ranked root causes), Test (confirm/refute each), Verify (checkpoint, fix, full test suite). Reports saved to <code>.vibecrew/debug-reports/</code></span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/review &mdash; Structured Code Review</h4>
+      <ul class="file-list">
+        <li><code>agents/code-reviewer.md</code> &mdash; <span class="file-desc">Opus agent, worktree isolation, read-only. 10-step analysis: correctness vs spec, TDR compliance, conventions, design tokens, error handling, test coverage, security, performance. Findings: critical/warning/info</span></li>
+        <li><code>skills/review/SKILL.md</code> &mdash; <span class="file-desc">Collect changed files, load feature spec as review contract, invoke code-reviewer agent in worktree isolation, display findings by severity. Optional in manual workflow (+2 Vibe Score), automatic in <code>/run-backlog</code></span></li>
+        <li><code>scripts/detect-review-status.sh</code> &mdash; <span class="file-desc">Check <code>.vibecrew/reviews/</code> for review reports matching active feature</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/e2e &mdash; Playwright E2E Test Generation</h4>
+      <ul class="file-list">
+        <li><code>skills/e2e/SKILL.md</code> &mdash; <span class="file-desc">Detect/scaffold Playwright, generate Page Object classes with accessible locators (getByRole &rarr; getByLabel &rarr; getByText &rarr; getByTestId), generate spec files from acceptance criteria, run with trace-on-first-retry</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/perf-test &mdash; k6 Performance Testing</h4>
+      <ul class="file-list">
+        <li><code>skills/perf-test/SKILL.md</code> &mdash; <span class="file-desc">Four test profiles (load, stress, spike, soak), scaffold from template, parse p95/p99 latency and error rates</span></li>
+        <li><code>templates/k6-config.js.template</code> &mdash; <span class="file-desc">k6 scaffold with configurable stages, default thresholds (p95 &lt; 500ms, error rate &lt; 1%), handleSummary JSON output</span></li>
+        <li><code>scripts/detect-perf-baselines.sh</code> &mdash; <span class="file-desc">Check <code>.vibecrew/perf-tests/</code> for results matching active feature</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>/a11y &mdash; WCAG 2.1 AA Accessibility Audit</h4>
+      <ul class="file-list">
+        <li><code>skills/a11y/SKILL.md</code> &mdash; <span class="file-desc">axe-core scan via Playwright, keyboard navigation checklist, ARIA validation, violations by severity (critical/serious/moderate/minor)</span></li>
+        <li><code>scripts/run-a11y-scan.sh</code> &mdash; <span class="file-desc">Create temp Playwright script, run axe-core with WCAG 2.1 AA tags, output JSON report</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Context Budget Optimization</h4>
+      <ul class="file-list">
+        <li><code>templates/trigger-table.md</code> &mdash; <span class="file-desc">Compact routing table for all 25 slash commands with agent, phase, description. Agent registry (13 agents) with model, isolation, triggers. State routing decision table (~60 lines)</span></li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge changed">Changed</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Tier 2 Phase Expansion (5 &rarr; 6 phases)</h4>
+      <ul class="file-list">
+        <li><code>skills/new-feature/SKILL.md</code> &mdash; <span class="file-desc">Added optional Review phase to phase tracker display</span></li>
+        <li><code>skills/run-backlog/SKILL.md</code> &mdash; <span class="file-desc">Inserted Phase 4.5 (Review) between Test and Docs. Updated all phase counts from 5 to 6</span></li>
+        <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">Added Code Reviewer to Tier 2 agent assignments, reviewer-complete.signal processing, and context budget on-demand loading</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Vibe Score Expansion</h4>
+      <ul class="file-list">
+        <li><code>skills/wrap/SKILL.md</code> &mdash; <span class="file-desc">Added skipped-code-review deduction (-5). Added 5 new bonuses: TDD discipline (+3), E2E passing (+3), a11y clean (+2), review complete (+2), perf baselines (+2)</span></li>
+        <li><code>scripts/calculate-vibe-score.sh</code> &mdash; <span class="file-desc">Added 5 new detection sections (TDD, E2E, a11y, review, perf) and 10 new JSON output fields</span></li>
+        <li><code>agents/verifier.md</code> &mdash; <span class="file-desc">Updated Vibe Score tables with new deduction and 5 new bonus rows</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Agent Enhancements</h4>
+      <ul class="file-list">
+        <li><code>agents/builder.md</code> &mdash; <span class="file-desc">Added TDD Integration section for red-green-refactor cycles</span></li>
+        <li><code>agents/ci-healer.md</code> &mdash; <span class="file-desc">Added systematic debugging methodology (Observe &rarr; Hypothesize &rarr; Test &rarr; Verify)</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Configuration</h4>
+      <ul class="file-list">
+        <li><code>settings.json</code> &mdash; <span class="file-desc">Added 3 allowedTools: k6, npx k6, npx @axe-core/playwright</span></li>
+        <li><code>.claude-plugin/plugin.json</code> &mdash; <span class="file-desc">Version bumped to 1.4.0</span></li>
+      </ul>
+    </div>
   </div>
 
   <!-- ============================================================ -->

@@ -5,6 +5,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-02-24
+
+### Added
+
+#### `/tdd` — Vertical-Slice TDD Workflow
+
+- `skills/tdd/SKILL.md` -- Red-green-refactor TDD with planning phase (interface signatures, behaviors, DI points). One failing test at a time, minimal implementation, refactor with full suite green. Commits with `TDD cycle: red-green-refactor` trailer. Discipline score (0-10)
+- `scripts/detect-tdd-discipline.sh` -- Search git log for TDD cycle trailers, output JSON with discipline_detected and cycle_count
+
+#### `/debug` — Systematic Debugging
+
+- `skills/debug/SKILL.md` -- Four-phase debugging: Observe (gather evidence, reproduce), Hypothesize (3-5 ranked root causes), Test (confirm/refute each), Verify (checkpoint, fix, full test suite). Reports saved to `.vibecrew/debug-reports/`
+
+#### `/review` — Structured Code Review
+
+- `agents/code-reviewer.md` -- Opus agent, worktree isolation, read-only (disallowedTools: Write, Edit). 10-step analysis: correctness vs spec, TDR compliance, conventions, design tokens, error handling, test coverage, security, performance. Findings: critical/warning/info. Verdict: APPROVE / REQUEST CHANGES / COMMENT ONLY
+- `skills/review/SKILL.md` -- Collect changed files, load feature spec as review contract, invoke code-reviewer agent, display findings by severity, track in `.vibecrew/reviews/`. Optional in manual workflow (+2 Vibe Score), automatic in `/run-backlog`
+- `scripts/detect-review-status.sh` -- Check `.vibecrew/reviews/` for review reports matching active feature
+
+#### `/e2e` — Playwright E2E Test Generation
+
+- `skills/e2e/SKILL.md` -- Detect/scaffold Playwright, generate Page Object classes with accessible locators (getByRole → getByLabel → getByText → getByTestId), generate spec files from acceptance criteria, run with trace-on-first-retry
+
+#### `/perf-test` — k6 Performance Testing
+
+- `skills/perf-test/SKILL.md` -- Four test profiles (load, stress, spike, soak), scaffold from template, parse p95/p99 latency and error rates, save to `.vibecrew/perf-tests/`
+- `templates/k6-config.js.template` -- k6 scaffold with configurable stages, default thresholds (p95 < 500ms, error rate < 1%), handleSummary JSON output
+- `scripts/detect-perf-baselines.sh` -- Check `.vibecrew/perf-tests/` for results matching active feature
+
+#### `/a11y` — WCAG 2.1 AA Accessibility Audit
+
+- `skills/a11y/SKILL.md` -- axe-core scan via Playwright, keyboard navigation checklist, ARIA validation, violations by severity (critical/serious/moderate/minor), reports saved to `.vibecrew/a11y/`
+- `scripts/run-a11y-scan.sh` -- Create temp Playwright script, run axe-core with WCAG 2.1 AA tags, output JSON report
+
+#### Context Budget Optimization
+
+- `templates/trigger-table.md` -- Compact routing table for all 25 slash commands with agent, phase, description. Agent registry (13 agents) with model, isolation, triggers. State routing decision table (~60 lines)
+
+### Changed
+
+#### Tier 2 Phase Expansion (5 → 6 phases)
+
+- `skills/new-feature/SKILL.md` -- Added optional Review phase to phase tracker display. Review is optional in manual workflow but earns +2 Vibe Score bonus
+- `skills/run-backlog/SKILL.md` -- Inserted Phase 4.5 (Review) between Test and Docs. Invokes `/review` after tests pass, loops back for fixes on critical findings (max 2 cycles). Updated all phase counts from 5 to 6
+- `agents/workflow-orchestrator.md` -- Added Code Reviewer to Tier 2 agent assignments. Added "Tier 2 Phase Sequence" subsection, `reviewer-complete.signal` processing, and "Context Budget: On-Demand Loading" referencing trigger-table.md
+
+#### Vibe Score Expansion
+
+- `skills/wrap/SKILL.md` -- Added skipped-code-review deduction (-5). Added 5 new bonuses: TDD discipline (+3), E2E tests passing (+3), accessibility clean (+2), code review complete (+2), performance baselines (+2)
+- `scripts/calculate-vibe-score.sh` -- Added 5 new detection sections (TDD, E2E, a11y, review, perf) and 10 new JSON output fields
+- `agents/verifier.md` -- Updated Vibe Score tables with new deduction and 5 new bonus rows. Added E2E, a11y, and perf references to Test Infrastructure
+
+#### Agent Enhancements
+
+- `agents/builder.md` -- Added TDD Integration section: red-green-refactor cycle with commit trailer when `/tdd` is active
+- `agents/ci-healer.md` -- Added systematic debugging methodology (Observe → Hypothesize → Test → Verify) for complex failures
+
+#### Configuration
+
+- `settings.json` -- Added 3 allowedTools: `k6 *`, `npx k6 *`, `npx @axe-core/playwright *`
+- `.claude-plugin/plugin.json` -- Version bumped to 1.4.0
+
+---
+
 ## [1.3.0] - 2026-02-23
 
 ### Added
@@ -298,6 +362,7 @@ Documentation, cleanup utilities, and finalized configurations.
 
 **Total: ~81 files across 6 implementation phases.**
 
+[1.4.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.4.0
 [1.3.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.3.0
 [1.2.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.2.0
 [1.1.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.1.0

@@ -85,7 +85,8 @@ Each deduction category has a per-category cap. Deductions are applied at most t
 | `context-violation` | -20 | -20 | Context usage exceeded 80%. See [Section 3.1](#31-token-and-context-metrics). | Session pushed into the danger zone for context exhaustion. Risk of forced compaction and lost state. |
 | `no-tests` | -10 | -10 | No test files created or modified during the session. See [Section 3.4](#34-test-and-quality-metrics). | Feature shipped without test coverage. Higher defect risk and harder to refactor. |
 | `no-spec` | -5 | -5 | Feature work started without acceptance criteria in `backlog.json`. See [Section 3.5](#35-phase-completion-metrics). | Implementation began without a deliberate plan. Increases rework probability. |
-| `missing-phase` | -3 per phase | -15 (5 phases) | Any Tier 2 phase skipped (no artifacts recorded in `state.json`). See [Section 3.5](#35-phase-completion-metrics). | Skipping phases reduces the quality feedback loop. |
+| `missing-phase` | -3 per phase | -18 (6 phases) | Any Tier 2 phase skipped (no artifacts recorded in `state.json`). See [Section 3.5](#35-phase-completion-metrics). | Skipping phases reduces the quality feedback loop. |
+| `doc-drift` | -3 per stale doc | -9 (3 docs) | Source code changed but matching feature docs not updated. New API endpoints/routes without doc coverage. See [Section 3.6](#36-documentation-drift-detection). | Stale docs mislead future sessions and accumulate technical debt. Counted within the `missing-phase` category for the Docs phase. |
 
 **Total deduction caps:**
 
@@ -202,6 +203,40 @@ For each tool call in the session:
 
 **Schema reference:** See [`architecture/schemas.md` Section 3](schemas.md#3-statejson) for the `state.json` feature phase structure.
 
+### 3.6 Documentation Drift Detection
+
+**Source:** Git diff of the current session combined with feature doc file timestamps.
+
+**What to look for:** Source code files modified during the session that have corresponding feature documentation which was NOT updated in the same session.
+
+**Detection logic:**
+
+```
+stale_docs = 0
+
+# Get source files changed in this session (from git diff or state.json session artifacts)
+changed_source_files = files modified in session (excluding test files, config, docs)
+
+# For each active/completed feature with code changes:
+For each feature with modified source files:
+  feature_doc_path = "docs/features/{feature-id}/"
+  If feature_doc_path exists:
+    If no doc files in feature_doc_path were modified this session:
+      stale_docs += 1
+  Else if feature is in "done" or "review" status:
+    stale_docs += 1   # completed feature with no docs at all
+
+# Also check for new API routes/endpoints without doc coverage
+new_routes = scan changed files for new route/endpoint definitions
+For each new_route:
+  If no matching API reference section exists in feature docs:
+    stale_docs += 1
+```
+
+**Cap:** `min(stale_docs, 3)` -- maximum 3 drift items counted, maximum -9 deduction. This counts within the `missing-phase` Docs phase category. If the Docs phase is already marked as skipped entirely, the `doc-drift` sub-deductions are not applied on top (no double-counting).
+
+**Implementation:** The `calculate-vibe-score.sh` script detects drift by comparing `git diff --name-only` output against doc directory modification times. The Doc Generator agent resolves drift during `/wrap` by auto-generating or updating stale docs.
+
 ---
 
 ## 4. Coaching Output
@@ -237,7 +272,7 @@ The Verifier produces two coaching fields in the score file (see [`architecture/
 ### 4.3 Celebration Rules
 
 - **Celebrate when the session has zero deductions.** A clean session deserves recognition.
-- **Celebrate specific achievements.** "All 5 phases completed" or "Cache utilization at 72%" -- not generic "good job" messages.
+- **Celebrate specific achievements.** "All 6 phases completed" or "Cache utilization at 72%" -- not generic "good job" messages.
 - **Keep it brief.** One sentence is enough.
 
 ### 4.4 Coaching Tone

@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0.0",
+  "daily_challenges": [
+    {
+      "id": "daily-clean-sweep",
+      "name": "Clean Sweep",
+      "description": "Complete a session with 0 deductions",
+      "type": "daily",
+      "xp_reward": 20,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "session_deductions",
+        "comparator": "equals",
+        "value": 0
+      }
+    },
+    {
+      "id": "daily-cache-champion",
+      "name": "Cache Champion",
+      "description": "Achieve >70% cache utilization in a session",
+      "type": "daily",
+      "xp_reward": 20,
+      "target_skill": "context_management",
+      "condition": {
+        "metric": "cache_ratio",
+        "comparator": "greater_than",
+        "value": 0.70
+      }
+    },
+    {
+      "id": "daily-no-churn",
+      "name": "Clear Channel",
+      "description": "Complete a session with 0 prompt churn sequences",
+      "type": "daily",
+      "xp_reward": 20,
+      "target_skill": "prompting",
+      "condition": {
+        "metric": "prompt_churn_sequences",
+        "comparator": "equals",
+        "value": 0
+      }
+    },
+    {
+      "id": "daily-context-light",
+      "name": "Light Footprint",
+      "description": "Keep context usage under 40% for the entire session",
+      "type": "daily",
+      "xp_reward": 25,
+      "target_skill": "context_management",
+      "condition": {
+        "metric": "peak_context_pct",
+        "comparator": "less_than",
+        "value": 40
+      }
+    },
+    {
+      "id": "daily-test-pass",
+      "name": "Green Light",
+      "description": "All tests pass on the first run",
+      "type": "daily",
+      "xp_reward": 20,
+      "target_skill": "testing",
+      "condition": {
+        "metric": "tests_first_pass",
+        "comparator": "equals",
+        "value": true
+      }
+    },
+    {
+      "id": "daily-phase-complete",
+      "name": "Phase Finisher",
+      "description": "Complete at least one Tier 2 phase",
+      "type": "daily",
+      "xp_reward": 15,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "phases_completed_this_session",
+        "comparator": "greater_than",
+        "value": 0
+      }
+    }
+  ],
+  "weekly_challenges": [
+    {
+      "id": "weekly-ship-week",
+      "name": "Ship Week",
+      "description": "Ship 1 complete feature (all 5 phases) this week",
+      "type": "weekly",
+      "xp_reward": 50,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "features_shipped_this_week",
+        "comparator": "greater_than_or_equal",
+        "value": 1
+      }
+    },
+    {
+      "id": "weekly-perfect-week",
+      "name": "Perfect Week",
+      "description": "All sessions this week score 90+",
+      "type": "weekly",
+      "xp_reward": 75,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "all_sessions_above",
+        "comparator": "greater_than_or_equal",
+        "value": 90
+      }
+    },
+    {
+      "id": "weekly-test-coverage",
+      "name": "Coverage Push",
+      "description": "Achieve >80% test coverage across all sessions this week",
+      "type": "weekly",
+      "xp_reward": 60,
+      "target_skill": "testing",
+      "condition": {
+        "metric": "avg_coverage_this_week",
+        "comparator": "greater_than",
+        "value": 80
+      }
+    },
+    {
+      "id": "weekly-architecture",
+      "name": "Blueprint Week",
+      "description": "Complete at least 2 plan phases this week",
+      "type": "weekly",
+      "xp_reward": 40,
+      "target_skill": "architecture",
+      "condition": {
+        "metric": "plan_phases_this_week",
+        "comparator": "greater_than_or_equal",
+        "value": 2
+      }
+    },
+    {
+      "id": "weekly-streak-5",
+      "name": "Five-Day Streak",
+      "description": "Maintain a 5-day coding streak this week",
+      "type": "weekly",
+      "xp_reward": 40,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "streak_days_this_week",
+        "comparator": "greater_than_or_equal",
+        "value": 5
+      }
+    }
+  ],
+  "onetime_challenges": [
+    {
+      "id": "onetime-speed-ship",
+      "name": "Speed Ship",
+      "description": "Ship a feature in a single session",
+      "type": "onetime",
+      "xp_reward": 100,
+      "unlock_level": 5,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "feature_shipped_single_session",
+        "comparator": "equals",
+        "value": true
+      }
+    },
+    {
+      "id": "onetime-full-coverage",
+      "name": "Full Coverage",
+      "description": "Achieve >90% test coverage on a feature",
+      "type": "onetime",
+      "xp_reward": 75,
+      "unlock_level": 10,
+      "target_skill": "testing",
+      "condition": {
+        "metric": "feature_coverage",
+        "comparator": "greater_than",
+        "value": 90
+      }
+    },
+    {
+      "id": "onetime-marathon",
+      "name": "Marathon Coder",
+      "description": "Ship 3 features in a single week",
+      "type": "onetime",
+      "xp_reward": 100,
+      "unlock_level": 8,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "features_shipped_this_week",
+        "comparator": "greater_than_or_equal",
+        "value": 3
+      }
+    },
+    {
+      "id": "onetime-perfect-ten",
+      "name": "Perfect Ten",
+      "description": "Achieve 10 consecutive sessions scoring 85+",
+      "type": "onetime",
+      "xp_reward": 100,
+      "unlock_level": 8,
+      "target_skill": "workflow_discipline",
+      "condition": {
+        "metric": "consecutive_sessions_above",
+        "comparator": "greater_than_or_equal",
+        "value": 10,
+        "score_threshold": 85
+      }
+    },
+    {
+      "id": "onetime-context-master",
+      "name": "Context Master",
+      "description": "Complete 20 sessions under 50% context usage",
+      "type": "onetime",
+      "xp_reward": 75,
+      "unlock_level": 10,
+      "target_skill": "context_management",
+      "condition": {
+        "metric": "sessions_under_context",
+        "comparator": "greater_than_or_equal",
+        "value": 20,
+        "threshold": 50
+      }
+    }
+  ]
+}

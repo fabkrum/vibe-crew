@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.0.0",
+  "badges": [
+    {
+      "id": "first-setup",
+      "name": "Hello, World",
+      "description": "Run /setup for the first time",
+      "category": "milestone",
+      "icon": "rocket",
+      "condition": {
+        "type": "event",
+        "event": "setup_complete",
+        "threshold": 1
+      },
+      "xp_reward": 10
+    },
+    {
+      "id": "first-foundation",
+      "name": "Architect",
+      "description": "Complete the Tier 1 foundation",
+      "category": "milestone",
+      "icon": "building",
+      "condition": {
+        "type": "state",
+        "field": "foundation.complete",
+        "value": true
+      },
+      "xp_reward": 25
+    },
+    {
+      "id": "first-feature",
+      "name": "Shipper",
+      "description": "Ship your first feature (all 5 phases)",
+      "category": "milestone",
+      "icon": "package",
+      "condition": {
+        "type": "stat",
+        "field": "total_features_shipped",
+        "threshold": 1
+      },
+      "xp_reward": 50
+    },
+    {
+      "id": "five-features",
+      "name": "Momentum",
+      "description": "Ship 5 features",
+      "category": "milestone",
+      "icon": "zap",
+      "condition": {
+        "type": "stat",
+        "field": "total_features_shipped",
+        "threshold": 5
+      },
+      "xp_reward": 100
+    },
+    {
+      "id": "first-tdr",
+      "name": "Researcher",
+      "description": "Produce your first Technology Decision Record",
+      "category": "milestone",
+      "icon": "search",
+      "condition": {
+        "type": "event",
+        "event": "tdr_complete",
+        "threshold": 1
+      },
+      "xp_reward": 15
+    },
+    {
+      "id": "clean-session",
+      "name": "Smooth Operator",
+      "description": "Score 90+ with 0 deductions in a single session",
+      "category": "skill",
+      "icon": "sparkles",
+      "condition": {
+        "type": "session",
+        "min_score": 90,
+        "max_deductions": 0
+      },
+      "xp_reward": 25
+    },
+    {
+      "id": "clean-streak-3",
+      "name": "On Fire",
+      "description": "3 consecutive sessions scoring 90+",
+      "category": "skill",
+      "icon": "flame",
+      "condition": {
+        "type": "consecutive_scores",
+        "min_score": 90,
+        "count": 3
+      },
+      "xp_reward": 50
+    },
+    {
+      "id": "clean-streak-10",
+      "name": "Untouchable",
+      "description": "10 consecutive sessions scoring 90+",
+      "category": "skill",
+      "icon": "shield",
+      "condition": {
+        "type": "consecutive_scores",
+        "min_score": 90,
+        "count": 10
+      },
+      "xp_reward": 150
+    },
+    {
+      "id": "high-cache",
+      "name": "Cache Master",
+      "description": "5 sessions with cache utilization above 70%",
+      "category": "skill",
+      "icon": "database",
+      "condition": {
+        "type": "cumulative_sessions",
+        "metric": "cache_ratio",
+        "threshold": 0.70,
+        "count": 5
+      },
+      "xp_reward": 50
+    },
+    {
+      "id": "zero-churn",
+      "name": "Clear Communicator",
+      "description": "10 sessions with 0 prompt churn sequences",
+      "category": "skill",
+      "icon": "message-circle",
+      "condition": {
+        "type": "cumulative_sessions",
+        "metric": "prompt_churn_sequences",
+        "threshold": 0,
+        "comparator": "equals",
+        "count": 10
+      },
+      "xp_reward": 75
+    },
+    {
+      "id": "tdd-warrior",
+      "name": "Test First",
+      "description": "5 features with tests written before implementation",
+      "category": "skill",
+      "icon": "check-circle",
+      "condition": {
+        "type": "cumulative_features",
+        "metric": "tdd_first",
+        "count": 5
+      },
+      "xp_reward": 75
+    },
+    {
+      "id": "context-ninja",
+      "name": "Context Ninja",
+      "description": "10 sessions under 50% context usage",
+      "category": "skill",
+      "icon": "crosshair",
+      "condition": {
+        "type": "cumulative_sessions",
+        "metric": "peak_context_pct",
+        "threshold": 50,
+        "comparator": "less_than",
+        "count": 10
+      },
+      "xp_reward": 75
+    },
+    {
+      "id": "perfect-100",
+      "name": "Perfectionist",
+      "description": "Score exactly 100 in a session",
+      "category": "special",
+      "icon": "crown",
+      "condition": {
+        "type": "session",
+        "exact_score": 100
+      },
+      "xp_reward": 100
+    },
+    {
+      "id": "comeback",
+      "name": "Comeback Kid",
+      "description": "Score 90+ immediately after a sub-50 session",
+      "category": "special",
+      "icon": "trending-up",
+      "condition": {
+        "type": "score_sequence",
+        "previous_max": 49,
+        "current_min": 90
+      },
+      "xp_reward": 50
+    },
+    {
+      "id": "week-streak-7",
+      "name": "Weekly Warrior",
+      "description": "Maintain a 7-day streak",
+      "category": "special",
+      "icon": "calendar",
+      "condition": {
+        "type": "streak",
+        "min_days": 7
+      },
+      "xp_reward": 50
+    },
+    {
+      "id": "month-streak-30",
+      "name": "Unstoppable",
+      "description": "Maintain a 30-day streak",
+      "category": "special",
+      "icon": "trophy",
+      "condition": {
+        "type": "streak",
+        "min_days": 30
+      },
+      "xp_reward": 200
+    }
+  ]
+}

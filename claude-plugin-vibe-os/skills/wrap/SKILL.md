@@ -820,6 +820,99 @@ After the Performance Coach completes, print one of:
 
 ---
 
+## Step 9.7: Gamification Processing
+
+After the Performance Coach completes, run the gamification processing pipeline to award XP, check badges, update streaks, and process challenges.
+
+### 9.7.1 Check if gamification is enabled
+
+```bash
+jq -r '.gamification.enabled // true' .vibeos/config.json 2>/dev/null || echo "true"
+```
+
+If `false`, skip this step entirely and proceed to Step 10.
+
+### 9.7.2 Run gamification pipeline
+
+Execute these scripts sequentially — each depends on the previous step:
+
+```bash
+# 1. Award XP from session data
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/award-xp.sh"
+
+# 2. Check and award badges
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-badges.sh"
+
+# 3. Update daily streak
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-streak.sh"
+
+# 4. Distribute XP to skill domains
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/distribute-skill-xp.sh"
+
+# 5. Update challenge progress
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-challenges.sh"
+
+# 6. Check for level-up and unlocks
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-level-up.sh"
+```
+
+Capture the JSON output from each script. If any script fails, log the error but continue with the remaining scripts.
+
+### 9.7.3 Display progression summary
+
+After the Vibe Score display, append a progression section using the captured outputs:
+
+```
+--- Progression ---
+Level {level} "{title}" | {xp_this_level}/{xp_to_next_level} XP to Level {next_level}
++{session_xp} (session) +{score_bonus} (score bonus) +{other} (other) = +{total} XP
+Streak: {current} days
+```
+
+If any skills leveled up, add:
+```
+Skill: {skill_name} +{xp} XP (Level {old} -> Level {new})
+```
+
+If any badges were earned, add:
+```
+--- New Badges ---
+[BADGE] {badge_name} -- {badge_description} (+{xp} XP)
+```
+
+If any challenges were completed, add:
+```
+--- Challenges Completed ---
+[{type}] {challenge_name} -- {description} (+{xp} XP)
+```
+
+If the player leveled up, add:
+```
+*** LEVEL UP! Level {old} -> Level {new} "{title}" ***
+Unlocked: {comma-separated list of new unlocks, if any}
+```
+
+Only show sections that have content. Skip empty sections to keep output concise.
+
+If a quiz is suggested based on session anti-patterns, add:
+```
+Tip: Try /quiz {quiz-id} to improve your {skill} skills.
+```
+
+### Quiz suggestion mapping
+
+| Anti-Pattern Detected | Suggested Quiz |
+|---|---|
+| Low cache utilization | `context-management-101` |
+| Prompt churn | `prompting-basics` |
+| No tests | `testing-discipline` |
+| No feature spec / missing plan | `architecture-planning` |
+| Skipped phases | `workflow-mastery` |
+
+Only suggest one quiz per session (pick the one matching the largest deduction).
+
+---
+
 ## Step 10: Session Complete
 
 ### 10.5 Auto-generate Handoff and Invoke Doc Generator

@@ -63,5 +63,11 @@
     "enabled": true,
     "max_attempts": 3,
     "auto_checkpoint": true
+  },
+  "gamification": {
+    "enabled": true,
+    "streak_reminders": false,
+    "quiz_frequency": "weekly",
+    "show_xp_in_status": true
   }
 }

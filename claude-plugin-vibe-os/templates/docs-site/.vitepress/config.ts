@@ -12,6 +12,7 @@ export default defineConfig({
       { text: "Stats", link: "/stats" },
       { text: "Trends", link: "/trends" },
       { text: "Coverage", link: "/coverage" },
+      { text: "Achievements", link: "/achievements" },
     ],
 
     sidebar: {

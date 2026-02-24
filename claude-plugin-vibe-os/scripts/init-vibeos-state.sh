@@ -146,6 +146,52 @@ else
   echo "Exists:  .vibeos/backlog.json (preserved)"
 fi
 
+# --- Write gamification.json (only if it doesn't exist) ---
+if [[ ! -f "$VIBEOS_DIR/gamification.json" ]]; then
+  cat > "$VIBEOS_DIR/gamification.json" <<EOF
+{
+  "schema_version": "1.0.0",
+  "level": 1,
+  "xp": 0,
+  "xp_this_level": 0,
+  "xp_to_next_level": 100,
+  "streak": {
+    "current": 0,
+    "longest": 0,
+    "last_session_date": null,
+    "grace_days_remaining": 2,
+    "frozen_today": false
+  },
+  "badges": [],
+  "skills": {
+    "prompting": { "level": 0, "xp": 0, "max_level": 5 },
+    "architecture": { "level": 0, "xp": 0, "max_level": 5 },
+    "testing": { "level": 0, "xp": 0, "max_level": 5 },
+    "context_management": { "level": 0, "xp": 0, "max_level": 5 },
+    "workflow_discipline": { "level": 0, "xp": 0, "max_level": 5 }
+  },
+  "active_challenges": [],
+  "completed_challenges": [],
+  "quizzes": {
+    "completed": [],
+    "correct_answers": 0,
+    "total_questions": 0
+  },
+  "unlocked_features": [],
+  "stats": {
+    "total_sessions": 0,
+    "total_features_shipped": 0,
+    "perfect_sessions": 0,
+    "best_vibe_score": 0,
+    "score_history": []
+  }
+}
+EOF
+  echo "Created: .vibeos/gamification.json"
+else
+  echo "Exists:  .vibeos/gamification.json (preserved)"
+fi
+
 # --- Add .gitignore entries ---
 GITIGNORE="$PROJECT_ROOT/.gitignore"
 VIBEOS_IGNORES=(
@@ -170,12 +216,13 @@ fi
 
 echo ""
 echo "VibeOS state initialized in $VIBEOS_DIR"
-echo "  config.json   -- User preferences (schema v1.0.0)"
-echo "  state.json    -- Project state (schema v1.0.0)"
-echo "  backlog.json  -- Feature backlog (schema v1.0.0)"
-echo "  sessions/     -- Session logs"
-echo "  scores/       -- Vibe Score history"
-echo "  signals/      -- Inter-agent signals"
-echo "  locks/        -- Advisory locks"
+echo "  config.json        -- User preferences (schema v1.0.0)"
+echo "  state.json         -- Project state (schema v1.0.0)"
+echo "  backlog.json       -- Feature backlog (schema v1.0.0)"
+echo "  gamification.json  -- Achievements & progression (schema v1.0.0)"
+echo "  sessions/          -- Session logs"
+echo "  scores/            -- Vibe Score history"
+echo "  signals/           -- Inter-agent signals"
+echo "  locks/             -- Advisory locks"
 
 exit 0

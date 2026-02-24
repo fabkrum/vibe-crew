@@ -66,6 +66,19 @@ if [[ -d "$HANDOFF_DIR" ]]; then
   HANDOFF_FILE=$(ls -1t "$HANDOFF_DIR"/handoff-*.md 2>/dev/null | head -1)
 fi
 
+# --- Read gamification state ---
+GAMIFICATION_FILE="$PROJECT_ROOT/.vibeos/gamification.json"
+GAMIFICATION_LINE=""
+if [[ -f "$GAMIFICATION_FILE" ]]; then
+  GAM_ENABLED=$(jq -r '.gamification.enabled // true' "$CONFIG_FILE" 2>/dev/null || echo "true")
+  if [[ "$GAM_ENABLED" != "false" ]]; then
+    GAM_LEVEL=$(jq -r '.level // 1' "$GAMIFICATION_FILE" 2>/dev/null || echo "1")
+    GAM_STREAK=$(jq -r '.streak.current // 0' "$GAMIFICATION_FILE" 2>/dev/null || echo "0")
+    GAM_CHALLENGE=$(jq -r '.active_challenges[0].name // "none"' "$GAMIFICATION_FILE" 2>/dev/null || echo "none")
+    GAMIFICATION_LINE="Level $GAM_LEVEL | Streak: ${GAM_STREAK} days | Challenge: $GAM_CHALLENGE"
+  fi
+fi
+
 # --- Output status summary (3 lines max, under 200 words) ---
 echo "---"
 if [[ "$FOUNDATION" == "false" ]]; then
@@ -84,6 +97,10 @@ else
   elif [[ "$TOTAL_FEATURES" -eq 0 ]]; then
     echo "  Run /plan-features or /idea to add features to the backlog."
   fi
+fi
+# Third line: gamification summary
+if [[ -n "$GAMIFICATION_LINE" ]]; then
+  echo "  $GAMIFICATION_LINE"
 fi
 
 # --- Show handoff summary if available ---

@@ -17,6 +17,7 @@
 7. [Signal Files](#7-signal-files)
 8. [Lock Files](#8-lock-files)
 9. [Migration Strategy](#9-migration-strategy)
+10. [Gamification State](#10-gamification-state)
 
 ---
 
@@ -46,6 +47,7 @@ Every `.vibeos/` JSON file includes a top-level `schema_version` field. When Vib
 ├── config.json                          # User preferences (per-project)
 ├── state.json                           # Project state + active feature
 ├── backlog.json                         # Feature backlog with specs
+├── gamification.json                    # Gamification state (XP, badges, streaks)
 ├── sessions/
 │   └── session-<ISO-date>-<NNN>.json    # Per-session logs
 ├── scores/
@@ -761,6 +763,172 @@ done
 2. **Breaking changes** (field renames, structural changes) → major version bump (1.0.0 → 2.0.0), requires explicit migration function
 3. **Signal files** are ephemeral and never migrated — old signals are simply deleted
 4. **Lock files** are ephemeral and never migrated
+
+---
+
+## 10. Gamification State
+
+Persistent progression state for the gamification system. Created by `/setup` (via `init-vibeos-state.sh`). Updated by gamification scripts during `/wrap`.
+
+**File location:** `.vibeos/gamification.json`
+
+```jsonc
+{
+  "schema_version": "1.0.0",
+
+  // Player progression
+  "level": 1,                                    // Current level (1-50)
+  "xp": 0,                                       // Total lifetime XP
+  "xp_this_level": 0,                            // XP earned toward current level
+  "xp_to_next_level": 100,                       // XP needed to reach next level
+
+  // Streak tracking
+  "streak": {
+    "current": 0,                                // Current consecutive-day streak
+    "longest": 0,                                // All-time longest streak
+    "last_session_date": null,                   // ISO date (YYYY-MM-DD) | null
+    "grace_days_remaining": 2,                   // Grace days left this month (max 2)
+    "frozen_today": false                        // Whether a grace day was used today
+  },
+
+  // Earned badges (array of badge event objects)
+  "badges": [
+    // {
+    //   "id": "first-setup",                    // Badge ID from badge-catalog.json
+    //   "earned_at": "2026-02-24T10:00:00Z"     // ISO 8601 timestamp
+    // }
+  ],
+
+  // Skill tree (5 domains)
+  "skills": {
+    "prompting":            { "level": 0, "xp": 0, "max_level": 5 },
+    "architecture":         { "level": 0, "xp": 0, "max_level": 5 },
+    "testing":              { "level": 0, "xp": 0, "max_level": 5 },
+    "context_management":   { "level": 0, "xp": 0, "max_level": 5 },
+    "workflow_discipline":  { "level": 0, "xp": 0, "max_level": 5 }
+  },
+
+  // Challenges
+  "active_challenges": [
+    // {
+    //   "id": "daily-clean-sweep",              // Challenge ID from challenge-pool.json
+    //   "type": "daily",                        // "daily" | "weekly" | "onetime"
+    //   "started_at": "2026-02-24T00:00:00Z",   // When the challenge became active
+    //   "expires_at": "2026-02-25T00:00:00Z",   // When the challenge expires
+    //   "progress": 0,                           // Current progress toward goal
+    //   "target": 1                              // Target value for completion
+    // }
+  ],
+  "completed_challenges": [
+    // {
+    //   "id": "daily-clean-sweep",
+    //   "completed_at": "2026-02-24T15:00:00Z",
+    //   "xp_awarded": 20
+    // }
+  ],
+
+  // Quiz tracking
+  "quizzes": {
+    "completed": [],                             // Array of completed quiz IDs
+    "correct_answers": 0,                        // Lifetime correct answers
+    "total_questions": 0                         // Lifetime total questions attempted
+  },
+
+  // Level-gated feature unlocks
+  "unlocked_features": [],                       // Array of feature IDs unlocked
+
+  // Aggregate stats
+  "stats": {
+    "total_sessions": 0,
+    "total_features_shipped": 0,
+    "perfect_sessions": 0,                       // Sessions with score 90+ and 0 deductions
+    "best_vibe_score": 0,
+    "score_history": []                          // Array of {date, score} for sparkline
+  }
+}
+```
+
+### Leveling Curve
+
+```
+XP_needed = floor(100 * 1.15^(level - 1))
+```
+
+| Level | XP to Next | Cumulative XP | Title |
+|-------|-----------|---------------|-------|
+| 1 | 100 | 0 | Newcomer |
+| 2-3 | 115-132 | 100-215 | Apprentice |
+| 4-5 | 152-175 | 347-499 | Focused Builder |
+| 6-8 | 201-266 | 674-1140 | Efficient Coder |
+| 9-12 | 306-404 | 1406-2572 | Seasoned Viber |
+| 13-18 | 465-808 | 2976-6546 | Workflow Master |
+| 19-25 | 929-2113 | 7354-16620 | Context Architect |
+| 26-35 | 2430-6621 | 18733-55416 | Vibe Sensei |
+| 36-45 | 7614-17531 | 62037-144000 | Grand Master |
+| 46-50 | 20161-28832 | 161531-282000 | Vibe Legend |
+
+### Skill Tree Thresholds
+
+5 levels per skill domain:
+
+| Skill Level | Name | XP Required |
+|-------------|------|-------------|
+| 0 | Novice | 0 |
+| 1 | Apprentice | 50 |
+| 2 | Practitioner | 200 |
+| 3 | Expert | 600 |
+| 4 | Master | 1400 |
+
+### Streak Rules
+
+- Increment on calendar days where `/wrap` completes successfully
+- Saturdays and Sundays do not break streaks and do not consume grace credits
+- 2 grace days per month: missing one weekday preserves the streak
+- Grace days reset on the 1st of each month
+- Broken streaks reset to 0 with no XP penalty
+
+### Unlockable Features
+
+| Level | Feature Unlocked |
+|-------|-----------------|
+| 1 | Base VibeOS |
+| 2 | Daily challenges |
+| 3 | `/quiz` command |
+| 5 | Weekly challenges, skill tree in `/achievements` |
+| 8 | One-time challenges |
+| 10 | Custom title in status line |
+| 15 | Advanced quizzes |
+| 20 | Detailed session analytics in `/status` |
+
+### Field Reference
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `schema_version` | string | yes | Schema version |
+| `level` | integer | yes | Current player level (1-50) |
+| `xp` | integer | yes | Total lifetime XP |
+| `xp_this_level` | integer | yes | XP earned toward current level |
+| `xp_to_next_level` | integer | yes | XP needed for next level |
+| `streak.current` | integer | yes | Current consecutive-day streak |
+| `streak.longest` | integer | yes | All-time longest streak |
+| `streak.last_session_date` | string\|null | yes | Last session date (YYYY-MM-DD) |
+| `streak.grace_days_remaining` | integer | yes | Grace days left this month |
+| `streak.frozen_today` | boolean | yes | Whether grace was used today |
+| `badges` | array | yes | Earned badge objects |
+| `skills.<domain>.level` | integer | yes | Skill domain level (0-5) |
+| `skills.<domain>.xp` | integer | yes | Skill domain XP |
+| `skills.<domain>.max_level` | integer | yes | Maximum skill level |
+| `active_challenges` | array | yes | Currently active challenges |
+| `completed_challenges` | array | yes | Completed challenge history |
+| `quizzes.completed` | string[] | yes | Completed quiz IDs |
+| `quizzes.correct_answers` | integer | yes | Lifetime correct answers |
+| `quizzes.total_questions` | integer | yes | Lifetime total questions |
+| `unlocked_features` | string[] | yes | Unlocked feature IDs |
+| `stats.total_sessions` | integer | yes | Lifetime session count |
+| `stats.total_features_shipped` | integer | yes | Lifetime features shipped |
+| `stats.perfect_sessions` | integer | yes | Sessions with 90+ and 0 deductions |
+| `stats.best_vibe_score` | integer | yes | All-time best score |
+| `stats.score_history` | array | yes | Score data for sparkline |
 
 ---
 

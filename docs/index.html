@@ -599,6 +599,157 @@
       .steps li { padding-left: 3rem; }
     }
 
+    /* ---- GAMIFICATION ---- */
+    .xp-bar-wrap {
+      background: var(--color-surface-2);
+      border-radius: 6px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 0.25rem;
+    }
+
+    .xp-bar {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--color-accent-dim), var(--color-accent));
+      transition: width 0.6s ease;
+    }
+
+    .level-badge-inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+      margin-right: 0.5rem;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .badge-card.locked {
+      opacity: 0.5;
+    }
+
+    .badge-card .badge-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .badge-card h5 {
+      margin: 0 0 0.15rem;
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+
+    .badge-card p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .skill-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-bar-wrap .skill-name {
+      width: 160px;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      text-align: right;
+    }
+
+    .skill-bar-wrap .bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--color-surface-2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-bar-wrap .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .skill-bar-wrap .skill-level {
+      width: 90px;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+    }
+
+    .streak-display {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-amber);
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .challenge-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .challenge-card .challenge-type {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-card .challenge-type.daily { color: var(--color-blue); }
+    .challenge-card .challenge-type.weekly { color: var(--color-accent); }
+    .challenge-card .challenge-type.onetime { color: var(--color-amber); }
+
+    .challenge-card h5 {
+      margin: 0 0 0.25rem;
+      color: var(--color-text);
+      font-size: 0.95rem;
+    }
+
+    .challenge-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
     @media (prefers-color-scheme: light) {
       /* keep dark — this is a terminal-culture product */
     }
@@ -618,6 +769,8 @@
       <li><a href="#existing-projects">Existing Projects</a></li>
       <li><a href="#advanced">Advanced</a></li>
       <li><a href="#system">System Deep Dive</a></li>
+      <li><a href="#cost-system">Cost &amp; Safety</a></li>
+      <li><a href="#gamification">Gamification</a></li>
       <li><a href="#efficiency">Efficiency Guide</a></li>
     </ul>
   </div>
@@ -655,11 +808,32 @@
         <ol>
           <li><a href="#agents">The 12-Agent Architecture</a></li>
           <li><a href="#hooks">The Hook System</a></li>
+          <li><a href="#status-bar">The Status Bar</a></li>
           <li><a href="#interrupt">The Interrupt Protocol</a></li>
           <li><a href="#phase-gate">The Phase Gate</a></li>
           <li><a href="#vibe-score">The Vibe Score &amp; Performance Coach</a></li>
           <li><a href="#commands">Slash Commands Reference</a></li>
           <li><a href="#state">State Management</a></li>
+        </ol>
+      </li>
+      <li><a href="#cost-system">Cost Tracking &amp; Safety</a>
+        <ol>
+          <li><a href="#cost-dashboard">Cost Dashboard (/cost)</a></li>
+          <li><a href="#cost-guardrails">Cost Guardrails</a></li>
+          <li><a href="#safety-hooks">Safety Hooks</a></li>
+        </ol>
+      </li>
+      <li><a href="#multi-lang">Multi-Language Support</a></li>
+      <li><a href="#dashboard">VitePress Documentation Dashboard</a></li>
+      <li><a href="#gamification">Gamification System</a>
+        <ol>
+          <li><a href="#xp-leveling">XP &amp; Leveling</a></li>
+          <li><a href="#badges-section">Badges</a></li>
+          <li><a href="#skill-tree">Skill Tree</a></li>
+          <li><a href="#streaks">Streaks</a></li>
+          <li><a href="#challenges">Challenges</a></li>
+          <li><a href="#quizzes">Quizzes</a></li>
+          <li><a href="#achievements-dashboard">Achievements Dashboard</a></li>
         </ol>
       </li>
       <li><a href="#efficiency">Maximizing Efficiency</a></li>
@@ -810,7 +984,7 @@ claude</code></pre>
     settings.json                 # Permission rules (allowed + denied tools)
     hooks/
       hooks.json                  # Event hook bindings
-    scripts/                      # ~52 bash automation scripts
+    scripts/                      # ~53 bash automation scripts
     agents/                       # 12 specialized AI agent prompts
     skills/                       # 17 slash command definitions
     templates/                    # Project templates and doc-site scaffold
@@ -932,6 +1106,7 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
         <h4>TDR &mdash; Research and lock the tech stack</h4>
         <p>The <strong>Stack Scout agent</strong> activates. This is a read-only research agent that runs in an <em>isolated context window</em>. It uses WebSearch, Context7, and Puppeteer to evaluate technology options against your requirements, then produces a <strong>Technology Decision Record</strong> at <code>docs/tdr-001-tech-stack.md</code>.</p>
         <p>The TDR documents what was considered, what was chosen, and why. Once approved, every agent works within these boundaries. The research costs 8,000&ndash;15,000 tokens but none of them touch your main session &mdash; only the distilled decision enters your context window.</p>
+        <p><strong>Step 3.5: Opponent Processor</strong> &mdash; Immediately after the TDR, VibeOS invokes the Opponent Processor agent to stress-test every technology decision. You see both the TDR and the counter-analysis side by side, then choose: keep all decisions, reconsider specific ones, or skip. See <a href="#opponent">Opponent Processor</a> for details.</p>
       </li>
       <li>
         <h4>Roadmap &mdash; Map out features</h4>
@@ -1018,19 +1193,20 @@ Completeness is checked at /wrap, not during work.</span></div>
         <p>Same process as a new project: copy or symlink <code>claude-plugin-vibe-os/</code> into your project root, then run <code>/setup</code> inside Claude Code.</p>
       </li>
       <li>
-        <h4>Run /new-project in "existing mode"</h4>
-        <p>When VibeOS detects an existing codebase (source files already present, git history exists), the <code>/new-project</code> flow adapts. Instead of asking you to define everything from scratch, it:</p>
+        <h4>Run /onboard</h4>
+        <p>The <code>/onboard</code> command launches the <strong>Code Auditor agent</strong> in a read-only worktree to analyze your codebase. It supports 7 languages (Node.js, Python, Ruby, Go, Rust, PHP, Java) and:</p>
         <ul>
-          <li><strong>Audits the codebase</strong> &mdash; scans for frameworks, dependencies, patterns, and conventions already in use</li>
-          <li><strong>Generates VISION.md</strong> from your input, same as greenfield</li>
-          <li><strong>Derives the design system</strong> by extracting existing CSS variables, colors, and spacing values where possible</li>
-          <li><strong>Creates the TDR</strong> documenting the stack <em>as it exists</em> rather than researching from scratch &mdash; the Stack Scout still runs to verify the current stack is optimal</li>
-          <li><strong>Builds CLAUDE.md</strong> incorporating discovered patterns and conventions</li>
+          <li><strong>Detects language and framework</strong> &mdash; scans manifests (<code>package.json</code>, <code>pyproject.toml</code>, <code>Gemfile</code>, <code>go.mod</code>, <code>Cargo.toml</code>, etc.)</li>
+          <li><strong>Extracts conventions</strong> &mdash; naming patterns, formatters, linters, commit format, import style</li>
+          <li><strong>Identifies test gaps</strong> &mdash; compares source vs test files, finds untested modules, estimates coverage</li>
+          <li><strong>Derives the design system</strong> &mdash; extracts existing CSS variables, colors, and spacing values via <code>extract-design-system.sh</code></li>
+          <li><strong>Generates CLAUDE.md</strong> &mdash; project-specific rules from discovered patterns, framework conventions, and architecture</li>
+          <li><strong>Initializes state</strong> &mdash; sets <code>foundation.complete = true</code> so the phase gate is unlocked immediately</li>
         </ul>
       </li>
       <li>
-        <h4>Run a test gap analysis</h4>
-        <p>The Test Writer agent scans your existing code and identifies areas without test coverage. It produces a prioritized list of tests to write, starting with the most critical business logic.</p>
+        <h4>Or run /new-project for full foundation</h4>
+        <p>Alternatively, when <code>/new-project</code> detects an existing codebase, it adapts the Tier 1 flow: the Stack Scout documents the stack as it exists (rather than researching from scratch), the design system is derived from existing CSS, and VISION.md is still generated from your input. This takes longer but produces all 5 foundation artifacts.</p>
       </li>
       <li>
         <h4>Map existing features to the backlog</h4>
@@ -1053,6 +1229,9 @@ Completeness is checked at /wrap, not during work.</span></div>
       <li><strong>Safety hooks</strong> &mdash; protection against <code>rm -rf</code>, force pushes, and other destructive commands</li>
       <li><strong>Auto-formatting</strong> &mdash; every file the AI writes is formatted automatically via PostToolUse hooks</li>
       <li><strong>Context warnings</strong> &mdash; alerts at 60% and 80% context usage to prevent exhaustion</li>
+      <li><strong>Cost tracking</strong> &mdash; real-time session cost via <code>/cost</code> with configurable spend limits</li>
+      <li><strong>Status bar</strong> &mdash; persistent display of context %, cost, feature, Vibe Score, duration, and compactions</li>
+      <li><strong>Security auditing</strong> &mdash; OWASP Top 10 scanning via <code>/audit</code> with language-specific dependency checks</li>
       <li><strong>Performance coaching</strong> &mdash; Vibe Scores and CLAUDE.md mutations from your first <code>/wrap</code></li>
     </ul>
   </section>
@@ -1367,6 +1546,57 @@ Presents suggestions one at a time for your approval
     <h4>How hooks enforce behavior</h4>
     <p>When Claude Code encounters a lifecycle event, it checks <code>hooks.json</code> for matching entries, passes a JSON payload to the script via stdin, and reads the exit code. <strong>Exit 0</strong> = allow the operation. <strong>Exit 2</strong> = block the operation. This gives hooks the power to both observe (PostToolUse) and control (PreToolUse) agent behavior.</p>
 
+    <!-- STATUS BAR -->
+    <h3 id="status-bar">The Status Bar</h3>
+    <p>A persistent status line renders after every assistant message, showing six data segments at <strong>zero token cost</strong>. The script (<code>scripts/statusline.sh</code>) is configured via <code>settings.json</code> and runs as a shell command outside the AI context window.</p>
+
+    <pre><code><span class="code-label">status bar</span>Opus ▓▓▓▓░░░░░░ 38% | $0.42 | auth-flow &middot; Code | &uarr;85 | 12m | ⟳0</code></pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Segment</th><th>Data Source</th><th>Details</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Context %</strong></td>
+            <td>stdin <code>context_window.used_percentage</code></td>
+            <td>10-char progress bar. <span style="color:var(--color-green)">Green &le;45%</span>, <span style="color:var(--color-amber)">Yellow 46&ndash;55%</span>, <span style="color:var(--color-red)">Red &gt;55%</span></td>
+          </tr>
+          <tr>
+            <td><strong>Session Cost</strong></td>
+            <td>stdin <code>cost.total_cost_usd</code></td>
+            <td>Formatted as <code>$X.XX</code>. Shows <code>$-.--</code> if unavailable</td>
+          </tr>
+          <tr>
+            <td><strong>Feature &middot; Phase</strong></td>
+            <td><code>.vibeos/state.json</code></td>
+            <td>Feature name truncated to 16 chars. Falls back to &ldquo;foundation &middot; Tier-1&rdquo; or &ldquo;no project&rdquo;</td>
+          </tr>
+          <tr>
+            <td><strong>Vibe Score</strong></td>
+            <td>Latest <code>.vibeos/scores/score-*.json</code></td>
+            <td>Shows trend suffix: <code>+</code> improving, <code>-</code> declining</td>
+          </tr>
+          <tr>
+            <td><strong>Duration</strong></td>
+            <td>stdin <code>cost.total_duration_ms</code></td>
+            <td>Displayed in minutes. Shows <code>&lt;1m</code> for short sessions</td>
+          </tr>
+          <tr>
+            <td><strong>Compactions</strong></td>
+            <td>Latest <code>.vibeos/sessions/session-*.json</code></td>
+            <td>Count of context compactions this session (⟳ prefix)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Graceful degradation</div>
+      <p>If <code>jq</code> is missing, the status bar shows &ldquo;VibeOS&rdquo;. If <code>.vibeos/</code> doesn&rsquo;t exist, it shows &ldquo;no project&rdquo;. The script always exits 0 and is compatible with macOS Bash 3.2. Target execution time is under 50ms.</p>
+    </div>
+
     <!-- INTERRUPT -->
     <h3 id="interrupt">The Interrupt Protocol</h3>
     <p>The Interrupt Protocol is the "Attention Economy" architecture. The terminal stays completely silent during normal operation. Notifications fire <em>only</em> on three conditions:</p>
@@ -1571,6 +1801,19 @@ Check file path being written:
       </table>
     </div>
 
+    <h4>Gamification</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/achievements</code></td><td>Compact CLI summary of level, badges, skill tree, streaks, challenges + visual dashboard link</td><td>Check progression anytime</td></tr>
+          <tr><td><code>/quiz</code></td><td>Interactive knowledge check on vibe-coding skills with educational explanations</td><td>Learn or refresh skills (unlocks at Level 3)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- STATE -->
     <h3 id="state">State Management</h3>
     <p>All VibeOS runtime state lives in <code>.vibeos/</code>:</p>
@@ -1583,6 +1826,7 @@ Check file path being written:
           <tr><td><code>config.json</code></td><td>Terminal preference, notification settings, feature toggles</td><td>/setup</td></tr>
           <tr><td><code>state.json</code></td><td>Foundation status + active feature + active workflow + phase tracking</td><td>All commands</td></tr>
           <tr><td><code>backlog.json</code></td><td>Feature backlog with specs, priorities, dependencies</td><td>/plan-features, /idea, /run-backlog</td></tr>
+          <tr><td><code>gamification.json</code></td><td>XP, level, badges, skill tree, streaks, challenges, quiz progress</td><td>/wrap (gamification pipeline)</td></tr>
           <tr><td><code>mutation-log.json</code></td><td>CLAUDE.md mutation audit log with timestamps and diffs</td><td>Performance Coach</td></tr>
           <tr><td><code>sessions/*.json</code></td><td>Session logs with phase data and token metrics</td><td>/wrap</td></tr>
           <tr><td><code>scores/*.json</code></td><td>Vibe Score breakdowns with deductions and bonuses</td><td>Performance Coach</td></tr>
@@ -1601,6 +1845,730 @@ Check file path being written:
       <li><strong>Teams:</strong> Commit <code>state.json</code>, <code>backlog.json</code>, and <code>scores/</code>. Gitignore <code>config.json</code> (terminal-specific)</li>
       <li><strong>Sensitive projects:</strong> Add <code>.vibeos/</code> to <code>.gitignore</code> entirely</li>
     </ul>
+
+    <h4>State schema migration</h4>
+    <p>When VibeOS is upgraded, <code>scripts/migrate-state.sh</code> automatically detects the current schema version and applies incremental migrations (1.0.0 &rarr; 1.1.0 &rarr; 1.2.0 &rarr; 1.3.0). New fields are added with sensible defaults. No manual migration is needed.</p>
+  </section>
+
+  <hr>
+
+  <!-- ================================= -->
+  <!-- SECTION: COST TRACKING & SAFETY   -->
+  <!-- ================================= -->
+  <section class="section" id="cost-system">
+    <span class="section-label">Cost &amp; Safety</span>
+    <h2>Cost Tracking &amp; Safety</h2>
+    <p>VibeOS provides real-time cost visibility and multi-layered safety enforcement. Cost tracking runs at zero token cost via hook scripts, and safety hooks block destructive operations before they execute.</p>
+
+    <!-- COST DASHBOARD -->
+    <h3 id="cost-dashboard">Cost Dashboard (<code>/cost</code>)</h3>
+    <p>Run <code>/cost</code> at any time to see a complete financial picture of your AI usage.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">$</div>
+        <h4>Current Session</h4>
+        <p>Live cost, turn count, model name, and last-updated timestamp. Read from <code>.vibeos/session-cost.json</code> which is updated after every assistant turn.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9650;</div>
+        <h4>Aggregates</h4>
+        <p>Daily, weekly, monthly, and all-time totals calculated by <code>aggregate-costs.sh</code> from session log files in <code>.vibeos/sessions/</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9632;</div>
+        <h4>Threshold Status</h4>
+        <p>Visual progress bars showing proximity to session warning, session max, and daily warning limits. Configurable in <code>.vibeos/config.json</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9881;</div>
+        <h4>Pricing Reference</h4>
+        <p>Per-model pricing table for Opus, Sonnet, and Haiku showing input, cache write, cache read, and output costs per million tokens.</p>
+      </div>
+    </div>
+
+    <h4>Model pricing (per million tokens)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Model</th><th>Input</th><th>Cache Write</th><th>Cache Read</th><th>Output</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Opus</strong></td><td>$15.00</td><td>$18.75</td><td>$1.50</td><td>$75.00</td></tr>
+          <tr><td><strong>Sonnet</strong></td><td>$3.00</td><td>$3.75</td><td>$0.30</td><td>$15.00</td></tr>
+          <tr><td><strong>Haiku</strong></td><td>$0.25</td><td>$0.30</td><td>$0.03</td><td>$1.25</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- COST GUARDRAILS -->
+    <h3 id="cost-guardrails">Cost Guardrails</h3>
+    <p>The <code>cost-guardrails.sh</code> hook runs on every Stop event, calculating per-turn costs with model-aware pricing and accumulating totals in <code>.vibeos/session-cost.json</code>.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Threshold</th><th>Default</th><th>Config Key</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Session Warning</strong></td>
+            <td>$2.00</td>
+            <td><code>cost_limits.session_warn_usd</code></td>
+            <td>Emits a cost warning to the agent</td>
+          </tr>
+          <tr>
+            <td><strong>Session Hard Limit</strong></td>
+            <td>$5.00</td>
+            <td><code>cost_limits.session_max_usd</code></td>
+            <td>Agent MUST pause and ask for permission to continue</td>
+          </tr>
+          <tr>
+            <td><strong>Daily Warning</strong></td>
+            <td>$20.00</td>
+            <td><code>cost_limits.daily_warn_usd</code></td>
+            <td>Emits a daily spend warning</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Daily totals are calculated by summing <code>estimated_cost_usd</code> from all session files matching today&rsquo;s date, plus the live session cost. All thresholds are configurable in <code>.vibeos/config.json</code>.</p>
+
+    <!-- SAFETY HOOKS -->
+    <h3 id="safety-hooks">Safety Hooks</h3>
+    <p>Three layers of protection run as PreToolUse hooks, blocking operations before they execute:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9632;</div>
+        <h4>protect-data.sh</h4>
+        <p>Blocks destructive bash commands: <code>rm -rf</code>, <code>git push --force</code>, <code>DROP TABLE</code>, <code>sudo</code>, <code>kill -9</code>, <code>chmod 777</code>, and more. 18 denied tool patterns in <code>settings.json</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9632;</div>
+        <h4>phase-gate.sh</h4>
+        <p>Blocks source code writes (<code>src/</code>, <code>app/</code>, <code>lib/</code>, <code>components/</code>) until all Tier 1 foundation artifacts exist. Allows config and docs writes always.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>restrict-paths.sh</h4>
+        <p>Validates that write targets are within the project directory and match allowed path patterns. Prevents accidental writes to system files or other projects.</p>
+      </div>
+    </div>
+
+    <h4>Permission rules</h4>
+    <p><code>settings.json</code> defines 71+ permission rules: 53 allowed tool patterns (npm, git, gh, jq, standard dev tools) and 18 denied patterns (sudo, force push, hard reset, kill -9, mkfs, dd). These are enforced at the Claude Code level before any hook runs.</p>
+
+    <div class="callout warn">
+      <div class="callout-title">Checkpoint safety net</div>
+      <p>Both <code>/heal</code> and <code>/new-feature</code> create a git checkpoint (<code>vibeos-checkpoint-&lt;timestamp&gt;</code>) before making changes. If anything goes wrong, <code>/undo</code> can roll back to any checkpoint. Checkpoints are lightweight git tags that don&rsquo;t add repository overhead.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ================================= -->
+  <!-- SECTION: MULTI-LANGUAGE SUPPORT   -->
+  <!-- ================================= -->
+  <section class="section" id="multi-lang">
+    <span class="section-label">Language Support</span>
+    <h2>Multi-Language Support</h2>
+    <p>While VibeOS was designed with JavaScript/TypeScript projects in mind, it supports 7 languages for onboarding, convention detection, security auditing, and dependency scanning.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Language</th><th>Manifest</th><th>Formatter</th><th>Linter</th><th>Framework Detection</th><th>Dep Audit</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Node.js / TypeScript</strong></td>
+            <td><code>package.json</code></td>
+            <td>Prettier</td>
+            <td>ESLint</td>
+            <td>React, Next.js, Vue, Svelte, Express, Prisma</td>
+            <td><code>npm audit</code></td>
+          </tr>
+          <tr>
+            <td><strong>Python</strong></td>
+            <td><code>pyproject.toml</code></td>
+            <td>Black, Ruff</td>
+            <td>Ruff, Flake8</td>
+            <td>Django, Flask, FastAPI, SQLAlchemy</td>
+            <td><code>pip audit</code></td>
+          </tr>
+          <tr>
+            <td><strong>Ruby</strong></td>
+            <td><code>Gemfile</code></td>
+            <td>RuboCop</td>
+            <td>RuboCop</td>
+            <td>Rails, ActiveRecord, Devise</td>
+            <td><code>bundle audit</code></td>
+          </tr>
+          <tr>
+            <td><strong>Go</strong></td>
+            <td><code>go.mod</code></td>
+            <td>gofmt</td>
+            <td>golangci-lint</td>
+            <td>Gin, Echo, Fiber, GORM</td>
+            <td><code>govulncheck</code></td>
+          </tr>
+          <tr>
+            <td><strong>Rust</strong></td>
+            <td><code>Cargo.toml</code></td>
+            <td>rustfmt</td>
+            <td>clippy</td>
+            <td>Actix, Axum, Diesel, SeaORM</td>
+            <td><code>cargo audit</code></td>
+          </tr>
+          <tr>
+            <td><strong>PHP</strong></td>
+            <td><code>composer.json</code></td>
+            <td>PHP-CS-Fixer</td>
+            <td>PHPStan</td>
+            <td>Laravel, Symfony, Eloquent, Doctrine</td>
+            <td><code>composer audit</code></td>
+          </tr>
+          <tr>
+            <td><strong>Java</strong></td>
+            <td><code>pom.xml</code> / <code>build.gradle</code></td>
+            <td>Checkstyle</td>
+            <td>Checkstyle</td>
+            <td>Spring Boot, Hibernate</td>
+            <td>&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How language detection works</h3>
+    <div class="flow"><span class="highlight">detect-conventions.sh</span> scans project root for manifests
+    &darr;
+Identifies language from: <span class="highlight">package.json</span>, <span class="highlight">pyproject.toml</span>, <span class="highlight">Gemfile</span>, <span class="highlight">go.mod</span>, <span class="highlight">Cargo.toml</span>, <span class="highlight">composer.json</span>, <span class="highlight">pom.xml</span>
+    &darr;
+<span class="highlight">extract-project-conventions.sh</span> detects per-language:
+  framework, ORM, auth library, API patterns, naming conventions
+    &darr;
+Results feed into <span class="highlight">Code Auditor</span> and <span class="highlight">CLAUDE.md generation</span></div>
+
+    <h3>Where language support applies</h3>
+    <ul>
+      <li><strong><code>/onboard</code></strong> &mdash; Code Auditor detects language, conventions, frameworks, and test gaps for all 7 languages</li>
+      <li><strong><code>/audit</code></strong> &mdash; Security Auditor runs language-specific dependency audit tools and adapts OWASP scanning patterns</li>
+      <li><strong>PostToolUse formatting</strong> &mdash; <code>format-code.sh</code> auto-formats with the correct tool: Prettier (JS/TS), Black (Python), rustfmt (Rust), gofmt (Go)</li>
+      <li><strong><code>/new-project</code></strong> &mdash; Stack Scout research adapts to the detected or chosen language ecosystem</li>
+    </ul>
+
+    <div class="callout info">
+      <div class="callout-title">Non-Node.js confidence levels</div>
+      <p>Node.js/TypeScript projects receive &ldquo;high&rdquo; confidence from the Code Auditor due to deeper ecosystem integration. Other languages receive &ldquo;medium&rdquo; confidence &mdash; the core workflow (Tier 1 foundation, Tier 2 cycle, Vibe Score, hooks) works identically, but framework-specific patterns may need manual refinement in CLAUDE.md.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ================================= -->
+  <!-- SECTION: VITEPRESS DASHBOARD      -->
+  <!-- ================================= -->
+  <section class="section" id="dashboard">
+    <span class="section-label">Dashboard</span>
+    <h2>VitePress Documentation Dashboard</h2>
+    <p>VibeOS generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 5 interactive Vue dashboard components that visualize cross-session data from <code>.vibeos/</code>.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9650;</div>
+        <h4>ScoreTrend.vue</h4>
+        <p>SVG line chart showing Vibe Score over the last 20 sessions with a trend indicator and target line at 80. Powered by <code>scores.data.ts</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>TokenBreakdown.vue</h4>
+        <p>Stacked horizontal bars showing input, cache, and output tokens per session with cost overlay. Reveals cache utilization trends.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9675;</div>
+        <h4>CoverageGauge.vue</h4>
+        <p>SVG radial gauge displaying test coverage percentage with green/yellow/red color bands.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9776;</div>
+        <h4>FeatureProgress.vue</h4>
+        <p>Horizontal bars showing features by Kanban column (planned, in-progress, done) with velocity metric calculated from session history.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9881;</div>
+        <h4>AgentActivityPanel.vue</h4>
+        <p>Agent invocation frequency bars and a session timeline with agent chips. Shows which agents are most active and their token consumption. Powered by <code>agents.data.ts</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9654;</div>
+        <h4>KanbanBoard.vue</h4>
+        <p>Interactive kanban view of the feature backlog from <code>.vibeos/backlog.json</code>. Features move through columns as they progress through the Tier 2 cycle.</p>
+      </div>
+    </div>
+
+    <h3>Dashboard pages</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Page</th><th>Components</th><th>Data Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Trends</strong> (<code>trends.md</code>)</td><td>ScoreTrend, TokenBreakdown</td><td><code>scores.data.ts</code>, <code>sessions.data.ts</code></td></tr>
+          <tr><td><strong>Coverage</strong> (<code>coverage.md</code>)</td><td>CoverageGauge, FeatureProgress</td><td><code>sessions.data.ts</code>, <code>backlog.data.ts</code></td></tr>
+          <tr><td><strong>Stats</strong> (<code>stats.md</code>)</td><td>StatsPage (composite)</td><td><code>sessions.data.ts</code></td></tr>
+          <tr><td><strong>Kanban</strong> (<code>kanban.md</code>)</td><td>KanbanBoard</td><td><code>backlog.data.ts</code></td></tr>
+          <tr><td><strong>Welcome</strong> (<code>system/welcome.md</code>)</td><td>Guided first-session flow</td><td>&mdash;</td></tr>
+          <tr><td><strong>Commands</strong> (<code>system/commands.md</code>)</td><td>Full slash command reference</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The <code>scripts/update-docs.sh</code> script copies live session data into the <code>docs-site/</code> directory for static builds. The Doc Generator agent (<code>/wrap</code>) updates the CHANGELOG, regenerates the VitePress sidebar via <code>rebuild-sidebar.sh</code>, and produces feature documentation from backlog specs.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Dashboard as a team tool</div>
+      <p>Deploy the docs site to your internal infrastructure. The score trend chart and agent activity panel are especially valuable for team retrospectives &mdash; they reveal patterns that individual developers might miss.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- =================================== -->
+  <!-- SECTION: GAMIFICATION SYSTEM        -->
+  <!-- =================================== -->
+  <section class="section" id="gamification">
+    <span class="section-label">Progression</span>
+    <h2>Gamification System</h2>
+    <p>VibeOS includes a persistent progression layer that motivates across sessions and teaches vibe-coding skills over time. Built on three principles: <strong>artifacts over actions</strong> (rewards map to real outputs), <strong>teaching over tracking</strong> (every mechanic helps you improve), and <strong>sustainable over addictive</strong> (grace periods, opt-in challenges, no toxic leaderboards).</p>
+
+    <p>The gamification system uses the existing Vibe Score as its primary data source. Every metric flows from real work artifacts &mdash; shipped features, passing tests, clean sessions &mdash; not arbitrary actions.</p>
+
+    <div class="callout info">
+      <div class="callout-title">How it integrates</div>
+      <p>The gamification pipeline runs automatically at the end of every <code>/wrap</code>. Six scripts execute sequentially: award XP, check badges, update streak, distribute skill XP, update challenges, and check level-ups. The <code>/achievements</code> command shows a compact CLI summary, and the VitePress dashboard provides the full visual experience.</p>
+    </div>
+
+    <!-- XP & LEVELING -->
+    <h3 id="xp-leveling">XP &amp; Leveling</h3>
+    <p>XP is earned through real development work. Every source maps to existing tracked data &mdash; no gamification-only actions.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Action</th><th>XP</th><th>Data Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Complete a session (<code>/wrap</code>)</td><td>+10 base</td><td>Session log</td></tr>
+          <tr><td>Vibe Score bonus</td><td>+(score &minus; 50) if &gt;50</td><td>Score file</td></tr>
+          <tr><td>Clean session (0 deductions)</td><td>+25</td><td>Score file</td></tr>
+          <tr><td>Complete a Tier 2 phase</td><td>+5 per phase</td><td>Phase tracking</td></tr>
+          <tr><td>Ship a feature (all 5 phases)</td><td>+50</td><td>Backlog</td></tr>
+          <tr><td>Complete Tier 1 foundation</td><td>+100</td><td>state.json</td></tr>
+          <tr><td>Tests pass on first run</td><td>+15</td><td>Test results</td></tr>
+          <tr><td>Quiz correct answer</td><td>+5</td><td>Quiz event</td></tr>
+          <tr><td>Challenge completion</td><td>20&ndash;100</td><td>Challenge definition</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Leveling curve</h4>
+    <p>XP needed per level follows an exponential curve: <code>floor(100 &times; 1.15^(level&minus;1))</code>. Level 5 is reachable in ~8&ndash;10 sessions, Level 10 in ~25&ndash;30 sessions.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Level</th><th>Title</th><th>XP to Next</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><span class="badge" style="background:rgba(107,114,128,0.15);color:#9ca3af">Newcomer</span></td><td>100</td></tr>
+          <tr><td>2&ndash;3</td><td><span class="badge" style="background:rgba(107,114,128,0.15);color:#9ca3af">Apprentice</span></td><td>115&ndash;132</td></tr>
+          <tr><td>4&ndash;5</td><td><span class="badge" style="background:var(--color-blue-dim);color:var(--color-blue)">Focused Builder</span></td><td>152&ndash;175</td></tr>
+          <tr><td>6&ndash;8</td><td><span class="badge" style="background:var(--color-blue-dim);color:var(--color-blue)">Efficient Coder</span></td><td>201&ndash;266</td></tr>
+          <tr><td>9&ndash;12</td><td><span class="badge purple">Seasoned Viber</span></td><td>306&ndash;404</td></tr>
+          <tr><td>13&ndash;18</td><td><span class="badge purple">Workflow Master</span></td><td>465&ndash;808</td></tr>
+          <tr><td>19&ndash;25</td><td><span class="badge amber">Context Architect</span></td><td>929&ndash;2,113</td></tr>
+          <tr><td>26&ndash;35</td><td><span class="badge amber">Vibe Sensei</span></td><td>2,430&ndash;6,621</td></tr>
+          <tr><td>36&ndash;45</td><td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Grand Master</span></td><td>7,614&ndash;17,531</td></tr>
+          <tr><td>46&ndash;50</td><td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Vibe Legend</span></td><td>20,161&ndash;28,832</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Unlockable features</h4>
+    <p>Features are gated by level to prevent overwhelming new users. Core functionality is never gated.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Level</th><th>Unlock</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1</strong></td><td>Base VibeOS</td></tr>
+          <tr><td><strong>2</strong></td><td>Daily challenges</td></tr>
+          <tr><td><strong>3</strong></td><td><code>/quiz</code> command</td></tr>
+          <tr><td><strong>5</strong></td><td>Weekly challenges, skill tree display in <code>/achievements</code></td></tr>
+          <tr><td><strong>8</strong></td><td>One-time challenges</td></tr>
+          <tr><td><strong>10</strong></td><td>Custom title in status line</td></tr>
+          <tr><td><strong>15</strong></td><td>Advanced quizzes</td></tr>
+          <tr><td><strong>20</strong></td><td>Detailed session analytics in <code>/status</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BADGES -->
+    <h3 id="badges-section">Badges</h3>
+    <p>Contextual badges tied to meaningful milestones. Locked badges show progress toward completion (e.g., &ldquo;3/5 features&rdquo;).</p>
+
+    <h4>Milestone badges (one-time)</h4>
+    <div class="badge-grid">
+      <div class="badge-card">
+        <div class="badge-icon">&#128640;</div>
+        <div>
+          <h5>Hello, World</h5>
+          <p>Run <code>/setup</code> for the first time</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#127959;</div>
+        <div>
+          <h5>Architect</h5>
+          <p>Complete the Tier 1 foundation</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128230;</div>
+        <div>
+          <h5>Shipper</h5>
+          <p>Ship your first feature (all 5 phases)</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#9889;</div>
+        <div>
+          <h5>Momentum</h5>
+          <p>Ship 5 features</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128269;</div>
+        <div>
+          <h5>Researcher</h5>
+          <p>Produce your first TDR</p>
+        </div>
+      </div>
+    </div>
+
+    <h4>Skill badges (demonstrating proficiency)</h4>
+    <div class="badge-grid">
+      <div class="badge-card">
+        <div class="badge-icon">&#10024;</div>
+        <div>
+          <h5>Smooth Operator</h5>
+          <p>Score 90+ with 0 deductions</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128293;</div>
+        <div>
+          <h5>On Fire</h5>
+          <p>3 consecutive 90+ sessions</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128737;</div>
+        <div>
+          <h5>Untouchable</h5>
+          <p>10 consecutive 90+ sessions</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128451;</div>
+        <div>
+          <h5>Cache Master</h5>
+          <p>5 sessions with cache &gt;70%</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128172;</div>
+        <div>
+          <h5>Clear Communicator</h5>
+          <p>10 sessions with 0 prompt churn</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#9989;</div>
+        <div>
+          <h5>Test First</h5>
+          <p>5 features with tests before implementation</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#127919;</div>
+        <div>
+          <h5>Context Ninja</h5>
+          <p>10 sessions under 50% context usage</p>
+        </div>
+      </div>
+    </div>
+
+    <h4>Special badges (rare)</h4>
+    <div class="badge-grid">
+      <div class="badge-card">
+        <div class="badge-icon">&#128081;</div>
+        <div>
+          <h5>Perfectionist</h5>
+          <p>Score exactly 100</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128200;</div>
+        <div>
+          <h5>Comeback Kid</h5>
+          <p>Score 90+ after a sub-50 session</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#128197;</div>
+        <div>
+          <h5>Weekly Warrior</h5>
+          <p>7-day coding streak</p>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-icon">&#127942;</div>
+        <div>
+          <h5>Unstoppable</h5>
+          <p>30-day coding streak</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL TREE -->
+    <h3 id="skill-tree">Skill Tree</h3>
+    <p>Five skill domains with 5 levels each. XP is distributed to domains based on session metrics, helping you identify strengths and weaknesses at a glance.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Skill</th><th>What It Measures</th><th>XP Sources</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Prompting</strong></td><td>Clear AI communication</td><td>Low churn, high scores</td></tr>
+          <tr><td><strong>Architecture</strong></td><td>Planning before building</td><td>TDRs, foundation, specs, plan phases</td></tr>
+          <tr><td><strong>Testing</strong></td><td>Quality assurance</td><td>Test coverage, TDD, first-pass tests</td></tr>
+          <tr><td><strong>Context Management</strong></td><td>Token efficiency</td><td>Cache ratio, context usage, Context7</td></tr>
+          <tr><td><strong>Workflow Discipline</strong></td><td>Following the process</td><td>Phase completion, streaks, shipping</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Skill levels</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Level</th><th>Name</th><th>XP Required</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>Novice</td><td>0</td></tr>
+          <tr><td>1</td><td>Apprentice</td><td>50</td></tr>
+          <tr><td>2</td><td>Practitioner</td><td>200</td></tr>
+          <tr><td>3</td><td>Expert</td><td>600</td></tr>
+          <tr><td>4</td><td>Master</td><td>1,400</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>CLI display example</h4>
+    <pre><code>Prompting          [####------] Level 2 (35/200 to Level 3)
+Architecture       [######----] Level 3 (120/600 to Level 4)
+Testing            [##--------] Level 1 (25/200 to Level 2)
+Context Management [########--] Level 4 (800/1400 to Level 5)
+Workflow Discipline[#####-----] Level 2 (150/200 to Level 3)</code></pre>
+
+    <p>The visual dashboard renders this as a 5-axis radar chart, making it easy to spot your development profile shape at a glance.</p>
+
+    <!-- STREAKS -->
+    <h3 id="streaks">Streaks</h3>
+    <p>Streaks track consecutive days of coding, designed to be encouraging rather than punitive.</p>
+
+    <ul>
+      <li><strong>Increment</strong> on calendar days where <code>/wrap</code> is run</li>
+      <li><strong>Weekend auto-grace:</strong> Saturdays and Sundays don&rsquo;t break streaks and don&rsquo;t consume grace credits</li>
+      <li><strong>2 grace days/month:</strong> Missing one weekday preserves the streak (resets on the 1st)</li>
+      <li><strong>No penalty for broken streaks</strong> &mdash; the counter resets to 0 but no XP is lost</li>
+      <li><strong>Streak reminders</strong> are opt-in (disabled by default in <code>config.json</code>)</li>
+    </ul>
+
+    <div class="callout tip">
+      <div class="callout-title">Sustainable by design</div>
+      <p>The weekend auto-grace and monthly grace days ensure that taking time off doesn&rsquo;t feel punishing. The system celebrates consistency without demanding it &mdash; a broken streak is just a number, not a loss.</p>
+    </div>
+
+    <!-- CHALLENGES -->
+    <h3 id="challenges">Challenges</h3>
+    <p>Optional, time-limited goals. Never required, never punish failure. Challenge selection is weighted toward your weakest skill domain to help you improve where it matters most.</p>
+
+    <h4>Daily challenges (refresh each day, unlock at Level 2)</h4>
+    <div class="challenge-cards">
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Clean Sweep</h5>
+        <p>Complete a session with 0 deductions (+20 XP)</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Cache Champion</h5>
+        <p>Achieve &gt;70% cache utilization (+20 XP)</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Green Light</h5>
+        <p>All tests pass on first run (+20 XP)</p>
+      </div>
+    </div>
+
+    <h4>Weekly challenges (refresh Monday, unlock at Level 5)</h4>
+    <div class="challenge-cards">
+      <div class="challenge-card">
+        <div class="challenge-type weekly">Weekly</div>
+        <h5>Ship Week</h5>
+        <p>Ship 1 complete feature this week (+50 XP)</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type weekly">Weekly</div>
+        <h5>Perfect Week</h5>
+        <p>All sessions this week score 90+ (+75 XP)</p>
+      </div>
+    </div>
+
+    <h4>One-time challenges (level-gated, unlock at Level 8)</h4>
+    <div class="challenge-cards">
+      <div class="challenge-card">
+        <div class="challenge-type onetime">One-Time &middot; Lvl 5</div>
+        <h5>Speed Ship</h5>
+        <p>Ship a feature in a single session (+100 XP)</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type onetime">One-Time &middot; Lvl 10</div>
+        <h5>Full Coverage</h5>
+        <p>Achieve &gt;90% test coverage on a feature (+75 XP)</p>
+      </div>
+    </div>
+
+    <!-- QUIZZES -->
+    <h3 id="quizzes">Quizzes (<code>/quiz</code>)</h3>
+    <p>Short (3&ndash;5 question) knowledge checks delivered interactively in the CLI. Each question shows the answer and an educational explanation regardless of correctness. Unlocks at Level 3.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Quiz ID</th><th>Topic</th><th>Level</th><th>Questions</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>context-management-101</code></td><td>Cache utilization, Context7, token efficiency</td><td>3</td><td>5</td></tr>
+          <tr><td><code>prompting-basics</code></td><td>Clear instructions, reducing churn, spec-first</td><td>3</td><td>5</td></tr>
+          <tr><td><code>testing-discipline</code></td><td>TDD-hybrid, when to test first vs after</td><td>3</td><td>4</td></tr>
+          <tr><td><code>architecture-planning</code></td><td>TDR purpose, foundation artifacts, phase gates</td><td>3</td><td>4</td></tr>
+          <tr><td><code>workflow-mastery</code></td><td>Phase sequence, <code>/wrap</code>, <code>/check</code>, streaks</td><td>3</td><td>5</td></tr>
+          <tr><td><code>advanced-context</code></td><td>Subagent isolation, compaction, cache optimization</td><td>15</td><td>4</td></tr>
+          <tr><td><code>advanced-testing</code></td><td>Playwright, axe-core, spec-first vs impl-first</td><td>15</td><td>4</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Triggering quizzes</h4>
+    <ol>
+      <li><strong>Explicit:</strong> <code>/quiz</code> or <code>/quiz context-management-101</code></li>
+      <li><strong>Contextual:</strong> Performance Coach suggests a relevant quiz after <code>/wrap</code> when it detects a specific anti-pattern (e.g., low cache &rarr; <code>context-management-101</code>)</li>
+      <li><strong>Periodic:</strong> Session Startup suggests an overdue quiz (never forces it)</li>
+    </ol>
+
+    <p>XP: <strong>+5 per correct answer</strong> (modest &mdash; cannot substitute for real work XP).</p>
+
+    <!-- ACHIEVEMENTS DASHBOARD -->
+    <h3 id="achievements-dashboard">Achievements Dashboard</h3>
+    <p>The visual dashboard lives as a page in the VitePress docs site (<code>achievements.md</code>), following the same data loader + Vue component pattern as the Kanban, Stats, and Trends pages.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#127942;</div>
+        <h4>Profile Header</h4>
+        <p>Level badge (color-coded by tier), title, XP progress bar, streak counter with flame icon, total sessions and features shipped.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#11088;</div>
+        <h4>Badge Gallery</h4>
+        <p>3-column grid with category tabs (Milestones, Skills, Special). Earned badges show full-color, locked badges are faded with progress indicators.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9672;</div>
+        <h4>Skill Radar Chart</h4>
+        <p>SVG 5-axis spider chart showing skill levels. Filled polygon reveals your development profile shape at a glance.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9632;</div>
+        <h4>Streak Calendar</h4>
+        <p>GitHub-style 12-week heatmap. Color intensity = Vibe Score. Grace days marked with a frost icon.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9889;</div>
+        <h4>Active Challenges</h4>
+        <p>Cards for each challenge with progress bar, time remaining, and type badge (Daily / Weekly / One-time).</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#128200;</div>
+        <h4>Score Sparkline</h4>
+        <p>Last 30 sessions as a mini SVG line chart with trend arrow and average score.</p>
+      </div>
+    </div>
+
+    <h4>Opening the dashboard</h4>
+    <p>The <code>/achievements</code> command displays a compact CLI text summary and prints a URL to open the full visual dashboard:</p>
+
+    <pre><code><span class="highlight">Achievements:</span> Level 7 "Focused Builder" | 8/21 badges | Streak: 12 days
+
+Open full dashboard: <span class="highlight">http://localhost:5173/achievements</span></code></pre>
+
+    <h4>How <code>/wrap</code> displays progression</h4>
+    <p>After the Vibe Score coaching output, <code>/wrap</code> appends a progression summary:</p>
+
+    <pre><code><span class="highlight">--- Progression ---</span>
+Level 7 | 340/420 XP to Level 8
++10 (session) +38 (score bonus) +5 (test phase) = +53 XP
+Skill: testing +15 XP (Level 2 -> Level 3)
+
+<span class="highlight">--- New Badges ---</span>
+[BADGE] Shipper -- First feature shipped! (+50 XP)
+
+<span class="highlight">*** LEVEL UP! Level 6 -> Level 7 "Focused Builder" ***</span>
+Unlocked: Weekly challenges, Skill tree in /achievements</code></pre>
+
+    <h4>Configuration</h4>
+    <p>All gamification settings live in <code>.vibeos/config.json</code>:</p>
+
+    <pre><code><span class="highlight">"gamification"</span>: {
+  "enabled": true,            <span class="muted">// Master toggle</span>
+  "streak_reminders": false,  <span class="muted">// Opt-in daily reminders</span>
+  "quiz_frequency": "weekly", <span class="muted">// How often quizzes are suggested</span>
+  "show_xp_in_status": true   <span class="muted">// Show XP in /status output</span>
+}</code></pre>
+
+    <p>Set <code>"enabled": false</code> to suppress all gamification output. The Vibe Score and Performance Coach continue to operate independently.</p>
+
+    <h4>Team features (optional, non-competitive)</h4>
+    <ul>
+      <li>Aggregated team stats (average score trend, total features shipped)</li>
+      <li>Team badges for collective achievements (&ldquo;Team ships 10 features&rdquo;)</li>
+      <li>No individual rankings or comparisons &mdash; the system is collaborative, not competitive</li>
+    </ul>
   </section>
 
   <hr>
@@ -1612,6 +2580,27 @@ Check file path being written:
     <span class="section-label">Best Practices</span>
     <h2>Maximizing Efficiency</h2>
     <p>VibeOS is designed to make each session more efficient than the last. Here's how to get the most out of the system and <em>why</em> each practice matters.</p>
+
+    <h3>Context Window Discipline</h3>
+    <p>VibeOS targets <strong>&lt;50% context usage</strong> per session. Three mechanisms enforce this automatically:</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">60%</div>
+        <h4>Warning at 60%</h4>
+        <p><code>check-context.sh</code> emits a warning. Start thinking about wrapping up. Commit working code.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">80%</div>
+        <h4>Critical at 80%</h4>
+        <p>Stronger warning. Commit and run <code>/wrap</code>. Consider delegating remaining work to a sub-agent.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">90%</div>
+        <h4>Danger at 90%</h4>
+        <p>Agent quality severely degraded. Immediately run <code>/wrap</code>. Do not attempt complex operations.</p>
+      </div>
+    </div>
+    <p>When context compaction occurs, <code>compact-reinject.sh</code> automatically re-injects the current project state, active feature, and phase &mdash; so you don&rsquo;t lose context on what you were working on.</p>
 
     <h3>Token Efficiency</h3>
     <div class="card-grid">
@@ -1629,7 +2618,7 @@ Check file path being written:
       </div>
       <div class="card">
         <h4>Let agents run in isolation</h4>
-        <p>Stack Scout, Test Writer, and Doc Generator run in separate context windows. Don't duplicate their work in the main session. Their research tokens never touch your context.</p>
+        <p>Stack Scout, Builder, and Code Simplifier run in separate worktree context windows. Don&rsquo;t duplicate their work in the main session. Their research tokens never touch your context.</p>
       </div>
     </div>
 
@@ -1785,6 +2774,29 @@ claude
       <li>Only sessions with a Vibe Score &ge; 70 are eligible for template extraction</li>
       <li>Verify session logs exist in <code>.vibeos/sessions/</code> and score files in <code>.vibeos/scores/</code></li>
       <li>Run <code>/wrap</code> at the end of sessions to generate the required data</li>
+    </ul>
+
+    <h3>Gamification not showing after /wrap</h3>
+    <ol>
+      <li>Check that gamification is enabled: <code>jq '.gamification.enabled' .vibeos/config.json</code> should return <code>true</code></li>
+      <li>Verify <code>.vibeos/gamification.json</code> exists. If not, run <code>/setup</code> to create it</li>
+      <li>Check that the gamification scripts are executable: <code>ls -la scripts/award-xp.sh</code></li>
+      <li>Run a script manually to debug: <code>bash scripts/award-xp.sh</code> &mdash; it outputs JSON with the XP breakdown</li>
+    </ol>
+
+    <h3>/quiz shows "Unlocks at Level 3"</h3>
+    <ul>
+      <li>The <code>/quiz</code> command requires Level 3 (approximately 3&ndash;4 completed sessions)</li>
+      <li>Check your level: <code>jq '.level' .vibeos/gamification.json</code></li>
+      <li>Keep running <code>/wrap</code> at the end of sessions to earn XP and level up</li>
+    </ul>
+
+    <h3>Streak broke unexpectedly</h3>
+    <ul>
+      <li>Streaks increment on calendar days where <code>/wrap</code> runs. If you didn&rsquo;t wrap, the day doesn&rsquo;t count</li>
+      <li>Weekends never break streaks. Check if you missed a <strong>weekday</strong></li>
+      <li>Grace days reset on the 1st of each month: <code>jq '.streak.grace_days_remaining' .vibeos/gamification.json</code></li>
+      <li>If the streak counter seems wrong, check <code>.streak.last_session_date</code> in gamification.json</li>
     </ul>
 
     <h3>Stale locks or corrupted state</h3>

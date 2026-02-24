@@ -38,6 +38,10 @@ ls -1t .vibeos/sessions/ 2>/dev/null | head -5
 ls -1t .vibeos/scores/ 2>/dev/null | head -1
 ```
 
+```bash
+cat .vibeos/gamification.json 2>/dev/null || echo '{"error": "not initialized"}'
+```
+
 ## Dashboard Format
 
 Present the collected data in this exact format:
@@ -92,6 +96,14 @@ Latest Vibe Score
 Recent Commits
 --------------
   <last 5 commits, one-line format>
+
+Achievements
+------------
+  Level:    <level> "<title>"
+  XP:       <xp_this_level>/<xp_to_next_level> to Level <next_level>
+  Streak:   <current> days (longest: <longest>)
+  Badges:   <earned>/<total>
+  Challenge: <active challenge name or "none">
 ```
 
 If `.vibeos/` does not exist, display only:

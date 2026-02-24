@@ -90,11 +90,11 @@ claude-plugin-vibe-os/
   "version": "1.0.0",
   "description": "Autonomous vibe-coding operating system for Claude Code",
   "author": {
-    "name": "SpeedKit",
-    "url": "https://github.com/speedkit"
+    "name": "Fabian Krumbholz",
+    "url": "https://github.com/fabkrum"
   },
   "homepage": "https://docs.vibeos.dev",
-  "repository": "https://github.com/speedkit/vibe-os",
+  "repository": "https://github.com/fabkrum/vibe-os",
   "license": "MIT",
   "keywords": ["vibe-coding", "automation", "multi-agent", "sdlc"],
   "agents": "./agents/",

@@ -324,4 +324,4 @@ MIT -- see [LICENSE](LICENSE) for details.
 
 ## Author
 
-[SpeedKit](https://github.com/speedkit)
+[Fabian Krumbholz](https://github.com/fabkrum)

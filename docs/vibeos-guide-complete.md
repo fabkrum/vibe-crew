@@ -1,7 +1,7 @@
 ---
 title: "VibeOS Guide"
 subtitle: "The Complete Guide to AI-Assisted Development with VibeOS"
-author: "SpeedKit"
+author: "Fabian Krumbholz"
 date: "February 2026"
 ---
 

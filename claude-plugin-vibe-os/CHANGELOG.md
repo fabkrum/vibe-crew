@@ -298,7 +298,7 @@ Documentation, cleanup utilities, and finalized configurations.
 
 **Total: ~81 files across 6 implementation phases.**
 
-[1.3.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.3.0
-[1.2.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.2.0
-[1.1.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.1.0
-[1.0.0]: https://github.com/speedkit/vibe-os/releases/tag/v1.0.0
+[1.3.0]: https://github.com/fabkrum/vibe-os/releases/tag/v1.3.0
+[1.2.0]: https://github.com/fabkrum/vibe-os/releases/tag/v1.2.0
+[1.1.0]: https://github.com/fabkrum/vibe-os/releases/tag/v1.1.0
+[1.0.0]: https://github.com/fabkrum/vibe-os/releases/tag/v1.0.0

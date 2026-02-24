@@ -77,12 +77,11 @@ The manifest is the entry point that Claude Code reads to identify and load a pl
   "version": "1.0.0",
   "description": "Autonomous vibe-coding operating system for Claude Code",
   "author": {
-    "name": "SpeedKit",
-    "email": "hello@speedkit.com",
-    "url": "https://github.com/speedkit"
+    "name": "Fabian Krumbholz",
+    "url": "https://github.com/fabkrum"
   },
   "homepage": "https://docs.vibeos.dev",
-  "repository": "https://github.com/speedkit/vibe-os",
+  "repository": "https://github.com/fabkrum/vibe-os",
   "license": "MIT",
   "keywords": ["vibe-coding", "automation", "multi-agent"],
   "commands": ["./custom/commands/special.md"],
@@ -1495,7 +1494,7 @@ Adopt the standard plugin layout with all components at the root level. Use `${C
   "version": "1.0.0",
   "description": "Autonomous vibe-coding operating system for Claude Code",
   "author": {
-    "name": "SpeedKit"
+    "name": "Fabian Krumbholz"
   },
   "keywords": ["vibe-coding", "automation", "multi-agent", "sdlc"],
   "agents": "./agents/",

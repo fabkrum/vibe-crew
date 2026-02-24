@@ -47,6 +47,27 @@ enabled by default but work is not blocked if they are unavailable.
 
 ---
 
+## Documentation
+
+VibeOS ships with a full companion documentation website. Open any page locally
+in your browser, or browse them on GitHub:
+
+| Page | Description |
+|---|---|
+| [Why VibeOS](../docs/why.html) | The three problems VibeOS solves, core design philosophy, and principles. |
+| [Setup Guide](../docs/setup.html) | Step-by-step installation, multi-project setup, Warp Terminal config. |
+| [New Project](../docs/new-project.html) | Two-Tier Workflow: foundation (Tier 1) and 5-phase feature cycle (Tier 2). |
+| [Existing Project](../docs/existing-project.html) | Onboard an existing codebase: code auditing, convention extraction, backlog mapping. |
+| [Detailed Workflow](../docs/workflow.html) | Advanced commands, Opponent Processor, cost tracking, Vibe Score, efficiency tips. |
+| [Example Session](../docs/example-session.html) | Full walkthrough: Day 1 foundation through parallel features, dev servers, best practices. |
+| [Architecture](../docs/architecture.html) | 12-agent system, hooks, interrupt protocol, state management, VitePress dashboard. |
+| [Warp Tips](../docs/warp.html) | Launch Configurations, keyboard shortcuts, Warp Drive, Notebooks, themes. |
+| [Release Notes](../docs/releases.html) | Complete changelog from v1.0.0 through v1.3.0. |
+
+> **Tip:** To browse the docs locally, open `docs/index.html` in your browser.
+
+---
+
 ## Quick Start
 
 1. Open a new Claude Code session in any directory.

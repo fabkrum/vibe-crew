@@ -148,26 +148,26 @@
       <a href="setup.html" class="sidebar-link">Setup</a>
       <a href="new-project.html" class="sidebar-link">New Project</a>
       <a href="existing-project.html" class="sidebar-link">Existing Project</a>
-      <a href="example-session.html" class="sidebar-link">Example Session</a>
       <a href="warp.html" class="sidebar-link">Warp</a>
-      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
     </div>
-    <div class="sidebar-group">
+    <div class="sidebar-group collapsed">
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
       <a href="workflow.html" class="sidebar-link">Core Workflow</a>
       <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
       <a href="personalization.html" class="sidebar-link">Personalization</a>
       <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
+      <a href="example-session.html" class="sidebar-link">Example Session</a>
     </div>
-    <div class="sidebar-group">
+    <div class="sidebar-group collapsed">
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
       <a href="architecture.html" class="sidebar-link active">Overview</a>
       <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
       <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
       <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
       <a href="arch-design.html" class="sidebar-link">Design &amp; Operations</a>
+      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
     </div>
-    <div class="sidebar-group">
+    <div class="sidebar-group collapsed">
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
       <a href="releases.html" class="sidebar-link">Release Notes</a>
     </div>
@@ -175,6 +175,7 @@
 </aside>
 
 <div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
+<script>var a=document.querySelector(".sidebar-link.active");if(a){var g=a.closest(".sidebar-group");if(g)g.classList.remove("collapsed");}</script>
 
 <div class="layout">
 <div class="main">

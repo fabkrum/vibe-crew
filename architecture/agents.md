@@ -43,7 +43,7 @@
 
 ## 2. Tool Access Matrix
 
-| Agent | Read | Write | Edit | Bash | Glob | Grep | WebSearch | WebFetch | Context7 | Puppeteer | Agent Teams |
+| Agent | Read | Write | Edit | Bash | Glob | Grep | WebSearch | WebFetch | Context7 | Chrome DevTools | Agent Teams |
 |-------|:----:|:-----:|:----:|:----:|:----:|:----:|:---------:|:--------:|:--------:|:---------:|:-----------:|
 | Session Startup | x | - | - | x | x | x | - | - | - | - | - |
 | Workflow Orchestrator | x | - | - | x | x | x | - | - | - | - | x |
@@ -302,7 +302,7 @@ It presents synthesized status to the developer via stdout, formatted as a struc
 
 ### Purpose
 
-The Stack Scout is a **read-only research agent** that evaluates technology options and produces Technology Decision Records (TDRs). It has access to web search, URL fetching, Context7 library documentation, and Puppeteer browser automation -- the full research toolkit. It is explicitly forbidden from creating or modifying source files.
+The Stack Scout is a **read-only research agent** that evaluates technology options and produces Technology Decision Records (TDRs). It has access to web search, URL fetching, Context7 library documentation, and Chrome DevTools browser automation -- the full research toolkit. It is explicitly forbidden from creating or modifying source files.
 
 The Stack Scout runs in an **isolated git worktree** (`isolation: worktree`), meaning it operates in a separate filesystem workspace that prevents any accidental side effects on the main working tree. All the thousands of tokens consumed by web searches, documentation fetches, and comparative analysis stay outside the main session. Only the distilled TDR output returns to the parent context. This isolation saves an estimated 8,000-15,000 tokens per research session.
 
@@ -314,7 +314,7 @@ name: stack-scout
 description: >
   Read-only research agent that evaluates technology options and produces
   Technology Decision Records (TDRs). Has access to WebSearch, WebFetch,
-  Context7, and Puppeteer for comprehensive research. Cannot create or
+  Context7, and Chrome DevTools for comprehensive research. Cannot create or
   modify source files. Works in an isolated worktree to prevent filesystem
   side effects. Use proactively for architecture research before any
   implementation begins.
@@ -328,9 +328,9 @@ tools:
   - WebFetch
   - mcp__context7__resolve-library-id
   - mcp__context7__get-library-docs
-  - mcp__puppeteer__navigate
-  - mcp__puppeteer__screenshot
-  - mcp__puppeteer__evaluate
+  - mcp__chrome-devtools__navigate
+  - mcp__chrome-devtools__screenshot
+  - mcp__chrome-devtools__evaluate
 disallowedTools:
   - Write
   - Edit

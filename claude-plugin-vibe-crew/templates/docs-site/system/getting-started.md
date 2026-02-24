@@ -35,7 +35,7 @@ The wizard will:
 
 1. Detect your terminal emulator (Warp, iTerm2, VS Code, Terminal.app)
 2. Test notification delivery
-3. Verify MCP server connections (Context7, Puppeteer)
+3. Verify MCP server connections (Context7, Chrome DevTools)
 4. Initialize the `.vibecrew/` state directory
 
 ## Creating a New Project

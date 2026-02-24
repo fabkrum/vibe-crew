@@ -13,7 +13,7 @@ What is the primary purpose of the Context7 MCP server in VibeCrew?
 
 - A) To store session logs and Vibe Score breakdowns between sessions
 - B) To replace pasting documentation into the context window by fetching docs on demand
-- C) To run automated browser tests using Puppeteer
+- C) To run automated browser tests using Chrome DevTools
 - D) To calculate token usage and warn when context limits are reached
 
 **Answer:** B

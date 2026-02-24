@@ -60,7 +60,7 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |  "Working!"          |                               |
  |                       |  4. MCP server verification   |
  |                       |     Context7: check           |
- |                       |     Puppeteer: check          |
+ |                       |     Chrome DevTools: check    |
  |                       |                               |
  |                       |  5. Git verification          |
  |                       |     git status                |
@@ -110,7 +110,7 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |                Stack Scout     |
  |                       |                in worktree    |
  |                       |  WebSearch + Context7 +       |
- |                       |  Puppeteer research           |
+ |                       |  Chrome DevTools research     |
  |                       |  Generate TDR                 |
  |                       |  [worktree: .claude/worktrees/|
  |                       |   scout-tdr-001/]             |
@@ -255,7 +255,7 @@ Orchestrator
     |         |
     |         +--- Stack Scout works in worktree
     |         |    .claude/worktrees/scout-tdr-001/
-    |         |    - WebSearch + Context7 + Puppeteer research
+    |         |    - WebSearch + Context7 + Chrome DevTools research
     |         |    - Produces TDR document
     |         |    - Commits in worktree
     |         |    - Signals completion via SendMessage
@@ -329,7 +329,7 @@ The phase gate is the enforcement mechanism that prevents source code writes bef
     |                                                      |
     |  OPTIONAL (informational):                           |
     |    [ ] Context7 MCP server                           |
-    |    [ ] Puppeteer MCP server                          |
+    |    [ ] Chrome DevTools MCP server                     |
     |    [ ] Warp terminal (for deep-link notifications)   |
     |                                                      |
     +------------------------------------------------------+

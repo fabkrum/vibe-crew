@@ -76,7 +76,7 @@ claude-plugin-vibe-crew/
     CLAUDE.md.template           # CLAUDE.md template for new projects
     config.json.template         # Default .vibecrew/config.json
     state.json.template          # Default .vibecrew/state.json
-  .mcp.json                      # MCP server definitions (Context7, Puppeteer)
+  .mcp.json                      # MCP server definitions (Context7, Chrome DevTools)
   settings.json                  # Default permission rules (deny list)
   LICENSE
   CHANGELOG.md
@@ -178,7 +178,7 @@ These enhance the experience but degrade gracefully when missing. The setup wiza
 |------------|----------------|---------|----------------------|--------------|
 | `terminal-notifier` | 2.0+ | Native macOS notifications for the Interrupt Protocol | Falls back to OSC 9 escape sequences; user may miss permission prompts and task completions | `brew install terminal-notifier` |
 | Context7 MCP | latest | Library documentation lookup on demand | Agents fall back to `WebSearch`/`WebFetch`; higher token cost but functional | Auto-installed via `npx -y` |
-| Puppeteer MCP | latest | Browser automation for research and visual testing | Stack Scout skips browser-based research; Verifier skips visual regression tests | Auto-installed via `npx -y` |
+| Chrome DevTools MCP | latest | Browser debugging and automation for research and visual testing | Stack Scout skips browser-based research; Verifier skips visual regression tests | Auto-installed via `npx -y` |
 
 ### 2.3 Dependency Check Script
 
@@ -243,7 +243,7 @@ VibeCrew uses two MCP servers. Both are recommended but optional -- the setup wi
 | Server | Package | Purpose | Used By |
 |--------|---------|---------|---------|
 | Context7 | `@upstash/context7-mcp@latest` | Library documentation lookup on demand | Stack Scout, Builder |
-| Puppeteer | `@anthropic/mcp-puppeteer` | Browser automation for research and visual testing | Stack Scout, Verifier |
+| Chrome DevTools | `chrome-devtools-mcp@latest` | Browser debugging and automation for research and visual testing | Stack Scout, Verifier |
 
 ### 3.2 .mcp.json Configuration
 
@@ -258,9 +258,9 @@ The plugin ships this `.mcp.json` at its root:
       "env": {},
       "disabled": false
     },
-    "puppeteer": {
+    "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-puppeteer"],
+      "args": ["-y", "chrome-devtools-mcp@latest"],
       "env": {},
       "disabled": false
     }
@@ -268,11 +268,11 @@ The plugin ships this `.mcp.json` at its root:
 }
 ```
 
-**Design decisions:** `npx -y` ensures latest versions are fetched automatically. No API keys are required (Context7 uses Upstash's free tier; Puppeteer launches local headless Chromium). Tool approval is managed by agent permissions and `settings.json`, not by MCP server configuration.
+**Design decisions:** `npx -y` ensures latest versions are fetched automatically. No API keys are required (Context7 uses Upstash's free tier; Chrome DevTools connects to a local browser instance). Tool approval is managed by agent permissions and `settings.json`, not by MCP server configuration.
 
 ### 3.3 Graceful Degradation
 
-If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token cost). If Puppeteer is missing, Stack Scout skips browser-based research and Verifier skips visual regression tests. The setup wizard reports MCP server status and provides installation commands if either is missing.
+If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token cost). If Chrome DevTools is missing, Stack Scout skips browser-based research and Verifier skips visual regression tests. The setup wizard reports MCP server status and provides installation commands if either is missing.
 
 ---
 
@@ -511,8 +511,8 @@ Step 2: Configure MCP Servers
   |
   +--> Context7 available? --> Enable
   +--> Context7 missing? --> Warn, recommend (do not block)
-  +--> Puppeteer available? --> Enable
-  +--> Puppeteer missing? --> Warn, recommend (do not block)
+  +--> Chrome DevTools available? --> Enable
+  +--> Chrome DevTools missing? --> Warn, recommend (do not block)
   |
 Step 3: Detect Terminal
   |
@@ -552,7 +552,7 @@ VibeCrew Dependency Check
   RECOMMENDED
   terminal-notifier  2.0.0   recommended       PASS
 
-MCP Server Check: Context7 AVAILABLE, Puppeteer AVAILABLE
+MCP Server Check: Context7 AVAILABLE, Chrome DevTools AVAILABLE
 Terminal Detection: Warp (deep-link notifications enabled)
 ```
 
@@ -870,7 +870,7 @@ Verify the plugin loaded correctly with `claude --debug`. Expected output includ
 [plugin] Agents: 5 loaded from ./agents/
 [plugin] Skills: 9 loaded from ./skills/
 [plugin] Hooks: 10 event bindings from ./hooks/hooks.json
-[plugin] MCP: context7, puppeteer from ./.mcp.json
+[plugin] MCP: context7, chrome-devtools from ./.mcp.json
 ```
 
 ### Troubleshooting

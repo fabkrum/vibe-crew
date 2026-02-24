@@ -77,7 +77,7 @@ claude-plugin-vibe-crew/                      # Plugin root
     notify.sh                               #   Notification + PostToolUseFailure: OS alerts
     check-context.sh                        #   Stop: context usage warnings (60%/80%/90%)
   settings.json                             # Default permission rules (allow/deny lists)
-  .mcp.json                                 # MCP server definitions (Context7, Puppeteer)
+  .mcp.json                                 # MCP server definitions (Context7, Chrome DevTools)
   LICENSE
   CHANGELOG.md
 
@@ -160,9 +160,9 @@ The `.mcp.json` file at the plugin root registers external tool providers that a
       "env": {},
       "disabled": false
     },
-    "puppeteer": {
+    "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-puppeteer"],
+      "args": ["-y", "chrome-devtools-mcp@latest"],
       "env": {},
       "disabled": false
     }
@@ -170,7 +170,7 @@ The `.mcp.json` file at the plugin root registers external tool providers that a
 }
 ```
 
-**Context7** replaces documentation pasting, saving approximately 1,500 tokens per API lookup. **Puppeteer** enables browser automation for the Stack Scout (web research) and visual regression testing. Both are optional but strongly recommended.
+**Context7** replaces documentation pasting, saving approximately 1,500 tokens per API lookup. **Chrome DevTools** enables browser debugging and automation for the Stack Scout (web research) and visual regression testing. Both are optional but strongly recommended.
 
 ### 1.6 Path Reference Rule
 
@@ -272,7 +272,7 @@ Each agent receives only the tools it needs. Read-only agents use `disallowedToo
 |-------|--------------|-----------------|
 | Session Startup | Read, Glob, Grep, Bash | Write, Edit, WebSearch |
 | Workflow Orchestrator | Read, Write, Edit, Glob, Grep, Bash, TeamCreate, TaskCreate, SendMessage | -- |
-| Stack Scout | Read, Glob, Grep, WebSearch, WebFetch, Context7, Puppeteer | Write, Edit |
+| Stack Scout | Read, Glob, Grep, WebSearch, WebFetch, Context7, Chrome DevTools | Write, Edit |
 | Builder | Read, Write, Edit, Glob, Grep, Bash, Context7 | -- |
 | Verifier | Read, Write, Edit, Glob, Grep, Bash | -- |
 

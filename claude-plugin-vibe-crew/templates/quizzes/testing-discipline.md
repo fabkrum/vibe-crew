@@ -29,11 +29,11 @@ Which tools does VibeCrew's Test Writer agent use for each testing layer?
 - A) Jest for unit tests and Cypress for end-to-end tests
 - B) Vitest for unit and integration tests, Playwright for end-to-end browser tests
 - C) Mocha for unit tests and Selenium for browser automation
-- D) Vitest for all test types, with Puppeteer used only for visual regression
+- D) Vitest for all test types, with Chrome DevTools used only for visual regression
 
 **Answer:** B
 
-**Explanation:** VibeCrew standardizes on Vitest for unit and integration testing (fast, Vite-native, compatible with the modern SaaS stack) and Playwright for end-to-end browser testing. Playwright is the same tool used by the Puppeteer MCP server in a different role. Cypress and Selenium are not part of the VibeCrew recommended stack.
+**Explanation:** VibeCrew standardizes on Vitest for unit and integration testing (fast, Vite-native, compatible with the modern SaaS stack) and Playwright for end-to-end browser testing. The Chrome DevTools MCP server provides browser automation capabilities for research and visual verification, while Playwright handles structured E2E test execution. Cypress and Selenium are not part of the VibeCrew recommended stack.
 
 ---
 

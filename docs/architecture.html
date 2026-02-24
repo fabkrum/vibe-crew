@@ -865,7 +865,7 @@
       <div class="card">
         <div class="card-icon blue">&#9673;</div>
         <h4>.mcp.json</h4>
-        <p>MCP server configuration for Context7 (documentation lookup) and Puppeteer (browser automation).</p>
+        <p>MCP server configuration for Context7 (documentation lookup) and Chrome DevTools (browser debugging and automation).</p>
       </div>
     </div>
 
@@ -915,7 +915,7 @@
             <td><strong>Stack Scout</strong></td>
             <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
             <td>Worktree</td>
-            <td>Read-only research. Uses WebSearch, Context7, Puppeteer. Produces TDR in isolated context</td>
+            <td>Read-only research. Uses WebSearch, Context7, Chrome DevTools. Produces TDR in isolated context</td>
             <td>Tier 1 architecture step</td>
           </tr>
           <tr>
@@ -1330,10 +1330,10 @@ args: feature_name
 
     <div class="callout tip">
       <div class="callout-title">What are MCP servers?</div>
-      <p>MCP servers are <strong>external tools that give the AI extra abilities</strong>. Normally, the AI can only read your files and run commands. MCP servers connect it to additional services &mdash; like a reference library (Context7, for looking up documentation) or a web browser (Puppeteer, for visiting websites). They're optional: VibeCrew works fine without them, but with them, the AI works faster and uses less of its "memory" because it can look things up on demand instead of trying to remember everything.</p>
+      <p>MCP servers are <strong>external tools that give the AI extra abilities</strong>. Normally, the AI can only read your files and run commands. MCP servers connect it to additional services &mdash; like a reference library (Context7, for looking up documentation) or a web browser (Chrome DevTools, for visiting websites and debugging). They're optional: VibeCrew works fine without them, but with them, the AI works faster and uses less of its "memory" because it can look things up on demand instead of trying to remember everything.</p>
     </div>
 
-    <p>Two MCP (Model Context Protocol) servers extend the agent's capabilities. Both are optional but strongly recommended for token efficiency.</p>
+    <p>Three MCP (Model Context Protocol) servers extend the agent's capabilities. Context7 and Chrome DevTools are enabled by default. Google Stitch is optional and disabled by default.</p>
 
     <div class="card-grid">
       <div class="card">
@@ -1343,8 +1343,13 @@ args: feature_name
       </div>
       <div class="card">
         <div class="card-icon green">&#9673;</div>
-        <h4>Puppeteer</h4>
-        <p><strong>Browser automation.</strong> The Stack Scout uses it for web research and screenshot verification during TDR creation. Also available for visual regression testing during the Test phase.</p>
+        <h4>Chrome DevTools</h4>
+        <p><strong>Browser debugging and automation.</strong> The Stack Scout uses it for web research and screenshot verification during TDR creation. Also available for visual regression testing during the Test phase.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9673;</div>
+        <h4>Google Stitch <span style="font-size:0.75rem;color:var(--color-text-muted);font-weight:400;">(disabled by default)</span></h4>
+        <p><strong>AI-powered UI design.</strong> Generates production-ready HTML/CSS from text prompts via Google Labs' Stitch platform. Used by the Builder agent during the UI Design phase to pull visual designs into the project. Requires Google authentication. See the <a href="setup.html#stitch">setup guide</a>.</p>
       </div>
     </div>
 
@@ -1354,9 +1359,14 @@ args: feature_name
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
     },
-    "puppeteer": {
+    "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "@anthropic/puppeteer-mcp@latest"]
+      "args": ["-y", "chrome-devtools-mcp@latest"]
+    },
+    "stitch": {
+      "command": "npx",
+      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
+      "disabled": true
     }
   }
 }</code></pre>

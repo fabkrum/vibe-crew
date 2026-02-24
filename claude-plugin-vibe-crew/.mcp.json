@@ -6,11 +6,17 @@
       "env": {},
       "disabled": false
     },
-    "puppeteer": {
+    "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-puppeteer"],
+      "args": ["-y", "chrome-devtools-mcp@latest"],
       "env": {},
       "disabled": false
+    },
+    "stitch": {
+      "command": "npx",
+      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
+      "env": {},
+      "disabled": true
     }
   }
 }

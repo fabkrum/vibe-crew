@@ -17,7 +17,7 @@
   },
   "mcp_servers": {
     "context7": true,
-    "puppeteer": true
+    "chrome_devtools": true
   },
   "formatting": {
     "auto_format": true,

@@ -47,7 +47,7 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
   },
   "mcp_servers": {
     "context7": true,
-    "puppeteer": true
+    "chrome_devtools": true
   },
   "formatting": {
     "auto_format": true,

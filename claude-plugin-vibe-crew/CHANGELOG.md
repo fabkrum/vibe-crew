@@ -201,7 +201,7 @@ Plugin scaffold and core infrastructure.
 - `scripts/init-vibecrew-state.sh` -- initializes `.vibecrew/` state directory with config, state, and backlog
 - `scripts/migrate-state.sh` -- state schema migration for version upgrades
 - `settings.json` -- 68 permission rules (50 allowed tools, 18 denied tools)
-- `.mcp.json` -- MCP server configuration for Context7 and Puppeteer
+- `.mcp.json` -- MCP server configuration for Context7 and Chrome DevTools
 - `LICENSE` -- MIT license
 - `templates/config.json.template` -- default `.vibecrew/config.json` scaffold
 

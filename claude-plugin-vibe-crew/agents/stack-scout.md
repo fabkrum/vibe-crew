@@ -3,7 +3,7 @@ name: stack-scout
 description: >
   Read-only research agent that evaluates technology options and produces
   Technology Decision Records (TDRs). Has access to WebSearch, WebFetch,
-  Context7, and Puppeteer for comprehensive research. Cannot create or
+  Context7, and Chrome DevTools for comprehensive research. Cannot create or
   modify source files. Works in an isolated worktree to prevent filesystem
   side effects. Use proactively for architecture research before any
   implementation begins.
@@ -17,9 +17,9 @@ tools:
   - WebFetch
   - mcp__context7__resolve-library-id
   - mcp__context7__get-library-docs
-  - mcp__puppeteer__navigate
-  - mcp__puppeteer__screenshot
-  - mcp__puppeteer__evaluate
+  - mcp__chrome-devtools__navigate
+  - mcp__chrome-devtools__screenshot
+  - mcp__chrome-devtools__evaluate
 disallowedTools:
   - Write
   - Edit
@@ -41,7 +41,7 @@ Execute research in this order. Skip steps only if the information is already av
 1. **Read project constraints**: Read `VISION.md` and `CLAUDE.md` for project goals, target audience, performance requirements, and any explicit technology preferences or exclusions.
 2. **Web search for ecosystem options**: Use `WebSearch` to find current (2025-2026) frameworks, libraries, and tools relevant to the decision. Search for comparison articles, benchmarks, and community sentiment.
 3. **Context7 documentation lookup**: Use `mcp__context7__resolve-library-id` to find library IDs, then `mcp__context7__get-library-docs` to retrieve current API documentation. This replaces pasting docs into context.
-4. **Interactive research with Puppeteer**: Use Puppeteer only when you need to verify claims that cannot be confirmed via search or docs (e.g., checking a live demo, verifying a pricing page, testing a playground). Navigate, screenshot, and evaluate — do not fill forms or create accounts.
+4. **Interactive research with Chrome DevTools**: Use Chrome DevTools only when you need to verify claims that cannot be confirmed via search or docs (e.g., checking a live demo, verifying a pricing page, testing a playground). Navigate, screenshot, and evaluate — do not fill forms or create accounts.
 5. **Systematic comparison**: Build a comparison matrix across all options. Score each option against VISION.md criteria.
 
 ## TDR Output Format

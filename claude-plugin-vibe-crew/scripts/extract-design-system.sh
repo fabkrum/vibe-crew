@@ -4,11 +4,11 @@ set -euo pipefail
 # =============================================================================
 # extract-design-system.sh — Extract design tokens from a reference URL
 # =============================================================================
-# Generates a Puppeteer MCP extraction payload and a template design-system.css.
+# Generates a Chrome DevTools MCP extraction payload and a template design-system.css.
 #
 # Workflow:
 #   1. This script outputs structured JSON instructions to stdout.
-#   2. Claude Code feeds the JSON to the Puppeteer MCP server, which drives
+#   2. Claude Code feeds the JSON to the Chrome DevTools MCP server, which drives
 #      a real browser to navigate to the URL and extract computed styles.
 #   3. Claude Code fills in the CSS custom properties template with the
 #      extracted values, producing the final design-system.css.
@@ -61,17 +61,17 @@ info "Reference URL: $REFERENCE_URL"
 info "Output path:   $OUTPUT_PATH"
 echo "" >&2
 
-# --- Step 3: Output Puppeteer MCP extraction payload -------------------------
+# --- Step 3: Output Chrome DevTools MCP extraction payload -------------------
 # This JSON describes the browser actions Claude should perform via the
-# Puppeteer MCP server. It is NOT executed by this script — Claude reads
-# the JSON and translates it into Puppeteer MCP tool calls.
+# Chrome DevTools MCP server. It is NOT executed by this script — Claude reads
+# the JSON and translates it into Chrome DevTools MCP tool calls.
 
-info "Generating Puppeteer MCP extraction instructions..."
+info "Generating Chrome DevTools MCP extraction instructions..."
 echo "" >&2
 
 cat <<PAYLOAD
 {
-  "description": "VibeCrew Design Token Extraction — Puppeteer MCP Instructions",
+  "description": "VibeCrew Design Token Extraction — Chrome DevTools MCP Instructions",
   "reference_url": "${REFERENCE_URL}",
   "output_path": "${OUTPUT_PATH}",
   "steps": [
@@ -161,7 +161,7 @@ echo "" >&2
 
 # --- Step 4: Output template design-system.css --------------------------------
 # This template uses CSS custom properties with placeholder values.
-# Claude fills in the actual values after running the Puppeteer extraction.
+# Claude fills in the actual values after running the Chrome DevTools extraction.
 
 info "Writing template CSS to: $OUTPUT_PATH"
 echo "" >&2
@@ -284,7 +284,7 @@ ok "JSON extraction payload printed to stdout."
 echo "" >&2
 info "Next steps:"
 info "  1. Claude reads the JSON payload above."
-info "  2. Claude uses Puppeteer MCP to navigate to $REFERENCE_URL"
+info "  2. Claude uses Chrome DevTools MCP to navigate to $REFERENCE_URL"
 info "  3. Claude runs the extraction_script in the browser context."
 info "  4. Claude replaces {{...}} placeholders in $OUTPUT_PATH with extracted values."
 echo "" >&2

@@ -95,7 +95,7 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
   // MCP server toggles
   "mcp_servers": {
     "context7": true,                    // Documentation lookup
-    "puppeteer": true                    // Browser automation for testing
+    "chrome_devtools": true              // Browser debugging and automation
   },
 
   // Code formatting
@@ -134,7 +134,7 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
 | `models.lightweight` | string | yes | `"haiku"` | Model for lightweight agents |
 | `models.standard` | string | yes | `"sonnet"` | Model for standard agents |
 | `mcp_servers.context7` | boolean | yes | `true` | Context7 MCP enabled |
-| `mcp_servers.puppeteer` | boolean | yes | `true` | Puppeteer MCP enabled |
+| `mcp_servers.chrome_devtools` | boolean | yes | `true` | Chrome DevTools MCP enabled |
 | `formatting.auto_format` | boolean | yes | `true` | Auto-format on file writes |
 | `formatting.formatter` | enum | yes | `"prettier"` | Formatter to use |
 | `context_warnings.warn_at_percent` | integer | yes | `60` | Warning threshold (%) |

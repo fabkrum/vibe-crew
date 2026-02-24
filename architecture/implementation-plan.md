@@ -85,7 +85,7 @@ Build the plugin skeleton, safety layer, session startup hook, and runtime state
 | 9 | `scripts/notify.sh` | Notification + PostToolUseFailure: OS notifications with Warp deep-linking via WARP_SESSION_ID |
 | 10 | `scripts/check-context.sh` | Stop hook: monitors context window usage, warns at 60%/80%/90% thresholds |
 | 11 | `settings.json` | Declarative deny rules: 40+ blocked command patterns (defense in depth alongside hook scripts) |
-| 12 | `.mcp.json` | MCP server configuration for Context7 and Puppeteer |
+| 12 | `.mcp.json` | MCP server configuration for Context7 and Chrome DevTools |
 | 13 | `scripts/init-vibecrew-state.sh` | Creates `.vibecrew/` directory with initial config.json, state.json, backlog.json (schemas per `architecture/schemas.md`) |
 | 14 | `LICENSE` | MIT license |
 
@@ -132,7 +132,7 @@ Define all five agent prompts, implement the first five slash commands (/setup, 
 |---|------|---------|
 | 1 | `agents/session-startup.md` | Haiku agent: environment check, state detection, 3-line status summary, routing |
 | 2 | `agents/workflow-orchestrator.md` | Opus agent: Tier 1/Tier 2 routing, Agent Teams coordination, state management |
-| 3 | `agents/stack-scout.md` | Opus agent: read-only research with WebSearch, Context7, Puppeteer. `isolation: worktree`. |
+| 3 | `agents/stack-scout.md` | Opus agent: read-only research with WebSearch, Context7, Chrome DevTools. `isolation: worktree`. |
 | 4 | `agents/builder.md` | Opus agent: design system (Tier 1) + component design + feature implementation (Tier 2). `isolation: worktree`. |
 | 5 | `agents/verifier.md` | Haiku agent: TDD-hybrid testing, quality checks, Vibe Score calculation |
 | 6 | `skills/setup/SKILL.md` | /setup: interactive wizard -- terminal selection, notification test, MCP verification, .vibecrew/ init |
@@ -357,7 +357,7 @@ End-to-end testing across the full workflow (Tier 1 foundation through Tier 2 fe
 | 1 | `README.md` | Plugin README: installation, quick start, command reference, architecture overview, troubleshooting |
 | 2 | `CHANGELOG.md` | Plugin changelog following Keep a Changelog format |
 | 3 | `scripts/uninstall.sh` | Clean removal: removes plugin files, optionally .vibecrew/. Does not touch source code. |
-| 4 | `scripts/extract-design-system.sh` | Uses Puppeteer MCP to extract color, typography, spacing from a reference URL. Outputs design-system.css tokens. |
+| 4 | `scripts/extract-design-system.sh` | Uses Chrome DevTools MCP to extract color, typography, spacing from a reference URL. Outputs design-system.css tokens. |
 | 5 | `templates/gitignore-additions.template` | Recommended .gitignore additions for VibeCrew projects (.vibecrew/config.json, signals/, locks/) |
 | 6 | `templates/CONTRIBUTING.md.template` | Contribution guide for plugin development |
 | 7 | `hooks/hooks.json` (finalized) | Final hook routing table with all bindings verified and tested |
@@ -385,7 +385,7 @@ All previous phases must be complete.
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| Design system extraction produces inaccurate tokens | Medium | Low | Extraction is a starting point. Builder validates and adjusts. User reviews during /new-project. Puppeteer is optional -- manual input fallback exists. |
+| Design system extraction produces inaccurate tokens | Medium | Low | Extraction is a starting point. Builder validates and adjusts. User reviews during /new-project. Chrome DevTools is optional -- manual input fallback exists. |
 | E2E tests reveal integration issues across phases | High | Medium | Budget extra time for integration debugging. Fix issues inline rather than deferring. |
 
 ---

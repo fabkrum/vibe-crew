@@ -43,7 +43,7 @@ VibeCrew ships with configurations for two MCP servers in `.mcp.json`. They are
 enabled by default but work is not blocked if they are unavailable.
 
 - **Context7** -- documentation lookup for popular frameworks and libraries.
-- **Puppeteer** -- headless browser automation for visual testing and research.
+- **Chrome DevTools** -- browser debugging and automation for visual testing and research.
 
 ---
 
@@ -174,7 +174,7 @@ VibeCrew uses 12 specialized agents, each with a dedicated system prompt:
 |---|---|---|---|
 | Session Startup | Haiku | Inline | Environment check, state detection, handoff detection, progressive hints, routing. |
 | Workflow Orchestrator | Opus | Inline | Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state. |
-| Stack Scout | Opus | Worktree | Read-only research agent. Uses WebSearch, Context7, and Puppeteer to produce Technology Decision Records in an isolated context. |
+| Stack Scout | Opus | Worktree | Read-only research agent. Uses WebSearch, Context7, and Chrome DevTools to produce Technology Decision Records in an isolated context. |
 | Builder | Opus | Worktree | Implements features within TDR boundaries. Runs in a worktree to isolate work-in-progress from the main branch. |
 | Verifier | Haiku | Inline | Runs quality checks (tests, lint, build, type-check), calculates Vibe Score. |
 | Performance Coach | Opus | Inline | Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals with 7-step guardrailed workflow. |
@@ -240,7 +240,7 @@ three conditions:
 claude-plugin-vibe-crew/
   .claude-plugin/
     plugin.json                 # Plugin manifest (name, version, entry points)
-  .mcp.json                    # Context7 + Puppeteer MCP server config
+  .mcp.json                    # Context7 + Chrome DevTools MCP server config
   settings.json                # 71 permission rules (allowed + denied tools)
   hooks/
     hooks.json                 # 10 hook bindings across 6 lifecycle events
@@ -318,7 +318,7 @@ System Settings > Notifications allows alerts from `terminal-notifier`.
 
 **MCP servers not connecting**
 
-MCP servers (Context7, Puppeteer) are optional. If they fail to start:
+MCP servers (Context7, Chrome DevTools) are optional. If they fail to start:
 
 1. Verify Node.js 18+ is available: `node --version`
 2. Test manually: `npx -y @upstash/context7-mcp@latest`

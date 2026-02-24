@@ -61,7 +61,7 @@ If the test succeeds, confirm notifications are working. If it fails (e.g., `ter
 
 ## Step 4: Check MCP Server Availability
 
-Check for Context7 and Puppeteer MCP servers. Read the MCP configuration:
+Check for Context7 and Chrome DevTools MCP servers. Read the MCP configuration:
 
 ```bash
 cat "${CLAUDE_PLUGIN_ROOT}/mcp-servers.json" 2>/dev/null
@@ -69,7 +69,7 @@ cat "${CLAUDE_PLUGIN_ROOT}/mcp-servers.json" 2>/dev/null
 
 For each MCP server:
 - **Context7**: Report whether configured. If available, note: "Documentation lookups will use Context7 instead of pasting docs into context."
-- **Puppeteer**: Report whether configured. If available, note: "Browser automation available for UI testing."
+- **Chrome DevTools**: Report whether configured. If available, note: "Browser debugging and automation available for UI testing."
 
 If neither is configured, note: "MCP servers are optional but strongly recommended. See the VibeCrew guide for configuration instructions."
 
@@ -126,7 +126,7 @@ Prerequisites:
 Terminal:           <detected terminal>
 Notifications:     <enabled/disabled>
 MCP - Context7:    <available/not configured>
-MCP - Puppeteer:   <available/not configured>
+MCP - Chrome DevTools: <available/not configured>
 State directory:   .vibecrew/ <created/existing>
 
 Setup complete! Run /new-project to start building your foundation.

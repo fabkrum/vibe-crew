@@ -11,7 +11,7 @@ VibeCrew is a Claude Code plugin that transforms Claude Code into an autonomous 
 ```
 claude-plugin-vibe-crew/          # The plugin — install this into your projects
   .claude-plugin/plugin.json    # Plugin manifest
-  .mcp.json                     # Context7 + Puppeteer MCP config
+  .mcp.json                     # Context7 + Chrome DevTools MCP config
   settings.json                 # Permission rules
   hooks/hooks.json              # Event hook bindings
   scripts/                      # ~53 bash automation scripts
@@ -39,7 +39,7 @@ Opus agents handle planning, research, code, security, and analysis — tasks wh
 |---|---|---|---|
 | Session Startup | Haiku | Inline | Environment check, state detection, routing on every session start |
 | Workflow Orchestrator | Opus | Inline | Routes between Tier 1/Tier 2, coordinates agent handoffs |
-| Stack Scout | Opus | Worktree | Read-only research agent (WebSearch, Context7, Puppeteer) that produces TDRs in isolated context |
+| Stack Scout | Opus | Worktree | Read-only research agent (WebSearch, Context7, Chrome DevTools) that produces TDRs in isolated context |
 | Builder | Opus | Worktree | Implements features within TDR boundaries |
 | Verifier | Haiku | Inline | Runs tests/build/lint/type-check for `/check`, `/wrap`, `/run-backlog` |
 | Performance Coach | Opus | Inline | Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals |
@@ -111,4 +111,4 @@ VibeCrew v1.3.0 — the plugin is feature-complete. The repository contains:
 - Claude Code 2.0+, Git 2.30+, GitHub CLI 2.0+, Node.js 18+
 - `terminal-notifier` (macOS notifications via Homebrew)
 - `jq` (JSON parsing in hook scripts)
-- MCP servers: Context7 (documentation lookup), Puppeteer (browser automation) — both optional but strongly recommended
+- MCP servers: Context7 (documentation lookup), Chrome DevTools (browser debugging and automation) — both optional but strongly recommended

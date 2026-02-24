@@ -660,11 +660,11 @@ VibeCrew's state is small (kilobytes, not megabytes), rarely queried in complex 
 | **Coverage** | Excellent for Next.js, Supabase, Stripe, Tailwind. Good for Drizzle, shadcn/ui. |
 | **Required** | Strongly recommended but optional. Without it, agents consume more context tokens for documentation lookups. |
 
-### 6.2 Puppeteer
+### 6.2 Chrome DevTools
 
 | Attribute | Value |
 |---|---|
-| **Purpose** | Browser automation for visual testing and research |
+| **Purpose** | Browser debugging and automation for research and visual testing |
 | **Used by** | Stack Scout (web research) |
 | **Benefit** | Enables automated browser interactions during research phases. Provides visual verification capabilities. |
 | **Required** | Optional. Stack Scout can use WebSearch + WebFetch as alternatives for research. |
@@ -680,15 +680,15 @@ MCP servers are configured in `mcp-servers.json` at the plugin root:
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
     },
-    "puppeteer": {
+    "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "@anthropic/puppeteer-mcp@latest"]
+      "args": ["-y", "chrome-devtools-mcp@latest"]
     }
   }
 }
 ```
 
-Both servers are toggled via `.vibecrew/config.json` (see `architecture/schemas.md` Section 2, fields `mcp_servers.context7` and `mcp_servers.puppeteer`). When a server is disabled, the corresponding agents fall back to built-in tools (WebSearch, WebFetch).
+Both servers are toggled via `.vibecrew/config.json` (see `architecture/schemas.md` Section 2, fields `mcp_servers.context7` and `mcp_servers.chrome_devtools`). When a server is disabled, the corresponding agents fall back to built-in tools (WebSearch, WebFetch).
 
 ---
 
@@ -743,7 +743,7 @@ VibeCrew-Generated SaaS Project
 |   |- State:        File-based JSON (.vibecrew/) — see schemas.md
 |   |- Communication: Signal files (.signal) + mkdir locks
 |   |- Hooks:        Bash scripts (zero-token enforcement)
-|   |- MCP Servers:  Context7 (docs) + Puppeteer (browser)
+|   |- MCP Servers:  Context7 (docs) + Chrome DevTools (browser)
 |   |- Agents:       5 v1.0 agents — see agents.md
 ```
 
@@ -767,5 +767,5 @@ The VitePress docs site runs on VitePress defaults during `npx vitepress dev doc
 
 ### Optional Dependencies
 
-- MCP servers: Context7 (documentation lookup), Puppeteer (browser automation)
+- MCP servers: Context7 (documentation lookup), Chrome DevTools (browser debugging and automation)
 - Warp Terminal (for Interrupt Protocol deep-linking via `warp://session/<id>`)

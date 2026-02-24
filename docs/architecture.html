@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeOS — Architecture</title>
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border) transparent;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ---- NAV ---- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-brand span {
+      color: var(--color-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-xs);
+      transition: all 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+      background: var(--color-surface-2);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      padding: 10rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: var(--color-accent-bg);
+      border: 1px solid rgba(167, 139, 250, 0.15);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--color-accent);
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: var(--color-accent-dim);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .hero-cta:hover {
+      background: #6d28d9;
+      transform: translateY(-1px);
+    }
+
+    /* ---- MAIN ---- */
+    .main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 6rem 2rem 6rem;
+    }
+
+    /* ---- SECTIONS ---- */
+    .section {
+      margin-bottom: 5rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .section > p,
+    .section > ul,
+    .section > ol {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    li::marker {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- CODE ---- */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--color-surface-2);
+      padding: 0.15em 0.45em;
+      border-radius: 4px;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    pre {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .code-label {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+
+    /* ---- CARDS ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--color-accent-dim);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+
+    .card h4 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    /* ---- TABLES ---- */
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead {
+      background: var(--color-surface-2);
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--color-border-subtle);
+      color: var(--color-text-secondary);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: var(--color-surface);
+    }
+
+    /* ---- CALLOUT ---- */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid;
+      font-size: 0.92rem;
+    }
+
+    .callout p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.info {
+      background: var(--color-blue-dim);
+      border-color: rgba(96, 165, 250, 0.2);
+      color: var(--color-blue);
+    }
+
+    .callout.tip {
+      background: var(--color-green-dim);
+      border-color: rgba(74, 222, 128, 0.2);
+      color: var(--color-green);
+    }
+
+    .callout.warn {
+      background: var(--color-amber-dim);
+      border-color: rgba(251, 191, 36, 0.2);
+      color: var(--color-amber);
+    }
+
+    .callout.danger {
+      background: var(--color-red-dim);
+      border-color: rgba(248, 113, 113, 0.2);
+      color: var(--color-red);
+    }
+
+    /* ---- FLOW DIAGRAM ---- */
+    .flow {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .flow .highlight {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .flow .muted {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- STEP LIST ---- */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding-left: 3.5rem;
+      margin-bottom: 2rem;
+      min-height: 2.25rem;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.25rem;
+      height: 2.25rem;
+      background: var(--color-accent-bg);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--color-accent);
+    }
+
+    .steps li h4 {
+      margin-top: 0;
+      margin-bottom: 0.25rem;
+    }
+
+    .steps li p {
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ---- BADGE ---- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+
+    .badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
+    .badge.green { background: var(--color-green-dim); color: var(--color-green); }
+    .badge.amber { background: var(--color-amber-dim); color: var(--color-amber); }
+
+    /* ---- DIVIDER ---- */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 4rem 0;
+    }
+
+    /* ---- TOC ---- */
+    .toc {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .toc ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    .toc li {
+      margin-bottom: 0.35rem;
+    }
+
+    .toc a {
+      color: var(--color-text-secondary);
+      font-size: 0.92rem;
+      transition: color 0.15s;
+    }
+
+    .toc a:hover {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .main { padding: 6rem 1.25rem 4rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.15rem; }
+      pre { padding: 1rem; }
+      .steps li { padding-left: 3rem; }
+    }
+
+    /* ---- GAMIFICATION ---- */
+    .xp-bar-wrap {
+      background: var(--color-surface-2);
+      border-radius: 6px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 0.25rem;
+    }
+
+    .xp-bar {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--color-accent-dim), var(--color-accent));
+      transition: width 0.6s ease;
+    }
+
+    .level-badge-inline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+      margin-right: 0.5rem;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .badge-card.locked {
+      opacity: 0.5;
+    }
+
+    .badge-card .badge-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .badge-card h5 {
+      margin: 0 0 0.15rem;
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+
+    .badge-card p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .skill-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-bar-wrap .skill-name {
+      width: 160px;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      text-align: right;
+    }
+
+    .skill-bar-wrap .bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--color-surface-2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-bar-wrap .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .skill-bar-wrap .skill-level {
+      width: 90px;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: var(--color-text-muted);
+    }
+
+    .streak-display {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-amber);
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .challenge-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+
+    .challenge-card .challenge-type {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .challenge-card .challenge-type.daily { color: var(--color-blue); }
+    .challenge-card .challenge-type.weekly { color: var(--color-accent); }
+    .challenge-card .challenge-type.onetime { color: var(--color-amber); }
+
+    .challenge-card h5 {
+      margin: 0 0 0.25rem;
+      color: var(--color-text);
+      font-size: 0.95rem;
+    }
+
+    .challenge-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
+    @media (prefers-color-scheme: light) {
+      /* keep dark — this is a terminal-culture product */
+    }
+
+    .nav-links a.active { color: var(--color-accent); background: var(--color-accent-bg); }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 2rem; text-decoration: none; transition: color 0.15s; }
+    .back-link:hover { color: var(--color-accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <ul class="nav-links">
+      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="setup.html">Setup</a></li>
+      <li><a href="new-project.html">New Project</a></li>
+      <li><a href="existing-project.html">Existing Project</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="architecture.html" class="active">Architecture</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="main">
+
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#system">System Deep Dive</a>
+        <ol>
+          <li><a href="#agents">The 12-Agent Architecture</a></li>
+          <li><a href="#hooks">The Hook System</a></li>
+          <li><a href="#status-bar">The Status Bar</a></li>
+          <li><a href="#interrupt">The Interrupt Protocol</a></li>
+          <li><a href="#phase-gate">The Phase Gate</a></li>
+          <li><a href="#vibe-score">The Vibe Score &amp; Performance Coach</a></li>
+          <li><a href="#commands">Slash Commands Reference</a></li>
+          <li><a href="#state">State Management</a></li>
+        </ol>
+      </li>
+      <li><a href="#dashboard">VitePress Documentation Dashboard</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <section class="section" id="system">
+    <span class="section-label">Architecture</span>
+    <h2>System Deep Dive</h2>
+    <p>VibeOS is a system of specialized agents, deterministic hooks, and bash scripts that work together to enforce quality, manage attention, and continuously improve your workflow. Here's how every piece fits together.</p>
+
+    <!-- AGENTS -->
+    <h3 id="agents">The 12-Agent Architecture</h3>
+    <p>Each agent has a specific role, model selection, tool access, and context budget. Haiku agents handle fast, routine tasks. Sonnet agents handle complex reasoning and implementation. One agent (Code Simplifier) uses Opus for deep analysis.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Agent</th><th>Model</th><th>Isolation</th><th>Role</th><th>When It Runs</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Session Startup</strong></td>
+            <td><span class="badge amber">Haiku</span></td>
+            <td>Inline</td>
+            <td>Environment check, state detection, handoff detection, routing</td>
+            <td>Every session start</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow Orchestrator</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Inline</td>
+            <td>Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog state</td>
+            <td>Command routing</td>
+          </tr>
+          <tr>
+            <td><strong>Stack Scout</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Read-only research. Uses WebSearch, Context7, Puppeteer. Produces TDR in isolated context</td>
+            <td>Tier 1 architecture step</td>
+          </tr>
+          <tr>
+            <td><strong>Builder</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Implements features within TDR boundaries. Runs in worktree to isolate work-in-progress</td>
+            <td>Tier 2 coding phase</td>
+          </tr>
+          <tr>
+            <td><strong>Verifier</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Inline</td>
+            <td>Runs quality checks (tests, lint, build, type-check), calculates Vibe Score</td>
+            <td>/check, /wrap, /run-backlog</td>
+          </tr>
+          <tr>
+            <td><strong>Performance Coach</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Inline</td>
+            <td>Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals</td>
+            <td>/wrap session end</td>
+          </tr>
+          <tr>
+            <td><strong>Code Auditor</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Read-only codebase analysis for existing project onboarding. Extracts conventions and patterns</td>
+            <td>/onboard</td>
+          </tr>
+          <tr>
+            <td><strong>Security Auditor</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Read-only OWASP Top 10 security analysis. Scans for injection, auth, XSS, secrets, and more</td>
+            <td>/audit</td>
+          </tr>
+          <tr>
+            <td><strong>Doc Generator</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Inline</td>
+            <td>Feature docs, CHANGELOG, release notes, VitePress sidebar regeneration</td>
+            <td>/wrap + Tier 2 docs phase</td>
+          </tr>
+          <tr>
+            <td><strong>Code Simplifier</strong></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
+            <td>Worktree</td>
+            <td>Read-only analysis: dead code, abstraction flattening, API reduction, dependency consolidation</td>
+            <td>/simplify</td>
+          </tr>
+          <tr>
+            <td><strong>CI Healer</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Inline</td>
+            <td>CI failure diagnosis and repair. Categorizes failures, applies targeted fixes (max 3 attempts)</td>
+            <td>/heal</td>
+          </tr>
+          <tr>
+            <td><strong>Opponent Processor</strong></td>
+            <td><span class="badge purple">Sonnet</span></td>
+            <td>Worktree</td>
+            <td>Devil's advocate for TDR decisions. Counter-arguments, debate matrices, risk assessments</td>
+            <td>Tier 1 after TDR</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Why isolated agents matter</div>
+      <p>Agents marked "Worktree" run in separate context windows. All their research tokens, documentation fetches, and analysis stay outside your main session. Only the distilled output enters your primary context &mdash; saving thousands of tokens per session.</p>
+    </div>
+
+    <!-- HOOKS -->
+    <h3 id="hooks">The Hook System</h3>
+    <p>Hooks are the enforcement layer. They run as bash scripts triggered by Claude Code lifecycle events. Because they're shell scripts, they consume <strong>zero AI context tokens</strong> &mdash; the most efficient enforcement mechanism possible.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Hook Event</th><th>Script(s)</th><th>When It Fires</th><th>What It Does</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SessionStart</strong></td>
+            <td><code>session-startup.sh</code>, <code>sync-state.sh</code>, <code>error-recovery.sh</code></td>
+            <td>Every Claude Code start</td>
+            <td>Environment check, state reconciliation, clear stale locks</td>
+          </tr>
+          <tr>
+            <td><strong>SessionStart</strong> (compact)</td>
+            <td><code>compact-reinject.sh</code></td>
+            <td>After context compaction</td>
+            <td>Re-injects project state after context compaction</td>
+          </tr>
+          <tr>
+            <td><strong>PreToolUse</strong> (Write/Edit)</td>
+            <td><code>phase-gate.sh</code>, <code>restrict-paths.sh</code></td>
+            <td>Before any file write</td>
+            <td>Blocks source writes before foundation; validates write targets</td>
+          </tr>
+          <tr>
+            <td><strong>PreToolUse</strong> (Bash)</td>
+            <td><code>protect-data.sh</code></td>
+            <td>Before any shell command</td>
+            <td>Blocks destructive operations (rm -rf, DROP TABLE, force push)</td>
+          </tr>
+          <tr>
+            <td><strong>PostToolUse</strong> (Write/Edit)</td>
+            <td><code>format-code.sh</code></td>
+            <td>After every file write</td>
+            <td>Auto-formats with Prettier, Black, rustfmt, gofmt</td>
+          </tr>
+          <tr>
+            <td><strong>Notification</strong></td>
+            <td><code>notify.sh</code></td>
+            <td>Permission blocked or task complete</td>
+            <td>Sends native OS notification with Warp deep-link</td>
+          </tr>
+          <tr>
+            <td><strong>PostToolUseFailure</strong></td>
+            <td><code>notify.sh error</code></td>
+            <td>Any tool execution fails</td>
+            <td>Sends error notification</td>
+          </tr>
+          <tr>
+            <td><strong>Stop</strong></td>
+            <td><code>check-context.sh</code>, <code>cost-guardrails.sh</code>, <code>claude-md-lint.sh</code></td>
+            <td>Session ending</td>
+            <td>Context warnings, cost threshold checks, CLAUDE.md validation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>How hooks enforce behavior</h4>
+    <p>When Claude Code encounters a lifecycle event, it checks <code>hooks.json</code> for matching entries, passes a JSON payload to the script via stdin, and reads the exit code. <strong>Exit 0</strong> = allow the operation. <strong>Exit 2</strong> = block the operation. This gives hooks the power to both observe (PostToolUse) and control (PreToolUse) agent behavior.</p>
+
+    <!-- STATUS BAR -->
+    <h3 id="status-bar">The Status Bar</h3>
+    <p>A persistent status line renders after every assistant message, showing six data segments at <strong>zero token cost</strong>. The script (<code>scripts/statusline.sh</code>) is configured via <code>settings.json</code> and runs as a shell command outside the AI context window.</p>
+
+    <pre><code><span class="code-label">status bar</span>Opus ▓▓▓▓░░░░░░ 38% | $0.42 | auth-flow &middot; Code | &uarr;85 | 12m | ⟳0</code></pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Segment</th><th>Data Source</th><th>Details</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Context %</strong></td>
+            <td>stdin <code>context_window.used_percentage</code></td>
+            <td>10-char progress bar. <span style="color:var(--color-green)">Green &le;45%</span>, <span style="color:var(--color-amber)">Yellow 46&ndash;55%</span>, <span style="color:var(--color-red)">Red &gt;55%</span></td>
+          </tr>
+          <tr>
+            <td><strong>Session Cost</strong></td>
+            <td>stdin <code>cost.total_cost_usd</code></td>
+            <td>Formatted as <code>$X.XX</code>. Shows <code>$-.--</code> if unavailable</td>
+          </tr>
+          <tr>
+            <td><strong>Feature &middot; Phase</strong></td>
+            <td><code>.vibeos/state.json</code></td>
+            <td>Feature name truncated to 16 chars. Falls back to &ldquo;foundation &middot; Tier-1&rdquo; or &ldquo;no project&rdquo;</td>
+          </tr>
+          <tr>
+            <td><strong>Vibe Score</strong></td>
+            <td>Latest <code>.vibeos/scores/score-*.json</code></td>
+            <td>Shows trend suffix: <code>+</code> improving, <code>-</code> declining</td>
+          </tr>
+          <tr>
+            <td><strong>Duration</strong></td>
+            <td>stdin <code>cost.total_duration_ms</code></td>
+            <td>Displayed in minutes. Shows <code>&lt;1m</code> for short sessions</td>
+          </tr>
+          <tr>
+            <td><strong>Compactions</strong></td>
+            <td>Latest <code>.vibeos/sessions/session-*.json</code></td>
+            <td>Count of context compactions this session (⟳ prefix)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-title">Graceful degradation</div>
+      <p>If <code>jq</code> is missing, the status bar shows &ldquo;VibeOS&rdquo;. If <code>.vibeos/</code> doesn&rsquo;t exist, it shows &ldquo;no project&rdquo;. The script always exits 0 and is compatible with macOS Bash 3.2. Target execution time is under 50ms.</p>
+    </div>
+
+    <!-- INTERRUPT -->
+    <h3 id="interrupt">The Interrupt Protocol</h3>
+    <p>The Interrupt Protocol is the "Attention Economy" architecture. The terminal stays completely silent during normal operation. Notifications fire <em>only</em> on three conditions:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">!</div>
+        <h4>Permission Stalls</h4>
+        <p><code>permission_prompt</code> &mdash; The agent needs Y/N approval. Execution is halted. Priority: Critical.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#10004;</div>
+        <h4>Task Completion</h4>
+        <p><code>idle_prompt</code> &mdash; A complex operation finished. The agent is waiting for your next instruction. Priority: High.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9888;</div>
+        <h4>Critical Failures</h4>
+        <p><code>PostToolUseFailure</code> &mdash; A tool returned a fatal exit code or compilation error that can't be resolved autonomously. Priority: High.</p>
+      </div>
+    </div>
+
+    <p>Everything else &mdash; standard tool execution, file reads, successful commands &mdash; is silent. Your Deep Work state is preserved.</p>
+
+    <!-- PHASE GATE -->
+    <h3 id="phase-gate">The Phase Gate</h3>
+    <p>The phase gate is the architectural enforcement mechanism. It runs as a <code>PreToolUse</code> hook on every Write and Edit operation.</p>
+
+    <div class="flow"><span class="highlight">phase-gate.sh</span> receives JSON payload from Claude Code
+    &darr;
+Reads <span class="highlight">.vibeos/state.json</span> &rarr; checks project_foundation.status
+    &darr;
+<span class="muted">If "complete":</span> exit 0 (allow all writes)
+<span class="muted">If "incomplete":</span>
+    &darr;
+Check file path being written:
+  <span class="highlight">.vibeos/</span>, <span class="highlight">CLAUDE.md</span>, <span class="highlight">VISION.md</span>, <span class="highlight">docs/</span>, <span class="highlight">design-system.css</span> &rarr; exit 0 (foundation artifacts allowed)
+  <span class="highlight">src/</span>, <span class="highlight">app/</span>, <span class="highlight">lib/</span>, <span class="highlight">components/</span>, etc. &rarr; exit 2 (BLOCKED)</div>
+
+    <p>When blocked, the developer sees a clear message listing which foundation steps remain incomplete and how to complete them.</p>
+
+    <!-- VIBE SCORE -->
+    <h3 id="vibe-score">The Vibe Score &amp; Performance Coach</h3>
+    <p>The Performance Coach runs at the end of every session (triggered by <code>/wrap</code>). It ingests the session transcript, calculates a Vibe Score, and initiates an interactive coaching dialogue.</p>
+
+    <h4>How the score is calculated</h4>
+    <p>Starting from 100, deductions are applied for detected anti-patterns:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Anti-Pattern</th><th>Deduction</th><th>How It's Detected</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Prompt churn</strong></td>
+            <td>-5 per sequence</td>
+            <td>3+ consecutive corrective messages without a successful tool call</td>
+          </tr>
+          <tr>
+            <td><strong>Tool loops</strong></td>
+            <td>-10 per loop</td>
+            <td>Same tool call with identical arguments repeated 3+ times</td>
+          </tr>
+          <tr>
+            <td><strong>Low cache utilization</strong></td>
+            <td>-15</td>
+            <td>cache_read_input_tokens &lt; 20% of total input_tokens</td>
+          </tr>
+          <tr>
+            <td><strong>Context violation</strong></td>
+            <td>-20</td>
+            <td>Significant work continued after the 80% context warning</td>
+          </tr>
+          <tr>
+            <td><strong>No tests written</strong></td>
+            <td>-10</td>
+            <td>Feature has coding artifacts but no test artifacts</td>
+          </tr>
+          <tr>
+            <td><strong>No feature spec</strong></td>
+            <td>-5</td>
+            <td>Coding started without a plan artifact</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Bonuses</strong> (up to +10): +5 for all 5 phases having artifacts, +5 for cache utilization above 50%.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Score Range</th><th>Rating</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>90&ndash;100</strong></td><td><span class="badge green">Excellent</span></td><td>Efficient, well-structured session</td></tr>
+          <tr><td><strong>75&ndash;89</strong></td><td><span class="badge purple">Good</span></td><td>Minor inefficiencies</td></tr>
+          <tr><td><strong>60&ndash;74</strong></td><td><span class="badge amber">Needs Improvement</span></td><td>Notable token waste</td></tr>
+          <tr><td><strong>Below 60</strong></td><td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Review Session</span></td><td>Significant anti-patterns detected</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>The coaching dialogue</h4>
+    <p>After calculating the score, the Performance Coach:</p>
+    <ol>
+      <li><strong>Presents the score</strong> with the single biggest observation: <em>"Vibe Score: 82/100. You pasted API docs 3 times (~4,500 tokens). Using Context7 MCP would have saved those tokens."</em></li>
+      <li><strong>Asks for feedback</strong>: <em>"How did this session feel? Any friction points?"</em></li>
+      <li><strong>Proposes a CLAUDE.md rule</strong>: <em>"Proposed rule: Always use Context7 for Dexie.js API docs. Add this? (y/n)"</em></li>
+      <li><strong>Mutates CLAUDE.md</strong> if approved &mdash; the rule is permanent and active from the next session onwards.</li>
+    </ol>
+
+    <div class="callout tip">
+      <div class="callout-title">The recursive improvement loop</div>
+      <p>Session 1: paste docs, score 78, rule added. Session 2: AI reads rule, uses Context7, score 89, new rule proposed. Session 3: two rules active, score 94. Each session is more efficient than the last. Mistakes are identified, codified, and permanently prevented.</p>
+    </div>
+
+    <!-- COMMANDS -->
+    <h3 id="commands">Slash Commands Reference</h3>
+
+    <h4>Project Setup</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/setup</code></td><td>Verify environment (Git, Node, gh, jq, terminal-notifier), detect terminal, initialize <code>.vibeos/</code></td><td>Once per developer</td></tr>
+          <tr><td><code>/new-project</code></td><td>Create the project foundation (Tier 1): VISION.md, design system, TDR, roadmap, CLAUDE.md</td><td>Once per project</td></tr>
+          <tr><td><code>/onboard</code></td><td>Onboard an existing project: analyze codebase, extract conventions, generate CLAUDE.md</td><td>Existing projects entering VibeOS</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Planning</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/plan-features</code></td><td>Define and prioritize the feature backlog in <code>.vibeos/backlog.json</code></td><td>Before starting feature work</td></tr>
+          <tr><td><code>/idea "text"</code></td><td>Capture an idea with zero disruption (1 line output)</td><td>Anytime &mdash; mid-session inspiration</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Development</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/new-feature "name"</code></td><td>Start a feature session on a new branch with 5-phase tracking</td><td>Beginning of each feature</td></tr>
+          <tr><td><code>/run-backlog</code></td><td>Auto-execute features in priority order</td><td>Hands-free batch execution</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Cost and Safety</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/cost</code></td><td>Real-time token cost dashboard: session, daily, weekly, monthly aggregates</td><td>Monitor spending</td></tr>
+          <tr><td><code>/undo</code></td><td>Checkpoint rollback: list checkpoints and recent commits, safely revert or reset</td><td>After mistakes or unwanted changes</td></tr>
+          <tr><td><code>/audit</code></td><td>OWASP Top 10 security review: injection, auth, XSS, secrets, dependencies</td><td>Before releases or security reviews</td></tr>
+          <tr><td><code>/heal</code></td><td>Auto-heal failing CI: fetch logs, diagnose, fix (max 3 attempts)</td><td>When CI fails</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Code Quality</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/simplify</code></td><td>Opus-powered code analysis: dead code, abstraction flattening, API reduction</td><td>After feature implementation</td></tr>
+          <tr><td><code>/replay</code></td><td>Reusable workflow templates from successful sessions (Vibe Score &ge; 70)</td><td>Replicate proven workflows</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Quality and Wrap-Up</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/check</code></td><td>Run tests + build + lint + type-check without modifying code</td><td>During development</td></tr>
+          <tr><td><code>/wrap</code></td><td>End session: completeness check, quality gate, Vibe Score, coaching, commit</td><td>End of <strong>every</strong> session</td></tr>
+          <tr><td><code>/handoff</code></td><td>Generate structured context transfer document for the next session</td><td>Before ending a session or switching contexts</td></tr>
+          <tr><td><code>/status</code></td><td>Full project dashboard: foundation, backlog, active feature, recent scores</td><td>Start of session or when lost</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Gamification</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Purpose</th><th>When to Use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/achievements</code></td><td>Compact CLI summary of level, badges, skill tree, streaks, challenges + visual dashboard link</td><td>Check progression anytime</td></tr>
+          <tr><td><code>/quiz</code></td><td>Interactive knowledge check on vibe-coding skills with educational explanations</td><td>Learn or refresh skills (unlocks at Level 3)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- STATE -->
+    <h3 id="state">State Management</h3>
+    <p>All VibeOS runtime state lives in <code>.vibeos/</code>:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>File / Directory</th><th>Purpose</th><th>Updated By</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>config.json</code></td><td>Terminal preference, notification settings, feature toggles</td><td>/setup</td></tr>
+          <tr><td><code>state.json</code></td><td>Foundation status + active feature + active workflow + phase tracking</td><td>All commands</td></tr>
+          <tr><td><code>backlog.json</code></td><td>Feature backlog with specs, priorities, dependencies</td><td>/plan-features, /idea, /run-backlog</td></tr>
+          <tr><td><code>gamification.json</code></td><td>XP, level, badges, skill tree, streaks, challenges, quiz progress</td><td>/wrap (gamification pipeline)</td></tr>
+          <tr><td><code>mutation-log.json</code></td><td>CLAUDE.md mutation audit log with timestamps and diffs</td><td>Performance Coach</td></tr>
+          <tr><td><code>sessions/*.json</code></td><td>Session logs with phase data and token metrics</td><td>/wrap</td></tr>
+          <tr><td><code>scores/*.json</code></td><td>Vibe Score breakdowns with deductions and bonuses</td><td>Performance Coach</td></tr>
+          <tr><td><code>releases/*.json</code></td><td>Release notes data</td><td>Doc Generator</td></tr>
+          <tr><td><code>handoffs/*.md</code></td><td>Cross-session context transfer documents</td><td>/handoff, /wrap</td></tr>
+          <tr><td><code>workflows/*.json</code></td><td>Reusable workflow templates from high-scoring sessions</td><td>/replay --create</td></tr>
+          <tr><td><code>simplifications/*.json</code></td><td>Code simplification reports with per-suggestion status</td><td>/simplify</td></tr>
+          <tr><td><code>ci-heals/*.json</code></td><td>CI heal reports documenting diagnosis and fix attempts</td><td>/heal</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Git strategy for .vibeos/</h4>
+    <ul>
+      <li><strong>Solo developer:</strong> Commit everything &mdash; preserves session history across machines</li>
+      <li><strong>Teams:</strong> Commit <code>state.json</code>, <code>backlog.json</code>, and <code>scores/</code>. Gitignore <code>config.json</code> (terminal-specific)</li>
+      <li><strong>Sensitive projects:</strong> Add <code>.vibeos/</code> to <code>.gitignore</code> entirely</li>
+    </ul>
+
+    <h4>State schema migration</h4>
+    <p>When VibeOS is upgraded, <code>scripts/migrate-state.sh</code> automatically detects the current schema version and applies incremental migrations (1.0.0 &rarr; 1.1.0 &rarr; 1.2.0 &rarr; 1.3.0). New fields are added with sensible defaults. No manual migration is needed.</p>
+  </section>
+
+  <hr>
+
+  <section class="section" id="dashboard">
+    <span class="section-label">Dashboard</span>
+    <h2>VitePress Documentation Dashboard</h2>
+    <p>VibeOS generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 5 interactive Vue dashboard components that visualize cross-session data from <code>.vibeos/</code>.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#9650;</div>
+        <h4>ScoreTrend.vue</h4>
+        <p>SVG line chart showing Vibe Score over the last 20 sessions with a trend indicator and target line at 80. Powered by <code>scores.data.ts</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9632;</div>
+        <h4>TokenBreakdown.vue</h4>
+        <p>Stacked horizontal bars showing input, cache, and output tokens per session with cost overlay. Reveals cache utilization trends.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9675;</div>
+        <h4>CoverageGauge.vue</h4>
+        <p>SVG radial gauge displaying test coverage percentage with green/yellow/red color bands.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9776;</div>
+        <h4>FeatureProgress.vue</h4>
+        <p>Horizontal bars showing features by Kanban column (planned, in-progress, done) with velocity metric calculated from session history.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon red">&#9881;</div>
+        <h4>AgentActivityPanel.vue</h4>
+        <p>Agent invocation frequency bars and a session timeline with agent chips. Shows which agents are most active and their token consumption. Powered by <code>agents.data.ts</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#9654;</div>
+        <h4>KanbanBoard.vue</h4>
+        <p>Interactive kanban view of the feature backlog from <code>.vibeos/backlog.json</code>. Features move through columns as they progress through the Tier 2 cycle.</p>
+      </div>
+    </div>
+
+    <h3>Dashboard pages</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Page</th><th>Components</th><th>Data Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Trends</strong> (<code>trends.md</code>)</td><td>ScoreTrend, TokenBreakdown</td><td><code>scores.data.ts</code>, <code>sessions.data.ts</code></td></tr>
+          <tr><td><strong>Coverage</strong> (<code>coverage.md</code>)</td><td>CoverageGauge, FeatureProgress</td><td><code>sessions.data.ts</code>, <code>backlog.data.ts</code></td></tr>
+          <tr><td><strong>Stats</strong> (<code>stats.md</code>)</td><td>StatsPage (composite)</td><td><code>sessions.data.ts</code></td></tr>
+          <tr><td><strong>Kanban</strong> (<code>kanban.md</code>)</td><td>KanbanBoard</td><td><code>backlog.data.ts</code></td></tr>
+          <tr><td><strong>Welcome</strong> (<code>system/welcome.md</code>)</td><td>Guided first-session flow</td><td>&mdash;</td></tr>
+          <tr><td><strong>Commands</strong> (<code>system/commands.md</code>)</td><td>Full slash command reference</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The <code>scripts/update-docs.sh</code> script copies live session data into the <code>docs-site/</code> directory for static builds. The Doc Generator agent (<code>/wrap</code>) updates the CHANGELOG, regenerates the VitePress sidebar via <code>rebuild-sidebar.sh</code>, and produces feature documentation from backlog specs.</p>
+
+    <div class="callout tip">
+      <div class="callout-title">Dashboard as a team tool</div>
+      <p>Deploy the docs site to your internal infrastructure. The score trend chart and agent activity panel are especially valuable for team retrospectives &mdash; they reveal patterns that individual developers might miss.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="troubleshooting">
+    <span class="section-label">Help</span>
+    <h2>Troubleshooting</h2>
+
+    <h3>Stale locks or corrupted state</h3>
+    <ol>
+      <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li>
+      <li>This resets any in-progress tasks that were interrupted by a crashed session</li>
+    </ol>
+
+    <h3>Git conflicts in .vibeos/</h3>
+    <ul>
+      <li><code>state.json</code>: Resolve by keeping the most recent active feature</li>
+      <li><code>backlog.json</code>: Merge the feature arrays</li>
+      <li><code>scores/</code> and <code>sessions/</code>: Rarely conflict &mdash; they're timestamped per-developer</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p style="margin-top: 0.25rem;">A Claude Code plugin by SpeedKit &middot; February 2026</p>
+</footer>
+
+</body>
+</html>

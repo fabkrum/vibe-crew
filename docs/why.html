@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeOS — Why VibeOS</title>
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-border) transparent;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ---- NAV ---- */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-brand span {
+      color: var(--color-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-xs);
+      transition: all 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--color-text);
+      background: var(--color-surface-2);
+    }
+
+    .nav-links a.active {
+      color: var(--color-accent);
+      background: var(--color-accent-bg);
+    }
+
+    /* ---- MAIN ---- */
+    .main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 6rem 2rem 6rem;
+    }
+
+    /* ---- SECTIONS ---- */
+    .section {
+      margin-bottom: 5rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .section > p,
+    .section > ul,
+    .section > ol {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    li::marker {
+      color: var(--color-text-muted);
+    }
+
+    /* ---- CODE ---- */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--color-surface-2);
+      padding: 0.15em 0.45em;
+      border-radius: 4px;
+      color: var(--color-accent);
+      border: 1px solid var(--color-border-subtle);
+    }
+
+    pre {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: var(--color-text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .code-label {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      font-family: var(--font-sans);
+      font-weight: 600;
+    }
+
+    /* ---- CARDS ---- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--color-accent-dim);
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+
+    .card h4 {
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    /* ---- CALLOUT ---- */
+    .callout {
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid;
+      font-size: 0.92rem;
+    }
+
+    .callout p {
+      margin: 0;
+      color: inherit;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.info {
+      background: var(--color-blue-dim);
+      border-color: rgba(96, 165, 250, 0.2);
+      color: var(--color-blue);
+    }
+
+    .callout.tip {
+      background: var(--color-green-dim);
+      border-color: rgba(74, 222, 128, 0.2);
+      color: var(--color-green);
+    }
+
+    .callout.warn {
+      background: var(--color-amber-dim);
+      border-color: rgba(251, 191, 36, 0.2);
+      color: var(--color-amber);
+    }
+
+    .callout.danger {
+      background: var(--color-red-dim);
+      border-color: rgba(248, 113, 113, 0.2);
+      color: var(--color-red);
+    }
+
+    /* ---- FOOTER ---- */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ---- NAV BACK LINK ---- */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .back-link:hover {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .main { padding: 5rem 1.25rem 4rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.15rem; }
+      pre { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <ul class="nav-links">
+      <li><a href="why.html" class="active">Why VibeOS</a></li>
+      <li><a href="setup.html">Setup</a></li>
+      <li><a href="new-project.html">New Project</a></li>
+      <li><a href="existing-project.html">Existing Project</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="main">
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+  <section class="section" id="why">
+    <span class="section-label">The Problem</span>
+    <h2>Why VibeOS Exists</h2>
+    <p>AI-assisted development &mdash; "vibe coding" &mdash; has changed how software gets built. A single developer can now ship at the pace of a small team. But scaling this workflow reveals three critical problems that VibeOS was designed to eliminate.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon amber">&#9888;</div>
+        <h4>The Attention Bottleneck</h4>
+        <p>When you run 5&ndash;15 concurrent Claude Code sessions, finished or blocked agents wait silently. You manually poll tabs to find which session needs you, destroying your focus every time. Your most valuable resource &mdash; your attention &mdash; is wasted on hunting.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#9632;</div>
+        <h4>Token Waste &amp; Context Exhaustion</h4>
+        <p>Pasting docs into chat (+1,500 tokens), correcting vague prompts (+500 each), re-explaining context after /clear (+2,000). When the context window fills, you lose all accumulated understanding and start from zero.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9881;</div>
+        <h4>Code Without Architecture</h4>
+        <p>Jump straight into code and the AI picks the wrong state library, uses incompatible API patterns, and generates components that ignore your design system. You catch it three features in, when technical debt has compounded.</p>
+      </div>
+    </div>
+
+    <h3>How VibeOS Solves Each One</h3>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon green">&#8594;</div>
+        <h4>The Interrupt Protocol</h4>
+        <p>The terminal stays silent during normal work. When an agent needs you (permission blocked, task complete, critical error), it sends a native OS notification with a one-click deep link to the exact tab. You never poll again.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#8594;</div>
+        <h4>The Performance Coach</h4>
+        <p>Every session ends with a Vibe Score (0&ndash;100). The coach identifies token waste, proposes a concrete CLAUDE.md rule to prevent it, and &mdash; with your approval &mdash; permanently writes that rule. Each session is more efficient than the last.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#8594;</div>
+        <h4>The Two-Tier Workflow</h4>
+        <p>A phase gate blocks all source code writes until the project foundation is complete: vision, design system, tech stack decision, roadmap, and project rules. Architecture decisions are deliberate, not accidental.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">The Core Philosophy</div>
+      <p>Human attention is the bottleneck, not AI speed. VibeOS is designed to maximize your focus time by minimizing interruptions, enforcing architecture before code, and turning every session into a learning opportunity.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p style="margin-top: 0.25rem;">A Claude Code plugin by SpeedKit &middot; February 2026</p>
+</footer>
+
+</body>
+</html>

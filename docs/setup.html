@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeOS — Setup Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #0a0a0b;
+      --color-surface: #111113;
+      --color-surface-2: #18181b;
+      --color-surface-3: #1e1e22;
+      --color-border: #27272a;
+      --color-border-subtle: #1e1e22;
+      --color-text: #fafafa;
+      --color-text-secondary: #a1a1aa;
+      --color-text-muted: #71717a;
+      --color-accent: #a78bfa;
+      --color-accent-dim: #7c3aed;
+      --color-accent-bg: rgba(167, 139, 250, 0.08);
+      --color-green: #4ade80;
+      --color-green-dim: rgba(74, 222, 128, 0.1);
+      --color-amber: #fbbf24;
+      --color-amber-dim: rgba(251, 191, 36, 0.1);
+      --color-red: #f87171;
+      --color-red-dim: rgba(248, 113, 113, 0.1);
+      --color-blue: #60a5fa;
+      --color-blue-dim: rgba(96, 165, 250, 0.1);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-xs: 6px;
+      --max-width: 860px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
+    body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10, 10, 11, 0.82); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
+    .nav-brand span { color: var(--color-accent); }
+    .nav-links { display: flex; gap: 0.25rem; list-style: none; }
+    .nav-links a { color: var(--color-text-secondary); text-decoration: none; font-size: 0.85rem; padding: 0.4rem 0.75rem; border-radius: var(--radius-xs); transition: all 0.15s; }
+    .nav-links a:hover { color: var(--color-text); background: var(--color-surface-2); }
+    .nav-links a.active { color: var(--color-accent); background: var(--color-accent-bg); }
+    .main { max-width: var(--max-width); margin: 0 auto; padding: 6rem 2rem 6rem; }
+    .section { margin-bottom: 5rem; }
+    .section-label { display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: 0.75rem; }
+    h2 { font-size: 1.9rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1rem; }
+    h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.75rem; margin-top: 2.5rem; }
+    h4 { font-size: 1.05rem; font-weight: 650; margin-bottom: 0.5rem; margin-top: 2rem; }
+    .section > p, .section > ul, .section > ol { color: var(--color-text-secondary); margin-bottom: 1.25rem; }
+    p { margin-bottom: 1rem; color: var(--color-text-secondary); }
+    strong { color: var(--color-text); font-weight: 600; }
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul, ol { padding-left: 1.5rem; margin-bottom: 1.25rem; color: var(--color-text-secondary); }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--color-text-muted); }
+    code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-surface-2); padding: 0.15em 0.45em; border-radius: 4px; color: var(--color-accent); border: 1px solid var(--color-border-subtle); }
+    pre { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; position: relative; }
+    pre code { background: none; padding: 0; border: none; color: var(--color-text-secondary); font-size: 0.85rem; line-height: 1.7; }
+    .code-label { position: absolute; top: 0.5rem; right: 0.75rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); font-family: var(--font-sans); font-weight: 600; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
+    .card:hover { border-color: var(--color-accent-dim); }
+    .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1rem; }
+    .card-icon.purple { background: var(--color-accent-bg); }
+    .card-icon.green { background: var(--color-green-dim); }
+    .card-icon.amber { background: var(--color-amber-dim); }
+    .card-icon.blue { background: var(--color-blue-dim); }
+    .card-icon.red { background: var(--color-red-dim); }
+    .card h4 { font-size: 1rem; margin-top: 0; margin-bottom: 0.5rem; color: var(--color-text); }
+    .card p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0; }
+    .table-wrap { overflow-x: auto; margin-bottom: 1.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    thead { background: var(--color-surface-2); }
+    th { text-align: left; padding: 0.75rem 1rem; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); border-bottom: 1px solid var(--color-border); white-space: nowrap; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--color-surface); }
+    .callout { border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid; font-size: 0.92rem; }
+    .callout p { margin: 0; color: inherit; }
+    .callout-title { font-weight: 700; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
+    .callout.info { background: var(--color-blue-dim); border-color: rgba(96, 165, 250, 0.2); color: var(--color-blue); }
+    .callout.tip { background: var(--color-green-dim); border-color: rgba(74, 222, 128, 0.2); color: var(--color-green); }
+    .callout.warn { background: var(--color-amber-dim); border-color: rgba(251, 191, 36, 0.2); color: var(--color-amber); }
+    .callout.danger { background: var(--color-red-dim); border-color: rgba(248, 113, 113, 0.2); color: var(--color-red); }
+    .flow { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; color: var(--color-text-secondary); overflow-x: auto; white-space: pre; }
+    .flow .highlight { color: var(--color-accent); font-weight: 600; }
+    .flow .muted { color: var(--color-text-muted); }
+    .steps { counter-reset: step; list-style: none; padding-left: 0; }
+    .steps li { counter-increment: step; position: relative; padding-left: 3.5rem; margin-bottom: 2rem; min-height: 2.25rem; }
+    .steps li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 2.25rem; height: 2.25rem; background: var(--color-accent-bg); border: 1px solid rgba(167, 139, 250, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: var(--color-accent); }
+    .steps li h4 { margin-top: 0; margin-bottom: 0.25rem; }
+    .steps li p { font-size: 0.92rem; margin-bottom: 0.5rem; }
+    hr { border: none; border-top: 1px solid var(--color-border); margin: 4rem 0; }
+    .toc { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem; }
+    .toc h3 { margin-top: 0; margin-bottom: 1rem; font-size: 1rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .toc ol { padding-left: 1.25rem; margin-bottom: 0; }
+    .toc li { margin-bottom: 0.35rem; }
+    .toc a { color: var(--color-text-secondary); font-size: 0.92rem; transition: color 0.15s; }
+    .toc a:hover { color: var(--color-accent); text-decoration: none; }
+    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border-subtle); color: var(--color-text-muted); font-size: 0.85rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--color-text-muted); font-size: 0.85rem; margin-bottom: 2rem; text-decoration: none; transition: color 0.15s; }
+    .back-link:hover { color: var(--color-accent); text-decoration: none; }
+    @media (max-width: 768px) { .nav-links { display: none; } .main { padding: 5rem 1.25rem 4rem; } .card-grid { grid-template-columns: 1fr; } h2 { font-size: 1.5rem; } h3 { font-size: 1.15rem; } pre { padding: 1rem; } .steps li { padding-left: 3rem; } }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeOS</a>
+    <ul class="nav-links">
+      <li><a href="why.html">Why VibeOS</a></li>
+      <li><a href="setup.html" class="active">Setup</a></li>
+      <li><a href="new-project.html">New Project</a></li>
+      <li><a href="existing-project.html">Existing Project</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="architecture.html">Architecture</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="main">
+
+  <a href="index.html" class="back-link">&larr; Back to Home</a>
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#install">Installation from Scratch</a></li>
+      <li><a href="#warp">Configuring Warp Terminal</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <section class="section" id="install">
+    <span class="section-label">Getting Started</span>
+    <h2>Installation from Scratch</h2>
+    <p>A complete walkthrough from zero to a fully operational VibeOS environment.</p>
+
+    <h3>Prerequisites</h3>
+    <p>Verify these are installed before proceeding:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Requirement</th><th>Minimum Version</th><th>Check Command</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Claude Code</strong></td><td>2.0.0+</td><td><code>claude --version</code></td></tr>
+          <tr><td><strong>Git</strong></td><td>2.30+</td><td><code>git --version</code></td></tr>
+          <tr><td><strong>GitHub CLI</strong></td><td>2.0+</td><td><code>gh --version</code></td></tr>
+          <tr><td><strong>Node.js</strong></td><td>18+ (for JS/TS projects)</td><td><code>node --version</code></td></tr>
+          <tr><td><strong>jq</strong></td><td>1.6+</td><td><code>jq --version</code></td></tr>
+          <tr><td><strong>macOS</strong></td><td>13+ (for native notifications)</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Step-by-Step Installation</h3>
+
+    <ol class="steps">
+      <li>
+        <h4>Install system dependencies</h4>
+        <p>These are needed for notifications, JSON parsing in hooks, and PR automation.</p>
+        <pre><code><span class="code-label">bash</span>brew install terminal-notifier jq
+brew install gh &amp;&amp; gh auth login</code></pre>
+      </li>
+
+      <li>
+        <h4>Add the plugin to your project</h4>
+        <p>Copy or symlink the VibeOS plugin directory into your project root. Symlinking is recommended for teams so updates propagate automatically.</p>
+        <pre><code><span class="code-label">bash</span># Option A: Direct copy
+cp -r /path/to/claude-plugin-vibe-os/ ./claude-plugin-vibe-os/
+
+# Option B: Symlink (recommended for teams)
+ln -s /path/to/claude-plugin-vibe-os ./claude-plugin-vibe-os
+
+# Option C: Git submodule (best for version control)
+git submodule add &lt;repo-url&gt; claude-plugin-vibe-os</code></pre>
+      </li>
+
+      <li>
+        <h4>Verify plugin detection</h4>
+        <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeOS automatically.</p>
+        <pre><code><span class="code-label">bash</span>cd /path/to/your-project
+claude</code></pre>
+        <p>You should see the VibeOS session startup agent run on first launch.</p>
+      </li>
+
+      <li>
+        <h4>Run the setup wizard</h4>
+        <p>Inside Claude Code, run:</p>
+        <pre><code><span class="code-label">claude code</span>/setup</code></pre>
+        <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibeos/</code> runtime directory.</p>
+      </li>
+
+      <li>
+        <h4>Install MCP servers (optional but recommended)</h4>
+        <p><strong>Context7</strong> saves ~1,500 tokens per API lookup by fetching documentation on-demand instead of pasting it into chat. <strong>Puppeteer</strong> enables browser automation for research and visual testing. Both are configured in <code>mcp-servers.json</code>.</p>
+      </li>
+
+      <li>
+        <h4>Verify the full pipeline</h4>
+        <ul>
+          <li><strong>Notifications:</strong> Tested during setup wizard</li>
+          <li><strong>Session startup:</strong> Exit and restart Claude Code &mdash; the startup agent should show a 3-line status summary</li>
+          <li><strong>Phase gate:</strong> Try writing a source file before running <code>/new-project</code> &mdash; it should be blocked</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>Resulting Directory Structure</h3>
+    <pre><code><span class="code-label">tree</span>your-project/
+  claude-plugin-vibe-os/          # The plugin (don't modify)
+    .claude-plugin/
+      plugin.json                 # Plugin manifest
+    .mcp.json                     # Context7 + Puppeteer MCP config
+    settings.json                 # Permission rules (allowed + denied tools)
+    hooks/
+      hooks.json                  # Event hook bindings
+    scripts/                      # ~53 bash automation scripts
+    agents/                       # 12 specialized AI agent prompts
+    skills/                       # 17 slash command definitions
+    templates/                    # Project templates and doc-site scaffold
+
+  .vibeos/                        # Per-project runtime state
+    config.json                   # Terminal preference, notification settings
+    state.json                    # Foundation status + active feature
+    backlog.json                  # Feature backlog with specs
+    sessions/                     # Session logs (JSON)
+    scores/                       # Vibe Score breakdowns (JSON)
+    releases/                     # Release notes data (JSON)
+    handoffs/                     # Cross-session handoff documents
+    workflows/                    # Reusable workflow templates (/replay)
+    simplifications/              # Code simplification reports (/simplify)
+    ci-heals/                     # CI heal reports (/heal)
+    mutation-log.json             # CLAUDE.md mutation audit log</code></pre>
+  </section>
+
+  <hr>
+
+  <section class="section" id="warp">
+    <span class="section-label">Terminal Setup</span>
+    <h2>Configuring Warp Terminal</h2>
+    <p>Warp provides the best VibeOS experience thanks to its deep-link support. When a notification fires, you click it and land on the <em>exact tab</em> that needs your attention &mdash; no hunting through 15 open sessions.</p>
+
+    <h3>Why Warp Is Recommended</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Terminal</th><th>Notification Method</th><th>Tab Deep-Link</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Warp</strong></td><td>OSC 777 + macOS banner</td><td>Yes &mdash; click goes to exact tab</td></tr>
+          <tr><td>iTerm2</td><td>OSC 9 + macOS banner</td><td>No</td></tr>
+          <tr><td>VS Code Terminal</td><td>macOS banner</td><td>No</td></tr>
+          <tr><td>Terminal.app</td><td>macOS banner</td><td>No</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How Deep-Linking Works</h3>
+    <p>Warp exposes a <code>WARP_SESSION_ID</code> environment variable for each terminal tab. VibeOS captures this value and constructs a <code>warp://session/&lt;id&gt;</code> URI. When the <code>notify.sh</code> script fires a notification, it passes this URI to <code>terminal-notifier</code>'s <code>-execute</code> flag. Clicking the macOS banner executes the deep link, which brings Warp to the foreground and switches to the exact tab.</p>
+
+    <div class="flow"><span class="muted">Agent blocks on permission</span>
+    &darr;
+<span class="highlight">notify.sh</span> reads JSON from stdin, extracts notification_type
+    &darr;
+Captures <span class="highlight">$WARP_SESSION_ID</span> from environment
+    &darr;
+Constructs deep link: <span class="highlight">warp://session/$SESSION_ID</span>
+    &darr;
+Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '$DEEP_LINK'"
+    &darr;
+<span class="muted">You click the notification &rarr; Warp focuses the exact tab</span></div>
+
+    <h3>Setup Steps for Warp</h3>
+    <ol class="steps">
+      <li>
+        <h4>Install Warp</h4>
+        <p>Download from <strong>warp.dev</strong> and complete the initial setup. Warp runs on macOS and Linux.</p>
+      </li>
+      <li>
+        <h4>Enable desktop notifications in Warp</h4>
+        <p>Open Warp Settings &rarr; Features &rarr; ensure <strong>Desktop Notifications</strong> is enabled.</p>
+      </li>
+      <li>
+        <h4>Verify WARP_SESSION_ID</h4>
+        <p>In any Warp tab, run:</p>
+        <pre><code><span class="code-label">bash</span>echo $WARP_SESSION_ID</code></pre>
+        <p>This should return a UUID. If it's empty, update Warp to the latest version.</p>
+      </li>
+      <li>
+        <h4>Allow macOS notifications</h4>
+        <p>Go to <strong>System Settings &rarr; Notifications &rarr; terminal-notifier</strong> and ensure "Allow Notifications" is on. Set the alert style to <strong>Banners</strong> or <strong>Alerts</strong>.</p>
+      </li>
+      <li>
+        <h4>Select Warp during /setup</h4>
+        <p>When the VibeOS setup wizard asks "Which terminal do you use?", select <strong>Warp</strong>. This is stored in <code>.vibeos/config.json</code> and determines how notifications are dispatched.</p>
+      </li>
+      <li>
+        <h4>Test the full loop</h4>
+        <p>The setup wizard sends a test notification. Click it &mdash; you should be taken back to the exact Warp tab where Claude Code is running.</p>
+      </li>
+    </ol>
+
+    <div class="callout info">
+      <div class="callout-title">Using a different terminal?</div>
+      <p>VibeOS works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="section" id="troubleshooting">
+    <span class="section-label">Help</span>
+    <h2>Troubleshooting</h2>
+
+    <h3>Notifications don't appear</h3>
+    <ol>
+      <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li>
+      <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li>
+      <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li>
+      <li>Check VibeOS config: verify <code>.vibeos/config.json</code> has <code>"notifications": true</code></li>
+      <li>Warp deep-links not working: run <code>echo $WARP_SESSION_ID</code> &mdash; should return a UUID</li>
+    </ol>
+
+    <h3>MCP servers not available</h3>
+    <ol>
+      <li><strong>Context7:</strong> Verify it's configured in your Claude Code settings. Try a test query</li>
+      <li><strong>Puppeteer:</strong> Ensure the Puppeteer MCP server is running and configured</li>
+      <li>Both are optional. VibeOS works without them &mdash; you just miss the token efficiency benefits</li>
+    </ol>
+
+    <h3>Stale locks or corrupted state</h3>
+    <ol>
+      <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li>
+      <li>This resets any in-progress tasks that were interrupted by a crashed session</li>
+    </ol>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <p><strong>VibeOS</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
+  <p style="margin-top: 0.25rem;">A Claude Code plugin by SpeedKit &middot; February 2026</p>
+</footer>
+
+</body>
+</html>

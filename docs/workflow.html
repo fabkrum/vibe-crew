@@ -1710,6 +1710,65 @@ claude
 
   <hr>
 
+  <section class="section" id="system-review">
+    <span class="section-label">Meta</span>
+    <h2>System Review &amp; Cross-Project Telemetry</h2>
+    <p>The <code>/system-review</code> command is a meta-level audit that evaluates the VibeCrew plugin itself. Unlike other commands, it operates at the plugin level and should be run from the VibeCrew repository &mdash; not from a user project.</p>
+
+    <h3>Cross-Project Telemetry Flow</h3>
+    <div class="flow">
+<span class="muted">Project A (.vibecrew/)</span>  ──┐
+<span class="muted">Project B (.vibecrew/)</span>  ──┼── <span class="highlight">collect-telemetry.sh</span> ──▶ telemetry/aggregate.json
+<span class="muted">Project C (.vibecrew/)</span>  ──┘                              │
+                                                        ▼
+                           <span class="highlight">/system-review</span> (from VibeCrew repo)
+                              │
+                              ├── Internal audit (plugin files)
+                              ├── Telemetry analysis (cross-project)
+                              ├── External research (WebSearch)
+                              │
+                              ▼
+                      reviews/system-review-{timestamp}.md
+                      reviews/system-review-{timestamp}.json</div>
+
+    <h3>What Gets Analyzed</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">1</div>
+        <h4>Internal Audit</h4>
+        <p>Model routing, context budgets, pattern consistency, unreferenced components</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">2</div>
+        <h4>Telemetry Analysis</h4>
+        <p>Usage patterns, quality trends, cost analysis, systemic friction across projects</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">3</div>
+        <h4>External Research</h4>
+        <p>Anthropic updates, new MCP servers, community patterns, competitor analysis</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">4</div>
+        <h4>Proposals</h4>
+        <p>Prioritized improvements with effort estimates and implementation sketches</p>
+      </div>
+    </div>
+
+    <h3>Running a System Review</h3>
+    <ol class="steps">
+      <li><strong>Navigate to the VibeCrew repo</strong> &mdash; <code>/system-review</code> operates at the plugin level, not from user projects.</li>
+      <li><strong>Run <code>/system-review</code></strong> &mdash; the skill collects plugin stats, aggregates telemetry from all registered projects, and launches the System Reviewer agent.</li>
+      <li><strong>Review the output</strong> &mdash; the terminal displays a summary with finding counts and top 5 proposals. The full report is saved as markdown and JSON.</li>
+      <li><strong>Compare with previous reviews</strong> &mdash; if a previous review exists, new/recurring/resolved findings are automatically identified.</li>
+    </ol>
+
+    <h3>Privacy &amp; Anonymization</h3>
+    <p>All telemetry is strictly local. Projects are identified by anonymous aliases (project-001, etc.). No project names, file paths, code, or credentials are ever included in telemetry data or review reports.</p>
+  </section>
+
+  <hr>
+
   <section class="section" id="troubleshooting">
     <span class="section-label">Help</span>
     <h2>Troubleshooting</h2>

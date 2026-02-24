@@ -15,8 +15,8 @@ claude-plugin-vibe-crew/          # The plugin — install this into your projec
   settings.json                 # Permission rules
   hooks/hooks.json              # Event hook bindings
   scripts/                      # ~67 bash automation scripts
-  agents/                       # 13 specialized AI agent prompts
-  skills/                       # 25 slash command definitions
+  agents/                       # 14 specialized AI agent prompts
+  skills/                       # 26 slash command definitions
   templates/                    # Project templates and doc-site scaffold
 
 architecture/                   # Architecture design docs (contributor reference)
@@ -31,7 +31,7 @@ CLAUDE.md                       # This file
 - **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css, TDR (Technology Decision Record), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook.
 - **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`.
 
-### Agent Topology (13 agents)
+### Agent Topology (14 agents)
 
 Opus agents handle planning, research, code, security, and analysis — tasks where mistakes are expensive to fix later. Haiku agents handle fast, mechanical tasks (routing, running shell commands). Sonnet handles template-driven output like documentation.
 
@@ -50,6 +50,7 @@ Opus agents handle planning, research, code, security, and analysis — tasks wh
 | CI Healer | Opus | Inline | CI failure diagnosis and repair (max 3 attempts) |
 | Opponent Processor | Opus | Worktree | Devil's advocate for TDR decisions, debate matrices, risk assessments |
 | Code Reviewer | Opus | Worktree | Read-only code review against feature spec, TDR compliance, conventions |
+| System Reviewer | Opus | Worktree | Read-only plugin meta-analysis, cross-project telemetry, ecosystem research |
 
 ### Hook System (zero-token enforcement via bash scripts)
 
@@ -87,9 +88,13 @@ When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
   workflows/                    # Reusable workflow templates (/replay)
 ```
 
+### Cross-Project Telemetry
+
+Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymized performance data (Vibe Scores, agent usage, cost metrics, MCP adoption) is aggregated for the `/system-review` command. Project paths and names are replaced with anonymous aliases (project-001, etc.). Telemetry data lives at `${CLAUDE_PLUGIN_ROOT}/telemetry/aggregate.json` and the project registry at `${CLAUDE_PLUGIN_ROOT}/project-registry.json`.
+
 ### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`
 
 ## Design Principles
 

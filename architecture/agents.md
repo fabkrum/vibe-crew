@@ -19,6 +19,7 @@
 7. [Verifier Agent](#7-verifier-agent)
 8. [Agent Interaction Map](#8-agent-interaction-map)
 9. [Design Decisions](#9-design-decisions)
+10. [System Reviewer Agent](#10-system-reviewer-agent)
 
 ---
 
@@ -31,6 +32,7 @@
 | 3 | Stack Scout | Opus | Delegated by Orchestrator for research | <45% | Worktree | 50 |
 | 4 | Builder | Opus | Delegated for design and code phases | <45% | Worktree | 100 |
 | 5 | Verifier | Haiku | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | 60 |
+| 14 | System Reviewer | Opus | `/system-review` command | <40% | Worktree | 50 |
 
 ### Agents Deferred to v1.1
 
@@ -52,6 +54,7 @@
 | Verifier | x | x | x | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |
 | Security Auditor | x | - | - | x | x | x | - | - | - | - | - | x | - | - | - | - | - | - |
 | CI Healer | x | x | x | x | x | x | - | - | - | - | - | - | x | - | - | - | - | - |
+| System Reviewer | x | - | - | x | x | x | x | x | x | - | - | - | - | - | - | - | - | - |
 
 Note: Conditional MCP servers (Supabase, Stripe, Vercel, Figma, Sentry, Semgrep) only expose tools when enabled. Agents list these tools in frontmatter regardless — they activate when the server is enabled.
 
@@ -1099,3 +1102,82 @@ The verification loop is the most important addition in the v1.0 revision, based
 4. **Verification is cheap.** Running `npm run build` costs shell execution time but zero model tokens (it is a Bash tool call). The verification overhead is negligible compared to the cost of unverified output propagating through the system.
 
 5. **Fix before escalate.** Agents attempt self-repair before escalating. The Builder reads the build error, identifies the fix, and retries. Only after exhausting self-repair does it escalate. This is the verify-fix loop pattern.
+
+---
+
+## 10. System Reviewer Agent
+
+### 10.1 Purpose
+
+The System Reviewer is a meta-analysis agent that audits the VibeCrew plugin itself rather than user projects. It analyzes plugin internals, cross-project telemetry data, and the external Claude Code ecosystem to produce structured improvement proposals. It is the only agent that operates at the plugin level rather than the project level.
+
+### 10.2 Specification
+
+| Property | Value |
+|----------|-------|
+| **Model** | Opus |
+| **Isolation** | Worktree |
+| **maxTurns** | 50 |
+| **Context Budget** | <40% |
+| **Trigger** | `/system-review` command (run from VibeCrew repo) |
+| **Read-only** | Yes — cannot Write, Edit, or create tasks |
+
+### 10.3 Tools
+
+**Allowed:** Read, Bash, Glob, Grep, WebSearch, WebFetch, mcp\_\_context7\_\_resolve-library-id, mcp\_\_context7\_\_get-library-docs
+
+**Disallowed:** Write, Edit, TeamCreate, TaskCreate, SendMessage
+
+### 10.4 Ten-Step Methodology
+
+The agent executes a structured 10-step analysis divided into three parts:
+
+**Part 1 — Internal Audit (Steps 1-5, ~15% context):**
+
+1. **Plugin Inventory** — Run `collect-plugin-stats.sh`, establish baseline counts
+2. **Model Routing Audit** — Read all agent frontmatter, evaluate Opus/Sonnet/Haiku assignments, estimate cost savings
+3. **Context Budget Audit** — Check Budget/Escalation/Verification sections, flag misaligned maxTurns
+4. **Pattern Consistency Audit** — Scan for structural deviations across agents, skills, and scripts
+5. **Component Usage Audit** — Find unreferenced scripts, templates, and MCP servers
+
+**Part 2 — Telemetry Analysis (Step 6, ~5% context):**
+
+6. **Cross-Project Telemetry** — Read `telemetry/aggregate.json`, identify unused skills/agents, common deductions, cost outliers, MCP adoption gaps, recurring mutation patterns
+
+**Part 3 — External Research (Steps 7-10, ~20% context):**
+
+7. **Anthropic Documentation** — Search for new Claude Code features, model updates, best practices
+8. **MCP Ecosystem** — Search for new MCP servers, cross-reference against registry
+9. **Community & Competitor Patterns** — Research Cursor rules, Windsurf cascades, Aider conventions
+10. **Innovation Brainstorm** — Synthesize all findings into forward-looking ideas
+
+### 10.5 Output
+
+The agent returns a single markdown report with five parts:
+
+- **Executive Summary** (5-10 lines)
+- **Part 1: Internal Audit** (5 subsections with tables)
+- **Part 2: Cross-Project Insights** (telemetry analysis with anonymous aliases)
+- **Part 3: External Research** (Anthropic, MCP, community, competitors)
+- **Part 4: Innovation Ideas** (value/effort matrix)
+- **Part 5: Prioritized Proposals** (top 10 with implementation sketches)
+- **Appendix: Research Sources** (all queries and URLs)
+
+### 10.6 Verification Loop
+
+1. All sections present (no empty sections without "No findings" note)
+2. Internal findings cite specific file paths
+3. Telemetry findings reference anonymous project aliases only
+4. External findings include source URLs
+5. Every proposal has priority, effort estimate, and implementation sketch
+6. No duplicate findings vs previous review (if provided)
+
+### 10.7 Key Differences from Other Agents
+
+| Aspect | Other Agents | System Reviewer |
+|--------|-------------|-----------------|
+| **Scope** | User project | VibeCrew plugin itself |
+| **Pre-flight** | Checks `.vibecrew/state.json` | Checks `plugin.json` |
+| **Data sources** | Project files | Plugin files + telemetry + web |
+| **Output** | Project artifacts | Review report (JSON + markdown) |
+| **Frequency** | Per-session/feature | Periodic (manual invocation) |

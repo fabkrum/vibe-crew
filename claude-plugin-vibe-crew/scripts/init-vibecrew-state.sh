@@ -226,6 +226,24 @@ else
   echo "Created: .gitignore with VibeCrew entries"
 fi
 
+# --- Register with central VibeCrew telemetry ---
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-}"
+if [[ -n "$PLUGIN_ROOT" ]] && [[ -f "$PLUGIN_ROOT/.claude-plugin/plugin.json" ]]; then
+  REGISTRY="$PLUGIN_ROOT/project-registry.json"
+  if [[ ! -f "$REGISTRY" ]]; then
+    echo '{"schema_version":"1.0.0","projects":[]}' > "$REGISTRY"
+  fi
+  # Only register if this project path isn't already registered
+  if ! jq -e --arg p "$PROJECT_ROOT" '.projects[] | select(.path == $p)' "$REGISTRY" >/dev/null 2>&1; then
+    NEXT_ID=$(jq '.projects | length + 1' "$REGISTRY")
+    ALIAS="project-$(printf '%03d' "$NEXT_ID")"
+    jq --arg p "$PROJECT_ROOT" --arg t "$TIMESTAMP" --arg a "$ALIAS" \
+      '.projects += [{"path": $p, "registered_at": $t, "alias": $a}]' \
+      "$REGISTRY" > "$REGISTRY.tmp" && mv "$REGISTRY.tmp" "$REGISTRY"
+    echo "Registered with VibeCrew telemetry as $ALIAS"
+  fi
+fi
+
 echo ""
 echo "VibeCrew state initialized in $VIBECREW_DIR"
 echo "  config.json        -- User preferences (schema v1.0.0)"

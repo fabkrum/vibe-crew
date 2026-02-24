@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "review_id": "SYS-REVIEW-{DATE}-{SEQ}",
+  "created_at": "{TIMESTAMP}",
+  "plugin_version": "{PLUGIN_VERSION}",
+  "telemetry_summary": {
+    "project_count": 0,
+    "total_sessions": 0,
+    "avg_vibe_score": 0
+  },
+  "findings": [
+    {
+      "id": "{FINDING_ID}",
+      "category": "model-routing|context-budget|pattern-consistency|component-usage|telemetry|anthropic-update|mcp-ecosystem|community-pattern|innovation",
+      "severity": "info|low|medium|high",
+      "title": "{FINDING_TITLE}",
+      "description": "{FINDING_DESCRIPTION}",
+      "affected_files": [],
+      "evidence": "{EVIDENCE}",
+      "source_url": null
+    }
+  ],
+  "proposals": [
+    {
+      "id": "{PROPOSAL_ID}",
+      "priority": "P1|P2|P3|P4",
+      "category": "optimization|new-feature|deprecation|upgrade|security",
+      "title": "{PROPOSAL_TITLE}",
+      "description": "{PROPOSAL_DESCRIPTION}",
+      "effort_estimate": "{EFFORT}",
+      "expected_impact": "{IMPACT}",
+      "implementation_sketch": "{SKETCH}",
+      "related_findings": []
+    }
+  ],
+  "diff_vs_previous": {
+    "new_findings": 0,
+    "recurring_findings": 0,
+    "resolved_findings": 0
+  },
+  "research_sources": [
+    {
+      "query": "{SEARCH_QUERY}",
+      "url": "{URL}",
+      "retrieved_at": "{TIMESTAMP}"
+    }
+  ]
+}

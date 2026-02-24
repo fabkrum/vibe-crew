@@ -33,7 +33,7 @@ The plugin is self-contained. All internal path references use the `${CLAUDE_PLU
 claude-plugin-vibe-crew/                      # Plugin root
   .claude-plugin/
     plugin.json                             # Plugin manifest (entry point)
-  agents/                                   # 13 specialized sub-agent definitions
+  agents/                                   # 14 specialized sub-agent definitions
     session-startup.md                      #   Haiku  -- environment check, routing
     workflow-orchestrator.md                 #   Opus   -- tier routing, Agent Teams coordination
     stack-scout.md                          #   Opus   -- read-only research, TDR output
@@ -46,7 +46,8 @@ claude-plugin-vibe-crew/                      # Plugin root
     code-simplifier.md                      #   Opus   -- complexity reduction, refactoring
     ci-healer.md                            #   Opus   -- CI/CD failure diagnosis and repair
     opponent-processor.md                   #   Opus   -- adversarial review, edge case discovery
-  skills/                                   # 25 slash commands (SKILL.md per command)
+    system-reviewer.md                      #   Opus   -- plugin meta-analysis, telemetry, ecosystem research
+  skills/                                   # 26 slash commands (SKILL.md per command)
     setup/
       SKILL.md                              #   /setup -- first-run installation wizard
     new-project/
@@ -65,6 +66,8 @@ claude-plugin-vibe-crew/                      # Plugin root
       SKILL.md                              #   /check -- run tests, build, lint
     wrap/
       SKILL.md                              #   /wrap -- session end with coaching
+    system-review/
+      SKILL.md                              #   /system-review -- plugin meta-analysis
   hooks/
     hooks.json                              # Event-to-script routing table
   scripts/                                  # ~67 bash automation scripts
@@ -78,6 +81,15 @@ claude-plugin-vibe-crew/                      # Plugin root
     check-context.sh                        #   Stop: context usage warnings (60%/80%/90%)
   settings.json                             # Default permission rules (allow/deny lists)
   .mcp.json                                 # MCP server definitions (10 servers, 3 enabled by default)
+  templates/
+    project-registry.json.template          #   Empty project registry template
+    system-review-report.json.template      #   System review report schema template
+  telemetry/                                # Cross-project aggregated telemetry
+    aggregate.json                          #   Anonymized performance data from all registered projects
+  reviews/                                  # System review reports
+    system-review-{timestamp}.md            #   Markdown review reports
+    system-review-{timestamp}.json          #   Structured JSON review reports
+  project-registry.json                     # Registered project paths + anonymous aliases
   LICENSE
   CHANGELOG.md
 
@@ -182,11 +194,11 @@ This is critical because marketplace-installed plugins are cached to `~/.claude/
 
 ## 2. Agent Topology
 
-### 2.1 The Thirteen Agents
+### 2.1 The Fourteen Agents
 
-VibeCrew operates through thirteen specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
+VibeCrew operates through fourteen specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
 
-The topology expands the original 9-agent design to 13 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding specialized agents for code quality, security, simplification, CI healing, adversarial review, and code review.
+The topology expands the original 9-agent design to 14 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding specialized agents for code quality, security, simplification, CI healing, adversarial review, code review, and plugin-level meta-analysis.
 
 ```
 +------------------------------------------------------------------+
@@ -995,7 +1007,7 @@ The Vibe Score deducts 15 points when cache utilization drops below 20%, incenti
 
 ### 6.1 Overview
 
-VibeCrew exposes 25 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
+VibeCrew exposes 26 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
 
 All VibeCrew commands use `disable-model-invocation: true` to prevent Claude from auto-loading them. They are user-triggered workflows, not background capabilities. Two commands (`/status` and `/check`) also allow model invocation for internal use by the Orchestrator.
 
@@ -1041,6 +1053,9 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 |  /cost           Token usage and cost breakdown                   |
 |  /achievements   View badges, level, streaks, skill tree          |
 |  /quiz           Test your VibeCrew knowledge                     |
+|                                                                   |
+|  META                                                              |
+|  /system-review  Plugin self-audit, telemetry, ecosystem research |
 |                                                                   |
 +-------------------------------------------------------------------+
 ```

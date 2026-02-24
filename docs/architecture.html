@@ -876,8 +876,8 @@
   settings.json                 # Permission rules (66 allowed, 22 denied)
   hooks/hooks.json              # Event-to-script routing table
   scripts/                      # ~67 bash automation scripts
-  agents/                       # 13 specialized agent prompts
-  skills/                       # 25 slash command definitions
+  agents/                       # 14 specialized agent prompts
+  skills/                       # 26 slash command definitions
   templates/                    # Badge catalog, challenge pool, quizzes, docs-site</code></pre>
 
     <!-- AGENTS -->
@@ -885,7 +885,7 @@
 
     <div class="callout tip">
       <div class="callout-title">What are agents?</div>
-      <p>Think of agents as <strong>specialist team members</strong>, each with a specific job. Instead of one AI doing everything, VibeCrew splits work across 13 agents &mdash; just like a real development team has designers, builders, testers, and reviewers. Each agent is an AI "personality" optimized for one task. The Builder writes code. The Verifier runs tests. The Security Auditor checks for vulnerabilities. You never interact with agents directly &mdash; VibeCrew picks the right one for each job automatically.</p>
+      <p>Think of agents as <strong>specialist team members</strong>, each with a specific job. Instead of one AI doing everything, VibeCrew splits work across 14 agents &mdash; just like a real development team has designers, builders, testers, and reviewers. Each agent is an AI "personality" optimized for one task. The Builder writes code. The Verifier runs tests. The Security Auditor checks for vulnerabilities. You never interact with agents directly &mdash; VibeCrew picks the right one for each job automatically.</p>
       <p style="margin-top: 0.5rem;"><strong>Inline vs. Worktree:</strong> Some agents work directly in your project folder ("inline") &mdash; like a colleague sitting at your desk. Others work in a <strong>worktree</strong>, which is an isolated copy of your project files. Think of it as giving that specialist their own private office with a photocopy of all your documents. They can read, analyze, and write without affecting your real files. When they're done, only the finished result comes back to you. This isolation also saves your AI "memory" (context window) &mdash; all of their research stays in their office, not yours.</p>
     </div>
 
@@ -987,6 +987,13 @@
             <td>Worktree</td>
             <td>Read-only code review against feature spec, TDR compliance, conventions, security, performance</td>
             <td>/review, /run-backlog</td>
+          </tr>
+          <tr>
+            <td><strong>System Reviewer</strong></td>
+            <td><span class="badge" style="background:var(--color-red-dim);color:var(--color-red)">Opus</span></td>
+            <td>Worktree</td>
+            <td>Read-only plugin meta-analysis — audits internals, analyzes cross-project telemetry, researches ecosystem</td>
+            <td>/system-review (from VibeCrew repo)</td>
           </tr>
         </tbody>
       </table>
@@ -2048,6 +2055,33 @@ Checks against thresholds:
       <div class="callout-title">Dashboard as a team tool</div>
       <p>Deploy the docs site to your internal infrastructure. The score trend chart and agent activity panel are especially valuable for team retrospectives &mdash; they reveal patterns that individual developers might miss.</p>
     </div>
+  </section>
+
+  <section class="section" id="telemetry">
+    <span class="section-label">Meta</span>
+    <h2>Cross-Project Telemetry</h2>
+    <p>VibeCrew includes a cross-project telemetry system for self-improvement. Projects automatically register with the central plugin during <code>/setup</code>, contributing anonymized performance data.</p>
+
+    <h3>How It Works</h3>
+    <ol class="steps">
+      <li><strong>Auto-Registration</strong> &mdash; During <code>/setup</code>, each project registers with the central VibeCrew plugin. An anonymous alias (project-001, project-002, etc.) replaces the real project path.</li>
+      <li><strong>Data Collection</strong> &mdash; The <code>collect-telemetry.sh</code> script reads <code>.vibecrew/</code> data from all registered projects: Vibe Scores, agent usage, session costs, MCP adoption, test metrics, and mutation patterns.</li>
+      <li><strong>Aggregation</strong> &mdash; Anonymized data is aggregated into <code>telemetry/aggregate.json</code> at the plugin root.</li>
+      <li><strong>Analysis</strong> &mdash; The System Reviewer agent (via <code>/system-review</code>) analyzes the aggregate to identify cross-project patterns, unused components, and systemic friction.</li>
+    </ol>
+
+    <h3>Privacy</h3>
+    <p>Telemetry is strictly local &mdash; no data leaves your machine. Project names, file paths, code, and credentials are never included. Only aggregate performance metrics are collected, keyed by anonymous aliases.</p>
+
+    <h3>The <code>/system-review</code> Command</h3>
+    <p>Run from the VibeCrew repository to trigger a comprehensive plugin audit:</p>
+    <ul>
+      <li><strong>Internal audit</strong> &mdash; model routing, context budgets, pattern consistency, unused components</li>
+      <li><strong>Telemetry analysis</strong> &mdash; usage patterns, quality trends, cost analysis, systemic issues</li>
+      <li><strong>External research</strong> &mdash; Anthropic updates, new MCP servers, community patterns</li>
+      <li><strong>Proposals</strong> &mdash; prioritized improvement recommendations with effort estimates</li>
+    </ul>
+    <p>Reports are saved to <code>reviews/</code> in both markdown and JSON format.</p>
   </section>
 
   <hr>

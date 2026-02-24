@@ -15,8 +15,9 @@
 3. [Workflow 3: Feature Lifecycle](#3-workflow-3-feature-lifecycle)
 4. [Workflow 4: Session Lifecycle](#4-workflow-4-session-lifecycle)
 5. [Workflow 5: Parallel Work Coordination](#5-workflow-5-parallel-work-coordination)
-6. [State Transition Reference](#6-state-transition-reference)
-7. [Error Recovery Across Workflows](#7-error-recovery-across-workflows)
+6. [Workflow 6: System Review](#6-workflow-6-system-review)
+7. [State Transition Reference](#7-state-transition-reference)
+8. [Error Recovery Across Workflows](#8-error-recovery-across-workflows)
 
 ---
 
@@ -1490,7 +1491,116 @@ The `config.json` `concurrency.max_parallel_agents` setting (default: 3) limits 
 
 ---
 
-## 6. State Transition Reference
+## 6. Workflow 6: System Review
+
+### 6.1 Overview
+
+The System Review workflow is a meta-level audit that evaluates the VibeCrew plugin itself rather than user projects. It collects anonymized telemetry from all registered projects, audits plugin internals, researches the external ecosystem, and produces prioritized improvement proposals.
+
+**Key difference from other workflows:** This workflow operates at the plugin level and does NOT require `.vibecrew/state.json`. It requires `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`.
+
+### 6.2 Trigger
+
+User runs `/system-review` from the VibeCrew repository (not from a user project).
+
+### 6.3 Data Flow
+
+```
++----------------------------------------------------------------+
+|                    SYSTEM REVIEW DATA FLOW                       |
++----------------------------------------------------------------+
+|                                                                 |
+|  REGISTERED PROJECTS                                            |
+|  Project A (.vibecrew/) ──┐                                     |
+|  Project B (.vibecrew/) ──┼── collect-telemetry.sh              |
+|  Project C (.vibecrew/) ──┘        │                            |
+|                                    ▼                            |
+|                        telemetry/aggregate.json                 |
+|                                    │                            |
+|  PLUGIN FILES                      │                            |
+|  agents/*.md ──────────┐           │                            |
+|  skills/*/SKILL.md ────┤           │                            |
+|  scripts/*.sh ─────────┤           │                            |
+|  hooks/hooks.json ─────┤           │                            |
+|  .mcp.json ────────────┘           │                            |
+|         │                          │                            |
+|         ▼                          ▼                            |
+|  collect-plugin-stats.sh    System Reviewer Agent               |
+|         │                   (Opus, worktree, read-only)         |
+|         └──────────────────────────┤                            |
+|                                    │                            |
+|  EXTERNAL SOURCES                  │                            |
+|  Anthropic docs ───────┐           │                            |
+|  MCP ecosystem ────────┤           │                            |
+|  Community patterns ───┘           │                            |
+|                                    ▼                            |
+|                        reviews/system-review-{ts}.md            |
+|                        reviews/system-review-{ts}.json          |
+|                                    │                            |
+|                                    ▼                            |
+|                      diff-review-findings.sh                    |
+|                      (compare vs previous review)               |
+|                                                                 |
++----------------------------------------------------------------+
+```
+
+### 6.4 Step-by-Step Sequence
+
+| Step | Actor | Action | Output |
+|------|-------|--------|--------|
+| 1 | Skill | Pre-flight: verify plugin manifest | Plugin version |
+| 2 | Skill | Check for previous reviews | Previous review JSON (if any) |
+| 3 | Skill | Run `collect-plugin-stats.sh` | Plugin inventory JSON |
+| 4 | Skill | Run `collect-telemetry.sh` | Aggregated telemetry JSON |
+| 5 | Skill | Launch System Reviewer agent (worktree) | Markdown report |
+| 6 | Skill | Save report (JSON + markdown) | Files in `reviews/` |
+| 7 | Skill | Run `diff-review-findings.sh` (if previous exists) | New/recurring/resolved counts |
+| 8 | Skill | Display terminal summary | Formatted output |
+
+### 6.5 Agent Methodology (10 Steps)
+
+The System Reviewer agent executes a structured 10-step analysis:
+
+**Internal Audit (Steps 1-5):**
+1. Plugin inventory via `collect-plugin-stats.sh`
+2. Model routing audit — evaluate Opus/Sonnet/Haiku assignments
+3. Context budget audit — check Budget/Escalation/Verification alignment
+4. Pattern consistency audit — scan for structural deviations
+5. Component usage audit — find unreferenced scripts, templates, MCP servers
+
+**Telemetry Analysis (Step 6):**
+6. Cross-project telemetry — analyze usage patterns, friction points, cost trends
+
+**External Research (Steps 7-10):**
+7. Anthropic documentation — new features, model updates, best practices
+8. MCP ecosystem — new servers, registry gaps
+9. Community patterns — Cursor rules, Windsurf, Aider, Claude Code community
+10. Innovation brainstorm — synthesize findings into new ideas
+
+### 6.6 Output Artifacts
+
+| Artifact | Location | Format |
+|----------|----------|--------|
+| Markdown report | `${CLAUDE_PLUGIN_ROOT}/reviews/system-review-{ts}.md` | Structured markdown with 5 parts |
+| JSON report | `${CLAUDE_PLUGIN_ROOT}/reviews/system-review-{ts}.json` | Schema: `system-review-report.json` |
+| Telemetry aggregate | `${CLAUDE_PLUGIN_ROOT}/telemetry/aggregate.json` | Fresh aggregate from all projects |
+
+### 6.7 Cross-Project Telemetry Registration
+
+Projects register with the central plugin during `/setup`:
+
+1. `init-vibecrew-state.sh` checks if `${CLAUDE_PLUGIN_ROOT}` is set and valid
+2. Creates `project-registry.json` from template if missing
+3. Adds the project path with an anonymous alias (project-NNN) if not already registered
+4. Registration is idempotent — running `/setup` again is a no-op
+
+### 6.8 Anonymization
+
+All telemetry data uses anonymous project aliases. The registry maps real paths to aliases but this mapping never appears in review reports. Only aggregate statistics and alias-keyed data are included in reports.
+
+---
+
+## 7. State Transition Reference
 
 ### 6.1 Foundation State Transitions
 
@@ -1586,9 +1696,9 @@ The `config.json` `concurrency.max_parallel_agents` setting (default: 3) limits 
 
 ---
 
-## 7. Error Recovery Across Workflows
+## 8. Error Recovery Across Workflows
 
-### 7.1 Error Recovery Matrix
+### 8.1 Error Recovery Matrix
 
 | Workflow | Failure | Detection | Recovery |
 |----------|---------|-----------|----------|
@@ -1610,7 +1720,7 @@ The `config.json` `concurrency.max_parallel_agents` setting (default: 3) limits 
 | **Parallel** | Concurrent write to backlog.json | mkdir lock contention | Wait up to 30s; fail with clear error if timeout |
 | **Parallel** | Orphaned worktree (agent crashed) | Session Startup scans worktrees | Report orphaned worktrees to developer; offer cleanup |
 
-### 7.2 Worktree-Specific Recovery
+### 8.2 Worktree-Specific Recovery
 
 Worktrees add a new failure mode (orphaned worktrees) but also simplify recovery for existing failure modes:
 

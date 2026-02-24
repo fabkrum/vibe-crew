@@ -726,7 +726,7 @@
       <li><a href="#day-one">Day 1: Project Foundation (Tier 1)</a></li>
       <li><a href="#planning-session">Day 2: Planning Session</a></li>
       <li><a href="#feature-session">Day 3: Building a Feature (Tier 2)</a></li>
-      <li><a href="#parallel-features">Day 4: Building Multiple Features in Parallel</a></li>
+      <li><a href="#parallel-features">Day 4: Working Across Multiple Panes</a></li>
       <li><a href="#dev-servers">Running Dev &amp; Test Servers</a></li>
       <li><a href="#companion-docs">Using the Companion Docs Website</a></li>
       <li><a href="#capturing-ideas">Capturing Ideas for the Backlog</a></li>
@@ -759,8 +759,8 @@
       </div>
     </div>
 
-    <h3>Recommended layout: 2&ndash;3 tabs</h3>
-    <p>Once comfortable, use 2&ndash;3 tabs. This is the sweet spot for most developers. One tab builds a feature while another handles planning, research, or a second feature.</p>
+    <h3>Recommended layout: one tab per project</h3>
+    <p>Each project gets its own Warp tab with three split panes: a large Planning pane on the left, and Development + Terminal panes stacked on the right. If you work on multiple projects, each one gets the same layout in its own tab.</p>
 
     <div class="terminal-grid three-col">
       <div class="terminal-window">
@@ -768,47 +768,47 @@
           <div class="terminal-dot red"></div>
           <div class="terminal-dot yellow"></div>
           <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab 1 &mdash; Feature A</span>
+          <span class="terminal-title">Left &mdash; Planning</span>
         </div>
-        <div class="terminal-body"><span class="accent">Building: user-auth</span>
-<span class="output">Code phase active</span>
-<span class="output">Builder agent working...</span></div>
+        <div class="terminal-body"><span class="accent">claude</span>
+<span class="output">/plan-features, /idea</span>
+<span class="output">/status, /check, /cost</span></div>
       </div>
       <div class="terminal-window">
         <div class="terminal-header">
           <div class="terminal-dot red"></div>
           <div class="terminal-dot yellow"></div>
           <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab 2 &mdash; Feature B</span>
+          <span class="terminal-title">Right top &mdash; Development</span>
         </div>
-        <div class="terminal-body"><span class="accent">Building: trip-creation</span>
-<span class="output">Plan phase active</span>
-<span class="output">Writing feature spec...</span></div>
+        <div class="terminal-body"><span class="accent">claude</span>
+<span class="output">Building: user-auth</span>
+<span class="output">Code phase active</span></div>
       </div>
       <div class="terminal-window">
         <div class="terminal-header">
           <div class="terminal-dot red"></div>
           <div class="terminal-dot yellow"></div>
           <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab 3 &mdash; Quick Tasks</span>
+          <span class="terminal-title">Right bottom &mdash; Terminal</span>
         </div>
-        <div class="terminal-body"><span class="accent">Utility session</span>
-<span class="output">/idea, /status, /check</span>
-<span class="output">/heal (if CI fails)</span></div>
+        <div class="terminal-body"><span class="accent">npm run dev</span>
+<span class="output">Local server running</span>
+<span class="output">http://localhost:3000</span></div>
       </div>
     </div>
 
     <div class="callout tip">
       <div class="callout-title">How notifications keep this manageable</div>
-      <p>You don't need to watch all tabs. The Interrupt Protocol sends a native OS notification when any tab needs you (permission prompt, task complete, or error). Click the notification to jump directly to that tab. Work in your active tab until you're interrupted &mdash; that's the whole system.</p>
+      <p>You don't need to watch all panes. The Interrupt Protocol sends a native OS notification when any session needs you (permission prompt, task complete, or error). Click the notification to jump directly to that pane. Work in your Planning pane until you're interrupted &mdash; that's the whole system.</p>
     </div>
 
-    <h3>Power layout: 4+ tabs</h3>
-    <p>Experienced users can run 4 or more tabs. Two feature tabs, one for planning/backlog, and one for auditing or CI healing. Beyond 4, the bottleneck shifts to code review rather than building &mdash; you'll have more PRs to review than you can keep up with.</p>
+    <h3>Multi-project workflow</h3>
+    <p>When working on multiple projects, each gets its own tab with the same 3-pane layout. Use <kbd>CMD</kbd>+<kbd>1</kbd> through <kbd>CMD</kbd>+<kbd>8</kbd> to jump between projects and <kbd>Opt</kbd>+<kbd>CMD</kbd>+<kbd>Arrow</kbd> to move between panes within a tab. Color-code tabs so you can identify projects at a glance.</p>
 
     <div class="callout warn">
-      <div class="callout-title">Each tab is an independent Claude Code session</div>
-      <p>Every tab runs its own context window. They share the filesystem (git branches, <code>.vibecrew/</code> state, <code>CLAUDE.md</code>) but not conversation history. This is by design &mdash; it means research in one tab doesn't consume context in another. But it also means you need to coordinate via branches: each feature gets its own branch.</p>
+      <div class="callout-title">Each pane is an independent Claude Code session</div>
+      <p>Every pane with Claude Code runs its own context window. They share the filesystem (git branches, <code>.vibecrew/</code> state, <code>CLAUDE.md</code>) but not conversation history. This is by design &mdash; it means planning in one pane doesn't consume context in the development pane. But it also means you need to coordinate via branches: each feature gets its own branch.</p>
     </div>
   </section>
 
@@ -1074,82 +1074,77 @@
 
   <hr>
 
-  <!-- ============ DAY 4: PARALLEL ============ -->
+  <!-- ============ DAY 4: MULTI-PANE ============ -->
   <section class="section" id="parallel-features">
     <span class="section-label">Advanced</span>
-    <h2>Day 4: Building Multiple Features in Parallel</h2>
-    <p>Once you've shipped a couple of features sequentially and feel comfortable with the rhythm, try parallel execution. This is where VibeCrew's multi-session design really shines.</p>
-
-    <h3>The setup: 3 tabs</h3>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon green">1</div>
-        <h4>Tab 1: Trip Creation</h4>
-        <p>Your primary focus. You're actively guiding this feature through the 6 phases, making decisions, reviewing output.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">2</div>
-        <h4>Tab 2: Itinerary Builder</h4>
-        <p>Running more autonomously. You started <code>/new-feature "itinerary-builder"</code> and let the agents work. You check in when notifications fire.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">3</div>
-        <h4>Tab 3: Utility</h4>
-        <p>Quick commands: <code>/idea</code> to capture thoughts, <code>/status</code> to check progress, <code>/check</code> to run quality gates, <code>/heal</code> if CI breaks.</p>
-      </div>
-    </div>
-
-    <h3>How a parallel session flows</h3>
-
-    <div class="flow"><span class="highlight">9:00</span>  Open Tab 1. <span class="green">/new-feature "trip-creation"</span>
-       Open Tab 2. <span class="green">/new-feature "itinerary-builder"</span>
-
-<span class="highlight">9:05</span>  Tab 1: You guide the Plan phase for trip-creation.
-       Tab 2: Agent writes the feature spec autonomously.
-
-<span class="highlight">9:10</span>  <span class="amber">Notification:</span> "Tab 2 &mdash; Plan phase complete. Ready for review."
-       You glance at the spec, approve it. Tab 2 moves to UI Design.
-
-<span class="highlight">9:12</span>  Tab 1: You finish the plan, start UI Design.
-       Tab 2: Agent designs components autonomously.
-
-<span class="highlight">9:20</span>  <span class="amber">Notification:</span> "Tab 2 &mdash; needs permission to create files."
-       Click notification. Approve file creation. Tab 2 continues.
-
-<span class="highlight">9:25</span>  Tab 1: Code phase starts. Builder agent working.
-       You switch to Tab 3: <span class="green">/status</span>
-       <span class="muted">Dashboard: trip-creation (Code), itinerary-builder (Code)</span>
-
-<span class="highlight">9:30</span>  <span class="amber">Notification:</span> "Tab 1 &mdash; Code phase complete."
-       You review the code, start the Test phase.
-
-<span class="highlight">9:35</span>  While Tab 1 runs tests, you capture an idea:
-       Tab 3: <span class="green">/idea "add map view to itinerary with Mapbox"</span>
-
-<span class="highlight">9:45</span>  Tab 1: All phases done. <span class="green">/wrap</span> &rarr; Score 88
-       Tab 2: Still in Test phase.
-
-<span class="highlight">9:50</span>  <span class="amber">Notification:</span> "Tab 2 &mdash; Tests complete. Docs phase done."
-       Switch to Tab 2. <span class="green">/wrap</span> &rarr; Score 85
-
-<span class="highlight">9:55</span>  Two features shipped in under an hour.
-       Tab 3: <span class="green">/status</span>
-       <span class="muted">Dashboard: 4/5 features done, 1 remaining.</span></div>
+    <h2>Day 4: Working Across Multiple Panes</h2>
+    <p>Once you've shipped a couple of features and feel comfortable with the rhythm, use the full 3-pane layout to stay productive while a feature builds. VibeCrew enforces a <strong>WIP limit of 1</strong> &mdash; only one feature can be in-progress at a time &mdash; but you can use the Planning pane for research and the Terminal pane for servers.</p>
 
     <div class="callout info">
-      <div class="callout-title">Can I run /run-backlog across multiple tabs?</div>
-      <p>Yes, but carefully. <code>/run-backlog</code> picks the next planned feature from the backlog automatically. If you run it in two tabs simultaneously, they'll pick different features (the backlog is file-locked to prevent duplicates). This is the fastest way to burn through a backlog, but each tab's work should be reviewed when it completes.</p>
+      <div class="callout-title">Why one feature at a time?</div>
+      <p>The WIP limit of 1 is enforced at multiple levels: <code>state.json</code> tracks a single active feature, <code>backlog.json</code> limits the in-progress column to 1, and <code>claim-task.sh</code> blocks new claims when the limit is reached. This is by design &mdash; it prevents merge conflicts, keeps context focused, and produces higher Vibe Scores.</p>
     </div>
 
-    <h3>When to build in parallel vs. sequentially</h3>
+    <h3>The setup: 3 panes per project</h3>
     <div class="card-grid">
       <div class="card">
-        <h4>Build in parallel when:</h4>
-        <p>Features are independent (no shared components), you're comfortable with the workflow, and you can context-switch without confusion. Best for: CRUD features, isolated pages, utility features.</p>
+        <div class="card-icon blue">&#9664;</div>
+        <h4>Left: Planning</h4>
+        <p>Your primary focus. Use <code>/plan-features</code> to refine upcoming specs, <code>/idea</code> to capture thoughts, <code>/status</code> to check progress, and <code>/check</code> to run quality gates.</p>
       </div>
       <div class="card">
-        <h4>Build sequentially when:</h4>
-        <p>Feature B depends on Feature A's code, you're working on core shared infrastructure (auth, database schema, API layer), or you're learning VibeCrew. Merge conflicts from parallel branches cost more time than they save.</p>
+        <div class="card-icon green">&#9650;</div>
+        <h4>Right top: Development</h4>
+        <p>The one in-progress feature moves through the 6 phases here. You guide decisions, review output, and run <code>/wrap</code> when done.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#9660;</div>
+        <h4>Right bottom: Terminal</h4>
+        <p>A raw shell for running dev servers (<code>npm run dev</code>), <code>git</code> commands, manual tests, or quick file browsing.</p>
+      </div>
+    </div>
+
+    <h3>How a multi-pane session flows</h3>
+
+    <div class="flow"><span class="highlight">9:00</span>  Development pane: <span class="green">/new-feature "trip-creation"</span>
+       Terminal pane: <span class="green">npm run dev</span>
+
+<span class="highlight">9:05</span>  Development: You guide the Plan phase for trip-creation.
+       Planning: <span class="green">/plan-features</span> &mdash; refine the itinerary-builder spec.
+
+<span class="highlight">9:15</span>  Development: Plan approved, UI Design starts.
+       Planning: Itinerary-builder spec is polished and ready in the backlog.
+
+<span class="highlight">9:25</span>  Development: Code phase starts. Builder agent working.
+       Planning: <span class="green">/status</span>
+       <span class="muted">Dashboard: trip-creation (Code), 3 features planned.</span>
+
+<span class="highlight">9:30</span>  <span class="amber">Notification:</span> "Development pane &mdash; Code phase complete."
+       You review the code, start the Test phase.
+
+<span class="highlight">9:35</span>  While Development runs tests, you capture an idea:
+       Planning: <span class="green">/idea "add map view to itinerary with Mapbox"</span>
+
+<span class="highlight">9:45</span>  Development: All phases done. <span class="green">/wrap</span> &rarr; Score 88
+       <span class="muted">WIP slot is now free.</span>
+
+<span class="highlight">9:46</span>  Development: <span class="green">/new-feature "itinerary-builder"</span>
+       Spec is already polished from earlier planning &mdash; Plan phase is fast.
+
+<span class="highlight">10:15</span> Development: <span class="green">/wrap</span> &rarr; Score 85
+       Two features shipped in ~75 minutes.
+       Planning: <span class="green">/status</span>
+       <span class="muted">Dashboard: 4/5 features done, 1 remaining.</span></div>
+
+    <h3>What you can do in each pane</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>Development pane (WIP slot)</h4>
+        <p><code>/new-feature</code>, <code>/run-backlog</code>, active phase work (Plan &rarr; Code &rarr; Test &rarr; Review &rarr; Docs), <code>/wrap</code>. Only one pane can do these at a time.</p>
+      </div>
+      <div class="card">
+        <h4>Planning pane (anytime)</h4>
+        <p><code>/plan-features</code>, <code>/idea</code>, <code>/status</code>, <code>/check</code>, <code>/heal</code>, <code>/cost</code>, <code>/simplify</code>, <code>/audit</code>, <code>/achievements</code>. These don't require the WIP slot.</p>
       </div>
     </div>
   </section>
@@ -1424,13 +1419,13 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       </div>
       <div class="card">
         <div class="card-icon green">We</div>
-        <h4>Wednesday: Parallel</h4>
-        <p><strong>2 tabs, 2 sessions each.</strong> Build itinerary-builder and group-invites in parallel. Use Tab 3 for <code>/status</code> checks and <code>/idea</code> captures. Total: ~2 hours, 2 features shipped.</p>
+        <h4>Wednesday: Full 3-pane workflow</h4>
+        <p><strong>3 panes.</strong> Build itinerary-builder in the Development pane while planning group-invites in the Planning pane. Dev server running in the Terminal pane. Once itinerary-builder wraps, start group-invites immediately &mdash; spec is already polished. Total: ~2 hours, 2 features shipped.</p>
       </div>
       <div class="card">
         <div class="card-icon amber">Th</div>
         <h4>Thursday: Final feature + cleanup</h4>
-        <p><strong>2 tabs.</strong> Tab 1: Build expense-splitting. Tab 2: Run <code>/simplify</code> on earlier features to reduce complexity. Run <code>/heal</code> if CI has issues. Total: ~1.5 hours.</p>
+        <p><strong>3 panes.</strong> Development pane: Build expense-splitting. Planning pane: Run <code>/simplify</code> on earlier features to reduce complexity. Run <code>/heal</code> if CI has issues. Total: ~1.5 hours.</p>
       </div>
       <div class="card">
         <div class="card-icon red">Fr</div>

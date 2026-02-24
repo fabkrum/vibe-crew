@@ -617,7 +617,7 @@
       <div class="card">
         <div class="card-icon green">&#9632;</div>
         <h4>Launch Configurations</h4>
-        <p>Save your 3-tab VibeCrew layout as a YAML file. One click and your workspace opens with the right tabs, directories, and startup commands.</p>
+        <p>Save your multi-project workspace as a YAML file. One click and every project opens with Planning, Development, and Terminal panes ready to go.</p>
       </div>
       <div class="card">
         <div class="card-icon blue">&#9632;</div>
@@ -727,96 +727,107 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
     <h2>The Ideal Window Layout</h2>
     <p>Warp Launch Configurations let you save a complete terminal layout &mdash; windows, tabs, panes, working directories, and startup commands &mdash; as a YAML file. Open it with one click and your entire VibeCrew workspace is ready.</p>
 
-    <h3>Recommended: 3-tab VibeCrew layout</h3>
-    <p>Save this file to <code>~/.warp/launch_configurations/vibecrew.yaml</code>. It creates the layout from the <a href="example-session.html#terminal-setup">Example Session</a> guide.</p>
+    <h3>One tab per project, three panes each</h3>
+    <p>The recommended layout uses <strong>one Warp tab per project</strong>. Each tab contains three split panes so you can plan, build, and run servers without switching context. If you work on multiple projects, each gets its own tab with the same pane structure.</p>
+
+    <div class="flow">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                      &#9474;  <span class="highlight">Development</span>  &#9474;
+&#9474;   <span class="highlight">Planning</span>            &#9474;  claude       &#9474;
+&#9474;   claude              &#9474;  (active      &#9474;
+&#9474;                      &#9474;   feature)    &#9474;
+&#9474;   /plan-features     &#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
+&#9474;   /idea              &#9474;  <span class="highlight">Terminal</span>      &#9474;
+&#9474;   /status            &#9474;  raw shell    &#9474;
+&#9474;   /check             &#9474;  npm run dev  &#9474;
+&#9474;                      &#9474;  git, tests   &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</div>
+
+    <ul>
+      <li><strong>Left pane (large)</strong> &mdash; Planning. Runs Claude Code for <code>/plan-features</code>, <code>/idea</code>, <code>/status</code>, <code>/check</code>, and other utility commands. This is your primary focus pane.</li>
+      <li><strong>Right top pane</strong> &mdash; Development. Runs Claude Code for the active feature (<code>/new-feature</code>, phase work, <code>/wrap</code>).</li>
+      <li><strong>Right bottom pane</strong> &mdash; Terminal. A raw shell for dev servers (<code>npm run dev</code>), <code>git</code> commands, file browsing, or manual tests. No Claude Code here.</li>
+    </ul>
+
+    <h3>Launch configuration</h3>
+    <p>Save this file to <code>~/.warp/launch_configurations/vibecrew.yaml</code>. Each tab represents one project &mdash; duplicate the tab block for additional projects, updating the <code>title</code> and <code>cwd</code> paths.</p>
 
     <pre class="copyable" data-copy="name: VibeCrew
 windows:
   - tabs:
-      - title: Feature A
+      - title: Project A
         color: Blue
         layout:
-          cwd: /path/to/your-project
-          commands:
-            - exec: claude
-      - title: Feature B
+          split_direction: vertical
+          panes:
+            - cwd: /path/to/project-a
+              commands:
+                - exec: claude
+              is_focused: true
+            - split_direction: horizontal
+              panes:
+                - cwd: /path/to/project-a
+                  commands:
+                    - exec: claude
+                - cwd: /path/to/project-a
+      - title: Project B
         color: Green
         layout:
-          cwd: /path/to/your-project
-          commands:
-            - exec: claude
-      - title: Quick Tasks
-        color: Yellow
-        layout:
-          cwd: /path/to/your-project
-          commands:
-            - exec: claude"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibecrew.yaml</span>name: VibeCrew
+          split_direction: vertical
+          panes:
+            - cwd: /path/to/project-b
+              commands:
+                - exec: claude
+              is_focused: true
+            - split_direction: horizontal
+              panes:
+                - cwd: /path/to/project-b
+                  commands:
+                    - exec: claude
+                - cwd: /path/to/project-b"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibecrew.yaml</span>name: VibeCrew
 windows:
   - tabs:
-      - title: Feature A
+      - title: Project A
         color: Blue
         layout:
-          cwd: /path/to/your-project
-          commands:
-            - exec: claude
-      - title: Feature B
+          split_direction: vertical
+          panes:
+            - cwd: /path/to/project-a
+              commands:
+                - exec: claude
+              is_focused: true
+            - split_direction: horizontal
+              panes:
+                - cwd: /path/to/project-a
+                  commands:
+                    - exec: claude
+                - cwd: /path/to/project-a
+      - title: Project B
         color: Green
         layout:
-          cwd: /path/to/your-project
-          commands:
-            - exec: claude
-      - title: Quick Tasks
-        color: Yellow
-        layout:
-          cwd: /path/to/your-project
-          commands:
-            - exec: claude</code></pre>
+          split_direction: vertical
+          panes:
+            - cwd: /path/to/project-b
+              commands:
+                - exec: claude
+              is_focused: true
+            - split_direction: horizontal
+              panes:
+                - cwd: /path/to/project-b
+                  commands:
+                    - exec: claude
+                - cwd: /path/to/project-b</code></pre>
 
-    <p>Launch it via Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>) &rarr; "Launch Configuration" &rarr; "VibeCrew". Three Claude Code sessions start in parallel, each in its own colored tab.</p>
+    <p>Launch it via Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>) &rarr; "Launch Configuration" &rarr; "VibeCrew". Each tab opens with the Planning and Development panes running Claude Code, and a raw Terminal pane ready for your dev server.</p>
 
     <div class="callout tip">
       <div class="callout-title">Color-code your tabs</div>
-      <p>Warp supports tab colors: <code>Red</code>, <code>Green</code>, <code>Yellow</code>, <code>Blue</code>, <code>Magenta</code>, <code>Cyan</code>. Use them to distinguish roles at a glance: Blue for your primary feature, Green for the secondary, Yellow for utility tasks. When a notification fires, you already know which color to look for.</p>
+      <p>Warp supports tab colors: <code>Red</code>, <code>Green</code>, <code>Yellow</code>, <code>Blue</code>, <code>Magenta</code>, <code>Cyan</code>. Assign a unique color to each project so you can identify them at a glance. When a notification fires, the tab color tells you which project needs attention.</p>
     </div>
 
-    <h3>Advanced: split-pane layout</h3>
-    <p>If you prefer panes over tabs, this layout splits a single window into three regions. The main feature pane takes 2/3 of the width, with a secondary feature and utility pane stacked on the right.</p>
-
-    <pre class="copyable" data-copy="name: VibeCrew Split
-windows:
-  - tabs:
-      - title: VibeCrew
-        layout:
-          split_direction: vertical
-          panes:
-            - cwd: /path/to/your-project
-              commands:
-                - exec: claude
-              is_focused: true
-            - split_direction: horizontal
-              panes:
-                - cwd: /path/to/your-project
-                  commands:
-                    - exec: claude
-                - cwd: /path/to/your-project"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibecrew-split.yaml</span>name: VibeCrew Split
-windows:
-  - tabs:
-      - title: VibeCrew
-        layout:
-          split_direction: vertical
-          panes:
-            - cwd: /path/to/your-project
-              commands:
-                - exec: claude
-              is_focused: true
-            - split_direction: horizontal
-              panes:
-                - cwd: /path/to/your-project
-                  commands:
-                    - exec: claude
-                - cwd: /path/to/your-project</code></pre>
-
-    <p>The third pane intentionally doesn't launch Claude Code &mdash; keep it as a raw shell for quick <code>git</code> commands, file browsing, or manual tests.</p>
+    <div class="callout info">
+      <div class="callout-title">Pane navigation</div>
+      <p>Use <kbd>Opt</kbd>+<kbd>CMD</kbd>+<kbd>Arrow</kbd> to move between panes by direction. Press <kbd>Shift</kbd>+<kbd>CMD</kbd>+<kbd>Enter</kbd> to temporarily maximize a pane for focused reading, then press it again to restore the layout.</p>
+    </div>
 
     <h3>Saving your current layout</h3>
     <p>Already arranged your windows perfectly? Save it without writing YAML: open the Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>), search for "Save New Launch Configuration", give it a name, and it captures your current tabs, panes, and directories.</p>
@@ -837,8 +848,8 @@ windows:
           <tr><th>Action</th><th>Shortcut</th><th>When to Use</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Jump to tab 1&ndash;8</strong></td><td><kbd>CMD</kbd>+<kbd>1</kbd> through <kbd>CMD</kbd>+<kbd>8</kbd></td><td>Fastest way to switch to a specific session. Tab 1 = Feature A, Tab 2 = Feature B, Tab 3 = Utility</td></tr>
-          <tr><td><strong>Jump to last tab</strong></td><td><kbd>CMD</kbd>+<kbd>9</kbd></td><td>Quick access to your utility tab regardless of tab count</td></tr>
+          <tr><td><strong>Jump to tab 1&ndash;8</strong></td><td><kbd>CMD</kbd>+<kbd>1</kbd> through <kbd>CMD</kbd>+<kbd>8</kbd></td><td>Fastest way to switch between projects. Tab 1 = Project A, Tab 2 = Project B, etc.</td></tr>
+          <tr><td><strong>Jump to last tab</strong></td><td><kbd>CMD</kbd>+<kbd>9</kbd></td><td>Quick access to your last project tab regardless of tab count</td></tr>
           <tr><td><strong>Next / previous tab</strong></td><td><kbd>Shift</kbd>+<kbd>CMD</kbd>+<kbd>}</kbd> / <kbd>{</kbd></td><td>Cycle through tabs when you're not sure which number</td></tr>
           <tr><td><strong>Reopen closed tab</strong></td><td><kbd>Shift</kbd>+<kbd>CMD</kbd>+<kbd>T</kbd></td><td>Accidentally closed a session? Reopen within 60 seconds</td></tr>
         </tbody>

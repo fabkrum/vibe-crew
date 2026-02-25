@@ -254,6 +254,65 @@
       margin: 0;
     }
 
+    /* ---- PROBLEM/SOLUTION PAIRS ---- */
+    .pair-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0;
+      align-items: stretch;
+      margin-bottom: 1.5rem;
+    }
+
+    .pair-row .card {
+      margin: 0;
+    }
+
+    .pair-row .card.problem {
+      border-color: rgba(248, 113, 113, 0.2);
+    }
+
+    .pair-row .card.problem:hover {
+      border-color: rgba(248, 113, 113, 0.4);
+    }
+
+    .pair-row .card.solution {
+      border-color: rgba(74, 222, 128, 0.2);
+    }
+
+    .pair-row .card.solution:hover {
+      border-color: rgba(74, 222, 128, 0.4);
+    }
+
+    .pair-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.75rem;
+      color: var(--color-text-muted);
+      font-size: 1.25rem;
+    }
+
+    .pair-label {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      margin-bottom: 0.75rem;
+    }
+
+    .pair-label.problem {
+      background: var(--color-red-dim);
+      color: var(--color-red);
+    }
+
+    .pair-label.solution {
+      background: var(--color-green-dim);
+      color: var(--color-green);
+    }
+
     /* ---- CALLOUT ---- */
     .callout {
       border-radius: var(--radius-sm);
@@ -318,6 +377,8 @@
       .layout { margin-left: 0; padding-top: 52px; }
       .main { padding: 2rem 1.25rem 4rem; }
       .card-grid { grid-template-columns: 1fr !important; }
+      .pair-row { grid-template-columns: 1fr; gap: 0; }
+      .pair-arrow { transform: rotate(90deg); padding: 0.5rem 0; }
       h2 { font-size: 1.5rem; }
       h3 { font-size: 1.15rem; }
       pre { padding: 1rem; }
@@ -380,55 +441,64 @@
 <div class="main">
 
   <section class="section" id="why">
-    <span class="section-label">The Problem</span>
+    <span class="section-label">The Problem &amp; The Solution</span>
     <h2>Why VibeCrew Exists</h2>
-    <p>AI-assisted development &mdash; "vibe coding" &mdash; has changed how software gets built. A single developer can now ship at the pace of a small team. But scaling this workflow reveals three critical problems that VibeCrew was designed to eliminate.</p>
+    <p>AI-assisted development &mdash; "vibe coding" &mdash; has changed how software gets built. A single developer can now ship at the pace of a small team. But scaling this workflow quickly exposes serious gaps: sessions lose context, architecture decisions happen by accident, and you spend more time managing AI agents than building your product.</p>
+    <p>VibeCrew is a Claude Code plugin that fills those gaps. It wraps every project in a structured lifecycle &mdash; from vision and tech stack research through feature development, testing, code review, and documentation &mdash; orchestrated by 14 specialized AI agents. You describe what you want to build, and VibeCrew handles the how: enforcing architecture before code, running quality gates automatically, sending you a notification only when it actually needs your input, and learning from every session to get smarter over time. Whether you are a seasoned developer or a non-technical founder, VibeCrew adapts to you &mdash; not the other way around.</p>
 
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon amber">&#9888;</div>
+    <div class="pair-row">
+      <div class="card problem">
+        <span class="pair-label problem">Problem</span>
         <h4>The Attention Bottleneck</h4>
         <p>When you run 5&ndash;15 concurrent Claude Code sessions, finished or blocked agents wait silently. You manually poll tabs to find which session needs you, destroying your focus every time. Your most valuable resource &mdash; your attention &mdash; is wasted on hunting.</p>
       </div>
-      <div class="card">
-        <div class="card-icon red">&#9632;</div>
-        <h4>Token Waste &amp; Context Exhaustion</h4>
-        <p>Pasting docs into chat (+1,500 tokens), correcting vague prompts (+500 each), re-explaining context after /clear (+2,000). When the context window fills, you lose all accumulated understanding and start from zero.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">&#9881;</div>
-        <h4>Code Without Architecture</h4>
-        <p>Jump straight into code and the AI picks the wrong state library, uses incompatible API patterns, and generates components that ignore your design system. You catch it three features in, when technical debt has compounded.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon purple">&#9881;</div>
-        <h4>One Size Fits Nobody</h4>
-        <p>Most AI coding tools treat everyone the same. A non-technical founder gets the same commit messages, PR formats, and unexplained decisions as a senior developer. Beginners are overwhelmed. Experienced developers are slowed down by verbose explanations they don't need.</p>
-      </div>
-    </div>
-
-    <h3>How VibeCrew Solves Each One</h3>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon green">&#8594;</div>
+      <div class="pair-arrow">&rarr;</div>
+      <div class="card solution">
+        <span class="pair-label solution">Solution</span>
         <h4>The Interrupt Protocol</h4>
         <p>The terminal stays silent during normal work. When an agent needs you (permission blocked, task complete, critical error), it sends a native OS notification with a one-click deep link to the exact tab. You never poll again.</p>
       </div>
-      <div class="card">
-        <div class="card-icon green">&#8594;</div>
+    </div>
+
+    <div class="pair-row">
+      <div class="card problem">
+        <span class="pair-label problem">Problem</span>
+        <h4>Token Waste &amp; Context Exhaustion</h4>
+        <p>Pasting docs into chat (+1,500 tokens), correcting vague prompts (+500 each), re-explaining context after /clear (+2,000). When the context window fills, you lose all accumulated understanding and start from zero.</p>
+      </div>
+      <div class="pair-arrow">&rarr;</div>
+      <div class="card solution">
+        <span class="pair-label solution">Solution</span>
         <h4>The Performance Coach</h4>
         <p>Every session ends with a Vibe Score (0&ndash;100). The coach identifies token waste, proposes a concrete CLAUDE.md rule to prevent it, and &mdash; with your approval &mdash; permanently writes that rule. Each session is more efficient than the last.</p>
       </div>
-      <div class="card">
-        <div class="card-icon green">&#8594;</div>
+    </div>
+
+    <div class="pair-row">
+      <div class="card problem">
+        <span class="pair-label problem">Problem</span>
+        <h4>Code Without Architecture</h4>
+        <p>Jump straight into code and the AI picks the wrong state library, uses incompatible API patterns, and generates components that ignore your design system. You catch it three features in, when technical debt has compounded.</p>
+      </div>
+      <div class="pair-arrow">&rarr;</div>
+      <div class="card solution">
+        <span class="pair-label solution">Solution</span>
         <h4>The Two-Tier Workflow</h4>
         <p>A phase gate blocks all source code writes until the project foundation is complete: vision, design system, tech stack decision, roadmap, and project rules. Architecture decisions are deliberate, not accidental.</p>
       </div>
-      <div class="card">
-        <div class="card-icon green">&#8594;</div>
+    </div>
+
+    <div class="pair-row">
+      <div class="card problem">
+        <span class="pair-label problem">Problem</span>
+        <h4>One Size Fits Nobody</h4>
+        <p>Most AI coding tools treat everyone the same. A non-technical founder gets the same commit messages, PR formats, and unexplained decisions as a senior developer. Beginners are overwhelmed. Experienced developers are slowed down by verbose explanations they don't need.</p>
+      </div>
+      <div class="pair-arrow">&rarr;</div>
+      <div class="card solution">
+        <span class="pair-label solution">Solution</span>
         <h4>Adaptive User Profiles</h4>
-        <p>Run <code>/profile</code> and VibeCrew adapts to you. A 2-minute interview (or pick a preset) personalizes every agent: message verbosity, autonomy level, PR format, code comments, gamification, and tech risk tolerance. As you grow, update your profile &mdash; the system evolves with you, so you always have exactly the experience that works best right now.</p>
+        <p>Run <code>/profile</code> and VibeCrew adapts to you. A 2-minute interview (or pick a preset) personalizes every agent: message verbosity, autonomy level, PR format, code comments, gamification, and tech risk tolerance. As you grow, update your profile &mdash; the system evolves with you.</p>
       </div>
     </div>
 

@@ -5,6 +5,83 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-02-25
+
+### Added
+
+#### `/profile` — User Profile System
+
+- `skills/profile/SKILL.md` -- Interactive 8-question interview (~2 minutes) with 3 presets (Builder, Explorer, Founder). 8 dimensions: role, code_literacy, autonomy, pr_review, verbosity, gamification_preference, learning, risk_tolerance. Stored in `.vibecrew/config.json` under `user_profile` key
+- `scripts/read-profile.sh` -- Universal profile reader: outputs JSON with all 8 dimensions, merges stored values over defaults, fills missing fields. Single bash call (~500 tokens)
+- `scripts/save-profile.sh` -- Atomic profile writer with `.tmp` + `mv` pattern. Auto-syncs gamification settings (enabled, show_xp_in_status, streak_reminders) based on gamification_preference dimension
+
+#### `/system-review` — Plugin Meta-Analysis
+
+- `agents/system-reviewer.md` -- Opus agent, worktree isolation, read-only. 10-step methodology: internal audit (inventory, model routing, context budgets, patterns, component usage), telemetry analysis (cross-project skill/agent usage, Vibe Score trends, cost analysis, MCP adoption), external research (Anthropic updates, MCP ecosystem, community patterns), innovation proposals (P1-P5 with effort estimates)
+- `skills/system-review/SKILL.md` -- Pre-flight check for plugin root, collect plugin stats and telemetry, invoke system-reviewer agent, output structured reports to `${CLAUDE_PLUGIN_ROOT}/reviews/`
+- `scripts/collect-telemetry.sh` -- Aggregates anonymized cross-project data (project aliases like project-001, never real paths). Tracks sessions, Vibe Scores, costs, deductions, agent usage
+- `scripts/collect-plugin-stats.sh` -- Parses agent definitions, skill/script/hook counts, MCP servers (bundled + registry)
+- `templates/system-review-report.json.template` -- Structured report schema with plugin stats, telemetry aggregate, findings, proposals
+
+#### MCP Server Registry
+
+- `templates/mcp-registry.json` -- Extended registry with 25 MCP servers total. 15 additional servers beyond the 10 bundled: Firebase, Prisma, Clerk, Auth0, Netlify, Railway, Shopify, MongoDB, Resend, Next.js DevTools, shadcn/ui, Terraform, Kubernetes, Neon, Upstash Redis. Each entry includes name, category, trigger patterns, command, args, env vars, docs_url. Auto-discoverable by Stack Scout based on TDR technology choices
+
+#### Vibe Dashboard
+
+- 7-tab interactive VitePress-powered dashboard: Guide, Kanban Board (7-column drag-and-drop), Session Statistics, Trends (score charts, token breakdown, agent heatmap), Coverage (test gauge, feature progress), Achievements (XP, badges, skill radar, streak calendar), Settings (browser-based `.vibecrew/config.json` editor)
+- Dev mode (`npm run docs:dev`): hot-reload, interactive drag-drop, settings writes directly to `.vibecrew/` files
+- Production mode (`npm run docs:build`): static HTML snapshot, read-only rendering
+
+#### Gamification System
+
+- XP & leveling with 50 tiers (Newcomer to Vibe Legend). XP earned through real work: session completion (+10 base), Vibe Score bonus, clean session (+25), ship feature (+50), Tier 1 completion (+100), tests first-pass (+15), quiz correct (+5)
+- 15 badges across 3 categories: milestone (Hello World, Architect, Shipper, Momentum, Researcher), skill (Smooth Operator, On Fire, Untouchable, Cache Master, Clear Communicator, Test First, Context Ninja), special (Perfectionist, Comeback Kid, Weekly Warrior, Unstoppable)
+- 5-domain skill tree (Prompting, Architecture, Testing, Context Management, Workflow Discipline) with 5 levels each (Novice to Master). Visual radar chart
+- Streaks with weekend auto-grace and 2 grace days/month. No penalty for broken streaks
+- Daily/weekly/one-time challenges (optional, never punish failure)
+- 7 quizzes unlockable at Level 3+ via `/quiz`
+- Achievements dashboard with level badge, XP progress, badge grid, 5-axis skill radar SVG, 12-week streak heatmap
+
+#### `/release` — Automated Release Process
+
+- `skills/release/SKILL.md` -- Slash command: bump version across 5 files, regenerate `docs/releases.html` from CHANGELOG.md, git commit and tag. No auto-push
+- `scripts/bump-version.sh` -- Updates version in `plugin.json` (jq), `session-startup.md`, `docs/index.html`, `CLAUDE.md`, `CHANGELOG.md` (renames `[Unreleased]` heading). Atomic JSON writes
+- `scripts/generate-releases-html.sh` -- State-machine CHANGELOG.md parser producing standalone `docs/releases.html` with embedded CSS, sidebar nav, version pills, and per-release sections
+
+### Changed
+
+#### Agent Model Upgrades
+
+- `agents/workflow-orchestrator.md` -- Model upgraded from Sonnet to Opus
+- `agents/stack-scout.md` -- Model upgraded from Sonnet to Opus
+- `agents/builder.md` -- Model upgraded from Sonnet to Opus
+- `agents/code-auditor.md` -- Model upgraded from Sonnet to Opus
+- `agents/security-auditor.md` -- Model upgraded from Sonnet to Opus
+- `agents/code-simplifier.md` -- Model upgraded from Sonnet to Opus
+- `agents/opponent-processor.md` -- Model upgraded from Sonnet to Opus
+- `agents/ci-healer.md` -- Model upgraded from Sonnet to Opus
+
+#### Profile-Aware Agent Adaptations
+
+- All agents read profile via `read-profile.sh` and adapt behavior: Session Startup adjusts greeting depth, Workflow Orchestrator adjusts approval gates, Builder adjusts commit messages and code comments, Verifier adjusts coaching and gamification display, Stack Scout adjusts tech maturity criteria, Doc Generator adjusts documentation depth, Code Reviewer adjusts finding explanations
+
+#### Documentation Site
+
+- Redesigned docs with sticky collapsible sidebar navigation (260px fixed width), mobile hamburger menu
+- Added `personalization.html` -- comprehensive 8-dimension profile + full gamification system documentation
+- Added `dashboard.html` -- Vibe Dashboard reference with 7-tab walkthrough
+- Split architecture docs into dedicated section with collapsible sidebar nav
+- Reorganized sidebar groups: Intro, Getting Started, Workflows, Architecture, Releases
+
+#### Configuration
+
+- `.claude-plugin/plugin.json` -- Version bumped to 1.5.0
+- Agent topology updated to 14 agents (was 13), 27 commands (was 25)
+- `templates/trigger-table.md` -- Updated with `/profile`, `/system-review` commands and System Reviewer agent
+
+---
+
 ## [1.4.0] - 2026-02-24
 
 ### Added
@@ -362,6 +439,7 @@ Documentation, cleanup utilities, and finalized configurations.
 
 **Total: ~81 files across 6 implementation phases.**
 
+[1.5.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.5.0
 [1.4.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.4.0
 [1.3.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.3.0
 [1.2.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.2.0

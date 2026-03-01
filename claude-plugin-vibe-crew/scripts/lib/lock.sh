@@ -12,8 +12,8 @@
 #
 # Behavior:
 #   - mkdir-based advisory lock (atomic on all filesystems)
-#   - 30-second stale lock detection
-#   - 30-second wait timeout, 0.5s polling
+#   - Configurable stale lock detection (default 60s, via config.json)
+#   - Configurable wait timeout (default 30s, via config.json), 0.5s polling
 #   - Trap-based cleanup on EXIT
 #   - Caller sets LOCK_FAIL_OPEN=true before sourcing for fail-open behavior
 
@@ -22,6 +22,19 @@ _LOCK_PROJECT_ROOT="${PROJECT_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null 
 _LOCK_VIBECREW_DIR="$_LOCK_PROJECT_ROOT/.vibecrew"
 _LOCK_DIR="$_LOCK_VIBECREW_DIR/locks/state-files"
 _LOCK_ACQUIRED=false
+
+# Configurable timeouts (can be overridden by config.json)
+_LOCK_STALE_TIMEOUT_SECS=60
+_LOCK_WAIT_TIMEOUT_SECS=30
+
+# Read overrides from config.json if available
+_LOCK_CONFIG_FILE="${_LOCK_VIBECREW_DIR}/config.json"
+if [[ -f "$_LOCK_CONFIG_FILE" ]]; then
+  _CFG_STALE="$(jq -r '.locks.stale_timeout_secs // empty' "$_LOCK_CONFIG_FILE" 2>/dev/null || echo "")"
+  _CFG_WAIT="$(jq -r '.locks.wait_timeout_secs // empty' "$_LOCK_CONFIG_FILE" 2>/dev/null || echo "")"
+  [[ -n "$_CFG_STALE" && "$_CFG_STALE" =~ ^[0-9]+$ ]] && _LOCK_STALE_TIMEOUT_SECS="$_CFG_STALE"
+  [[ -n "$_CFG_WAIT" && "$_CFG_WAIT" =~ ^[0-9]+$ ]] && _LOCK_WAIT_TIMEOUT_SECS="$_CFG_WAIT"
+fi
 
 # --- Cross-platform timestamp parsing ---
 _lock_parse_timestamp() {
@@ -42,7 +55,7 @@ _lock_cleanup() {
 
 trap _lock_cleanup EXIT
 
-# --- Check if existing lock is stale (>30s old) ---
+# --- Check if existing lock is stale (older than configured timeout) ---
 _lock_is_stale() {
   local lock_info="$_LOCK_DIR/info.json"
   if [[ ! -f "$lock_info" ]]; then
@@ -57,7 +70,7 @@ _lock_is_stale() {
   lock_epoch=$(_lock_parse_timestamp "$locked_at")
   now_epoch=$(date "+%s")
   local age=$(( now_epoch - lock_epoch ))
-  [[ "$age" -gt 30 ]]
+  [[ "$age" -gt "$_LOCK_STALE_TIMEOUT_SECS" ]]
 }
 
 # --- Write lock info file ---
@@ -71,7 +84,7 @@ _lock_write_info() {
   "pid": $$,
   "locked_at": "$ts",
   "target_files": "state.json,backlog.json",
-  "timeout_seconds": 30
+  "timeout_seconds": $_LOCK_WAIT_TIMEOUT_SECS
 }
 EOF
 }
@@ -89,38 +102,41 @@ acquire_state_lock() {
     return 0
   fi
 
-  # Lock exists -- check if stale
+  # Lock exists -- check if stale (atomic claim via rename)
   if _lock_is_stale; then
-    rm -rf "$_LOCK_DIR"
-    if mkdir "$_LOCK_DIR" 2>/dev/null; then
-      _LOCK_ACQUIRED=true
-      _lock_write_info "$caller"
-      return 0
-    fi
+    mv "$_LOCK_DIR" "${_LOCK_DIR}.stale.$$" 2>/dev/null && {
+      rm -rf "${_LOCK_DIR}.stale.$$"
+      if mkdir "$_LOCK_DIR" 2>/dev/null; then
+        _LOCK_ACQUIRED=true
+        _lock_write_info "$caller"
+        return 0
+      fi
+    }
   fi
 
-  # Wait up to 30 seconds, polling every 0.5s
+  # Wait up to configured timeout, polling every 0.5s
+  local max_attempts=$(( _LOCK_WAIT_TIMEOUT_SECS * 2 ))
   local attempts=0
-  while [[ "$attempts" -lt 60 ]]; do
+  while [[ "$attempts" -lt "$max_attempts" ]]; do
     sleep 0.5
     if mkdir "$_LOCK_DIR" 2>/dev/null; then
       _LOCK_ACQUIRED=true
       _lock_write_info "$caller"
       return 0
     fi
-    # Check for stale lock while waiting
+    # Check for stale lock while waiting (atomic claim via rename)
     if _lock_is_stale; then
-      rm -rf "$_LOCK_DIR"
+      mv "$_LOCK_DIR" "${_LOCK_DIR}.stale.$$" 2>/dev/null && rm -rf "${_LOCK_DIR}.stale.$$"
     fi
     ((attempts++))
   done
 
   # Timeout
   if [[ "${LOCK_FAIL_OPEN:-false}" == "true" ]]; then
-    echo "WARNING: Could not acquire state lock after 30 seconds, proceeding without lock" >&2
+    echo "WARNING: Could not acquire state lock after $_LOCK_WAIT_TIMEOUT_SECS seconds, proceeding without lock" >&2
     return 1
   else
-    echo "ERROR: Could not acquire state lock after 30 seconds." >&2
+    echo "ERROR: Could not acquire state lock after $_LOCK_WAIT_TIMEOUT_SECS seconds." >&2
     exit 1
   fi
 }

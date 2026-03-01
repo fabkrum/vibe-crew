@@ -23,6 +23,7 @@ fi
 
 # Create a temporary Playwright script for the axe scan
 SCAN_SCRIPT=$(mktemp /tmp/a11y-scan-XXXXXX.mjs)
+trap 'rm -f "$SCAN_SCRIPT"' EXIT
 cat > "$SCAN_SCRIPT" << 'SCAN_EOF'
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
@@ -87,9 +88,6 @@ SCAN_OUTPUT=$(node "$SCAN_SCRIPT" "$TARGET_URL" 2>/dev/null || echo '{"error": "
 
 # Save report
 echo "$SCAN_OUTPUT" > "${REPORT_FILE}.tmp" && mv "${REPORT_FILE}.tmp" "$REPORT_FILE"
-
-# Clean up temp script
-rm -f "$SCAN_SCRIPT"
 
 # Output to stdout
 echo "$SCAN_OUTPUT"

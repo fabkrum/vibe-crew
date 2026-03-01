@@ -7,11 +7,12 @@
 
 set -euo pipefail
 
-CURRENT_VERSION="1.4.0"
+CURRENT_VERSION="1.5.0"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
-# Source shared lock library
+# Source shared libraries
 source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/error-log.sh"
 
 # --- Semver comparison ---
 version_lt() {
@@ -172,6 +173,40 @@ migrate_1_3_to_1_4() {
   esac
 }
 
+# --- Migration: 1.4.0 -> 1.5.0 ---
+migrate_1_4_to_1_5() {
+  local file="$1"
+  local basename
+  basename=$(basename "$file")
+
+  case "$basename" in
+    config.json)
+      # Add quality_gate, pricing, and locks config sections
+      jq '. + {
+        quality_gate: (.quality_gate // {
+          timeout_seconds: 120
+        }),
+        pricing: (.pricing // {
+          opus: { input: 15.00, cache_create: 18.75, cache_read: 1.50, output: 75.00 },
+          sonnet: { input: 3.00, cache_create: 3.75, cache_read: 0.30, output: 15.00 },
+          haiku: { input: 0.25, cache_create: 0.30, cache_read: 0.03, output: 1.25 },
+          last_updated: "2026-03-01"
+        }),
+        locks: (.locks // {
+          stale_timeout_secs: 60,
+          wait_timeout_secs: 30
+        })
+      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      ;;
+    state.json)
+      # No structural changes needed for state in 1.5.0
+      ;;
+    backlog.json)
+      # No structural changes needed for backlog in 1.5.0
+      ;;
+  esac
+}
+
 # --- Migrate a single file ---
 migrate_file() {
   local file="$1"
@@ -207,6 +242,9 @@ migrate_file() {
   if version_lt "$version" "1.4.0"; then
     migrate_1_3_to_1_4 "$file"
   fi
+  if version_lt "$version" "1.5.0"; then
+    migrate_1_4_to_1_5 "$file"
+  fi
 
   # Update schema_version to current
   local tmp="${file}.tmp"
@@ -217,36 +255,49 @@ migrate_file() {
 
 # --- Acquire lock and run on all state files ---
 LOCK_FAIL_OPEN=true
+
+VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
+STATE_FILE="$VIBECREW_DIR/state.json"
+BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
+CONFIG_FILE="$VIBECREW_DIR/config.json"
+
 if acquire_state_lock "migrate-state"; then
-  for f in "$PROJECT_ROOT/.vibecrew/config.json" "$PROJECT_ROOT/.vibecrew/state.json" "$PROJECT_ROOT/.vibecrew/backlog.json"; do
+  # Backup all files before migration
+  BACKUP_DIR="$VIBECREW_DIR/.backup"
+  mkdir -p "$BACKUP_DIR"
+  for f in "$STATE_FILE" "$BACKLOG_FILE" "$CONFIG_FILE"; do
+    [[ -f "$f" ]] && cp "$f" "$BACKUP_DIR/$(basename "$f").pre-migration" 2>/dev/null || log_error "migrate-state" "Failed to backup $(basename "$f") before migration"
+  done
+
+  for f in "$CONFIG_FILE" "$STATE_FILE" "$BACKLOG_FILE"; do
     migrate_file "$f"
   done
+
+  # --- Migrate score files (inside lock scope) ---
+  if [[ -d "$PROJECT_ROOT/.vibecrew/scores" ]]; then
+    for f in "$PROJECT_ROOT/.vibecrew/scores"/score-*.json; do
+      [[ -f "$f" ]] || continue
+      local_version=$(jq -r '.schema_version // "1.0.0"' "$f" 2>/dev/null || echo "1.0.0")
+      if version_lt "$local_version" "1.1.0"; then
+        migrate_score_1_0_to_1_1 "$f"
+        jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$f" > "${f}.tmp" && mv "${f}.tmp" "$f"
+      fi
+    done
+  fi
+
+  # --- Migrate mutation log (inside lock scope) ---
+  MUTATION_LOG="$PROJECT_ROOT/.vibecrew/mutation-log.json"
+  if [[ -f "$MUTATION_LOG" ]]; then
+    local_version=$(jq -r '.schema_version // "1.0.0"' "$MUTATION_LOG" 2>/dev/null || echo "1.0.0")
+    if version_lt "$local_version" "1.1.0"; then
+      migrate_mutation_log_1_0_to_1_1 "$MUTATION_LOG"
+      jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$MUTATION_LOG" > "${MUTATION_LOG}.tmp" && mv "${MUTATION_LOG}.tmp" "$MUTATION_LOG"
+      echo "Migrated mutation-log.json from $local_version to $CURRENT_VERSION"
+    fi
+  fi
 else
   echo "WARNING: Could not acquire lock, skipping migration" >&2
 fi
 
-# --- Migrate score files ---
-if [[ -d "$PROJECT_ROOT/.vibecrew/scores" ]]; then
-  for f in "$PROJECT_ROOT/.vibecrew/scores"/score-*.json; do
-    [[ -f "$f" ]] || continue
-    local_version=$(jq -r '.schema_version // "1.0.0"' "$f" 2>/dev/null || echo "1.0.0")
-    if version_lt "$local_version" "1.1.0"; then
-      migrate_score_1_0_to_1_1 "$f"
-      jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$f" > "${f}.tmp" && mv "${f}.tmp" "$f"
-    fi
-  done
-fi
-
-# --- Migrate mutation log ---
-MUTATION_LOG="$PROJECT_ROOT/.vibecrew/mutation-log.json"
-if [[ -f "$MUTATION_LOG" ]]; then
-  local_version=$(jq -r '.schema_version // "1.0.0"' "$MUTATION_LOG" 2>/dev/null || echo "1.0.0")
-  if version_lt "$local_version" "1.1.0"; then
-    migrate_mutation_log_1_0_to_1_1 "$MUTATION_LOG"
-    jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$MUTATION_LOG" > "${MUTATION_LOG}.tmp" && mv "${MUTATION_LOG}.tmp" "$MUTATION_LOG"
-    echo "Migrated mutation-log.json from $local_version to $CURRENT_VERSION"
-  fi
-fi
-
-release_state_lock
+[[ "$_LOCK_ACQUIRED" == "true" ]] && release_state_lock
 exit 0

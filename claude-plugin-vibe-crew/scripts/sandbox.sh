@@ -4,7 +4,9 @@
 # Usage: source "${CLAUDE_PLUGIN_ROOT}/scripts/sandbox.sh"
 
 SANDBOX_PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-SANDBOX_PROJECT_ROOT=$(realpath "$SANDBOX_PROJECT_ROOT")
+SANDBOX_PROJECT_ROOT=$(realpath "$SANDBOX_PROJECT_ROOT" 2>/dev/null) || {
+  echo "ERROR: Cannot resolve project root" >&2; return 1
+}
 
 # --- Path Canonicalization ---
 sandbox_canonicalize() {
@@ -19,7 +21,7 @@ sandbox_canonicalize() {
     if [[ -d "$parent" ]]; then
       echo "$(realpath "$parent")/$name"
     else
-      realpath -m "$path" 2>/dev/null || echo "$path"
+      realpath -m "$path" 2>/dev/null || python3 -c "import os; print(os.path.abspath('$path'))" 2>/dev/null || echo "$path"
     fi
   fi
 }

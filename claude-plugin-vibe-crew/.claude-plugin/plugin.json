@@ -1,6 +1,6 @@
 {
   "name": "vibe-crew",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Autonomous vibe-coding operating system for Claude Code",
   "author": {
     "name": "Fabian Krumbholz",
@@ -13,5 +13,6 @@
   "agents": "./agents/",
   "skills": "./skills/",
   "hooks": "./hooks/hooks.json",
-  "mcpServers": "./.mcp.json"
+  "mcpServers": "./.mcp.json",
+  "settings": "./settings.json"
 }

@@ -22,15 +22,16 @@ detect_terminal() {
 }
 
 TERMINAL=$(detect_terminal)
+echo "Detected terminal: $TERMINAL"
 
 # --- Create directory structure ---
-mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,handoffs,workflows}
+mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,handoffs,workflows,.backup}
 
 # --- Write config.json (only if it doesn't exist) ---
 if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
   cat > "$VIBECREW_DIR/config.json" <<EOF
 {
-  "schema_version": "1.4.0",
+  "schema_version": "1.5.0",
   "created_at": "$TIMESTAMP",
   "terminal": "$TERMINAL",
   "notifications": {
@@ -76,6 +77,34 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "session_max_usd": 5.00,
     "daily_warn_usd": 20.00
   },
+  "pricing": {
+    "opus": {
+      "input": 15.00,
+      "cache_create": 18.75,
+      "cache_read": 1.50,
+      "output": 75.00
+    },
+    "sonnet": {
+      "input": 3.00,
+      "cache_create": 3.75,
+      "cache_read": 0.30,
+      "output": 15.00
+    },
+    "haiku": {
+      "input": 0.25,
+      "cache_create": 0.30,
+      "cache_read": 0.03,
+      "output": 1.25
+    },
+    "last_updated": "2026-03-01"
+  },
+  "locks": {
+    "stale_timeout_secs": 60,
+    "wait_timeout_secs": 30
+  },
+  "quality_gate": {
+    "timeout_seconds": 120
+  },
   "gamification": {
     "enabled": false
   },
@@ -102,7 +131,7 @@ fi
 if [[ ! -f "$VIBECREW_DIR/state.json" ]]; then
   cat > "$VIBECREW_DIR/state.json" <<EOF
 {
-  "schema_version": "1.4.0",
+  "schema_version": "1.5.0",
   "foundation": {
     "complete": false,
     "completed_at": null,
@@ -115,6 +144,7 @@ if [[ ! -f "$VIBECREW_DIR/state.json" ]]; then
       "design_system": {
         "status": "pending",
         "file": null,
+        "brief_file": null,
         "approved_at": null
       },
       "tdr": {
@@ -150,6 +180,9 @@ if [[ ! -f "$VIBECREW_DIR/state.json" ]]; then
     "default_branch": "main",
     "initialized": false
   },
+  "active_workflow": null,
+  "onboarded": false,
+  "onboarded_at": null,
   "updated_at": "$TIMESTAMP"
 }
 EOF
@@ -162,7 +195,7 @@ fi
 if [[ ! -f "$VIBECREW_DIR/backlog.json" ]]; then
   cat > "$VIBECREW_DIR/backlog.json" <<EOF
 {
-  "schema_version": "1.4.0",
+  "schema_version": "1.5.0",
   "columns": [
     { "id": "idea",        "title": "Ideas",          "wip_limit": null },
     { "id": "planning",    "title": "Planning",       "wip_limit": 2 },
@@ -236,6 +269,11 @@ VIBECREW_IGNORES=(
   ".vibecrew/locks/"
   ".vibecrew/notifications.log"
   ".vibecrew/config.json"
+  ".vibecrew/scores/"
+  ".vibecrew/gamification.json"
+  ".vibecrew/.backup/"
+  ".vibecrew/session-errors.jsonl"
+  ".vibecrew/session-cost.json"
 )
 
 if [[ -f "$GITIGNORE" ]]; then
@@ -270,9 +308,9 @@ fi
 
 echo ""
 echo "VibeCrew state initialized in $VIBECREW_DIR"
-echo "  config.json        -- User preferences (schema v1.4.0)"
-echo "  state.json         -- Project state (schema v1.4.0)"
-echo "  backlog.json       -- Feature backlog (schema v1.4.0)"
+echo "  config.json        -- User preferences (schema v1.5.0)"
+echo "  state.json         -- Project state (schema v1.5.0)"
+echo "  backlog.json       -- Feature backlog (schema v1.5.0)"
 echo "  sessions/          -- Session logs"
 echo "  scores/            -- Vibe Score history"
 echo "  signals/           -- Inter-agent signals"

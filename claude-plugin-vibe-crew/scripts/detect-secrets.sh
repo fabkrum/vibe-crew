@@ -16,6 +16,7 @@ EXCLUDES="--exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exc
 
 # Temp file for collecting findings
 FINDINGS_TMP=$(mktemp)
+trap 'rm -f "$FINDINGS_TMP"' EXIT
 echo '[]' > "$FINDINGS_TMP"
 
 # --- Helper: redact a secret value (show first 4 + last 4 chars) ---
@@ -137,8 +138,5 @@ jq -n \
     "secrets_found": $secrets_found,
     "total_count": $total_count
   }'
-
-# Clean up
-rm -f "$FINDINGS_TMP"
 
 exit 0

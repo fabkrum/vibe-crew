@@ -1,0 +1,9 @@
+[submodule "claude-plugin-vibe-crew/tests/bats"]
+	path = claude-plugin-vibe-crew/tests/bats
+	url = https://github.com/bats-core/bats-core.git
+[submodule "claude-plugin-vibe-crew/tests/bats-support"]
+	path = claude-plugin-vibe-crew/tests/bats-support
+	url = https://github.com/bats-core/bats-support.git
+[submodule "claude-plugin-vibe-crew/tests/bats-assert"]
+	path = claude-plugin-vibe-crew/tests/bats-assert
+	url = https://github.com/bats-core/bats-assert.git

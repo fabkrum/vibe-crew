@@ -13,111 +13,13 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 STATE_FILE="$VIBECREW_DIR/state.json"
 BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
-LOCK_DIR="$VIBECREW_DIR/locks/backlog-json"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # =============================================================================
-# Locking helpers
+# Shared locking
 # =============================================================================
 
-LOCK_ACQUIRED=false
-
-cleanup() {
-  if [[ "$LOCK_ACQUIRED" == "true" ]]; then
-    rm -rf "$LOCK_DIR"
-  fi
-}
-
-trap cleanup EXIT
-
-is_lock_stale() {
-  local lock_info="$LOCK_DIR/info.json"
-  if [[ ! -f "$lock_info" ]]; then
-    return 0  # No info file means stale
-  fi
-  local locked_at
-  locked_at=$(jq -r '.locked_at // empty' "$lock_info" 2>/dev/null || echo "")
-  if [[ -z "$locked_at" ]]; then
-    return 0
-  fi
-  # Check if lock is older than 30 seconds
-  local lock_epoch now_epoch
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$locked_at" "+%s" &>/dev/null; then
-    # macOS date
-    lock_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$locked_at" "+%s" 2>/dev/null || echo "0")
-  else
-    # GNU date
-    lock_epoch=$(date -d "$locked_at" "+%s" 2>/dev/null || echo "0")
-  fi
-  now_epoch=$(date "+%s")
-  local age=$(( now_epoch - lock_epoch ))
-  [[ "$age" -gt 30 ]]
-}
-
-acquire_lock() {
-  mkdir -p "$VIBECREW_DIR/locks"
-
-  # Try to acquire
-  if mkdir "$LOCK_DIR" 2>/dev/null; then
-    LOCK_ACQUIRED=true
-    cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "claim-task.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-    return 0
-  fi
-
-  # Lock exists -- check if stale
-  if is_lock_stale; then
-    rm -rf "$LOCK_DIR"
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "claim-task.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-  fi
-
-  # Wait up to 5 seconds, polling every 0.5s
-  local attempts=0
-  while [[ "$attempts" -lt 10 ]]; do
-    sleep 0.5
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "claim-task.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-    ((attempts++))
-  done
-
-  echo "ERROR: Could not acquire lock on backlog.json after 5 seconds." >&2
-  exit 1
-}
-
-release_lock() {
-  rm -rf "$LOCK_DIR"
-  LOCK_ACQUIRED=false
-}
+source "$(dirname "$0")/lib/lock.sh"
 
 # =============================================================================
 # Atomic write with validation
@@ -148,9 +50,8 @@ atomic_write() {
     return 1
   fi
 
-  # Atomic rename
+  # Atomic rename (caller manages .bak cleanup for rollback safety)
   mv "$tmp" "$target"
-  rm -f "$backup"
   return 0
 }
 
@@ -185,7 +86,7 @@ fi
 # Acquire lock and read backlog
 # =============================================================================
 
-acquire_lock
+acquire_state_lock "claim-task"
 
 BACKLOG=$(cat "$BACKLOG_FILE")
 
@@ -200,14 +101,14 @@ if [[ -n "$FEATURE_ID" ]]; then
 
   if [[ "$FEATURE_JSON" == "null" ]]; then
     echo "ERROR: Feature '$FEATURE_ID' not found in backlog." >&2
-    release_lock
+    release_state_lock
     exit 1
   fi
 
   FEATURE_COLUMN=$(echo "$FEATURE_JSON" | jq -r '.column // "unknown"')
   if [[ "$FEATURE_COLUMN" != "planned" ]]; then
     echo "ERROR: Feature '$FEATURE_ID' is in column '$FEATURE_COLUMN', not 'planned'." >&2
-    release_lock
+    release_state_lock
     exit 1
   fi
 else
@@ -221,7 +122,7 @@ else
 
   if [[ "$WIP_LIMIT" != "null" ]] && [[ "$IN_PROGRESS_COUNT" -ge "$WIP_LIMIT" ]]; then
     echo "ERROR: WIP limit reached. $IN_PROGRESS_COUNT feature(s) already in-progress (limit: $WIP_LIMIT)." >&2
-    release_lock
+    release_state_lock
     exit 1
   fi
 
@@ -233,7 +134,7 @@ else
 
   if [[ "$READY_COUNT" -eq 0 ]]; then
     echo "No planned features."
-    release_lock
+    release_state_lock
     exit 0
   fi
 
@@ -267,7 +168,7 @@ else
 
   if [[ "$FEATURE_JSON" == "null" ]]; then
     echo "No ready features with satisfied dependencies."
-    release_lock
+    release_state_lock
     exit 0
   fi
 fi
@@ -284,7 +185,7 @@ if [[ -n "$FEATURE_ID" ]] && [[ "${FEATURE_JSON:-null}" != "null" ]]; then
         '[.features[] | select(.id == $did) | .column] | .[0] // "unknown"')
       if [[ "$DEP_COLUMN" != "done" ]]; then
         echo "ERROR: Dependency '$dep_id' is in column '$DEP_COLUMN', not 'done'." >&2
-        release_lock
+        release_state_lock
         exit 1
       fi
     done <<< "$DEPS"
@@ -341,17 +242,25 @@ UPDATED_STATE=$(echo "$STATE" | jq \
 
 if ! atomic_write "$BACKLOG_FILE" "$UPDATED_BACKLOG"; then
   echo "ERROR: Failed to write backlog.json" >&2
-  release_lock
+  release_state_lock
   exit 1
 fi
 
 if ! atomic_write "$STATE_FILE" "$UPDATED_STATE"; then
-  echo "ERROR: Failed to write state.json" >&2
-  release_lock
+  echo "ERROR: Failed to write state.json, rolling back backlog.json" >&2
+  # Rollback backlog from backup
+  if [[ -f "${BACKLOG_FILE}.bak" ]]; then
+    cp "${BACKLOG_FILE}.bak" "$BACKLOG_FILE"
+  fi
+  rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
+  release_state_lock
   exit 1
 fi
 
-release_lock
+# Both writes succeeded — clean up backups
+rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
+
+release_state_lock
 
 # =============================================================================
 # Output result as JSON

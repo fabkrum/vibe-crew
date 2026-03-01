@@ -50,12 +50,12 @@ HOOK_OUTPUT
 # Category 1: Destructive File Operations
 # =============================================================================
 
-if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|--recursive).*\s+/[^a-zA-Z]'; then
-  block "Destructive" "rm -rf / destroys the entire filesystem." "Remove specific directories instead."
+if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*[rR]|--recursive).*\s+/'; then
+  block "Destructive" "Recursive rm targeting / destroys the filesystem." "Remove specific directories instead."
 fi
 
-if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|--recursive).*(\s+~|\$HOME)'; then
-  block "Destructive" "rm -rf ~ destroys the home directory." "Remove specific directories instead."
+if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*[rR]|--recursive).*(\s+~|\$HOME)'; then
+  block "Destructive" "Recursive rm targeting ~ destroys the home directory." "Remove specific directories instead."
 fi
 
 if echo "$COMMAND" | grep -qE '\bmkfs\b'; then
@@ -78,7 +78,7 @@ fi
 # Category 2: Privilege Escalation
 # =============================================================================
 
-if echo "$COMMAND" | grep -qE '\bsudo\b'; then
+if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)(sudo|/usr/bin/sudo|command\s+sudo|env\s+sudo)\b'; then
   block "Privilege" "sudo executes commands with elevated privileges." "Run without sudo if possible."
 fi
 
@@ -86,11 +86,11 @@ if echo "$COMMAND" | grep -qE '\bsu\s+-'; then
   block "Privilege" "su switches to another user (typically root)."
 fi
 
-if echo "$COMMAND" | grep -qE '\bdoas\b'; then
+if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)(doas|/usr/bin/doas|command\s+doas|env\s+doas)\b'; then
   block "Privilege" "doas executes commands with elevated privileges."
 fi
 
-if echo "$COMMAND" | grep -qE '\bpkexec\b'; then
+if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)(pkexec|/usr/bin/pkexec|command\s+pkexec|env\s+pkexec)\b'; then
   block "Privilege" "pkexec executes commands with elevated privileges."
 fi
 
@@ -106,7 +106,7 @@ if echo "$COMMAND" | grep -qE '\bchown\b'; then
   block "Privilege" "chown changes file ownership, which can affect system security."
 fi
 
-if echo "$COMMAND" | grep -qE 'chmod\s+[u+]*s'; then
+if echo "$COMMAND" | grep -qE 'chmod\s+([ugoa+]*s|[2467][0-7]{3})'; then
   block "Privilege" "Setting setuid/setgid bit is a security risk."
 fi
 
@@ -138,7 +138,7 @@ if echo "$COMMAND" | grep -qE 'git\s+branch\s+-D\s+(main|master)'; then
   block "Git" "Deleting main/master branch destroys the primary branch."
 fi
 
-if echo "$COMMAND" | grep -qE 'git\s+checkout\s+\.\s*$'; then
+if echo "$COMMAND" | grep -qE 'git\s+checkout\s+\.(\s|;|&|\||$)'; then
   block "Git" "git checkout . discards all unstaged changes." "Use git stash to preserve changes."
 fi
 
@@ -146,7 +146,7 @@ if echo "$COMMAND" | grep -qE 'git\s+stash\s+drop'; then
   block "Git" "git stash drop permanently deletes stashed changes." "Use git stash list to review stashes first."
 fi
 
-if echo "$COMMAND" | grep -qE 'git\s+push\s+.*\s+(main|master)\b'; then
+if echo "$COMMAND" | grep -qE 'git\s+push\s+\S+\s+(main|master)\s*$'; then
   block "Git" "Pushing directly to main/master bypasses code review." "Push to a feature branch and create a PR instead."
 fi
 
@@ -178,15 +178,15 @@ fi
 # Category 5: Credential and Secret Exposure
 # =============================================================================
 
-if echo "$COMMAND" | grep -qE 'cat\s+.*\.env\b'; then
+if echo "$COMMAND" | grep -qE '(cat|less|more|head|tail|bat|most|view|tac|nl)\s+.*\.env\b'; then
   block "Credentials" "Reading .env files may expose secrets." "Use specific environment variables instead."
 fi
 
-if echo "$COMMAND" | grep -qE 'cat\s+.*\.ssh/'; then
+if echo "$COMMAND" | grep -qE '(cat|less|more|head|tail|bat|most|view|tac|nl)\s+.*\.ssh/'; then
   block "Credentials" "Reading SSH keys exposes authentication credentials."
 fi
 
-if echo "$COMMAND" | grep -qE 'cat\s+.*\.aws/(credentials|config)'; then
+if echo "$COMMAND" | grep -qE '(cat|less|more|head|tail|bat|most|view|tac|nl)\s+.*\.aws/(credentials|config)'; then
   block "Credentials" "Reading AWS credentials exposes cloud access keys."
 fi
 
@@ -239,7 +239,10 @@ fi
 # =============================================================================
 
 if echo "$COMMAND" | grep -qE 'curl\s+.*(-X\s+POST|-d|--data)'; then
-  block "Network" "curl POST with data may exfiltrate information." "Review the request body and destination before sending."
+  # Exempt localhost/loopback addresses
+  if ! echo "$COMMAND" | grep -qE 'localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]'; then
+    block "Network" "curl POST with data may exfiltrate information." "Review the request body and destination before sending."
+  fi
 fi
 
 if echo "$COMMAND" | grep -qE '\bnc\b|\bncat\b|\bnetcat\b'; then

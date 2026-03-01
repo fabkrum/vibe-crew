@@ -910,6 +910,9 @@ If preference is `disabled`, skip this step entirely and proceed to Step 10.
 Execute these scripts sequentially — each depends on the previous step:
 
 ```bash
+# 0. Refresh active challenges before scoring
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/refresh-challenges.sh"
+
 # 1. Award XP from session data
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/award-xp.sh"
 

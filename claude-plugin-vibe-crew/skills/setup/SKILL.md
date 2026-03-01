@@ -112,7 +112,7 @@ Run the initialization script:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/init-vibecrew-state.sh"
 ```
 
-This script creates the `.vibecrew/` directory structure with `config.json`, `state.json`, `backlog.json`, and subdirectories for `sessions/`, `scores/`, and `releases/`.
+This script creates the `.vibecrew/` directory structure with `config.json`, `state.json`, `backlog.json`, and subdirectories for `sessions/`, `scores/`, `signals/`, `locks/`, `architecture/`, `releases/`, `handoffs/`, and `workflows/`.
 
 ## Step 6: Verify Initialization
 

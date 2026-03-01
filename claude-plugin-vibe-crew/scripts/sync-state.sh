@@ -12,7 +12,6 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 STATE_FILE="$VIBECREW_DIR/state.json"
 BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
-LOCK_DIR="$VIBECREW_DIR/locks/sync-state"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 ISSUES=0
@@ -20,121 +19,11 @@ FIXES=()
 WARNINGS=()
 
 # =============================================================================
-# Timestamp helpers (macOS + GNU compatible)
+# Shared locking (fail-open for sync-state)
 # =============================================================================
 
-parse_timestamp() {
-  local ts="$1"
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" &>/dev/null; then
-    date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" 2>/dev/null || echo "0"
-  else
-    date -d "$ts" "+%s" 2>/dev/null || echo "0"
-  fi
-}
-
-# =============================================================================
-# Locking helpers (mkdir-based advisory lock, 30 second timeout)
-# =============================================================================
-
-LOCK_ACQUIRED=false
-
-cleanup() {
-  if [[ "$LOCK_ACQUIRED" == "true" ]]; then
-    rm -rf "$LOCK_DIR"
-  fi
-}
-
-trap cleanup EXIT
-
-is_lock_stale() {
-  local lock_info="$LOCK_DIR/info.json"
-  if [[ ! -f "$lock_info" ]]; then
-    return 0  # No info file means stale
-  fi
-  local locked_at
-  locked_at=$(jq -r '.locked_at // empty' "$lock_info" 2>/dev/null || echo "")
-  if [[ -z "$locked_at" ]]; then
-    return 0
-  fi
-  local lock_epoch now_epoch
-  lock_epoch=$(parse_timestamp "$locked_at")
-  now_epoch=$(date "+%s")
-  local age=$(( now_epoch - lock_epoch ))
-  [[ "$age" -gt 30 ]]
-}
-
-acquire_lock() {
-  mkdir -p "$VIBECREW_DIR/locks"
-
-  # Try to acquire
-  if mkdir "$LOCK_DIR" 2>/dev/null; then
-    LOCK_ACQUIRED=true
-    cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "sync-state.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "state.json,backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-    return 0
-  fi
-
-  # Lock exists -- check if stale
-  if is_lock_stale; then
-    rm -rf "$LOCK_DIR"
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "sync-state.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "state.json,backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-  fi
-
-  # Wait up to 30 seconds, polling every 0.5s
-  local attempts=0
-  while [[ "$attempts" -lt 60 ]]; do
-    sleep 0.5
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "sync-state.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "state.json,backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-
-    # Check for stale lock while waiting
-    if is_lock_stale; then
-      rm -rf "$LOCK_DIR"
-      # Loop will try mkdir on next iteration
-    fi
-
-    ((attempts++))
-  done
-
-  # Fail open -- could not acquire lock, skip sync
-  WARNINGS+=("Could not acquire lock after 30 seconds, skipping sync")
-  return 1
-}
-
-release_lock() {
-  rm -rf "$LOCK_DIR"
-  LOCK_ACQUIRED=false
-}
+LOCK_FAIL_OPEN=true
+source "$(dirname "$0")/lib/lock.sh"
 
 # =============================================================================
 # Atomic write with validation
@@ -194,9 +83,8 @@ fi
 # Acquire lock
 # =============================================================================
 
-if ! acquire_lock; then
+if ! acquire_state_lock "sync-state"; then
   echo "State sync: skipped (could not acquire lock)"
-  echo "  - Warning: ${WARNINGS[*]}"
   exit 0
 fi
 
@@ -380,7 +268,7 @@ fi
 # Release lock
 # =============================================================================
 
-release_lock
+release_state_lock
 
 # =============================================================================
 # Output report

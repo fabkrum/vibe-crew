@@ -14,9 +14,10 @@ claude-plugin-vibe-crew/          # The plugin — install this into your projec
   .mcp.json                     # MCP server config (10 servers)
   settings.json                 # Permission rules
   hooks/hooks.json              # Event hook bindings
-  scripts/                      # ~70 bash automation scripts
+  scripts/                      # ~80 bash automation scripts
   agents/                       # 14 specialized AI agent prompts
-  skills/                       # 27 slash command definitions
+  skills/                       # 28 slash command definitions
+  tests/                        # BATS test suite
   templates/                    # Project templates and doc-site scaffold
 
 architecture/                   # Architecture design docs (contributor reference)
@@ -84,6 +85,7 @@ When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
   config.json                   # Terminal preference, notification settings (editable via dashboard Settings page)
   state.json                    # Foundation status + active feature
   backlog.json                  # Feature backlog with specs
+  gamification.json             # Achievements & progression (opt-in)
   architecture/                 # Mermaid architecture diagrams (Tier 1 artifact)
     system.mmd                  #   Infrastructure topology (flowchart TD)
     schema.mmd                  #   Entity-relationship diagram (erDiagram)
@@ -92,6 +94,8 @@ When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
     component-tree.mmd          #   Component hierarchy with data flow (flowchart TD)
   sessions/                     # Session logs (JSON)
   scores/                       # Vibe Score breakdowns (JSON)
+  signals/                      # Inter-agent signal files
+  locks/                        # Advisory locks for concurrent access
   releases/                     # Release notes data (JSON)
   handoffs/                     # Cross-session handoff documents
   workflows/                    # Reusable workflow templates (/replay)
@@ -103,7 +107,7 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`
 
 ### User Profile System
 

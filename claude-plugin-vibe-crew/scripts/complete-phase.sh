@@ -14,111 +14,13 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 STATE_FILE="$VIBECREW_DIR/state.json"
 BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
-LOCK_DIR="$VIBECREW_DIR/locks/backlog-json"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # =============================================================================
-# Locking helpers
+# Shared locking
 # =============================================================================
 
-LOCK_ACQUIRED=false
-
-cleanup() {
-  if [[ "$LOCK_ACQUIRED" == "true" ]]; then
-    rm -rf "$LOCK_DIR"
-  fi
-}
-
-trap cleanup EXIT
-
-is_lock_stale() {
-  local lock_info="$LOCK_DIR/info.json"
-  if [[ ! -f "$lock_info" ]]; then
-    return 0  # No info file means stale
-  fi
-  local locked_at
-  locked_at=$(jq -r '.locked_at // empty' "$lock_info" 2>/dev/null || echo "")
-  if [[ -z "$locked_at" ]]; then
-    return 0
-  fi
-  # Check if lock is older than 30 seconds
-  local lock_epoch now_epoch
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$locked_at" "+%s" &>/dev/null; then
-    # macOS date
-    lock_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$locked_at" "+%s" 2>/dev/null || echo "0")
-  else
-    # GNU date
-    lock_epoch=$(date -d "$locked_at" "+%s" 2>/dev/null || echo "0")
-  fi
-  now_epoch=$(date "+%s")
-  local age=$(( now_epoch - lock_epoch ))
-  [[ "$age" -gt 30 ]]
-}
-
-acquire_lock() {
-  mkdir -p "$VIBECREW_DIR/locks"
-
-  # Try to acquire
-  if mkdir "$LOCK_DIR" 2>/dev/null; then
-    LOCK_ACQUIRED=true
-    cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "complete-phase.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-    return 0
-  fi
-
-  # Lock exists -- check if stale
-  if is_lock_stale; then
-    rm -rf "$LOCK_DIR"
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "complete-phase.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-  fi
-
-  # Wait up to 5 seconds, polling every 0.5s
-  local attempts=0
-  while [[ "$attempts" -lt 10 ]]; do
-    sleep 0.5
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "complete-phase.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-    ((attempts++))
-  done
-
-  echo "ERROR: Could not acquire lock on backlog.json after 5 seconds." >&2
-  exit 1
-}
-
-release_lock() {
-  rm -rf "$LOCK_DIR"
-  LOCK_ACQUIRED=false
-}
+source "$(dirname "$0")/lib/lock.sh"
 
 # =============================================================================
 # Atomic write with validation
@@ -149,9 +51,8 @@ atomic_write() {
     return 1
   fi
 
-  # Atomic rename
+  # Atomic rename (caller manages .bak cleanup for rollback safety)
   mv "$tmp" "$target"
-  rm -f "$backup"
   return 0
 }
 
@@ -180,6 +81,8 @@ if [[ "$1" == "foundation" ]]; then
     exit 1
   fi
 
+  acquire_state_lock "complete-phase-foundation"
+
   UPDATED=$(jq \
     --arg ts "$TIMESTAMP" \
     '.foundation.complete = true | .foundation.completed_at = $ts | .updated_at = $ts' \
@@ -187,9 +90,13 @@ if [[ "$1" == "foundation" ]]; then
 
   if ! atomic_write "$STATE_FILE" "$UPDATED"; then
     echo "ERROR: Failed to write state.json" >&2
+    rm -f "${STATE_FILE}.bak"
+    release_state_lock
     exit 1
   fi
 
+  rm -f "${STATE_FILE}.bak"
+  release_state_lock
   echo "Foundation marked complete."
   exit 0
 fi
@@ -262,7 +169,7 @@ if [[ ! -f "$STATE_FILE" ]]; then
 fi
 
 # Acquire lock
-acquire_lock
+acquire_state_lock "complete-phase"
 
 # Read backlog
 BACKLOG=$(cat "$BACKLOG_FILE")
@@ -273,7 +180,7 @@ FEATURE_INDEX=$(echo "$BACKLOG" | jq --arg id "$FEATURE_ID" \
 
 if [[ "$FEATURE_INDEX" == "-1" ]] || [[ "$FEATURE_INDEX" == "null" ]]; then
   echo "ERROR: Feature '$FEATURE_ID' not found in backlog." >&2
-  release_lock
+  release_state_lock
   exit 1
 fi
 
@@ -322,18 +229,27 @@ UPDATED_STATE=$(echo "$STATE" | jq \
 # Write backlog atomically
 if ! atomic_write "$BACKLOG_FILE" "$UPDATED_BACKLOG"; then
   echo "ERROR: Failed to write backlog.json" >&2
-  release_lock
+  rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
+  release_state_lock
   exit 1
 fi
 
 # Write state atomically
 if ! atomic_write "$STATE_FILE" "$UPDATED_STATE"; then
-  echo "ERROR: Failed to write state.json" >&2
-  release_lock
+  echo "ERROR: Failed to write state.json, rolling back backlog.json" >&2
+  # Rollback backlog from backup
+  if [[ -f "${BACKLOG_FILE}.bak" ]]; then
+    cp "${BACKLOG_FILE}.bak" "$BACKLOG_FILE"
+  fi
+  rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
+  release_state_lock
   exit 1
 fi
 
-release_lock
+# Both writes succeeded — clean up backups
+rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
+
+release_state_lock
 
 echo "$FEATURE_ID: completed $COMPLETED_PHASE, now in $NEXT_COLUMN"
 exit 0

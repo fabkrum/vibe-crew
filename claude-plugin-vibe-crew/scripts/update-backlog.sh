@@ -16,111 +16,13 @@ set -euo pipefail
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
-LOCK_DIR="$VIBECREW_DIR/locks/backlog-json"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # =============================================================================
-# Locking helpers
+# Shared locking
 # =============================================================================
 
-LOCK_ACQUIRED=false
-
-cleanup() {
-  if [[ "$LOCK_ACQUIRED" == "true" ]]; then
-    rm -rf "$LOCK_DIR"
-  fi
-}
-
-trap cleanup EXIT
-
-is_lock_stale() {
-  local lock_info="$LOCK_DIR/info.json"
-  if [[ ! -f "$lock_info" ]]; then
-    return 0  # No info file means stale
-  fi
-  local locked_at
-  locked_at=$(jq -r '.locked_at // empty' "$lock_info" 2>/dev/null || echo "")
-  if [[ -z "$locked_at" ]]; then
-    return 0
-  fi
-  # Check if lock is older than 30 seconds
-  local lock_epoch now_epoch
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$locked_at" "+%s" &>/dev/null; then
-    # macOS date
-    lock_epoch=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$locked_at" "+%s" 2>/dev/null || echo "0")
-  else
-    # GNU date
-    lock_epoch=$(date -d "$locked_at" "+%s" 2>/dev/null || echo "0")
-  fi
-  now_epoch=$(date "+%s")
-  local age=$(( now_epoch - lock_epoch ))
-  [[ "$age" -gt 30 ]]
-}
-
-acquire_lock() {
-  mkdir -p "$VIBECREW_DIR/locks"
-
-  # Try to acquire
-  if mkdir "$LOCK_DIR" 2>/dev/null; then
-    LOCK_ACQUIRED=true
-    cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "update-backlog.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-    return 0
-  fi
-
-  # Lock exists -- check if stale
-  if is_lock_stale; then
-    rm -rf "$LOCK_DIR"
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "update-backlog.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-  fi
-
-  # Wait up to 5 seconds, polling every 0.5s
-  local attempts=0
-  while [[ "$attempts" -lt 10 ]]; do
-    sleep 0.5
-    if mkdir "$LOCK_DIR" 2>/dev/null; then
-      LOCK_ACQUIRED=true
-      cat > "$LOCK_DIR/info.json" <<EOF
-{
-  "locked_by": "update-backlog.sh",
-  "pid": $$,
-  "locked_at": "$TIMESTAMP",
-  "target_file": "backlog.json",
-  "timeout_seconds": 30
-}
-EOF
-      return 0
-    fi
-    ((attempts++))
-  done
-
-  echo "ERROR: Could not acquire lock on backlog.json after 5 seconds." >&2
-  exit 1
-}
-
-release_lock() {
-  rm -rf "$LOCK_DIR"
-  LOCK_ACQUIRED=false
-}
+source "$(dirname "$0")/lib/lock.sh"
 
 # =============================================================================
 # Atomic write with validation
@@ -246,7 +148,7 @@ fi
 # Acquire lock and read backlog
 # =============================================================================
 
-acquire_lock
+acquire_state_lock "update-backlog"
 
 BACKLOG=$(cat "$BACKLOG_FILE")
 
@@ -259,7 +161,7 @@ FEATURE_INDEX=$(echo "$BACKLOG" | jq --arg id "$FEATURE_ID" \
 
 if [[ "$FEATURE_INDEX" == "-1" ]] || [[ "$FEATURE_INDEX" == "null" ]]; then
   echo "ERROR: Feature '$FEATURE_ID' not found in backlog." >&2
-  release_lock
+  release_state_lock
   exit 1
 fi
 
@@ -317,11 +219,11 @@ fi
 
 if ! atomic_write "$BACKLOG_FILE" "$UPDATED_BACKLOG"; then
   echo "ERROR: Failed to write backlog.json" >&2
-  release_lock
+  release_state_lock
   exit 1
 fi
 
-release_lock
+release_state_lock
 
 # Truncate long values for the summary
 DISPLAY_VALUE="$VALUE"

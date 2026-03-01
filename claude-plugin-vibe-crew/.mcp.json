@@ -2,19 +2,19 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "args": ["-y", "@upstash/context7-mcp@2.1.2"],
       "env": {},
       "disabled": false
     },
     "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "args": ["-y", "chrome-devtools-mcp@0.18.1"],
       "env": {},
       "disabled": false
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"],
+      "args": ["-y", "@playwright/mcp@0.0.68"],
       "env": {},
       "disabled": false
     },
@@ -34,7 +34,7 @@
     },
     "supabase": {
       "command": "npx",
-      "args": ["-y", "supabase-mcp-server@latest"],
+      "args": ["-y", "supabase-mcp@1.5.0"],
       "env": {
         "SUPABASE_URL": "",
         "SUPABASE_SERVICE_ROLE_KEY": ""
@@ -43,7 +43,7 @@
     },
     "stripe": {
       "command": "npx",
-      "args": ["-y", "@stripe/mcp@latest"],
+      "args": ["-y", "@stripe/mcp@0.3.1"],
       "env": {
         "STRIPE_SECRET_KEY": ""
       },
@@ -67,7 +67,7 @@
     },
     "stitch": {
       "command": "npx",
-      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
+      "args": ["-y", "@_davideast/stitch-mcp@0.4.0", "proxy"],
       "env": {},
       "disabled": true
     }

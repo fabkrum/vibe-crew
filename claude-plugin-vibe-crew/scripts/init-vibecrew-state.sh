@@ -15,6 +15,7 @@ TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 detect_terminal() {
   if [[ -n "${WARP_SESSION_ID:-}" ]]; then echo "warp"
   elif [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then echo "iterm"
+  elif [[ "${TERM_PROGRAM:-}" == "vscode" ]]; then echo "vscode"
   elif [[ "${TERM_PROGRAM:-}" == "Apple_Terminal" ]]; then echo "terminal"
   else echo "other"
   fi
@@ -23,13 +24,14 @@ detect_terminal() {
 TERMINAL=$(detect_terminal)
 
 # --- Create directory structure ---
-mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks}
+mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,handoffs,workflows}
 
 # --- Write config.json (only if it doesn't exist) ---
 if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
   cat > "$VIBECREW_DIR/config.json" <<EOF
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.4.0",
+  "created_at": "$TIMESTAMP",
   "terminal": "$TERMINAL",
   "notifications": {
     "enabled": true,
@@ -74,6 +76,9 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "session_max_usd": 5.00,
     "daily_warn_usd": 20.00
   },
+  "gamification": {
+    "enabled": false
+  },
   "user_profile": {
     "interview_completed": false,
     "role": null,
@@ -97,7 +102,7 @@ fi
 if [[ ! -f "$VIBECREW_DIR/state.json" ]]; then
   cat > "$VIBECREW_DIR/state.json" <<EOF
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.4.0",
   "foundation": {
     "complete": false,
     "completed_at": null,
@@ -118,6 +123,11 @@ if [[ ! -f "$VIBECREW_DIR/state.json" ]]; then
         "approved_at": null
       },
       "roadmap": {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      },
+      "architecture_diagrams": {
         "status": "pending",
         "file": null,
         "approved_at": null
@@ -152,7 +162,7 @@ fi
 if [[ ! -f "$VIBECREW_DIR/backlog.json" ]]; then
   cat > "$VIBECREW_DIR/backlog.json" <<EOF
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.4.0",
   "columns": [
     { "id": "idea",        "title": "Ideas",          "wip_limit": null },
     { "id": "planning",    "title": "Planning",       "wip_limit": 2 },
@@ -170,8 +180,10 @@ else
   echo "Exists:  .vibecrew/backlog.json (preserved)"
 fi
 
-# --- Write gamification.json (only if it doesn't exist) ---
-if [[ ! -f "$VIBECREW_DIR/gamification.json" ]]; then
+# --- Write gamification.json (only if gamification is enabled and file doesn't exist) ---
+# Gamification is opt-in. The file is created lazily when the user enables it via /profile.
+GAMIFICATION_ENABLED=$(jq -r '.gamification.enabled // false' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "false")
+if [[ "$GAMIFICATION_ENABLED" == "true" ]] && [[ ! -f "$VIBECREW_DIR/gamification.json" ]]; then
   cat > "$VIBECREW_DIR/gamification.json" <<EOF
 {
   "schema_version": "1.0.0",
@@ -212,7 +224,7 @@ if [[ ! -f "$VIBECREW_DIR/gamification.json" ]]; then
 }
 EOF
   echo "Created: .vibecrew/gamification.json"
-else
+elif [[ -f "$VIBECREW_DIR/gamification.json" ]]; then
   echo "Exists:  .vibecrew/gamification.json (preserved)"
 fi
 
@@ -258,13 +270,16 @@ fi
 
 echo ""
 echo "VibeCrew state initialized in $VIBECREW_DIR"
-echo "  config.json        -- User preferences (schema v1.0.0)"
-echo "  state.json         -- Project state (schema v1.0.0)"
-echo "  backlog.json       -- Feature backlog (schema v1.0.0)"
-echo "  gamification.json  -- Achievements & progression (schema v1.0.0)"
+echo "  config.json        -- User preferences (schema v1.4.0)"
+echo "  state.json         -- Project state (schema v1.4.0)"
+echo "  backlog.json       -- Feature backlog (schema v1.4.0)"
 echo "  sessions/          -- Session logs"
 echo "  scores/            -- Vibe Score history"
 echo "  signals/           -- Inter-agent signals"
 echo "  locks/             -- Advisory locks"
+echo "  architecture/      -- Mermaid architecture diagrams"
+echo "  releases/          -- Release notes"
+echo "  handoffs/          -- Cross-session handoffs"
+echo "  workflows/         -- Reusable workflow templates"
 
 exit 0

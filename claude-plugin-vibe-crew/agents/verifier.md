@@ -274,36 +274,41 @@ If `false`, skip all gamification processing and proceed to the coaching display
 
 Run in this exact order:
 
-1. **Award XP** — Calculate and apply session XP:
+1. **Refresh Challenges** — Refresh active challenge pool before scoring:
+   ```bash
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/refresh-challenges.sh"
+   ```
+
+2. **Award XP** — Calculate and apply session XP:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/award-xp.sh"
    ```
    Capture the JSON output for display.
 
-2. **Check Badges** — Evaluate badge conditions:
+3. **Check Badges** — Evaluate badge conditions:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-badges.sh"
    ```
    Capture newly earned badges for display.
 
-3. **Update Streak** — Update the daily streak counter:
+4. **Update Streak** — Update the daily streak counter:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-streak.sh"
    ```
 
-4. **Distribute Skill XP** — Allocate XP to skill domains:
+5. **Distribute Skill XP** — Allocate XP to skill domains:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/distribute-skill-xp.sh"
    ```
    Capture skill level-ups for display.
 
-5. **Update Challenges** — Check active challenge progress:
+6. **Update Challenges** — Check active challenge progress:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-challenges.sh"
    ```
    Capture completed challenges for display.
 
-6. **Check Level Up** — Process level advancement and unlocks:
+7. **Check Level Up** — Process level advancement and unlocks:
    ```bash
    bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-level-up.sh"
    ```

@@ -17,7 +17,7 @@ DEFAULTS='{
   "autonomy": "checkpoints",
   "pr_review": "review",
   "verbosity": "standard",
-  "gamification_preference": "full",
+  "gamification_preference": "disabled",
   "learning": "reference_docs",
   "risk_tolerance": "balanced",
   "updated_at": null

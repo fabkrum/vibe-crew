@@ -10,6 +10,9 @@ set -euo pipefail
 CURRENT_VERSION="1.4.0"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
+# Source shared lock library
+source "$(dirname "$0")/lib/lock.sh"
+
 # --- Semver comparison ---
 version_lt() {
   # Returns 0 (true) if $1 < $2
@@ -212,10 +215,15 @@ migrate_file() {
   echo "Migrated $(basename "$file") from $version to $CURRENT_VERSION"
 }
 
-# --- Run on all state files ---
-for f in "$PROJECT_ROOT/.vibecrew/config.json" "$PROJECT_ROOT/.vibecrew/state.json" "$PROJECT_ROOT/.vibecrew/backlog.json"; do
-  migrate_file "$f"
-done
+# --- Acquire lock and run on all state files ---
+LOCK_FAIL_OPEN=true
+if acquire_state_lock "migrate-state"; then
+  for f in "$PROJECT_ROOT/.vibecrew/config.json" "$PROJECT_ROOT/.vibecrew/state.json" "$PROJECT_ROOT/.vibecrew/backlog.json"; do
+    migrate_file "$f"
+  done
+else
+  echo "WARNING: Could not acquire lock, skipping migration" >&2
+fi
 
 # --- Migrate score files ---
 if [[ -d "$PROJECT_ROOT/.vibecrew/scores" ]]; then
@@ -240,4 +248,5 @@ if [[ -f "$MUTATION_LOG" ]]; then
   fi
 fi
 
+release_state_lock
 exit 0

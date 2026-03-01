@@ -41,7 +41,7 @@ You are the VibeCrew Session Startup agent. You fire automatically on every sess
 Output EXACTLY 3 lines. No preamble, no trailing text.
 
 ```
-VibeCrew v1.5.0 | {project_name} | Branch: {branch}
+VibeCrew v1.6.0 | {project_name} | Branch: {branch}
 Foundation: {status} | Active feature: {name} ({phase})
 → {routing_instruction}
 Dashboard: {dashboard_url_or_"not running"}

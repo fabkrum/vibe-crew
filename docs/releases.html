@@ -301,12 +301,93 @@
   </section>
 
   <div class="version-nav">
+    <a href="#v1.6.0">v1.6.0</a>
     <a href="#v1.5.0">v1.5.0</a>
     <a href="#v1.4.0">v1.4.0</a>
     <a href="#v1.3.0">v1.3.0</a>
     <a href="#v1.2.0">v1.2.0</a>
     <a href="#v1.1.0">v1.1.0</a>
     <a href="#v1.0.0">v1.0.0</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.6.0                                                   -->
+  <!-- ============================================================ -->
+  <div class="release" id="v1.6.0">
+    <div class="release-header">
+      <h2>v1.6.0</h2>
+      <span class="release-date">2026-03-01</span>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.6.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Mermaid Architecture Diagrams — 6th Tier 1 Foundation Artifact</h4>
+      <ul class="file-list">
+        <li><code>templates/architecture-diagrams/system.mmd.template</code> &mdash; <span class="file-desc">Flowchart TD with Client/Edge/App/Data/External subgraphs and <code>{{PLACEHOLDER}}</code> syntax for TDR technology names</span></li>
+        <li><code>templates/architecture-diagrams/schema.mmd.template</code> &mdash; <span class="file-desc">erDiagram with User entity and comment instructions for adding domain entities from VISION.md</span></li>
+        <li><code>templates/architecture-diagrams/state-flows.mmd.template</code> &mdash; <span class="file-desc">stateDiagram-v2 with Authentication state group and placeholder for primary user flows</span></li>
+        <li><code>templates/architecture-diagrams/api-sequences.mmd.template</code> &mdash; <span class="file-desc">sequenceDiagram with auth handshake and primary CRUD flow placeholders</span></li>
+        <li><code>templates/architecture-diagrams/component-tree.mmd.template</code> &mdash; <span class="file-desc">Flowchart TD with App/Layout/Header/Nav/Main/Footer skeleton, arrow labels showing props ↓ / events ↑. Grows during Tier 2 as Builder adds components</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>New Project Workflow — Step 5: Architecture Diagrams</h4>
+      <ul class="file-list">
+        <li><code>skills/new-project/SKILL.md</code> &mdash; <span class="file-desc">New Step 5 reads VISION.md + TDR + roadmap, loads 5 templates, generates <code>.mmd</code> files to <code>.vibecrew/architecture/</code>, presents summary for approval. CLAUDE.md generation moves to Step 6</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Agent Enhancements</h4>
+      <ul class="file-list">
+        <li><code>agents/stack-scout.md</code> &mdash; <span class="file-desc">Produces preliminary <code>flowchart TD</code> system diagram alongside the TDR using chosen technology names</span></li>
+        <li><code>agents/builder.md</code> &mdash; <span class="file-desc">Reads all 5 <code>.mmd</code> files during Code Phase for implementation context; updates <code>component-tree.mmd</code> after adding components; adds <code>Diagram-Drift:</code> commit trailer for deviations</span></li>
+        <li><code>agents/code-reviewer.md</code> &mdash; <span class="file-desc">New Step 4.5 "Architecture Diagram Consistency" checks schema.mmd, api-sequences.mmd, state-flows.mmd, and component-tree.mmd against actual code (warning level)</span></li>
+        <li><code>agents/doc-generator.md</code> &mdash; <span class="file-desc">New "Architecture Diagram Freshness" section with stale detection rules; <code>/wrap</code> workflow checks and updates stale diagrams</span></li>
+        <li><code>agents/security-auditor.md</code> &mdash; <span class="file-desc">Reads <code>system.mmd</code> and <code>api-sequences.mmd</code> before OWASP scan for topology and data flow context</span></li>
+        <li><code>agents/performance-coach.md</code> &mdash; <span class="file-desc">Documentation drift template expanded to include architecture diagrams</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Schema &amp; Migration</h4>
+      <ul class="file-list">
+        <li><code>templates/state.json.template</code> &mdash; <span class="file-desc">Schema version 1.1.0 → 1.2.0; added <code>architecture_diagrams</code> artifact to foundation</span></li>
+        <li><code>scripts/sync-state.sh</code> &mdash; <span class="file-desc">Migration logic for existing projects: adds <code>architecture_diagrams</code> with status <code>"skipped"</code> for complete foundations, <code>"pending"</code> for incomplete</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Phase Gate &amp; Scoring</h4>
+      <ul class="file-list">
+        <li><code>scripts/phase-gate.sh</code> &mdash; <span class="file-desc">Added <code>*.mmd</code> to allowed file patterns during Tier 1</span></li>
+        <li><code>architecture/scoring.md</code> &mdash; <span class="file-desc"><code>stale_docs</code> definition expanded to include <code>.vibecrew/architecture/*.mmd</code> files</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Documentation</h4>
+      <ul class="file-list">
+        <li><code>architecture/diagrams.md</code> &mdash; <span class="file-desc">Design doc covering purpose (token efficiency), 5 diagram types, lifecycle, stale detection rules, agent consumption matrix, Vibe Score integration</span></li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge changed">Changed</span></h3>
+    </div>
+      <ul class="file-list">
+        <li><span class="file-desc">All "5 artifact" references updated to "6" across 31 files (agents, skills, scripts, architecture docs, HTML docs, quizzes, README, CLAUDE.md)</span></li>
+        <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">Tier 1 routing: Architecture Diagrams inserted as step 5, CLAUDE.md renumbered to step 6</span></li>
+        <li><code>skills/wrap/SKILL.md</code> &mdash; <span class="file-desc">Doc Generator invocation includes diagram freshness check</span></li>
+        <li><code>scripts/session-startup.sh</code> &mdash; <span class="file-desc">Foundation completion denominator updated to 6</span></li>
+        <li><code>.claude-plugin/plugin.json</code> &mdash; <span class="file-desc">Version bumped to 1.6.0</span></li>
+        <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Banner version bumped to 1.6.0</span></li>
+      </ul>
   </div>
 
   <!-- ============================================================ -->
@@ -919,7 +1000,7 @@
     </div>
   </div>
 
-  <p style="text-align:center; color:var(--color-text-muted); margin-top:3rem;"><strong>Total: ~238 items across 6 releases.</strong></p>
+  <p style="text-align:center; color:var(--color-text-muted); margin-top:3rem;"><strong>Total: ~261 items across 7 releases.</strong></p>
 </div>
 
 <footer class="footer">

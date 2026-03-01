@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-03-01
+
+### Added
+
+#### Mermaid Architecture Diagrams — 6th Tier 1 Foundation Artifact
+
+- `templates/architecture-diagrams/system.mmd.template` -- Flowchart TD with Client/Edge/App/Data/External subgraphs and `{{PLACEHOLDER}}` syntax for TDR technology names
+- `templates/architecture-diagrams/schema.mmd.template` -- erDiagram with User entity and comment instructions for adding domain entities from VISION.md
+- `templates/architecture-diagrams/state-flows.mmd.template` -- stateDiagram-v2 with Authentication state group and placeholder for primary user flows
+- `templates/architecture-diagrams/api-sequences.mmd.template` -- sequenceDiagram with auth handshake and primary CRUD flow placeholders
+- `templates/architecture-diagrams/component-tree.mmd.template` -- Flowchart TD with App/Layout/Header/Nav/Main/Footer skeleton, arrow labels showing props ↓ / events ↑. Grows during Tier 2 as Builder adds components
+
+#### New Project Workflow — Step 5: Architecture Diagrams
+
+- `skills/new-project/SKILL.md` -- New Step 5 reads VISION.md + TDR + roadmap, loads 5 templates, generates `.mmd` files to `.vibecrew/architecture/`, presents summary for approval. CLAUDE.md generation moves to Step 6
+
+#### Agent Enhancements
+
+- `agents/stack-scout.md` -- Produces preliminary `flowchart TD` system diagram alongside the TDR using chosen technology names
+- `agents/builder.md` -- Reads all 5 `.mmd` files during Code Phase for implementation context; updates `component-tree.mmd` after adding components; adds `Diagram-Drift:` commit trailer for deviations
+- `agents/code-reviewer.md` -- New Step 4.5 "Architecture Diagram Consistency" checks schema.mmd, api-sequences.mmd, state-flows.mmd, and component-tree.mmd against actual code (warning level)
+- `agents/doc-generator.md` -- New "Architecture Diagram Freshness" section with stale detection rules; `/wrap` workflow checks and updates stale diagrams
+- `agents/security-auditor.md` -- Reads `system.mmd` and `api-sequences.mmd` before OWASP scan for topology and data flow context
+- `agents/performance-coach.md` -- Documentation drift template expanded to include architecture diagrams
+
+#### Schema & Migration
+
+- `templates/state.json.template` -- Schema version 1.1.0 → 1.2.0; added `architecture_diagrams` artifact to foundation
+- `scripts/sync-state.sh` -- Migration logic for existing projects: adds `architecture_diagrams` with status `"skipped"` for complete foundations, `"pending"` for incomplete
+
+#### Phase Gate & Scoring
+
+- `scripts/phase-gate.sh` -- Added `*.mmd` to allowed file patterns during Tier 1
+- `architecture/scoring.md` -- `stale_docs` definition expanded to include `.vibecrew/architecture/*.mmd` files
+
+#### Documentation
+
+- `architecture/diagrams.md` -- Design doc covering purpose (token efficiency), 5 diagram types, lifecycle, stale detection rules, agent consumption matrix, Vibe Score integration
+
+### Changed
+
+- All "5 artifact" references updated to "6" across 31 files (agents, skills, scripts, architecture docs, HTML docs, quizzes, README, CLAUDE.md)
+- `agents/workflow-orchestrator.md` -- Tier 1 routing: Architecture Diagrams inserted as step 5, CLAUDE.md renumbered to step 6
+- `skills/wrap/SKILL.md` -- Doc Generator invocation includes diagram freshness check
+- `scripts/session-startup.sh` -- Foundation completion denominator updated to 6
+
+### Files Changed
+
+- `.claude-plugin/plugin.json` -- Version bumped to 1.6.0
+- `agents/session-startup.md` -- Banner version bumped to 1.6.0
+
 ## [1.5.0] - 2026-02-25
 
 ### Added
@@ -445,3 +496,4 @@ Documentation, cleanup utilities, and finalized configurations.
 [1.2.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.2.0
 [1.1.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.1.0
 [1.0.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.0.0
+[1.6.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.6.0

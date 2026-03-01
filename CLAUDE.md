@@ -177,7 +177,7 @@ The Performance Coach can propose a CLAUDE.md mutation if documentation drift re
 
 ## Current Status
 
-VibeCrew v1.5.0 — the plugin is feature-complete. The repository contains:
+VibeCrew v1.6.0 — the plugin is feature-complete. The repository contains:
 - The full plugin (`claude-plugin-vibe-crew/`) with all agents, hooks, scripts, skills, and templates
 - Architecture design docs (`architecture/`) for contributor reference
 - Companion documentation website (`docs/`) with setup guide, workflows, example sessions, and best practices

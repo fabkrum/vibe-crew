@@ -8,6 +8,7 @@
 |-----------|--------|
 | Category | {{PRODUCT_CATEGORY}} |
 | Audience | {{TARGET_AUDIENCE}} |
+| Core Problem | {{CORE_PROBLEM}} |
 | Usage Pattern | {{USAGE_PATTERN}} |
 | Emotional Direction | {{EMOTIONAL_DIRECTION}} |
 | Key Action | {{KEY_ACTION}} |

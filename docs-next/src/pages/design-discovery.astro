@@ -52,7 +52,7 @@ const cssExample = `/* Usage in components */
   <section class="section" id="phase-1">
     <span class="section-label">Phase 1</span>
     <h2>Product &amp; Audience Context</h2>
-    <p>Five questions establish who you're building for and how the product should feel. Every question offers predefined options <strong>and</strong> a free-text alternative &mdash; you're never locked into the provided choices.</p>
+    <p>Six questions establish who you're building for, what problem you're solving, and how the product should feel. Every question offers predefined options <strong>and</strong> a free-text alternative &mdash; you're never locked into the provided choices.</p>
 
     <TableWrap>
       <table>
@@ -72,16 +72,21 @@ const cssExample = `/* Usage in components */
           </tr>
           <tr>
             <td>Q3</td>
+            <td><strong>What problem does it solve for them?</strong></td>
+            <td>Saves time on repetitive tasks &middot; Reduces complexity / simplifies decisions &middot; Enables collaboration across teams &middot; Provides insights from data &middot; Replaces manual / offline processes &middot; <em>or describe the problem</em></td>
+          </tr>
+          <tr>
+            <td>Q4</td>
             <td><strong>How do they use it?</strong></td>
             <td>Quick daily checks &middot; Deep focused sessions &middot; On-the-go mobile &middot; Collaborative team use &middot; Passive consumption &middot; <em>or describe the usage</em></td>
           </tr>
           <tr>
-            <td>Q4</td>
+            <td>Q5</td>
             <td><strong>How should it feel?</strong></td>
             <td>Trustworthy &amp; professional &middot; Playful &amp; energetic &middot; Minimal &amp; calm &middot; Bold &amp; premium &middot; Warm &amp; approachable &middot; <em>or describe the feeling</em></td>
           </tr>
           <tr>
-            <td>Q5</td>
+            <td>Q6</td>
             <td><strong>What is the primary thing users do?</strong></td>
             <td>Analyze data &middot; Create content &middot; Manage workflows &middot; Browse &amp; discover &middot; Communicate &middot; Transact &middot; <em>or describe the action</em></td>
           </tr>
@@ -96,9 +101,9 @@ const cssExample = `/* Usage in components */
       VibeCrew interprets: <strong>quick daily checks</strong> + <strong>trustworthy &amp; professional</strong> + <strong>analyze data</strong>, and confirms this mapping with you before moving on.
     </Callout>
 
-    <p>After all 5 answers, a summary is presented:</p>
+    <p>After all 6 answers, a summary is presented:</p>
     <Callout type="info">
-      &ldquo;We're building a <strong>SaaS dashboard</strong> for <strong>enterprise teams</strong>, designed for <strong>deep focused sessions</strong>. It should feel <strong>trustworthy &amp; professional</strong>, focused on <strong>analyzing data</strong>.&rdquo;
+      &ldquo;We're building a <strong>SaaS dashboard</strong> for <strong>enterprise teams</strong> that <strong>provides insights from data</strong>, designed for <strong>deep focused sessions</strong>. It should feel <strong>trustworthy &amp; professional</strong>, focused on <strong>analyzing data</strong>.&rdquo;
     </Callout>
 
     <h3>Profile Adaptations</h3>
@@ -167,7 +172,7 @@ const cssExample = `/* Usage in components */
     <h2>Component Preferences</h2>
     <p>The final phase asks 2-3 questions about component patterns, <strong>filtered by your Phase 1 answers</strong>. A dashboard gets different navigation options than a content platform.</p>
 
-    <h4>Q6: Navigation Style (always asked)</h4>
+    <h4>Q7: Navigation Style (always asked)</h4>
     <p>Options vary by product category:</p>
     <ul>
       <li><strong>Dashboards</strong>: Sidebar / top bar / combined</li>
@@ -175,13 +180,13 @@ const cssExample = `/* Usage in components */
       <li><strong>Mobile-first</strong>: Bottom tab bar / hamburger slide-out / gesture-based</li>
     </ul>
 
-    <h4>Q7: Data Display (conditional)</h4>
+    <h4>Q8: Data Display (conditional)</h4>
     <p>Only asked if your primary action involves data, workflows, or transactions:</p>
     <ul>
       <li>Dense tables / card grid / list view / mixed layout</li>
     </ul>
 
-    <h4>Q8: Interaction Density (always asked)</h4>
+    <h4>Q9: Interaction Density (always asked)</h4>
     <ul>
       <li><strong>Minimal</strong> &mdash; Lots of whitespace, one action per view</li>
       <li><strong>Moderate</strong> &mdash; Balanced density, grouped actions</li>
@@ -214,7 +219,7 @@ const cssExample = `/* Usage in components */
     <h3>design-brief.md</h3>
     <p>The &ldquo;why&rdquo; document that captures every decision and its rationale. Sections include:</p>
     <ul>
-      <li><strong>Product Context</strong> &mdash; Category, audience, usage pattern, emotional direction, key action</li>
+      <li><strong>Product Context</strong> &mdash; Category, audience, core problem, usage pattern, emotional direction, key action</li>
       <li><strong>Visual Direction</strong> &mdash; Chosen direction name, reference products, rationale</li>
       <li><strong>Design Tokens Summary</strong> &mdash; Key tokens with reasoning for each choice</li>
       <li><strong>Component Preferences</strong> &mdash; Navigation, data display, interaction density with rationale</li>

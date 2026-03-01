@@ -125,7 +125,7 @@ If `full_auto` autonomy is set, skip the interactive interview. Use VISION.md to
 
 ### Phase 1 — Product & Audience Context
 
-Ask 5 questions. For every question, present the numbered options, then add: *"Or describe in your own words."* If the user provides free text, interpret it into the closest design parameters and confirm your interpretation before proceeding.
+Ask 6 questions. For every question, present the numbered options, then add: *"Or describe in your own words."* If the user provides free text, interpret it into the closest design parameters and confirm your interpretation before proceeding.
 
 **Q1: "What are we building?"**
 1. SaaS dashboard
@@ -144,7 +144,15 @@ Or describe it in your own words.
 5. Students / learners
 Or describe them in your own words.
 
-**Q3: "How do they use it?"**
+**Q3: "What problem does it solve for them?"**
+1. Saves time on repetitive tasks
+2. Reduces complexity / simplifies decisions
+3. Enables collaboration across teams
+4. Provides insights from data
+5. Replaces manual / offline processes
+Or describe the problem in your own words.
+
+**Q4: "How do they use it?"**
 1. Quick daily checks
 2. Deep focused sessions
 3. On-the-go mobile
@@ -152,7 +160,7 @@ Or describe them in your own words.
 5. Passive consumption
 Or describe the usage in your own words.
 
-**Q4: "How should it feel?"**
+**Q5: "How should it feel?"**
 1. Trustworthy & professional
 2. Playful & energetic
 3. Minimal & calm
@@ -160,7 +168,7 @@ Or describe the usage in your own words.
 5. Warm & approachable
 Or describe the feeling in your own words.
 
-**Q5: "What is the primary thing users do?"**
+**Q6: "What is the primary thing users do?"**
 1. Analyze data
 2. Create content
 3. Manage workflows
@@ -169,11 +177,11 @@ Or describe the feeling in your own words.
 6. Transact
 Or describe the action in your own words.
 
-**Free-text interpretation:** When the user provides free text instead of picking a numbered option, interpret their answer, map it to the closest design parameters, and present your interpretation for confirmation. Example: user types "busy nurses checking patient vitals between rounds" → interpret as: quick daily checks + trustworthy & professional + analyze data, and confirm before proceeding.
+**Free-text interpretation:** When the user provides free text instead of picking a numbered option, interpret their answer, map it to the closest design parameters, and present your interpretation for confirmation. Example: user types "busy nurses checking patient vitals between rounds" → interpret as: saves time on repetitive tasks + quick daily checks + trustworthy & professional + analyze data, and confirm before proceeding.
 
-After all 5 answers, present a summary:
+After all 6 answers, present a summary:
 
-> "We're building a **{category}** for **{audience}**, designed for **{usage}** sessions. It should feel **{emotion}**, focused on **{action}**."
+> "We're building a **{category}** for **{audience}** that **{problem}**, designed for **{usage}** sessions. It should feel **{emotion}**, focused on **{action}**."
 
 If autonomy is `supervised` or `collaborative`, ask the user to confirm this summary before proceeding.
 
@@ -217,20 +225,20 @@ If the user describes their own direction, generate the full specification for t
 
 Ask 2-3 contextual questions filtered by Phase 1 answers. All questions include *"or describe your preference"* as a free-text option.
 
-**Q6: Navigation style** (always asked, options vary by product category):
+**Q7: Navigation style** (always asked, options vary by product category):
 - Dashboards → sidebar / top bar / combined / or describe
 - Content/marketplace → top nav / hamburger / tab bar / or describe
 - Mobile-first → bottom tab bar / hamburger slide-out / gesture-based / or describe
 - Other → sidebar / top nav / combined / or describe
 
-**Q7: Data display** (only ask if Q5 key action involves data, workflows, or transactions):
+**Q8: Data display** (only ask if Q6 key action involves data, workflows, or transactions):
 1. Dense tables
 2. Card grid
 3. List view
 4. Mixed layout
 Or describe your preference.
 
-**Q8: Interaction density** (always asked):
+**Q9: Interaction density** (always asked):
 1. Minimal — lots of whitespace, one action per view
 2. Moderate — balanced density, grouped actions
 3. Dense — information-rich, multiple actions visible

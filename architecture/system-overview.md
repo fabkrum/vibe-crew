@@ -491,7 +491,7 @@ Tier 2 is an iterative 6-phase cycle applied to each feature in the backlog. Pha
 
 | Phase | Agent | Inputs | Outputs |
 |-------|-------|--------|---------|
-| **Plan** | Workflow Orchestrator | User idea, roadmap | Feature spec with acceptance criteria in `backlog.json` |
+| **Plan** | Workflow Orchestrator | User idea, roadmap | Feature spec with problem statement and acceptance criteria in `backlog.json` |
 | **Design** | Builder | Feature spec, design-system.css | Component mockups, layout specifications |
 | **Code** | Builder | Feature spec, design output, TDR | Implementation in worktree |
 | **Test** | Verifier | Implementation, acceptance criteria | Unit tests, integration tests, accessibility tests |

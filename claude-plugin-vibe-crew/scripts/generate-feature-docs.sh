@@ -45,6 +45,7 @@ while IFS= read -r feature_id; do
 
   NAME=$(echo "$FEATURE_JSON" | jq -r '.name // "Unnamed Feature"')
   DESCRIPTION=$(echo "$FEATURE_JSON" | jq -r '.spec.description // "No description provided."')
+  PROBLEM=$(echo "$FEATURE_JSON" | jq -r '.spec.problem_statement // ""')
   PRIORITY=$(echo "$FEATURE_JSON" | jq -r '.priority // "medium"')
   LABELS=$(echo "$FEATURE_JSON" | jq -r '.labels // [] | join(", ")')
   CREATED_AT=$(echo "$FEATURE_JSON" | jq -r '.created_at // ""')
@@ -76,6 +77,18 @@ $DESCRIPTION
 - **Labels**: $LABELS
 - **Created**: $CREATED_AT
 
+DOC_EOF
+
+  if [[ -n "$PROBLEM" ]]; then
+    cat >> "$DOC_FILE.tmp" << DOC_EOF
+## Problem Statement
+
+$PROBLEM
+
+DOC_EOF
+  fi
+
+  cat >> "$DOC_FILE.tmp" << DOC_EOF
 ## Acceptance Criteria
 
 $CRITERIA

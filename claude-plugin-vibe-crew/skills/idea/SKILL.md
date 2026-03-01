@@ -49,7 +49,7 @@ Use the locked backlog updater to atomically append the new feature:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
-  '.features += [{id: $id, name: $name, description: $desc, column: "idea", priority: 999, labels: [], spec: {acceptance_criteria: [], ui_description: "", business_logic: "", technical_notes: ""}, dependencies: [], phases_completed: [], created_at: $ts, updated_at: $ts}]' \
+  '.features += [{id: $id, name: $name, description: $desc, column: "idea", priority: 999, labels: [], spec: {problem_statement: null, acceptance_criteria: [], ui_description: "", business_logic: "", technical_notes: ""}, dependencies: [], phases_completed: [], created_at: $ts, updated_at: $ts}]' \
   --arg id "feat-NNN" \
   --arg name "<derived name>" \
   --arg desc "<full user description>" \

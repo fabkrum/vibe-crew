@@ -11,7 +11,7 @@ export const commands: Command[] = [
   { name: '/setup', category: 'Setup', purpose: 'Verify dependencies, detect terminal, initialize .vibecrew/', agent: 'Session Startup', tier: 'Any', args: '' },
   { name: '/new-project', category: 'Setup', purpose: '7-step foundation: VISION, design system, TDR, roadmap, architecture diagrams, CLAUDE.md, commit', agent: 'Orchestrator, Stack Scout, Builder, Opponent', tier: '1', args: '' },
   { name: '/onboard', category: 'Setup', purpose: 'Existing project analysis, convention extraction, CLAUDE.md generation', agent: 'Code Auditor', tier: '1', args: '' },
-  { name: '/plan-features', category: 'Planning', purpose: 'Define backlog specs: acceptance criteria, priority, complexity, dependencies', agent: 'Orchestrator', tier: '2', args: '' },
+  { name: '/plan-features', category: 'Planning', purpose: 'Define backlog specs: problem statement, acceptance criteria, priority, complexity, dependencies', agent: 'Orchestrator', tier: '2', args: '' },
   { name: '/idea', category: 'Planning', purpose: '1-line capture to backlog.json with status "unplanned". Zero context cost', agent: 'None (script only)', tier: 'Any', args: '"text"' },
   { name: '/status', category: 'Planning', purpose: 'Full project dashboard: foundation, backlog, active feature, recent scores', agent: 'None (script only)', tier: 'Any', args: '' },
   { name: '/new-feature', category: 'Development', purpose: 'Branch creation, checkpoint, 6-phase tracking, WIP limit enforcement', agent: 'Builder', tier: '2', args: '"name"' },

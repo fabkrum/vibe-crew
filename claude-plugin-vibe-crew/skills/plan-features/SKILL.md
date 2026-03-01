@@ -71,7 +71,18 @@ Present what is known about the feature:
 - Any existing spec fields that are already populated
 - Dependencies or relationships noted in the roadmap
 
-### B. Acceptance Criteria (3-5 items)
+### B. Problem Statement
+
+Ask the user: "What problem does this feature solve for the user?"
+
+Guide the user to articulate:
+- **Who** experiences the problem (which persona from VISION.md)
+- **What** the current pain point or gap is
+- **Why** solving it matters (user impact, business value)
+
+A good problem statement is 1-2 sentences. Example: "Enterprise admins currently have no way to see which team members are inactive, leading to wasted seats and security risks."
+
+### C. Acceptance Criteria (3-5 items)
 
 Ask the user: "What does 'done' look like for this feature? Let's define 3-5 specific, testable acceptance criteria."
 
@@ -82,7 +93,7 @@ Guide the user to write criteria that are:
 
 If the user gives vague criteria, ask clarifying questions to make them specific.
 
-### C. UI Description
+### D. UI Description
 
 Ask the user: "How should this look and feel? Describe the key UI elements and interactions."
 
@@ -93,7 +104,7 @@ Prompt for:
 - Mobile considerations if applicable
 - Reference to design-system.css tokens where relevant
 
-### D. Business Logic
+### E. Business Logic
 
 Ask the user: "What are the business rules behind this feature?"
 
@@ -103,7 +114,7 @@ Prompt for:
 - Permissions or access control
 - Integration points with other features or external services
 
-### E. Technical Notes
+### F. Technical Notes
 
 Based on the TDR and the user's answers, add technical notes:
 - Relevant API endpoints needed
@@ -111,14 +122,14 @@ Based on the TDR and the user's answers, add technical notes:
 - Third-party services or APIs involved
 - Performance considerations
 
-### F. Metadata
+### G. Metadata
 
 Ask the user:
 - "Priority? (1 = highest, lower number = build first)" — suggest a default based on roadmap tier
 - "Labels? (e.g., mvp, frontend, backend, auth, payments, api)" — suggest based on feature content
 - "Dependencies? Does this feature require another feature to be built first?" — reference other features by ID
 
-### G. Save Feature
+### H. Save Feature
 
 After collecting all information, update the backlog using `jq`:
 
@@ -126,11 +137,12 @@ For **new features** (from roadmap, not yet in backlog):
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
-  '.features += [{id: $id, name: $name, description: $desc, column: "planned", priority: ($priority | tonumber), labels: $labels, spec: {acceptance_criteria: $criteria, ui_description: $ui, business_logic: $logic, technical_notes: $tech}, dependencies: $deps, phases_completed: [], created_at: $ts, updated_at: $ts}]' \
+  '.features += [{id: $id, name: $name, description: $desc, column: "planned", priority: ($priority | tonumber), labels: $labels, spec: {problem_statement: $problem, acceptance_criteria: $criteria, ui_description: $ui, business_logic: $logic, technical_notes: $tech}, dependencies: $deps, phases_completed: [], created_at: $ts, updated_at: $ts}]' \
   --arg id "feat-NNN" \
   --arg name "<feature name>" \
   --arg desc "<description>" \
   --arg priority "<number>" \
+  --arg problem "<problem statement>" \
   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
   --arg ui "<ui description>" \
   --arg logic "<business logic>" \
@@ -144,9 +156,10 @@ For **existing features** (ideas or incomplete planned features):
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
-  '(.features[] | select(.id == $id)) |= (.column = "planned" | .priority = ($priority | tonumber) | .labels = $labels | .spec.acceptance_criteria = $criteria | .spec.ui_description = $ui | .spec.business_logic = $logic | .spec.technical_notes = $tech | .dependencies = $deps | .updated_at = $ts)' \
+  '(.features[] | select(.id == $id)) |= (.column = "planned" | .priority = ($priority | tonumber) | .labels = $labels | .spec.problem_statement = $problem | .spec.acceptance_criteria = $criteria | .spec.ui_description = $ui | .spec.business_logic = $logic | .spec.technical_notes = $tech | .dependencies = $deps | .updated_at = $ts)' \
   --arg id "<feature-id>" \
   --arg priority "<number>" \
+  --arg problem "<problem statement>" \
   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
   --arg ui "<ui description>" \
   --arg logic "<business logic>" \
@@ -160,7 +173,7 @@ Confirm to the user: "Saved feat-NNN: <name> with full spec."
 
 **Save after each feature.** Do not batch saves to the end.
 
-### H. Handle User Commands
+### I. Handle User Commands
 
 During the planning loop, the user can say:
 - **"skip"**: Skip this feature. Do not modify its backlog entry. Move to the next feature.

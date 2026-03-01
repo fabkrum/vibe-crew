@@ -83,6 +83,7 @@ Search the backlog for an existing feature or create a new entry.
        "name": "<feature name>",
        "column": "in-progress",
        "spec": {
+         "problem_statement": null,
          "acceptance_criteria": [],
          "ui_description": "",
          "business_logic": ""

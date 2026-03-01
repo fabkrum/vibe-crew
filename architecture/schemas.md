@@ -330,6 +330,7 @@ Feature backlog. Created by `/plan-features`. Modified by `/new-feature`, `/idea
 
       // Spec (populated during "plan" phase)
       "spec": {
+        "problem_statement": null,       // What problem this feature solves | null
         "acceptance_criteria": [],       // String array of requirements
         "ui_description": null,          // Brief UI description | null
         "business_logic": [],            // String array of logic requirements
@@ -377,6 +378,7 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `column` | enum | yes | Current Kanban column |
 | `priority` | integer | yes | Priority (1 = highest) |
 | `labels` | string[] | yes | Categorization labels |
+| `spec.problem_statement` | string\|null | yes | What problem this feature solves |
 | `spec.acceptance_criteria` | string[] | yes | List of requirements |
 | `spec.ui_description` | string\|null | yes | UI description |
 | `spec.business_logic` | string[] | yes | Business logic requirements |

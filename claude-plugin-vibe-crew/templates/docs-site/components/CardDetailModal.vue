@@ -16,6 +16,7 @@ const form = reactive({
   priority: 999,
   labels: [],
   spec: {
+    problem_statement: '',
     acceptance_criteria: [],
     ui_description: '',
     business_logic: [],
@@ -32,6 +33,7 @@ function resetForm() {
   form.priority = props.feature.priority || 999
   form.labels = [...(props.feature.labels || [])]
   form.spec = {
+    problem_statement: props.feature.spec?.problem_statement || '',
     acceptance_criteria: [...(props.feature.spec?.acceptance_criteria || [])],
     ui_description: props.feature.spec?.ui_description || '',
     business_logic: [...(props.feature.spec?.business_logic || [])],
@@ -95,6 +97,7 @@ async function onSave() {
     priority: form.priority,
     labels: form.labels,
     spec: {
+      problem_statement: form.spec.problem_statement.trim() || null,
       acceptance_criteria: form.spec.acceptance_criteria,
       ui_description: form.spec.ui_description.trim() || null,
       business_logic: form.spec.business_logic,
@@ -213,6 +216,12 @@ function formatDate(iso) {
           <!-- Spec -->
           <div class="section">
             <h3>Spec</h3>
+
+            <div class="spec-field">
+              <h4>Problem Statement</h4>
+              <p v-if="!editing">{{ feature.spec?.problem_statement || 'Not defined' }}</p>
+              <textarea v-else v-model="form.spec.problem_statement" rows="2" placeholder="What problem does this feature solve?" />
+            </div>
 
             <div class="spec-field">
               <h4>Acceptance Criteria</h4>

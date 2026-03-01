@@ -261,6 +261,7 @@
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
       <a href="setup.html" class="sidebar-link">Setup</a>
       <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
       <a href="existing-project.html" class="sidebar-link">Existing Project</a>
       <a href="warp.html" class="sidebar-link">Warp</a>
     </div>
@@ -779,10 +780,10 @@
       <h4>Performance Coach (Phase 1)</h4>
       <p>Self-improvement engine with cross-session trend analysis and CLAUDE.md mutation system.</p>
       <ul class="file-list">
-        <li><code>agents/performance-coach.md</code> &mdash; <span class="file-desc">Sonnet agent with persistent MEMORY.md, 7-step mutation workflow, and 5 anti-pattern templates</span></li>
+        <li><code>agents/performance-coach.md</code> &mdash; <span class="file-desc">Opus agent with persistent MEMORY.md, 7-step mutation workflow, 6 anti-pattern templates, and 10 guardrails (including max 15 learnings, no hook-redundant rules, no directory enumerations)</span></li>
         <li><code>scripts/aggregate-scores.sh</code> &mdash; <span class="file-desc">Reads last 10 score files, classifies trends (improving/declining/recurring/plateau/volatile), calculates satisfaction-score correlation</span></li>
         <li><code>scripts/detect-anti-patterns.sh</code> &mdash; <span class="file-desc">Scans score history for recurring deduction categories, outputs frequency data</span></li>
-        <li><code>scripts/apply-mutation.sh</code> &mdash; <span class="file-desc">Appends approved rules to CLAUDE.md "Session Learnings" section, updates mutation-log.json</span></li>
+        <li><code>scripts/apply-mutation.sh</code> &mdash; <span class="file-desc">Appends approved rules to CLAUDE.md "Session Learnings" section with auto-pruning (max 15 rules), updates mutation-log.json</span></li>
         <li><code>scripts/check-mutation-eligibility.sh</code> &mdash; <span class="file-desc">Enforces guardrails: min 5 sessions, 3+ occurrences, max 1/session, no duplicates, 3-rejection cooldown</span></li>
         <li><code>templates/memory-md.template</code> &mdash; <span class="file-desc">Persistent Performance Coach memory (anti-patterns, mutations, trends, notes)</span></li>
         <li><code>templates/mutation-proposal.json.template</code> &mdash; <span class="file-desc">Structured mutation proposal format</span></li>

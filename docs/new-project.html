@@ -749,6 +749,7 @@
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
       <a href="setup.html" class="sidebar-link">Setup</a>
       <a href="new-project.html" class="sidebar-link active">New Project</a>
+      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
       <a href="existing-project.html" class="sidebar-link">Existing Project</a>
       <a href="warp.html" class="sidebar-link">Warp</a>
     </div>
@@ -797,8 +798,14 @@
         <p>The output is <code>VISION.md</code> &mdash; a document every agent reads. When the Feature Developer writes code, it knows who your users are. When the Stack Scout evaluates technologies, it factors in your constraints.</p>
       </li>
       <li>
-        <h4>design-system.css &mdash; Establish visual identity</h4>
-        <p>The <strong>UI Designer agent</strong> asks about your brand preferences: primary color, font, border radius, density. It generates a complete set of CSS custom properties (colors, typography, spacing, radii) that every component will use. No hardcoded values, ever.</p>
+        <h4>Design Discovery &mdash; Establish visual identity</h4>
+        <p>VibeCrew runs a <strong>3-phase design interview</strong> tailored to your product.
+        First, it asks about your product category, audience, usage patterns, and emotional direction.
+        Then it generates 3 visual directions specifically adapted to your answers &mdash; not generic options.
+        Finally, it collects component preferences (navigation style, data display, interaction density)
+        filtered by your earlier choices. The output: <code>design-system.css</code> (CSS custom properties)
+        and <code>design-brief.md</code> (design rationale for agents to reference).
+        <a href="design-discovery.html">Learn more about Design Discovery &rarr;</a></p>
       </li>
       <li>
         <h4>TDR &mdash; Research and lock the tech stack</h4>
@@ -824,7 +831,7 @@
       </li>
       <li>
         <h4>CLAUDE.md &mdash; Codify project rules</h4>
-        <p>VibeCrew synthesizes everything into the master rules file. It includes your tech stack, architecture conventions, architecture diagram references, design system reference, and a &ldquo;Session Learnings&rdquo; section that the Performance Coach populates over time. This is the first file Claude Code reads every session.</p>
+        <p>VibeCrew synthesizes everything into a minimal rules file (~31 lines). It includes your tech stack, conventions, architecture rules, and a &ldquo;Session Learnings&rdquo; section (capped at 15 rules, oldest auto-pruned). Deliberately kept small &mdash; research shows oversized context files increase agent cost 20%+ without improving outcomes. No directory enumerations, no rules that hooks already enforce.</p>
       </li>
       <li>
         <h4>Git commit &mdash; Version the foundation</h4>

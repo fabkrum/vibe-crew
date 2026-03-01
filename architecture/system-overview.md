@@ -890,9 +890,9 @@ Every VibeCrew agent session targets less than 50% context window utilization. T
 |  (60%/80%/90% thresholds)     exhaustion      fires after each  |
 |                                               assistant turn     |
 |                                                                  |
-|  CLAUDE.md under 500 lines    Hundreds of     Re-read on every  |
-|  (concise, reference files    tokens per      API call -- bloat  |
-|  instead of inlining)         turn saved      is cumulative      |
+|  CLAUDE.md under 200 lines    Hundreds of     Re-read on every  |
+|  (minimal, no dir trees,      tokens per      API call -- bloat  |
+|  no hook-redundant rules)     turn saved      is cumulative      |
 |                                                                  |
 |  Clear initial prompts        ~500 tokens     Avoid correction   |
 |  (reduces correction loops)   per avoided     sequences that     |
@@ -1013,16 +1013,16 @@ This ensures the agent can resume work without losing track of where it is in th
 
 ### 5.8 CLAUDE.md Budget
 
-CLAUDE.md is re-read on every API call. A 500-line CLAUDE.md consumes roughly 2,000-3,000 tokens per turn. A bloated 1,000-line file doubles this cost across every interaction for the entire session.
+CLAUDE.md is re-read on every API call. Research (arxiv.org/abs/2602.11988) shows oversized context files increase agent cost 20%+ without improving success rates. Every line costs compliance tokens — agents follow instructions faithfully, but over-specification triggers exploration that burns tokens without better outcomes.
 
 Rules for keeping CLAUDE.md lean:
 
-1. Maximum 500 lines
-2. Reference external files instead of inlining content ("Reference: design-system.css")
-3. Use imperative language ("Always use X", "Never do Y")
-4. 20-40 high-impact rules, not 200 minor ones
-5. Review monthly -- remove stale rules, consolidate duplicates
-6. Performance Coach proposes mutations; bloat is pruned in the same cycle
+1. Maximum 200 lines (soft limit), 400 lines (hard limit)
+2. Never enumerate directories or file trees — agents navigate via architecture diagrams
+3. Never restate rules that hooks already enforce (phase-gate, format-code, protect-data, quality-gate)
+4. Reference external files instead of inlining content
+5. Session Learnings capped at 15 rules with automatic oldest-pruning
+6. Performance Coach guardrails block hook-redundant and directory-enumeration mutations
 
 ### 5.9 Cache Utilization as Efficiency Signal
 

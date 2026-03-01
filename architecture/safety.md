@@ -1489,13 +1489,13 @@ if [[ -f "$CLAUDE_MD" ]]; then
 
   if [[ "$CLAUDE_MD_LINES" -gt 600 ]]; then
     echo ""
-    echo "CLAUDE.MD BLOCKED: CLAUDE.md is ${CLAUDE_MD_LINES} lines (hard limit: 600)."
-    echo "No further mutations are allowed until pruning reduces it below 500 lines."
+    echo "CLAUDE.MD BLOCKED: CLAUDE.md is ${CLAUDE_MD_LINES} lines (hard limit: 400)."
+    echo "No further mutations are allowed until pruning reduces it below 200 lines."
     echo "Run /wrap to have the Verifier propose stale rule removal."
     echo "Rules marked with <!-- pinned --> are protected from auto-pruning."
   elif [[ "$CLAUDE_MD_LINES" -gt 500 ]]; then
     echo ""
-    echo "CLAUDE.MD WARNING: CLAUDE.md is ${CLAUDE_MD_LINES} lines (soft limit: 500)."
+    echo "CLAUDE.MD WARNING: CLAUDE.md is ${CLAUDE_MD_LINES} lines (soft limit: 200)."
     echo "Consider pruning stale rules before adding new ones."
     echo "The Verifier (during /wrap) can propose removing rules not triggered in 5+ sessions."
   fi
@@ -1604,26 +1604,30 @@ The `/run-backlog` command processes multiple features unattended. Additional sa
 
 ### 10.1 The Problem
 
-CLAUDE.md is the model's primary instruction file. If it grows without bounds, it consumes an increasing share of the context window on every turn, crowds out actual work, and eventually degrades agent performance. Boris Cherny's own CLAUDE.md is approximately 2,500 tokens (~500 lines). VibeCrew must prevent CLAUDE.md from bloating beyond this baseline.
+CLAUDE.md is the model's primary instruction file. Research (arxiv.org/abs/2602.11988) demonstrates that oversized context files increase agent cost 20%+ without improving task success rates. Every line costs compliance tokens — agents follow instructions faithfully, and over-specification triggers exploration that burns tokens without better outcomes. VibeCrew aggressively prevents CLAUDE.md bloat.
 
-The risk is compounded by the self-improving design: the Verifier (v1.0) and the future Performance Coach (v1.1) can propose CLAUDE.md rule mutations. Without size management, every session adds rules and none are ever removed.
+The risk is compounded by the self-improving design: the Performance Coach can propose CLAUDE.md rule mutations. Without size management, every session adds rules and none are ever removed.
 
 ### 10.2 Size Limits
 
 | Threshold | Line Count | Approximate Tokens | Level | Response |
 |-----------|------------|---------------------|-------|----------|
-| Soft limit | 500 lines | ~2,500 tokens | Warning | Warn the user. Suggest pruning. |
-| Hard limit | 600 lines | ~3,000 tokens | Block | Block all further CLAUDE.md mutations until pruning reduces it below 500 lines. |
+| Soft limit | 200 lines | ~1,000 tokens | Warning | Warn the user. Suggest pruning stale rules and removing hook-redundant rules. |
+| Hard limit | 400 lines | ~2,000 tokens | Block | Block all further CLAUDE.md mutations until pruning reduces it below 200 lines. |
 
 ### 10.3 Monitoring Implementation
 
-CLAUDE.md size is monitored by `check-context.sh` (the Stop hook), the same script that monitors context usage and cost. See Section 8.3 for the complete script. The relevant CLAUDE.md monitoring logic:
+CLAUDE.md size is monitored by `claude-md-lint.sh` (a Stop hook script). It runs the following checks:
 
-1. **Count lines** in CLAUDE.md using `wc -l`
-2. **Compare against thresholds** (500 soft, 600 hard)
-3. **Emit warnings or blocks** as appropriate
+1. **Line count** — compare against thresholds (200 soft, 400 hard)
+2. **Session Learnings count** — flag when exceeding the 15-rule cap
+3. **Redundancy detection** — flag rules that restate what hooks already enforce (phase-gate, format-code, protect-data, quality-gate)
+4. **Pinned section tracking** — count `<!-- pinned -->` markers
+5. **Duplicate detection** — find content lines appearing more than once
+6. **Inlined content** — flag long lines (>200 chars) and large code blocks (>20 lines)
+7. **Disproportionate sections** — flag any `## ` section taking >25% of total lines
 
-When the hard limit (600 lines) is exceeded:
+When the hard limit (400 lines) is exceeded:
 - The Stop hook emits a blocking message that the model receives
 - The message instructs the agent that no further CLAUDE.md mutations are allowed
 - The user is directed to run `/wrap` where the Verifier can propose pruning
@@ -1650,7 +1654,7 @@ During `/wrap`, the Verifier agent can propose removing stale rules from CLAUDE.
    ```
    CLAUDE.md Pruning Report
    ========================
-   Current size: 547 lines (soft limit: 500)
+   Current size: 187 lines (soft limit: 200)
 
    Stale rules (not triggered in last 5 sessions):
      Line 142: "Always use React.memo for list item components"
@@ -1937,7 +1941,7 @@ echo "Failed: $FAIL"
 | Stale locks blocking agents indefinitely | Medium | 30-minute timeout + PID-based detection |
 | Context exhaustion causing safety rule amnesia | Medium | 60%/80%/90% threshold system with forced stop |
 | Uncontrolled API cost during `/run-backlog` | Medium | Three-tier cost guardrails with hard stop at session limit |
-| CLAUDE.md bloat degrading agent performance | Medium | 500/600 line limits with pruning mechanism |
+| CLAUDE.md bloat degrading agent performance | Medium | 200/400 line limits, 15-rule Session Learnings cap, redundancy detection, auto-pruning |
 | Worktree accumulation consuming disk space | Low | Session Startup cleans up orphaned worktrees; `cleanup-worktree.sh` script |
 | Cost estimation inaccuracy (pricing changes) | Low | Conservative pricing model; users can adjust thresholds |
 
@@ -2066,7 +2070,7 @@ Layer 9: Quality Gate                (quality-gate.sh)
          v                          Auto-detects commands from package.json, blocks on failure
 Layer 8: CLAUDE.md Size Management   (claude-md-lint.sh, Verifier pruning)
          |                          Prevents instruction bloat and context waste
-         v                          500-line soft limit, 600-line hard limit
+         v                          200-line soft limit, 400-line hard limit, 15-rule Session Learnings cap
 Layer 7: Cost Monitoring             (cost-guardrails.sh)
          |                          Prevents uncontrolled API spend
          v                          $2/$5/$20 thresholds with hard stop

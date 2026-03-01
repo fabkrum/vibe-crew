@@ -323,7 +323,7 @@ Phase 2 must be complete (agents defined, state files in use). Can run in parall
 
 1. **Context re-injection is complete**: After compaction, the re-injected summary includes foundation status, active feature with phase, recent commits, and worktree path. Under 300 tokens.
 2. **Cost guardrails trigger correctly**: When session cost exceeds `session_warn_usd`, a warning appears. When it exceeds `session_max_usd`, the agent pauses and asks the user for permission to continue.
-3. **CLAUDE.md lint reports accurately**: Detects files over 500 lines, identifies duplicate rules, flags inlined content that should reference external files.
+3. **CLAUDE.md lint reports accurately**: Detects files over 200 lines (soft) / 400 lines (hard), identifies duplicate rules, flags hook-redundant rules, enforces 15-rule Session Learnings cap, and flags inlined content that should reference external files.
 4. **State migration works**: Files with older `schema_version` are migrated forward. Files with newer versions are refused with a warning.
 5. **Plugin self-test passes**: `validate-plugin.sh` confirms all files exist, scripts are executable, and JSON is valid.
 6. **Error recovery handles common failures**: Stale locks, port conflicts, orphaned processes, and git conflicts are detected and resolved or reported clearly.

@@ -7,7 +7,7 @@
 | Command | Agent | Phase | Description |
 |---------|-------|-------|-------------|
 | `/setup` | session-startup | — | Initialize VibeCrew in a project |
-| `/new-project` | workflow-orchestrator | Tier 1 | Run sequential foundation (VISION → design → TDR → roadmap → CLAUDE.md) |
+| `/new-project` | workflow-orchestrator | Tier 1 | Run sequential foundation (VISION → Design Discovery → TDR → roadmap → CLAUDE.md) |
 | `/plan-features` | workflow-orchestrator | Tier 2 | Create/refine feature backlog with specs |
 | `/new-feature "name"` | workflow-orchestrator | Tier 2 | Start feature: branch, state, phase tracker |
 | `/run-backlog` | workflow-orchestrator | Tier 2 | Autonomous feature processing loop |

@@ -111,6 +111,11 @@
   --transition-normal: 250ms ease;
   --transition-slow: 350ms ease;
 
+  /* ---- Layout Context (from Design Discovery) ---- */
+  --density-factor: {{DENSITY_FACTOR}};          /* 0.85=compact, 1.0=comfortable, 1.15=spacious */
+  --content-width-max: {{CONTENT_WIDTH_MAX}};    /* 72ch for reading, 1440px for dashboards */
+  --nav-width: {{NAV_WIDTH}};                    /* 240px for sidebar, 0 for top nav */
+
   /* ---- Z-Index Scale ---- */
   --z-dropdown: 50;
   --z-sticky: 100;

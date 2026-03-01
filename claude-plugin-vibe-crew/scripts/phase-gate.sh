@@ -62,6 +62,7 @@ ALLOWED_PATTERNS=(
   "CLAUDE.md"
   "VISION.md"
   "design-system.css"
+  "design-brief.md"
   "roadmap.md"
   ".vibecrew/"
   "docs/"

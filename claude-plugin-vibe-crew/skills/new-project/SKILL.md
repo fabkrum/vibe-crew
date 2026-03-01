@@ -99,7 +99,7 @@ jq '.foundation.artifacts.vision.status = "complete" | .foundation.artifacts.vis
 
 ---
 
-## Step 2: design-system.css
+## Step 2: Design Discovery (design-system.css + design-brief.md)
 
 Read VISION.md to understand the project's personality and audience:
 
@@ -107,36 +107,170 @@ Read VISION.md to understand the project's personality and audience:
 cat VISION.md
 ```
 
-Ask the user:
+Read the user profile for verbosity and autonomy adaptations:
 
-1. "What color direction feels right for your project? (e.g., professional blue, energetic orange, minimal monochrome, nature green)"
-2. "Font preference? (clean sans-serif / classic serif / modern geometric / system defaults)"
-3. "Border radius preference? (sharp 0px / subtle 4px / rounded 8px / pill 9999px)"
-4. "UI density? (compact for dashboards / comfortable for consumer apps / spacious for content)"
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
+```
 
-Read the design system template:
+**Profile adaptations for Design Discovery:**
+- `minimal` verbosity: Show options only, no explanations of why each question matters.
+- `educational` verbosity: Explain the UX principle behind each question before asking.
+- `supervised` autonomy: Confirm the Phase 1 summary before proceeding to Phase 2.
+- `full_auto` autonomy: Auto-pick Direction A (safest) from Phase 2, skip Phase 2 choice and Phase 3. Generate both files immediately.
+
+If `full_auto` autonomy is set, skip the interactive interview. Use VISION.md to infer answers for all phases, pick Direction A, and generate both output files. Present the final summary for one approval.
+
+---
+
+### Phase 1 — Product & Audience Context
+
+Ask 5 questions. For every question, present the numbered options, then add: *"Or describe in your own words."* If the user provides free text, interpret it into the closest design parameters and confirm your interpretation before proceeding.
+
+**Q1: "What are we building?"**
+1. SaaS dashboard
+2. Marketplace / e-commerce
+3. Content platform
+4. Mobile-first tool
+5. Social / community
+6. Creative tool
+Or describe it in your own words.
+
+**Q2: "Who uses it?"**
+1. Technical professionals
+2. Non-technical consumers
+3. Enterprise teams
+4. Creative freelancers
+5. Students / learners
+Or describe them in your own words.
+
+**Q3: "How do they use it?"**
+1. Quick daily checks
+2. Deep focused sessions
+3. On-the-go mobile
+4. Collaborative team use
+5. Passive consumption
+Or describe the usage in your own words.
+
+**Q4: "How should it feel?"**
+1. Trustworthy & professional
+2. Playful & energetic
+3. Minimal & calm
+4. Bold & premium
+5. Warm & approachable
+Or describe the feeling in your own words.
+
+**Q5: "What is the primary thing users do?"**
+1. Analyze data
+2. Create content
+3. Manage workflows
+4. Browse & discover
+5. Communicate
+6. Transact
+Or describe the action in your own words.
+
+**Free-text interpretation:** When the user provides free text instead of picking a numbered option, interpret their answer, map it to the closest design parameters, and present your interpretation for confirmation. Example: user types "busy nurses checking patient vitals between rounds" → interpret as: quick daily checks + trustworthy & professional + analyze data, and confirm before proceeding.
+
+After all 5 answers, present a summary:
+
+> "We're building a **{category}** for **{audience}**, designed for **{usage}** sessions. It should feel **{emotion}**, focused on **{action}**."
+
+If autonomy is `supervised` or `collaborative`, ask the user to confirm this summary before proceeding.
+
+---
+
+### Phase 2 — Visual Direction
+
+Generate 3 tailored visual directions based on the Phase 1 answers. Use the seed matrix below as creative starting points — do NOT copy them literally. Adapt and blend based on the specific combination of product category, audience, and emotional direction.
+
+**Seed Matrix (creative starting points):**
+
+| Product + Feel | Direction A (Safe) | Direction B (Modern) | Direction C (Signature) |
+|---|---|---|---|
+| Dashboard + Professional | Tableau / Datadog | Linear / Vercel | Stripe Dashboard |
+| Dashboard + Minimal | Plausible Analytics | Raycast | Arc Browser |
+| Marketplace + Energetic | Shopify | Gumroad | Product Hunt |
+| Content + Calm | Medium | Notion | iA Writer |
+| Mobile + Playful | Duolingo | Headspace | Cash App |
+| Social + Energetic | Discord | Threads | BeReal |
+| Creative + Bold | Figma | Framer | Runway |
+
+For each of the 3 directions, generate:
+- **Name** (2-3 words, e.g., "Linear Finance")
+- **Reference** (1-2 known products for inspiration)
+- **Color palette** (primary HSL, neutral temperature warm/cool/neutral, accent approach complementary/analogous/monochromatic)
+- **Typography** (heading font + body font pairing)
+- **Spacing/density** (compact / comfortable / spacious)
+- **Border radius** (sharp / subtle / rounded / pill)
+- **Shadow strategy** (flat / subtle / layered / dramatic)
+- **One-line vibe** sentence
+
+Present as a compact comparison table. Then ask:
+
+> "Which direction speaks to you? (A / B / C) — or describe a different direction in your own words."
+
+If the user describes their own direction, generate the full specification for their custom direction (same format as A/B/C) and confirm before proceeding.
+
+---
+
+### Phase 3 — Component Preferences
+
+Ask 2-3 contextual questions filtered by Phase 1 answers. All questions include *"or describe your preference"* as a free-text option.
+
+**Q6: Navigation style** (always asked, options vary by product category):
+- Dashboards → sidebar / top bar / combined / or describe
+- Content/marketplace → top nav / hamburger / tab bar / or describe
+- Mobile-first → bottom tab bar / hamburger slide-out / gesture-based / or describe
+- Other → sidebar / top nav / combined / or describe
+
+**Q7: Data display** (only ask if Q5 key action involves data, workflows, or transactions):
+1. Dense tables
+2. Card grid
+3. List view
+4. Mixed layout
+Or describe your preference.
+
+**Q8: Interaction density** (always asked):
+1. Minimal — lots of whitespace, one action per view
+2. Moderate — balanced density, grouped actions
+3. Dense — information-rich, multiple actions visible
+Or describe your preference.
+
+---
+
+### Output Generation
+
+Read the templates:
 
 ```bash
 cat "${CLAUDE_PLUGIN_ROOT}/templates/design-system.css.template"
+cat "${CLAUDE_PLUGIN_ROOT}/templates/design-brief.md.template"
 ```
 
-Generate design-system.css with CSS custom properties based on user preferences. The file should define:
-- Color palette (primary, secondary, neutral, semantic colors) as HSL custom properties
-- Typography scale (font families, sizes from xs to 2xl, weights, line heights)
-- Spacing scale (4px base unit, from spacing-1 through spacing-16)
-- Border radius tokens
-- Shadow tokens (sm, md, lg, xl)
-- Transition tokens
-- Breakpoint references as comments
+1. **Generate `design-system.css`**: Populate the template with the chosen direction's values. Map the direction to concrete CSS custom properties:
+   - Color palette (primary, secondary, neutral, semantic colors) as HSL custom properties
+   - Typography scale (font families, sizes from xs to 2xl, weights, line heights)
+   - Spacing scale (4px base unit, from spacing-1 through spacing-16)
+   - Border radius tokens
+   - Shadow tokens (sm, md, lg, xl)
+   - Transition tokens
+   - Layout context tokens (density factor, content width, nav width from Phase 3 answers)
+   - Breakpoint references as comments
 
-Write design-system.css to the project root.
+2. **Generate `design-brief.md`**: Populate the template with all Phase 1-3 answers, the chosen direction's rationale, design token summary, component preferences, and 3 derived design principles.
 
-Present a summary of the design tokens to the user and ask: "Does this design direction feel right? (approve / edit / skip)"
+3. Write both files to the project root.
 
-Update state.json:
+4. Present a summary showing the chosen direction name, key tokens (primary color, fonts, radius, density), and component preferences. Ask: "Does this design direction feel right? (approve / edit / skip)"
+
+   - **approve**: Update state and proceed.
+   - **edit**: Ask what to change, revise, and ask again.
+   - **skip**: Mark as skipped and move on.
+
+5. Update state.json with both file paths:
 
 ```bash
-jq '.foundation.artifacts.design_system.status = "complete" | .foundation.artifacts.design_system.file = "design-system.css" | .foundation.artifacts.design_system.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+jq '.foundation.artifacts.design_system.status = "complete" | .foundation.artifacts.design_system.file = "design-system.css" | .foundation.artifacts.design_system.brief_file = "design-brief.md" | .foundation.artifacts.design_system.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
 ```
 
 ---

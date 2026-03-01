@@ -183,6 +183,8 @@ The `.mcp.json` file at the plugin root registers 10 bundled MCP servers. Three 
 
 Servers are toggled via `scripts/enable-mcp-server.sh <name> [enable|disable]`. Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy. All agents gracefully degrade when MCP servers are unavailable.
 
+**MCP Tool Search (automatic).** Claude Code's built-in Tool Search (shipped January 2026) dynamically loads only 3-5 relevant tool definitions per task instead of preloading all MCP tools into context. This activates automatically when combined tool definitions exceed 10% of the context window. For VibeCrew projects that enable 5+ servers after TDR selection, Tool Search prevents tool definitions from consuming context — reducing overhead from ~60K tokens (with many servers) to ~8.5K. VibeCrew's "disabled by default, enable from TDR" pattern complements this: baseline projects start with only 3 servers, and Tool Search handles the scaling when more are activated.
+
 ### 1.6 Path Reference Rule
 
 Every path in hooks, scripts, and MCP configurations must use `${CLAUDE_PLUGIN_ROOT}` rather than absolute or relative paths. This variable is set by Claude Code at runtime to the plugin's installed location:
@@ -875,6 +877,11 @@ Every VibeCrew agent session targets less than 50% context window utilization. T
 |  Context7 MCP for docs        ~1,500 tokens   On-demand API     |
 |  (fetch docs on demand        per lookup      lookup replaces   |
 |  instead of pasting)                          pasting docs      |
+|                                                                  |
+|  MCP Tool Search              ~50K tokens     Claude Code auto-  |
+|  (dynamic tool loading        saved when      loads only 3-5     |
+|  instead of preloading        5+ servers      relevant tools per |
+|  all MCP definitions)         are enabled     task (Jan 2026)    |
 |                                                                  |
 |  Haiku for mechanical         ~60x cheaper    Session Startup    |
 |  agents (routing and          per token       and Verifier use   |

@@ -850,6 +850,11 @@ args: feature_name
       <div class="callout-title">Token savings from Context7</div>
       <p>A single session might query Supabase auth docs, Next.js routing docs, and Tailwind utility references. Without Context7, that's ~4,500 tokens of pasted documentation. With Context7, the agent fetches exactly what it needs on demand &mdash; and those tokens are served from the MCP server, not your context window. The Performance Coach tracks this and deducts points (-15) for low cache utilization when Context7 isn't being used.</p>
     </div>
+
+    <div class="callout info">
+      <div class="callout-title">MCP Tool Search (automatic)</div>
+      <p>Claude Code's built-in Tool Search (January 2026) dynamically loads only 3&ndash;5 relevant tool definitions per task instead of preloading all MCP tools into context. It activates automatically when combined tool definitions exceed 10% of the context window. For VibeCrew projects that enable 5+ servers after TDR selection, this prevents tool definitions from consuming context &mdash; reducing overhead from ~60K tokens to ~8.5K. VibeCrew's &ldquo;disabled by default, enable from TDR&rdquo; pattern complements this: baseline projects start with only 3 servers, and Tool Search handles the scaling.</p>
+    </div>
   </section>
 
 </div>

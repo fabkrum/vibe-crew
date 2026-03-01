@@ -13,116 +13,84 @@ import { url } from '../data/site';
   <div class="toc">
     <h3>On This Page</h3>
     <ol>
-      <li><a href="#install">Installation from Scratch</a></li>
+      <li><a href="#install">Quick Install (3 Steps)</a></li>
       <li><a href="#multi-project">Multi-Project Setup (Recommended)</a></li>
       <li><a href="#warp">Warp Terminal</a></li>
       <li><a href="#stitch">Enabling Google Stitch (UI Design)</a></li>
+      <li><a href="#manual">Manual Installation</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ol>
   </div>
 
   <section class="section" id="install">
     <span class="section-label">Getting Started</span>
-    <h2>Installation from Scratch</h2>
-    <p>A complete walkthrough from zero to a fully operational VibeCrew environment.</p>
-
-    <h3>Prerequisites</h3>
-    <p>VibeCrew needs 3 required dependencies and has 2 optional ones:</p>
-
-    <TableWrap>
-      <table>
-        <thead>
-          <tr><th>Requirement</th><th>Tier</th><th>Minimum Version</th><th>Check Command</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Git</strong></td><td>Required</td><td>2.30+</td><td><code>git --version</code></td></tr>
-          <tr><td><strong>Node.js</strong></td><td>Required</td><td>18+</td><td><code>node --version</code></td></tr>
-          <tr><td><strong>jq</strong></td><td>Required</td><td>1.6+</td><td><code>jq --version</code></td></tr>
-          <tr><td><strong>GitHub CLI</strong></td><td>Optional</td><td>2.0+</td><td><code>gh --version</code></td></tr>
-          <tr><td><strong>terminal-notifier</strong></td><td>Optional</td><td>any</td><td><code>which terminal-notifier</code></td></tr>
-        </tbody>
-      </table>
-    </TableWrap>
-
-    <p><strong>Optional dependencies:</strong> GitHub CLI enables PR automation (<code>/review</code>, <code>gh pr create</code>). <code>terminal-notifier</code> enables desktop notifications on macOS. VibeCrew works without both.</p>
-
-    <h3>Step-by-Step Installation</h3>
+    <h2>Quick Install (3 Steps)</h2>
+    <p>VibeCrew ships with an automated bootstrap script that detects your OS, checks all dependencies, and installs only what's missing. Three steps, under two minutes.</p>
 
     <ol class="steps">
       <li>
-        <h4>Install dependencies</h4>
-        <p>Use the bootstrap script (recommended) or install manually:</p>
-        <CodeBlock label="bash" code={`# Option A: Bootstrap script (detects OS, installs only what's missing)
-cd claude-plugin-vibe-crew && ./install.sh
-
-# Option B: Manual install on macOS
-brew install jq node
-# Optional:
-brew install terminal-notifier gh && gh auth login`} />
-        <p>Alternatively, <code>/setup</code> inside Claude Code can auto-install missing required dependencies.</p>
+        <h4>Clone VibeCrew</h4>
+        <p>Clone the repo to a central location. This becomes your single source of truth across all projects.</p>
+        <CodeBlock label="bash" code={`mkdir -p ~/claude-plugins && cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git`} />
       </li>
 
       <li>
-        <h4>Add the plugin to your project</h4>
-        <p>The recommended approach is a <strong>central clone + symlink</strong>, especially if you'll use VibeCrew across multiple projects. See <a href="#multi-project">Multi-Project Setup</a> below for the full guide.</p>
-        <CodeBlock label="bash" code={`# Recommended: Central clone + symlink (see Multi-Project Setup below)
-mkdir -p ~/claude-plugins && cd ~/claude-plugins
-git clone https://github.com/fabkrum/vibe-crew.git
-cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
-        <p>For alternative approaches (direct copy, git submodule), see the <a href="#multi-project">comparison table</a> in the Multi-Project section.</p>
+        <h4>Run the bootstrap script</h4>
+        <p>The installer detects your OS and package manager, checks every dependency, and installs only what's missing. It's idempotent &mdash; safe to run multiple times.</p>
+        <CodeBlock label="bash" code={`cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew
+./install.sh`} />
+        <p>Use <code>./install.sh --yes</code> to skip the confirmation prompt.</p>
       </li>
 
       <li>
-        <h4>Verify plugin detection</h4>
-        <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeCrew automatically.</p>
-        <CodeBlock label="bash" code={`cd /path/to/your-project
+        <h4>Link to your project and run setup</h4>
+        <p>Symlink the plugin into your project, start Claude Code, and run the setup wizard.</p>
+        <CodeBlock label="bash" code={`cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
 claude`} />
-        <p>You should see the VibeCrew session startup agent run on first launch.</p>
-      </li>
-
-      <li>
-        <h4>Run the setup wizard</h4>
-        <p>Inside Claude Code, run:</p>
         <CodeBlock label="claude code" code={`/setup`} />
-        <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibecrew/</code> runtime directory.</p>
-      </li>
-
-      <li>
-        <h4>Personalize your experience (optional)</h4>
-        <p>Run the profile interview to adapt VibeCrew to your workflow. This takes about 2 minutes, or pick a preset (Builder, Explorer, Founder) for instant configuration.</p>
-        <CodeBlock label="claude code" code={`/profile`} />
-        <p>This personalizes message verbosity, autonomy level, PR format, code comments, gamification, and more. You can update it anytime by running <code>/profile</code> again. See <a href={`${url('/workflow')}#profile`}>User Profile &amp; Personalization</a> for full details.</p>
-      </li>
-
-      <li>
-        <h4>Install MCP servers (optional but recommended)</h4>
-        <p>VibeCrew ships with <strong>10 MCP servers</strong>. Three are enabled by default: <strong>Context7</strong> (documentation lookup, ~1,500 tokens saved per query), <strong>Chrome DevTools</strong> (browser debugging), and <strong>Playwright</strong> (E2E browser testing). All three require no authentication.</p>
-        <p>Seven additional servers ship disabled and are <strong>auto-enabled when your TDR selects matching technologies</strong>: <strong>Semgrep</strong> (security scanning), <strong>Sentry</strong> (error tracking), <strong>Supabase</strong> (database), <strong>Stripe</strong> (payments), <strong>Vercel</strong> (deployment), <strong>Figma</strong> (design), and <strong>Stitch</strong> (Google AI design). Authenticated servers require environment variables &mdash; the setup wizard shows which variables are needed.</p>
-      </li>
-
-      <li>
-        <h4>Verify the full pipeline</h4>
-        <ul>
-          <li><strong>Notifications:</strong> Tested during setup wizard</li>
-          <li><strong>Session startup:</strong> Exit and restart Claude Code &mdash; the startup agent should show a 3-line status summary</li>
-          <li><strong>Phase gate:</strong> Try writing a source file before running <code>/new-project</code> &mdash; it should be blocked</li>
-        </ul>
+        <p>The wizard creates the <code>.vibecrew/</code> runtime directory, tests notifications, verifies MCP servers, and checks git configuration.</p>
       </li>
     </ol>
 
-    <h3>Resulting Directory Structure</h3>
+    <Callout type="tip" title="Optional: personalize your experience">
+      <p>Run <code>/profile</code> after setup to adapt VibeCrew to your workflow (verbosity, autonomy level, PR format, gamification, and more). Pick a preset (Builder, Explorer, Founder) or answer 8 questions. Takes about 2 minutes. See <a href={`${url('/workflow')}#profile`}>User Profile &amp; Personalization</a> for details.</p>
+    </Callout>
+
+    <h3>What the bootstrap script installs</h3>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Dependency</th><th>Tier</th><th>Min Version</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Git</strong></td><td>Required</td><td>2.30+</td><td>Version control, worktrees</td></tr>
+          <tr><td><strong>Node.js</strong></td><td>Required</td><td>18+</td><td>MCP servers, build tools</td></tr>
+          <tr><td><strong>jq</strong></td><td>Required</td><td>1.6+</td><td>JSON parsing in hook scripts</td></tr>
+          <tr><td><strong>GitHub CLI</strong></td><td>Optional</td><td>2.0+</td><td>PR automation (<code>/review</code>, <code>gh pr create</code>)</td></tr>
+          <tr><td><strong>terminal-notifier</strong></td><td>Optional</td><td>any</td><td>Desktop notifications on macOS</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+    <p>The script supports <strong>macOS</strong> (Homebrew) and <strong>Linux</strong> (apt, dnf, yum). Optional dependencies are offered but not required &mdash; VibeCrew works without them.</p>
+
+    <h3>MCP servers</h3>
+    <p>VibeCrew ships with <strong>10 MCP servers</strong>. Three are enabled by default: <strong>Context7</strong> (documentation lookup), <strong>Chrome DevTools</strong> (browser debugging), and <strong>Playwright</strong> (E2E browser testing). All three require no authentication and work immediately.</p>
+    <p>Seven additional servers are <strong>auto-enabled when your TDR selects matching technologies</strong>: Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, and Stitch. Authenticated servers require environment variables &mdash; the setup wizard shows which ones are needed.</p>
+
+    <h3>Resulting directory structure</h3>
     <pre><code><span class="code-label">tree</span>{`your-project/
-  claude-plugin-vibe-crew/          # The plugin (don't modify)
+  claude-plugin-vibe-crew/          # The plugin (symlink → central install)
     .claude-plugin/
       plugin.json                 # Plugin manifest
     .mcp.json                     # MCP server config (10 servers)
     settings.json                 # Permission rules (allowed + denied tools)
     hooks/
       hooks.json                  # Event hook bindings
-    scripts/                      # ~67 bash automation scripts
-    agents/                       # 13 specialized AI agent prompts
-    skills/                       # 25 slash command definitions
+    scripts/                      # ~80 bash automation scripts
+    agents/                       # 14 specialized AI agent prompts
+    skills/                       # 31 slash command definitions
     templates/                    # Project templates and doc-site scaffold
 
   .vibecrew/                        # Per-project runtime state
@@ -144,7 +112,7 @@ claude`} />
   <section class="section" id="multi-project">
     <span class="section-label">Recommended</span>
     <h2>Multi-Project Setup</h2>
-    <p>Most users work on multiple projects. Instead of copying VibeCrew into every project, install it once and share it. This gives you a single source of truth, instant updates across all projects, and zero duplication.</p>
+    <p>Most users work on multiple projects. The Quick Install above already sets you up for this &mdash; VibeCrew lives in one central location and each project gets a symlink. Here's how it works and how to add more projects.</p>
 
     <h3>How it works</h3>
     <div class="flow"><span class="highlight">Central install</span> (one copy on your machine)
@@ -165,37 +133,11 @@ claude`} />
 
     <p>The plugin code (agents, hooks, scripts, commands) lives in one place. Each project gets its own <code>.vibecrew/</code> folder with its own backlog, session logs, scores, and config. Projects are fully isolated from each other.</p>
 
-    <h3>Step-by-step</h3>
-    <ol class="steps">
-      <li>
-        <h4>Clone VibeCrew to a central location</h4>
-        <p>Pick a permanent home for the plugin. <code>~/claude-plugins/</code> is a good convention.</p>
-        <CodeBlock label="bash" code={`mkdir -p ~/claude-plugins
-cd ~/claude-plugins
-git clone https://github.com/fabkrum/vibe-crew.git`} />
-      </li>
-
-      <li>
-        <h4>Symlink into your first project</h4>
-        <p>Create a symbolic link from your project to the central install. Use an absolute path so the link works regardless of where you open the terminal.</p>
-        <CodeBlock label="bash" code={`cd ~/projects/my-project
+    <h3>Adding a new project</h3>
+    <p>Two commands, under 30 seconds:</p>
+    <CodeBlock label="bash" code={`cd ~/projects/another-project
 ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
-      </li>
-
-      <li>
-        <h4>Run <code>/setup</code> in the project</h4>
-        <p>Start Claude Code and run the setup wizard. This creates the <code>.vibecrew/</code> folder with project-specific state. Each project runs <code>/setup</code> once.</p>
-        <CodeBlock label="bash" code={`claude`} />
-        <CodeBlock label="claude code" code={`/setup`} />
-      </li>
-
-      <li>
-        <h4>Repeat for each new project</h4>
-        <p>For every new project, just create the symlink and run <code>/setup</code>. Two commands, under 30 seconds.</p>
-        <CodeBlock label="bash" code={`cd ~/projects/another-project
-ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
-      </li>
-    </ol>
+    <p>Then start Claude Code and run <code>/setup</code>.</p>
 
     <h3>Updating VibeCrew across all projects</h3>
     <p>Since every project symlinks to the same central location, updating is one command:</p>
@@ -393,6 +335,37 @@ vibecrew-update() {
     <Callout type="warn" title="Stitch is experimental">
       <p>Google Stitch is a Google Labs experiment and may change or be discontinued. VibeCrew treats it as a fully optional enhancement &mdash; nothing in the core workflow depends on it. If Stitch is unavailable, the Builder agent generates UI code directly from your design system tokens and feature spec as usual.</p>
     </Callout>
+  </section>
+
+  <hr>
+
+  <section class="section" id="manual">
+    <span class="section-label">Alternative</span>
+    <h2>Manual Installation</h2>
+    <p>If you prefer to install dependencies yourself instead of using the bootstrap script, here's what you need.</p>
+
+    <h3>macOS (Homebrew)</h3>
+    <CodeBlock label="bash" code={`# Required
+brew install jq node
+
+# Optional (PR automation + desktop notifications)
+brew install terminal-notifier gh
+gh auth login`} />
+
+    <h3>Linux (apt)</h3>
+    <CodeBlock label="bash" code={`# Required
+sudo apt-get install -y git nodejs jq
+
+# Optional
+sudo apt-get install -y gh
+gh auth login`} />
+
+    <p>Verify with:</p>
+    <CodeBlock label="bash" code={`git --version    # 2.30+
+node --version   # 18+
+jq --version     # 1.6+`} />
+
+    <p>Then follow steps 1 and 3 from the <a href="#install">Quick Install</a> above (clone and link).</p>
   </section>
 
   <hr>

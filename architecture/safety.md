@@ -794,7 +794,7 @@ exit 2
 
 ### 5.5 Lifting the Phase Gate
 
-The phase gate is lifted when the Workflow Orchestrator (via `Bash` script) or the `/status` command detects that all five artifacts exist and have been approved. The `check-foundation.sh` script validates each artifact and sets `foundation.complete = true` in the canonical `state.json` schema (see `architecture/schemas.md` Section 3):
+The phase gate is lifted when the Workflow Orchestrator (via `Bash` script) or the `/status` command detects that all six artifacts exist and have been approved. The `check-foundation.sh` script validates each artifact and sets `foundation.complete = true` in the canonical `state.json` schema (see `architecture/schemas.md` Section 3):
 
 ```bash
 #!/bin/bash

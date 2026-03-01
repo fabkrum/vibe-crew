@@ -247,7 +247,9 @@ For each new_route:
 
 **Cap:** `min(stale_docs, 3)` -- maximum 3 drift items counted, maximum -9 deduction. This counts within the `missing-phase` Docs phase category. If the Docs phase is already marked as skipped entirely, the `doc-drift` sub-deductions are not applied on top (no double-counting).
 
-**Implementation:** The `calculate-vibe-score.sh` script detects drift by comparing `git diff --name-only` output against doc directory modification times. The Doc Generator agent resolves drift during `/wrap` by auto-generating or updating stale docs.
+**Scope:** `stale_docs` includes both feature documentation in `docs/features/` AND architecture diagrams in `.vibecrew/architecture/*.mmd`. A stale architecture diagram (e.g., `schema.mmd` not updated after a migration change) counts as one stale doc toward the cap.
+
+**Implementation:** The `calculate-vibe-score.sh` script detects drift by comparing `git diff --name-only` output against doc directory modification times and architecture diagram stale detection rules. The Doc Generator agent resolves drift during `/wrap` by auto-generating or updating stale docs and diagrams.
 
 ---
 

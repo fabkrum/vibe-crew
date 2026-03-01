@@ -28,7 +28,7 @@ CLAUDE.md                       # This file
 
 ### Two-Tier Workflow
 
-- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css, TDR (Technology Decision Record), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook.
+- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css, TDR (Technology Decision Record), roadmap, Architecture Diagrams (5 Mermaid `.mmd` files), and CLAUDE.md before any source code can be written. Enforced by a phase gate hook.
 - **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`.
 
 ### Agent Topology (14 agents)
@@ -81,6 +81,12 @@ When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
   config.json                   # Terminal preference, notification settings (editable via dashboard Settings page)
   state.json                    # Foundation status + active feature
   backlog.json                  # Feature backlog with specs
+  architecture/                 # Mermaid architecture diagrams (Tier 1 artifact)
+    system.mmd                  #   Infrastructure topology (flowchart TD)
+    schema.mmd                  #   Entity-relationship diagram (erDiagram)
+    state-flows.mmd             #   Auth states and user flows (stateDiagram-v2)
+    api-sequences.mmd           #   API request/response patterns (sequenceDiagram)
+    component-tree.mmd          #   Component hierarchy with data flow (flowchart TD)
   sessions/                     # Session logs (JSON)
   scores/                       # Vibe Score breakdowns (JSON)
   releases/                     # Release notes data (JSON)
@@ -143,8 +149,9 @@ Any session that modifies source code, configuration, or project structure must 
 1. **Feature docs** (`docs/features/{feature-name}/`): The Doc Generator updates feature documentation to reflect implementation changes — new endpoints, changed props, modified behavior.
 2. **CHANGELOG.md**: New entries from conventional commits made during the session.
 3. **Architecture artifacts**: If the change affects data models, API contracts, component hierarchy, or routing — update the relevant architecture docs (TDR addendum, component design spec, or data model doc).
-4. **VitePress sidebar**: Regenerated when any doc pages are added or removed.
-5. **Project CLAUDE.md**: If the change introduces new conventions, patterns, or constraints that future sessions should follow.
+4. **Architecture diagrams** (`.vibecrew/architecture/*.mmd`): If the change affects database schema, API routes, auth flows, infrastructure topology, or component hierarchy — update the relevant Mermaid diagram(s). The Doc Generator checks diagram freshness during `/wrap`.
+5. **VitePress sidebar**: Regenerated when any doc pages are added or removed.
+6. **Project CLAUDE.md**: If the change introduces new conventions, patterns, or constraints that future sessions should follow.
 
 ### Enforcement in the Tier 2 workflow
 
@@ -163,7 +170,8 @@ Documentation drift is scored as a **missing phase artifact** (-3 per stale doc)
 |---|---|
 | Source code changed but matching feature doc not updated | -3 (missing-phase: docs) |
 | New API endpoints/routes without doc coverage | -3 (missing-phase: docs) |
-| All feature docs current after code changes | +5 (all-phases bonus eligible) |
+| Architecture diagram stale after code changes (schema, routes, components, etc.) | -3 per stale diagram (doc-drift) |
+| All feature docs and architecture diagrams current after code changes | +5 (all-phases bonus eligible) |
 
 The Performance Coach can propose a CLAUDE.md mutation if documentation drift recurs across 3+ sessions, using template: "Always update feature documentation in the same session as code changes. Run the Doc Generator before wrapping."
 

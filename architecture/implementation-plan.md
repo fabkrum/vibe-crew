@@ -136,7 +136,7 @@ Define all five agent prompts, implement the first five slash commands (/setup, 
 | 4 | `agents/builder.md` | Opus agent: design system (Tier 1) + component design + feature implementation (Tier 2). `isolation: worktree`. |
 | 5 | `agents/verifier.md` | Haiku agent: TDD-hybrid testing, quality checks, Vibe Score calculation |
 | 6 | `skills/setup/SKILL.md` | /setup: interactive wizard -- terminal selection, notification test, MCP verification, .vibecrew/ init |
-| 7 | `skills/new-project/SKILL.md` | /new-project: guided 5-step Tier 1 foundation -- VISION.md, design-system.css, TDR, roadmap, CLAUDE.md |
+| 7 | `skills/new-project/SKILL.md` | /new-project: guided 6-step Tier 1 foundation -- VISION.md, design-system.css, TDR, roadmap, architecture diagrams, CLAUDE.md |
 | 8 | `skills/status/SKILL.md` | /status: read-only dashboard with dynamic context injection |
 | 9 | `skills/idea/SKILL.md` | /idea: zero-disruption backlog capture. Exactly one line of output. |
 | 10 | `skills/plan-features/SKILL.md` | /plan-features: interactive planning session with feature specs and acceptance criteria |
@@ -161,7 +161,7 @@ Phase 1 must be complete. All hook scripts and the plugin manifest must be funct
 
 1. **Session Startup runs on every session**: Opens Claude Code in a VibeCrew project, Session Startup activates automatically, prints a 3-line status summary under 200 words.
 2. **/setup completes full wizard**: Terminal selection, notification test, MCP verification, .vibecrew/ initialization. Config persisted to `.vibecrew/config.json`.
-3. **/new-project produces all 5 foundation artifacts**: VISION.md, design-system.css, TDR, roadmap.md, and CLAUDE.md created. `state.json` updated to `foundation.complete: true`. Phase gate unlocks.
+3. **/new-project produces all 6 foundation artifacts**: VISION.md, design-system.css, TDR, roadmap.md, architecture diagrams (5 `.mmd` files), and CLAUDE.md created. `state.json` updated to `foundation.complete: true`. Phase gate unlocks.
 4. **Stack Scout runs in isolated worktree**: Research tokens stay outside the main session. Only the TDR result returns to the parent context.
 5. **/status is read-only**: Dashboard with no side effects -- no state mutations, no file writes, no git operations.
 6. **/idea captures instantly**: Appends to backlog.json, returns one line, no follow-up questions.
@@ -369,7 +369,7 @@ All previous phases must be complete.
 
 ### Acceptance Criteria
 
-1. **End-to-end Tier 1 works**: A fresh project runs /setup -> /new-project and produces all 5 foundation artifacts. Phase gate unlocks. Zero manual intervention required after initial user inputs.
+1. **End-to-end Tier 1 works**: A fresh project runs /setup -> /new-project and produces all 6 foundation artifacts. Phase gate unlocks. Zero manual intervention required after initial user inputs.
 2. **End-to-end Tier 2 works**: A feature goes from /new-feature through all 6 phases (plan, design, code, test, review, docs) and produces a PR. Quality gate passes.
 3. **Plugin self-test passes**: `validate-plugin.sh` confirms all files exist, scripts are executable, hooks reference valid scripts.
 4. **README is complete**: Installation (<5 minutes), quick start, command reference, architecture overview, troubleshooting section.

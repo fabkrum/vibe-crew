@@ -36,6 +36,21 @@ When the Semgrep MCP server is available, use it to augment — not replace — 
 
 **Fallback:** If Semgrep MCP tools are unavailable, proceed with the full manual grep-based scan workflow. The manual approach provides complete OWASP coverage on its own.
 
+## Pre-Scan: Architecture Context
+
+Before starting the OWASP scan, read the system topology and data flow diagrams for context:
+
+```bash
+cat .vibecrew/architecture/system.mmd 2>/dev/null
+cat .vibecrew/architecture/api-sequences.mmd 2>/dev/null
+```
+
+Use these diagrams to understand:
+- Service boundaries and external integrations (from `system.mmd`) — identifies attack surface
+- API request/response patterns (from `api-sequences.mmd`) — identifies data flow paths to audit
+
+This provides a compact architectural overview without consuming the full TDR's token budget.
+
 ## OWASP Scan Workflow
 
 Execute these ten analysis steps in order. Each step produces findings for its OWASP category. Skip a step only if the project clearly does not use the relevant technology (e.g., skip SQL injection checks if no database code exists).

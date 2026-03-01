@@ -152,13 +152,14 @@ directory and invoked directly from the Claude Code prompt.
 ### Two-Tier Workflow
 
 **Tier 1 -- Project Foundation** is a sequential, one-time process that
-produces five artifacts before any source code is written:
+produces six artifacts before any source code is written:
 
 1. `VISION.md` -- product vision, target users, success criteria
 2. `design-system.css` -- colors, typography, spacing, component tokens
 3. `TDR` (Technology Decision Record) -- stack choices with rationale
 4. `roadmap.md` -- phased delivery plan
-5. `CLAUDE.md` -- project-specific rules for Claude Code
+5. Architecture Diagrams -- 5 Mermaid `.mmd` files (system, schema, state flows, API sequences, component tree)
+6. `CLAUDE.md` -- project-specific rules for Claude Code
 
 A phase gate hook (`phase-gate.sh`) blocks all Write and Edit operations on
 source code files until every foundation artifact is present.

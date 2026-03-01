@@ -207,6 +207,43 @@ fi
 STATE=$(cat "$STATE_FILE")
 BACKLOG=$(cat "$BACKLOG_FILE")
 STATE_MODIFIED=false
+
+# =============================================================================
+# Schema migration: v1.1.0 -> v1.2.0
+# Add architecture_diagrams artifact if missing (for existing projects)
+# =============================================================================
+
+HAS_ARCH_DIAGRAMS=$(echo "$STATE" | jq -r '.foundation.artifacts.architecture_diagrams // empty')
+
+if [[ -z "$HAS_ARCH_DIAGRAMS" ]]; then
+  FOUNDATION_COMPLETE=$(echo "$STATE" | jq -r '.foundation.complete // false')
+
+  if [[ "$FOUNDATION_COMPLETE" == "true" ]]; then
+    # Foundation already complete -- add architecture_diagrams as "skipped" so phase gate stays open
+    STATE=$(echo "$STATE" | jq --arg ts "$TIMESTAMP" '
+      .schema_version = "1.2.0" |
+      .foundation.artifacts.architecture_diagrams = {
+        "status": "skipped",
+        "file": null,
+        "approved_at": null
+      } |
+      .updated_at = $ts
+    ')
+  else
+    # Foundation not yet complete -- add as "pending"
+    STATE=$(echo "$STATE" | jq --arg ts "$TIMESTAMP" '
+      .schema_version = "1.2.0" |
+      .foundation.artifacts.architecture_diagrams = {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      } |
+      .updated_at = $ts
+    ')
+  fi
+  STATE_MODIFIED=true
+  FIXES+=("Migrated state.json schema to v1.2.0 (added architecture_diagrams artifact)")
+fi
 BACKLOG_MODIFIED=false
 
 # =============================================================================
@@ -288,7 +325,7 @@ fi
 
 # =============================================================================
 # Check 4: Foundation consistency
-# If foundation.complete is true, verify all 5 artifacts are "complete"
+# If foundation.complete is true, verify all 6 artifacts are "complete"
 # =============================================================================
 
 FOUNDATION_COMPLETE=$(echo "$STATE" | jq -r '.foundation.complete // false')

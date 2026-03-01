@@ -1002,10 +1002,11 @@ Report: "Handoff generated: {filename} ({word_count} words)"
 
 #### 10.5.2 Invoke Doc Generator
 
-Check if any features moved to `done` or `review` during this session. If so, invoke the Doc Generator agent to:
-1. Generate feature docs for newly completed features
-2. Update CHANGELOG.md with conventional commits
-3. Rebuild VitePress sidebar if docs were added
+Check if any features moved to `done` or `review` during this session, or if source code was modified. If so, invoke the Doc Generator agent to:
+1. Check architecture diagram freshness (compare `git diff` against `.vibecrew/architecture/*.mmd` stale detection rules) and update stale diagrams
+2. Generate feature docs for newly completed features
+3. Update CHANGELOG.md with conventional commits
+4. Rebuild VitePress sidebar if docs were added
 
 If no features completed, skip Doc Generator invocation and print:
 "Doc Generator: No completed features to document."

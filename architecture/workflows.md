@@ -127,12 +127,17 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |  feature list ------->|                               |
  |                       |  Generate docs/roadmap.md     |
  |                       |                               |
- |                       |  STEP 5: CLAUDE.md            |
+ |                       |  STEP 5: Architecture Diagrams|
+ |                       |  Read VISION + TDR + roadmap  |
+ |                       |  Generate 5 .mmd files to     |
+ |                       |  .vibecrew/architecture/      |
+ |                       |                               |
+ |                       |  STEP 6: CLAUDE.md            |
  |                       |  Synthesize from all          |
- |                       |  artifacts                    |
+ |                       |  artifacts + diagrams         |
  |                       |  Generate CLAUDE.md           |
  |                       |                               |
- |                       |  STEP 6: Git init + commit    |
+ |                       |  STEP 7: Git init + commit    |
  |                       |  git add + commit foundation  |
  |                       |                               |
  |                       |  Update state.json:           |

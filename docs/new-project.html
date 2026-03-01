@@ -812,8 +812,19 @@
         <p>List your planned features in rough priority order. VibeCrew generates <code>docs/roadmap.md</code> with priority tiers (Must Have, Should Have, Nice to Have, Out of Scope). This becomes the input for <code>/plan-features</code> later.</p>
       </li>
       <li>
+        <h4>Architecture Diagrams &mdash; Visualize the architecture</h4>
+        <p>VibeCrew generates 5 Mermaid diagrams in <code>.vibecrew/architecture/</code> that give agents a compact visual architecture reference (~250&ndash;600 tokens for all 5, vs 2,000&ndash;5,000 for the full TDR):</p>
+        <ul>
+          <li><strong>system.mmd</strong> &mdash; Infrastructure topology (services, boundaries, data flow)</li>
+          <li><strong>schema.mmd</strong> &mdash; Database entity-relationship diagram</li>
+          <li><strong>state-flows.mmd</strong> &mdash; Authentication states and primary user journeys</li>
+          <li><strong>api-sequences.mmd</strong> &mdash; API request/response patterns</li>
+          <li><strong>component-tree.mmd</strong> &mdash; Component hierarchy with data flow direction (extended during Tier 2)</li>
+        </ul>
+      </li>
+      <li>
         <h4>CLAUDE.md &mdash; Codify project rules</h4>
-        <p>VibeCrew synthesizes everything into the master rules file. It includes your tech stack, architecture conventions, design system reference, and a "Session Learnings" section that the Performance Coach populates over time. This is the first file Claude Code reads every session.</p>
+        <p>VibeCrew synthesizes everything into the master rules file. It includes your tech stack, architecture conventions, architecture diagram references, design system reference, and a &ldquo;Session Learnings&rdquo; section that the Performance Coach populates over time. This is the first file Claude Code reads every session.</p>
       </li>
       <li>
         <h4>Git commit &mdash; Version the foundation</h4>

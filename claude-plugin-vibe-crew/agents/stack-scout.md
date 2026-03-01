@@ -114,6 +114,38 @@ Proposed
 {Estimate the context window cost of working with the chosen technology: library size, boilerplate verbosity, documentation lookup frequency. Rate as low/medium/high.}
 ```
 
+## Preliminary System Architecture Diagram
+
+After completing the TDR, produce a preliminary `flowchart TD` diagram alongside it. This diagram uses the technology names chosen in the TDR to show the system topology:
+
+- **Client Layer**: Browser / Mobile
+- **Edge / CDN**: CDN provider from TDR (if applicable)
+- **Application Layer**: Framework, API routes, auth provider from TDR
+- **Data Layer**: Database, ORM from TDR
+- **External Services**: Payment, email, storage providers from TDR (if applicable)
+
+Return the diagram as Mermaid text within the TDR output (after the Consequences section). The Workflow Orchestrator will extract it and use it as the basis for `.vibecrew/architecture/system.mmd` during the Architecture Diagrams step.
+
+**Format:**
+
+```markdown
+## Preliminary System Architecture
+
+```mermaid
+flowchart TD
+    subgraph Client["Client Layer"]
+        Browser["Browser"]
+    end
+    subgraph App["Application Layer"]
+        Framework["Next.js"]
+        ...
+    end
+    ...
+`` `
+```
+
+Since you are read-only, you cannot create the `.mmd` file directly. The Orchestrator handles file creation.
+
 ## TDR Numbering
 
 Read existing TDR files in the project to determine the next sequential number. If no TDRs exist, start at TDR-001.

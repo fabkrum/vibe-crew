@@ -671,7 +671,7 @@ SESSION_MAX=$(jq -r '.cost_limits.session_max_usd // 5.00' .vibecrew/config.json
 
 All state files are initialized during `/setup` (Step 4) with `schema_version: "1.0.0"`. Rather than defining schemas inline, this section specifies the initial values that differ from the full schema defaults.
 
-**`.vibecrew/state.json`** -- `foundation.complete: false`, all 5 artifacts set to `"pending"`, `active_feature` fields set to `null`, `git.initialized: false`. See [schemas.md, Section 3](schemas.md#3-statejson) for the complete schema.
+**`.vibecrew/state.json`** -- `foundation.complete: false`, all 6 artifacts set to `"pending"`, `active_feature` fields set to `null`, `git.initialized: false`. See [schemas.md, Section 3](schemas.md#3-statejson) for the complete schema.
 
 **`.vibecrew/backlog.json`** -- Empty `features` array, default 7-column Kanban definition. See [schemas.md, Section 4](schemas.md#4-backlogjson) for the complete schema.
 

@@ -376,6 +376,7 @@ isolation: worktree
 | Output | Description | Destination |
 |--------|-------------|-------------|
 | Technology Decision Record | Structured document with context, options, decision, and consequences | Returned to parent context as task result |
+| Preliminary System Diagram | `flowchart TD` Mermaid diagram using chosen TDR technology names | Returned as text within TDR output; Orchestrator extracts for `.vibecrew/architecture/system.mmd` |
 | TDR file | Written to `docs/tdr-NNN-<topic>.md` by the Orchestrator (not by Stack Scout directly) | Orchestrator delegates the write |
 
 **TDR output structure:**
@@ -456,7 +457,7 @@ If the research exceeds `maxTurns` or the context budget, the agent returns a pa
 The Builder is the combined **design and implementation** agent in VibeCrew v1.0. It merges the responsibilities of the former UI Designer and Feature Developer agents into a single agent that handles the full creative pipeline:
 
 - **Tier 1 (Foundation):** Creates the project's `design-system.css` with HSL color palettes, typography scales, spacing systems, and component tokens.
-- **Tier 2 (Feature Development):** Designs component specifications, implements features within TDR boundaries, creates feature branches, writes application code, and makes conventional commits with `Co-Authored-By` trailers.
+- **Tier 2 (Feature Development):** Reads architecture diagrams from `.vibecrew/architecture/` for implementation context, designs component specifications, implements features within TDR boundaries, creates feature branches, writes application code, updates `component-tree.mmd` as new components are added, and makes conventional commits with `Co-Authored-By` trailers.
 
 The Builder uses Context7 to look up documentation for CSS frameworks, component libraries (such as shadcn/ui), design system conventions, and application framework APIs. It works in an **isolated git worktree** (`isolation: worktree`), enabling parallel feature development across multiple terminal tabs without filesystem conflicts.
 

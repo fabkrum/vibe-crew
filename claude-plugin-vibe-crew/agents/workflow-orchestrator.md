@@ -53,9 +53,10 @@ Guide the foundation sequence strictly in order. Do not skip steps. Do not allow
 2. **design-system.css** — Delegate to Builder (UI Designer mode) once VISION.md is approved.
 3. **TDR** — Delegate to Stack Scout for technology research. Wait for TDR completion.
 4. **roadmap.md** — Synthesize VISION.md + TDR into a phased roadmap. Delegate to Builder.
-5. **CLAUDE.md** — Generate project-specific CLAUDE.md from all foundation artifacts. Delegate to Builder.
+5. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR + roadmap. Use the Stack Scout's preliminary system diagram as a starting point.
+6. **CLAUDE.md** — Generate project-specific CLAUDE.md from all foundation artifacts. Delegate to Builder.
 
-After each step, verify the artifact exists and run `complete-phase.sh` to advance foundation state. The phase-gate hook blocks source code writes until all 5 artifacts are complete.
+After each step, verify the artifact exists and run `complete-phase.sh` to advance foundation state. The phase-gate hook blocks source code writes until all 6 artifacts are complete.
 
 ### Opponent Processor Coordination
 

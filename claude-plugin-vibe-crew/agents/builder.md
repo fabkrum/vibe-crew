@@ -62,10 +62,12 @@ Derive all values from VISION.md's brand direction. If VISION.md does not specif
 ### Code Phase
 
 1. Read the approved design spec and the TDR.
-2. Implement the feature using technologies approved in the TDR.
-3. Use CSS custom properties from `design-system.css` for all visual styling.
-4. Make atomic commits as you complete logical units of work.
-5. Signal completion with `builder-complete.signal`.
+2. Read all 5 architecture diagrams from `.vibecrew/architecture/` for implementation context — especially `component-tree.mmd` to know where new components belong in the hierarchy.
+3. Implement the feature using technologies approved in the TDR.
+4. Use CSS custom properties from `design-system.css` for all visual styling.
+5. After adding new components, update `component-tree.mmd` to reflect each new component's position, parent, and data flow direction (props down, events up).
+6. Make atomic commits as you complete logical units of work. If the implementation deviates from any diagram (e.g., schema changes not yet in `schema.mmd`), add a `Diagram-Drift:` trailer to the commit message noting which diagram(s) need updating.
+7. Signal completion with `builder-complete.signal`.
 
 ### TDD Integration
 

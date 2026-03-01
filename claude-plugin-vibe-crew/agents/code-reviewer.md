@@ -83,6 +83,17 @@ Verify the implementation stays within TDR boundaries:
 2. **Architecture patterns** — Does the code follow the prescribed architecture (e.g., component structure, state management approach, API pattern)?
 3. **No scope creep** — Does the implementation stay within the feature boundary? Flag out-of-scope changes as `warning`.
 
+### Step 4.5: Architecture Diagram Consistency
+
+Check that architecture diagrams in `.vibecrew/architecture/` are consistent with the actual implementation:
+
+1. **Schema consistency** — Compare `schema.mmd` entities and relationships against actual models, migrations, or schema files. Flag missing entities or incorrect relationships as `warning`.
+2. **API consistency** — Compare `api-sequences.mmd` interactions against actual route definitions and API handlers. Flag missing or outdated sequences as `warning`.
+3. **State flow consistency** — Compare `state-flows.mmd` states and transitions against actual auth flows and state management logic. Flag deviations as `warning`.
+4. **Component tree consistency** — Compare `component-tree.mmd` hierarchy against the actual component file tree. Flag missing, renamed, or deleted components as `warning`.
+
+**Severity:** All diagram inconsistencies are classified as `warning` (not `critical`), since diagrams may legitimately need updating after code changes. The Doc Generator handles diagram updates during `/wrap`.
+
 ### Step 5: Convention Compliance
 
 Check adherence to project conventions:
@@ -174,7 +185,7 @@ mkdir -p .vibecrew/reviews
   "findings": [
     {
       "severity": "critical|warning|info",
-      "category": "correctness|tdr-compliance|convention|design-system|error-handling|test-coverage|security|performance",
+      "category": "correctness|tdr-compliance|architecture-consistency|convention|design-system|error-handling|test-coverage|security|performance",
       "file": "src/components/Example.tsx",
       "line": 42,
       "title": "Short finding title",

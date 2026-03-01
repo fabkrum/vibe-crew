@@ -55,6 +55,12 @@ Every `.vibecrew/` JSON file includes a top-level `schema_version` field. When V
 │   └── session-<ISO-date>-<NNN>.json    # Per-session logs
 ├── scores/
 │   └── score-<ISO-date>-<NNN>.json      # Per-session Vibe Score breakdowns
+├── architecture/
+│   ├── system.mmd                       # Infrastructure topology (flowchart TD)
+│   ├── schema.mmd                       # Entity-relationship diagram (erDiagram)
+│   ├── state-flows.mmd                  # Auth states and user flows (stateDiagram-v2)
+│   ├── api-sequences.mmd               # Request/response patterns (sequenceDiagram)
+│   └── component-tree.mmd              # Component hierarchy with data flow (flowchart TD)
 ├── signals/
 │   └── <agent>-<event>.signal           # Ephemeral inter-agent signals (JSON)
 └── locks/
@@ -187,11 +193,11 @@ Project state tracking. Created by `/new-project` (Tier 1) or `/setup` (existing
 
 ```jsonc
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.2.0",
 
   // Tier 1: Project Foundation
   "foundation": {
-    "complete": false,                   // true when ALL 5 artifacts approved
+    "complete": false,                   // true when ALL 6 artifacts approved
     "completed_at": null,                // ISO 8601 timestamp | null
     "artifacts": {
       "vision": {
@@ -212,6 +218,11 @@ Project state tracking. Created by `/new-project` (Tier 1) or `/setup` (existing
       "roadmap": {
         "status": "pending",
         "file": null,
+        "approved_at": null
+      },
+      "architecture_diagrams": {
+        "status": "pending",
+        "file": null,                    // ".vibecrew/architecture/" once created
         "approved_at": null
       },
       "claude_md": {
@@ -250,7 +261,7 @@ pending → in-progress → complete
 
 An artifact's `status` moves to `"in-progress"` when an agent begins work on it, and to `"complete"` when the user approves it. The `file` path is set when the artifact is first created. The `approved_at` timestamp is set on approval.
 
-`foundation.complete` flips to `true` only when ALL five artifacts have `status: "complete"`. This is the gate that the phase-gate hook checks.
+`foundation.complete` flips to `true` only when ALL six artifacts have `status: "complete"`. This is the gate that the phase-gate hook checks.
 
 ### Active Feature Phase Values
 
@@ -274,7 +285,7 @@ The `phases_completed` array tracks which phases have been completed at least on
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `schema_version` | string | yes | Schema version |
-| `foundation.complete` | boolean | yes | All 5 artifacts approved |
+| `foundation.complete` | boolean | yes | All 6 artifacts approved |
 | `foundation.completed_at` | string\|null | yes | When foundation was completed |
 | `foundation.artifacts.<name>.status` | enum | yes | `pending`\|`in-progress`\|`complete` |
 | `foundation.artifacts.<name>.file` | string\|null | yes | Relative file path |

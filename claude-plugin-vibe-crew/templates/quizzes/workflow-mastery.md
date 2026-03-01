@@ -18,7 +18,7 @@ What is the key structural difference between Tier 1 and Tier 2 workflows in Vib
 
 **Answer:** B
 
-**Explanation:** Tier 1 is a one-time sequential process — you complete it once per project to produce the five foundation artifacts (VISION.md, design-system.css, TDR, roadmap, CLAUDE.md). After Tier 1 is complete, every new feature follows the Tier 2 cycle: Plan, UI Design, Code, Test, Review, and Docs. The Review phase is optional in manual workflows but automatic in /run-backlog. The Tier 1 gate must be passed before any Tier 2 work can begin.
+**Explanation:** Tier 1 is a one-time sequential process — you complete it once per project to produce the six foundation artifacts (VISION.md, design-system.css, TDR, roadmap, architecture diagrams, CLAUDE.md). After Tier 1 is complete, every new feature follows the Tier 2 cycle: Plan, UI Design, Code, Test, Review, and Docs. The Review phase is optional in manual workflows but automatic in /run-backlog. The Tier 1 gate must be passed before any Tier 2 work can begin.
 
 ---
 

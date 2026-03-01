@@ -82,6 +82,7 @@ claude-plugin-vibe-crew/                      # Plugin root
   settings.json                             # Default permission rules (allow/deny lists)
   .mcp.json                                 # MCP server definitions (10 servers, 3 enabled by default)
   templates/
+    architecture-diagrams/                  #   Mermaid diagram templates (5 .mmd.template files)
     project-registry.json.template          #   Empty project registry template
     system-review-report.json.template      #   System review report schema template
   telemetry/                                # Cross-project aggregated telemetry
@@ -427,7 +428,7 @@ VibeCrew enforces a two-tier workflow that separates project foundation from fea
 
 ### 3.2 Tier 1: Project Foundation
 
-Tier 1 is a sequential, one-time process that creates the five foundation artifacts before any source code is written. The phase gate hook (`phase-gate.sh`) reads `.vibecrew/state.json` and blocks all writes to source code paths (`src/`, `app/`, `lib/`, `components/`, `pages/`, `features/`) until `foundation.complete` is `true`.
+Tier 1 is a sequential, one-time process that creates the six foundation artifacts before any source code is written. The phase gate hook (`phase-gate.sh`) reads `.vibecrew/state.json` and blocks all writes to source code paths (`src/`, `app/`, `lib/`, `components/`, `pages/`, `features/`) until `foundation.complete` is `true`.
 
 > **Schema reference:** The `foundation.complete` field is defined in [schemas.md, Section 3: state.json](schemas.md#3-statejson). The phase gate checks this boolean -- not a string status value.
 
@@ -439,9 +440,24 @@ Tier 1 is a sequential, one-time process that creates the five foundation artifa
 | 2 | `design-system.css` | Builder | CSS custom properties for colors, typography, spacing |
 | 3 | TDR (Technology Decision Record) | Stack Scout | Chosen tech stack with competitive analysis |
 | 4 | `docs/roadmap.md` | Workflow Orchestrator | Prioritized feature list with dependencies |
-| 5 | `CLAUDE.md` | Workflow Orchestrator | Project rules, conventions, commands, stack reference |
+| 5 | Architecture Diagrams (5 `.mmd` files) | Workflow Orchestrator | Mermaid diagrams: system topology, DB schema, state flows, API sequences, component tree |
+| 6 | `CLAUDE.md` | Workflow Orchestrator | Project rules, conventions, commands, stack reference |
 
-**Why sequential:** Each artifact depends on the previous one. The design system requires the vision (audience, tone). The TDR requires the design system (framework compatibility). The roadmap requires the TDR (what is technically feasible). CLAUDE.md requires all of the above.
+**Why sequential:** Each artifact depends on the previous one. The design system requires the vision (audience, tone). The TDR requires the design system (framework compatibility). The roadmap requires the TDR (what is technically feasible). Architecture diagrams require VISION.md + TDR + roadmap (they distill all three into compact visual form). CLAUDE.md requires all of the above.
+
+#### Mermaid Architecture Diagram System
+
+The 5th foundation artifact is a set of Mermaid diagrams stored in `.vibecrew/architecture/`. They provide agents with a compact visual architecture summary (~250-600 total tokens for all 5 files) compared to re-reading the full TDR (2,000-5,000 tokens).
+
+| File | Syntax | Content |
+|------|--------|---------|
+| `system.mmd` | `flowchart TD` | Infrastructure topology with service boundaries |
+| `schema.mmd` | `erDiagram` | Entity-relationship diagram from VISION.md domain |
+| `state-flows.mmd` | `stateDiagram-v2` | Auth states and primary user journeys |
+| `api-sequences.mmd` | `sequenceDiagram` | Request/response patterns for auth and CRUD |
+| `component-tree.mmd` | `flowchart TD` | Component hierarchy with data flow (props ↓, events ↑) |
+
+`component-tree.mmd` is unique: it starts as a skeleton in Tier 1 and grows during Tier 2 as the Builder adds components. All diagrams are checked for freshness by the Doc Generator during `/wrap` and updated when stale. See [diagrams.md](diagrams.md) for the full design doc.
 
 **Phase gate enforcement:**
 
@@ -1099,7 +1115,7 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 
 **`/setup`** -- First-run installation wizard. Verifies prerequisites (Git 2.30+, GitHub CLI 2.0+, Node.js 18+, jq, terminal-notifier). Creates the `.vibecrew/` directory with initial `config.json`, `state.json`, and `backlog.json` (see [schemas.md](schemas.md) for initial file structures). Configures MCP servers. Runs in a forked context to avoid polluting the main session.
 
-**`/new-project`** -- Triggers the Tier 1 foundation workflow. Sequentially produces VISION.md, design-system.css, TDR, roadmap, and CLAUDE.md. Sets `foundation.complete` to `true` in `state.json` when all five artifacts are created and approved. This is the command that unlocks Tier 2.
+**`/new-project`** -- Triggers the Tier 1 foundation workflow. Sequentially produces VISION.md, design-system.css, TDR, roadmap, architecture diagrams (5 Mermaid `.mmd` files), and CLAUDE.md. Sets `foundation.complete` to `true` in `state.json` when all six artifacts are created and approved. This is the command that unlocks Tier 2.
 
 **`/plan-features`** -- Interactive planning session. Reads the roadmap, asks clarifying questions about each feature, and populates `backlog.json` with feature specs including acceptance criteria, priorities, and dependency relationships. Features move from `idea` to `planning` when planning begins, and advance to `planned` when specs are complete and dependencies are met.
 

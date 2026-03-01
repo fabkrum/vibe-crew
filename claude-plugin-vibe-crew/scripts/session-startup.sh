@@ -84,7 +84,7 @@ echo "---"
 if [[ "$FOUNDATION" == "false" ]]; then
   # Count completed artifacts
   COMPLETED=$(jq '[.foundation.artifacts | to_entries[] | select(.value.status == "complete")] | length' "$STATE_FILE" 2>/dev/null || echo "0")
-  echo "VibeCrew | Foundation: $COMPLETED/5 artifacts complete"
+  echo "VibeCrew | Foundation: $COMPLETED/6 artifacts complete"
   echo "  Run /new-project to continue building the foundation."
 elif [[ -n "$ACTIVE_FEATURE" ]]; then
   echo "VibeCrew | Feature: $ACTIVE_FEATURE | Phase: ${ACTIVE_PHASE:-unknown}"

@@ -24,16 +24,16 @@ What is the purpose of a Technology Decision Record (TDR) in VibeCrew?
 
 ## Q2
 
-Which of the following correctly lists the 5 foundation artifacts that Tier 1 must produce before any source code can be written?
+Which of the following correctly lists the 6 foundation artifacts that Tier 1 must produce before any source code can be written?
 
-- A) VISION.md, README.md, package.json, .gitignore, CLAUDE.md
-- B) VISION.md, design-system.css, TDR, roadmap, CLAUDE.md
-- C) TDR, backlog.json, state.json, VISION.md, design-system.css
-- D) CLAUDE.md, TDR, feature-spec.md, roadmap, design-system.css
+- A) VISION.md, README.md, package.json, .gitignore, TDR, CLAUDE.md
+- B) VISION.md, design-system.css, TDR, roadmap, architecture diagrams, CLAUDE.md
+- C) TDR, backlog.json, state.json, VISION.md, design-system.css, CLAUDE.md
+- D) CLAUDE.md, TDR, feature-spec.md, roadmap, design-system.css, architecture diagrams
 
 **Answer:** B
 
-**Explanation:** The five Tier 1 foundation artifacts are VISION.md (product vision and goals), design-system.css (visual design tokens and component styles), TDR (technology decisions), roadmap (phased feature plan), and CLAUDE.md (project-specific AI instructions). The phase gate hook enforces that all five exist before any source code writes are permitted. README.md and package.json are standard files but are not VibeCrew phase-gate requirements.
+**Explanation:** The six Tier 1 foundation artifacts are VISION.md (product vision and goals), design-system.css (visual design tokens and component styles), TDR (technology decisions), roadmap (phased feature plan), architecture diagrams (5 Mermaid .mmd files in .vibecrew/architecture/), and CLAUDE.md (project-specific AI instructions). The phase gate hook enforces that all six exist before any source code writes are permitted. README.md and package.json are standard files but are not VibeCrew phase-gate requirements.
 
 ---
 

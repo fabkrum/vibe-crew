@@ -46,13 +46,14 @@ Start your first project with the guided foundation workflow:
 /new-project
 ```
 
-This creates 5 foundation artifacts before any source code is written:
+This creates 6 foundation artifacts before any source code is written:
 
 1. **VISION.md** — Project vision, personas, value proposition
 2. **design-system.css** — Color tokens, typography, spacing
 3. **Technology Decision Record** — Stack choices with rationale
 4. **roadmap.md** — Prioritized feature roadmap
-5. **CLAUDE.md** — Code conventions and session learnings
+5. **Architecture Diagrams** — 5 Mermaid diagrams (system, schema, state flows, API sequences, component tree)
+6. **CLAUDE.md** — Code conventions and session learnings
 
 ## Building Features
 

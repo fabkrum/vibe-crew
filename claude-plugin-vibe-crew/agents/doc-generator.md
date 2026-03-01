@@ -94,16 +94,32 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-release-notes.sh"
 
 Output: `.vibecrew/releases/release-{date}.json`
 
+### 5. Architecture Diagram Freshness
+
+Check if architecture diagrams in `.vibecrew/architecture/` are stale based on source file changes:
+
+| Diagram | Stale when these files change |
+|---------|-------------------------------|
+| `schema.mmd` | Migration files, model definitions, schema files (`*.prisma`, `migrations/`, `models/`, `schema.*`) |
+| `api-sequences.mmd` | Route handlers, API endpoints, middleware files (`routes/`, `api/`, `middleware/`) |
+| `state-flows.mmd` | Auth logic, state machines, workflow files (`auth/`, `store/`, `state/`, `*machine*`) |
+| `system.mmd` | Infrastructure config, deployment files, service integrations (`docker*`, `vercel.json`, `.env*`, `infra/`) |
+| `component-tree.mmd` | Component files added, renamed, or deleted (`components/`, `*.tsx`, `*.vue`, `*.svelte`) |
+
+When a diagram is stale, update it to reflect the current implementation. Read the relevant source files and regenerate the affected Mermaid syntax while preserving any custom annotations.
+
 ## Workflow During /wrap
 
 When invoked by `/wrap`, execute in this order:
 
 1. **Detect documentation drift**: Compare source files modified this session (`git diff --name-only`) against existing feature docs. Identify features with code changes but stale or missing documentation.
-2. **Update drifted docs**: For any feature whose source code changed this session, update the matching feature doc to reflect the current implementation — new endpoints, changed props, modified behavior, updated acceptance criteria status.
-3. **Generate missing docs**: For completed features (column = `done` or `review`) that lack documentation entirely, generate a full feature doc page.
-4. **Update CHANGELOG.md** with new commits since last update.
-5. **Rebuild VitePress sidebar** if any docs were added or removed.
-6. **Report drift resolution**: Include drift stats in the output summary.
+2. **Check architecture diagram freshness**: Compare source file changes against the stale detection rules above. Identify which `.mmd` files need updating.
+3. **Update drifted docs**: For any feature whose source code changed this session, update the matching feature doc to reflect the current implementation — new endpoints, changed props, modified behavior, updated acceptance criteria status.
+4. **Update stale diagrams**: For any architecture diagram flagged as stale, read the relevant source files and update the Mermaid syntax to reflect the current implementation.
+5. **Generate missing docs**: For completed features (column = `done` or `review`) that lack documentation entirely, generate a full feature doc page.
+6. **Update CHANGELOG.md** with new commits since last update.
+7. **Rebuild VitePress sidebar** if any docs were added or removed.
+8. **Report drift resolution**: Include drift stats in the output summary.
 
 ## Output Format
 
@@ -112,6 +128,7 @@ After completing documentation tasks, output a summary:
 ```
 --- Doc Generator ---
 Drift detected: {N} features with stale docs
+Diagrams updated: {D} ({diagram names})
 Docs updated: {M} ({feature names})
 Docs generated: {K} new ({feature names})
 CHANGELOG: {L} entries added

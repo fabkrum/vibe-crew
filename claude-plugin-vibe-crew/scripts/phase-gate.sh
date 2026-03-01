@@ -67,6 +67,7 @@ ALLOWED_PATTERNS=(
   "docs/"
   "tdr/"
   "research/"
+  "*.mmd"
   "package.json"
   "package-lock.json"
   "tsconfig.json"
@@ -105,7 +106,8 @@ VibeCrew requires these Tier 1 artifacts before any source code:
   2. design-system.css -- Design tokens and component styles
   3. TDR -- Technology Decision Record
   4. roadmap.md -- Feature roadmap with priorities
-  5. CLAUDE.md -- Project rules and conventions
+  5. Architecture Diagrams -- Mermaid diagrams in .vibecrew/architecture/
+  6. CLAUDE.md -- Project rules and conventions
 
 Incomplete artifacts:
 $MISSING

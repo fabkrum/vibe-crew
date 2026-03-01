@@ -24,7 +24,7 @@ Interactive wizard that detects your terminal, tests notifications, verifies MCP
 /new-project
 ```
 
-Guided 5-step workflow that creates VISION.md, design-system.css, Technology Decision Record, roadmap, and CLAUDE.md. The phase gate blocks source code writes until all 5 artifacts are approved.
+Guided 6-step workflow that creates VISION.md, design-system.css, Technology Decision Record, roadmap, architecture diagrams, and CLAUDE.md. The phase gate blocks source code writes until all 6 artifacts are approved.
 
 ## /plan-features
 
@@ -84,7 +84,7 @@ Appends a new feature to backlog.json in the "idea" column. Produces exactly one
 ```
 
 Displays:
-- Foundation progress (5 artifacts)
+- Foundation progress (6 artifacts)
 - Active feature and current phase
 - Backlog summary (features per column)
 - Session count and latest Vibe Score

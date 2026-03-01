@@ -1,12 +1,12 @@
 ---
 name: new-project
-description: Run the Tier 1 foundation workflow to create all 5 project artifacts
+description: Run the Tier 1 foundation workflow to create all 6 project artifacts
 disable-model-invocation: true
 ---
 
 # VibeCrew Tier 1: New Project Foundation
 
-You are the VibeCrew Workflow Orchestrator running the Tier 1 foundation workflow. Your job is to guide the user through creating 5 mandatory project artifacts before any source code can be written. This is the phase gate: no code until the foundation is complete.
+You are the VibeCrew Workflow Orchestrator running the Tier 1 foundation workflow. Your job is to guide the user through creating 6 mandatory project artifacts before any source code can be written. This is the phase gate: no code until the foundation is complete.
 
 ## Pre-flight Checks
 
@@ -25,7 +25,7 @@ Store the profile values for use throughout this workflow. Adapt question depth 
 - `educational`: Explain each concept in depth. For VISION.md: explain what a product vision is and why it matters. For TDR: explain what technology decisions are and how they affect the project.
 
 **Autonomy adaptation:**
-- `full_auto`: After gathering initial vision answers, auto-generate all 5 artifacts without per-artifact approval. Present a final summary for one approval.
+- `full_auto`: After gathering initial vision answers, auto-generate all 6 artifacts without per-artifact approval. Present a final summary for one approval.
 - `checkpoints`: Ask for approval per artifact (current behavior).
 - `collaborative`: Explain what you're about to create and why before each artifact. Present draft and ask for feedback.
 - `supervised`: Show examples of each artifact before creating. Explain every section. Ask for approval on each section, not just the whole artifact.
@@ -52,9 +52,10 @@ Parse `foundation.complete` and the status of each artifact in `foundation.artif
 - `design_system` (design-system.css)
 - `tdr` (Technology Decision Record)
 - `roadmap` (docs/roadmap.md)
+- `architecture_diagrams` (Architecture Diagrams)
 - `claude_md` (CLAUDE.md)
 
-**If `foundation.complete` is `true`**: Tell the user the foundation is already complete. List all 5 artifacts with their file paths. Suggest: "Run /plan-features to plan your backlog, or /new-feature to start building."
+**If `foundation.complete` is `true`**: Tell the user the foundation is already complete. List all 6 artifacts with their file paths. Suggest: "Run /plan-features to plan your backlog, or /new-feature to start building."
 
 **If partially complete**: Report which artifacts are done and which remain. Resume from the first incomplete artifact.
 
@@ -250,7 +251,55 @@ jq '.foundation.artifacts.roadmap.status = "complete" | .foundation.artifacts.ro
 
 ---
 
-## Step 5: CLAUDE.md
+## Step 5: Architecture Diagrams
+
+Read the previously created foundation artifacts for context:
+
+```bash
+cat VISION.md 2>/dev/null
+cat docs/tdr-001-tech-stack.md 2>/dev/null
+cat docs/roadmap.md 2>/dev/null
+```
+
+Read the 5 architecture diagram templates:
+
+```bash
+cat "${CLAUDE_PLUGIN_ROOT}/templates/architecture-diagrams/system.mmd.template"
+cat "${CLAUDE_PLUGIN_ROOT}/templates/architecture-diagrams/schema.mmd.template"
+cat "${CLAUDE_PLUGIN_ROOT}/templates/architecture-diagrams/state-flows.mmd.template"
+cat "${CLAUDE_PLUGIN_ROOT}/templates/architecture-diagrams/api-sequences.mmd.template"
+cat "${CLAUDE_PLUGIN_ROOT}/templates/architecture-diagrams/component-tree.mmd.template"
+```
+
+Create the architecture directory:
+
+```bash
+mkdir -p .vibecrew/architecture
+```
+
+Generate 5 `.mmd` files to `.vibecrew/architecture/` by populating the templates:
+
+- **system.mmd** — Replace `{{PLACEHOLDER}}` values with TDR technology choices (framework, database, auth provider, CDN, etc.)
+- **schema.mmd** — Add domain entities from VISION.md personas and core features. Define relationships and cardinality.
+- **state-flows.mmd** — Map primary user journeys from VISION.md personas. Include authentication states and key feature flows.
+- **api-sequences.mmd** — Add primary CRUD sequences and any third-party integration flows from the TDR.
+- **component-tree.mmd** — Generate a skeleton component hierarchy based on the TDR framework choice. Include layout components (App, Layout, Header, Nav, Main, Footer) with data flow direction.
+
+Present a summary of all 5 diagrams to the user and ask: "Do these architecture diagrams capture the right structure? (approve / edit / skip)"
+
+- **approve**: Update state and proceed.
+- **edit**: Ask which diagram(s) to change, revise, and ask again.
+- **skip**: Mark as skipped and move on.
+
+Update state.json:
+
+```bash
+jq '.foundation.artifacts.architecture_diagrams.status = "complete" | .foundation.artifacts.architecture_diagrams.file = ".vibecrew/architecture/" | .foundation.artifacts.architecture_diagrams.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+```
+
+---
+
+## Step 6: CLAUDE.md
 
 Read all previously created artifacts:
 
@@ -259,6 +308,7 @@ cat VISION.md 2>/dev/null
 cat design-system.css 2>/dev/null
 cat docs/tdr-001-tech-stack.md 2>/dev/null
 cat docs/roadmap.md 2>/dev/null
+ls .vibecrew/architecture/*.mmd 2>/dev/null
 ```
 
 Read the CLAUDE.md template:
@@ -272,6 +322,7 @@ Generate a project-specific CLAUDE.md that includes:
 - **Project overview**: One-paragraph summary from VISION.md
 - **Tech stack**: Exact versions and packages from TDR
 - **Architecture rules**: Derived from TDR decisions (e.g., "Use server components by default", "All database access through Prisma")
+- **Architecture diagrams**: Reference `.vibecrew/architecture/` and list the 5 `.mmd` files (system.mmd, schema.mmd, state-flows.mmd, api-sequences.mmd, component-tree.mmd) with brief descriptions
 - **Code conventions**: File naming, component structure, import order
 - **Design system reference**: Point to design-system.css, document key token names
 - **Testing requirements**: Framework and coverage expectations from TDR
@@ -292,7 +343,7 @@ jq '.foundation.artifacts.claude_md.status = "complete" | .foundation.artifacts.
 
 ## Completion
 
-After all 5 artifacts are complete (or skipped):
+After all 6 artifacts are complete (or skipped):
 
 1. Mark the foundation as complete:
 
@@ -317,7 +368,8 @@ Artifacts created:
   2. design-system.css      — Design tokens and visual language
   3. docs/tdr-001-tech-stack.md — Technology decisions with rationale
   4. docs/roadmap.md        — Prioritized feature roadmap
-  5. CLAUDE.md              — AI coding conventions and rules
+  5. .vibecrew/architecture/ — Mermaid architecture diagrams (5 files)
+  6. CLAUDE.md              — AI coding conventions and rules
 
 The phase gate is now open. Source code writes are permitted.
 

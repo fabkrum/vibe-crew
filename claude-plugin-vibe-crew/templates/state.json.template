@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "foundation": {
     "complete": false,
     "completed_at": null,
@@ -20,6 +20,11 @@
         "approved_at": null
       },
       "roadmap": {
+        "status": "pending",
+        "file": null,
+        "approved_at": null
+      },
+      "architecture_diagrams": {
         "status": "pending",
         "file": null,
         "approved_at": null

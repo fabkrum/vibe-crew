@@ -466,7 +466,7 @@ args: feature_name
         </thead>
         <tbody>
           <tr><td rowspan="3"><strong>Setup</strong></td><td><code>/setup</code></td><td>Session Startup</td><td>Verify dependencies, detect terminal, initialize <code>.vibecrew/</code></td></tr>
-          <tr><td><code>/new-project</code></td><td>Orchestrator, Stack Scout, Builder, Opponent</td><td>6-step foundation: VISION, design system, TDR, roadmap, CLAUDE.md, commit</td></tr>
+          <tr><td><code>/new-project</code></td><td>Orchestrator, Stack Scout, Builder, Opponent</td><td>7-step foundation: VISION, design system, TDR, roadmap, architecture diagrams, CLAUDE.md, commit</td></tr>
           <tr><td><code>/onboard</code></td><td>Code Auditor</td><td>Existing project analysis, convention extraction, CLAUDE.md generation</td></tr>
           <tr><td rowspan="3"><strong>Planning</strong></td><td><code>/plan-features</code></td><td>Orchestrator</td><td>Define backlog specs: acceptance criteria, priority, complexity, dependencies</td></tr>
           <tr><td><code>/idea "text"</code></td><td>None (script only)</td><td>1-line capture to backlog.json with status "unplanned". Zero context cost</td></tr>
@@ -752,6 +752,26 @@ args: feature_name
       <div class="callout-title">Two layers of protection</div>
       <p>The <code>settings.json</code> permission rules are the first layer (enforced by Claude Code). The <code>protect-data.sh</code> PreToolUse hook is the second layer (catches patterns like <code>DROP TABLE</code> that aren't tool-level commands). Together they form a defense-in-depth system.</p>
     </div>
+
+    <!-- ARCHITECTURE DIAGRAMS -->
+    <h3 id="architecture-diagrams">Mermaid Architecture Diagram System</h3>
+
+    <p>The 6th foundation artifact is a set of 5 Mermaid diagrams stored in <code>.vibecrew/architecture/</code>. They give agents a compact visual architecture reference at a fraction of the token cost of reading full-text documents.</p>
+
+    <table>
+      <thead><tr><th>File</th><th>Mermaid Syntax</th><th>Content</th></tr></thead>
+      <tbody>
+        <tr><td><code>system.mmd</code></td><td><code>flowchart TD</code></td><td>Infrastructure topology with service boundaries</td></tr>
+        <tr><td><code>schema.mmd</code></td><td><code>erDiagram</code></td><td>Database entity-relationship diagram</td></tr>
+        <tr><td><code>state-flows.mmd</code></td><td><code>stateDiagram-v2</code></td><td>Authentication states and primary user journeys</td></tr>
+        <tr><td><code>api-sequences.mmd</code></td><td><code>sequenceDiagram</code></td><td>API request/response patterns</td></tr>
+        <tr><td><code>component-tree.mmd</code></td><td><code>flowchart TD</code></td><td>Component hierarchy with data flow direction</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Lifecycle:</strong> Generated during Tier 1 (Step 5) from VISION.md + TDR + roadmap. Updated during Tier 2 by the Builder (<code>component-tree.mmd</code>) and Doc Generator (all diagrams, during <code>/wrap</code>). The Code Reviewer checks diagram consistency as a warning-level finding.</p>
+
+    <p><strong>Token savings:</strong> All 5 diagrams total ~250&ndash;600 tokens, compared to the TDR alone (2,000&ndash;5,000 tokens). Agents that need quick architectural context read the diagrams instead of re-reading the full TDR.</p>
 
     <!-- MCP SERVERS -->
     <h3 id="mcp-servers">MCP Server Integration</h3>

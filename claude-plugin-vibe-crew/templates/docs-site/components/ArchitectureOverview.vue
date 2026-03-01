@@ -9,6 +9,7 @@ const props = defineProps({
 const { isDark } = useData()
 const rendered = ref(false)
 const containerRefs = ref([])
+let renderGeneration = 0
 
 function setContainerRef(el, index) {
   if (el) containerRefs.value[index] = el
@@ -17,6 +18,7 @@ function setContainerRef(el, index) {
 async function renderDiagrams() {
   if (!props.diagrams.length) return
 
+  const gen = ++renderGeneration
   const mermaid = (await import('mermaid')).default
   mermaid.initialize({
     startOnLoad: false,
@@ -25,11 +27,12 @@ async function renderDiagrams() {
   })
 
   for (let i = 0; i < props.diagrams.length; i++) {
+    if (gen !== renderGeneration) return // stale render
     const el = containerRefs.value[i]
     if (!el) continue
 
     try {
-      const id = `mermaid-diagram-${i}`
+      const id = `mermaid-${gen}-${i}`
       const { svg } = await mermaid.render(id, props.diagrams[i].content)
       el.innerHTML = svg
     } catch {
@@ -44,7 +47,7 @@ onMounted(() => {
   nextTick(renderDiagrams)
 })
 
-watch(isDark, async () => {
+watch([isDark, () => props.diagrams], async () => {
   rendered.value = false
   await nextTick()
   renderDiagrams()

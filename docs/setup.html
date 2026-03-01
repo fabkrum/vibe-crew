@@ -217,33 +217,45 @@
     <p>A complete walkthrough from zero to a fully operational VibeCrew environment.</p>
 
     <h3>Prerequisites</h3>
-    <p>Verify these are installed before proceeding:</p>
+    <p>VibeCrew needs 3 required dependencies and has 2 optional ones:</p>
 
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Requirement</th><th>Minimum Version</th><th>Check Command</th></tr>
+          <tr><th>Requirement</th><th>Tier</th><th>Minimum Version</th><th>Check Command</th></tr>
         </thead>
         <tbody>
-          <tr><td><strong>Claude Code</strong></td><td>2.0.0+</td><td><code>claude --version</code></td></tr>
-          <tr><td><strong>Git</strong></td><td>2.30+</td><td><code>git --version</code></td></tr>
-          <tr><td><strong>GitHub CLI</strong></td><td>2.0+</td><td><code>gh --version</code></td></tr>
-          <tr><td><strong>Node.js</strong></td><td>18+ (for JS/TS projects)</td><td><code>node --version</code></td></tr>
-          <tr><td><strong>jq</strong></td><td>1.6+</td><td><code>jq --version</code></td></tr>
-          <tr><td><strong>macOS</strong></td><td>13+ (for native notifications)</td><td>&mdash;</td></tr>
+          <tr><td><strong>Git</strong></td><td>Required</td><td>2.30+</td><td><code>git --version</code></td></tr>
+          <tr><td><strong>Node.js</strong></td><td>Required</td><td>18+</td><td><code>node --version</code></td></tr>
+          <tr><td><strong>jq</strong></td><td>Required</td><td>1.6+</td><td><code>jq --version</code></td></tr>
+          <tr><td><strong>GitHub CLI</strong></td><td>Optional</td><td>2.0+</td><td><code>gh --version</code></td></tr>
+          <tr><td><strong>terminal-notifier</strong></td><td>Optional</td><td>any</td><td><code>which terminal-notifier</code></td></tr>
         </tbody>
       </table>
     </div>
+
+    <p><strong>Optional dependencies:</strong> GitHub CLI enables PR automation (<code>/review</code>, <code>gh pr create</code>). <code>terminal-notifier</code> enables desktop notifications on macOS. VibeCrew works without both.</p>
 
     <h3>Step-by-Step Installation</h3>
 
     <ol class="steps">
       <li>
-        <h4>Install system dependencies</h4>
-        <p>These are needed for notifications, JSON parsing in hooks, and PR automation.</p>
-        <pre class="copyable" data-copy="brew install terminal-notifier jq
-brew install gh && gh auth login"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>brew install terminal-notifier jq
-brew install gh &amp;&amp; gh auth login</code></pre>
+        <h4>Install dependencies</h4>
+        <p>Use the bootstrap script (recommended) or install manually:</p>
+        <pre class="copyable" data-copy="# Option A: Bootstrap script (detects OS, installs only what's missing)
+cd claude-plugin-vibe-crew && ./install.sh
+
+# Option B: Manual install on macOS
+brew install jq node
+# Optional:
+brew install terminal-notifier gh && gh auth login"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span># Option A: Bootstrap script (detects OS, installs only what&rsquo;s missing)
+cd claude-plugin-vibe-crew &amp;&amp; ./install.sh
+
+# Option B: Manual install on macOS
+brew install jq node
+# Optional:
+brew install terminal-notifier gh &amp;&amp; gh auth login</code></pre>
+        <p>Alternatively, <code>/setup</code> inside Claude Code can auto-install missing required dependencies.</p>
       </li>
 
       <li>

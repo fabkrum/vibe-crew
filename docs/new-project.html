@@ -900,9 +900,10 @@ Completeness is checked at /wrap, not during work.</span></div>
 
   <section class="section">
     <h3>Phase gate blocks when it shouldn't</h3>
+    <p>The phase gate message shows your progress: <em>"Foundation progress: 2/6 artifacts complete. Missing: tdr, roadmap, architecture diagrams, claude md."</em></p>
     <ol>
-      <li>Check <code>.vibecrew/state.json</code> &mdash; is <code>project_foundation.status</code> set to <code>"complete"</code>?</li>
-      <li>If any foundation step is null, run <code>/new-project</code> to complete the missing steps</li>
+      <li>Check <code>.vibecrew/state.json</code> &mdash; is <code>foundation.complete</code> set to <code>true</code>?</li>
+      <li>If any foundation artifacts are incomplete, run <code>/new-project</code> to complete the missing steps or <code>/status</code> for details</li>
       <li>The phase gate allows writes to config paths (<code>.vibecrew/</code>, <code>CLAUDE.md</code>, <code>docs/</code>). If a legitimate config file is blocked, check the path patterns in <code>phase-gate.sh</code></li>
     </ol>
   </section>

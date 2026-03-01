@@ -776,16 +776,23 @@ fi
 
 # --- This is a source code write during Tier 1 -- BLOCK ---
 
-# Collect missing artifacts for the error message
-MISSING=$(jq -r \
-  '.foundation.artifacts | to_entries[] | select(.value.status != "complete") | "  - \(.value.file // "not created") (\(.key))"' \
-  "$STATE_FILE" 2>/dev/null || echo "  (unable to read state)")
+# Count complete and missing artifacts
+TOTAL=6
+COMPLETE=$(jq '[.foundation.artifacts | to_entries[] | select(.value.status == "complete")] | length' "$STATE_FILE" 2>/dev/null || echo "0")
+MISSING_LIST=$(jq -r \
+  '.foundation.artifacts | to_entries[] | select(.value.status != "complete") | .key' \
+  "$STATE_FILE" 2>/dev/null | sed 's/_/ /g' | paste -sd', ' -)
+
+REASON="VibeCrew: Run /new-project first — VibeCrew designs before it codes.\n\nFoundation progress: ${COMPLETE}/${TOTAL} artifacts complete\n  Missing: ${MISSING_LIST:-unknown}\n\nRun /status for details."
+
+# Escape the reason for JSON
+REASON_ESCAPED=$(echo "$REASON" | jq -Rs '.')
 
 cat <<HOOK_OUTPUT
 {
   "hookSpecificOutput": {
     "permissionDecision": "deny",
-    "reason": "Cannot write source code before the project foundation is complete.\n\nFile: $FILE_PATH\n\nVibeCrew requires these Tier 1 artifacts before any source code:\n  1. VISION.md -- Project goals and target users\n  2. design-system.css -- Design tokens and component styles\n  3. TDR -- Technology Decision Record\n  4. roadmap.md -- Feature roadmap with priorities\n  5. CLAUDE.md -- Project rules and conventions\n\nMissing artifacts:\n$MISSING\n\nComplete all foundation artifacts, then run /status to verify."
+    "reason": $REASON_ESCAPED
   }
 }
 HOOK_OUTPUT

@@ -34,6 +34,11 @@ The Orchestrator coordinates the entire flow using the **Agent Teams API** (`Tea
 ```
 USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |                               |
+ | (optional) install.sh |                               |
+ | Installs missing deps |                               |
+ | before entering       |                               |
+ | Claude Code           |                               |
+ |                       |                               |
  |  claude (start)       |                               |
  |---------------------->|                               |
  |                       |  SessionStart hook fires      |
@@ -45,13 +50,19 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |                               |
  |  /setup               |                               |
  |---------------------->|                               |
- |                       |  1. Dependency check          |
- |                       |     claude >= 2.0             |
- |                       |     git >= 2.30               |
- |                       |     gh >= 2.0 (authed)        |
- |                       |     node >= 18                |
- |                       |     terminal-notifier?        |
- |                       |     jq?                       |
+ |                       |  1. Dependency check           |
+ |                       |     REQUIRED:                  |
+ |                       |       git >= 2.30              |
+ |                       |       node >= 18               |
+ |                       |       jq >= 1.6               |
+ |                       |     OPTIONAL:                  |
+ |                       |       gh >= 2.0 (+ auth check)|
+ |                       |       terminal-notifier?       |
+ |                       |                               |
+ |                       |  1b. Auto-install offer       |
+ |  <-- "Install now?"   |     (if required deps missing)|
+ |  "Yes" ------------->|     Execute install commands   |
+ |                       |     Re-verify deps            |
  |                       |                               |
  |  <-- terminal prompt  |  2. Terminal selection        |
  |  "Warp"              |     store in config.json      |
@@ -59,15 +70,12 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |  3. Notification test         |
  |  <-- OS notification  |     notify.sh "test"          |
  |  "Working!"          |                               |
- |                       |  4. MCP server verification   |
- |                       |     10 servers enumerated     |
- |                       |     3 enabled, 7 disabled     |
+ |                       |  4. MCP server health check   |
+ |                       |     check-mcp-health.sh       |
+ |                       |     3 enabled servers tested  |
+ |                       |     per-server pass/fail      |
  |                       |                               |
- |                       |  5. Git verification          |
- |                       |     git status                |
- |                       |     gh auth status            |
- |                       |                               |
- |                       |  6. Scaffold .vibecrew/         |
+ |                       |  5. Scaffold .vibecrew/         |
  |                       |     config.json               |
  |                       |     state.json                |
  |                       |     backlog.json              |

@@ -16,18 +16,40 @@ Run the dependency checker script:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-deps.sh"
 ```
 
-Parse the output. For each dependency:
+Parse the JSON output. For each dependency:
 - If present, report the version found.
-- If missing, provide the exact installation command:
-  - **Git**: `brew install git` (macOS) or `sudo apt install git` (Linux)
-  - **GitHub CLI**: `brew install gh` (macOS) or see https://cli.github.com
-  - **Node.js 18+**: `brew install node@18` or use `nvm install 18`
-  - **jq**: `brew install jq` (macOS) or `sudo apt install jq` (Linux)
-  - **terminal-notifier** (macOS only): `brew install terminal-notifier`
+- If missing and **required** (Git, Node.js, jq), flag it as blocking.
+- If missing and **optional** (GitHub CLI, terminal-notifier), flag it as a warning.
 
-If any required dependency (Git, GitHub CLI, Node.js, jq) is missing, list all missing dependencies and stop. Tell the user: "Install the missing dependencies above and run /setup again."
+### Auto-install flow
 
-Do NOT proceed past this step if required dependencies are missing.
+If any **required** dependency is missing, offer the user a choice:
+
+> "Some required dependencies are missing. Want me to install them?"
+> 1. **Install now** — I'll run the install commands for you
+> 2. **Show commands** — I'll list the commands so you can run them yourself
+
+If the user chooses "Install now":
+1. Run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-deps.sh" --auto-install` to get the exact install commands
+2. Execute each install command from the `install_commands` array via Bash
+3. Re-run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-deps.sh"` to verify
+4. If verification passes, continue to Step 2
+5. If verification still fails, show the remaining missing deps and stop
+
+If the user chooses "Show commands", display the install commands and stop:
+"Install the missing dependencies above and run /setup again."
+
+If only **optional** dependencies are missing, warn but continue:
+- **GitHub CLI** missing: "PR automation (/review, gh pr create) will be unavailable."
+- **terminal-notifier** missing: "Desktop notifications will be disabled."
+
+### GitHub CLI auth check
+
+If `gh` is installed, check the `gh_authenticated` field in the output:
+- If `"not_authenticated"`: warn "GitHub CLI is installed but not authenticated. PR features won't work until you run `gh auth login`." Do NOT block setup.
+- If `"ok"`: report as authenticated.
+
+Do NOT proceed past this step if **required** dependencies (Git, Node.js, jq) are missing.
 
 ## Step 2: Detect Terminal
 
@@ -59,39 +81,41 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh" test
 
 If the test succeeds, confirm notifications are working. If it fails (e.g., `terminal-notifier` not installed on macOS), warn the user but do NOT block setup. Notifications are optional.
 
-## Step 4: Check MCP Server Availability
+## Step 4: Check MCP Server Health
 
-Enumerate all MCP servers from the plugin configuration and display their status:
+Run the MCP health check script:
 
-```bash
-jq -r '.mcpServers | to_entries[] | "\(.key)\t\(if .value.disabled then "disabled" else "enabled" end)\t\(.value.env // {} | keys | if length > 0 then join(", ") else "-" end)"' "${CLAUDE_PLUGIN_ROOT}/.mcp.json"
+```
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-mcp-health.sh"
 ```
 
-Display the results as a formatted table:
+Parse the JSON output and display a results table:
 
 ```
 MCP Servers
 ===========
-Server            Status     Auth Required
-------            ------     -------------
-context7          enabled    -
-chrome-devtools   enabled    -
-playwright        enabled    -
-semgrep           disabled   -
-sentry            disabled   SENTRY_AUTH_TOKEN
-supabase          disabled   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
-stripe            disabled   STRIPE_SECRET_KEY
-vercel            disabled   VERCEL_TOKEN
-figma             disabled   FIGMA_ACCESS_TOKEN
-stitch            disabled   -
+Server            Status
+------            ------
+context7          ok
+chrome-devtools   ok
+playwright        failed — <error message>
 ```
 
-For each enabled server, confirm it is ready to use. For disabled servers that require auth, explain:
-- "Disabled servers are auto-enabled when matching technologies are selected in your TDR."
-- "To manually enable a server, run: `bash ${CLAUDE_PLUGIN_ROOT}/scripts/enable-mcp-server.sh <server-name> enable`"
-- "Set the required environment variables before enabling authenticated servers."
+Also show disabled servers from the plugin config for reference:
 
-If no servers are enabled, note: "MCP servers are optional but strongly recommended. Context7 and Playwright are enabled by default."
+```bash
+jq -r '.mcpServers | to_entries[] | select(.value.disabled == true) | .key' "${CLAUDE_PLUGIN_ROOT}/.mcp.json"
+```
+
+For each result:
+- **ok**: Server started successfully and is ready to use.
+- **failed**: Warn but do NOT block. Note: "Server X failed to start — features using it will fall back to alternatives."
+
+If no servers are enabled, note: "MCP servers are optional but recommended. Context7 and Playwright are enabled by default."
+
+For disabled servers:
+- "Disabled servers are auto-enabled when matching technologies are selected in your TDR."
+- "To manually enable: `bash ${CLAUDE_PLUGIN_ROOT}/scripts/enable-mcp-server.sh <server-name> enable`"
 
 ## Step 5: Initialize .vibecrew/ Directory
 
@@ -139,17 +163,27 @@ VibeCrew Setup Complete
 
 Prerequisites:
   Git:              v2.x.x
-  GitHub CLI:       v2.x.x
   Node.js:          v18.x.x
   jq:               v1.x
 
+Optional:
+  GitHub CLI:       v2.x.x (or "not installed — PR automation disabled")
+  terminal-notifier: installed (or "not installed — desktop notifications disabled")
+
 Terminal:           <detected terminal>
 Notifications:     <enabled/disabled>
-MCP - Context7:    <available/not configured>
-MCP - Chrome DevTools: <available/not configured>
+MCP Servers:       <N healthy / M enabled>
 State directory:   .vibecrew/ <created/existing>
 
 Setup complete! Run /new-project to start building your foundation.
+```
+
+If optional dependencies are missing, append a note:
+
+```
+Optional features not available:
+  - PR automation (install: brew install gh)
+  - Desktop notifications (install: brew install terminal-notifier)
 ```
 
 ## Step 8: Launch Dashboard
@@ -191,7 +225,7 @@ If `true`, skip this step silently.
 
 - Execute steps sequentially. Do NOT skip ahead.
 - Report results clearly after each step with pass/fail indicators.
-- If a required dependency is missing, stop and provide installation instructions. Do not continue.
-- If an optional component is missing (notifications, MCP servers), warn but continue.
+- If a **required** dependency is missing AND the user declines auto-install, stop and provide installation instructions. Do not continue.
+- If an **optional** component is missing (GitHub CLI, terminal-notifier, notifications, MCP servers), warn but continue.
 - Never modify any project source files during setup.
 - Use `${CLAUDE_PLUGIN_ROOT}` for all references to plugin scripts and templates.

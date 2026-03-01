@@ -93,27 +93,19 @@ fi
 
 # --- This is a source code write during Tier 1 -- BLOCK ---
 
-# Collect missing artifacts for the error message
-MISSING=$(jq -r \
-  '.foundation.artifacts | to_entries[] | select(.value.status != "complete") | "  - \(.key): \(.value.status)"' \
-  "$STATE_FILE" 2>/dev/null || echo "  (unable to read state)")
+# Count complete and missing artifacts
+TOTAL=6
+COMPLETE=$(jq '[.foundation.artifacts | to_entries[] | select(.value.status == "complete")] | length' "$STATE_FILE" 2>/dev/null || echo "0")
+MISSING_LIST=$(jq -r \
+  '.foundation.artifacts | to_entries[] | select(.value.status != "complete") | .key' \
+  "$STATE_FILE" 2>/dev/null | sed 's/_/ /g' | paste -sd', ' -)
 
-REASON="Cannot write source code before the project foundation is complete.
+REASON="VibeCrew: Run /new-project first — VibeCrew designs before it codes.
 
-File: $FILE_PATH
+Foundation progress: ${COMPLETE}/${TOTAL} artifacts complete
+  Missing: ${MISSING_LIST:-unknown}
 
-VibeCrew requires these Tier 1 artifacts before any source code:
-  1. VISION.md -- Project goals and target users
-  2. design-system.css -- Design tokens and component styles
-  3. TDR -- Technology Decision Record
-  4. roadmap.md -- Feature roadmap with priorities
-  5. Architecture Diagrams -- Mermaid diagrams in .vibecrew/architecture/
-  6. CLAUDE.md -- Project rules and conventions
-
-Incomplete artifacts:
-$MISSING
-
-Run /new-project to complete the foundation, then /status to verify."
+Run /status for details."
 
 # Escape the reason for JSON
 REASON_ESCAPED=$(echo "$REASON" | jq -Rs '.')

@@ -85,6 +85,7 @@ claude-plugin-vibe-crew/                      # Plugin root
     inject-architecture.sh                  #   Orchestrator: pre-loads Mermaid diagrams into context
   settings.json                             # Default permission rules (allow/deny lists)
   .mcp.json                                 # MCP server definitions (10 servers, 3 enabled by default)
+  install.sh                                # Bootstrap script for dependency installation
   templates/
     architecture-diagrams/                  #   Mermaid diagram templates (5 .mmd.template files)
     project-registry.json.template          #   Empty project registry template

@@ -62,7 +62,7 @@ run_gate() {
 @test "foundation incomplete: blocks src/ writes" {
   run_gate "Write" "$TEST_PROJECT_DIR/src/app.tsx"
   assert_failure 2
-  assert_output --partial "Cannot write source code"
+  assert_output --partial "designs before it codes"
 }
 
 @test "foundation incomplete: blocks lib/ writes" {

@@ -75,6 +75,7 @@ claude-plugin-vibe-crew/
     quality-gate.sh
     inject-architecture.sh
     check-deps.sh
+    check-mcp-health.sh
     migrate-state.sh
   templates/
     CLAUDE.md.template           # CLAUDE.md template for new projects
@@ -82,6 +83,7 @@ claude-plugin-vibe-crew/
     state.json.template          # Default .vibecrew/state.json
   .mcp.json                      # MCP server definitions (Context7, Chrome DevTools)
   settings.json                  # Default permission rules (deny list)
+  install.sh                     # Bootstrap script for dependency installation
   LICENSE
   CHANGELOG.md
 ```
@@ -168,21 +170,45 @@ These must be present for VibeCrew to function. The setup wizard blocks until al
 
 | Dependency | Minimum Version | Purpose | Installation |
 |------------|----------------|---------|--------------|
-| Claude Code | 2.0+ | Plugin host runtime | `npm install -g @anthropic-ai/claude-code` |
 | Git | 2.30+ | Version control, worktrees, PRs | Pre-installed on macOS (Xcode CLT) |
-| GitHub CLI (`gh`) | 2.0+ | Automated PR creation, issue management | `brew install gh` |
 | Node.js | 18+ | MCP server execution (npx), build tools | `brew install node` |
 | `jq` | 1.6+ | JSON parsing in all hook scripts | `brew install jq` |
 
-### 2.2 Recommended Dependencies
+> **Note:** Claude Code is not checked by `check-deps.sh` — VibeCrew is already running inside Claude Code, so checking for its binary is redundant.
+
+### 2.2 Optional Dependencies
 
 These enhance the experience but degrade gracefully when missing. The setup wizard warns but does not block.
 
 | Dependency | Minimum Version | Purpose | Degradation Without It | Installation |
 |------------|----------------|---------|----------------------|--------------|
+| GitHub CLI (`gh`) | 2.0+ | Automated PR creation, issue management | PR automation (`/review`, `gh pr create`) disabled | `brew install gh` |
 | `terminal-notifier` | 2.0+ | Native macOS notifications for the Interrupt Protocol | Falls back to OSC 9 escape sequences; user may miss permission prompts and task completions | `brew install terminal-notifier` |
 | Context7 MCP | latest | Library documentation lookup on demand | Agents fall back to `WebSearch`/`WebFetch`; higher token cost but functional | Auto-installed via `npx -y` |
 | Chrome DevTools MCP | latest | Browser debugging and automation for research and visual testing | Stack Scout skips browser-based research; Verifier skips visual regression tests | Auto-installed via `npx -y` |
+
+### 2.3 Bootstrap Install Script
+
+For users who prefer a single-command setup, `install.sh` at the plugin root installs all missing dependencies:
+
+```bash
+# Interactive (prompts before installing)
+./install.sh
+
+# Non-interactive (for CI or scripting)
+./install.sh --yes
+```
+
+The script detects the OS and package manager (Homebrew on macOS, apt/dnf/yum on Linux), checks each dependency, consolidates missing packages into a single install command, and optionally prompts `gh auth login` if GitHub CLI was just installed. It does NOT install Claude Code itself.
+
+### 2.4 Auto-Install During `/setup`
+
+The `check-deps.sh` script supports an `--auto-install` flag that includes `install_commands` in the JSON output. The `/setup` wizard uses this to offer users an in-session install flow:
+
+1. Run `check-deps.sh` to detect missing deps
+2. If required deps missing, offer: "Install now?" or "Show manual commands"
+3. If user accepts, execute install commands via Bash
+4. Re-run `check-deps.sh` to verify
 
 ### 2.3 Dependency Check Script
 
@@ -314,9 +340,20 @@ Discovery preferences in `.vibecrew/config.json`:
 }
 ```
 
-### 3.5 Graceful Degradation
+### 3.5 MCP Health Checks
 
-All agents are designed to work without MCP servers. If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token cost). If Chrome DevTools or Playwright is missing, visual debugging is skipped. If any conditional server is unavailable, the agent continues with standard approaches (Bash, grep, file reads). The setup wizard reports all MCP server statuses.
+The `scripts/check-mcp-health.sh` script validates enabled MCP servers during `/setup`. For each enabled server:
+
+1. Attempt to start the server command with a 5-second timeout
+2. Check if the process starts without immediate error
+3. Kill the process after confirming successful start
+4. Report JSON: `{server: "context7", status: "ok|failed", error: "..."}`
+
+Only default-enabled servers (Context7, Chrome DevTools, Playwright) are checked. Disabled servers are skipped to avoid requiring auth tokens for optional integrations.
+
+### 3.6 Graceful Degradation
+
+All agents are designed to work without MCP servers. If Context7 is missing, agents fall back to `WebSearch`/`WebFetch` (higher token cost). If Chrome DevTools or Playwright is missing, visual debugging is skipped. If any conditional server is unavailable, the agent continues with standard approaches (Bash, grep, file reads). The setup wizard reports all MCP server health statuses.
 
 ---
 
@@ -566,36 +603,46 @@ The `/setup` skill is the first command a user runs after installing VibeCrew. I
 ### 7.2 Setup Flow
 
 ```
+Step 0 (optional): Bootstrap dependencies
+  |
+  +--> Run install.sh to install missing deps before entering Claude Code
+  |
 Step 1: Check Dependencies
   |
-  +--> All required pass? --> Step 2
-  +--> Any required fail? --> Show install commands, ask user to install, re-check
+  +--> All required (Git, Node.js, jq) pass? --> Step 2
+  +--> Any required fail? --> Offer auto-install or show manual commands
+  |    +--> User accepts auto-install --> Execute commands, re-verify --> Step 2
+  |    +--> User declines --> Stop with instructions
+  +--> Optional missing (gh, terminal-notifier)? --> Warn, continue
+  +--> gh installed but not authed? --> Warn (PR features disabled)
   |
-Step 2: Configure MCP Servers
-  |
-  +--> Context7 available? --> Enable
-  +--> Context7 missing? --> Warn, recommend (do not block)
-  +--> Chrome DevTools available? --> Enable
-  +--> Chrome DevTools missing? --> Warn, recommend (do not block)
-  |
-Step 3: Detect Terminal
+Step 2: Detect Terminal
   |
   +--> WARP_SESSION_ID set? --> "warp" (deep-links enabled)
   +--> TERM_PROGRAM = iTerm.app? --> "iterm" (standard notifications)
   +--> TERM_PROGRAM = Apple_Terminal? --> "terminal" (standard notifications)
   +--> Otherwise? --> "other" (fallback OSC 9)
   |
-Step 4: Create .vibecrew/ Runtime Directory
+Step 3: Test Notifications
   |
-  +--> Write config.json (preferences from steps 1-3, schema_version: "1.0.0")
+  +--> notify.sh test --> Pass or warn (non-blocking)
+  |
+Step 4: MCP Server Health Checks
+  |
+  +--> Run check-mcp-health.sh on enabled servers
+  +--> Report per-server pass/fail (non-blocking)
+  |
+Step 5: Create .vibecrew/ Runtime Directory
+  |
+  +--> Write config.json (preferences from steps 1-4, schema_version: "1.0.0")
   +--> Write state.json (foundation.complete: false, schema_version: "1.0.0")
   +--> Write backlog.json (empty features array, schema_version: "1.0.0")
   +--> Create sessions/, scores/, signals/, locks/ directories
   |
-Step 5: Report Readiness
+Step 6: Report Readiness
   |
-  +--> Print summary table
-  +--> Confirm ready or list blockers
+  +--> Print summary table (required, optional, MCP, terminal)
+  +--> List disabled features (if optional deps missing)
   +--> Instruct: "Run /new-project to begin"
 ```
 
@@ -607,16 +654,19 @@ Each step produces a summary table. Missing required dependencies block progress
 VibeCrew Dependency Check
 -----------------------
   REQUIRED
-  Claude Code      2.3.1     required 2.0+     PASS
   Git              2.44.0    required 2.30+    PASS
-  GitHub CLI       2.49.2    required 2.0+     PASS
   Node.js          22.11.0   required 18+      PASS
   jq               1.7.1     required 1.6+     PASS
 
-  RECOMMENDED
-  terminal-notifier  2.0.0   recommended       PASS
+  OPTIONAL
+  GitHub CLI       2.49.2    optional 2.0+     PASS (authenticated)
+  terminal-notifier  2.0.0   optional          PASS
 
-MCP Server Check: Context7 AVAILABLE, Chrome DevTools AVAILABLE
+MCP Server Health:
+  context7          ok
+  chrome-devtools   ok
+  playwright        ok
+
 Terminal Detection: Warp (deep-link notifications enabled)
 ```
 
@@ -648,8 +698,9 @@ The final output confirms all checks passed and directs the user to the next ste
 ```
 VibeCrew Setup Complete
 =====================
-  Dependencies:     5/5 required passed, 1/1 recommended passed
-  MCP Servers:      2/2 available
+  Required:         3/3 passed (Git, Node.js, jq)
+  Optional:         2/2 passed (GitHub CLI, terminal-notifier)
+  MCP Servers:      3/3 healthy
   Terminal:         Warp (deep-links enabled)
   State files:      config.json, state.json, backlog.json (schema v1.0.0)
   Foundation:       INCOMPLETE

@@ -2,50 +2,100 @@
 # scripts/check-deps.sh
 # Validate all VibeCrew dependencies
 # Returns JSON with status of each dependency
+#
+# Flags:
+#   --auto-install   Include install_commands in JSON output
+#
 # Exit 0: all required dependencies met
 # Exit 1: required dependency missing
 
 set -euo pipefail
 
-PASS=0; FAIL=0; WARN=0; RESULTS=()
+AUTO_INSTALL=false
+for arg in "$@"; do
+  case "$arg" in
+    --auto-install) AUTO_INSTALL=true ;;
+  esac
+done
+
+PASS=0; FAIL=0; WARN=0; RESULTS=(); INSTALL_CMDS=()
+
+# Detect package manager
+if command -v brew &>/dev/null; then
+  PKG_MGR="brew"
+elif command -v apt-get &>/dev/null; then
+  PKG_MGR="apt"
+else
+  PKG_MGR="unknown"
+fi
 
 check_dep() {
-  local name="$1" command="$2" min_version="$3" install_hint="$4" required="$5"
-  local version_flag="${6:---version}"
+  local name="$1" command="$2" min_version="$3" level="$4"
+  local brew_pkg="${5:-$command}" apt_pkg="${6:-$command}"
+  local version_flag="${7:---version}"
 
-  if ! command -v "$command" &> /dev/null; then
-    RESULTS+=("{\"name\":\"$name\",\"status\":\"missing\",\"required\":\"$min_version\",\"install\":\"$install_hint\",\"level\":\"$required\"}")
-    [ "$required" = "required" ] && ((FAIL++)) || ((WARN++))
+  # Build install hint based on detected package manager
+  local install_hint
+  case "$PKG_MGR" in
+    brew) install_hint="brew install $brew_pkg" ;;
+    apt)  install_hint="sudo apt-get install -y $apt_pkg" ;;
+    *)    install_hint="Install $name ($command) manually" ;;
+  esac
+
+  if ! command -v "$command" &>/dev/null; then
+    RESULTS+=("{\"name\":\"$name\",\"command\":\"$command\",\"status\":\"missing\",\"required\":\"$min_version\",\"install\":\"$install_hint\",\"level\":\"$level\"}")
+    if [[ "$level" == "required" ]]; then
+      ((FAIL++))
+      INSTALL_CMDS+=("$install_hint")
+    else
+      ((WARN++))
+      INSTALL_CMDS+=("$install_hint")
+    fi
     return
   fi
 
   local version
   version=$("$command" $version_flag 2>&1 | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)
-  RESULTS+=("{\"name\":\"$name\",\"status\":\"ok\",\"found\":\"${version:-unknown}\",\"required\":\"$min_version\",\"level\":\"$required\"}")
+  RESULTS+=("{\"name\":\"$name\",\"command\":\"$command\",\"status\":\"ok\",\"found\":\"${version:-unknown}\",\"required\":\"$min_version\",\"level\":\"$level\"}")
   ((PASS++))
 }
 
-# Required dependencies
-check_dep "Claude Code" "claude" "2.0.0" "npm install -g @anthropic-ai/claude-code" "required"
-check_dep "Git" "git" "2.30.0" "xcode-select --install" "required"
-check_dep "GitHub CLI" "gh" "2.0.0" "brew install gh" "required"
-check_dep "Node.js" "node" "18.0.0" "brew install node" "required" "--version"
-check_dep "jq" "jq" "1.6" "brew install jq" "required"
+# Required dependencies (block /setup if missing)
+check_dep "Git"     "git"  "2.30.0" "required" "git"  "git"  "--version"
+check_dep "Node.js" "node" "18.0.0" "required" "node" "nodejs" "--version"
+check_dep "jq"      "jq"   "1.6"    "required" "jq"   "jq"   "--version"
 
-# Recommended dependencies
-check_dep "terminal-notifier" "terminal-notifier" "2.0.0" "brew install terminal-notifier" "recommended"
+# Optional dependencies (warn but don't block)
+check_dep "GitHub CLI"        "gh"                  "2.0.0" "optional" "gh"                  "gh"                  "--version"
+check_dep "terminal-notifier" "terminal-notifier"   "2.0.0" "optional" "terminal-notifier"   "terminal-notifier"   "--version"
 
-# Check gh auth status
-GH_AUTH="ok"
-if command -v gh &>/dev/null && ! gh auth status &>/dev/null 2>&1; then
-  GH_AUTH="not_authenticated"
-  ((FAIL++))
+# Check gh auth status (informational, never blocks)
+GH_AUTH="not_installed"
+if command -v gh &>/dev/null; then
+  if gh auth status &>/dev/null 2>&1; then
+    GH_AUTH="ok"
+  else
+    GH_AUTH="not_authenticated"
+  fi
 fi
 
 # Build output JSON
 DEPS_JSON=$(printf '%s,' "${RESULTS[@]}" | sed 's/,$//')
-jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
-  --argjson pass "$PASS" --argjson fail "$FAIL" --argjson warn "$WARN" \
-  '{dependencies:$deps, gh_authenticated:$gh_auth, summary:{passed:$pass, required_failed:$fail, recommended_missing:$warn, ready:($fail==0)}}'
 
-[ "$FAIL" -gt 0 ] && exit 1 || exit 0
+if [[ "$AUTO_INSTALL" == "true" ]]; then
+  # Include install commands for missing deps
+  CMDS_JSON="[]"
+  if [[ ${#INSTALL_CMDS[@]} -gt 0 ]]; then
+    CMDS_JSON=$(printf '%s\n' "${INSTALL_CMDS[@]}" | jq -R . | jq -s .)
+  fi
+  jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
+    --argjson pass "$PASS" --argjson fail "$FAIL" --argjson warn "$WARN" \
+    --argjson cmds "$CMDS_JSON" --arg pkg_mgr "$PKG_MGR" \
+    '{dependencies:$deps, gh_authenticated:$gh_auth, package_manager:$pkg_mgr, install_commands:$cmds, summary:{passed:$pass, required_failed:$fail, optional_missing:$warn, ready:($fail==0)}}'
+else
+  jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
+    --argjson pass "$PASS" --argjson fail "$FAIL" --argjson warn "$WARN" \
+    '{dependencies:$deps, gh_authenticated:$gh_auth, summary:{passed:$pass, required_failed:$fail, optional_missing:$warn, ready:($fail==0)}}'
+fi
+
+[[ "$FAIL" -gt 0 ]] && exit 1 || exit 0

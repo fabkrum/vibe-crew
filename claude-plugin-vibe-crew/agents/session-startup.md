@@ -54,7 +54,8 @@ Dashboard: {dashboard_url_or_"not running"}
 - `{phase}`: Current phase of active feature (`plan`, `design`, `code`, `test`, `docs`), or "idle" if none.
 - `{routing_instruction}`: One of:
   - `Run /setup to initialize VibeCrew for this project.` (no state.json found)
-  - `Resuming Tier 1: {next_step}` (foundation incomplete)
+  - `Resuming Tier 1: {next_step}` (foundation incomplete, 2+ artifacts done)
+  - `VibeCrew uses a design-first approach: run /new-project to define your project vision, design system, and tech stack before writing code.` (foundation incomplete AND fewer than 2 artifacts complete — brand new project)
   - `Resuming Tier 2: {feature_name} → {phase}` (feature in progress)
   - `Ready for next feature. Run /new-feature or /run-backlog.` (foundation complete, no active feature)
 

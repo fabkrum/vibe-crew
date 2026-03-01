@@ -11,22 +11,29 @@ attention is needed -- permission stalls, task completions, and critical failure
 
 ## Quick Install
 
-**Prerequisites**
-
-| Dependency | Minimum Version |
-|---|---|
-| Claude Code | 2.0+ |
-| Git | 2.30+ |
-| GitHub CLI (`gh`) | 2.0+ |
-| Node.js | 18+ |
-| `jq` | any |
-| `terminal-notifier` (macOS) | any |
-
-Install missing dependencies on macOS:
+**Option A: Bootstrap script (installs everything)**
 
 ```bash
-brew install jq terminal-notifier gh node
+cd claude-plugin-vibe-crew
+./install.sh
 ```
+
+This detects your OS and package manager, installs any missing dependencies, and
+prompts for GitHub CLI authentication. Pass `--yes` to skip confirmation prompts.
+
+**Option B: Manual install**
+
+| Dependency | Tier | Minimum Version | Installation |
+|---|---|---|---|
+| Git | Required | 2.30+ | Pre-installed on macOS |
+| Node.js | Required | 18+ | `brew install node` |
+| `jq` | Required | any | `brew install jq` |
+| GitHub CLI (`gh`) | Optional | 2.0+ | `brew install gh` |
+| `terminal-notifier` (macOS) | Optional | any | `brew install terminal-notifier` |
+
+> **Note:** GitHub CLI is only needed for PR automation (`/review`, `gh pr create`).
+> `terminal-notifier` enables desktop notifications. Both are optional — VibeCrew
+> works without them.
 
 **Install the plugin**
 
@@ -35,7 +42,8 @@ claude plugin install /path/to/claude-plugin-vibe-crew
 ```
 
 Installation takes under 5 minutes. The plugin registers hooks, agents, slash
-commands, permission rules, and optional MCP servers automatically.
+commands, permission rules, and optional MCP servers automatically. The `/setup`
+command can also auto-install missing dependencies from within Claude Code.
 
 **Optional MCP servers**
 
@@ -70,14 +78,17 @@ in your browser, or browse them on GitHub:
 
 ## Quick Start
 
-1. Open a new Claude Code session in any directory.
-2. Run `/setup` to verify your environment and install dependencies.
-3. Run `/new-project` to create a fresh project. VibeCrew walks you through
+1. Run `./install.sh` to install dependencies (or install them manually).
+2. Install the plugin: `claude plugin install /path/to/claude-plugin-vibe-crew`
+3. Open a new Claude Code session in any directory.
+4. Run `/setup` to verify your environment and initialize VibeCrew. If any
+   dependencies are missing, `/setup` offers to install them automatically.
+5. Run `/new-project` to create a fresh project. VibeCrew walks you through
    Tier 1 (project foundation) before any source code can be written.
-4. Run `/plan-features` to build your feature backlog.
-5. Run `/new-feature "feature name"` to begin developing a feature through the
+6. Run `/plan-features` to build your feature backlog.
+7. Run `/new-feature "feature name"` to begin developing a feature through the
    Tier 2 cycle.
-6. Run `/wrap` when you are done to generate session logs, release notes, and
+8. Run `/wrap` when you are done to generate session logs, release notes, and
    a Vibe Score breakdown.
 
 ---
@@ -91,7 +102,7 @@ directory and invoked directly from the Claude Code prompt.
 
 | Command | Description |
 |---|---|
-| `/setup` | Verify environment (Git, Node, gh, jq, terminal-notifier), detect terminal, initialize `.vibecrew/` state directory. |
+| `/setup` | Verify environment (Git, Node.js, jq required; gh, terminal-notifier optional), auto-install missing deps, health-check MCP servers, detect terminal, initialize `.vibecrew/` state directory. |
 | `/new-project` | Create a new project and run through Tier 1: generate VISION.md, design-system.css, TDR, roadmap, and CLAUDE.md. Phase gate blocks source code writes until all foundation artifacts exist. |
 
 ### Planning
@@ -295,6 +306,7 @@ claude-plugin-vibe-crew/
     quiz/SKILL.md              # /quiz command
   scripts/                     # ~67 bash automation scripts
   templates/                   # Project templates and doc-site scaffold
+  install.sh                   # Bootstrap script for dependency installation
   LICENSE                      # MIT License
 
 .vibecrew/                       # Per-project runtime state (created by /setup)
@@ -319,12 +331,13 @@ claude-plugin-vibe-crew/
 
 ## Troubleshooting
 
-**Phase gate blocked -- "Foundation not complete"**
+**Phase gate blocked -- "VibeCrew designs before it codes"**
 
-The phase gate hook prevents source code writes until all five Tier 1 artifacts
-exist (VISION.md, design-system.css, TDR, roadmap, CLAUDE.md). Run `/status`
-to see which artifacts are missing, then run `/new-project` to complete the
-foundation.
+The phase gate hook prevents source code writes until all six Tier 1 artifacts
+are complete (VISION.md, design-system.css, TDR, roadmap, architecture diagrams,
+CLAUDE.md). The error message shows your progress (e.g., "2/6 artifacts complete")
+and lists what's missing. Run `/status` for details, then `/new-project` to
+continue the foundation.
 
 **Notifications not working**
 

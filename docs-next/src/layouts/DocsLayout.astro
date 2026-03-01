@@ -17,7 +17,6 @@ const { title, description, sectionLabel, activeSlug, wide = false } = Astro.pro
 <BaseLayout title={`VibeCrew — ${title}`} description={description} activeSlug={activeSlug}>
   <div class="main" data-pagefind-body>
     <Breadcrumbs title={title} slug={activeSlug} />
-    {sectionLabel && <span class="section-label">{sectionLabel}</span>}
     <slot />
     <PrevNext slug={activeSlug} />
   </div>

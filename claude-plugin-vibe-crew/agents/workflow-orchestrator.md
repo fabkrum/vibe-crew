@@ -54,7 +54,7 @@ Guide the foundation sequence strictly in order. Do not skip steps. Do not allow
 3. **TDR** — Delegate to Stack Scout for technology research. Wait for TDR completion.
 4. **roadmap.md** — Synthesize VISION.md + TDR into a phased roadmap. Delegate to Builder.
 5. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR + roadmap. Use the Stack Scout's preliminary system diagram as a starting point.
-6. **CLAUDE.md** — Generate project-specific CLAUDE.md from all foundation artifacts. Delegate to Builder.
+6. **CLAUDE.md** — Generate project-specific CLAUDE.md from the template. Delegate to Builder. **Minimalism principle:** Research shows oversized context files increase agent cost 20%+ without improving success rates. The generated CLAUDE.md must stay under 200 lines, must not enumerate directories or file trees (agents navigate via architecture diagrams), and must not restate rules that hooks already enforce (phase-gate, format-code, protect-data, quality-gate). Only include project-specific conventions, tech stack, and architecture rules that cannot be enforced mechanically.
 
 After each step, verify the artifact exists and run `complete-phase.sh` to advance foundation state. The phase-gate hook blocks source code writes until all 6 artifacts are complete.
 

@@ -81,6 +81,34 @@ fi
 
 echo "Applied mutation to CLAUDE.md: $RULE"
 
+# --- Prune Session Learnings to max 15 rules ---
+# Research shows oversized context files increase cost without improving outcomes.
+# Keep only the 15 most recent learnings (newest at the bottom).
+MAX_LEARNINGS=15
+SECTION_START=$(grep -n "^## Session Learnings" "$CLAUDE_MD" | head -1 | cut -d: -f1)
+if [[ -n "$SECTION_START" ]]; then
+  # Find next section or end of file
+  NEXT_SEC=$(awk -v start="$((SECTION_START + 1))" 'NR > start && /^## / { print NR; exit }' "$CLAUDE_MD")
+  if [[ -z "$NEXT_SEC" ]]; then
+    NEXT_SEC=$(($(wc -l < "$CLAUDE_MD" | tr -d ' ') + 1))
+  fi
+
+  # Count rule lines (starting with "- ") in the section
+  RULE_LINES=$(awk -v s="$((SECTION_START + 1))" -v e="$((NEXT_SEC - 1))" 'NR >= s && NR <= e && /^- /' "$CLAUDE_MD" | wc -l | tr -d ' ')
+
+  if [[ "$RULE_LINES" -gt "$MAX_LEARNINGS" ]]; then
+    EXCESS=$((RULE_LINES - MAX_LEARNINGS))
+    # Remove the oldest $EXCESS rule lines (first ones after header)
+    REMOVED=0
+    awk -v s="$((SECTION_START + 1))" -v e="$((NEXT_SEC - 1))" -v ex="$EXCESS" '
+      BEGIN { removed = 0 }
+      NR >= s && NR <= e && /^- / && removed < ex { removed++; next }
+      { print }
+    ' "$CLAUDE_MD" > "$CLAUDE_MD.tmp" && mv "$CLAUDE_MD.tmp" "$CLAUDE_MD"
+    echo "Pruned $EXCESS oldest Session Learnings (cap: $MAX_LEARNINGS)"
+  fi
+fi
+
 # --- Update mutation-log.json ---
 if [[ -f "$MUTATION_LOG" ]]; then
   MUTATION_ID="mut-$(date -u +%Y%m%d%H%M%S)"

@@ -14,14 +14,16 @@ if [[ ! -f "$CLAUDE_MD" ]]; then
 fi
 
 # ── Line count ──
+# Research (arxiv.org/abs/2602.11988) shows larger context files increase agent cost
+# 20%+ without improving success rates. Minimize aggressively.
 LINE_COUNT="$(wc -l < "$CLAUDE_MD" | tr -d ' ')"
 
-if [[ "$LINE_COUNT" -ge 600 ]]; then
+if [[ "$LINE_COUNT" -ge 400 ]]; then
   SIZE_STATUS="BLOCKED"
-  SIZE_MSG="BLOCKED: CLAUDE.md is ${LINE_COUNT} lines (hard limit: 600). No further CLAUDE.md mutations allowed until pruning reduces it below 500."
-elif [[ "$LINE_COUNT" -ge 500 ]]; then
+  SIZE_MSG="BLOCKED: CLAUDE.md is ${LINE_COUNT} lines (hard limit: 400). No further mutations allowed until pruning reduces it below 200. Every line costs compliance tokens — keep this file minimal."
+elif [[ "$LINE_COUNT" -ge 200 ]]; then
   SIZE_STATUS="WARNING"
-  SIZE_MSG="WARNING: CLAUDE.md is ${LINE_COUNT} lines (soft limit: 500). Consider pruning stale rules."
+  SIZE_MSG="WARNING: CLAUDE.md is ${LINE_COUNT} lines (soft limit: 200). Research shows oversized context files increase cost without improving outcomes. Prune stale rules and remove anything hooks already enforce."
 else
   SIZE_STATUS="OK"
   SIZE_MSG=""
@@ -191,12 +193,47 @@ if [[ "$LINE_COUNT" -gt 0 ]]; then
   fi
 fi
 
+# ── Session Learnings count ──
+MAX_LEARNINGS=15
+LEARNINGS_COUNT=0
+LEARNINGS_MSG=""
+
+SL_START="$(grep -n '^## Session Learnings' "$CLAUDE_MD" 2>/dev/null | head -1 | cut -d: -f1 || true)"
+if [[ -n "$SL_START" ]]; then
+  SL_NEXT="$(awk -v start="$((SL_START + 1))" 'NR > start && /^## / { print NR; exit }' "$CLAUDE_MD" || true)"
+  if [[ -z "$SL_NEXT" ]]; then
+    SL_NEXT="$((LINE_COUNT + 1))"
+  fi
+  LEARNINGS_COUNT="$(awk -v s="$((SL_START + 1))" -v e="$((SL_NEXT - 1))" 'NR >= s && NR <= e && /^- /' "$CLAUDE_MD" | wc -l | tr -d ' ')"
+  if [[ "$LEARNINGS_COUNT" -gt "$MAX_LEARNINGS" ]]; then
+    LEARNINGS_MSG="WARNING: Session Learnings has ${LEARNINGS_COUNT} rules (max: ${MAX_LEARNINGS}). Run apply-mutation.sh to auto-prune oldest."
+  fi
+fi
+
+# ── Redundancy detection ──
+# Flag rules that restate what hooks already enforce (phase-gate, format-code, protect-data, quality-gate)
+REDUNDANT_COUNT=0
+REDUNDANT_PATTERNS=("never write source code before foundation" "always format" "never rm -rf" "never force push" "always run build" "always run lint" "always run typecheck" "do not drop table")
+for pat in "${REDUNDANT_PATTERNS[@]}"; do
+  if grep -qi "$pat" "$CLAUDE_MD" 2>/dev/null; then
+    REDUNDANT_COUNT=$((REDUNDANT_COUNT + 1))
+  fi
+done
+
 # ── Output report ──
 echo "CLAUDE.md Lint Report"
 echo "====================="
 echo "Size: ${LINE_COUNT} lines (${SIZE_STATUS})"
 if [[ -n "$SIZE_MSG" ]]; then
   echo "$SIZE_MSG"
+fi
+
+if [[ -n "$LEARNINGS_MSG" ]]; then
+  echo "$LEARNINGS_MSG"
+fi
+
+if [[ "$REDUNDANT_COUNT" -gt 0 ]]; then
+  echo "Redundant rules: ${REDUNDANT_COUNT} rule(s) restate what hooks already enforce. Remove them to save compliance tokens."
 fi
 
 echo "Pinned sections: ${PINNED_COUNT}${PINNED_RANGES:+ (lines ${PINNED_RANGES})}"

@@ -251,6 +251,9 @@ Use trend data to calibrate confidence levels:
 5. **Minimum 5 sessions.** No mutations proposed until at least 5 score files exist.
 6. **No structural changes.** Only append rules to the "Session Learnings" section. Never delete, reorder, or modify existing CLAUDE.md content.
 7. **Master toggle.** If `.vibecrew/config.json` has `performance_coach.enabled = false`, skip all steps and exit immediately.
+8. **No hook-redundant rules.** Never propose a rule that restates what a hook script already enforces. Phase-gate blocks pre-foundation writes, protect-data blocks destructive commands, format-code auto-formats, quality-gate runs typecheck/lint/build. Adding CLAUDE.md rules for these wastes compliance tokens without additional enforcement.
+9. **No directory enumerations.** Never propose a rule that lists directory structures, file trees, or codebase overviews. Research shows these do not help agents navigate and increase cost by 20%+.
+10. **Max 15 learnings.** The Session Learnings section is capped at 15 rules. `apply-mutation.sh` auto-prunes the oldest when exceeded. If the section is already at 15, the proposed rule must be more impactful than the oldest existing rule to justify the replacement.
 
 ## Budget
 

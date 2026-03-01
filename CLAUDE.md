@@ -138,8 +138,9 @@ The `/profile` command runs an 8-question interview (or offers presets) that sto
 2. **Human attention is the bottleneck** — The system stays silent during normal operation and interrupts only when blocked, complete, or failed.
 3. **Context window discipline** — Target <50% context usage. Subagents isolate expensive research. MCP servers (Context7) replace pasting docs. Architecture diagrams pre-loaded once via `inject-architecture.sh` instead of per-agent reads. Warnings at 60%/80%.
 4. **Hooks over suggestions** — Enforce rules via deterministic bash scripts (zero tokens) rather than relying on the model to remember. The quality gate Stop hook (`quality-gate.sh`) catches typecheck/lint/build errors immediately after every task completion.
-5. **Self-improving** — Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules, creating a recursive efficiency improvement loop.
+5. **Self-improving** — Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules, creating a recursive efficiency improvement loop. Capped at 15 Session Learnings with automatic oldest-pruning.
 6. **Parallel by default** — Planning and development can run simultaneously across terminal tabs.
+7. **Minimal CLAUDE.md** — Research (arxiv.org/abs/2602.11988) shows oversized context files increase agent cost 20%+ without improving success rates. User project CLAUDE.md files target <200 lines. Never include directory enumerations (agents navigate via architecture diagrams). Never restate rules that hooks enforce. Every line must earn its token cost.
 
 ## Documentation Sync Rule
 

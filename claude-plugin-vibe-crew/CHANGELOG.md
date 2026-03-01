@@ -5,6 +5,77 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-03-01
+
+### Fixed
+
+#### Critical Security Hardening
+
+- `scripts/cost-guardrails.sh` -- AWK injection: replaced string interpolation with `-v` flag passing in `calc()`, `fmt_usd()`, and all inline awk comparisons
+- `scripts/check-mcp-health.sh` -- Command injection: replaced `bash -c "$SERVER_CMD"` with array-based execution, mktemp-based temp files with cleanup trap, server name sanitization
+- `scripts/restrict-paths.sh` -- JSON injection: replaced heredoc with `jq -Rs` escaping for validation output
+- `scripts/update-state.sh` -- jq expression injection: added allowlist validation rejecting dangerous builtins (`input`, `env`, `debug`, `halt`, `builtins`)
+
+#### Robustness Fixes
+
+- `scripts/lib/lock.sh` -- Fixed TOCTOU race in stale lock removal using atomic `mv`-based claim pattern
+- `scripts/migrate-state.sh` -- Moved score/mutation migrations inside lock scope; made lock release conditional
+- `scripts/sandbox.sh` -- Added realpath error guard and `python3` fallback for `realpath -m`
+- `scripts/detect-secrets.sh`, `scripts/run-a11y-scan.sh` -- Added EXIT traps for temp file cleanup
+- `scripts/statusline.sh` -- Atomic write via tmp+mv pattern
+
+#### Cross-Platform Compatibility
+
+- `scripts/detect-conventions.sh` -- Replaced `grep -P` (PCRE) with `grep -q`/`grep -qE` for macOS compatibility
+- `scripts/quality-gate.sh` -- Added `timeout` command availability check with graceful fallback
+- `scripts/bump-version.sh` -- Cross-platform `sed -i` wrapper function for macOS/Linux
+- `scripts/check-context.sh` -- Cross-platform date parsing (macOS `date -j` + GNU `date -d` fallback)
+
+#### Script Fixes
+
+- `scripts/generate-feature-docs.sh` -- Fixed `$priority` → `$PRIORITY` variable name
+- `scripts/generate-handoff.sh` -- Replaced `echo -e` with `printf '%b'`
+- `scripts/extract-design-system.sh` -- Fixed URL escaping in JSON payloads and sed delimiters
+- `scripts/generate-counter-tdr.sh` -- Removed double-escaping before `jq --arg`
+
+#### Agent Prompt Fixes
+
+- `agents/session-startup.md` -- Fixed "3 lines" → "4 lines" count, clarified safety constraints
+- `agents/code-reviewer.md`, `agents/code-auditor.md`, `agents/code-simplifier.md`, `agents/security-auditor.md` -- Fixed read-only contradictions (agents with Write/Edit tools now clarify their write scope)
+- `agents/builder.md` -- Fixed duplicate step numbers, clarified `auto_merge` PR behavior
+- `agents/ci-healer.md` -- Aligned dependency fix strategy with safety rules (no auto-add to package.json)
+- `agents/workflow-orchestrator.md` -- Fixed agent count (13→14), added signal validation, added concurrent run-backlog guard
+- `agents/opponent-processor.md` -- Added profile-aware output adaptation
+- `agents/verifier.md` -- Updated vestigial v1.0 mutation text
+
+### Changed
+
+#### Config & Settings
+
+- `settings.json` -- Restricted `cp`/`mv` to project scope, added pnpm/yarn/bun patterns, added deny patterns for `rm -rf /*` and force-push to main/master, fixed statusLine path
+- `.mcp.json` -- Fixed supabase package name, replaced empty env values with `YOUR_TOKEN_HERE` placeholders
+- `.claude-plugin/plugin.json` -- Added settings reference
+
+#### Templates
+
+- `templates/onboard-state.json.template` -- Updated to schema v1.5.0, added architecture_diagrams artifact and brief_file field
+- `templates/signal-schema.json` -- Expanded agent enum from 5 to 11 signal-producing agents
+- `templates/workflow.json.template` -- Added review phase to phase_order
+- `templates/score-breakdown.json.template` -- Added review phase
+- `templates/architecture-manifest.json` -- Removed misleading `$schema` line
+- `scripts/init-vibecrew-state.sh` -- Added 7 missing config sections and state fields
+
+#### Documentation
+
+- `CLAUDE.md` -- Fixed hook table (session-startup.md → session-startup.sh, added 4 missing hooks)
+- `README.md` -- Updated stale counts (14 agents, 31 commands, 10 MCP servers, v1.7.0 releases), added System Reviewer
+- `templates/trigger-table.md` -- Added 5 missing commands, fixed /audit agent mapping, added System Reviewer
+- `architecture/agents.md` -- Updated from 5 v1.0 agents to 14 v1.7.0 agents with full summary table
+- `architecture/schemas.md` -- Updated schema version to 1.5.0, added review phase
+- `architecture/workflows.md` -- Updated from 5-agent to 14-agent topology
+
+---
+
 ## [1.6.0] - 2026-03-01
 
 ### Added
@@ -490,10 +561,11 @@ Documentation, cleanup utilities, and finalized configurations.
 
 **Total: ~81 files across 6 implementation phases.**
 
+[1.7.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.7.0
+[1.6.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.6.0
 [1.5.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.5.0
 [1.4.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.4.0
 [1.3.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.3.0
 [1.2.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.2.0
 [1.1.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.1.0
 [1.0.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.0.0
-[1.6.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.6.0

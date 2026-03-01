@@ -4,7 +4,7 @@
 >
 > This document defines the complete workflow design for VibeCrew v1.0, covering five scenarios: new project initialization, existing project onboarding (deferred), the feature lifecycle, the session lifecycle, and parallel work coordination. Each workflow specifies step-by-step sequences, state transitions, agent handoffs via the Agent Teams API, worktree isolation, and hook interactions.
 >
-> **v1.0 Revision.** This revision aligns with the 5-agent topology (Session Startup, Workflow Orchestrator, Stack Scout, Builder, Verifier), replaces branch-per-agent with worktree-per-agent isolation, replaces copy-paste tab commands with the Agent Teams API, fixes the feature lifecycle contradiction (sequential with verify-fix loops), and defers Workflow 2 (Existing Project Onboarding) to v1.1. All JSON schemas reference `architecture/schemas.md` as the single source of truth.
+> **v1.0 Revision.** This revision aligns with the 14-agent topology (Session Startup, Workflow Orchestrator, Stack Scout, Builder, Verifier), replaces branch-per-agent with worktree-per-agent isolation, replaces copy-paste tab commands with the Agent Teams API, fixes the feature lifecycle contradiction (sequential with verify-fix loops), and defers Workflow 2 (Existing Project Onboarding) to v1.1. All JSON schemas reference `architecture/schemas.md` as the single source of truth.
 
 ---
 
@@ -383,16 +383,20 @@ The v1.1 onboarding workflow will automate this process with dedicated audit pha
 
 ### 3.1 Overview
 
-The feature lifecycle is the iterative Tier 2 workflow. A feature progresses through 7 Kanban columns (`idea` through `done`) and 4 execution phases (`plan`, `design`, `code`, `test`). Three agents participate: Builder (design + code), Verifier (test), and the Workflow Orchestrator (plan + coordination). Handoffs are mediated by the Agent Teams API.
+The feature lifecycle is the iterative Tier 2 workflow. A feature progresses through 7 Kanban columns (`idea` through `done`) and 6 execution phases (`plan`, `design`, `code`, `test`, `review`, `docs`). Four agents participate: Builder (design + code), Verifier (test), Code Reviewer (review), and the Workflow Orchestrator (plan + coordination). Handoffs are mediated by the Agent Teams API.
 
-**Key design resolution.** Phases are **sequential by default** but can be **re-entered** via verify-fix loops. If the Verifier finds bugs during testing, it sends the feature back to `in-progress` for the Builder to fix. The column progression is:
+**Key design resolution.** Phases are **sequential by default** but can be **re-entered** via verify-fix loops and review-fix cycles. If the Verifier finds bugs during testing, it sends the feature back to `in-progress` for the Builder to fix. If the Code Reviewer issues a `request-changes` verdict with critical findings, the Orchestrator routes findings back to the Builder for a structured fix cycle (max 2 cycles). If the Builder hits a blocking error (`builder-blocked.signal`), the Orchestrator attempts auto-recovery via the CI Healer agent before escalating to the developer. The column progression is:
 
 ```
 idea -> planning -> planned -> in-progress -> testing -> review -> done
-                                    ^            |
-                                    |            |
-                                    +-- fix -----+
-                                    (verify-fix loop)
+                                    ^            |          |
+                                    |            |          |
+                                    +-- fix -----+          |
+                                    (verify-fix loop)       |
+                                    ^                       |
+                                    |                       |
+                                    +-- review-fix cycle ---+
+                                    (max 2 cycles)
 ```
 
 ### 3.2 Feature State Machine
@@ -763,6 +767,25 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     SAFETY LIMIT: Max 3 verify-fix iterations per feature.
     After 3 failed loops, Orchestrator notifies the developer
     and pauses the feature for manual intervention.
+
+    REVIEW-FIX CYCLE (after tests pass):
+    Code Reviewer produces review report with verdict.
+    If verdict is request-changes with critical findings:
+      1. Orchestrator extracts critical findings
+      2. Writes builder-review-feedback.json
+      3. Builder fixes each critical finding
+      4. Builder re-runs build verify
+      5. Code Reviewer re-reviews changed files
+      6. Max 2 review-fix cycles. After 2 cycles,
+         feature marked as blocked.
+
+    AUTO-RECOVERY (on builder-blocked signal):
+    Before escalating to the developer:
+      1. Orchestrator reads error details from signal
+      2. Runs npm install (if missing modules suspected)
+      3. Invokes CI Healer agent for diagnosis
+      4. If CI Healer succeeds, resumes Builder
+      5. If CI Healer fails, escalates to developer
 ```
 
 ### 3.9 `/run-backlog` Automation Loop
@@ -801,8 +824,15 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     |                 |  Design (Builder)|                    |
     |                 |  Code (Builder)  |                    |
     |                 |  Test (Verifier) |                    |
+    |                 |  Review (Code    |                    |
+    |                 |   Reviewer)      |                    |
+    |                 |  Docs            |                    |
     |                 |  (with verify-   |                    |
-    |                 |   fix loops)     |                    |
+    |                 |   fix loops,     |                    |
+    |                 |   review-fix     |                    |
+    |                 |   cycles max 2x, |                    |
+    |                 |   auto-recovery  |                    |
+    |                 |   via CI Healer) |                    |
     |                 +--------+---------+                    |
     |                          |                              |
     |                          v                              |
@@ -864,10 +894,12 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
 | `idea` | `planning` | `/plan-features` or user drags in dashboard | Orchestrator | User initiates planning |
 | `planning` | `planned` | `/plan-features` | Orchestrator | Acceptance criteria set, dependencies identified |
 | `planned` | `in-progress` | `/new-feature` or `/run-backlog` | Orchestrator (delegates to Builder) | All dependencies in `done` column, WIP limit not reached |
-| `in-progress` | `testing` | Code phase complete | Builder signals Orchestrator | Builder verify loop passes (build + lint) |
+| `in-progress` | `testing` | Code phase complete | Builder signals Orchestrator | Builder verify loop passes (build + lint); signal includes `changed_files` |
 | `testing` | `in-progress` | Verify-fix loop | Verifier signals Orchestrator | Tests fail, bugs need fixing (max 3 loops) |
-| `testing` | `review` | Tests pass, PR created | Verifier signals, Builder creates PR | All tests pass, quality gate passes |
-| `review` | `done` | User merges PR + `/wrap` | User (on GitHub) + Verifier | PR merged, Vibe Score calculated |
+| `testing` | `review` | Tests pass | Verifier signals Orchestrator | All tests pass; Code Reviewer invoked |
+| `review` | `in-progress` | Review-fix cycle | Code Reviewer verdict `request-changes` | Critical findings routed to Builder via `builder-review-feedback.json` (max 2 cycles) |
+| `review` | `done` | Review approved + user merges PR + `/wrap` | Code Reviewer approves, Builder creates PR, Verifier wraps | PR merged, Vibe Score calculated |
+| `in-progress` | `blocked` | Builder blocked + auto-recovery fails | Orchestrator (via CI Healer) | CI Healer attempted, escalated to developer |
 
 See `architecture/schemas.md` Section 4 for the canonical `backlog.json` schema and Kanban column definitions.
 

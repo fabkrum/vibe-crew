@@ -16,7 +16,7 @@ claude-plugin-vibe-crew/          # The plugin — install this into your projec
   hooks/hooks.json              # Event hook bindings
   scripts/                      # ~80 bash automation scripts
   agents/                       # 14 specialized AI agent prompts
-  skills/                       # 28 slash command definitions
+  skills/                       # 31 slash command definitions
   tests/                        # BATS test suite
   templates/                    # Project templates and doc-site scaffold
 
@@ -29,7 +29,7 @@ CLAUDE.md                       # This file
 
 ### Two-Tier Workflow
 
-- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css + design-brief.md (via Design Discovery interview), TDR (Technology Decision Record), roadmap, Architecture Diagrams (5 Mermaid `.mmd` files), and CLAUDE.md before any source code can be written. Enforced by a phase gate hook. Step 2 (Design Discovery) runs a 3-phase contextual interview: Product & Audience Context → Visual Direction → Component Preferences, producing both the CSS token file and a design brief that captures rationale for agents to reference.
+- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css + design-brief.md (via Design Discovery interview), TDR (Technology Decision Record), Architecture Diagrams (5 Mermaid `.mmd` files), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook. Step 2 (Design Discovery) runs a 3-phase contextual interview: Product & Audience Context → Visual Direction → Component Preferences, producing both the CSS token file and a design brief that captures rationale for agents to reference. Architecture Diagrams are generated before the Opponent Processor runs, giving it structural context for its analysis.
 - **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`.
 
 ### Agent Topology (14 agents)
@@ -57,7 +57,7 @@ Opus agents handle planning, research, code, security, and analysis — tasks wh
 
 | Hook | Script | Purpose |
 |---|---|---|
-| SessionStart | session-startup.md | Environment check and state routing |
+| SessionStart | session-startup.sh | Environment check and state routing |
 | PreToolUse (Write/Edit) | phase-gate.sh | Blocks source code writes until foundation complete |
 | PreToolUse (Bash) | protect-data.sh | Blocks dangerous commands (rm -rf, DROP TABLE, force push) |
 | PostToolUse (Write/Edit) | format-code.sh | Auto-formats written files |
@@ -67,6 +67,10 @@ Opus agents handle planning, research, code, security, and analysis — tasks wh
 | Stop | cost-guardrails.sh | Session and daily cost tracking against thresholds |
 | Stop | claude-md-lint.sh | CLAUDE.md size and quality validation |
 | Stop | quality-gate.sh | Runs typecheck/lint/build on modified source files; blocks on failure |
+| SessionStart | sync-state.sh | State file sync on startup |
+| SessionStart | error-recovery.sh | Error recovery on startup |
+| SessionStart (compact) | compact-reinject.sh | Context re-injection after /compact |
+| PreToolUse (Write/Edit) | restrict-paths.sh | Blocks writes outside project root |
 
 ### Interrupt Protocol
 
@@ -107,7 +111,7 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/simplify`, `/apply-simplifications`, `/reconsider`, `/recover-state`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`
 
 ### User Profile System
 
@@ -185,7 +189,7 @@ The Performance Coach can propose a CLAUDE.md mutation if documentation drift re
 
 ## Current Status
 
-VibeCrew v1.6.0 — the plugin is feature-complete. The repository contains:
+VibeCrew v1.7.0 — the plugin is feature-complete. The repository contains:
 - The full plugin (`claude-plugin-vibe-crew/`) with all agents, hooks, scripts, skills, and templates
 - Architecture design docs (`architecture/`) for contributor reference
 - Companion documentation website (`docs/`) with setup guide, workflows, example sessions, and best practices

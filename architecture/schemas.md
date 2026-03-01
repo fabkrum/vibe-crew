@@ -2,7 +2,7 @@
 
 > **This is the single source of truth for all `.vibecrew/` JSON file schemas.**
 > All other architecture documents MUST reference this file rather than defining schemas inline.
-> Schema version: `1.0.0`
+> Schema version: `1.5.0`
 
 ---
 
@@ -268,13 +268,13 @@ An artifact's `status` moves to `"in-progress"` when an agent begins work on it,
 The `active_feature.phase` field uses these values:
 
 ```
-"plan" | "design" | "code" | "test" | "docs" | null
+"plan" | "design" | "code" | "test" | "review" | "docs" | null
 ```
 
 Phases are **sequential by default** but can be re-entered if issues are found during verification:
 
 ```
-plan → design → code → test → docs → (done)
+plan → design → code → test → review → docs → (done)
               ↖─── verify-fix loops ───↙
 ```
 
@@ -706,6 +706,85 @@ Created by Stack Scout after completing a TDR. Consumed by Orchestrator.
   }
 }
 ```
+
+#### 7.4 Builder Complete Signal (with changed_files)
+
+Created by Builder when the code phase finishes. Includes a `changed_files` list so the Verifier can optimize test targeting.
+
+```jsonc
+{
+  "schema_version": "1.0.0",
+  "source": "builder",
+  "event": "complete",
+  "timestamp": "2026-03-01T14:30:00Z",
+  "feature_id": "feat-001",
+  "summary": "Implemented login form and OAuth flow",
+
+  "payload": {
+    "files_created": ["src/auth/login.ts", "src/auth/oauth.ts"],
+    "files_modified": ["src/routes.ts"],
+    "worktree": ".claude/worktrees/builder-feat-001",
+    "changed_files": [
+      {"path": "src/auth/login.ts", "type": "added"},
+      {"path": "src/auth/oauth.ts", "type": "added"},
+      {"path": "src/routes.ts", "type": "modified"}
+    ]
+  }
+}
+```
+
+The `changed_files` array is populated by running:
+
+```bash
+git diff --name-status HEAD~$(git rev-list --count origin/main..HEAD) -- | awk '{print "{\"path\":\"" $2 "\",\"type\":\"" ($1=="A"?"added":($1=="M"?"modified":"deleted")) "\"}"}' | jq -s '.'
+```
+
+If the git command fails, the `changed_files` field may be omitted. The Verifier falls back to `git diff` for change detection.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `payload.changed_files` | array | no | Files changed during code phase |
+| `payload.changed_files[].path` | string | yes (if array present) | Relative file path |
+| `payload.changed_files[].type` | enum | yes (if array present) | `"added"` \| `"modified"` \| `"deleted"` |
+
+#### 7.5 Builder Review Feedback Signal
+
+Created by the Orchestrator when a Code Reviewer verdict is `request-changes`. Consumed by the Builder to address critical findings in a structured fix cycle.
+
+**File path:** `.vibecrew/signals/builder-review-feedback.json`
+
+```jsonc
+{
+  "feature_id": "feat-001",
+  "review_file": ".vibecrew/reviews/review-feat-001-20260301.json",
+  "cycle": 1,                              // Current review-fix cycle (1 or 2)
+  "critical_findings": [
+    {
+      "file": "src/components/Example.tsx",
+      "line": 42,
+      "title": "Missing null check",
+      "description": "Props can be undefined when component mounts before data loads.",
+      "suggestion": "Add optional chaining: props?.value instead of props.value"
+    }
+  ],
+  "timestamp": "2026-03-01T10:00:00Z"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `feature_id` | string | yes | Feature ID from backlog |
+| `review_file` | string | yes | Path to the review JSON that triggered the feedback |
+| `cycle` | integer | yes | Current review-fix cycle number (1 or 2) |
+| `critical_findings` | array | yes | Critical findings extracted from the review |
+| `critical_findings[].file` | string | yes | Source file containing the issue |
+| `critical_findings[].line` | integer | yes | Line number of the issue |
+| `critical_findings[].title` | string | yes | Short title of the finding |
+| `critical_findings[].description` | string | yes | Detailed description of the problem |
+| `critical_findings[].suggestion` | string | yes | Suggested fix |
+| `timestamp` | string | yes | ISO 8601 timestamp when feedback was created |
+
+**Lifecycle:** Maximum 2 review-fix cycles. After 2 cycles without resolution, the feature is marked as `blocked` with reason "Review findings unresolved after 2 cycles".
 
 ### Signal Lifecycle
 

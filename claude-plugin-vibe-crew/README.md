@@ -47,8 +47,8 @@ command can also auto-install missing dependencies from within Claude Code.
 
 **Optional MCP servers**
 
-VibeCrew ships with configurations for two MCP servers in `.mcp.json`. They are
-enabled by default but work is not blocked if they are unavailable.
+VibeCrew ships with configurations for 10 MCP servers in `.mcp.json`. They are
+enabled or conditionally enabled based on TDR technology choices.
 
 - **Context7** -- documentation lookup for popular frameworks and libraries.
 - **Chrome DevTools** -- browser debugging and automation for visual testing and research.
@@ -68,9 +68,9 @@ in your browser, or browse them on GitHub:
 | [Existing Project](../docs/existing-project.html) | Onboard an existing codebase: code auditing, convention extraction, backlog mapping. |
 | [Detailed Workflow](../docs/workflow.html) | Advanced commands, Opponent Processor, cost tracking, Vibe Score, efficiency tips. |
 | [Example Session](../docs/example-session.html) | Full walkthrough: Day 1 foundation through parallel features, dev servers, best practices. |
-| [Architecture](../docs/architecture.html) | 13-agent system, hooks, interrupt protocol, state management, VitePress dashboard. |
+| [Architecture](../docs/architecture.html) | 14-agent system, hooks, interrupt protocol, state management, VitePress dashboard. |
 | [Warp Tips](../docs/warp.html) | Launch Configurations, keyboard shortcuts, Warp Drive, Notebooks, themes. |
-| [Release Notes](../docs/releases.html) | Complete changelog from v1.0.0 through v1.4.0. |
+| [Release Notes](../docs/releases.html) | Complete changelog from v1.0.0 through v1.7.0. |
 
 > **Tip:** To browse the docs locally, open `docs/index.html` in your browser.
 
@@ -95,7 +95,7 @@ in your browser, or browse them on GitHub:
 
 ## Commands Reference
 
-VibeCrew provides 25 slash commands. Each command is defined in the `skills/`
+VibeCrew provides 31 slash commands. Each command is defined in the `skills/`
 directory and invoked directly from the Claude Code prompt.
 
 ### Project Setup
@@ -187,7 +187,7 @@ feature:
 
 ### Agents
 
-VibeCrew uses 13 specialized agents, each with a dedicated system prompt:
+VibeCrew uses 14 specialized agents, each with a dedicated system prompt:
 
 | Agent | Model | Execution | Role |
 |---|---|---|---|
@@ -204,6 +204,7 @@ VibeCrew uses 13 specialized agents, each with a dedicated system prompt:
 | CI Healer | Opus | Inline | CI failure diagnosis and repair. Categorizes failures (build/test/lint/dep/env), applies targeted fixes with max 3 attempts. |
 | Opponent Processor | Opus | Worktree | Devil's advocate for TDR decisions. Generates counter-arguments, debate matrices, and risk assessments for technology choices. |
 | Code Reviewer | Opus | Worktree | Read-only code review against feature spec, TDR compliance, conventions, security surface, and performance anti-patterns. |
+| System Reviewer | Opus | Worktree | Read-only plugin meta-analysis, cross-project telemetry, ecosystem research, and innovation proposals. |
 
 ### Hook System
 

@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 02 (Revised) | February 2026
 >
-> This document defines all 5 VibeCrew v1.0 agents -- their trigger conditions, input/output contracts, tool permissions, verification loops, context budgets, safety constraints, status reporting mechanisms, and complete YAML frontmatter for their `.md` definition files. Each agent runs as an isolated Claude Code sub-agent with its own context window, as documented in [Research 01: Plugin Architecture](../research/01-claude-code-plugin-architecture.md) and [Research 02: Multi-Agent Orchestration](../research/02-multi-agent-orchestration.md).
+> This document defines all 14 VibeCrew v1.7.0 agents -- their trigger conditions, input/output contracts, tool permissions, verification loops, context budgets, safety constraints, status reporting mechanisms, and complete YAML frontmatter for their `.md` definition files. Each agent runs as an isolated Claude Code sub-agent with its own context window, as documented in [Research 01: Plugin Architecture](../research/01-claude-code-plugin-architecture.md) and [Research 02: Multi-Agent Orchestration](../research/02-multi-agent-orchestration.md).
 >
 > **v1.0 Consolidation.** This revision reduces the agent count from 9 to 5, following Boris Cherny / Anthropic best practices for multi-agent systems. The primary changes: UI Designer and Feature Developer merge into **Builder**; Test Writer, Quality Check, and Performance Coach scoring merge into **Verifier**; Doc Generator and Performance Coach (as standalone agents) are deferred to v1.1. Every agent now includes an explicit **Verification Loop** -- the single most important practice for reliable agent output.
 
@@ -32,7 +32,15 @@
 | 3 | Stack Scout | Opus | Delegated by Orchestrator for research | <45% | Worktree | 50 |
 | 4 | Builder | Opus | Delegated for design and code phases | <45% | Worktree | 100 |
 | 5 | Verifier | Haiku | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | 60 |
-| 14 | System Reviewer | Opus | `/system-review` command | <40% | Worktree | 50 |
+| 6 | Performance Coach | Opus | `/wrap` Step 9.5 (after 5+ sessions) | <30% | Inline | 25 |
+| 7 | Doc Generator | Sonnet | `/wrap` Step 10, `/handoff`, `/release` | <25% | Inline | 20 |
+| 8 | Code Auditor | Opus | `/audit`, `/onboard` | <40% | Worktree | 40 |
+| 9 | Security Auditor | Opus | Security analysis (manual trigger) | <40% | Worktree | 40 |
+| 10 | Code Simplifier | Opus | `/simplify` | <35% | Worktree | 30 |
+| 11 | CI Healer | Opus | `/heal` | <30% | Inline | 15 |
+| 12 | Opponent Processor | Opus | TDR counter-analysis (Tier 1 Step 3.5) | <35% | Worktree | 30 |
+| 13 | Code Reviewer | Opus | `/review`, `/run-backlog` Phase 4.5 | <35% | Worktree | 30 |
+| 14 | System Reviewer | Opus | `/system-review` | <30% | Worktree | 25 |
 
 ### Agents Deferred to v1.1
 
@@ -929,28 +937,53 @@ Builder ----------signal----------> Orchestrator -------task-------> Verifier
     |                                     |                              |
     v                                     v                              v
 builder-complete.signal           reads signal,                 verifier-test-complete.signal
-                                  advances column,
+(includes changed_files)          advances column,
                                   creates next task
-    |                                     |                              |
-    +---- .vibecrew/signals/ ---------------+---- .vibecrew/signals/ --------+
+                                       |
+                              +--------+--------+
+                              |                 |
+                              v                 v
+                         Code Reviewer    CI Healer (on error)
+                              |                 |
+                              v                 v
+                    reviewer-complete      auto-recovery
+                         .signal           attempt
+                              |
+                     +--------+--------+
+                     |                 |
+               approve/            request-
+               comment-only        changes
+                     |                 |
+                     v                 v
+                  advance         builder-review-
+                  to docs         feedback.json
+                                      |
+                                      v
+                                   Builder
+                                   (fix cycle,
+                                    max 2x)
 ```
 
 ### Handoff Sequence for a Complete Feature (v1.0)
 
 ```
 1. Orchestrator       identifies next ready feature in backlog
-2. Orchestrator       creates Agent Team with Builder + Verifier
+2. Orchestrator       creates Agent Team with Builder + Verifier + Code Reviewer
 3. Builder            creates component design spec (design phase) [worktree]
 4. Builder            implements the feature (code phase) [worktree]
 5. Builder            runs verify loop: build + lint pass
-6. Builder            signals completion
+6. Builder            signals completion (includes changed_files list)
 7. Orchestrator       processes signal, assigns Verifier
-8. Verifier           writes and runs tests (test phase)
+8. Verifier           writes and runs tests (test phase), targets changed_files
 9. Verifier           runs verify loop: all tests pass
 10. Verifier          signals completion
-11. Builder           creates PR via gh pr create
-12. Developer         reviews and merges PR
-13. Verifier          runs /wrap: final quality check, Vibe Score, session log
+11. Orchestrator      assigns Code Reviewer for structured review
+12. Code Reviewer     produces review report with verdict
+13. Orchestrator      if REQUEST_CHANGES: routes findings → Builder → re-review (max 2 cycles)
+14. Orchestrator      if builder-blocked: attempts auto-recovery via CI Healer before escalating
+15. Builder           creates PR via gh pr create
+16. Developer         reviews and merges PR
+17. Verifier          runs /wrap: final quality check, Vibe Score, session log
 ```
 
 ---

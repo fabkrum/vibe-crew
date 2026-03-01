@@ -57,8 +57,8 @@ Derive all values from VISION.md's brand direction and `design-brief.md` (if pre
 2. Read acceptance criteria.
 3. Read `design-brief.md` (if present) for navigation style, data display pattern, and interaction density preferences. Use these to inform component layout and structure decisions.
 4. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements.
-4. Write the design spec to `docs/features/{feature-name}/design.md`.
-5. Signal completion with `builder-design-complete.signal`.
+5. Write the design spec to `docs/features/{feature-name}/design.md`.
+6. Signal completion with `builder-design-complete.signal`.
 
 ### Code Phase
 
@@ -90,6 +90,19 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 5. Repeat for each acceptance criterion until all are covered.
 
 When TDD is not active, follow the standard Code Phase above. TDD mode is opt-in via `/tdd` — it does not change the default workflow.
+
+### Review Feedback Integration
+
+When a review feedback file exists at `.vibecrew/signals/builder-review-feedback.json`, integrate the review findings before continuing:
+
+1. **Read feedback** — Parse the feedback file to extract critical findings.
+2. **Fix each finding** — Address each critical finding in order:
+   - Read the referenced file and line number.
+   - Apply the suggested fix or an equivalent correction.
+   - Verify the fix compiles (`npm run build`).
+3. **Run build verify** — After all findings are addressed, run the full build verification loop.
+4. **Commit fixes** — Use the format: `fix(<scope>): address review finding: <title>` with the `Co-Authored-By` trailer.
+5. **Signal completion** — Write a `builder-complete.signal` indicating the review fixes are done. Include `"review_cycle": <N>` in the signal payload.
 
 ### PR Preparation
 
@@ -176,7 +189,7 @@ Adapt your output based on the profile:
 
 ### PR Body Format (from `pr_review`)
 
-| `auto_merge` | Skip PR creation entirely. Commit to branch and merge directly after tests pass. |
+| `auto_merge` | Create PR with auto-merge label. The Orchestrator will merge after verification passes. |
 | `summary` | Create PR with 3-line body: what changed, why, what to test. |
 | `review` | Full PR with quality gate table, acceptance criteria checklist, and test plan (current behavior). |
 | `walkthrough` | Full PR + per-file "Code Walkthrough" section with explanations adapted to the user's `code_literacy` level. |
@@ -237,12 +250,26 @@ Signal file format:
 ```json
 {
   "feature_id": "{id}",
+  "agent": "builder",
+  "status": "complete",
   "phase": "{phase}",
   "timestamp": "{ISO 8601}",
   "branch": "{branch_name}",
-  "commit": "{head_commit_sha}"
+  "commit": "{head_commit_sha}",
+  "changed_files": [
+    {"path": "src/components/Example.tsx", "type": "added"},
+    {"path": "src/utils/helpers.ts", "type": "modified"}
+  ]
 }
 ```
+
+Populate `changed_files` by running:
+
+```bash
+git diff --name-status HEAD~$(git rev-list --count origin/main..HEAD) -- | awk '{print "{\"path\":\"" $2 "\",\"type\":\"" ($1=="A"?"added":($1=="M"?"modified":"deleted")) "\"}"}' | jq -s '.'
+```
+
+If the git command fails, omit the `changed_files` field — the Verifier will fall back to `git diff`.
 
 ## Phase Advancement
 

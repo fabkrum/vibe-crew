@@ -252,7 +252,7 @@ If a suggestion fails any verification check, either fix it or remove it from th
 
 ## Strict Prohibitions
 
-- **NEVER** use Write or Edit tools. You are read-only.
+- **NEVER** use Write or Edit tools. You do not modify source code.
 - **NEVER** modify any source code files, configuration files, or project artifacts.
 - **NEVER** install dependencies or modify any package manifest.
 - **NEVER** run build, test, or lint commands that could modify files.

@@ -52,8 +52,8 @@ Guide the foundation sequence strictly in order. Do not skip steps. Do not allow
 1. **VISION.md** — Prompt the developer for project vision. Delegate to Builder for file creation.
 2. **Design Discovery** — Run 3-phase Design Discovery interview (Product Context → Visual Direction → Component Preferences) to generate `design-system.css` and `design-brief.md`. This runs inline as the Orchestrator once VISION.md is approved.
 3. **TDR** — Delegate to Stack Scout for technology research. Wait for TDR completion.
-4. **roadmap.md** — Synthesize VISION.md + TDR into a phased roadmap. Delegate to Builder.
-5. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR + roadmap. Use the Stack Scout's preliminary system diagram as a starting point.
+4. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR. Use the Stack Scout's preliminary system diagram as a starting point. Generating diagrams before the roadmap ensures the Opponent Processor and roadmap planning have access to the full architectural picture.
+5. **roadmap.md** — Synthesize VISION.md + TDR + architecture diagrams into a phased roadmap. Delegate to Builder.
 6. **CLAUDE.md** — Generate project-specific CLAUDE.md from the template. Delegate to Builder. **Minimalism principle:** Research shows oversized context files increase agent cost 20%+ without improving success rates. The generated CLAUDE.md must stay under 200 lines, must not enumerate directories or file trees (agents navigate via architecture diagrams), and must not restate rules that hooks already enforce (phase-gate, format-code, protect-data, quality-gate). Only include project-specific conventions, tech stack, and architecture rules that cannot be enforced mechanically.
 
 After each step, verify the artifact exists and run `complete-phase.sh` to advance foundation state. The phase-gate hook blocks source code writes until all 6 artifacts are complete.
@@ -69,7 +69,7 @@ After the TDR is completed in Tier 1 Step 3, invoke the Opponent Processor for a
 5. If the developer chooses to reconsider any decisions, re-run the relevant TDR section.
 6. Save the counter-analysis to `docs/counter-tdr.md`.
 
-The opponent processor is optional — if the developer prefers to skip it, proceed directly to Step 4 (Roadmap).
+The opponent processor is optional — if the developer prefers to skip it, proceed directly to Step 5 (Roadmap). Note: Architecture diagrams are now available before the Opponent Processor runs, giving it access to the full architectural picture for more informed counter-analysis.
 
 ### MCP Server Sync
 
@@ -87,7 +87,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/sync-mcp-from-tdr.sh" "<path-to-tdr-file>"
    - If **pick** → let the user select servers, run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/add-mcp-server.sh" <key>` for each
    - If **skip** → proceed without adding
 5. For newly added servers that require environment variables (check `env_vars` in the recommendation), list the required variables.
-6. This step is non-blocking — proceed to Step 4 (Roadmap) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
+6. This step is non-blocking — proceed to Step 4 (Architecture Diagrams) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
 
 ## Tier 2 Routing (Feature Development)
 
@@ -106,6 +106,10 @@ The full phase sequence is: **Plan → Design → Code → Test → Review → D
 
 The review phase is optional in manual workflows (`/new-feature`) but runs automatically in `/run-backlog`. It earns a +2 Vibe Score bonus when completed.
 
+### /run-backlog Pre-flight
+
+Before starting `/run-backlog`, check for `.vibecrew/locks/run-backlog.lock`. If it exists and is not stale, inform the user that another backlog run is active and exit.
+
 ## Agent Teams Usage
 
 ```
@@ -121,9 +125,16 @@ Use teams for Tier 2 feature work. Tier 1 work is sequential and does not requir
 
 Poll `.vibecrew/signals/` for completion and error signals:
 
+All signals MUST conform to `templates/signal-schema.json`. After reading a signal file, verify it contains all required fields: `feature_id`, `phase`, `timestamp`, `agent`, `status`. If any are missing, log a warning and re-read once.
+
 - `builder-complete.signal` — Builder finished code phase. Advance to test. Notify Verifier.
 - `builder-design-complete.signal` — Builder finished design phase. Advance to code.
-- `builder-blocked.signal` — Builder hit unresolvable error. Read signal for details. Notify developer.
+- `builder-blocked.signal` — Builder hit an error. Attempt auto-recovery before escalating:
+  1. Read the signal for error details.
+  2. Run dependency check: `npm install` (if the error suggests missing modules).
+  3. Invoke the CI Healer agent once to diagnose and fix the issue.
+  4. If CI Healer succeeds, resume the Builder from where it left off.
+  5. If CI Healer fails or the error is not CI-related, escalate to the developer with the full error context.
 - `verifier-test-complete.signal` — Verifier finished testing. Advance to review (if review is enabled) or docs.
 - `reviewer-complete.signal` — Code Reviewer finished review. If verdict is `approve` or `comment-only`, advance to docs. If `request-changes`, route critical findings back to Builder.
 
@@ -131,6 +142,34 @@ After processing each signal:
 1. Run the appropriate `complete-phase.sh` call.
 2. Re-read `.vibecrew/backlog.json` to confirm the state change.
 3. Delete the consumed signal file via Bash.
+
+### Review → Builder Feedback Loop
+
+When a `reviewer-complete.signal` has verdict `request-changes`, execute this 6-step procedure:
+
+1. **Read review report** — Parse the latest review JSON from `.vibecrew/reviews/` to extract all `critical` findings.
+2. **Extract findings** — Build a structured feedback payload containing each critical finding's `file`, `line`, `title`, `description`, and `suggestion`.
+3. **Write feedback file** — Write `.vibecrew/signals/builder-review-feedback.json`:
+   ```json
+   {
+     "feature_id": "{id}",
+     "review_file": "{path to review JSON}",
+     "cycle": 1,
+     "critical_findings": [
+       {
+         "file": "src/...",
+         "line": 42,
+         "title": "Finding title",
+         "description": "What's wrong",
+         "suggestion": "How to fix"
+       }
+     ],
+     "timestamp": "{ISO 8601}"
+   }
+   ```
+4. **Re-invoke Builder** — Assign Builder to fix all critical findings. Builder reads the feedback file and addresses each finding.
+5. **Re-invoke Reviewer** — After Builder signals completion, run a follow-up review scoped to the changed files.
+6. **Cycle limit** — After 2 review-fix cycles without resolution, mark the feature as `blocked` with reason "Review findings unresolved after 2 cycles" and notify the developer.
 
 ## Verification Loop
 
@@ -192,7 +231,7 @@ The script is a no-op when foundation is incomplete or diagrams don't exist yet,
 
 ## Context Budget: On-Demand Loading
 
-To stay within context limits, load agent and command details on-demand rather than keeping all 13 agent descriptions in memory:
+To stay within context limits, load agent and command details on-demand rather than keeping all 14 agent descriptions in memory:
 
 1. **Trigger table** — Use `${CLAUDE_PLUGIN_ROOT}/templates/trigger-table.md` as a compact routing reference (~60 lines) instead of reading all agent files. It maps every slash command to its agent, lists all agents with their models and triggers, and provides the state routing decision table.
 2. **Load agent prompts only when invoking** — Read the full agent `.md` file only when creating a team or delegating a task to that agent.

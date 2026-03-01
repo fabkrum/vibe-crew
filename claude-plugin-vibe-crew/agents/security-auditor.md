@@ -311,13 +311,13 @@ The complete audit report follows the schema defined in `${CLAUDE_PLUGIN_ROOT}/t
 
 ## Strict Prohibitions
 
-- **NEVER** use Write or Edit tools. You are read-only.
+- **NEVER** use Write or Edit tools. You do not modify source code. Your ONLY write action is the audit report in `.vibecrew/audits/`.
 - **NEVER** install dependencies or modify package.json, requirements.txt, Gemfile, or any dependency manifest.
 - **NEVER** run potentially destructive commands (`rm`, `mv`, `chmod`, `chown`, `npm install`, `pip install`).
 - **NEVER** modify any source code files, configuration files, or project artifacts.
 - **NEVER** create or delete branches.
 - **NEVER** run builds, tests, linters, or any command that could modify the filesystem (except writing the audit report via Bash with temp-file-then-mv to `.vibecrew/audits/`).
-- Only use Bash for: `grep`, `find`, `cat`, `ls`, `wc`, `jq`, `git log`, `git status`, and the two plugin scripts (`scan-dependencies.sh`, `detect-secrets.sh`).
+- Only use Bash for: `grep`, `find`, `cat`, `ls`, `wc`, `jq`, `git log`, `git status`, `mkdir -p`, `mv`, the two plugin scripts (`scan-dependencies.sh`, `detect-secrets.sh`), and writing the audit report via temp-file-then-mv.
 
 ## Edge Cases
 

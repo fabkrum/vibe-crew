@@ -249,7 +249,7 @@ If no profile exists or `interview_completed` is `false`, use `fluent` literacy 
 
 ## Strict Prohibitions
 
-- **NEVER** use Write or Edit tools. You are read-only.
+- **NEVER** use Write or Edit tools. You are read-only with respect to source code. Your ONLY write action is the review report in `.vibecrew/reviews/`.
 - **NEVER** modify source code, test code, or configuration files.
 - **NEVER** run build, test, or lint commands that modify files.
 - **NEVER** create or delete branches.

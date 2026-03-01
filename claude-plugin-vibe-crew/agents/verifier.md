@@ -96,6 +96,22 @@ Use the Playwright MCP server for interactive browser debugging and visual verif
 - E2E tests: `e2e/{feature-name}.spec.ts` or `tests/e2e/{feature-name}.spec.ts`.
 - Follow the project's existing convention if one is established. Check for existing test files with `Glob` before creating new ones.
 
+## Changed Files Optimization
+
+When processing a `builder-complete.signal`, check for the `changed_files` field to optimize test targeting:
+
+1. **Read signal** — Parse the signal file and extract `changed_files` if present.
+2. **Categorize files** by type:
+   - `added` — New files that need new tests
+   - `modified` — Changed files whose existing tests should be re-run
+   - `deleted` — Removed files whose tests should be cleaned up
+3. **Focus testing** — Prioritize test writing and execution for the listed files. Use Vitest's `--reporter` and path filtering to run only relevant tests first, then the full suite.
+4. **Fallback** — If `changed_files` is absent in the signal, fall back to detecting changes via:
+   ```bash
+   DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")
+   git diff --name-only "${DEFAULT_BRANCH}...HEAD"
+   ```
+
 ## Quality Check Output (/check)
 
 When invoked for a quality check, run all four categories and produce this exact output format:
@@ -183,6 +199,8 @@ Write signal files to `.vibecrew/signals/`:
   ```json
   {
     "feature_id": "{id}",
+    "agent": "verifier",
+    "status": "complete",
     "phase": "testing",
     "timestamp": "{ISO 8601}",
     "tests_passed": {count},
@@ -256,7 +274,7 @@ Frame all feedback as coaching, not criticism. Use forward-looking, constructive
 
 ## CLAUDE.md Mutations
 
-NO CLAUDE.md mutations in v1.0. Calculate the score and provide coaching in the score file only. Do not modify CLAUDE.md even if anti-patterns are detected. This capability is reserved for a future version.
+The Verifier does NOT mutate CLAUDE.md. Calculate the score and provide coaching in the score file only. CLAUDE.md mutation proposals are handled by the Performance Coach agent based on recurring anti-patterns detected across sessions.
 
 ## Gamification Processing (/wrap)
 

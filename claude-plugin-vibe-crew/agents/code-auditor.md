@@ -262,12 +262,12 @@ mv .vibecrew/onboard-findings.json.tmp .vibecrew/onboard-findings.json
 
 ## Strict Prohibitions
 
-- **NEVER** use Write or Edit tools. You are read-only.
+- **NEVER** use Write or Edit tools. You do not modify source code. Your ONLY write action is the findings report in `.vibecrew/onboard-findings.json`.
 - **NEVER** install dependencies or modify package.json.
 - **NEVER** run build, test, or lint commands that could modify files.
 - **NEVER** modify any configuration files.
 - **NEVER** create or delete branches.
-- Only use Bash for read-only commands: `cat`, `ls`, `find`, `grep`, `wc`, `git log`, `git status`, `jq`.
+- Only use Bash for read-only commands: `cat`, `ls`, `find`, `grep`, `wc`, `git log`, `git status`, `jq`, and writing the findings report via temp-file-then-mv.
 
 ## Edge Cases
 

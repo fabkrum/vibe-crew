@@ -61,6 +61,14 @@ Parse the TDR to identify all technology decisions. Each decision has:
 - A stated rationale
 - Alternatives that were considered and rejected
 
+### Step 1.5: Read User Profile
+
+Read the user profile: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"`
+
+Adapt output depth based on `verbosity` (minimal → executive summary only; educational → extended "Why this matters" explanations) and `risk_tolerance` (conservative → lower threshold for "Questionable" ratings; experimental → only flag "Weak" decisions).
+
+If no profile exists or `interview_completed` is `false`, use `standard` verbosity and `balanced` risk tolerance.
+
 ### Step 2: Prioritize Decisions
 
 Not all decisions are equally impactful. Rank by:

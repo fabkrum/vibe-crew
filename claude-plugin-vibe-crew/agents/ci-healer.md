@@ -89,7 +89,7 @@ Common patterns: ESLint rule violations, Prettier formatting issues, style error
 Common patterns: missing packages, version conflicts, peer dependency warnings, lockfile issues.
 
 **Strategy:**
-- For **missing packages** (`Could not resolve`, `ModuleNotFoundError`): check if the package is in `package.json`. If missing, add it. If present but not installed, the CI should run `npm ci` — check if the lockfile is committed.
+- For **missing packages** (`Could not resolve`, `ModuleNotFoundError`): check if the package is in `package.json`. If missing from package.json, inform the user and do NOT add it automatically. Only fix lockfile sync issues. If present but not installed, the CI should run `npm ci` — check if the lockfile is committed.
 - For **version conflicts** (`ERESOLVE`, `peer dep`): check the conflicting version requirements. Update the version range in `package.json` to satisfy all peer dependency constraints.
 - For **lockfile issues**: if `package-lock.json` is out of sync with `package.json`, run `npm install` locally to regenerate it and commit both files.
 - **Never use `--force` or `--legacy-peer-deps`** as a fix. Resolve the actual conflict.

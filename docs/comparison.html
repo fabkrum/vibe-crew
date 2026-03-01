@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Comparison</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.C1_FxMSw.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link active"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Intro</span>  <span class="separator">/</span> <span>Comparison</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Intro"},{"@type":"ListItem","position":3,"name":"Comparison"}]}</script> <span class="section-label">Intro</span>  <h2>VibeCrew vs. Alternatives</h2> <p>How does VibeCrew compare to using Claude Code directly, or to other AI coding tools? This page breaks down the key differences.</p> <section class="section"> <h3>Comparison Table</h3> <div class="table-wrap">  <table> <thead> <tr> <th>Capability</th> <th>VibeCrew</th> <th>Claude Code (vanilla)</th> <th>Cursor / Windsurf</th> </tr> </thead> <tbody> <tr> <td><strong>Architecture-first workflow</strong></td> <td>Enforced via phase gate</td> <td>Manual discipline</td> <td>Not enforced</td> </tr> <tr> <td><strong>Multi-agent orchestration</strong></td> <td>14 specialized agents</td> <td>Single agent</td> <td>Single agent</td> </tr> <tr> <td><strong>Quality enforcement</strong></td> <td>Hooks run tests/lint/build automatically</td> <td>Manual</td> <td>Limited</td> </tr> <tr> <td><strong>Token efficiency</strong></td> <td>Worktree isolation, MCP servers, context compaction</td> <td>Manual context management</td> <td>IDE-integrated context</td> </tr> <tr> <td><strong>Design system</strong></td> <td>Generated via Design Discovery interview</td> <td>Manual creation</td> <td>Not included</td> </tr> <tr> <td><strong>Cost tracking</strong></td> <td>Real-time dashboard, session/daily guardrails</td> <td>API billing only</td> <td>Subscription-based</td> </tr> <tr> <td><strong>Session continuity</strong></td> <td>Handoffs, state files, session logs</td> <td>/compact only</td> <td>IDE state</td> </tr> <tr> <td><strong>Autonomous mode</strong></td> <td>/run-backlog auto-executes features</td> <td>Manual per-task</td> <td>Manual per-task</td> </tr> <tr> <td><strong>Code review</strong></td> <td>Dedicated Code Reviewer agent</td> <td>Manual prompt</td> <td>Not built-in</td> </tr> <tr> <td><strong>Security auditing</strong></td> <td>OWASP Top 10 via Security Auditor</td> <td>Manual prompt</td> <td>Not built-in</td> </tr> <tr> <td><strong>Documentation</strong></td> <td>Auto-generated, drift detection</td> <td>Manual</td> <td>Not built-in</td> </tr> <tr> <td><strong>Non-technical users</strong></td> <td>Founder profile preset, adaptive verbosity</td> <td>Requires prompting skill</td> <td>Requires coding knowledge</td> </tr> <tr> <td><strong>Pricing</strong></td> <td>Free (open source) + Claude API costs</td> <td>Claude API costs</td> <td>$20-40/month subscription</td> </tr> </tbody> </table>  </div> </section> <section class="section"> <h3>When to Use VibeCrew</h3> <div class="card-grid"> <div class="card"> <div class="card-icon green">&#10003;</div> <h4>Great fit</h4> <p>Building a new SaaS from scratch. Working on complex multi-feature projects. Non-technical founders building MVPs. Teams wanting consistent code quality across AI-generated code.</p> </div> <div class="card"> <div class="card-icon amber">&#8776;</div> <h4>Okay fit</h4> <p>Quick scripts or one-off tools. Small bug fixes in existing codebases. Projects where you already have strong architecture and just need coding help.</p> </div> <div class="card"> <div class="card-icon red">&#10007;</div> <h4>Not ideal</h4> <p>Inline code completion while typing (use Cursor/Copilot). Projects that don't use Git. Environments where Claude Code can't run.</p> </div> </div> </section> <section class="section"> <h3>VibeCrew + Claude Code: Better Together</h3> <p>VibeCrew doesn't replace Claude Code &mdash; it enhances it. Everything you can do with vanilla Claude Code still works. VibeCrew adds:</p> <ul> <li><strong>Structure</strong> &mdash; A proven workflow instead of ad-hoc prompting</li> <li><strong>Enforcement</strong> &mdash; Hooks that catch mistakes before they ship</li> <li><strong>Specialization</strong> &mdash; 14 agents optimized for specific tasks</li> <li><strong>Memory</strong> &mdash; State files, session logs, and handoffs that survive across sessions</li> <li><strong>Visibility</strong> &mdash; Vibe Scores, cost tracking, and a visual dashboard</li> </ul> <div class="callout tip"> <div class="callout-title">Start simple</div>  <p>You don't have to use every feature on day one. Start with <code>/new-project</code> and <code>/new-feature</code>. Add <code>/review</code>, <code>/simplify</code>, and <code>/audit</code> as you get comfortable. The <a href="/vibe-crew/quick-start.html">Quick Start</a> gets you running in minutes.</p>  </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/why.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Why VibeCrew</span></a><a href="/vibe-crew/quick-start.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Quick Start</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html>

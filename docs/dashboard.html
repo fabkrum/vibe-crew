@@ -1,448 +1,157 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeCrew &mdash; Vibe Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --color-bg: #0a0a0b;
-      --color-surface: #111113;
-      --color-surface-2: #18181b;
-      --color-surface-3: #1e1e22;
-      --color-border: #27272a;
-      --color-border-subtle: #1e1e22;
-      --color-text: #fafafa;
-      --color-text-secondary: #a1a1aa;
-      --color-text-muted: #71717a;
-      --color-accent: #a78bfa;
-      --color-accent-dim: #7c3aed;
-      --color-accent-bg: rgba(167, 139, 250, 0.08);
-      --color-green: #4ade80;
-      --color-green-dim: rgba(74, 222, 128, 0.1);
-      --color-amber: #fbbf24;
-      --color-amber-dim: rgba(251, 191, 36, 0.1);
-      --color-red: #f87171;
-      --color-red-dim: rgba(248, 113, 113, 0.1);
-      --color-blue: #60a5fa;
-      --color-blue-dim: rgba(96, 165, 250, 0.1);
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-xs: 6px;
-      --max-width: 860px;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-    body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-    /* ---- SIDEBAR ---- */
-    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-    .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
-    .sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
-    .sidebar-header .nav-brand span { color: var(--color-accent); }
-    .sidebar-nav { padding: 1rem 0; }
-    .sidebar-group { padding: 0 0 0.5rem; }
-    .sidebar-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; cursor: pointer; transition: color 0.15s; }
-    .sidebar-label:hover { color: var(--color-text-secondary); }
-    .sidebar-label::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform 0.2s; }
-    .sidebar-group.collapsed .sidebar-label::after { transform: rotate(-90deg); }
-    .sidebar-group.collapsed .sidebar-link { display: none; }
-    .sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
-    .sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
-    .sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
-    /* ---- MOBILE BAR ---- */
-    .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
-    .mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
-    .mobile-bar .nav-brand span { color: var(--color-accent); }
-    .hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-    .hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
-    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
-    /* ---- LAYOUT ---- */
-    .layout { margin-left: 260px; }
-    .main { max-width: var(--max-width); margin: 0 auto; padding: 3rem 2rem 6rem; }
-    .section { margin-bottom: 5rem; }
-    .section-label { display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: 0.75rem; }
-    h2 { font-size: 1.9rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1rem; }
-    h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.75rem; margin-top: 2.5rem; }
-    h4 { font-size: 1.05rem; font-weight: 650; margin-bottom: 0.5rem; margin-top: 2rem; }
-    .section > p, .section > ul, .section > ol { color: var(--color-text-secondary); margin-bottom: 1.25rem; }
-    p { margin-bottom: 1rem; color: var(--color-text-secondary); }
-    strong { color: var(--color-text); font-weight: 600; }
-    a { color: var(--color-accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    ul, ol { padding-left: 1.5rem; margin-bottom: 1.25rem; color: var(--color-text-secondary); }
-    li { margin-bottom: 0.4rem; }
-    li::marker { color: var(--color-text-muted); }
-    code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-surface-2); padding: 0.15em 0.45em; border-radius: 4px; color: var(--color-accent); border: 1px solid var(--color-border-subtle); }
-    pre { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; position: relative; }
-    pre code { background: none; padding: 0; border: none; color: var(--color-text-secondary); font-size: 0.85rem; line-height: 1.7; }
-    .code-label { position: absolute; top: 0.5rem; right: 0.75rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); font-family: var(--font-sans); font-weight: 600; }
-    pre.copyable { padding-right: 3.5rem; }
-    pre.copyable .code-label { right: 3.25rem; }
-    .copy-btn { position: absolute; top: 0.6rem; right: 0.6rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: var(--radius-xs); color: var(--color-text-muted); cursor: pointer; transition: all 0.15s; padding: 0; }
-    .copy-btn:hover { color: var(--color-text); border-color: var(--color-accent-dim); background: var(--color-surface-3); }
-    .copy-btn.copied { color: var(--color-green); border-color: rgba(74, 222, 128, 0.3); }
-    .copy-btn svg { width: 16px; height: 16px; }
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
-    .card:hover { border-color: var(--color-accent-dim); }
-    .card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1rem; }
-    .card-icon.purple { background: var(--color-accent-bg); }
-    .card-icon.green { background: var(--color-green-dim); }
-    .card-icon.amber { background: var(--color-amber-dim); }
-    .card-icon.blue { background: var(--color-blue-dim); }
-    .card-icon.red { background: var(--color-red-dim); }
-    .card h4 { font-size: 1rem; margin-top: 0; margin-bottom: 0.5rem; color: var(--color-text); }
-    .card p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0; }
-    .table-wrap { overflow-x: auto; margin-bottom: 1.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
-    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    thead { background: var(--color-surface-2); }
-    th { text-align: left; padding: 0.75rem 1rem; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); border-bottom: 1px solid var(--color-border); white-space: nowrap; }
-    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); vertical-align: top; }
-    tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: var(--color-surface); }
-    .callout { border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid; font-size: 0.92rem; }
-    .callout p { margin: 0; color: inherit; }
-    .callout-title { font-weight: 700; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
-    .callout.info { background: var(--color-blue-dim); border-color: rgba(96, 165, 250, 0.2); color: var(--color-blue); }
-    .callout.tip { background: var(--color-green-dim); border-color: rgba(74, 222, 128, 0.2); color: var(--color-green); }
-    .callout.warn { background: var(--color-amber-dim); border-color: rgba(251, 191, 36, 0.2); color: var(--color-amber); }
-    .callout.danger { background: var(--color-red-dim); border-color: rgba(248, 113, 113, 0.2); color: var(--color-red); }
-    .flow { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; color: var(--color-text-secondary); overflow-x: auto; white-space: pre; }
-    .flow .highlight { color: var(--color-accent); font-weight: 600; }
-    .flow .muted { color: var(--color-text-muted); }
-    .toc { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem; }
-    .toc h3 { margin-top: 0; margin-bottom: 1rem; font-size: 1rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-    .toc ol { padding-left: 1.25rem; margin-bottom: 0; }
-    .toc li { margin-bottom: 0.35rem; }
-    .toc a { color: var(--color-text-secondary); font-size: 0.92rem; transition: color 0.15s; }
-    .toc a:hover { color: var(--color-accent); text-decoration: none; }
-    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border-subtle); color: var(--color-text-muted); font-size: 0.85rem; }
-    hr { border: none; border-top: 1px solid var(--color-border); margin: 4rem 0; }
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
-      body.sidebar-open .sidebar { transform: translateX(0); }
-      body.sidebar-open .sidebar-overlay { display: block; }
-      .mobile-bar { display: flex; }
-      .layout { margin-left: 0; padding-top: 52px; }
-      .main { padding: 2rem 1.25rem 4rem; }
-      .card-grid { grid-template-columns: 1fr; }
-      h2 { font-size: 1.5rem; }
-      h3 { font-size: 1.15rem; }
-      pre { padding: 1rem; }
-      .steps li { padding-left: 3rem; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="mobile-bar">
-  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
-  </button>
-  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-</div>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
-      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
-    </div>
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
-      <a href="setup.html" class="sidebar-link">Setup</a>
-      <a href="new-project.html" class="sidebar-link">New Project</a>
-      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
-      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
-      <a href="warp.html" class="sidebar-link">Warp</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
-      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
-      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
-      <a href="personalization.html" class="sidebar-link">Personalization</a>
-      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
-      <a href="example-session.html" class="sidebar-link">Example Session</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
-      <a href="architecture.html" class="sidebar-link">Overview</a>
-      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
-      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
-      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
-      <a href="arch-design.html" class="sidebar-link">Design &amp; Operations</a>
-      <a href="dashboard.html" class="sidebar-link active">Vibe Dashboard</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
-      <a href="releases.html" class="sidebar-link">Release Notes</a>
-    </div>
-  </nav>
-</aside>
-
-<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
-<script>var a=document.querySelector(".sidebar-link.active");if(a){var g=a.closest(".sidebar-group");if(g)g.classList.remove("collapsed");}</script>
-
-<div class="layout">
-<div class="main">
-
-  <div class="toc">
-    <h3>On This Page</h3>
-    <ol>
-      <li><a href="#what">What is the Vibe Dashboard</a></li>
-      <li><a href="#start">How to Start It</a></li>
-      <li><a href="#tabs">Dashboard Tabs</a></li>
-      <li><a href="#cli">CLI Alternatives</a></li>
-      <li><a href="#data-flow">Data Flow</a></li>
-      <li><a href="#production">Production Build</a></li>
-      <li><a href="#troubleshooting">Troubleshooting</a></li>
-    </ol>
-  </div>
-
-  <!-- ============ WHAT IS THE VIBE DASHBOARD ============ -->
-  <section class="section" id="what">
-    <span class="section-label">Overview</span>
-    <h2>What is the Vibe Dashboard</h2>
-    <p>The Vibe Dashboard is a <strong>VitePress-powered documentation site</strong> scaffolded into every VibeCrew project during <code>/setup</code>. It lives in your project's <code>docs/</code> folder and provides a browser-based interface for browsing development metrics, managing your feature backlog, and editing project settings.</p>
-    <p>The dashboard reads live data from <code>.vibecrew/</code> &mdash; the same JSON files that power the CLI commands. It includes 7 tabs: a getting-started guide, a Kanban board, session statistics, Vibe Score trends, test coverage, achievements, and a settings editor.</p>
-
-    <div class="callout info">
-      <div class="callout-title">Not the companion docs you're reading now</div>
-      <p>This page documents the <strong>per-project Vibe Dashboard</strong> that gets scaffolded into your project. It's separate from the VibeCrew companion documentation site (the one you're reading right now).</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ HOW TO START IT ============ -->
-  <section class="section" id="start">
-    <span class="section-label">Getting Started</span>
-    <h2>How to Start It</h2>
-    <p>Launch the dashboard with a single command from your project root. The script auto-installs dependencies if needed and opens your browser automatically:</p>
-
-    <pre class="copyable" data-copy="bash scripts/start-dashboard.sh"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>bash scripts/start-dashboard.sh</code></pre>
-
-    <p>The script checks for missing <code>node_modules</code>, runs <code>npm install</code> if necessary, starts the VitePress dev server, and opens <code>http://localhost:5173</code> in your default browser. The dashboard hot-reloads when <code>.vibecrew/</code> data changes.</p>
-
-    <div class="callout tip">
-      <div class="callout-title">Run it alongside your dev server</div>
-      <p>Open a separate terminal tab for the dashboard. It runs on its own port and doesn't interfere with your application's dev server. In Warp, use a split pane or a dedicated tab.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ DASHBOARD TABS ============ -->
-  <section class="section" id="tabs">
-    <span class="section-label">Features</span>
-    <h2>Dashboard Tabs</h2>
-    <p>The dashboard ships with 7 tabs. Each tab reads from specific <code>.vibecrew/</code> JSON files via VitePress data loaders.</p>
-
-    <h3>Guide</h3>
-    <p>The default landing tab. Contains the same getting-started documentation that's scaffolded into <code>docs/system/getting-started.md</code> &mdash; a quick reference for setup, commands, and workflow.</p>
-
-    <h3 id="tab-kanban">Kanban Board</h3>
-    <p>A 7-column interactive board showing every feature in your backlog across its workflow stages:</p>
-    <ul>
-      <li><strong>Ideas</strong> &mdash; Raw ideas captured via <code>/idea</code> or the + button on the dashboard</li>
-      <li><strong>Planning</strong> &mdash; Features actively being planned (specs in progress)</li>
-      <li><strong>Planned</strong> &mdash; Features with complete specs, ready to build</li>
-      <li><strong>In Development</strong> &mdash; Currently being built by the Builder agent</li>
-      <li><strong>Testing</strong> &mdash; Running tests and quality checks</li>
-      <li><strong>Review</strong> &mdash; Code review in progress</li>
-      <li><strong>Done</strong> &mdash; Feature complete, wrapped, and documented</li>
-    </ul>
-    <p>Add ideas via the + button, drag cards between columns, click to edit specs, and launch Warp sessions with action buttons. A live session bar shows real-time Claude Code status (model, context usage, cost).</p>
-    <p>Data source: <code>.vibecrew/backlog.json</code></p>
-
-    <h3 id="tab-stats">Session Statistics</h3>
-    <p>Aggregate metrics across all your development sessions:</p>
-    <ul>
-      <li><strong>Total sessions</strong> &mdash; Number of completed sessions</li>
-      <li><strong>Average Vibe Score</strong> &mdash; Your mean score across all sessions</li>
-      <li><strong>Total tokens</strong> &mdash; Input + output token usage</li>
-      <li><strong>Estimated cost</strong> &mdash; Cumulative API cost</li>
-    </ul>
-    <p>Data source: <code>.vibecrew/sessions/*.json</code></p>
-
-    <h3 id="tab-trends">Trends</h3>
-    <p>Time-series visualizations of your development patterns:</p>
-    <ul>
-      <li><strong>Vibe Score line chart</strong> &mdash; Score trajectory across sessions</li>
-      <li><strong>Token breakdown</strong> &mdash; Input vs. output tokens per session</li>
-      <li><strong>Agent activity</strong> &mdash; Which agents ran and how often</li>
-    </ul>
-    <p>Data source: <code>.vibecrew/scores/*.json</code></p>
-
-    <h3 id="tab-coverage">Coverage</h3>
-    <p>Quality metrics at a glance:</p>
-    <ul>
-      <li><strong>Test coverage gauge</strong> &mdash; Percentage of code covered by tests</li>
-      <li><strong>Feature delivery progress</strong> &mdash; Completed features vs. total backlog</li>
-    </ul>
-
-    <h3 id="tab-achievements">Achievements</h3>
-    <p>The gamification system rendered visually:</p>
-    <ul>
-      <li><strong>Level &amp; XP</strong> &mdash; Your current level and experience points</li>
-      <li><strong>Badges</strong> &mdash; Earned badges with unlock conditions</li>
-      <li><strong>Skill radar</strong> &mdash; Radar chart of your development skills</li>
-      <li><strong>Streak calendar</strong> &mdash; Daily activity streak tracking</li>
-    </ul>
-    <p>Data source: <code>.vibecrew/gamification.json</code></p>
-
-    <h3 id="tab-settings">Settings</h3>
-    <p>A browser-based editor for <code>.vibecrew/config.json</code>. You can modify:</p>
-    <ul>
-      <li><strong>User profile</strong> &mdash; Role, code literacy, autonomy, verbosity, and other profile dimensions</li>
-      <li><strong>Notifications</strong> &mdash; Toggle notification delivery and sound</li>
-      <li><strong>Cost limits</strong> &mdash; Set per-session and per-feature cost caps</li>
-      <li><strong>MCP servers</strong> &mdash; Enable or disable optional MCP integrations</li>
-      <li><strong>Agent behavior</strong> &mdash; Adjust agent-specific settings</li>
-      <li><strong>Gamification</strong> &mdash; Toggle scoring, achievements, and XP display</li>
-    </ul>
-
-    <div class="callout warn">
-      <div class="callout-title">Interactive features require dev mode</div>
-      <p>When running <code>npm run docs:dev</code>, interactive features (adding ideas, dragging cards, editing specs, saving settings) write changes directly to <code>.vibecrew/</code> files. In a static production build (<code>npm run docs:build</code>), the board renders read-only.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ CLI ALTERNATIVES ============ -->
-  <section class="section" id="cli">
-    <span class="section-label">Terminal Equivalents</span>
-    <h2>CLI Alternatives</h2>
-    <p>Every dashboard tab has a terminal equivalent. If you prefer staying in the CLI, these commands show the same data:</p>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Dashboard Tab</th><th>CLI Command</th><th>What It Shows</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Kanban / Stats</strong></td><td><code>/status</code></td><td>Feature backlog overview, session count, current feature</td></tr>
-          <tr><td><strong>Stats / Trends</strong></td><td><code>/cost</code></td><td>Token usage, API costs, per-session breakdown</td></tr>
-          <tr><td><strong>Achievements</strong></td><td><code>/achievements</code></td><td>Level, XP, badges, streaks, challenges</td></tr>
-          <tr><td><strong>Settings (profile)</strong></td><td><code>/profile</code></td><td>Edit user profile dimensions interactively</td></tr>
-          <tr><td><strong>Coverage</strong></td><td><code>/check</code></td><td>Run tests, lint, type-check, and see coverage</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ DATA FLOW ============ -->
-  <section class="section" id="data-flow">
-    <span class="section-label">Architecture</span>
-    <h2>Data Flow</h2>
-    <p>The dashboard reads data through a simple pipeline:</p>
-
-    <div class="flow"><span class="highlight">.vibecrew/*.json</span>          <span class="muted"># Raw data written by VibeCrew agents</span>
-       |
-<span class="highlight">VitePress data loaders</span>      <span class="muted"># .data.ts files that read and transform JSON</span>
-       |
-<span class="highlight">Vue components</span>             <span class="muted"># Render charts, tables, cards, forms</span>
-       |
-<span class="highlight">Browser</span>                    <span class="muted"># Hot-reloads when data files change</span></div>
-
-    <p>Data loaders run at build time (for static builds) or on each page load (in dev mode). In dev mode, VitePress watches the <code>.vibecrew/</code> directory and triggers hot-reloads when any JSON file changes &mdash; so running <code>/wrap</code> in a Claude Code session updates the dashboard in real time.</p>
-
-    <p>In dev mode, the dashboard also provides API endpoints for CRUD operations and uses Vite's built-in WebSocket for real-time push updates when <code>.vibecrew/</code> files change.</p>
-
-    <div class="callout info">
-      <div class="callout-title">No database required</div>
-      <p>All data lives in flat JSON files inside <code>.vibecrew/</code>. There's no database, no backend server, and no external dependencies beyond VitePress itself. The dashboard is a pure static site that reads local files.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ PRODUCTION BUILD ============ -->
-  <section class="section" id="production">
-    <span class="section-label">Deployment</span>
-    <h2>Production Build</h2>
-    <p>To generate a static HTML version of the dashboard:</p>
-
-    <pre class="copyable" data-copy="cd docs
-npm run docs:build"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>cd docs
-npm run docs:build</code></pre>
-
-    <p>The output goes to <code>docs/.vitepress/dist/</code>. You can deploy this to any static hosting provider (Vercel, Netlify, GitHub Pages) to share project metrics with your team.</p>
-
-    <div class="callout tip">
-      <div class="callout-title">Snapshot your metrics</div>
-      <p>A production build captures a point-in-time snapshot of your <code>.vibecrew/</code> data. This is useful for sprint reviews, stakeholder updates, or archiving project history.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ TROUBLESHOOTING ============ -->
-  <section class="section" id="troubleshooting">
-    <span class="section-label">Help</span>
-    <h2>Troubleshooting</h2>
-
-    <h3>Dashboard shows empty/no data</h3>
-    <p>The dashboard reads from <code>.vibecrew/</code> JSON files that are created as you work. If you haven't completed any sessions yet:</p>
-    <ol>
-      <li>Run <code>/new-project</code> to create the project foundation</li>
-      <li>Build at least one feature with <code>/new-feature "name"</code></li>
-      <li>Close the session with <code>/wrap</code> &mdash; this writes session data, scores, and updates the backlog</li>
-    </ol>
-    <p>After your first <code>/wrap</code>, all dashboard tabs will populate with data.</p>
-
-    <h3>Port 5173 is already in use</h3>
-    <p>If another dev server is using port 5173, VitePress will automatically try the next available port (5174, 5175, etc.). Check the terminal output for the actual URL. You can also specify a port explicitly:</p>
-    <pre class="copyable" data-copy="npm run docs:dev -- --port 5200"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>npm run docs:dev -- --port 5200</code></pre>
-
-    <h3>Drag-and-drop not working</h3>
-    <p>Interactive features (drag-and-drop, adding ideas, editing cards) only work when running the dev server. Static builds render the board read-only.</p>
-
-    <h3>Settings changes don't persist</h3>
-    <p>The Settings tab can only write to <code>.vibecrew/config.json</code> when VitePress is running in dev mode (<code>npm run docs:dev</code>). If you're viewing a static build, Settings shows a read-only view with copyable JSON that you can paste into <code>.vibecrew/config.json</code> manually.</p>
-
-    <h3>Hot-reload isn't working</h3>
-    <ol>
-      <li>Make sure you're running the dev server (<code>npm run docs:dev</code>), not viewing a static build</li>
-      <li>Check that <code>.vibecrew/</code> is in the same project root where you started VitePress</li>
-      <li>Try restarting the dev server &mdash; VitePress occasionally needs a restart after major file structure changes</li>
-    </ol>
-  </section>
-
-</div>
-
-<footer class="footer">
-  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
-  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
-</footer>
-</div>
-
-<script>
-document.querySelectorAll('.copy-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var pre = btn.closest('pre');
-    var text = pre.getAttribute('data-copy');
-    navigator.clipboard.writeText(text).then(function() {
-      btn.classList.add('copied');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-      setTimeout(function() {
-        btn.classList.remove('copied');
-        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-      }, 2000);
-    });
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Vibe Dashboard</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.flow[data-astro-cid-3nssi2tu]{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem;font-family:var(--font-mono);font-size:.85rem;line-height:1.6;color:var(--color-text-secondary);overflow-x:auto;white-space:pre}.flow[data-astro-cid-3nssi2tu] .highlight[data-astro-cid-3nssi2tu]{color:var(--color-accent);font-weight:600}.flow[data-astro-cid-3nssi2tu] .muted[data-astro-cid-3nssi2tu]{color:var(--color-text-muted)}.toc[data-astro-cid-3nssi2tu]{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius);padding:2rem;margin-bottom:3rem}.toc[data-astro-cid-3nssi2tu] h3[data-astro-cid-3nssi2tu]{margin-top:0;margin-bottom:1rem;font-size:1rem;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em}.toc[data-astro-cid-3nssi2tu] ol[data-astro-cid-3nssi2tu]{padding-left:1.25rem;margin-bottom:0}.toc[data-astro-cid-3nssi2tu] li[data-astro-cid-3nssi2tu]{margin-bottom:.35rem}.toc[data-astro-cid-3nssi2tu] a[data-astro-cid-3nssi2tu]{color:var(--color-text-secondary);font-size:.92rem;transition:color .15s}.toc[data-astro-cid-3nssi2tu] a[data-astro-cid-3nssi2tu]:hover{color:var(--color-accent);text-decoration:none}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.C1_FxMSw.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
   });
-});
-</script>
-</body>
-</html>
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link active"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Architecture</span>  <span class="separator">/</span> <span>Vibe Dashboard</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Architecture"},{"@type":"ListItem","position":3,"name":"Vibe Dashboard"}]}</script> <span class="section-label">Architecture</span>  <div class="toc" data-astro-cid-3nssi2tu> <h3 data-astro-cid-3nssi2tu>On This Page</h3> <ol data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu><a href="#what" data-astro-cid-3nssi2tu>What is the Vibe Dashboard</a></li> <li data-astro-cid-3nssi2tu><a href="#start" data-astro-cid-3nssi2tu>How to Start It</a></li> <li data-astro-cid-3nssi2tu><a href="#tabs" data-astro-cid-3nssi2tu>Dashboard Tabs</a></li> <li data-astro-cid-3nssi2tu><a href="#cli" data-astro-cid-3nssi2tu>CLI Alternatives</a></li> <li data-astro-cid-3nssi2tu><a href="#data-flow" data-astro-cid-3nssi2tu>Data Flow</a></li> <li data-astro-cid-3nssi2tu><a href="#production" data-astro-cid-3nssi2tu>Production Build</a></li> <li data-astro-cid-3nssi2tu><a href="#troubleshooting" data-astro-cid-3nssi2tu>Troubleshooting</a></li> </ol> </div>  <section class="section" id="what" data-astro-cid-3nssi2tu> <span class="section-label" data-astro-cid-3nssi2tu>Overview</span> <h2 data-astro-cid-3nssi2tu>What is the Vibe Dashboard</h2> <p data-astro-cid-3nssi2tu>The Vibe Dashboard is a <strong data-astro-cid-3nssi2tu>VitePress-powered documentation site</strong> scaffolded into every VibeCrew project during <code data-astro-cid-3nssi2tu>/setup</code>. It lives in your project's <code data-astro-cid-3nssi2tu>docs/</code> folder and provides a browser-based interface for browsing development metrics, managing your feature backlog, and editing project settings.</p> <p data-astro-cid-3nssi2tu>The dashboard reads live data from <code data-astro-cid-3nssi2tu>.vibecrew/</code> &mdash; the same JSON files that power the CLI commands. It includes 7 tabs: a getting-started guide, a Kanban board, session statistics, Vibe Score trends, test coverage, achievements, and a settings editor.</p> <div class="callout info"> <div class="callout-title">Not the companion docs you&#39;re reading now</div>  <p data-astro-cid-3nssi2tu>This page documents the <strong data-astro-cid-3nssi2tu>per-project Vibe Dashboard</strong> that gets scaffolded into your project. It's separate from the VibeCrew companion documentation site (the one you're reading right now).</p>  </div> </section> <hr data-astro-cid-3nssi2tu>  <section class="section" id="start" data-astro-cid-3nssi2tu> <span class="section-label" data-astro-cid-3nssi2tu>Getting Started</span> <h2 data-astro-cid-3nssi2tu>How to Start It</h2> <p data-astro-cid-3nssi2tu>Launch the dashboard with a single command from your project root. The script auto-installs dependencies if needed and opens your browser automatically:</p> <pre class="copyable" data-copy="bash scripts/start-dashboard.sh"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>bash scripts/start-dashboard.sh</code></pre> <p data-astro-cid-3nssi2tu>The script checks for missing <code data-astro-cid-3nssi2tu>node_modules</code>, runs <code data-astro-cid-3nssi2tu>npm install</code> if necessary, starts the VitePress dev server, and opens <code data-astro-cid-3nssi2tu>http://localhost:5173</code> in your default browser. The dashboard hot-reloads when <code data-astro-cid-3nssi2tu>.vibecrew/</code> data changes.</p> <div class="callout tip"> <div class="callout-title">Run it alongside your dev server</div>  <p data-astro-cid-3nssi2tu>Open a separate terminal tab for the dashboard. It runs on its own port and doesn't interfere with your application's dev server. In Warp, use a split pane or a dedicated tab.</p>  </div> </section> <hr data-astro-cid-3nssi2tu>  <section class="section" id="tabs" data-astro-cid-3nssi2tu> <span class="section-label" data-astro-cid-3nssi2tu>Features</span> <h2 data-astro-cid-3nssi2tu>Dashboard Tabs</h2> <p data-astro-cid-3nssi2tu>The dashboard ships with 7 tabs. Each tab reads from specific <code data-astro-cid-3nssi2tu>.vibecrew/</code> JSON files via VitePress data loaders.</p> <h3 data-astro-cid-3nssi2tu>Guide</h3> <p data-astro-cid-3nssi2tu>The default landing tab. Contains the same getting-started documentation that's scaffolded into <code data-astro-cid-3nssi2tu>docs/system/getting-started.md</code> &mdash; a quick reference for setup, commands, and workflow.</p> <h3 id="tab-kanban" data-astro-cid-3nssi2tu>Kanban Board</h3> <p data-astro-cid-3nssi2tu>A 7-column interactive board showing every feature in your backlog across its workflow stages:</p> <ul data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Ideas</strong> &mdash; Raw ideas captured via <code data-astro-cid-3nssi2tu>/idea</code> or the + button on the dashboard</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Planning</strong> &mdash; Features actively being planned (specs in progress)</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Planned</strong> &mdash; Features with complete specs, ready to build</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>In Development</strong> &mdash; Currently being built by the Builder agent</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Testing</strong> &mdash; Running tests and quality checks</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Review</strong> &mdash; Code review in progress</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Done</strong> &mdash; Feature complete, wrapped, and documented</li> </ul> <p data-astro-cid-3nssi2tu>Add ideas via the + button, drag cards between columns, click to edit specs, and launch Warp sessions with action buttons. A live session bar shows real-time Claude Code status (model, context usage, cost).</p> <p data-astro-cid-3nssi2tu>Data source: <code data-astro-cid-3nssi2tu>.vibecrew/backlog.json</code></p> <h3 id="tab-stats" data-astro-cid-3nssi2tu>Session Statistics</h3> <p data-astro-cid-3nssi2tu>Aggregate metrics across all your development sessions:</p> <ul data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Total sessions</strong> &mdash; Number of completed sessions</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Average Vibe Score</strong> &mdash; Your mean score across all sessions</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Total tokens</strong> &mdash; Input + output token usage</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Estimated cost</strong> &mdash; Cumulative API cost</li> </ul> <p data-astro-cid-3nssi2tu>Data source: <code data-astro-cid-3nssi2tu>.vibecrew/sessions/*.json</code></p> <h3 id="tab-trends" data-astro-cid-3nssi2tu>Trends</h3> <p data-astro-cid-3nssi2tu>Time-series visualizations of your development patterns:</p> <ul data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Vibe Score line chart</strong> &mdash; Score trajectory across sessions</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Token breakdown</strong> &mdash; Input vs. output tokens per session</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Agent activity</strong> &mdash; Which agents ran and how often</li> </ul> <p data-astro-cid-3nssi2tu>Data source: <code data-astro-cid-3nssi2tu>.vibecrew/scores/*.json</code></p> <h3 id="tab-coverage" data-astro-cid-3nssi2tu>Coverage</h3> <p data-astro-cid-3nssi2tu>Quality metrics at a glance:</p> <ul data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Test coverage gauge</strong> &mdash; Percentage of code covered by tests</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Feature delivery progress</strong> &mdash; Completed features vs. total backlog</li> </ul> <h3 id="tab-achievements" data-astro-cid-3nssi2tu>Achievements</h3> <p data-astro-cid-3nssi2tu>The gamification system rendered visually:</p> <ul data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Level &amp; XP</strong> &mdash; Your current level and experience points</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Badges</strong> &mdash; Earned badges with unlock conditions</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Skill radar</strong> &mdash; Radar chart of your development skills</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Streak calendar</strong> &mdash; Daily activity streak tracking</li> </ul> <p data-astro-cid-3nssi2tu>Data source: <code data-astro-cid-3nssi2tu>.vibecrew/gamification.json</code></p> <h3 id="tab-settings" data-astro-cid-3nssi2tu>Settings</h3> <p data-astro-cid-3nssi2tu>A browser-based editor for <code data-astro-cid-3nssi2tu>.vibecrew/config.json</code>. You can modify:</p> <ul data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>User profile</strong> &mdash; Role, code literacy, autonomy, verbosity, and other profile dimensions</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Notifications</strong> &mdash; Toggle notification delivery and sound</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Cost limits</strong> &mdash; Set per-session and per-feature cost caps</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>MCP servers</strong> &mdash; Enable or disable optional MCP integrations</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Agent behavior</strong> &mdash; Adjust agent-specific settings</li> <li data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Gamification</strong> &mdash; Toggle scoring, achievements, and XP display</li> </ul> <div class="callout warn"> <div class="callout-title">Interactive features require dev mode</div>  <p data-astro-cid-3nssi2tu>When running <code data-astro-cid-3nssi2tu>npm run docs:dev</code>, interactive features (adding ideas, dragging cards, editing specs, saving settings) write changes directly to <code data-astro-cid-3nssi2tu>.vibecrew/</code> files. In a static production build (<code data-astro-cid-3nssi2tu>npm run docs:build</code>), the board renders read-only.</p>  </div> </section> <hr data-astro-cid-3nssi2tu>  <section class="section" id="cli" data-astro-cid-3nssi2tu> <span class="section-label" data-astro-cid-3nssi2tu>Terminal Equivalents</span> <h2 data-astro-cid-3nssi2tu>CLI Alternatives</h2> <p data-astro-cid-3nssi2tu>Every dashboard tab has a terminal equivalent. If you prefer staying in the CLI, these commands show the same data:</p> <div class="table-wrap">  <table data-astro-cid-3nssi2tu> <thead data-astro-cid-3nssi2tu> <tr data-astro-cid-3nssi2tu><th data-astro-cid-3nssi2tu>Dashboard Tab</th><th data-astro-cid-3nssi2tu>CLI Command</th><th data-astro-cid-3nssi2tu>What It Shows</th></tr> </thead> <tbody data-astro-cid-3nssi2tu> <tr data-astro-cid-3nssi2tu><td data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Kanban / Stats</strong></td><td data-astro-cid-3nssi2tu><code data-astro-cid-3nssi2tu>/status</code></td><td data-astro-cid-3nssi2tu>Feature backlog overview, session count, current feature</td></tr> <tr data-astro-cid-3nssi2tu><td data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Stats / Trends</strong></td><td data-astro-cid-3nssi2tu><code data-astro-cid-3nssi2tu>/cost</code></td><td data-astro-cid-3nssi2tu>Token usage, API costs, per-session breakdown</td></tr> <tr data-astro-cid-3nssi2tu><td data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Achievements</strong></td><td data-astro-cid-3nssi2tu><code data-astro-cid-3nssi2tu>/achievements</code></td><td data-astro-cid-3nssi2tu>Level, XP, badges, streaks, challenges</td></tr> <tr data-astro-cid-3nssi2tu><td data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Settings (profile)</strong></td><td data-astro-cid-3nssi2tu><code data-astro-cid-3nssi2tu>/profile</code></td><td data-astro-cid-3nssi2tu>Edit user profile dimensions interactively</td></tr> <tr data-astro-cid-3nssi2tu><td data-astro-cid-3nssi2tu><strong data-astro-cid-3nssi2tu>Coverage</strong></td><td data-astro-cid-3nssi2tu><code data-astro-cid-3nssi2tu>/check</code></td><td data-astro-cid-3nssi2tu>Run tests, lint, type-check, and see coverage</td></tr> </tbody> </table>  </div> </section> <hr data-astro-cid-3nssi2tu>  <section class="section" id="data-flow" data-astro-cid-3nssi2tu> <span class="section-label" data-astro-cid-3nssi2tu>Architecture</span> <h2 data-astro-cid-3nssi2tu>Data Flow</h2> <p data-astro-cid-3nssi2tu>The dashboard reads data through a simple pipeline:</p> <div class="flow" data-astro-cid-3nssi2tu><span class="highlight" data-astro-cid-3nssi2tu>.vibecrew/*.json</span> <span class="muted" data-astro-cid-3nssi2tu># Raw data written by VibeCrew agents</span>
+|
+<span class="highlight" data-astro-cid-3nssi2tu>VitePress data loaders</span> <span class="muted" data-astro-cid-3nssi2tu># .data.ts files that read and transform JSON</span>
+|
+<span class="highlight" data-astro-cid-3nssi2tu>Vue components</span> <span class="muted" data-astro-cid-3nssi2tu># Render charts, tables, cards, forms</span>
+|
+<span class="highlight" data-astro-cid-3nssi2tu>Browser</span> <span class="muted" data-astro-cid-3nssi2tu># Hot-reloads when data files change</span></div> <p data-astro-cid-3nssi2tu>Data loaders run at build time (for static builds) or on each page load (in dev mode). In dev mode, VitePress watches the <code data-astro-cid-3nssi2tu>.vibecrew/</code> directory and triggers hot-reloads when any JSON file changes &mdash; so running <code data-astro-cid-3nssi2tu>/wrap</code> in a Claude Code session updates the dashboard in real time.</p> <p data-astro-cid-3nssi2tu>In dev mode, the dashboard also provides API endpoints for CRUD operations and uses Vite's built-in WebSocket for real-time push updates when <code data-astro-cid-3nssi2tu>.vibecrew/</code> files change.</p> <div class="callout info"> <div class="callout-title">No database required</div>  <p data-astro-cid-3nssi2tu>All data lives in flat JSON files inside <code data-astro-cid-3nssi2tu>.vibecrew/</code>. There's no database, no backend server, and no external dependencies beyond VitePress itself. The dashboard is a pure static site that reads local files.</p>  </div> </section> <hr data-astro-cid-3nssi2tu>  <section class="section" id="production" data-astro-cid-3nssi2tu> <span class="section-label" data-astro-cid-3nssi2tu>Deployment</span> <h2 data-astro-cid-3nssi2tu>Production Build</h2> <p data-astro-cid-3nssi2tu>To generate a static HTML version of the dashboard:</p> <pre class="copyable" data-copy="cd docs
+npm run docs:build"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>cd docs
+npm run docs:build</code></pre> <p data-astro-cid-3nssi2tu>The output goes to <code data-astro-cid-3nssi2tu>docs/.vitepress/dist/</code>. You can deploy this to any static hosting provider (Vercel, Netlify, GitHub Pages) to share project metrics with your team.</p> <div class="callout tip"> <div class="callout-title">Snapshot your metrics</div>  <p data-astro-cid-3nssi2tu>A production build captures a point-in-time snapshot of your <code data-astro-cid-3nssi2tu>.vibecrew/</code> data. This is useful for sprint reviews, stakeholder updates, or archiving project history.</p>  </div> </section> <hr data-astro-cid-3nssi2tu>  <section class="section" id="troubleshooting" data-astro-cid-3nssi2tu> <span class="section-label" data-astro-cid-3nssi2tu>Help</span> <h2 data-astro-cid-3nssi2tu>Troubleshooting</h2> <h3 data-astro-cid-3nssi2tu>Dashboard shows empty/no data</h3> <p data-astro-cid-3nssi2tu>The dashboard reads from <code data-astro-cid-3nssi2tu>.vibecrew/</code> JSON files that are created as you work. If you haven't completed any sessions yet:</p> <ol data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu>Run <code data-astro-cid-3nssi2tu>/new-project</code> to create the project foundation</li> <li data-astro-cid-3nssi2tu>Build at least one feature with <code data-astro-cid-3nssi2tu>/new-feature "name"</code></li> <li data-astro-cid-3nssi2tu>Close the session with <code data-astro-cid-3nssi2tu>/wrap</code> &mdash; this writes session data, scores, and updates the backlog</li> </ol> <p data-astro-cid-3nssi2tu>After your first <code data-astro-cid-3nssi2tu>/wrap</code>, all dashboard tabs will populate with data.</p> <h3 data-astro-cid-3nssi2tu>Port 5173 is already in use</h3> <p data-astro-cid-3nssi2tu>If another dev server is using port 5173, VitePress will automatically try the next available port (5174, 5175, etc.). Check the terminal output for the actual URL. You can also specify a port explicitly:</p> <pre class="copyable" data-copy="npm run docs:dev -- --port 5200"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>npm run docs:dev -- --port 5200</code></pre> <h3 data-astro-cid-3nssi2tu>Drag-and-drop not working</h3> <p data-astro-cid-3nssi2tu>Interactive features (drag-and-drop, adding ideas, editing cards) only work when running the dev server. Static builds render the board read-only.</p> <h3 data-astro-cid-3nssi2tu>Settings changes don't persist</h3> <p data-astro-cid-3nssi2tu>The Settings tab can only write to <code data-astro-cid-3nssi2tu>.vibecrew/config.json</code> when VitePress is running in dev mode (<code data-astro-cid-3nssi2tu>npm run docs:dev</code>). If you're viewing a static build, Settings shows a read-only view with copyable JSON that you can paste into <code data-astro-cid-3nssi2tu>.vibecrew/config.json</code> manually.</p> <h3 data-astro-cid-3nssi2tu>Hot-reload isn't working</h3> <ol data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu>Make sure you're running the dev server (<code data-astro-cid-3nssi2tu>npm run docs:dev</code>), not viewing a static build</li> <li data-astro-cid-3nssi2tu>Check that <code data-astro-cid-3nssi2tu>.vibecrew/</code> is in the same project root where you started VitePress</li> <li data-astro-cid-3nssi2tu>Try restarting the dev server &mdash; VitePress occasionally needs a restart after major file structure changes</li> </ol> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/arch-design.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Design &amp; Operations</span></a><a href="/vibe-crew/commands.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Slash Commands</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html> 

@@ -1,0 +1,181 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import { url } from '../data/site';
+---
+
+<DocsLayout title="FAQ" sectionLabel="Reference" activeSlug="faq">
+
+  <h2>Frequently Asked Questions</h2>
+  <p>Common questions about VibeCrew, organized by topic. Can't find your answer? Check <a href={url('/tips.html')}>Tips &amp; Troubleshooting</a> for more detailed guidance.</p>
+
+  <section class="section">
+    <h3>Getting Started</h3>
+
+    <details class="faq-item">
+      <summary>What is VibeCrew?</summary>
+      <div class="faq-answer">
+        <p>VibeCrew is a Claude Code plugin that transforms Claude Code into an autonomous development team. It orchestrates multiple AI agents, enforces architecture-first development, and manages the full software development lifecycle &mdash; from project vision to deployment.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Do I need coding experience to use VibeCrew?</summary>
+      <div class="faq-answer">
+        <p>No. VibeCrew is designed for users at all skill levels. Run <code>/profile</code> to set your experience level, and VibeCrew adapts its explanations, autonomy, and output style accordingly. Non-technical founders can build production-grade apps using the Founder preset.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What terminals does VibeCrew support?</summary>
+      <div class="faq-answer">
+        <p>VibeCrew works with any terminal. <a href={url('/warp.html')}>Warp Terminal</a> is recommended because it provides tab deep-linking (click a notification to jump to the exact session), structured output blocks, and Launch Configurations. But iTerm2, VS Code Terminal, Terminal.app, and others all work fine.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How do I install VibeCrew on multiple projects?</summary>
+      <div class="faq-answer">
+        <p>Clone VibeCrew once to a central location (e.g., <code>~/claude-plugins/vibe-crew/</code>), then symlink into each project. See the <a href={url('/setup.html') + '#multi-project'}>Multi-Project Setup</a> guide.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section">
+    <h3>Workflow</h3>
+
+    <details class="faq-item">
+      <summary>What's the difference between Tier 1 and Tier 2?</summary>
+      <div class="faq-answer">
+        <p><strong>Tier 1</strong> is the one-time project foundation: VISION.md, design system, TDR, architecture diagrams, roadmap, and CLAUDE.md. It runs sequentially and must complete before any source code can be written.</p>
+        <p><strong>Tier 2</strong> is the iterative feature cycle: Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs. Each feature goes through this 6-phase process.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I skip the foundation (Tier 1)?</summary>
+      <div class="faq-answer">
+        <p>No. The phase gate hook blocks source code writes until the foundation is complete. This is intentional &mdash; writing code without architecture decisions leads to rework, inconsistency, and technical debt. The foundation typically takes 15-30 minutes and saves hours of rework later.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How do I add VibeCrew to an existing project?</summary>
+      <div class="faq-answer">
+        <p>Use <code>/onboard</code> instead of <code>/new-project</code>. The Code Auditor agent analyzes your codebase, extracts conventions, derives a design system from existing styles, and generates a CLAUDE.md. See <a href={url('/existing-project.html')}>Existing Projects</a>.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What does /run-backlog do?</summary>
+      <div class="faq-answer">
+        <p><code>/run-backlog</code> auto-executes features from your backlog by priority. It runs the full Tier 2 cycle for each feature, including code review, and stops on failure for human review. VibeCrew forces a <code>/compact</code> between features to prevent context rot during long autonomous runs.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section">
+    <h3>Cost &amp; Performance</h3>
+
+    <details class="faq-item">
+      <summary>How much does VibeCrew cost to run?</summary>
+      <div class="faq-answer">
+        <p>VibeCrew itself is free and open source. The cost comes from Claude API usage. A typical foundation session costs $5-15, and feature sessions cost $2-8 depending on complexity. Use <code>/cost</code> to see real-time spending and <code>/profile</code> to configure cost guardrails.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>How does VibeCrew keep token costs down?</summary>
+      <div class="faq-answer">
+        <p>Several mechanisms: (1) worktree agents isolate research tokens from the main session, (2) hooks enforce rules at zero token cost, (3) MCP servers like Context7 replace pasting docs (~1,500 tokens saved per query), (4) CLAUDE.md is kept under 200 lines, and (5) forced compaction between features in <code>/run-backlog</code> prevents context rot.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What is the Vibe Score?</summary>
+      <div class="faq-answer">
+        <p>A per-session quality metric starting at 100. Points are deducted for prompt churn, tool loops, skipped tests, and documentation drift. Bonuses are awarded for complete artifacts, high cache utilization, TDD discipline, and clean sessions. Range: 0-130. See <a href={url('/arch-runtime.html') + '#vibe-score'}>Vibe Score details</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section">
+    <h3>Troubleshooting</h3>
+
+    <details class="faq-item">
+      <summary>The phase gate is blocking my writes. What do I do?</summary>
+      <div class="faq-answer">
+        <p>This means the Tier 1 foundation isn't complete yet. Run <code>/status</code> to see which foundation steps are missing, then run <code>/new-project</code> (or <code>/onboard</code> for existing projects) to complete them. The phase gate only blocks source code writes &mdash; config files, documentation, and <code>.vibecrew/</code> state files are always writable.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>My session state is corrupted. How do I fix it?</summary>
+      <div class="faq-answer">
+        <p>Run <code>/recover-state</code> to clear lock files and repair corrupted JSON. If that doesn't work, you can manually delete the <code>.vibecrew/locks/</code> directory. Your backlog, session logs, and scores are never deleted during recovery.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Notifications aren't working.</summary>
+      <div class="faq-answer">
+        <p>Check these in order: (1) Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code>. (2) Check macOS: System Settings &rarr; Notifications &rarr; terminal-notifier. (3) Verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code>. See the full <a href={url('/setup.html') + '#troubleshooting'}>troubleshooting guide</a>.</p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>An MCP server isn't connecting.</summary>
+      <div class="faq-answer">
+        <p>Default servers (Context7, Chrome DevTools, Playwright) work via <code>npx</code> &mdash; try restarting Claude Code. For conditional servers (Supabase, Stripe, etc.), ensure the required environment variables are set. Run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code> to activate. All MCP servers are optional &mdash; agents gracefully fall back to built-in tools.</p>
+      </div>
+    </details>
+  </section>
+</DocsLayout>
+
+<style>
+  .faq-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  .faq-item summary {
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.15s;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    transition: transform 0.2s;
+  }
+
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+
+  .faq-item summary:hover {
+    background: var(--color-surface);
+  }
+
+  .faq-answer {
+    padding: 0 1.25rem 1rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .faq-answer p:last-child {
+    margin-bottom: 0;
+  }
+</style>

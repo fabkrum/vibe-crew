@@ -1,850 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeCrew — Existing Projects</title>
-  <style>
-    :root {
-      --color-bg: #0a0a0b;
-      --color-surface: #111113;
-      --color-surface-2: #18181b;
-      --color-surface-3: #1e1e22;
-      --color-border: #27272a;
-      --color-border-subtle: #1e1e22;
-      --color-text: #fafafa;
-      --color-text-secondary: #a1a1aa;
-      --color-text-muted: #71717a;
-      --color-accent: #a78bfa;
-      --color-accent-dim: #7c3aed;
-      --color-accent-bg: rgba(167, 139, 250, 0.08);
-      --color-green: #4ade80;
-      --color-green-dim: rgba(74, 222, 128, 0.1);
-      --color-amber: #fbbf24;
-      --color-amber-dim: rgba(251, 191, 36, 0.1);
-      --color-red: #f87171;
-      --color-red-dim: rgba(248, 113, 113, 0.1);
-      --color-blue: #60a5fa;
-      --color-blue-dim: rgba(96, 165, 250, 0.1);
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-xs: 6px;
-      --max-width: 860px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: var(--color-border) transparent;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--color-bg);
-      color: var(--color-text);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* ---- SIDEBAR ---- */
-    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-    .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
-    .sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
-    .sidebar-header .nav-brand span { color: var(--color-accent); }
-    .sidebar-nav { padding: 1rem 0; }
-    .sidebar-group { padding: 0 0 0.5rem; }
-    .sidebar-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; cursor: pointer; transition: color 0.15s; }
-    .sidebar-label:hover { color: var(--color-text-secondary); }
-    .sidebar-label::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform 0.2s; }
-    .sidebar-group.collapsed .sidebar-label::after { transform: rotate(-90deg); }
-    .sidebar-group.collapsed .sidebar-link { display: none; }
-    .sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
-    .sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
-    .sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
-    /* ---- MOBILE BAR ---- */
-    .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
-    .mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
-    .mobile-bar .nav-brand span { color: var(--color-accent); }
-    .hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-    .hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
-    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
-    /* ---- LAYOUT ---- */
-    .layout { margin-left: 260px; }
-
-    /* ---- HERO ---- */
-    .hero {
-      padding: 10rem 2rem 5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 600px;
-      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 1rem;
-      background: var(--color-accent-bg);
-      border: 1px solid rgba(167, 139, 250, 0.15);
-      border-radius: 100px;
-      font-size: 0.8rem;
-      color: var(--color-accent);
-      margin-bottom: 2rem;
-      font-weight: 500;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--color-text-secondary);
-      max-width: 640px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.7;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.75rem;
-      background: var(--color-accent-dim);
-      color: #fff;
-      border-radius: var(--radius-sm);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: all 0.2s;
-      border: none;
-    }
-
-    .hero-cta:hover {
-      background: #6d28d9;
-      transform: translateY(-1px);
-    }
-
-    /* ---- MAIN ---- */
-    .main {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 3rem 2rem 6rem;
-    }
-
-    /* ---- SECTIONS ---- */
-    .section {
-      margin-bottom: 5rem;
-    }
-
-    .section-label {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-accent);
-      margin-bottom: 0.75rem;
-    }
-
-    h2 {
-      font-size: 1.9rem;
-      font-weight: 750;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.75rem;
-      margin-top: 2.5rem;
-    }
-
-    h4 {
-      font-size: 1.05rem;
-      font-weight: 650;
-      margin-bottom: 0.5rem;
-      margin-top: 2rem;
-    }
-
-    .section > p,
-    .section > ul,
-    .section > ol {
-      color: var(--color-text-secondary);
-      margin-bottom: 1.25rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-      color: var(--color-text-secondary);
-    }
-
-    strong {
-      color: var(--color-text);
-      font-weight: 600;
-    }
-
-    a {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    ul, ol {
-      padding-left: 1.5rem;
-      margin-bottom: 1.25rem;
-      color: var(--color-text-secondary);
-    }
-
-    li {
-      margin-bottom: 0.4rem;
-    }
-
-    li::marker {
-      color: var(--color-text-muted);
-    }
-
-    /* ---- CODE ---- */
-    code {
-      font-family: var(--font-mono);
-      font-size: 0.85em;
-      background: var(--color-surface-2);
-      padding: 0.15em 0.45em;
-      border-radius: 4px;
-      color: var(--color-accent);
-      border: 1px solid var(--color-border-subtle);
-    }
-
-    pre {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem 1.5rem;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    pre code {
-      background: none;
-      padding: 0;
-      border: none;
-      color: var(--color-text-secondary);
-      font-size: 0.85rem;
-      line-height: 1.7;
-    }
-
-    .code-label {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.75rem;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-text-muted);
-      font-family: var(--font-sans);
-      font-weight: 600;
-    }
-
-    /* ---- CARDS ---- */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--color-accent-dim);
-    }
-
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    .card-icon.purple { background: var(--color-accent-bg); }
-    .card-icon.green { background: var(--color-green-dim); }
-    .card-icon.amber { background: var(--color-amber-dim); }
-    .card-icon.blue { background: var(--color-blue-dim); }
-    .card-icon.red { background: var(--color-red-dim); }
-
-    .card h4 {
-      font-size: 1rem;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-      color: var(--color-text);
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      color: var(--color-text-muted);
-      margin: 0;
-    }
-
-    /* ---- TABLES ---- */
-    .table-wrap {
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-
-    thead {
-      background: var(--color-surface-2);
-    }
-
-    th {
-      text-align: left;
-      padding: 0.75rem 1rem;
-      font-weight: 600;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-text-muted);
-      border-bottom: 1px solid var(--color-border);
-      white-space: nowrap;
-    }
-
-    td {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--color-border-subtle);
-      color: var(--color-text-secondary);
-      vertical-align: top;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tbody tr:hover {
-      background: var(--color-surface);
-    }
-
-    /* ---- CALLOUT ---- */
-    .callout {
-      border-radius: var(--radius-sm);
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid;
-      font-size: 0.92rem;
-    }
-
-    .callout p {
-      margin: 0;
-      color: inherit;
-    }
-
-    .callout-title {
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .callout.info {
-      background: var(--color-blue-dim);
-      border-color: rgba(96, 165, 250, 0.2);
-      color: var(--color-blue);
-    }
-
-    .callout.tip {
-      background: var(--color-green-dim);
-      border-color: rgba(74, 222, 128, 0.2);
-      color: var(--color-green);
-    }
-
-    .callout.warn {
-      background: var(--color-amber-dim);
-      border-color: rgba(251, 191, 36, 0.2);
-      color: var(--color-amber);
-    }
-
-    .callout.danger {
-      background: var(--color-red-dim);
-      border-color: rgba(248, 113, 113, 0.2);
-      color: var(--color-red);
-    }
-
-    /* ---- FLOW DIAGRAM ---- */
-    .flow {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: var(--color-text-secondary);
-      overflow-x: auto;
-      white-space: pre;
-    }
-
-    .flow .highlight {
-      color: var(--color-accent);
-      font-weight: 600;
-    }
-
-    .flow .muted {
-      color: var(--color-text-muted);
-    }
-
-    /* ---- STEP LIST ---- */
-    .steps {
-      counter-reset: step;
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .steps li {
-      counter-increment: step;
-      position: relative;
-      padding-left: 3.5rem;
-      margin-bottom: 2rem;
-      min-height: 2.25rem;
-    }
-
-    .steps li::before {
-      content: counter(step);
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2.25rem;
-      height: 2.25rem;
-      background: var(--color-accent-bg);
-      border: 1px solid rgba(167, 139, 250, 0.2);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: var(--color-accent);
-    }
-
-    .steps li h4 {
-      margin-top: 0;
-      margin-bottom: 0.25rem;
-    }
-
-    .steps li p {
-      font-size: 0.92rem;
-      margin-bottom: 0.5rem;
-    }
-
-    /* ---- BADGE ---- */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      font-family: var(--font-mono);
-    }
-
-    .badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
-    .badge.green { background: var(--color-green-dim); color: var(--color-green); }
-    .badge.amber { background: var(--color-amber-dim); color: var(--color-amber); }
-
-    /* ---- DIVIDER ---- */
-    hr {
-      border: none;
-      border-top: 1px solid var(--color-border);
-      margin: 4rem 0;
-    }
-
-    /* ---- TOC ---- */
-    .toc {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .toc h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .toc ol {
-      padding-left: 1.25rem;
-      margin-bottom: 0;
-    }
-
-    .toc li {
-      margin-bottom: 0.35rem;
-    }
-
-    .toc a {
-      color: var(--color-text-secondary);
-      font-size: 0.92rem;
-      transition: color 0.15s;
-    }
-
-    .toc a:hover {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-
-    /* ---- FOOTER ---- */
-    .footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      border-top: 1px solid var(--color-border-subtle);
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* ---- RESPONSIVE ---- */
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
-      body.sidebar-open .sidebar { transform: translateX(0); }
-      body.sidebar-open .sidebar-overlay { display: block; }
-      .mobile-bar { display: flex; }
-      .layout { margin-left: 0; padding-top: 52px; }
-      .main { padding: 2rem 1.25rem 4rem; }
-      .card-grid { grid-template-columns: 1fr; }
-      h2 { font-size: 1.5rem; }
-      h3 { font-size: 1.15rem; }
-      pre { padding: 1rem; }
-      .steps li { padding-left: 3rem; }
-    }
-
-    /* ---- GAMIFICATION ---- */
-    .xp-bar-wrap {
-      background: var(--color-surface-2);
-      border-radius: 6px;
-      height: 10px;
-      width: 100%;
-      overflow: hidden;
-      margin-bottom: 0.25rem;
-    }
-
-    .xp-bar {
-      height: 100%;
-      border-radius: 6px;
-      background: linear-gradient(90deg, var(--color-accent-dim), var(--color-accent));
-      transition: width 0.6s ease;
-    }
-
-    .level-badge-inline {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: #fff;
-      margin-right: 0.5rem;
-    }
-
-    .badge-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .badge-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-
-    .badge-card.locked {
-      opacity: 0.5;
-    }
-
-    .badge-card .badge-icon {
-      font-size: 1.5rem;
-      flex-shrink: 0;
-    }
-
-    .badge-card h5 {
-      margin: 0 0 0.15rem;
-      font-size: 0.9rem;
-      color: var(--color-text);
-    }
-
-    .badge-card p {
-      margin: 0;
-      font-size: 0.8rem;
-      color: var(--color-text-muted);
-    }
-
-    .skill-bar-wrap {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .skill-bar-wrap .skill-name {
-      width: 160px;
-      flex-shrink: 0;
-      font-size: 0.85rem;
-      color: var(--color-text-secondary);
-      text-align: right;
-    }
-
-    .skill-bar-wrap .bar-track {
-      flex: 1;
-      height: 8px;
-      background: var(--color-surface-2);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .skill-bar-wrap .bar-fill {
-      height: 100%;
-      border-radius: 4px;
-    }
-
-    .skill-bar-wrap .skill-level {
-      width: 90px;
-      font-size: 0.8rem;
-      font-family: var(--font-mono);
-      color: var(--color-text-muted);
-    }
-
-    .streak-display {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--color-amber);
-      margin-bottom: 0.5rem;
-    }
-
-    .challenge-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .challenge-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem;
-    }
-
-    .challenge-card .challenge-type {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .challenge-card .challenge-type.daily { color: var(--color-blue); }
-    .challenge-card .challenge-type.weekly { color: var(--color-accent); }
-    .challenge-card .challenge-type.onetime { color: var(--color-amber); }
-
-    .challenge-card h5 {
-      margin: 0 0 0.25rem;
-      color: var(--color-text);
-      font-size: 0.95rem;
-    }
-
-    .challenge-card p {
-      margin: 0;
-      font-size: 0.85rem;
-      color: var(--color-text-muted);
-    }
-
-    @media (prefers-color-scheme: light) {
-      /* keep dark — this is a terminal-culture product */
-    }
-
-  </style>
-</head>
-<body>
-
-<div class="mobile-bar">
-  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
-  </button>
-  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-</div>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
-      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
-    </div>
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
-      <a href="setup.html" class="sidebar-link">Setup</a>
-      <a href="new-project.html" class="sidebar-link">New Project</a>
-      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
-      <a href="existing-project.html" class="sidebar-link active">Existing Project</a>
-      <a href="warp.html" class="sidebar-link">Warp</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
-      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
-      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
-      <a href="personalization.html" class="sidebar-link">Personalization</a>
-      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
-      <a href="example-session.html" class="sidebar-link">Example Session</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
-      <a href="architecture.html" class="sidebar-link">Overview</a>
-      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
-      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
-      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
-      <a href="arch-design.html" class="sidebar-link">Design &amp; Operations</a>
-      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
-      <a href="releases.html" class="sidebar-link">Release Notes</a>
-    </div>
-  </nav>
-</aside>
-
-<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
-<script>var a=document.querySelector(".sidebar-link.active");if(a){var g=a.closest(".sidebar-group");if(g)g.classList.remove("collapsed");}</script>
-
-<div class="layout">
-<div class="main">
-
-  <section class="section" id="existing-projects">
-    <span class="section-label">Existing Projects</span>
-    <h2>Using VibeCrew with Existing Projects</h2>
-    <p>VibeCrew isn't only for greenfield work. Bringing it into an existing codebase provides structure, quality gates, and continuous improvement to projects that were started without this framework.</p>
-
-    <h3>Onboarding an Existing Project</h3>
-
-    <ol class="steps">
-      <li>
-        <h4>Install the plugin</h4>
-        <p>Same process as a new project: copy or symlink <code>claude-plugin-vibe-crew/</code> into your project root, then run <code>/setup</code> inside Claude Code.</p>
-      </li>
-      <li>
-        <h4>Run /onboard</h4>
-        <p>The <code>/onboard</code> command launches the <strong>Code Auditor agent</strong> in a read-only worktree to analyze your codebase. It supports 7 languages (Node.js, Python, Ruby, Go, Rust, PHP, Java) and:</p>
-        <ul>
-          <li><strong>Detects language and framework</strong> &mdash; scans manifests (<code>package.json</code>, <code>pyproject.toml</code>, <code>Gemfile</code>, <code>go.mod</code>, <code>Cargo.toml</code>, etc.)</li>
-          <li><strong>Extracts conventions</strong> &mdash; naming patterns, formatters, linters, commit format, import style</li>
-          <li><strong>Identifies test gaps</strong> &mdash; compares source vs test files, finds untested modules, estimates coverage</li>
-          <li><strong>Derives the design system</strong> &mdash; extracts existing CSS variables, colors, and spacing values via <code>extract-design-system.sh</code></li>
-          <li><strong>Generates CLAUDE.md</strong> &mdash; project-specific rules from discovered patterns, framework conventions, and architecture</li>
-          <li><strong>Initializes state</strong> &mdash; sets <code>foundation.complete = true</code> so the phase gate is unlocked immediately</li>
-        </ul>
-      </li>
-      <li>
-        <h4>Or run /new-project for full foundation</h4>
-        <p>Alternatively, when <code>/new-project</code> detects an existing codebase, it adapts the Tier 1 flow: the Stack Scout documents the stack as it exists (rather than researching from scratch), the design system is derived from existing CSS, and VISION.md is still generated from your input. This takes longer but produces all 6 foundation artifacts (VISION.md, design-system.css, TDR, roadmap, architecture diagrams, CLAUDE.md).</p>
-      </li>
-      <li>
-        <h4>Map existing features to the backlog</h4>
-        <p>Use <code>/plan-features</code> to document features that already exist (marked as "complete") and define new features you want to build. This gives you a unified backlog that includes both history and future work.</p>
-      </li>
-      <li>
-        <h4>Start developing with full VibeCrew workflow</h4>
-        <p>From this point forward, every new feature uses the Tier 2 cycle. The phase gate is active, the Performance Coach runs at session end, and CLAUDE.md accumulates project-specific intelligence.</p>
-      </li>
-    </ol>
-
-    <div class="callout info">
-      <div class="callout-title">The phase gate and existing code</div>
-      <p>The phase gate only blocks <em>new</em> source code writes before the foundation is complete. Once you've completed the /new-project flow for your existing project, the gate unlocks and you can modify any file freely. Existing code is never touched or reformatted without your explicit instruction.</p>
-    </div>
-
-    <h3>What You Get Immediately</h3>
-    <ul>
-      <li><strong>Interrupt Protocol</strong> &mdash; native notifications for blocked agents, completed tasks, and errors</li>
-      <li><strong>Safety hooks</strong> &mdash; protection against <code>rm -rf</code>, force pushes, and other destructive commands</li>
-      <li><strong>Auto-formatting</strong> &mdash; every file the AI writes is formatted automatically via PostToolUse hooks</li>
-      <li><strong>Context warnings</strong> &mdash; alerts at 60% and 80% context usage to prevent exhaustion</li>
-      <li><strong>Cost tracking</strong> &mdash; real-time session cost via <code>/cost</code> with configurable spend limits</li>
-      <li><strong>Status bar</strong> &mdash; persistent display of context %, cost, feature, Vibe Score, duration, and compactions</li>
-      <li><strong>Security auditing</strong> &mdash; OWASP Top 10 scanning via <code>/audit</code> with language-specific dependency checks</li>
-      <li><strong>Performance coaching</strong> &mdash; Vibe Scores and CLAUDE.md mutations from your first <code>/wrap</code></li>
-    </ul>
-  </section>
-</div>
-
-<footer class="footer">
-  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
-  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
-</footer>
-</div>
-
-</body>
-</html>
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Existing Projects</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.C1_FxMSw.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link active"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Getting Started</span>  <span class="separator">/</span> <span>Existing Projects</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Getting Started"},{"@type":"ListItem","position":3,"name":"Existing Projects"}]}</script> <span class="section-label">Existing Projects</span>  <section class="section" id="existing-projects"> <span class="section-label">Existing Projects</span> <h2>Using VibeCrew with Existing Projects</h2> <p>VibeCrew isn't only for greenfield work. Bringing it into an existing codebase provides structure, quality gates, and continuous improvement to projects that were started without this framework.</p> <h3>Onboarding an Existing Project</h3> <ol class="steps"> <li> <h4>Install the plugin</h4> <p>Same process as a new project: copy or symlink <code>claude-plugin-vibe-crew/</code> into your project root, then run <code>/setup</code> inside Claude Code.</p> </li> <li> <h4>Run /onboard</h4> <p>The <code>/onboard</code> command launches the <strong>Code Auditor agent</strong> in a read-only worktree to analyze your codebase. It supports 7 languages (Node.js, Python, Ruby, Go, Rust, PHP, Java) and:</p> <ul> <li><strong>Detects language and framework</strong> &mdash; scans manifests (<code>package.json</code>, <code>pyproject.toml</code>, <code>Gemfile</code>, <code>go.mod</code>, <code>Cargo.toml</code>, etc.)</li> <li><strong>Extracts conventions</strong> &mdash; naming patterns, formatters, linters, commit format, import style</li> <li><strong>Identifies test gaps</strong> &mdash; compares source vs test files, finds untested modules, estimates coverage</li> <li><strong>Derives the design system</strong> &mdash; extracts existing CSS variables, colors, and spacing values via <code>extract-design-system.sh</code></li> <li><strong>Generates CLAUDE.md</strong> &mdash; project-specific rules from discovered patterns, framework conventions, and architecture</li> <li><strong>Initializes state</strong> &mdash; sets <code>foundation.complete = true</code> so the phase gate is unlocked immediately</li> </ul> </li> <li> <h4>Or run /new-project for full foundation</h4> <p>Alternatively, when <code>/new-project</code> detects an existing codebase, it adapts the Tier 1 flow: the Stack Scout documents the stack as it exists (rather than researching from scratch), the design system is derived from existing CSS, and VISION.md is still generated from your input. This takes longer but produces all 6 foundation artifacts (VISION.md, design-system.css, TDR, roadmap, architecture diagrams, CLAUDE.md).</p> </li> <li> <h4>Map existing features to the backlog</h4> <p>Use <code>/plan-features</code> to document features that already exist (marked as "complete") and define new features you want to build. This gives you a unified backlog that includes both history and future work.</p> </li> <li> <h4>Start developing with full VibeCrew workflow</h4> <p>From this point forward, every new feature uses the Tier 2 cycle. The phase gate is active, the Performance Coach runs at session end, and CLAUDE.md accumulates project-specific intelligence.</p> </li> </ol> <div class="callout info"> <div class="callout-title">The phase gate and existing code</div>  <p>The phase gate only blocks <em>new</em> source code writes before the foundation is complete. Once you've completed the /new-project flow for your existing project, the gate unlocks and you can modify any file freely. Existing code is never touched or reformatted without your explicit instruction.</p>  </div> <h3>What You Get Immediately</h3> <ul> <li><strong>Interrupt Protocol</strong> &mdash; native notifications for blocked agents, completed tasks, and errors</li> <li><strong>Safety hooks</strong> &mdash; protection against <code>rm -rf</code>, force pushes, and other destructive commands</li> <li><strong>Auto-formatting</strong> &mdash; every file the AI writes is formatted automatically via PostToolUse hooks</li> <li><strong>Context warnings</strong> &mdash; alerts at 60% and 80% context usage to prevent exhaustion</li> <li><strong>Cost tracking</strong> &mdash; real-time session cost via <code>/cost</code> with configurable spend limits</li> <li><strong>Status bar</strong> &mdash; persistent display of context %, cost, feature, Vibe Score, duration, and compactions</li> <li><strong>Security auditing</strong> &mdash; OWASP Top 10 scanning via <code>/audit</code> with language-specific dependency checks</li> <li><strong>Performance coaching</strong> &mdash; Vibe Scores and CLAUDE.md mutations from your first <code>/wrap</code></li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/design-discovery.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Design Discovery</span></a><a href="/vibe-crew/warp.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Warp</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html>

@@ -1,0 +1,25 @@
+---
+import { url } from '../data/site';
+---
+
+<div class="mobile-bar">
+  <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="3" y1="5" x2="17" y2="5"/>
+      <line x1="3" y1="10" x2="17" y2="10"/>
+      <line x1="3" y1="15" x2="17" y2="15"/>
+    </svg>
+  </button>
+  <a href={url('/index.html')} class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+</div>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<script is:inline>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script>

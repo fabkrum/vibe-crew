@@ -1,0 +1,114 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import { url } from '../data/site';
+---
+
+<DocsLayout title="Quick Start" sectionLabel="Getting Started" activeSlug="quick-start">
+
+  <h2>Quick Start Guide</h2>
+  <p>Get from zero to your first feature in under 10 minutes. This guide covers the essentials &mdash; see the <a href={url('/setup.html')}>full Setup Guide</a> for advanced options.</p>
+
+  <section class="section">
+    <h3>Prerequisites</h3>
+    <p>Make sure you have these installed:</p>
+    <ul>
+      <li><strong>Git</strong> 2.30+ &mdash; <code>git --version</code></li>
+      <li><strong>Node.js</strong> 18+ &mdash; <code>node --version</code></li>
+      <li><strong>jq</strong> 1.6+ &mdash; <code>jq --version</code> (install: <code>brew install jq</code>)</li>
+      <li><strong>Claude Code</strong> &mdash; <a href="https://claude.ai/code">claude.ai/code</a></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h3>1. Install VibeCrew</h3>
+    <p>Clone once, symlink to every project:</p>
+    <CodeBlock code={`mkdir -p ~/claude-plugins && cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git
+cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} label="bash" />
+  </section>
+
+  <section class="section">
+    <h3>2. Run Setup</h3>
+    <p>Start Claude Code in your project directory and run the setup wizard:</p>
+    <CodeBlock code={`claude`} label="bash" />
+    <p>Then inside Claude Code:</p>
+    <CodeBlock code={`/setup`} label="claude code" />
+    <p>The wizard verifies dependencies, detects your terminal, and creates the <code>.vibecrew/</code> runtime directory.</p>
+  </section>
+
+  <section class="section">
+    <h3>3. Start a New Project</h3>
+    <CodeBlock code={`/new-project`} label="claude code" />
+    <p>This runs the <strong>Tier 1 foundation</strong> &mdash; a sequential process that creates:</p>
+    <ol>
+      <li><strong>VISION.md</strong> &mdash; What you're building and who it's for</li>
+      <li><strong>Design System</strong> &mdash; CSS tokens via the <a href={url('/design-discovery.html')}>Design Discovery</a> interview</li>
+      <li><strong>TDR</strong> &mdash; Technology Decision Record (researched by Stack Scout agent)</li>
+      <li><strong>Architecture Diagrams</strong> &mdash; 5 Mermaid diagrams covering your system</li>
+      <li><strong>Roadmap</strong> &mdash; Initial 5-8 feature backlog</li>
+      <li><strong>CLAUDE.md</strong> &mdash; Project rules for future sessions</li>
+    </ol>
+
+    <Callout type="info" title="This takes 15-30 minutes">
+      <p>The foundation is a one-time investment. After this, every feature session starts instantly because the architecture decisions are already made.</p>
+    </Callout>
+  </section>
+
+  <section class="section">
+    <h3>4. Build Your First Feature</h3>
+    <CodeBlock code={`/new-feature "user-authentication"`} label="claude code" />
+    <p>This enters the <strong>Tier 2 feature cycle</strong>: Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs. The Builder agent handles implementation within the boundaries set by your TDR.</p>
+  </section>
+
+  <section class="section">
+    <h3>5. Wrap the Session</h3>
+    <CodeBlock code={`/wrap`} label="claude code" />
+    <p>This runs the quality gate (tests, lint, build), calculates your Vibe Score, generates a session log, and commits your work.</p>
+  </section>
+
+  <hr>
+
+  <section class="section">
+    <h3>What Just Happened?</h3>
+    <p>You now have:</p>
+    <ul>
+      <li>A complete project architecture (design system, TDR, diagrams)</li>
+      <li>A feature built with automated testing and code review</li>
+      <li>A Vibe Score tracking your development quality</li>
+      <li>Session logs and documentation auto-generated</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h3>Next Steps</h3>
+    <div class="card-grid">
+      <a href={url('/workflow.html')} class="card">
+        <div class="card-icon purple">&#9654;</div>
+        <h4>Core Workflow</h4>
+        <p>Understand the full Tier 1/Tier 2 lifecycle and 6-phase feature cycle.</p>
+        <div class="card-arrow">Learn more &rarr;</div>
+      </a>
+      <a href={url('/personalization.html')} class="card">
+        <div class="card-icon green">&#9998;</div>
+        <h4>Personalize</h4>
+        <p>Run <code>/profile</code> to adapt VibeCrew to your experience level and preferences.</p>
+        <div class="card-arrow">Customize &rarr;</div>
+      </a>
+      <a href={url('/warp.html')} class="card">
+        <div class="card-icon blue">&#9000;</div>
+        <h4>Warp Terminal</h4>
+        <p>Unlock tab deep-linking, Launch Configurations, and multi-pane workflows.</p>
+        <div class="card-arrow">Explore &rarr;</div>
+      </a>
+      <a href={url('/example-session.html')} class="card">
+        <div class="card-icon amber">&#9654;</div>
+        <h4>Example Session</h4>
+        <p>See a complete walkthrough of a typical week with VibeCrew.</p>
+        <div class="card-arrow">Watch &rarr;</div>
+      </a>
+    </div>
+  </section>
+</DocsLayout>

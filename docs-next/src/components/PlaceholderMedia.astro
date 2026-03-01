@@ -1,0 +1,15 @@
+---
+interface Props {
+  icon?: string;
+  label: string;
+  type?: 'image' | 'video';
+}
+
+const { icon, label, type = 'image' } = Astro.props;
+const defaultIcon = type === 'video' ? '&#9654;' : '&#128247;';
+---
+
+<div class="placeholder-media">
+  <div class="icon"><Fragment set:html={icon || defaultIcon} /></div>
+  <div class="label">{label}</div>
+</div>

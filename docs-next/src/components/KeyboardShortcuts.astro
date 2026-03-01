@@ -1,0 +1,49 @@
+---
+---
+
+<div class="kbd-tooltip" id="kbd-tooltip">
+  <h4>Keyboard Shortcuts</h4>
+  <dl>
+    <dt>/</dt><dd>Search</dd>
+    <dt>n</dt><dd>Next page</dd>
+    <dt>p</dt><dd>Previous page</dd>
+    <dt>t</dt><dd>Toggle TOC</dd>
+    <dt>?</dt><dd>Show/hide shortcuts</dd>
+  </dl>
+</div>
+
+<script is:inline>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script>

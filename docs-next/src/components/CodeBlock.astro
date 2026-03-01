@@ -1,0 +1,19 @@
+---
+interface Props {
+  code: string;
+  lang?: string;
+  label?: string;
+  copyable?: boolean;
+}
+
+const { code, lang, label, copyable = true } = Astro.props;
+---
+
+<pre class={copyable ? 'copyable' : ''} data-copy={copyable ? code : undefined}>{copyable && (
+  <button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"/>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+    </svg>
+  </button>
+)}<code>{label && <span class="code-label">{label}</span>}{code}</code></pre>

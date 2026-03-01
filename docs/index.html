@@ -1,394 +1,162 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeCrew Documentation — The Autonomous Vibe-Coding Operating System</title>
-  <style>
-    :root {
-      --color-bg: #0a0a0b;
-      --color-surface: #111113;
-      --color-surface-2: #18181b;
-      --color-surface-3: #1e1e22;
-      --color-border: #27272a;
-      --color-border-subtle: #1e1e22;
-      --color-text: #fafafa;
-      --color-text-secondary: #a1a1aa;
-      --color-text-muted: #71717a;
-      --color-accent: #a78bfa;
-      --color-accent-dim: #7c3aed;
-      --color-accent-bg: rgba(167, 139, 250, 0.08);
-      --color-green: #4ade80;
-      --color-green-dim: rgba(74, 222, 128, 0.1);
-      --color-amber: #fbbf24;
-      --color-amber-dim: rgba(251, 191, 36, 0.1);
-      --color-red: #f87171;
-      --color-red-dim: rgba(248, 113, 113, 0.1);
-      --color-blue: #60a5fa;
-      --color-blue-dim: rgba(96, 165, 250, 0.1);
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-xs: 6px;
-      --max-width: 860px;
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew Documentation</title><meta name="description" content="The autonomous vibe-coding operating system that turns Claude Code into a full development team."><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.hero{padding:6rem 2rem 4rem;text-align:center;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;top:0;left:50%;transform:translate(-50%);width:800px;height:600px;background:radial-gradient(ellipse at center,rgba(124,58,237,.12) 0%,transparent 70%);pointer-events:none}.hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;background:var(--color-accent-bg);border:1px solid rgba(167,139,250,.15);border-radius:100px;font-size:.8rem;color:var(--color-accent);margin-bottom:2rem;font-weight:500}.hero h1{font-size:clamp(2.5rem,6vw,4rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.5rem;background:linear-gradient(135deg,#fff,#a1a1aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}html[data-theme=light] .hero h1{background:linear-gradient(135deg,#18181b,#52525b);-webkit-background-clip:text;background-clip:text}.hero p{font-size:1.15rem;color:var(--color-text-secondary);max-width:640px;margin:0 auto 2.5rem;line-height:1.7}.hero-actions{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}.hero-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:var(--radius-sm);font-weight:600;font-size:.95rem;text-decoration:none;transition:all .2s}.hero-btn.primary{background:var(--color-accent-dim);color:#fff}.hero-btn.primary:hover{background:var(--color-accent);text-decoration:none}.hero-btn.secondary{background:var(--color-surface-2);color:var(--color-text);border:1px solid var(--color-border)}.hero-btn.secondary:hover{border-color:var(--color-accent-dim);text-decoration:none}@media(max-width:768px){.hero{padding:4rem 1.5rem 3rem}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.C1_FxMSw.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">   <header class="hero"> <div class="hero-badge">Claude Code Plugin &middot; v1.7.0</div> <h1>VibeCrew Documentation</h1> <p>The autonomous vibe-coding operating system that turns Claude Code into a full development team. Architecture-first, attention-aware, and self-improving.</p> <div class="hero-actions"> <a href="/vibe-crew/quick-start.html" class="hero-btn primary">Quick Start &rarr;</a> <a href="/vibe-crew/setup.html" class="hero-btn secondary">Full Setup Guide</a> </div> </header> <div class="main" data-pagefind-body> <div class="page-grid"> <a href="/vibe-crew/why.html" class="page-card"> <div class="page-card-icon purple">&#9733;</div> <h3>Why VibeCrew</h3> <p>The three problems VibeCrew solves: the attention bottleneck, token waste, and code without architecture. Core design philosophy and principles.</p> <div class="card-arrow">Read more &rarr;</div> </a> <a href="/vibe-crew/setup.html" class="page-card"> <div class="page-card-icon green">&#9881;</div> <h3>Setup Guide</h3> <p>Step-by-step installation from zero: system dependencies, plugin setup, MCP servers, Warp Terminal configuration, and notification testing.</p> <div class="card-arrow">Get started &rarr;</div> </a> <a href="/vibe-crew/new-project.html" class="page-card"> <div class="page-card-icon blue">&#10010;</div> <h3>Start a New Project</h3> <p>The Two-Tier Workflow: build the project foundation (VISION.md, design system, TDR, roadmap, CLAUDE.md), then enter the 6-phase feature cycle.</p> <div class="card-arrow">Read more &rarr;</div> </a> <a href="/vibe-crew/existing-project.html" class="page-card"> <div class="page-card-icon amber">&#8635;</div> <h3>Existing Projects</h3> <p>Bring VibeCrew into an existing codebase: automated code auditing, convention extraction, design system derivation, and backlog mapping.</p> <div class="card-arrow">Read more &rarr;</div> </a> <a href="/vibe-crew/workflow.html" class="page-card"> <div class="page-card-icon red">&#9654;</div> <h3>Core Workflow</h3> <p>The two-tier development lifecycle, 6-phase feature cycle, Vibe Score system, plus advanced features, personalization, and efficiency tips.</p> <div class="card-arrow">Read more &rarr;</div> </a> <a href="/vibe-crew/dashboard.html" class="page-card"> <div class="page-card-icon blue">&#9636;</div> <h3>Vibe Dashboard</h3> <p>Browse your project metrics in the browser: feature Kanban, session stats, Vibe Score trends, test coverage, achievements, and settings.</p> <div class="card-arrow">Learn more &rarr;</div> </a> <a href="/vibe-crew/example-session.html" class="page-card"> <div class="page-card-icon red">&#9654;</div> <h3>Example Session</h3> <p>A concrete walkthrough: terminal setup, Day 1 foundation, planning sessions, building features, multi-tab workflows, capturing ideas, and a full week timeline.</p> <div class="card-arrow">See the example &rarr;</div> </a> <a href="/vibe-crew/architecture.html" class="page-card"> <div class="page-card-icon purple">&#9632;</div> <h3>Architecture Deep Dive</h3> <p>The 14-agent system, hook enforcement layer, status bar, interrupt protocol, phase gate, Vibe Score, slash commands, state management, and Vibe Dashboard.</p> <div class="card-arrow">Read more &rarr;</div> </a> <a href="/vibe-crew/warp.html" class="page-card"> <div class="page-card-icon blue">&#9000;</div> <h3>Warp Tips &amp; Tricks</h3> <p>Optimize your Warp Terminal for VibeCrew: window layouts, Launch Configurations, keyboard shortcuts, Warp Drive, Notebooks, themes, and more.</p> <div class="card-arrow">Explore tips &rarr;</div> </a> <a href="/vibe-crew/releases.html" class="page-card"> <div class="page-card-icon green">&#9998;</div> <h3>Release Notes</h3> <p>Complete changelog for all VibeCrew versions: v1.0.0 through v1.7.0. Every new feature, agent, script, and configuration change documented.</p> <div class="card-arrow">View changelog &rarr;</div> </a> </div> </div>   <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: var(--color-border) transparent;
+    function closeSearch() {
+      overlay.classList.remove('open');
     }
 
-    body {
-      font-family: var(--font-sans);
-      background: var(--color-bg);
-      color: var(--color-text);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html> <!-- Global copy button handler --> <script>
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    var pre = btn.closest('pre');
+    var text = pre && pre.getAttribute('data-copy');
+    if (!text) {
+      var code = pre && pre.querySelector('code');
+      if (code) text = code.textContent;
     }
-
-    /* ---- SIDEBAR ---- */
-    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-    .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
-    .sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
-    .sidebar-header .nav-brand span { color: var(--color-accent); }
-    .sidebar-nav { padding: 1rem 0; }
-    .sidebar-group { padding: 0 0 0.5rem; }
-    .sidebar-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; cursor: pointer; transition: color 0.15s; }
-    .sidebar-label:hover { color: var(--color-text-secondary); }
-    .sidebar-label::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform 0.2s; }
-    .sidebar-group.collapsed .sidebar-label::after { transform: rotate(-90deg); }
-    .sidebar-group.collapsed .sidebar-link { display: none; }
-    .sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
-    .sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
-    .sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
-    /* ---- MOBILE BAR ---- */
-    .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
-    .mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
-    .mobile-bar .nav-brand span { color: var(--color-accent); }
-    .hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-    .hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
-    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
-    /* ---- LAYOUT ---- */
-    .layout { margin-left: 260px; }
-
-    /* ---- HERO ---- */
-    .hero {
-      padding: 6rem 2rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+    if (text) {
+      navigator.clipboard.writeText(text).then(function() {
+        btn.classList.add('copied');
+        setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+      });
     }
+  });
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 600px;
-      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 1rem;
-      background: var(--color-accent-bg);
-      border: 1px solid rgba(167, 139, 250, 0.15);
-      border-radius: 100px;
-      font-size: 0.8rem;
-      color: var(--color-accent);
-      margin-bottom: 2rem;
-      font-weight: 500;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--color-text-secondary);
-      max-width: 640px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.7;
-    }
-
-    /* ---- MAIN ---- */
-    .main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 2rem 6rem;
-    }
-
-    /* ---- PAGE CARDS ---- */
-    .page-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 2rem;
-    }
-
-    .page-card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      text-decoration: none;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .page-card:hover {
-      border-color: var(--color-accent-dim);
-      transform: translateY(-2px);
-      text-decoration: none;
-    }
-
-    .page-card-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .page-card-icon.purple { background: var(--color-accent-bg); }
-    .page-card-icon.green { background: var(--color-green-dim); }
-    .page-card-icon.amber { background: var(--color-amber-dim); }
-    .page-card-icon.blue { background: var(--color-blue-dim); }
-    .page-card-icon.red { background: var(--color-red-dim); }
-
-    .page-card h3 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--color-text);
-      margin-bottom: 0.5rem;
-      margin-top: 0;
-    }
-
-    .page-card p {
-      font-size: 0.9rem;
-      color: var(--color-text-muted);
-      margin: 0;
-      flex: 1;
-    }
-
-    .page-card .card-arrow {
-      margin-top: 1.25rem;
-      font-size: 0.85rem;
-      color: var(--color-accent);
-      font-weight: 600;
-    }
-
-    /* ---- FOOTER ---- */
-    .footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      border-top: 1px solid var(--color-border-subtle);
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-      color: var(--color-text-secondary);
-    }
-
-    strong {
-      color: var(--color-text);
-      font-weight: 600;
-    }
-
-    a {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    /* ---- RESPONSIVE ---- */
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
-      body.sidebar-open .sidebar { transform: translateX(0); }
-      body.sidebar-open .sidebar-overlay { display: block; }
-      .mobile-bar { display: flex; }
-      .layout { margin-left: 0; padding-top: 52px; }
-      .hero { padding: 4rem 1.5rem 3rem; }
-      .main { padding: 0 1.25rem 4rem; }
-      .page-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- ============ SIDEBAR ============ -->
-<div class="mobile-bar">
-  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
-  </button>
-  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-</div>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
-      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
-    </div>
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
-      <a href="setup.html" class="sidebar-link">Setup</a>
-      <a href="new-project.html" class="sidebar-link">New Project</a>
-      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
-      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
-      <a href="warp.html" class="sidebar-link">Warp</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
-      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
-      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
-      <a href="personalization.html" class="sidebar-link">Personalization</a>
-      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
-      <a href="example-session.html" class="sidebar-link">Example Session</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
-      <a href="architecture.html" class="sidebar-link">Overview</a>
-      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
-      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
-      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
-      <a href="arch-design.html" class="sidebar-link">Design &amp; Operations</a>
-      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
-      <a href="releases.html" class="sidebar-link">Release Notes</a>
-    </div>
-  </nav>
-</aside>
-
-<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
-<script>var a=document.querySelector(".sidebar-link.active");if(a){var g=a.closest(".sidebar-group");if(g)g.classList.remove("collapsed");}</script>
-
-<div class="layout">
-
-<!-- ============ HERO ============ -->
-<header class="hero">
-  <div class="hero-badge">Claude Code Plugin &middot; v1.6.0</div>
-  <h1>VibeCrew Documentation</h1>
-  <p>The autonomous vibe-coding operating system that turns Claude Code into a full development team. Architecture-first, attention-aware, and self-improving.</p>
-</header>
-
-<!-- ============ MAIN ============ -->
-<div class="main">
-
-  <div class="page-grid">
-    <a href="why.html" class="page-card">
-      <div class="page-card-icon purple">&#9733;</div>
-      <h3>Why VibeCrew</h3>
-      <p>The three problems VibeCrew solves: the attention bottleneck, token waste, and code without architecture. Core design philosophy and principles.</p>
-      <div class="card-arrow">Read more &rarr;</div>
-    </a>
-
-    <a href="setup.html" class="page-card">
-      <div class="page-card-icon green">&#9881;</div>
-      <h3>Setup Guide</h3>
-      <p>Step-by-step installation from zero: system dependencies, plugin setup, MCP servers, Warp Terminal configuration, and notification testing.</p>
-      <div class="card-arrow">Get started &rarr;</div>
-    </a>
-
-    <a href="new-project.html" class="page-card">
-      <div class="page-card-icon blue">&#10010;</div>
-      <h3>Start a New Project</h3>
-      <p>The Two-Tier Workflow: build the project foundation (VISION.md, design system, TDR, roadmap, CLAUDE.md), then enter the 6-phase feature cycle.</p>
-      <div class="card-arrow">Read more &rarr;</div>
-    </a>
-
-    <a href="existing-project.html" class="page-card">
-      <div class="page-card-icon amber">&#8635;</div>
-      <h3>Existing Projects</h3>
-      <p>Bring VibeCrew into an existing codebase: automated code auditing, convention extraction, design system derivation, and backlog mapping.</p>
-      <div class="card-arrow">Read more &rarr;</div>
-    </a>
-
-    <a href="workflow.html" class="page-card">
-      <div class="page-card-icon red">&#9654;</div>
-      <h3>Core Workflow</h3>
-      <p>The two-tier development lifecycle, 6-phase feature cycle, Vibe Score system, plus advanced features, personalization, and efficiency tips.</p>
-      <div class="card-arrow">Read more &rarr;</div>
-    </a>
-
-    <a href="dashboard.html" class="page-card">
-      <div class="page-card-icon blue">&#9636;</div>
-      <h3>Vibe Dashboard</h3>
-      <p>Browse your project metrics in the browser: feature Kanban, session stats, Vibe Score trends, test coverage, achievements, and settings.</p>
-      <div class="card-arrow">Learn more &rarr;</div>
-    </a>
-
-    <a href="example-session.html" class="page-card">
-      <div class="page-card-icon red">&#9654;</div>
-      <h3>Example Session</h3>
-      <p>A concrete walkthrough: terminal setup, Day 1 foundation, planning sessions, building features, multi-tab workflows, capturing ideas, and a full week timeline.</p>
-      <div class="card-arrow">See the example &rarr;</div>
-    </a>
-
-    <a href="architecture.html" class="page-card">
-      <div class="page-card-icon purple">&#9632;</div>
-      <h3>Architecture Deep Dive</h3>
-      <p>The 13-agent system, hook enforcement layer, status bar, interrupt protocol, phase gate, Vibe Score, slash commands, state management, and VitePress dashboard.</p>
-      <div class="card-arrow">Read more &rarr;</div>
-    </a>
-
-    <a href="warp.html" class="page-card">
-      <div class="page-card-icon blue">&#9000;</div>
-      <h3>Warp Tips &amp; Tricks</h3>
-      <p>Optimize your Warp Terminal for VibeCrew: window layouts, Launch Configurations, keyboard shortcuts, Warp Drive, Notebooks, themes, and more.</p>
-      <div class="card-arrow">Explore tips &rarr;</div>
-    </a>
-
-    <a href="releases.html" class="page-card">
-      <div class="page-card-icon green">&#9998;</div>
-      <h3>Release Notes</h3>
-      <p>Complete changelog for all VibeCrew versions: v1.0.0 through v1.6.0. Every new feature, agent, script, and configuration change documented.</p>
-      <div class="card-arrow">View changelog &rarr;</div>
-    </a>
-  </div>
-
-</div>
-
-<!-- ============ FOOTER ============ -->
-<footer class="footer">
-  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
-  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
-</footer>
-</div>
-
-</body>
-</html>
+  // Auto-inject copy buttons on any pre without one
+  document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+    if (pre.classList.contains('mermaid')) return;
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.setAttribute('aria-label', 'Copy to clipboard');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    pre.style.position = 'relative';
+    pre.appendChild(btn);
+  });
+</script>

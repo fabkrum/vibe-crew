@@ -1,0 +1,177 @@
+---
+---
+
+<div class="profile-selector" id="profile-selector">
+  <h3>Find Your Profile Preset</h3>
+  <p>Answer 3 questions to find the best starting preset for you.</p>
+
+  <div class="ps-step" data-step="1">
+    <p class="ps-question"><strong>1.</strong> What's your coding experience?</p>
+    <div class="ps-options">
+      <button class="ps-btn" data-value="dev">I write code regularly</button>
+      <button class="ps-btn" data-value="some">I've written some code</button>
+      <button class="ps-btn" data-value="none">I don't write code</button>
+    </div>
+  </div>
+
+  <div class="ps-step hidden" data-step="2">
+    <p class="ps-question"><strong>2.</strong> How much control do you want?</p>
+    <div class="ps-options">
+      <button class="ps-btn" data-value="auto">Let VibeCrew handle everything</button>
+      <button class="ps-btn" data-value="check">Check in at key milestones</button>
+      <button class="ps-btn" data-value="collab">Collaborate on every decision</button>
+    </div>
+  </div>
+
+  <div class="ps-step hidden" data-step="3">
+    <p class="ps-question"><strong>3.</strong> What's your primary goal?</p>
+    <div class="ps-options">
+      <button class="ps-btn" data-value="ship">Ship features fast</button>
+      <button class="ps-btn" data-value="learn">Learn while building</button>
+      <button class="ps-btn" data-value="mvp">Build an MVP for my idea</button>
+    </div>
+  </div>
+
+  <div class="ps-result hidden" id="ps-result">
+    <div class="ps-result-card">
+      <div class="ps-result-icon" id="ps-result-icon"></div>
+      <div>
+        <h4 id="ps-result-name"></h4>
+        <p id="ps-result-desc"></p>
+        <p style="margin-top: 0.75rem;"><code>/profile</code> &rarr; select this preset to get started.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-selector {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .profile-selector h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .ps-step.hidden,
+  .ps-result.hidden {
+    display: none;
+  }
+
+  .ps-question {
+    margin-bottom: 0.75rem;
+    color: var(--color-text);
+  }
+
+  .ps-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .ps-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+  }
+
+  .ps-btn:hover {
+    border-color: var(--color-accent-dim);
+    color: var(--color-text);
+  }
+
+  .ps-btn.selected {
+    background: var(--color-accent-bg);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .ps-result-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-accent-bg);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: var(--radius-sm);
+    align-items: flex-start;
+  }
+
+  .ps-result-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .ps-result-card h4 {
+    margin: 0 0 0.25rem;
+    color: var(--color-accent);
+  }
+
+  .ps-result-card p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var answers = {};
+    var steps = document.querySelectorAll('.ps-step');
+    var result = document.getElementById('ps-result');
+
+    document.getElementById('profile-selector').addEventListener('click', function(e) {
+      var btn = e.target.closest('.ps-btn');
+      if (!btn) return;
+
+      var step = btn.closest('.ps-step');
+      var stepNum = parseInt(step.getAttribute('data-step'));
+
+      // Mark selected
+      step.querySelectorAll('.ps-btn').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      answers[stepNum] = btn.getAttribute('data-value');
+
+      // Show next step or result
+      if (stepNum < 3) {
+        var next = document.querySelector('[data-step="' + (stepNum + 1) + '"]');
+        if (next) next.classList.remove('hidden');
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult() {
+      var presets = {
+        builder: { name: 'Builder', icon: '&#9881;', desc: 'Optimized for experienced developers. Full autonomy, minimal explanations, auto-merge PRs.' },
+        explorer: { name: 'Explorer', icon: '&#128218;', desc: 'Optimized for learners. Inline explanations, reference docs, collaborative decision-making.' },
+        founder: { name: 'Founder', icon: '&#127942;', desc: 'Optimized for non-technical users. Educational verbosity, supervised autonomy, detailed walkthroughs.' },
+      };
+
+      var preset;
+      if (answers[1] === 'none' || answers[3] === 'mvp') {
+        preset = 'founder';
+      } else if (answers[3] === 'learn' || answers[1] === 'some') {
+        preset = 'explorer';
+      } else {
+        preset = 'builder';
+      }
+
+      var p = presets[preset];
+      document.getElementById('ps-result-icon').innerHTML = p.icon;
+      document.getElementById('ps-result-name').textContent = p.name + ' Preset';
+      document.getElementById('ps-result-desc').textContent = p.desc;
+      result.classList.remove('hidden');
+    }
+  })();
+</script>

@@ -1,0 +1,19 @@
+{
+  "name": "vibecrew-docs",
+  "type": "module",
+  "version": "1.7.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && npx pagefind --site ../docs",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.5.0",
+    "@astrojs/sitemap": "^3.3.0"
+  },
+  "devDependencies": {
+    "@pagefind/default-ui": "^1.3.0",
+    "pagefind": "^1.3.0"
+  }
+}

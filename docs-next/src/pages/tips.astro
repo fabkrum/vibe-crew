@@ -1,0 +1,276 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import TableWrap from '../components/TableWrap.astro';
+---
+
+<DocsLayout title="Tips & Troubleshooting" sectionLabel="Best Practices" activeSlug="tips">
+
+    <div class="toc">
+      <h3>On This Page</h3>
+      <ol>
+        <li><a href="#efficiency">Maximizing Efficiency</a></li>
+        <li><a href="#system-review">System Review &amp; Cross-Project Telemetry</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+      </ol>
+    </div>
+
+    <section class="section" id="efficiency">
+      <span class="section-label">Best Practices</span>
+      <h2>Maximizing Efficiency</h2>
+      <p>VibeCrew is designed to make each session more efficient than the last. Here's how to get the most out of the system and <em>why</em> each practice matters.</p>
+
+      <h3>Context Window Discipline</h3>
+      <p>VibeCrew targets <strong>&lt;50% context usage</strong> per session. Three mechanisms enforce this automatically:</p>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon green">60%</div>
+          <h4>Warning at 60%</h4>
+          <p><code>check-context.sh</code> emits a warning. Start thinking about wrapping up. Commit working code.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon amber">80%</div>
+          <h4>Critical at 80%</h4>
+          <p>Stronger warning. Commit and run <code>/wrap</code>. Consider delegating remaining work to a sub-agent.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon red">90%</div>
+          <h4>Danger at 90%</h4>
+          <p>Agent quality severely degraded. Immediately run <code>/wrap</code>. Do not attempt complex operations.</p>
+        </div>
+      </div>
+      <p>When context compaction occurs, <code>compact-reinject.sh</code> automatically re-injects the current project state, active feature, and phase &mdash; so you don&rsquo;t lose context on what you were working on.</p>
+
+      <h3>Token Efficiency</h3>
+      <div class="card-grid">
+        <div class="card">
+          <h4>Use Context7 for everything</h4>
+          <p>This is consistently the single biggest token saver. Every time you paste documentation into chat, you burn ~1,500 tokens that Context7 could fetch on-demand. The Performance Coach will flag this &mdash; listen to it.</p>
+        </div>
+        <div class="card">
+          <h4>Write clear initial prompts</h4>
+          <p>Prompt churn (-5 points each) comes from vague instructions. Spend 30 seconds writing a precise prompt instead of 3 follow-up corrections. The first prompt is the cheapest prompt.</p>
+        </div>
+        <div class="card">
+          <h4>Respect context warnings</h4>
+          <p>At 60%: start thinking about wrapping. At 80%: definitely wrap. Pushing to 100% forces a /clear and loses all accumulated understanding. A fresh context + CLAUDE.md = fast restart.</p>
+        </div>
+        <div class="card">
+          <h4>Let agents run in isolation</h4>
+          <p>Stack Scout, Builder, and Code Simplifier run in separate worktree context windows. Don&rsquo;t duplicate their work in the main session. Their research tokens never touch your context.</p>
+        </div>
+      </div>
+
+      <h3>Workflow Efficiency</h3>
+      <div class="card-grid">
+        <div class="card">
+          <h4>Always /wrap</h4>
+          <p>Never close the terminal without wrapping. The session log feeds the learning system, the commit preserves your work, and the Vibe Score identifies improvements. Skipping /wrap means the session is invisible.</p>
+        </div>
+        <div class="card">
+          <h4>Use /idea aggressively</h4>
+          <p>Mid-feature inspiration should be captured, not pursued. /idea takes 1 second and produces 1 line of output. The idea is safe in the backlog. Your flow is preserved.</p>
+        </div>
+        <div class="card">
+          <h4>Trust the phase gate</h4>
+          <p>It feels restrictive at first. But the 15&ndash;30 minutes spent on the foundation prevents hours of rework from wrong architectural assumptions. Every seasoned VibeCrew user says the same thing: "I'm glad it forced me to plan."</p>
+        </div>
+        <div class="card">
+          <h4>Review CLAUDE.md monthly</h4>
+          <p>Remove stale rules, consolidate duplicates, promote critical rules to the top. The Performance Coach adds rules &mdash; you curate them. A well-maintained CLAUDE.md is the most powerful file in your project.</p>
+        </div>
+      </div>
+
+      <h3>A Typical Day</h3>
+      <pre><code># Morning — start fresh
+claude
+# Session startup agent runs, shows where you left off
+
+/status
+# Dashboard: 2/4 features done, Trip Creation in progress
+
+# Continue where you left off
+"Continue implementing the itinerary builder component"
+
+# Mid-session inspiration
+/idea "add drag-and-drop reordering to itinerary items"
+
+# Quick quality check
+/check
+
+# End of day
+/wrap
+# Vibe Score: 91/100. Coaching + commit + session log.</code></pre>
+
+      <h3>Common Anti-Patterns to Avoid</h3>
+      <TableWrap>
+        <table>
+          <thead>
+            <tr><th>Anti-Pattern</th><th>Consequence</th><th>Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Skipping /wrap</strong></td>
+              <td>No session log, no Vibe Score, no CLAUDE.md improvements, uncommitted work</td>
+              <td>Always wrap. Make it a habit.</td>
+            </tr>
+            <tr>
+              <td><strong>Ignoring the phase gate</strong></td>
+              <td>AI makes wrong assumptions about stack, design, patterns</td>
+              <td>Complete /new-project fully before any feature work</td>
+            </tr>
+            <tr>
+              <td><strong>Pasting docs into chat</strong></td>
+              <td>1,500+ tokens wasted per paste, context fills faster</td>
+              <td>Use Context7 MCP &mdash; it's configured and ready</td>
+            </tr>
+            <tr>
+              <td><strong>Starting features without specs</strong></td>
+              <td>Feature Developer guesses at requirements, rework later</td>
+              <td>Always run /plan-features or write a spec at /new-feature</td>
+            </tr>
+            <tr>
+              <td><strong>Pushing past 80% context</strong></td>
+              <td>Context exhaustion, /clear, lose all session state</td>
+              <td>Wrap at 80%. Fresh context + CLAUDE.md = fast restart</td>
+            </tr>
+            <tr>
+              <td><strong>Hardcoding design values</strong></td>
+              <td>Inconsistent UI, wasted tokens fixing later</td>
+              <td>Always reference design-system.css tokens</td>
+            </tr>
+          </tbody>
+        </table>
+      </TableWrap>
+
+      <h3>For Teams</h3>
+      <ul>
+        <li><strong>One person owns the foundation.</strong> The project lead runs <code>/new-project</code> and establishes the TDR. Don't debate architecture in separate sessions.</li>
+        <li><strong>Share the backlog.</strong> Use <code>/plan-features</code> as a team exercise. Commit <code>backlog.json</code> so everyone works from the same list.</li>
+        <li><strong>Commit Vibe Scores.</strong> Make scores visible to the team &mdash; not as competition, but as a shared learning signal for retrospectives.</li>
+        <li><strong>Standardize on Warp.</strong> The deep-link notifications are worth it when running parallel sessions across a team.</li>
+        <li><strong>Do score retros.</strong> Even 15 minutes every two weeks reviewing score trends and adding team rules to CLAUDE.md compounds into massive efficiency gains.</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section class="section" id="system-review">
+      <span class="section-label">Meta</span>
+      <h2>System Review &amp; Cross-Project Telemetry</h2>
+      <p>The <code>/system-review</code> command is a meta-level audit that evaluates the VibeCrew plugin itself. Unlike other commands, it operates at the plugin level and should be run from the VibeCrew repository &mdash; not from a user project.</p>
+
+      <h3>Cross-Project Telemetry Flow</h3>
+      <div class="flow">
+<span class="muted">Project A (.vibecrew/)</span>  ──┐
+<span class="muted">Project B (.vibecrew/)</span>  ──┼── <span class="highlight">collect-telemetry.sh</span> ──▶ telemetry/aggregate.json
+<span class="muted">Project C (.vibecrew/)</span>  ──┘                              │
+                                                        ▼
+                           <span class="highlight">/system-review</span> (from VibeCrew repo)
+                              │
+                              ├── Internal audit (plugin files)
+                              ├── Telemetry analysis (cross-project)
+                              ├── External research (WebSearch)
+                              │
+                              ▼
+                      reviews/system-review-&#123;timestamp&#125;.md
+                      reviews/system-review-&#123;timestamp&#125;.json</div>
+
+      <h3>What Gets Analyzed</h3>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon purple">1</div>
+          <h4>Internal Audit</h4>
+          <p>Model routing, context budgets, pattern consistency, unreferenced components</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">2</div>
+          <h4>Telemetry Analysis</h4>
+          <p>Usage patterns, quality trends, cost analysis, systemic friction across projects</p>
+        </div>
+        <div class="card">
+          <div class="card-icon blue">3</div>
+          <h4>External Research</h4>
+          <p>Anthropic updates, new MCP servers, community patterns, competitor analysis</p>
+        </div>
+        <div class="card">
+          <div class="card-icon amber">4</div>
+          <h4>Proposals</h4>
+          <p>Prioritized improvements with effort estimates and implementation sketches</p>
+        </div>
+      </div>
+
+      <h3>Running a System Review</h3>
+      <ol class="steps">
+        <li><strong>Navigate to the VibeCrew repo</strong> &mdash; <code>/system-review</code> operates at the plugin level, not from user projects.</li>
+        <li><strong>Run <code>/system-review</code></strong> &mdash; the skill collects plugin stats, aggregates telemetry from all registered projects, and launches the System Reviewer agent.</li>
+        <li><strong>Review the output</strong> &mdash; the terminal displays a summary with finding counts and top 5 proposals. The full report is saved as markdown and JSON.</li>
+        <li><strong>Compare with previous reviews</strong> &mdash; if a previous review exists, new/recurring/resolved findings are automatically identified.</li>
+      </ol>
+
+      <h3>Privacy &amp; Anonymization</h3>
+      <p>All telemetry is strictly local. Projects are identified by anonymous aliases (project-001, etc.). No project names, file paths, code, or credentials are ever included in telemetry data or review reports.</p>
+    </section>
+
+    <hr>
+
+    <section class="section" id="troubleshooting">
+      <span class="section-label">Help</span>
+      <h2>Troubleshooting</h2>
+      <p>Common issues related to advanced workflows, gamification, and efficiency features.</p>
+
+      <h3>Vibe Score seems inaccurate</h3>
+      <ul>
+        <li><strong>New projects:</strong> Scores are less meaningful in the first few sessions as the system establishes baselines</li>
+        <li><strong>Complex features:</strong> Large features naturally have more tool calls and corrections &mdash; the score accounts for this but may seem low</li>
+        <li><strong>Override deductions:</strong> If the coach flags something unavoidable, say so during the coaching dialogue &mdash; it factors into the next proposal</li>
+      </ul>
+
+      <h3>/heal can't fetch CI logs</h3>
+      <ol>
+        <li>Verify GitHub CLI is authenticated: <code>gh auth status</code></li>
+        <li>Ensure the repo has a remote: <code>git remote -v</code></li>
+        <li>Check that a recent CI run exists: <code>gh run list --limit 5</code></li>
+        <li>If the failure is on a different branch, switch to it first</li>
+      </ol>
+
+      <h3>/simplify shows no suggestions</h3>
+      <ul>
+        <li>The agent only analyzes files changed on the current feature branch vs. the default branch</li>
+        <li>Verify you're on a feature branch (not main/master): <code>git branch --show-current</code></li>
+        <li>Check that source files were changed (config and docs are excluded)</li>
+        <li>The minimum files threshold is configurable in <code>.vibecrew/config.json</code> under <code>simplify.min_files_for_analysis</code></li>
+      </ul>
+
+      <h3>/replay can't find eligible sessions</h3>
+      <ul>
+        <li>Only sessions with a Vibe Score &ge; 70 are eligible for template extraction</li>
+        <li>Verify session logs exist in <code>.vibecrew/sessions/</code> and score files in <code>.vibecrew/scores/</code></li>
+        <li>Run <code>/wrap</code> at the end of sessions to generate the required data</li>
+      </ul>
+
+      <h3>Gamification not showing after /wrap</h3>
+      <ol>
+        <li>Check that gamification is enabled: <code>jq '.gamification.enabled' .vibecrew/config.json</code> should return <code>true</code></li>
+        <li>Verify <code>.vibecrew/gamification.json</code> exists. If not, run <code>/setup</code> to create it</li>
+        <li>Check that the gamification scripts are executable: <code>ls -la scripts/award-xp.sh</code></li>
+        <li>Run a script manually to debug: <code>bash scripts/award-xp.sh</code> &mdash; it outputs JSON with the XP breakdown</li>
+      </ol>
+
+      <h3>/quiz shows "Unlocks at Level 3"</h3>
+      <ul>
+        <li>The <code>/quiz</code> command requires Level 3 (approximately 3&ndash;4 completed sessions)</li>
+        <li>Check your level: <code>jq '.level' .vibecrew/gamification.json</code></li>
+        <li>Keep running <code>/wrap</code> at the end of sessions to earn XP and level up</li>
+      </ul>
+
+      <h3>Streak broke unexpectedly</h3>
+      <ul>
+        <li>Streaks increment on calendar days where <code>/wrap</code> runs. If you didn&rsquo;t wrap, the day doesn&rsquo;t count</li>
+        <li>Weekends never break streaks. Check if you missed a <strong>weekday</strong></li>
+        <li>Grace days reset on the 1st of each month: <code>jq '.streak.grace_days_remaining' .vibecrew/gamification.json</code></li>
+        <li>If the streak counter seems wrong, check <code>.streak.last_session_date</code> in gamification.json</li>
+      </ul>
+    </section>
+
+</DocsLayout>

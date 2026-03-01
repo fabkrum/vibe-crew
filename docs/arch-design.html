@@ -1,387 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeCrew — Design &amp; Operations</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-:root {
-  --color-bg: #0a0a0b;
-  --color-surface: #111113;
-  --color-surface-2: #18181b;
-  --color-surface-3: #1e1e22;
-  --color-border: #27272a;
-  --color-border-subtle: #1e1e22;
-  --color-text: #fafafa;
-  --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
-  --color-accent: #a78bfa;
-  --color-accent-dim: #7c3aed;
-  --color-accent-bg: rgba(167, 139, 250, 0.08);
-  --color-green: #4ade80;
-  --color-green-dim: rgba(74, 222, 128, 0.1);
-  --color-amber: #fbbf24;
-  --color-amber-dim: rgba(251, 191, 36, 0.1);
-  --color-red: #f87171;
-  --color-red-dim: rgba(248, 113, 113, 0.1);
-  --color-blue: #60a5fa;
-  --color-blue-dim: rgba(96, 165, 250, 0.1);
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-xs: 6px;
-  --max-width: 860px;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Design &amp; Operations</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.steps[data-astro-cid-uafpm6m6]{counter-reset:step;list-style:none;padding-left:0}.steps[data-astro-cid-uafpm6m6] li[data-astro-cid-uafpm6m6]{counter-increment:step;position:relative;padding-left:3.5rem;margin-bottom:2rem;min-height:2.25rem}.steps[data-astro-cid-uafpm6m6] li[data-astro-cid-uafpm6m6]:before{content:counter(step);position:absolute;left:0;top:0;width:2.25rem;height:2.25rem;background:var(--color-accent-bg);border:1px solid rgba(167,139,250,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--color-accent)}.steps[data-astro-cid-uafpm6m6] li[data-astro-cid-uafpm6m6] h4[data-astro-cid-uafpm6m6]{margin-top:0;margin-bottom:.25rem}.steps[data-astro-cid-uafpm6m6] li[data-astro-cid-uafpm6m6] p[data-astro-cid-uafpm6m6]{font-size:.92rem;margin-bottom:.5rem}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.C1_FxMSw.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link active"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Architecture</span>  <span class="separator">/</span> <span>Design &amp; Operations</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Architecture"},{"@type":"ListItem","position":3,"name":"Design & Operations"}]}</script> <span class="section-label">Architecture</span>  <section class="section" id="design-principles" data-astro-cid-uafpm6m6> <span class="section-label" data-astro-cid-uafpm6m6>Philosophy</span> <h2 data-astro-cid-uafpm6m6>Design Principles</h2> <p data-astro-cid-uafpm6m6>Every architectural decision in VibeCrew follows these principles. Understanding them explains <em data-astro-cid-uafpm6m6>why</em> the system works the way it does. These aren't just technical choices &mdash; they're the philosophy behind VibeCrew. If you ever wonder "why does it work this way?", the answer is usually one of these principles.</p> <div class="card-grid" data-astro-cid-uafpm6m6> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon purple" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Fail-open design</h4> <p data-astro-cid-uafpm6m6>All scripts exit 0 on error. A failing hook script never blocks your session &mdash; it silently degrades. The system reports the problem but lets you keep working. Sessions are too expensive to block with infrastructure issues.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon green" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Hooks over suggestions</h4> <p data-astro-cid-uafpm6m6>Rules are enforced via deterministic bash scripts (zero tokens) rather than relying on the model to remember instructions. A hook that exits 2 <em data-astro-cid-uafpm6m6>physically blocks</em> the operation. An instruction in CLAUDE.md can be forgotten or misinterpreted.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon blue" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Atomic state mutations</h4> <p data-astro-cid-uafpm6m6>All state mutations use the temp file + <code data-astro-cid-uafpm6m6>mv</code> pattern. Scripts write to <code data-astro-cid-uafpm6m6>file.tmp</code>, then <code data-astro-cid-uafpm6m6>mv file.tmp file.json</code>. This prevents corruption from partial writes &mdash; critical when multiple agents may update state concurrently.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon amber" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Advisory locking</h4> <p data-astro-cid-uafpm6m6>Multi-agent state access uses <code data-astro-cid-uafpm6m6>mkdir</code>-based advisory locks with 30&ndash;60 second timeouts. If a lock is stale (crashed process), <code data-astro-cid-uafpm6m6>error-recovery.sh</code> cleans it up at session start. No deadlocks possible.</p> </div> </div> <div class="card-grid" data-astro-cid-uafpm6m6> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon red" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Research before code</h4> <p data-astro-cid-uafpm6m6>The phase gate enforces architecture decisions (TDR) before any source code writes are allowed. The 15&ndash;30 minutes spent on the foundation prevents hours of rework from wrong assumptions.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon purple" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Human attention is the bottleneck</h4> <p data-astro-cid-uafpm6m6>The system stays completely silent during normal operation. It interrupts only when blocked, complete, or failed. Every notification is actionable &mdash; no noise, no status updates, no progress bars.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon green" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Context window discipline</h4> <p data-astro-cid-uafpm6m6>Target &lt;50% context usage. Worktree agents isolate expensive research. MCP servers replace pasting documentation. Warnings at 60% and 80%. Compaction reinject preserves project awareness.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon blue" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>Self-improving</h4> <p data-astro-cid-uafpm6m6>Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules. The system gets more efficient with every session. Mistakes are identified, codified, and prevented &mdash; recursively.</p> </div> </div> </section> <hr data-astro-cid-uafpm6m6> <section class="section" id="dashboard" data-astro-cid-uafpm6m6> <span class="section-label" data-astro-cid-uafpm6m6>Dashboard</span> <h2 data-astro-cid-uafpm6m6>VitePress Documentation Dashboard</h2> <div class="callout tip"> <div class="callout-title">What is the dashboard?</div>  <p data-astro-cid-uafpm6m6>The dashboard is a <strong data-astro-cid-uafpm6m6>visual website that VibeCrew generates for your project</strong>. It turns all of your session data (scores, features, costs, agent activity) into charts, progress bars, and a kanban board. Think of it as a project management tool that builds itself automatically from your work. You can open it in your browser to see the big picture: how many features are done, how your quality scores are trending, which agents are doing the most work, and how your feature backlog is progressing. Teams find it especially useful for weekly retrospectives.</p>  </div> <p data-astro-cid-uafpm6m6>VibeCrew generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 6 interactive Vue dashboard components that visualize cross-session data from <code data-astro-cid-uafpm6m6>.vibecrew/</code>.</p> <div class="card-grid" data-astro-cid-uafpm6m6> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon purple" data-astro-cid-uafpm6m6>&#9650;</div> <h4 data-astro-cid-uafpm6m6>ScoreTrend.vue</h4> <p data-astro-cid-uafpm6m6>SVG line chart showing Vibe Score over the last 20 sessions with a trend indicator and target line at 80. Powered by <code data-astro-cid-uafpm6m6>scores.data.ts</code>.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon blue" data-astro-cid-uafpm6m6>&#9632;</div> <h4 data-astro-cid-uafpm6m6>TokenBreakdown.vue</h4> <p data-astro-cid-uafpm6m6>Stacked horizontal bars showing input, cache, and output tokens per session with cost overlay. Reveals cache utilization trends.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon green" data-astro-cid-uafpm6m6>&#9675;</div> <h4 data-astro-cid-uafpm6m6>CoverageGauge.vue</h4> <p data-astro-cid-uafpm6m6>SVG radial gauge displaying test coverage percentage with green/yellow/red color bands.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon amber" data-astro-cid-uafpm6m6>&#9776;</div> <h4 data-astro-cid-uafpm6m6>FeatureProgress.vue</h4> <p data-astro-cid-uafpm6m6>Horizontal bars showing features by Kanban column (planned, in-progress, done) with velocity metric calculated from session history.</p> </div> </div> <div class="card-grid" data-astro-cid-uafpm6m6> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon amber" data-astro-cid-uafpm6m6>&#9881;</div> <h4 data-astro-cid-uafpm6m6>SettingsPanel.vue</h4> <p data-astro-cid-uafpm6m6>Interactive configuration editor with radio pills, toggles, and number inputs. Reads and writes <code data-astro-cid-uafpm6m6>.vibecrew/config.json</code> including all user profile dimensions. Powered by <code data-astro-cid-uafpm6m6>config.data.ts</code>.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon red" data-astro-cid-uafpm6m6>&#9881;</div> <h4 data-astro-cid-uafpm6m6>AgentActivityPanel.vue</h4> <p data-astro-cid-uafpm6m6>Agent invocation frequency bars and a session timeline with agent chips. Shows which agents are most active and their token consumption. Powered by <code data-astro-cid-uafpm6m6>agents.data.ts</code>.</p> </div> <div class="card" data-astro-cid-uafpm6m6> <div class="card-icon purple" data-astro-cid-uafpm6m6>&#9654;</div> <h4 data-astro-cid-uafpm6m6>KanbanBoard.vue</h4> <p data-astro-cid-uafpm6m6>Interactive kanban view of the feature backlog from <code data-astro-cid-uafpm6m6>.vibecrew/backlog.json</code>. Features move through columns as they progress through the Tier 2 cycle.</p> </div> </div> <h3 data-astro-cid-uafpm6m6>Dashboard pages</h3> <div class="table-wrap">  <table data-astro-cid-uafpm6m6> <thead data-astro-cid-uafpm6m6> <tr data-astro-cid-uafpm6m6><th data-astro-cid-uafpm6m6>Page</th><th data-astro-cid-uafpm6m6>Components</th><th data-astro-cid-uafpm6m6>Data Source</th></tr> </thead> <tbody data-astro-cid-uafpm6m6> <tr data-astro-cid-uafpm6m6><td data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Trends</strong> (<code data-astro-cid-uafpm6m6>trends.md</code>)</td><td data-astro-cid-uafpm6m6>ScoreTrend, TokenBreakdown</td><td data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>scores.data.ts</code>, <code data-astro-cid-uafpm6m6>sessions.data.ts</code></td></tr> <tr data-astro-cid-uafpm6m6><td data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Coverage</strong> (<code data-astro-cid-uafpm6m6>coverage.md</code>)</td><td data-astro-cid-uafpm6m6>CoverageGauge, FeatureProgress</td><td data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>sessions.data.ts</code>, <code data-astro-cid-uafpm6m6>backlog.data.ts</code></td></tr> <tr data-astro-cid-uafpm6m6><td data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Stats</strong> (<code data-astro-cid-uafpm6m6>stats.md</code>)</td><td data-astro-cid-uafpm6m6>StatsPage (composite)</td><td data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>sessions.data.ts</code></td></tr> <tr data-astro-cid-uafpm6m6><td data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Kanban</strong> (<code data-astro-cid-uafpm6m6>kanban.md</code>)</td><td data-astro-cid-uafpm6m6>KanbanBoard</td><td data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>backlog.data.ts</code></td></tr> <tr data-astro-cid-uafpm6m6><td data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Settings</strong> (<code data-astro-cid-uafpm6m6>settings.md</code>)</td><td data-astro-cid-uafpm6m6>SettingsPanel</td><td data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>config.data.ts</code></td></tr> <tr data-astro-cid-uafpm6m6><td data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Welcome</strong> (<code data-astro-cid-uafpm6m6>system/welcome.md</code>)</td><td data-astro-cid-uafpm6m6>Guided first-session flow</td><td data-astro-cid-uafpm6m6>&mdash;</td></tr> <tr data-astro-cid-uafpm6m6><td data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Commands</strong> (<code data-astro-cid-uafpm6m6>system/commands.md</code>)</td><td data-astro-cid-uafpm6m6>Full slash command reference</td><td data-astro-cid-uafpm6m6>&mdash;</td></tr> </tbody> </table>  </div> <p data-astro-cid-uafpm6m6>The <code data-astro-cid-uafpm6m6>scripts/update-docs.sh</code> script copies live session data into the <code data-astro-cid-uafpm6m6>docs-site/</code> directory for static builds. The Doc Generator agent (<code data-astro-cid-uafpm6m6>/wrap</code>) updates the CHANGELOG, regenerates the VitePress sidebar via <code data-astro-cid-uafpm6m6>rebuild-sidebar.sh</code>, and produces feature documentation from backlog specs.</p> <div class="callout tip"> <div class="callout-title">Dashboard as a team tool</div>  <p data-astro-cid-uafpm6m6>Deploy the docs site to your internal infrastructure. The score trend chart and agent activity panel are especially valuable for team retrospectives &mdash; they reveal patterns that individual developers might miss.</p>  </div> </section> <section class="section" id="telemetry" data-astro-cid-uafpm6m6> <span class="section-label" data-astro-cid-uafpm6m6>Meta</span> <h2 data-astro-cid-uafpm6m6>Cross-Project Telemetry</h2> <p data-astro-cid-uafpm6m6>VibeCrew includes a cross-project telemetry system for self-improvement. Projects automatically register with the central plugin during <code data-astro-cid-uafpm6m6>/setup</code>, contributing anonymized performance data.</p> <h3 data-astro-cid-uafpm6m6>How It Works</h3> <ol class="steps" data-astro-cid-uafpm6m6> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Auto-Registration</strong> &mdash; During <code data-astro-cid-uafpm6m6>/setup</code>, each project registers with the central VibeCrew plugin. An anonymous alias (project-001, project-002, etc.) replaces the real project path.</li> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Data Collection</strong> &mdash; The <code data-astro-cid-uafpm6m6>collect-telemetry.sh</code> script reads <code data-astro-cid-uafpm6m6>.vibecrew/</code> data from all registered projects: Vibe Scores, agent usage, session costs, MCP adoption, test metrics, and mutation patterns.</li> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Aggregation</strong> &mdash; Anonymized data is aggregated into <code data-astro-cid-uafpm6m6>telemetry/aggregate.json</code> at the plugin root.</li> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Analysis</strong> &mdash; The System Reviewer agent (via <code data-astro-cid-uafpm6m6>/system-review</code>) analyzes the aggregate to identify cross-project patterns, unused components, and systemic friction.</li> </ol> <h3 data-astro-cid-uafpm6m6>Privacy</h3> <p data-astro-cid-uafpm6m6>Telemetry is strictly local &mdash; no data leaves your machine. Project names, file paths, code, and credentials are never included. Only aggregate performance metrics are collected, keyed by anonymous aliases.</p> <h3 data-astro-cid-uafpm6m6>The <code data-astro-cid-uafpm6m6>/system-review</code> Command</h3> <p data-astro-cid-uafpm6m6>Run from the VibeCrew repository to trigger a comprehensive plugin audit:</p> <ul data-astro-cid-uafpm6m6> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Internal audit</strong> &mdash; model routing, context budgets, pattern consistency, unused components</li> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Telemetry analysis</strong> &mdash; usage patterns, quality trends, cost analysis, systemic issues</li> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>External research</strong> &mdash; Anthropic updates, new MCP servers, community patterns</li> <li data-astro-cid-uafpm6m6><strong data-astro-cid-uafpm6m6>Proposals</strong> &mdash; prioritized improvement recommendations with effort estimates</li> </ul> <p data-astro-cid-uafpm6m6>Reports are saved to <code data-astro-cid-uafpm6m6>reviews/</code> in both markdown and JSON format.</p> </section> <hr data-astro-cid-uafpm6m6> <section class="section" id="troubleshooting" data-astro-cid-uafpm6m6> <span class="section-label" data-astro-cid-uafpm6m6>Help</span> <h2 data-astro-cid-uafpm6m6>Troubleshooting</h2> <h3 data-astro-cid-uafpm6m6>Stale locks or corrupted state</h3> <ol data-astro-cid-uafpm6m6> <li data-astro-cid-uafpm6m6>Run <code data-astro-cid-uafpm6m6>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li> <li data-astro-cid-uafpm6m6>This resets any in-progress tasks that were interrupted by a crashed session</li> </ol> <h3 data-astro-cid-uafpm6m6>Git conflicts in .vibecrew/</h3> <ul data-astro-cid-uafpm6m6> <li data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>state.json</code>: Resolve by keeping the most recent active feature</li> <li data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>backlog.json</code>: Merge the feature arrays</li> <li data-astro-cid-uafpm6m6><code data-astro-cid-uafpm6m6>scores/</code> and <code data-astro-cid-uafpm6m6>sessions/</code>: Rarely conflict &mdash; they're timestamped per-developer</li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/arch-reference.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Commands &amp; State</span></a><a href="/vibe-crew/dashboard.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Vibe Dashboard</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
 
-/* ---- SIDEBAR ---- */
-.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-.sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
-.sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
-.sidebar-header .nav-brand span { color: var(--color-accent); }
-.sidebar-nav { padding: 1rem 0; }
-.sidebar-group { padding: 0 0 0.5rem; }
-.sidebar-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; cursor: pointer; transition: color 0.15s; }
-.sidebar-label:hover { color: var(--color-text-secondary); }
-.sidebar-label::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform 0.2s; }
-.sidebar-group.collapsed .sidebar-label::after { transform: rotate(-90deg); }
-.sidebar-group.collapsed .sidebar-link { display: none; }
-.sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
-.sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
-.sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
-.mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
-.mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
-.mobile-bar .nav-brand span { color: var(--color-accent); }
-.hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-.hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
-.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
-.layout { margin-left: 260px; }
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
 
-/* ---- MAIN ---- */
-.main { max-width: var(--max-width); margin: 0 auto; padding: 3rem 2rem 6rem; }
-.section { margin-bottom: 5rem; }
-.section-label { display: inline-block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: 0.75rem; }
-h2 { font-size: 1.9rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 1rem; }
-h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.75rem; margin-top: 2.5rem; }
-h4 { font-size: 1.05rem; font-weight: 650; margin-bottom: 0.5rem; margin-top: 2rem; }
-.section > p, .section > ul, .section > ol { color: var(--color-text-secondary); margin-bottom: 1.25rem; }
-p { margin-bottom: 1rem; color: var(--color-text-secondary); }
-strong { color: var(--color-text); font-weight: 600; }
-a { color: var(--color-accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-ul, ol { padding-left: 1.5rem; margin-bottom: 1.25rem; color: var(--color-text-secondary); }
-li { margin-bottom: 0.4rem; }
-li::marker { color: var(--color-text-muted); }
-code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-surface-2); padding: 0.15em 0.45em; border-radius: 4px; color: var(--color-accent); border: 1px solid var(--color-border-subtle); }
-pre { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; overflow-x: auto; margin-bottom: 1.5rem; position: relative; }
-pre code { background: none; padding: 0; border: none; color: var(--color-text-secondary); font-size: 0.85rem; line-height: 1.7; }
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
 
-/* ---- CARDS ---- */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-.card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s; }
-.card:hover { border-color: var(--color-accent-dim); }
-.card-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1rem; }
-.card-icon.purple { background: var(--color-accent-bg); }
-.card-icon.green { background: var(--color-green-dim); }
-.card-icon.amber { background: var(--color-amber-dim); }
-.card-icon.blue { background: var(--color-blue-dim); }
-.card-icon.red { background: var(--color-red-dim); }
-.card h4 { font-size: 1rem; margin-top: 0; margin-bottom: 0.5rem; color: var(--color-text); }
-.card p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0; }
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
 
-/* ---- TABLES ---- */
-.table-wrap { overflow-x: auto; margin-bottom: 1.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-thead { background: var(--color-surface-2); }
-th { text-align: left; padding: 0.75rem 1rem; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); border-bottom: 1px solid var(--color-border); white-space: nowrap; }
-td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); vertical-align: top; }
-tr:last-child td { border-bottom: none; }
-tbody tr:hover { background: var(--color-surface); }
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
 
-/* ---- CALLOUTS ---- */
-.callout { border-radius: var(--radius-sm); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid; font-size: 0.92rem; }
-.callout p { margin: 0; color: inherit; }
-.callout-title { font-weight: 700; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
-.callout.info { background: var(--color-blue-dim); border-color: rgba(96, 165, 250, 0.2); color: var(--color-blue); }
-.callout.tip { background: var(--color-green-dim); border-color: rgba(74, 222, 128, 0.2); color: var(--color-green); }
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
 
-/* ---- STEPS ---- */
-.steps { counter-reset: step; list-style: none; padding-left: 0; }
-.steps li { counter-increment: step; position: relative; padding-left: 3.5rem; margin-bottom: 2rem; min-height: 2.25rem; }
-.steps li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 2.25rem; height: 2.25rem; background: var(--color-accent-bg); border: 1px solid rgba(167, 139, 250, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: var(--color-accent); }
-.steps li h4 { margin-top: 0; margin-bottom: 0.25rem; }
-.steps li p { font-size: 0.92rem; margin-bottom: 0.5rem; }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
 
-/* ---- DIVIDER ---- */
-hr { border: none; border-top: 1px solid var(--color-border); margin: 4rem 0; }
-
-/* ---- FOOTER ---- */
-.footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border-subtle); color: var(--color-text-muted); font-size: 0.85rem; }
-
-/* ---- RESPONSIVE ---- */
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
-  body.sidebar-open .sidebar { transform: translateX(0); }
-  body.sidebar-open .sidebar-overlay { display: block; }
-  .mobile-bar { display: flex; }
-  .layout { margin-left: 0; padding-top: 52px; }
-  .main { padding: 2rem 1.25rem 4rem; }
-  .card-grid { grid-template-columns: 1fr; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.15rem; }
-  pre { padding: 1rem; }
-  .steps li { padding-left: 3rem; }
-}
-  </style>
-</head>
-<body>
-
-<div class="mobile-bar">
-  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
-  </button>
-  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-</div>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
-      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
-    </div>
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
-      <a href="setup.html" class="sidebar-link">Setup</a>
-      <a href="new-project.html" class="sidebar-link">New Project</a>
-      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
-      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
-      <a href="warp.html" class="sidebar-link">Warp</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
-      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
-      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
-      <a href="personalization.html" class="sidebar-link">Personalization</a>
-      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
-      <a href="example-session.html" class="sidebar-link">Example Session</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
-      <a href="architecture.html" class="sidebar-link">Overview</a>
-      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
-      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
-      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
-      <a href="arch-design.html" class="sidebar-link active">Design &amp; Operations</a>
-      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
-      <a href="releases.html" class="sidebar-link">Release Notes</a>
-    </div>
-  </nav>
-</aside>
-
-<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
-<script>var a=document.querySelector(".sidebar-link.active");if(a){var g=a.closest(".sidebar-group");if(g)g.classList.remove("collapsed");}</script>
-
-<div class="layout">
-<main class="main">
-
-  <section class="section" id="design-principles">
-    <span class="section-label">Philosophy</span>
-    <h2>Design Principles</h2>
-    <p>Every architectural decision in VibeCrew follows these principles. Understanding them explains <em>why</em> the system works the way it does. These aren't just technical choices &mdash; they're the philosophy behind VibeCrew. If you ever wonder "why does it work this way?", the answer is usually one of these principles.</p>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon purple">&#9632;</div>
-        <h4>Fail-open design</h4>
-        <p>All scripts exit 0 on error. A failing hook script never blocks your session &mdash; it silently degrades. The system reports the problem but lets you keep working. Sessions are too expensive to block with infrastructure issues.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon green">&#9632;</div>
-        <h4>Hooks over suggestions</h4>
-        <p>Rules are enforced via deterministic bash scripts (zero tokens) rather than relying on the model to remember instructions. A hook that exits 2 <em>physically blocks</em> the operation. An instruction in CLAUDE.md can be forgotten or misinterpreted.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">&#9632;</div>
-        <h4>Atomic state mutations</h4>
-        <p>All state mutations use the temp file + <code>mv</code> pattern. Scripts write to <code>file.tmp</code>, then <code>mv file.tmp file.json</code>. This prevents corruption from partial writes &mdash; critical when multiple agents may update state concurrently.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">&#9632;</div>
-        <h4>Advisory locking</h4>
-        <p>Multi-agent state access uses <code>mkdir</code>-based advisory locks with 30&ndash;60 second timeouts. If a lock is stale (crashed process), <code>error-recovery.sh</code> cleans it up at session start. No deadlocks possible.</p>
-      </div>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon red">&#9632;</div>
-        <h4>Research before code</h4>
-        <p>The phase gate enforces architecture decisions (TDR) before any source code writes are allowed. The 15&ndash;30 minutes spent on the foundation prevents hours of rework from wrong assumptions.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon purple">&#9632;</div>
-        <h4>Human attention is the bottleneck</h4>
-        <p>The system stays completely silent during normal operation. It interrupts only when blocked, complete, or failed. Every notification is actionable &mdash; no noise, no status updates, no progress bars.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon green">&#9632;</div>
-        <h4>Context window discipline</h4>
-        <p>Target &lt;50% context usage. Worktree agents isolate expensive research. MCP servers replace pasting documentation. Warnings at 60% and 80%. Compaction reinject preserves project awareness.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">&#9632;</div>
-        <h4>Self-improving</h4>
-        <p>Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules. The system gets more efficient with every session. Mistakes are identified, codified, and prevented &mdash; recursively.</p>
-      </div>
-    </div>
-  </section>
-
-  <hr>
-
-  <section class="section" id="dashboard">
-    <span class="section-label">Dashboard</span>
-    <h2>VitePress Documentation Dashboard</h2>
-
-    <div class="callout tip">
-      <div class="callout-title">What is the dashboard?</div>
-      <p>The dashboard is a <strong>visual website that VibeCrew generates for your project</strong>. It turns all of your session data (scores, features, costs, agent activity) into charts, progress bars, and a kanban board. Think of it as a project management tool that builds itself automatically from your work. You can open it in your browser to see the big picture: how many features are done, how your quality scores are trending, which agents are doing the most work, and how your feature backlog is progressing. Teams find it especially useful for weekly retrospectives.</p>
-    </div>
-
-    <p>VibeCrew generates a VitePress-powered documentation site for every project. Beyond static docs, it includes 6 interactive Vue dashboard components that visualize cross-session data from <code>.vibecrew/</code>.</p>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon purple">&#9650;</div>
-        <h4>ScoreTrend.vue</h4>
-        <p>SVG line chart showing Vibe Score over the last 20 sessions with a trend indicator and target line at 80. Powered by <code>scores.data.ts</code>.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">&#9632;</div>
-        <h4>TokenBreakdown.vue</h4>
-        <p>Stacked horizontal bars showing input, cache, and output tokens per session with cost overlay. Reveals cache utilization trends.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon green">&#9675;</div>
-        <h4>CoverageGauge.vue</h4>
-        <p>SVG radial gauge displaying test coverage percentage with green/yellow/red color bands.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">&#9776;</div>
-        <h4>FeatureProgress.vue</h4>
-        <p>Horizontal bars showing features by Kanban column (planned, in-progress, done) with velocity metric calculated from session history.</p>
-      </div>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon amber">&#9881;</div>
-        <h4>SettingsPanel.vue</h4>
-        <p>Interactive configuration editor with radio pills, toggles, and number inputs. Reads and writes <code>.vibecrew/config.json</code> including all user profile dimensions. Powered by <code>config.data.ts</code>.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon red">&#9881;</div>
-        <h4>AgentActivityPanel.vue</h4>
-        <p>Agent invocation frequency bars and a session timeline with agent chips. Shows which agents are most active and their token consumption. Powered by <code>agents.data.ts</code>.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon purple">&#9654;</div>
-        <h4>KanbanBoard.vue</h4>
-        <p>Interactive kanban view of the feature backlog from <code>.vibecrew/backlog.json</code>. Features move through columns as they progress through the Tier 2 cycle.</p>
-      </div>
-    </div>
-
-    <h3>Dashboard pages</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Page</th><th>Components</th><th>Data Source</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>Trends</strong> (<code>trends.md</code>)</td><td>ScoreTrend, TokenBreakdown</td><td><code>scores.data.ts</code>, <code>sessions.data.ts</code></td></tr>
-          <tr><td><strong>Coverage</strong> (<code>coverage.md</code>)</td><td>CoverageGauge, FeatureProgress</td><td><code>sessions.data.ts</code>, <code>backlog.data.ts</code></td></tr>
-          <tr><td><strong>Stats</strong> (<code>stats.md</code>)</td><td>StatsPage (composite)</td><td><code>sessions.data.ts</code></td></tr>
-          <tr><td><strong>Kanban</strong> (<code>kanban.md</code>)</td><td>KanbanBoard</td><td><code>backlog.data.ts</code></td></tr>
-          <tr><td><strong>Settings</strong> (<code>settings.md</code>)</td><td>SettingsPanel</td><td><code>config.data.ts</code></td></tr>
-          <tr><td><strong>Welcome</strong> (<code>system/welcome.md</code>)</td><td>Guided first-session flow</td><td>&mdash;</td></tr>
-          <tr><td><strong>Commands</strong> (<code>system/commands.md</code>)</td><td>Full slash command reference</td><td>&mdash;</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p>The <code>scripts/update-docs.sh</code> script copies live session data into the <code>docs-site/</code> directory for static builds. The Doc Generator agent (<code>/wrap</code>) updates the CHANGELOG, regenerates the VitePress sidebar via <code>rebuild-sidebar.sh</code>, and produces feature documentation from backlog specs.</p>
-
-    <div class="callout tip">
-      <div class="callout-title">Dashboard as a team tool</div>
-      <p>Deploy the docs site to your internal infrastructure. The score trend chart and agent activity panel are especially valuable for team retrospectives &mdash; they reveal patterns that individual developers might miss.</p>
-    </div>
-  </section>
-
-  <section class="section" id="telemetry">
-    <span class="section-label">Meta</span>
-    <h2>Cross-Project Telemetry</h2>
-    <p>VibeCrew includes a cross-project telemetry system for self-improvement. Projects automatically register with the central plugin during <code>/setup</code>, contributing anonymized performance data.</p>
-
-    <h3>How It Works</h3>
-    <ol class="steps">
-      <li><strong>Auto-Registration</strong> &mdash; During <code>/setup</code>, each project registers with the central VibeCrew plugin. An anonymous alias (project-001, project-002, etc.) replaces the real project path.</li>
-      <li><strong>Data Collection</strong> &mdash; The <code>collect-telemetry.sh</code> script reads <code>.vibecrew/</code> data from all registered projects: Vibe Scores, agent usage, session costs, MCP adoption, test metrics, and mutation patterns.</li>
-      <li><strong>Aggregation</strong> &mdash; Anonymized data is aggregated into <code>telemetry/aggregate.json</code> at the plugin root.</li>
-      <li><strong>Analysis</strong> &mdash; The System Reviewer agent (via <code>/system-review</code>) analyzes the aggregate to identify cross-project patterns, unused components, and systemic friction.</li>
-    </ol>
-
-    <h3>Privacy</h3>
-    <p>Telemetry is strictly local &mdash; no data leaves your machine. Project names, file paths, code, and credentials are never included. Only aggregate performance metrics are collected, keyed by anonymous aliases.</p>
-
-    <h3>The <code>/system-review</code> Command</h3>
-    <p>Run from the VibeCrew repository to trigger a comprehensive plugin audit:</p>
-    <ul>
-      <li><strong>Internal audit</strong> &mdash; model routing, context budgets, pattern consistency, unused components</li>
-      <li><strong>Telemetry analysis</strong> &mdash; usage patterns, quality trends, cost analysis, systemic issues</li>
-      <li><strong>External research</strong> &mdash; Anthropic updates, new MCP servers, community patterns</li>
-      <li><strong>Proposals</strong> &mdash; prioritized improvement recommendations with effort estimates</li>
-    </ul>
-    <p>Reports are saved to <code>reviews/</code> in both markdown and JSON format.</p>
-  </section>
-
-  <hr>
-
-  <section class="section" id="troubleshooting">
-    <span class="section-label">Help</span>
-    <h2>Troubleshooting</h2>
-
-    <h3>Stale locks or corrupted state</h3>
-    <ol>
-      <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li>
-      <li>This resets any in-progress tasks that were interrupted by a crashed session</li>
-    </ol>
-
-    <h3>Git conflicts in .vibecrew/</h3>
-    <ul>
-      <li><code>state.json</code>: Resolve by keeping the most recent active feature</li>
-      <li><code>backlog.json</code>: Merge the feature arrays</li>
-      <li><code>scores/</code> and <code>sessions/</code>: Rarely conflict &mdash; they're timestamped per-developer</li>
-    </ul>
-  </section>
-
-</main>
-
-  <footer class="footer">
-    <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
-    <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
-  </footer>
-</div>
-
-</body>
-</html>
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html> 

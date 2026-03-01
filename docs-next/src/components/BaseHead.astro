@@ -1,0 +1,25 @@
+---
+import { url } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'VibeCrew Documentation — The Autonomous Vibe-Coding Operating System' } = Astro.props;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="generator" content={Astro.generator} />
+<link rel="sitemap" href={url('/sitemap-index.xml')} />
+
+<!-- Prevent FOUC for theme -->
+<script is:inline>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script>

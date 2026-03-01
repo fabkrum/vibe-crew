@@ -1,520 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeCrew — Why VibeCrew</title>
-  <style>
-    :root {
-      --color-bg: #0a0a0b;
-      --color-surface: #111113;
-      --color-surface-2: #18181b;
-      --color-surface-3: #1e1e22;
-      --color-border: #27272a;
-      --color-border-subtle: #1e1e22;
-      --color-text: #fafafa;
-      --color-text-secondary: #a1a1aa;
-      --color-text-muted: #71717a;
-      --color-accent: #a78bfa;
-      --color-accent-dim: #7c3aed;
-      --color-accent-bg: rgba(167, 139, 250, 0.08);
-      --color-green: #4ade80;
-      --color-green-dim: rgba(74, 222, 128, 0.1);
-      --color-amber: #fbbf24;
-      --color-amber-dim: rgba(251, 191, 36, 0.1);
-      --color-red: #f87171;
-      --color-red-dim: rgba(248, 113, 113, 0.1);
-      --color-blue: #60a5fa;
-      --color-blue-dim: rgba(96, 165, 250, 0.1);
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-xs: 6px;
-      --max-width: 860px;
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Why VibeCrew</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.pair-row[data-astro-cid-yqiszuht]{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;margin-bottom:1.5rem}.pair-arrow[data-astro-cid-yqiszuht]{display:flex;align-items:center;justify-content:center;padding:0 .75rem;color:var(--color-text-muted);font-size:1.25rem}.pair-label[data-astro-cid-yqiszuht]{display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:.15rem .5rem;border-radius:3px;margin-bottom:.75rem}.pair-label[data-astro-cid-yqiszuht].problem{background:var(--color-red-dim);color:var(--color-red)}.pair-label[data-astro-cid-yqiszuht].solution{background:var(--color-green-dim);color:var(--color-green)}.pair-row[data-astro-cid-yqiszuht] .card[data-astro-cid-yqiszuht].problem{border-color:#f8717133}.pair-row[data-astro-cid-yqiszuht] .card[data-astro-cid-yqiszuht].solution{border-color:#4ade8033}@media(max-width:768px){.pair-row[data-astro-cid-yqiszuht]{grid-template-columns:1fr}.pair-arrow[data-astro-cid-yqiszuht]{transform:rotate(90deg);padding:.5rem 0}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.C1_FxMSw.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link active"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Intro</span>  <span class="separator">/</span> <span>Why VibeCrew</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Intro"},{"@type":"ListItem","position":3,"name":"Why VibeCrew"}]}</script> <span class="section-label">The Problem &amp; The Solution</span>  <section class="section" id="why" data-astro-cid-yqiszuht> <span class="section-label" data-astro-cid-yqiszuht>The Problem &amp; The Solution</span> <h2 data-astro-cid-yqiszuht>Why VibeCrew Exists</h2> <p data-astro-cid-yqiszuht>AI-assisted development &mdash; "vibe coding" &mdash; has changed how software gets built. A single developer can now ship at the pace of a small team. But scaling this workflow quickly exposes serious gaps: sessions lose context, architecture decisions happen by accident, and you spend more time managing AI agents than building your product.</p> <p data-astro-cid-yqiszuht>VibeCrew is a Claude Code plugin that fills those gaps. It wraps every project in a structured lifecycle &mdash; from vision and tech stack research through feature development, testing, code review, and documentation &mdash; orchestrated by 14 specialized AI agents. You describe what you want to build, and VibeCrew handles the how: enforcing architecture before code, running quality gates automatically, sending you a notification only when it actually needs your input, and learning from every session to get smarter over time. Whether you are a seasoned developer or a non-technical founder, VibeCrew adapts to you &mdash; not the other way around.</p> <div class="pair-row" data-astro-cid-yqiszuht> <div class="card problem" data-astro-cid-yqiszuht> <span class="pair-label problem" data-astro-cid-yqiszuht>Problem</span> <h4 data-astro-cid-yqiszuht>The Attention Bottleneck</h4> <p data-astro-cid-yqiszuht>When you run 5&ndash;15 concurrent Claude Code sessions, finished or blocked agents wait silently. You manually poll tabs to find which session needs you, destroying your focus every time. Your most valuable resource &mdash; your attention &mdash; is wasted on hunting.</p> </div> <div class="pair-arrow" data-astro-cid-yqiszuht>&rarr;</div> <div class="card solution" data-astro-cid-yqiszuht> <span class="pair-label solution" data-astro-cid-yqiszuht>Solution</span> <h4 data-astro-cid-yqiszuht>The Interrupt Protocol</h4> <p data-astro-cid-yqiszuht>The terminal stays silent during normal work. When an agent needs you (permission blocked, task complete, critical error), it sends a native OS notification with a one-click deep link to the exact tab. You never poll again.</p> </div> </div> <div class="pair-row" data-astro-cid-yqiszuht> <div class="card problem" data-astro-cid-yqiszuht> <span class="pair-label problem" data-astro-cid-yqiszuht>Problem</span> <h4 data-astro-cid-yqiszuht>Token Waste &amp; Context Exhaustion</h4> <p data-astro-cid-yqiszuht>Pasting docs into chat (+1,500 tokens), correcting vague prompts (+500 each), re-explaining context after /clear (+2,000). When the context window fills, you lose all accumulated understanding and start from zero.</p> </div> <div class="pair-arrow" data-astro-cid-yqiszuht>&rarr;</div> <div class="card solution" data-astro-cid-yqiszuht> <span class="pair-label solution" data-astro-cid-yqiszuht>Solution</span> <h4 data-astro-cid-yqiszuht>The Performance Coach</h4> <p data-astro-cid-yqiszuht>Every session ends with a Vibe Score (0&ndash;100). The coach identifies token waste, proposes a concrete CLAUDE.md rule to prevent it, and &mdash; with your approval &mdash; permanently writes that rule. Each session is more efficient than the last.</p> </div> </div> <div class="pair-row" data-astro-cid-yqiszuht> <div class="card problem" data-astro-cid-yqiszuht> <span class="pair-label problem" data-astro-cid-yqiszuht>Problem</span> <h4 data-astro-cid-yqiszuht>Code Without Architecture</h4> <p data-astro-cid-yqiszuht>Jump straight into code and the AI picks the wrong state library, uses incompatible API patterns, and generates components that ignore your design system. You catch it three features in, when technical debt has compounded.</p> </div> <div class="pair-arrow" data-astro-cid-yqiszuht>&rarr;</div> <div class="card solution" data-astro-cid-yqiszuht> <span class="pair-label solution" data-astro-cid-yqiszuht>Solution</span> <h4 data-astro-cid-yqiszuht>The Two-Tier Workflow</h4> <p data-astro-cid-yqiszuht>A phase gate blocks all source code writes until the project foundation is complete: vision, design system, tech stack decision, roadmap, and project rules. Architecture decisions are deliberate, not accidental.</p> </div> </div> <div class="pair-row" data-astro-cid-yqiszuht> <div class="card problem" data-astro-cid-yqiszuht> <span class="pair-label problem" data-astro-cid-yqiszuht>Problem</span> <h4 data-astro-cid-yqiszuht>One Size Fits Nobody</h4> <p data-astro-cid-yqiszuht>Most AI coding tools treat everyone the same. A non-technical founder gets the same commit messages, PR formats, and unexplained decisions as a senior developer. Beginners are overwhelmed. Experienced developers are slowed down by verbose explanations they don't need.</p> </div> <div class="pair-arrow" data-astro-cid-yqiszuht>&rarr;</div> <div class="card solution" data-astro-cid-yqiszuht> <span class="pair-label solution" data-astro-cid-yqiszuht>Solution</span> <h4 data-astro-cid-yqiszuht>Adaptive User Profiles</h4> <p data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/profile</code> and VibeCrew adapts to you. A 2-minute interview (or pick a preset) personalizes every agent: message verbosity, autonomy level, PR format, code comments, gamification, and tech risk tolerance. As you grow, update your profile &mdash; the system evolves with you.</p> </div> </div> <div class="callout tip"> <div class="callout-title">The Core Philosophy</div> 
+Human attention is the bottleneck, not AI speed. VibeCrew is designed to maximize your focus time by minimizing interruptions, enforcing architecture before code, and turning every session into a learning opportunity.
+ </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/comparison.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Comparison</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: var(--color-border) transparent;
+    function closeSearch() {
+      overlay.classList.remove('open');
     }
 
-    body {
-      font-family: var(--font-sans);
-      background: var(--color-bg);
-      color: var(--color-text);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
 
-    /* ---- SIDEBAR ---- */
-    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-    .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
-    .sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
-    .sidebar-header .nav-brand span { color: var(--color-accent); }
-    .sidebar-nav { padding: 1rem 0; }
-    .sidebar-group { padding: 0 0 0.5rem; }
-    .sidebar-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; cursor: pointer; transition: color 0.15s; }
-    .sidebar-label:hover { color: var(--color-text-secondary); }
-    .sidebar-label::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform 0.2s; }
-    .sidebar-group.collapsed .sidebar-label::after { transform: rotate(-90deg); }
-    .sidebar-group.collapsed .sidebar-link { display: none; }
-    .sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
-    .sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
-    .sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
-    /* ---- MOBILE BAR ---- */
-    .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
-    .mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
-    .mobile-bar .nav-brand span { color: var(--color-accent); }
-    .hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-    .hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
-    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
-    /* ---- LAYOUT ---- */
-    .layout { margin-left: 260px; }
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
 
-    /* ---- MAIN ---- */
-    .main {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 3rem 2rem 6rem;
-    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
 
-    /* ---- SECTIONS ---- */
-    .section {
-      margin-bottom: 5rem;
-    }
-
-    .section-label {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-accent);
-      margin-bottom: 0.75rem;
-    }
-
-    h2 {
-      font-size: 1.9rem;
-      font-weight: 750;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.75rem;
-      margin-top: 2.5rem;
-    }
-
-    h4 {
-      font-size: 1.05rem;
-      font-weight: 650;
-      margin-bottom: 0.5rem;
-      margin-top: 2rem;
-    }
-
-    .section > p,
-    .section > ul,
-    .section > ol {
-      color: var(--color-text-secondary);
-      margin-bottom: 1.25rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-      color: var(--color-text-secondary);
-    }
-
-    strong {
-      color: var(--color-text);
-      font-weight: 600;
-    }
-
-    a {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    ul, ol {
-      padding-left: 1.5rem;
-      margin-bottom: 1.25rem;
-      color: var(--color-text-secondary);
-    }
-
-    li {
-      margin-bottom: 0.4rem;
-    }
-
-    li::marker {
-      color: var(--color-text-muted);
-    }
-
-    /* ---- CODE ---- */
-    code {
-      font-family: var(--font-mono);
-      font-size: 0.85em;
-      background: var(--color-surface-2);
-      padding: 0.15em 0.45em;
-      border-radius: 4px;
-      color: var(--color-accent);
-      border: 1px solid var(--color-border-subtle);
-    }
-
-    pre {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem 1.5rem;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    pre code {
-      background: none;
-      padding: 0;
-      border: none;
-      color: var(--color-text-secondary);
-      font-size: 0.85rem;
-      line-height: 1.7;
-    }
-
-    .code-label {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.75rem;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-text-muted);
-      font-family: var(--font-sans);
-      font-weight: 600;
-    }
-
-    /* ---- CARDS ---- */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--color-accent-dim);
-    }
-
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    .card-icon.purple { background: var(--color-accent-bg); }
-    .card-icon.green { background: var(--color-green-dim); }
-    .card-icon.amber { background: var(--color-amber-dim); }
-    .card-icon.blue { background: var(--color-blue-dim); }
-    .card-icon.red { background: var(--color-red-dim); }
-
-    .card h4 {
-      font-size: 1rem;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-      color: var(--color-text);
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      color: var(--color-text-muted);
-      margin: 0;
-    }
-
-    /* ---- PROBLEM/SOLUTION PAIRS ---- */
-    .pair-row {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 0;
-      align-items: stretch;
-      margin-bottom: 1.5rem;
-    }
-
-    .pair-row .card {
-      margin: 0;
-    }
-
-    .pair-row .card.problem {
-      border-color: rgba(248, 113, 113, 0.2);
-    }
-
-    .pair-row .card.problem:hover {
-      border-color: rgba(248, 113, 113, 0.4);
-    }
-
-    .pair-row .card.solution {
-      border-color: rgba(74, 222, 128, 0.2);
-    }
-
-    .pair-row .card.solution:hover {
-      border-color: rgba(74, 222, 128, 0.4);
-    }
-
-    .pair-arrow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 0.75rem;
-      color: var(--color-text-muted);
-      font-size: 1.25rem;
-    }
-
-    .pair-label {
-      display: inline-block;
-      font-size: 0.6rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0.15rem 0.5rem;
-      border-radius: 3px;
-      margin-bottom: 0.75rem;
-    }
-
-    .pair-label.problem {
-      background: var(--color-red-dim);
-      color: var(--color-red);
-    }
-
-    .pair-label.solution {
-      background: var(--color-green-dim);
-      color: var(--color-green);
-    }
-
-    /* ---- CALLOUT ---- */
-    .callout {
-      border-radius: var(--radius-sm);
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid;
-      font-size: 0.92rem;
-    }
-
-    .callout p {
-      margin: 0;
-      color: inherit;
-    }
-
-    .callout-title {
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .callout.info {
-      background: var(--color-blue-dim);
-      border-color: rgba(96, 165, 250, 0.2);
-      color: var(--color-blue);
-    }
-
-    .callout.tip {
-      background: var(--color-green-dim);
-      border-color: rgba(74, 222, 128, 0.2);
-      color: var(--color-green);
-    }
-
-    .callout.warn {
-      background: var(--color-amber-dim);
-      border-color: rgba(251, 191, 36, 0.2);
-      color: var(--color-amber);
-    }
-
-    .callout.danger {
-      background: var(--color-red-dim);
-      border-color: rgba(248, 113, 113, 0.2);
-      color: var(--color-red);
-    }
-
-    /* ---- FOOTER ---- */
-    .footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      border-top: 1px solid var(--color-border-subtle);
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* ---- RESPONSIVE ---- */
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
-      body.sidebar-open .sidebar { transform: translateX(0); }
-      body.sidebar-open .sidebar-overlay { display: block; }
-      .mobile-bar { display: flex; }
-      .layout { margin-left: 0; padding-top: 52px; }
-      .main { padding: 2rem 1.25rem 4rem; }
-      .card-grid { grid-template-columns: 1fr !important; }
-      .pair-row { grid-template-columns: 1fr; gap: 0; }
-      .pair-arrow { transform: rotate(90deg); padding: 0.5rem 0; }
-      h2 { font-size: 1.5rem; }
-      h3 { font-size: 1.15rem; }
-      pre { padding: 1rem; }
-    }
-  </style>
-</head>
-<body>
-
-<div class="mobile-bar">
-  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
-  </button>
-  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-</div>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
-      <a href="why.html" class="sidebar-link active">Why VibeCrew</a>
-    </div>
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
-      <a href="setup.html" class="sidebar-link">Setup</a>
-      <a href="new-project.html" class="sidebar-link">New Project</a>
-      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
-      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
-      <a href="warp.html" class="sidebar-link">Warp</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
-      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
-      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
-      <a href="personalization.html" class="sidebar-link">Personalization</a>
-      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
-      <a href="example-session.html" class="sidebar-link">Example Session</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
-      <a href="architecture.html" class="sidebar-link">Overview</a>
-      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
-      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
-      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
-      <a href="arch-design.html" class="sidebar-link">Design &amp; Operations</a>
-      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
-      <a href="releases.html" class="sidebar-link">Release Notes</a>
-    </div>
-  </nav>
-</aside>
-
-<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
-<script>var a=document.querySelector(".sidebar-link.active");if(a){var g=a.closest(".sidebar-group");if(g)g.classList.remove("collapsed");}</script>
-
-<div class="layout">
-<div class="main">
-
-  <section class="section" id="why">
-    <span class="section-label">The Problem &amp; The Solution</span>
-    <h2>Why VibeCrew Exists</h2>
-    <p>AI-assisted development &mdash; "vibe coding" &mdash; has changed how software gets built. A single developer can now ship at the pace of a small team. But scaling this workflow quickly exposes serious gaps: sessions lose context, architecture decisions happen by accident, and you spend more time managing AI agents than building your product.</p>
-    <p>VibeCrew is a Claude Code plugin that fills those gaps. It wraps every project in a structured lifecycle &mdash; from vision and tech stack research through feature development, testing, code review, and documentation &mdash; orchestrated by 14 specialized AI agents. You describe what you want to build, and VibeCrew handles the how: enforcing architecture before code, running quality gates automatically, sending you a notification only when it actually needs your input, and learning from every session to get smarter over time. Whether you are a seasoned developer or a non-technical founder, VibeCrew adapts to you &mdash; not the other way around.</p>
-
-    <div class="pair-row">
-      <div class="card problem">
-        <span class="pair-label problem">Problem</span>
-        <h4>The Attention Bottleneck</h4>
-        <p>When you run 5&ndash;15 concurrent Claude Code sessions, finished or blocked agents wait silently. You manually poll tabs to find which session needs you, destroying your focus every time. Your most valuable resource &mdash; your attention &mdash; is wasted on hunting.</p>
-      </div>
-      <div class="pair-arrow">&rarr;</div>
-      <div class="card solution">
-        <span class="pair-label solution">Solution</span>
-        <h4>The Interrupt Protocol</h4>
-        <p>The terminal stays silent during normal work. When an agent needs you (permission blocked, task complete, critical error), it sends a native OS notification with a one-click deep link to the exact tab. You never poll again.</p>
-      </div>
-    </div>
-
-    <div class="pair-row">
-      <div class="card problem">
-        <span class="pair-label problem">Problem</span>
-        <h4>Token Waste &amp; Context Exhaustion</h4>
-        <p>Pasting docs into chat (+1,500 tokens), correcting vague prompts (+500 each), re-explaining context after /clear (+2,000). When the context window fills, you lose all accumulated understanding and start from zero.</p>
-      </div>
-      <div class="pair-arrow">&rarr;</div>
-      <div class="card solution">
-        <span class="pair-label solution">Solution</span>
-        <h4>The Performance Coach</h4>
-        <p>Every session ends with a Vibe Score (0&ndash;100). The coach identifies token waste, proposes a concrete CLAUDE.md rule to prevent it, and &mdash; with your approval &mdash; permanently writes that rule. Each session is more efficient than the last.</p>
-      </div>
-    </div>
-
-    <div class="pair-row">
-      <div class="card problem">
-        <span class="pair-label problem">Problem</span>
-        <h4>Code Without Architecture</h4>
-        <p>Jump straight into code and the AI picks the wrong state library, uses incompatible API patterns, and generates components that ignore your design system. You catch it three features in, when technical debt has compounded.</p>
-      </div>
-      <div class="pair-arrow">&rarr;</div>
-      <div class="card solution">
-        <span class="pair-label solution">Solution</span>
-        <h4>The Two-Tier Workflow</h4>
-        <p>A phase gate blocks all source code writes until the project foundation is complete: vision, design system, tech stack decision, roadmap, and project rules. Architecture decisions are deliberate, not accidental.</p>
-      </div>
-    </div>
-
-    <div class="pair-row">
-      <div class="card problem">
-        <span class="pair-label problem">Problem</span>
-        <h4>One Size Fits Nobody</h4>
-        <p>Most AI coding tools treat everyone the same. A non-technical founder gets the same commit messages, PR formats, and unexplained decisions as a senior developer. Beginners are overwhelmed. Experienced developers are slowed down by verbose explanations they don't need.</p>
-      </div>
-      <div class="pair-arrow">&rarr;</div>
-      <div class="card solution">
-        <span class="pair-label solution">Solution</span>
-        <h4>Adaptive User Profiles</h4>
-        <p>Run <code>/profile</code> and VibeCrew adapts to you. A 2-minute interview (or pick a preset) personalizes every agent: message verbosity, autonomy level, PR format, code comments, gamification, and tech risk tolerance. As you grow, update your profile &mdash; the system evolves with you.</p>
-      </div>
-    </div>
-
-    <div class="callout tip">
-      <div class="callout-title">The Core Philosophy</div>
-      <p>Human attention is the bottleneck, not AI speed. VibeCrew is designed to maximize your focus time by minimizing interruptions, enforcing architecture before code, and turning every session into a learning opportunity.</p>
-    </div>
-  </section>
-</div>
-
-<footer class="footer">
-  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
-  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
-</footer>
-</div>
-
-</body>
-</html>
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html> 

@@ -1,0 +1,129 @@
+/* ---- Release notes page ---- */
+.version-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.version-nav a {
+  padding: 0.35rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.version-nav a:hover {
+  color: var(--color-text);
+  background: var(--color-surface-2);
+}
+
+.version-nav a.latest {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+}
+
+.release-section {
+  margin-bottom: 4rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.release-section:last-child {
+  border-bottom: none;
+}
+
+.release-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.release-version {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.release-date {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.release-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2em 0.7em;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.release-badge.latest {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+}
+
+.change-list {
+  list-style: none;
+  padding: 0;
+}
+
+.change-list li {
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.change-list li:last-child {
+  border-bottom: none;
+}
+
+.change-type {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15em 0.6em;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.change-type.added {
+  background: var(--color-green-dim);
+  color: var(--color-green);
+}
+
+.change-type.changed {
+  background: var(--color-blue-dim);
+  color: var(--color-blue);
+}
+
+.change-type.fixed {
+  background: var(--color-amber-dim);
+  color: var(--color-amber);
+}
+
+.change-type.removed {
+  background: var(--color-red-dim);
+  color: var(--color-red);
+}
+
+.change-type.improved {
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+}

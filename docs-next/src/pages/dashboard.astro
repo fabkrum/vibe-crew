@@ -1,0 +1,241 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import TableWrap from '../components/TableWrap.astro';
+---
+
+<DocsLayout title="Vibe Dashboard" sectionLabel="Architecture" activeSlug="dashboard">
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#what">What is the Vibe Dashboard</a></li>
+      <li><a href="#start">How to Start It</a></li>
+      <li><a href="#tabs">Dashboard Tabs</a></li>
+      <li><a href="#cli">CLI Alternatives</a></li>
+      <li><a href="#data-flow">Data Flow</a></li>
+      <li><a href="#production">Production Build</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <!-- ============ WHAT IS THE VIBE DASHBOARD ============ -->
+  <section class="section" id="what">
+    <span class="section-label">Overview</span>
+    <h2>What is the Vibe Dashboard</h2>
+    <p>The Vibe Dashboard is a <strong>VitePress-powered documentation site</strong> scaffolded into every VibeCrew project during <code>/setup</code>. It lives in your project's <code>docs/</code> folder and provides a browser-based interface for browsing development metrics, managing your feature backlog, and editing project settings.</p>
+    <p>The dashboard reads live data from <code>.vibecrew/</code> &mdash; the same JSON files that power the CLI commands. It includes 7 tabs: a getting-started guide, a Kanban board, session statistics, Vibe Score trends, test coverage, achievements, and a settings editor.</p>
+
+    <Callout type="info" title="Not the companion docs you're reading now">
+      <p>This page documents the <strong>per-project Vibe Dashboard</strong> that gets scaffolded into your project. It's separate from the VibeCrew companion documentation site (the one you're reading right now).</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ============ HOW TO START IT ============ -->
+  <section class="section" id="start">
+    <span class="section-label">Getting Started</span>
+    <h2>How to Start It</h2>
+    <p>Launch the dashboard with a single command from your project root. The script auto-installs dependencies if needed and opens your browser automatically:</p>
+
+    <CodeBlock code="bash scripts/start-dashboard.sh" label="bash" />
+
+    <p>The script checks for missing <code>node_modules</code>, runs <code>npm install</code> if necessary, starts the VitePress dev server, and opens <code>http://localhost:5173</code> in your default browser. The dashboard hot-reloads when <code>.vibecrew/</code> data changes.</p>
+
+    <Callout type="tip" title="Run it alongside your dev server">
+      <p>Open a separate terminal tab for the dashboard. It runs on its own port and doesn't interfere with your application's dev server. In Warp, use a split pane or a dedicated tab.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ============ DASHBOARD TABS ============ -->
+  <section class="section" id="tabs">
+    <span class="section-label">Features</span>
+    <h2>Dashboard Tabs</h2>
+    <p>The dashboard ships with 7 tabs. Each tab reads from specific <code>.vibecrew/</code> JSON files via VitePress data loaders.</p>
+
+    <h3>Guide</h3>
+    <p>The default landing tab. Contains the same getting-started documentation that's scaffolded into <code>docs/system/getting-started.md</code> &mdash; a quick reference for setup, commands, and workflow.</p>
+
+    <h3 id="tab-kanban">Kanban Board</h3>
+    <p>A 7-column interactive board showing every feature in your backlog across its workflow stages:</p>
+    <ul>
+      <li><strong>Ideas</strong> &mdash; Raw ideas captured via <code>/idea</code> or the + button on the dashboard</li>
+      <li><strong>Planning</strong> &mdash; Features actively being planned (specs in progress)</li>
+      <li><strong>Planned</strong> &mdash; Features with complete specs, ready to build</li>
+      <li><strong>In Development</strong> &mdash; Currently being built by the Builder agent</li>
+      <li><strong>Testing</strong> &mdash; Running tests and quality checks</li>
+      <li><strong>Review</strong> &mdash; Code review in progress</li>
+      <li><strong>Done</strong> &mdash; Feature complete, wrapped, and documented</li>
+    </ul>
+    <p>Add ideas via the + button, drag cards between columns, click to edit specs, and launch Warp sessions with action buttons. A live session bar shows real-time Claude Code status (model, context usage, cost).</p>
+    <p>Data source: <code>.vibecrew/backlog.json</code></p>
+
+    <h3 id="tab-stats">Session Statistics</h3>
+    <p>Aggregate metrics across all your development sessions:</p>
+    <ul>
+      <li><strong>Total sessions</strong> &mdash; Number of completed sessions</li>
+      <li><strong>Average Vibe Score</strong> &mdash; Your mean score across all sessions</li>
+      <li><strong>Total tokens</strong> &mdash; Input + output token usage</li>
+      <li><strong>Estimated cost</strong> &mdash; Cumulative API cost</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/sessions/*.json</code></p>
+
+    <h3 id="tab-trends">Trends</h3>
+    <p>Time-series visualizations of your development patterns:</p>
+    <ul>
+      <li><strong>Vibe Score line chart</strong> &mdash; Score trajectory across sessions</li>
+      <li><strong>Token breakdown</strong> &mdash; Input vs. output tokens per session</li>
+      <li><strong>Agent activity</strong> &mdash; Which agents ran and how often</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/scores/*.json</code></p>
+
+    <h3 id="tab-coverage">Coverage</h3>
+    <p>Quality metrics at a glance:</p>
+    <ul>
+      <li><strong>Test coverage gauge</strong> &mdash; Percentage of code covered by tests</li>
+      <li><strong>Feature delivery progress</strong> &mdash; Completed features vs. total backlog</li>
+    </ul>
+
+    <h3 id="tab-achievements">Achievements</h3>
+    <p>The gamification system rendered visually:</p>
+    <ul>
+      <li><strong>Level &amp; XP</strong> &mdash; Your current level and experience points</li>
+      <li><strong>Badges</strong> &mdash; Earned badges with unlock conditions</li>
+      <li><strong>Skill radar</strong> &mdash; Radar chart of your development skills</li>
+      <li><strong>Streak calendar</strong> &mdash; Daily activity streak tracking</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/gamification.json</code></p>
+
+    <h3 id="tab-settings">Settings</h3>
+    <p>A browser-based editor for <code>.vibecrew/config.json</code>. You can modify:</p>
+    <ul>
+      <li><strong>User profile</strong> &mdash; Role, code literacy, autonomy, verbosity, and other profile dimensions</li>
+      <li><strong>Notifications</strong> &mdash; Toggle notification delivery and sound</li>
+      <li><strong>Cost limits</strong> &mdash; Set per-session and per-feature cost caps</li>
+      <li><strong>MCP servers</strong> &mdash; Enable or disable optional MCP integrations</li>
+      <li><strong>Agent behavior</strong> &mdash; Adjust agent-specific settings</li>
+      <li><strong>Gamification</strong> &mdash; Toggle scoring, achievements, and XP display</li>
+    </ul>
+
+    <Callout type="warn" title="Interactive features require dev mode">
+      <p>When running <code>npm run docs:dev</code>, interactive features (adding ideas, dragging cards, editing specs, saving settings) write changes directly to <code>.vibecrew/</code> files. In a static production build (<code>npm run docs:build</code>), the board renders read-only.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ============ CLI ALTERNATIVES ============ -->
+  <section class="section" id="cli">
+    <span class="section-label">Terminal Equivalents</span>
+    <h2>CLI Alternatives</h2>
+    <p>Every dashboard tab has a terminal equivalent. If you prefer staying in the CLI, these commands show the same data:</p>
+
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Dashboard Tab</th><th>CLI Command</th><th>What It Shows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Kanban / Stats</strong></td><td><code>/status</code></td><td>Feature backlog overview, session count, current feature</td></tr>
+          <tr><td><strong>Stats / Trends</strong></td><td><code>/cost</code></td><td>Token usage, API costs, per-session breakdown</td></tr>
+          <tr><td><strong>Achievements</strong></td><td><code>/achievements</code></td><td>Level, XP, badges, streaks, challenges</td></tr>
+          <tr><td><strong>Settings (profile)</strong></td><td><code>/profile</code></td><td>Edit user profile dimensions interactively</td></tr>
+          <tr><td><strong>Coverage</strong></td><td><code>/check</code></td><td>Run tests, lint, type-check, and see coverage</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+  </section>
+
+  <hr>
+
+  <!-- ============ DATA FLOW ============ -->
+  <section class="section" id="data-flow">
+    <span class="section-label">Architecture</span>
+    <h2>Data Flow</h2>
+    <p>The dashboard reads data through a simple pipeline:</p>
+
+    <div class="flow"><span class="highlight">.vibecrew/*.json</span>          <span class="muted"># Raw data written by VibeCrew agents</span>
+       |
+<span class="highlight">VitePress data loaders</span>      <span class="muted"># .data.ts files that read and transform JSON</span>
+       |
+<span class="highlight">Vue components</span>             <span class="muted"># Render charts, tables, cards, forms</span>
+       |
+<span class="highlight">Browser</span>                    <span class="muted"># Hot-reloads when data files change</span></div>
+
+    <p>Data loaders run at build time (for static builds) or on each page load (in dev mode). In dev mode, VitePress watches the <code>.vibecrew/</code> directory and triggers hot-reloads when any JSON file changes &mdash; so running <code>/wrap</code> in a Claude Code session updates the dashboard in real time.</p>
+
+    <p>In dev mode, the dashboard also provides API endpoints for CRUD operations and uses Vite's built-in WebSocket for real-time push updates when <code>.vibecrew/</code> files change.</p>
+
+    <Callout type="info" title="No database required">
+      <p>All data lives in flat JSON files inside <code>.vibecrew/</code>. There's no database, no backend server, and no external dependencies beyond VitePress itself. The dashboard is a pure static site that reads local files.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ============ PRODUCTION BUILD ============ -->
+  <section class="section" id="production">
+    <span class="section-label">Deployment</span>
+    <h2>Production Build</h2>
+    <p>To generate a static HTML version of the dashboard:</p>
+
+    <CodeBlock code={`cd docs\nnpm run docs:build`} label="bash" />
+
+    <p>The output goes to <code>docs/.vitepress/dist/</code>. You can deploy this to any static hosting provider (Vercel, Netlify, GitHub Pages) to share project metrics with your team.</p>
+
+    <Callout type="tip" title="Snapshot your metrics">
+      <p>A production build captures a point-in-time snapshot of your <code>.vibecrew/</code> data. This is useful for sprint reviews, stakeholder updates, or archiving project history.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ============ TROUBLESHOOTING ============ -->
+  <section class="section" id="troubleshooting">
+    <span class="section-label">Help</span>
+    <h2>Troubleshooting</h2>
+
+    <h3>Dashboard shows empty/no data</h3>
+    <p>The dashboard reads from <code>.vibecrew/</code> JSON files that are created as you work. If you haven't completed any sessions yet:</p>
+    <ol>
+      <li>Run <code>/new-project</code> to create the project foundation</li>
+      <li>Build at least one feature with <code>/new-feature "name"</code></li>
+      <li>Close the session with <code>/wrap</code> &mdash; this writes session data, scores, and updates the backlog</li>
+    </ol>
+    <p>After your first <code>/wrap</code>, all dashboard tabs will populate with data.</p>
+
+    <h3>Port 5173 is already in use</h3>
+    <p>If another dev server is using port 5173, VitePress will automatically try the next available port (5174, 5175, etc.). Check the terminal output for the actual URL. You can also specify a port explicitly:</p>
+    <CodeBlock code="npm run docs:dev -- --port 5200" label="bash" />
+
+    <h3>Drag-and-drop not working</h3>
+    <p>Interactive features (drag-and-drop, adding ideas, editing cards) only work when running the dev server. Static builds render the board read-only.</p>
+
+    <h3>Settings changes don't persist</h3>
+    <p>The Settings tab can only write to <code>.vibecrew/config.json</code> when VitePress is running in dev mode (<code>npm run docs:dev</code>). If you're viewing a static build, Settings shows a read-only view with copyable JSON that you can paste into <code>.vibecrew/config.json</code> manually.</p>
+
+    <h3>Hot-reload isn't working</h3>
+    <ol>
+      <li>Make sure you're running the dev server (<code>npm run docs:dev</code>), not viewing a static build</li>
+      <li>Check that <code>.vibecrew/</code> is in the same project root where you started VitePress</li>
+      <li>Try restarting the dev server &mdash; VitePress occasionally needs a restart after major file structure changes</li>
+    </ol>
+  </section>
+
+</DocsLayout>
+
+<style>
+.flow { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6; color: var(--color-text-secondary); overflow-x: auto; white-space: pre; }
+.flow .highlight { color: var(--color-accent); font-weight: 600; }
+.flow .muted { color: var(--color-text-muted); }
+.toc { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem; }
+.toc h3 { margin-top: 0; margin-bottom: 1rem; font-size: 1rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.toc ol { padding-left: 1.25rem; margin-bottom: 0; }
+.toc li { margin-bottom: 0.35rem; }
+.toc a { color: var(--color-text-secondary); font-size: 0.92rem; transition: color 0.15s; }
+.toc a:hover { color: var(--color-accent); text-decoration: none; }
+</style>

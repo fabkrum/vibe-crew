@@ -1,0 +1,100 @@
+---
+interface TocItem {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: TocItem[];
+}
+
+const { headings } = Astro.props;
+const filtered = headings.filter((h) => h.depth <= 3);
+---
+
+{filtered.length >= 3 && (
+  <nav class="toc-sidebar" aria-label="Table of Contents">
+    <h4 class="toc-sidebar-title">On this page</h4>
+    <ul class="toc-sidebar-list">
+      {filtered.map((h) => (
+        <li class={`toc-sidebar-item depth-${h.depth}`}>
+          <a href={`#${h.slug}`} class="toc-sidebar-link">{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .toc-sidebar {
+    padding-top: 1rem;
+  }
+
+  .toc-sidebar-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin: 0 0 0.75rem;
+  }
+
+  .toc-sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-sidebar-item {
+    margin-bottom: 0.25rem;
+  }
+
+  .toc-sidebar-item.depth-3 {
+    padding-left: 0.75rem;
+  }
+
+  .toc-sidebar-link {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: 0.15rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 0.5rem;
+    transition: all 0.15s;
+  }
+
+  .toc-sidebar-link:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .toc-sidebar-link.active {
+    color: var(--color-accent);
+    border-left-color: var(--color-accent);
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var links = document.querySelectorAll('.toc-sidebar-link');
+    if (!links.length) return;
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          links.forEach(function(l) { l.classList.remove('active'); });
+          var active = document.querySelector('.toc-sidebar-link[href="#' + entry.target.id + '"]');
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+
+    links.forEach(function(link) {
+      var id = link.getAttribute('href').slice(1);
+      var target = document.getElementById(id);
+      if (target) observer.observe(target);
+    });
+  })();
+</script>

@@ -1,1494 +1,268 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VibeCrew — Example Session</title>
-  <style>
-    :root {
-      --color-bg: #0a0a0b;
-      --color-surface: #111113;
-      --color-surface-2: #18181b;
-      --color-surface-3: #1e1e22;
-      --color-border: #27272a;
-      --color-border-subtle: #1e1e22;
-      --color-text: #fafafa;
-      --color-text-secondary: #a1a1aa;
-      --color-text-muted: #71717a;
-      --color-accent: #a78bfa;
-      --color-accent-dim: #7c3aed;
-      --color-accent-bg: rgba(167, 139, 250, 0.08);
-      --color-green: #4ade80;
-      --color-green-dim: rgba(74, 222, 128, 0.1);
-      --color-amber: #fbbf24;
-      --color-amber-dim: rgba(251, 191, 36, 0.1);
-      --color-red: #f87171;
-      --color-red-dim: rgba(248, 113, 113, 0.1);
-      --color-blue: #60a5fa;
-      --color-blue-dim: rgba(96, 165, 250, 0.1);
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-xs: 6px;
-      --max-width: 860px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: var(--color-border) transparent;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--color-bg);
-      color: var(--color-text);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* ---- SIDEBAR ---- */
-    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border-subtle); overflow-y: auto; z-index: 200; padding: 0; scrollbar-width: thin; scrollbar-color: var(--color-border) transparent; }
-    .sidebar-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border-subtle); }
-    .sidebar-header .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none; }
-    .sidebar-header .nav-brand span { color: var(--color-accent); }
-    .sidebar-nav { padding: 1rem 0; }
-    .sidebar-group { padding: 0 0 0.5rem; }
-    .sidebar-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); padding: 1rem 1.5rem 0.4rem; user-select: none; cursor: pointer; transition: color 0.15s; }
-    .sidebar-label:hover { color: var(--color-text-secondary); }
-    .sidebar-label::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid currentColor; transition: transform 0.2s; }
-    .sidebar-group.collapsed .sidebar-label::after { transform: rotate(-90deg); }
-    .sidebar-group.collapsed .sidebar-link { display: none; }
-    .sidebar-link { display: block; font-size: 0.875rem; color: var(--color-text-secondary); text-decoration: none; padding: 0.35rem 1.5rem; transition: all 0.15s; border-left: 2px solid transparent; }
-    .sidebar-link:hover { color: var(--color-text); background: var(--color-surface-2); text-decoration: none; }
-    .sidebar-link.active { color: var(--color-accent); background: var(--color-accent-bg); border-left-color: var(--color-accent); }
-    /* ---- MOBILE BAR ---- */
-    .mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: rgba(10, 10, 11, 0.92); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-bottom: 1px solid var(--color-border-subtle); z-index: 300; padding: 0 1rem; align-items: center; gap: 0.75rem; }
-    .mobile-bar .nav-brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; color: var(--color-text); text-decoration: none; }
-    .mobile-bar .nav-brand span { color: var(--color-accent); }
-    .hamburger { background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 0.4rem; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-    .hamburger:hover { color: var(--color-text); background: var(--color-surface-2); }
-    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 150; }
-    /* ---- LAYOUT ---- */
-    .layout { margin-left: 260px; }
-
-    /* ---- HERO ---- */
-    .hero {
-      padding: 10rem 2rem 5rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 600px;
-      background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.4rem 1rem;
-      background: var(--color-accent-bg);
-      border: 1px solid rgba(167, 139, 250, 0.15);
-      border-radius: 100px;
-      font-size: 0.8rem;
-      color: var(--color-accent);
-      margin-bottom: 2rem;
-      font-weight: 500;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--color-text-secondary);
-      max-width: 640px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.7;
-    }
-
-    /* ---- MAIN ---- */
-    .main {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 3rem 2rem 6rem;
-    }
-
-    /* ---- SECTIONS ---- */
-    .section {
-      margin-bottom: 5rem;
-    }
-
-    .section-label {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-accent);
-      margin-bottom: 0.75rem;
-    }
-
-    h2 {
-      font-size: 1.9rem;
-      font-weight: 750;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.75rem;
-      margin-top: 2.5rem;
-    }
-
-    h4 {
-      font-size: 1.05rem;
-      font-weight: 650;
-      margin-bottom: 0.5rem;
-      margin-top: 2rem;
-    }
-
-    .section > p,
-    .section > ul,
-    .section > ol {
-      color: var(--color-text-secondary);
-      margin-bottom: 1.25rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-      color: var(--color-text-secondary);
-    }
-
-    strong {
-      color: var(--color-text);
-      font-weight: 600;
-    }
-
-    a {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    ul, ol {
-      padding-left: 1.5rem;
-      margin-bottom: 1.25rem;
-      color: var(--color-text-secondary);
-    }
-
-    li {
-      margin-bottom: 0.4rem;
-    }
-
-    li::marker {
-      color: var(--color-text-muted);
-    }
-
-    /* ---- CODE ---- */
-    code {
-      font-family: var(--font-mono);
-      font-size: 0.85em;
-      background: var(--color-surface-2);
-      padding: 0.15em 0.45em;
-      border-radius: 4px;
-      color: var(--color-accent);
-      border: 1px solid var(--color-border-subtle);
-    }
-
-    pre {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-sm);
-      padding: 1.25rem 1.5rem;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    pre code {
-      background: none;
-      padding: 0;
-      border: none;
-      color: var(--color-text-secondary);
-      font-size: 0.85rem;
-      line-height: 1.7;
-    }
-
-    .code-label {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.75rem;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-text-muted);
-      font-family: var(--font-sans);
-      font-weight: 600;
-    }
-
-    /* ---- CARDS ---- */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .card {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--color-accent-dim);
-    }
-
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-
-    .card-icon.purple { background: var(--color-accent-bg); }
-    .card-icon.green { background: var(--color-green-dim); }
-    .card-icon.amber { background: var(--color-amber-dim); }
-    .card-icon.blue { background: var(--color-blue-dim); }
-    .card-icon.red { background: var(--color-red-dim); }
-
-    .card h4 {
-      font-size: 1rem;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-      color: var(--color-text);
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      color: var(--color-text-muted);
-      margin: 0;
-    }
-
-    /* ---- CALLOUT ---- */
-    .callout {
-      border-radius: var(--radius-sm);
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid;
-      font-size: 0.92rem;
-    }
-
-    .callout p {
-      margin: 0;
-      color: inherit;
-    }
-
-    .callout-title {
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .callout.info {
-      background: var(--color-blue-dim);
-      border-color: rgba(96, 165, 250, 0.2);
-      color: var(--color-blue);
-    }
-
-    .callout.tip {
-      background: var(--color-green-dim);
-      border-color: rgba(74, 222, 128, 0.2);
-      color: var(--color-green);
-    }
-
-    .callout.warn {
-      background: var(--color-amber-dim);
-      border-color: rgba(251, 191, 36, 0.2);
-      color: var(--color-amber);
-    }
-
-    .callout.danger {
-      background: var(--color-red-dim);
-      border-color: rgba(248, 113, 113, 0.2);
-      color: var(--color-red);
-    }
-
-    /* ---- FLOW DIAGRAM ---- */
-    .flow {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: var(--color-text-secondary);
-      overflow-x: auto;
-      white-space: pre;
-    }
-
-    .flow .highlight {
-      color: var(--color-accent);
-      font-weight: 600;
-    }
-
-    .flow .muted {
-      color: var(--color-text-muted);
-    }
-
-    .flow .green {
-      color: var(--color-green);
-      font-weight: 600;
-    }
-
-    .flow .amber {
-      color: var(--color-amber);
-      font-weight: 600;
-    }
-
-    .flow .blue {
-      color: var(--color-blue);
-      font-weight: 600;
-    }
-
-    /* ---- STEP LIST ---- */
-    .steps {
-      counter-reset: step;
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .steps li {
-      counter-increment: step;
-      position: relative;
-      padding-left: 3.5rem;
-      margin-bottom: 2rem;
-      min-height: 2.25rem;
-    }
-
-    .steps li::before {
-      content: counter(step);
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2.25rem;
-      height: 2.25rem;
-      background: var(--color-accent-bg);
-      border: 1px solid rgba(167, 139, 250, 0.2);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: var(--color-accent);
-    }
-
-    .steps li h4 {
-      margin-top: 0;
-      margin-bottom: 0.25rem;
-    }
-
-    .steps li p {
-      font-size: 0.92rem;
-      margin-bottom: 0.5rem;
-    }
-
-    /* ---- BADGE ---- */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      font-family: var(--font-mono);
-    }
-
-    .badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
-    .badge.green { background: var(--color-green-dim); color: var(--color-green); }
-    .badge.amber { background: var(--color-amber-dim); color: var(--color-amber); }
-    .badge.blue { background: var(--color-blue-dim); color: var(--color-blue); }
-
-    /* ---- TERMINAL LAYOUT ---- */
-    .terminal-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .terminal-grid.three-col {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    .terminal-window {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .terminal-header {
-      background: var(--color-surface-2);
-      padding: 0.6rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border-bottom: 1px solid var(--color-border-subtle);
-    }
-
-    .terminal-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .terminal-dot.red { background: #ff5f57; }
-    .terminal-dot.yellow { background: #febc2e; }
-    .terminal-dot.green { background: #28c840; }
-
-    .terminal-title {
-      font-size: 0.75rem;
-      color: var(--color-text-muted);
-      font-family: var(--font-mono);
-      margin-left: 0.5rem;
-    }
-
-    .terminal-body {
-      padding: 1rem 1.25rem;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      line-height: 1.7;
-      color: var(--color-text-secondary);
-      white-space: pre-wrap;
-    }
-
-    .terminal-body .prompt {
-      color: var(--color-green);
-    }
-
-    .terminal-body .cmd {
-      color: var(--color-text);
-    }
-
-    .terminal-body .output {
-      color: var(--color-text-muted);
-    }
-
-    .terminal-body .accent {
-      color: var(--color-accent);
-    }
-
-    .terminal-body .warn {
-      color: var(--color-amber);
-    }
-
-    .terminal-body .success {
-      color: var(--color-green);
-    }
-
-    /* ---- TIMELINE ---- */
-    .timeline {
-      position: relative;
-      padding-left: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0.5rem;
-      top: 0.5rem;
-      bottom: 0.5rem;
-      width: 2px;
-      background: var(--color-border);
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 2rem;
-      padding-left: 1.5rem;
-    }
-
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -1.75rem;
-      top: 0.55rem;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--color-accent);
-      border: 2px solid var(--color-bg);
-    }
-
-    .timeline-item.done::before {
-      background: var(--color-green);
-    }
-
-    .timeline-item.active::before {
-      background: var(--color-amber);
-      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
-    }
-
-    .timeline-time {
-      font-size: 0.75rem;
-      font-family: var(--font-mono);
-      color: var(--color-text-muted);
-      margin-bottom: 0.25rem;
-    }
-
-    .timeline-title {
-      font-weight: 700;
-      color: var(--color-text);
-      margin-bottom: 0.25rem;
-    }
-
-    .timeline-desc {
-      font-size: 0.9rem;
-      color: var(--color-text-secondary);
-      margin: 0;
-    }
-
-    /* ---- DIVIDER ---- */
-    hr {
-      border: none;
-      border-top: 1px solid var(--color-border);
-      margin: 4rem 0;
-    }
-
-    /* ---- TOC ---- */
-    .toc {
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .toc h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      color: var(--color-text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .toc ol {
-      padding-left: 1.25rem;
-      margin-bottom: 0;
-    }
-
-    .toc li {
-      margin-bottom: 0.35rem;
-    }
-
-    .toc a {
-      color: var(--color-text-secondary);
-      font-size: 0.92rem;
-      transition: color 0.15s;
-    }
-
-    .toc a:hover {
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-
-    /* ---- FOOTER ---- */
-    .footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      border-top: 1px solid var(--color-border-subtle);
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* ---- RESPONSIVE ---- */
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
-      body.sidebar-open .sidebar { transform: translateX(0); }
-      body.sidebar-open .sidebar-overlay { display: block; }
-      .mobile-bar { display: flex; }
-      .layout { margin-left: 0; padding-top: 52px; }
-      .main { padding: 2rem 1.25rem 4rem; }
-      .card-grid { grid-template-columns: 1fr; }
-      h2 { font-size: 1.5rem; }
-      h3 { font-size: 1.15rem; }
-      pre { padding: 1rem; }
-      .steps li { padding-left: 3rem; }
-    }
-
-  </style>
-</head>
-<body>
-
-<div class="mobile-bar">
-  <button class="hamburger" onclick="document.body.classList.toggle('sidebar-open')" aria-label="Toggle navigation">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
-  </button>
-  <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-</div>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <a href="index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
-      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
-    </div>
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
-      <a href="setup.html" class="sidebar-link">Setup</a>
-      <a href="new-project.html" class="sidebar-link">New Project</a>
-      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
-      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
-      <a href="warp.html" class="sidebar-link">Warp</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
-      <a href="workflow.html" class="sidebar-link">Core Workflow</a>
-      <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
-      <a href="personalization.html" class="sidebar-link">Personalization</a>
-      <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
-      <a href="example-session.html" class="sidebar-link active">Example Session</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
-      <a href="architecture.html" class="sidebar-link">Overview</a>
-      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
-      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
-      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
-      <a href="arch-design.html" class="sidebar-link">Design &amp; Operations</a>
-      <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
-    </div>
-    <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
-      <a href="releases.html" class="sidebar-link">Release Notes</a>
-    </div>
-  </nav>
-</aside>
-
-<div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
-<script>var a=document.querySelector(".sidebar-link.active");if(a){var g=a.closest(".sidebar-group");if(g)g.classList.remove("collapsed");}</script>
-
-<div class="layout">
-<div class="main">
-
-  <div class="toc">
-    <h3>On This Page</h3>
-    <ol>
-      <li><a href="#terminal-setup">Terminal Setup &mdash; How Many Windows?</a></li>
-      <li><a href="#day-one">Day 1: Project Foundation (Tier 1)</a></li>
-      <li><a href="#planning-session">Day 2: Planning Session</a></li>
-      <li><a href="#feature-session">Day 3: Building a Feature (Tier 2)</a></li>
-      <li><a href="#parallel-features">Day 4: Working Across Multiple Panes</a></li>
-      <li><a href="#dev-servers">Running Dev &amp; Test Servers</a></li>
-      <li><a href="#companion-docs">Using the Companion Docs Website</a></li>
-      <li><a href="#capturing-ideas">Capturing Ideas for the Backlog</a></li>
-      <li><a href="#full-week">A Full Week with VibeCrew</a></li>
-      <li><a href="#best-practices">Best Practices &amp; Guardrails</a></li>
-    </ol>
-  </div>
-
-  <!-- ============ TERMINAL SETUP ============ -->
-  <section class="section" id="terminal-setup">
-    <span class="section-label">Getting Oriented</span>
-    <h2>Terminal Setup &mdash; How Many Windows?</h2>
-    <p>VibeCrew is designed for parallel work across multiple terminal tabs. The number of tabs depends on your experience level and what you're doing.</p>
-
-    <h3>Starter layout: 1 tab</h3>
-    <p>If you're new to VibeCrew, start with a single terminal. Run <code>/setup</code>, <code>/new-project</code>, and your first few features sequentially. Learn the rhythm before adding parallelism.</p>
-
-    <div class="terminal-grid">
-      <div class="terminal-window" style="grid-column: 1 / -1;">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab 1 &mdash; Main Session</span>
-        </div>
-        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
-<span class="output">Session startup agent detects project state...</span>
-<span class="accent">VibeCrew v1.4.0 | Foundation: complete | Feature: user-auth (Code phase)</span>
-<span class="output">Ready. Type /status for full dashboard.</span></div>
-      </div>
-    </div>
-
-    <h3>Recommended layout: one tab per project</h3>
-    <p>Each project gets its own Warp tab with three split panes: a large Planning pane on the left, and Development + Terminal panes stacked on the right. If you work on multiple projects, each one gets the same layout in its own tab.</p>
-
-    <div class="terminal-grid three-col">
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Left &mdash; Planning</span>
-        </div>
-        <div class="terminal-body"><span class="accent">claude</span>
-<span class="output">/plan-features, /idea</span>
-<span class="output">/status, /check, /cost</span></div>
-      </div>
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Right top &mdash; Development</span>
-        </div>
-        <div class="terminal-body"><span class="accent">claude</span>
-<span class="output">Building: user-auth</span>
-<span class="output">Code phase active</span></div>
-      </div>
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Right bottom &mdash; Terminal</span>
-        </div>
-        <div class="terminal-body"><span class="accent">npm run dev</span>
-<span class="output">Local server running</span>
-<span class="output">http://localhost:3000</span></div>
-      </div>
-    </div>
-
-    <div class="callout tip">
-      <div class="callout-title">How notifications keep this manageable</div>
-      <p>You don't need to watch all panes. The Interrupt Protocol sends a native OS notification when any session needs you (permission prompt, task complete, or error). Click the notification to jump directly to that pane. Work in your Planning pane until you're interrupted &mdash; that's the whole system.</p>
-    </div>
-
-    <h3>Multi-project workflow</h3>
-    <p>When working on multiple projects, each gets its own tab with the same 3-pane layout. Use <kbd>CMD</kbd>+<kbd>1</kbd> through <kbd>CMD</kbd>+<kbd>8</kbd> to jump between projects and <kbd>Opt</kbd>+<kbd>CMD</kbd>+<kbd>Arrow</kbd> to move between panes within a tab. Color-code tabs so you can identify projects at a glance.</p>
-
-    <div class="callout warn">
-      <div class="callout-title">Each pane is an independent Claude Code session</div>
-      <p>Every pane with Claude Code runs its own context window. They share the filesystem (git branches, <code>.vibecrew/</code> state, <code>CLAUDE.md</code>) but not conversation history. This is by design &mdash; it means planning in one pane doesn't consume context in the development pane. But it also means you need to coordinate via branches: each feature gets its own branch.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ DAY 1: FOUNDATION ============ -->
-  <section class="section" id="day-one">
-    <span class="section-label">Example Walkthrough</span>
-    <h2>Day 1: Project Foundation (Tier 1)</h2>
-    <p>Let's build a travel planning SaaS called <strong>TripFlow</strong>. Day 1 is entirely Tier 1 &mdash; no source code, only architecture. This takes one session, typically 20&ndash;40 minutes.</p>
-
-    <h3>The session</h3>
-    <p>Open a single terminal tab.</p>
-
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
-<span class="output"># Session startup agent runs automatically</span>
-<span class="accent">VibeCrew v1.4.0 | No project detected. Run /new-project to begin.</span>
-
-<span class="prompt">&gt;</span> /new-project</code></pre>
-
-    <p>VibeCrew now walks you through 6 steps. You answer questions, it produces artifacts.</p>
-
-    <div class="timeline">
-      <div class="timeline-item done">
-        <div class="timeline-time">~3 min</div>
-        <div class="timeline-title">Step 1: VISION.md</div>
-        <p class="timeline-desc">You describe TripFlow: a collaborative trip planner for groups. Target users are friend groups planning vacations. Key constraint: mobile-first. VibeCrew produces <code>VISION.md</code>.</p>
-      </div>
-      <div class="timeline-item done">
-        <div class="timeline-time">~5 min</div>
-        <div class="timeline-title">Step 2: design-system.css</div>
-        <p class="timeline-desc">You pick a warm blue primary color, Inter font, 8px radius. The UI Designer agent generates 80+ CSS custom properties: colors, typography, spacing, shadows, breakpoints.</p>
-      </div>
-      <div class="timeline-item done">
-        <div class="timeline-time">~15 min</div>
-        <div class="timeline-title">Step 3: TDR (Technology Decision Record)</div>
-        <p class="timeline-desc">The Stack Scout agent launches in a <strong>separate context window</strong>. It researches Next.js vs. Remix vs. SvelteKit, compares auth solutions, evaluates databases. You can work on something else while it runs. It produces <code>docs/tdr-001-tech-stack.md</code> recommending Next.js + Supabase + Tailwind.</p>
-      </div>
-      <div class="timeline-item done">
-        <div class="timeline-time">~3 min</div>
-        <div class="timeline-title">Step 3.5: Opponent Processor</div>
-        <p class="timeline-desc">The Opponent challenges the TDR: "Supabase row-level security has sharp edges with complex group permissions." You review both sides and decide to keep the choices. The counter-analysis is saved for reference.</p>
-      </div>
-      <div class="timeline-item done">
-        <div class="timeline-time">~5 min</div>
-        <div class="timeline-title">Step 4: Roadmap</div>
-        <p class="timeline-desc">You list features: user auth, trip creation, itinerary builder, group invites, expense splitting. VibeCrew organizes them into priority tiers in <code>docs/roadmap.md</code>.</p>
-      </div>
-      <div class="timeline-item done">
-        <div class="timeline-time">~2 min</div>
-        <div class="timeline-title">Step 5: CLAUDE.md</div>
-        <p class="timeline-desc">VibeCrew synthesizes everything: tech stack rules, design system reference, file conventions, testing strategy. The master rules file is ready.</p>
-      </div>
-      <div class="timeline-item done">
-        <div class="timeline-time">~1 min</div>
-        <div class="timeline-title">Step 6: Git commit</div>
-        <p class="timeline-desc"><code>git commit -m "plan: project foundation"</code> &mdash; Phase gate unlocks. Source code writes are now allowed.</p>
-      </div>
-    </div>
-
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /wrap
-<span class="success">Vibe Score: 95/100</span>
-<span class="output">Session logged. Foundation complete. You can now run /plan-features or /new-feature.</span></code></pre>
-
-    <div class="callout info">
-      <div class="callout-title">Why this matters</div>
-      <p>Every session after this starts with Claude reading <code>CLAUDE.md</code>. It knows your stack is Next.js + Supabase + Tailwind. It knows your design tokens. It knows your file conventions. You never explain these again. The 30 minutes you spent on the foundation saves hours of corrections across every future session.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ DAY 2: PLANNING ============ -->
-  <section class="section" id="planning-session">
-    <span class="section-label">Planning</span>
-    <h2>Day 2: Planning Session</h2>
-    <p>Before building features, invest one session in creating structured specifications. This session is short (15&ndash;20 min) and pays for itself immediately.</p>
-
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
-<span class="accent">VibeCrew v1.4.0 | Foundation: complete | No active feature</span>
-<span class="output">Ready. 5 features in roadmap, 0 planned.</span>
-
-<span class="prompt">&gt;</span> /plan-features</code></pre>
-
-    <p>VibeCrew reads your roadmap and walks through each feature. For each one, you provide or confirm:</p>
-
-    <ul>
-      <li><strong>Name and description</strong> &mdash; one sentence</li>
-      <li><strong>Acceptance criteria</strong> &mdash; when is this feature "done"?</li>
-      <li><strong>Priority</strong> &mdash; P0 (must have) through P3 (nice to have)</li>
-      <li><strong>Complexity</strong> &mdash; S / M / L / XL</li>
-      <li><strong>Dependencies</strong> &mdash; which features must exist first?</li>
-    </ul>
-
-    <p>The output is <code>.vibecrew/backlog.json</code> &mdash; a structured file that <code>/new-feature</code> and <code>/run-backlog</code> read to determine what to build next.</p>
-
-    <pre><code><span class="code-label">backlog.json (excerpt)</span>{
-  "features": [
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Example Session</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.terminal-window{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius);margin-bottom:2rem;overflow:hidden}.terminal-titlebar{display:flex;align-items:center;padding:.75rem 1rem;background:var(--color-surface-2);border-bottom:1px solid var(--color-border-subtle);gap:.5rem}.terminal-dots{display:flex;gap:.4rem}.terminal-dot{width:10px;height:10px;border-radius:50%}.terminal-dot.red{background:#ff5f57}.terminal-dot.yellow{background:#febc2e}.terminal-dot.green{background:#28c840}.terminal-title{flex:1;text-align:center;font-size:.8rem;color:var(--color-text-muted);font-family:var(--font-mono)}.terminal-body{padding:1.25rem 1.5rem;font-family:var(--font-mono);font-size:.85rem;line-height:1.7;color:var(--color-text-secondary);overflow-x:auto}.terminal-body .prompt{color:var(--color-green)}.terminal-body .command{color:var(--color-text);font-weight:500}.terminal-body .output{color:var(--color-text-muted)}.terminal-body .accent{color:var(--color-accent)}.terminal-body .success{color:var(--color-green)}.terminal-body .warning{color:var(--color-amber)}.terminal-body .error{color:var(--color-red)}.timeline{position:relative;padding-left:2rem}.timeline:before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--color-border)}.timeline-item{position:relative;padding-bottom:2.5rem}.timeline-item:before{content:"";position:absolute;left:-2rem;top:.4rem;width:12px;height:12px;border-radius:50%;background:var(--color-accent-dim);border:2px solid var(--color-accent);transform:translate(-50%);margin-left:1px}.timeline-item.completed:before{background:var(--color-green);border-color:var(--color-green)}.timeline-time{font-size:.8rem;font-weight:600;color:var(--color-accent);margin-bottom:.25rem}.timeline-title{font-size:1.05rem;font-weight:700;color:var(--color-text);margin-bottom:.5rem}.timeline-body{color:var(--color-text-secondary);font-size:.9rem}.timeline-body ul{margin-top:.5rem}.terminal-grid[data-astro-cid-vl6nuuly]{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}.terminal-grid[data-astro-cid-vl6nuuly].three-col{grid-template-columns:1fr 1fr 1fr}@media(max-width:768px){.terminal-grid[data-astro-cid-vl6nuuly],.terminal-grid[data-astro-cid-vl6nuuly].three-col{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.C1_FxMSw.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link active"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Workflows</span>  <span class="separator">/</span> <span>Example Session</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Workflows"},{"@type":"ListItem","position":3,"name":"Example Session"}]}</script> <span class="section-label">Workflows</span>  <div class="toc" data-astro-cid-vl6nuuly> <h3 data-astro-cid-vl6nuuly>On This Page</h3> <ol data-astro-cid-vl6nuuly> <li data-astro-cid-vl6nuuly><a href="#terminal-setup" data-astro-cid-vl6nuuly>Terminal Setup &mdash; How Many Windows?</a></li> <li data-astro-cid-vl6nuuly><a href="#day-one" data-astro-cid-vl6nuuly>Day 1: Project Foundation (Tier 1)</a></li> <li data-astro-cid-vl6nuuly><a href="#planning-session" data-astro-cid-vl6nuuly>Day 2: Planning Session</a></li> <li data-astro-cid-vl6nuuly><a href="#feature-session" data-astro-cid-vl6nuuly>Day 3: Building a Feature (Tier 2)</a></li> <li data-astro-cid-vl6nuuly><a href="#parallel-features" data-astro-cid-vl6nuuly>Day 4: Working Across Multiple Panes</a></li> <li data-astro-cid-vl6nuuly><a href="#dev-servers" data-astro-cid-vl6nuuly>Running Dev &amp; Test Servers</a></li> <li data-astro-cid-vl6nuuly><a href="#companion-docs" data-astro-cid-vl6nuuly>Using the Companion Docs Website</a></li> <li data-astro-cid-vl6nuuly><a href="#capturing-ideas" data-astro-cid-vl6nuuly>Capturing Ideas for the Backlog</a></li> <li data-astro-cid-vl6nuuly><a href="#full-week" data-astro-cid-vl6nuuly>A Full Week with VibeCrew</a></li> <li data-astro-cid-vl6nuuly><a href="#best-practices" data-astro-cid-vl6nuuly>Best Practices &amp; Guardrails</a></li> </ol> </div>  <section class="section" id="terminal-setup" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Getting Oriented</span> <h2 data-astro-cid-vl6nuuly>Terminal Setup &mdash; How Many Windows?</h2> <p data-astro-cid-vl6nuuly>VibeCrew is designed for parallel work across multiple terminal tabs. The number of tabs depends on your experience level and what you're doing.</p> <h3 data-astro-cid-vl6nuuly>Starter layout: 1 tab</h3> <p data-astro-cid-vl6nuuly>If you're new to VibeCrew, start with a single terminal. Run <code data-astro-cid-vl6nuuly>/setup</code>, <code data-astro-cid-vl6nuuly>/new-project</code>, and your first few features sequentially. Learn the rhythm before adding parallelism.</p> <div class="terminal-grid" data-astro-cid-vl6nuuly> <div class="terminal-window" style="grid-column: 1 / -1;" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Tab 1 &mdash; Main Session</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="prompt" data-astro-cid-vl6nuuly>$</span> <span class="cmd" data-astro-cid-vl6nuuly>claude</span> <span class="output" data-astro-cid-vl6nuuly>Session startup agent detects project state...</span> <span class="accent" data-astro-cid-vl6nuuly>VibeCrew v1.4.0 | Foundation: complete | Feature: user-auth (Code phase)</span> <span class="output" data-astro-cid-vl6nuuly>Ready. Type /status for full dashboard.</span></div> </div> </div> <h3 data-astro-cid-vl6nuuly>Recommended layout: one tab per project</h3> <p data-astro-cid-vl6nuuly>Each project gets its own Warp tab with three split panes: a large Planning pane on the left, and Development + Terminal panes stacked on the right. If you work on multiple projects, each one gets the same layout in its own tab.</p> <div class="terminal-grid three-col" data-astro-cid-vl6nuuly> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Left &mdash; Planning</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="accent" data-astro-cid-vl6nuuly>claude</span> <span class="output" data-astro-cid-vl6nuuly>/plan-features, /idea</span> <span class="output" data-astro-cid-vl6nuuly>/status, /check, /cost</span></div> </div> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Right top &mdash; Development</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="accent" data-astro-cid-vl6nuuly>claude</span> <span class="output" data-astro-cid-vl6nuuly>Building: user-auth</span> <span class="output" data-astro-cid-vl6nuuly>Code phase active</span></div> </div> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Right bottom &mdash; Terminal</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="accent" data-astro-cid-vl6nuuly>npm run dev</span> <span class="output" data-astro-cid-vl6nuuly>Local server running</span> <span class="output" data-astro-cid-vl6nuuly>http://localhost:3000</span></div> </div> </div> <div class="callout tip"> <div class="callout-title">How notifications keep this manageable</div>  <p data-astro-cid-vl6nuuly>You don't need to watch all panes. The Interrupt Protocol sends a native OS notification when any session needs you (permission prompt, task complete, or error). Click the notification to jump directly to that pane. Work in your Planning pane until you're interrupted &mdash; that's the whole system.</p>  </div> <h3 data-astro-cid-vl6nuuly>Multi-project workflow</h3> <p data-astro-cid-vl6nuuly>When working on multiple projects, each gets its own tab with the same 3-pane layout. Use <kbd data-astro-cid-vl6nuuly>CMD</kbd>+<kbd data-astro-cid-vl6nuuly>1</kbd> through <kbd data-astro-cid-vl6nuuly>CMD</kbd>+<kbd data-astro-cid-vl6nuuly>8</kbd> to jump between projects and <kbd data-astro-cid-vl6nuuly>Opt</kbd>+<kbd data-astro-cid-vl6nuuly>CMD</kbd>+<kbd data-astro-cid-vl6nuuly>Arrow</kbd> to move between panes within a tab. Color-code tabs so you can identify projects at a glance.</p> <div class="callout warn"> <div class="callout-title">Each pane is an independent Claude Code session</div>  <p data-astro-cid-vl6nuuly>Every pane with Claude Code runs its own context window. They share the filesystem (git branches, <code data-astro-cid-vl6nuuly>.vibecrew/</code> state, <code data-astro-cid-vl6nuuly>CLAUDE.md</code>) but not conversation history. This is by design &mdash; it means planning in one pane doesn't consume context in the development pane. But it also means you need to coordinate via branches: each feature gets its own branch.</p>  </div> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="day-one" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Example Walkthrough</span> <h2 data-astro-cid-vl6nuuly>Day 1: Project Foundation (Tier 1)</h2> <p data-astro-cid-vl6nuuly>Let's build a travel planning SaaS called <strong data-astro-cid-vl6nuuly>TripFlow</strong>. Day 1 is entirely Tier 1 &mdash; no source code, only architecture. This takes one session, typically 20&ndash;40 minutes.</p> <h3 data-astro-cid-vl6nuuly>The session</h3> <p data-astro-cid-vl6nuuly>Open a single terminal tab.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>$</span> claude
+<span class="output" data-astro-cid-vl6nuuly># Session startup agent runs automatically</span>
+<span class="accent" data-astro-cid-vl6nuuly>VibeCrew v1.4.0 | No project detected. Run /new-project to begin.</span>
+
+<span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /new-project</code></pre> <p data-astro-cid-vl6nuuly>VibeCrew now walks you through 6 steps. You answer questions, it produces artifacts.</p> <div class="timeline" data-astro-cid-vl6nuuly> <div class="timeline-item completed" data-astro-cid-vl6nuuly> <div class="timeline-time" data-astro-cid-vl6nuuly>~3 min</div> <div class="timeline-title" data-astro-cid-vl6nuuly>Step 1: VISION.md</div> <p class="timeline-desc" data-astro-cid-vl6nuuly>You describe TripFlow: a collaborative trip planner for groups. Target users are friend groups planning vacations. Key constraint: mobile-first. VibeCrew produces <code data-astro-cid-vl6nuuly>VISION.md</code>.</p> </div> <div class="timeline-item completed" data-astro-cid-vl6nuuly> <div class="timeline-time" data-astro-cid-vl6nuuly>~5 min</div> <div class="timeline-title" data-astro-cid-vl6nuuly>Step 2: design-system.css</div> <p class="timeline-desc" data-astro-cid-vl6nuuly>You pick a warm blue primary color, Inter font, 8px radius. The UI Designer agent generates 80+ CSS custom properties: colors, typography, spacing, shadows, breakpoints.</p> </div> <div class="timeline-item completed" data-astro-cid-vl6nuuly> <div class="timeline-time" data-astro-cid-vl6nuuly>~15 min</div> <div class="timeline-title" data-astro-cid-vl6nuuly>Step 3: TDR (Technology Decision Record)</div> <p class="timeline-desc" data-astro-cid-vl6nuuly>The Stack Scout agent launches in a <strong data-astro-cid-vl6nuuly>separate context window</strong>. It researches Next.js vs. Remix vs. SvelteKit, compares auth solutions, evaluates databases. You can work on something else while it runs. It produces <code data-astro-cid-vl6nuuly>docs/tdr-001-tech-stack.md</code> recommending Next.js + Supabase + Tailwind.</p> </div> <div class="timeline-item completed" data-astro-cid-vl6nuuly> <div class="timeline-time" data-astro-cid-vl6nuuly>~3 min</div> <div class="timeline-title" data-astro-cid-vl6nuuly>Step 3.5: Opponent Processor</div> <p class="timeline-desc" data-astro-cid-vl6nuuly>The Opponent challenges the TDR: "Supabase row-level security has sharp edges with complex group permissions." You review both sides and decide to keep the choices. The counter-analysis is saved for reference.</p> </div> <div class="timeline-item completed" data-astro-cid-vl6nuuly> <div class="timeline-time" data-astro-cid-vl6nuuly>~5 min</div> <div class="timeline-title" data-astro-cid-vl6nuuly>Step 4: Roadmap</div> <p class="timeline-desc" data-astro-cid-vl6nuuly>You list features: user auth, trip creation, itinerary builder, group invites, expense splitting. VibeCrew organizes them into priority tiers in <code data-astro-cid-vl6nuuly>docs/roadmap.md</code>.</p> </div> <div class="timeline-item completed" data-astro-cid-vl6nuuly> <div class="timeline-time" data-astro-cid-vl6nuuly>~2 min</div> <div class="timeline-title" data-astro-cid-vl6nuuly>Step 5: CLAUDE.md</div> <p class="timeline-desc" data-astro-cid-vl6nuuly>VibeCrew synthesizes everything: tech stack rules, design system reference, file conventions, testing strategy. The master rules file is ready.</p> </div> <div class="timeline-item completed" data-astro-cid-vl6nuuly> <div class="timeline-time" data-astro-cid-vl6nuuly>~1 min</div> <div class="timeline-title" data-astro-cid-vl6nuuly>Step 6: Git commit</div> <p class="timeline-desc" data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly>git commit -m "plan: project foundation"</code> &mdash; Phase gate unlocks. Source code writes are now allowed.</p> </div> </div> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /wrap
+<span class="success" data-astro-cid-vl6nuuly>Vibe Score: 95/100</span>
+<span class="output" data-astro-cid-vl6nuuly>Session logged. Foundation complete. You can now run /plan-features or /new-feature.</span></code></pre> <div class="callout info"> <div class="callout-title">Why this matters</div>  <p data-astro-cid-vl6nuuly>Every session after this starts with Claude reading <code data-astro-cid-vl6nuuly>CLAUDE.md</code>. It knows your stack is Next.js + Supabase + Tailwind. It knows your design tokens. It knows your file conventions. You never explain these again. The 30 minutes you spent on the foundation saves hours of corrections across every future session.</p>  </div> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="planning-session" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Planning</span> <h2 data-astro-cid-vl6nuuly>Day 2: Planning Session</h2> <p data-astro-cid-vl6nuuly>Before building features, invest one session in creating structured specifications. This session is short (15&ndash;20 min) and pays for itself immediately.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>$</span> claude
+<span class="accent" data-astro-cid-vl6nuuly>VibeCrew v1.4.0 | Foundation: complete | No active feature</span>
+<span class="output" data-astro-cid-vl6nuuly>Ready. 5 features in roadmap, 0 planned.</span>
+
+<span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /plan-features</code></pre> <p data-astro-cid-vl6nuuly>VibeCrew reads your roadmap and walks through each feature. For each one, you provide or confirm:</p> <ul data-astro-cid-vl6nuuly> <li data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>Name and description</strong> &mdash; one sentence</li> <li data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>Acceptance criteria</strong> &mdash; when is this feature "done"?</li> <li data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>Priority</strong> &mdash; P0 (must have) through P3 (nice to have)</li> <li data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>Complexity</strong> &mdash; S / M / L / XL</li> <li data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>Dependencies</strong> &mdash; which features must exist first?</li> </ul> <p data-astro-cid-vl6nuuly>The output is <code data-astro-cid-vl6nuuly>.vibecrew/backlog.json</code> &mdash; a structured file that <code data-astro-cid-vl6nuuly>/new-feature</code> and <code data-astro-cid-vl6nuuly>/run-backlog</code> read to determine what to build next.</p> <pre class="copyable" data-copy="{
+  &#34;features&#34;: [
     {
-      "id": "user-auth",
-      "name": "User Authentication",
-      "priority": "P0",
-      "complexity": "M",
-      "status": "planned",
-      "acceptance_criteria": [
-        "Users can sign up with email/password",
-        "Users can sign in with Google OAuth",
-        "Protected routes redirect to login",
-        "Session persists across page refresh"
+      &#34;id&#34;: &#34;user-auth&#34;,
+      &#34;name&#34;: &#34;User Authentication&#34;,
+      &#34;priority&#34;: &#34;P0&#34;,
+      &#34;complexity&#34;: &#34;M&#34;,
+      &#34;status&#34;: &#34;planned&#34;,
+      &#34;acceptance_criteria&#34;: [
+        &#34;Users can sign up with email/password&#34;,
+        &#34;Users can sign in with Google OAuth&#34;,
+        &#34;Protected routes redirect to login&#34;,
+        &#34;Session persists across page refresh&#34;
       ],
-      "dependencies": []
+      &#34;dependencies&#34;: []
     },
     {
-      "id": "trip-creation",
-      "name": "Trip Creation",
-      "priority": "P0",
-      "complexity": "M",
-      "status": "planned",
-      "dependencies": ["user-auth"]
+      &#34;id&#34;: &#34;trip-creation&#34;,
+      &#34;name&#34;: &#34;Trip Creation&#34;,
+      &#34;priority&#34;: &#34;P0&#34;,
+      &#34;complexity&#34;: &#34;M&#34;,
+      &#34;status&#34;: &#34;planned&#34;,
+      &#34;dependencies&#34;: [&#34;user-auth&#34;]
     }
   ]
-}</code></pre>
+}"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">backlog.json (excerpt)</span>{
+  &quot;features&quot;: [
+    {
+      &quot;id&quot;: &quot;user-auth&quot;,
+      &quot;name&quot;: &quot;User Authentication&quot;,
+      &quot;priority&quot;: &quot;P0&quot;,
+      &quot;complexity&quot;: &quot;M&quot;,
+      &quot;status&quot;: &quot;planned&quot;,
+      &quot;acceptance_criteria&quot;: [
+        &quot;Users can sign up with email/password&quot;,
+        &quot;Users can sign in with Google OAuth&quot;,
+        &quot;Protected routes redirect to login&quot;,
+        &quot;Session persists across page refresh&quot;
+      ],
+      &quot;dependencies&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;trip-creation&quot;,
+      &quot;name&quot;: &quot;Trip Creation&quot;,
+      &quot;priority&quot;: &quot;P0&quot;,
+      &quot;complexity&quot;: &quot;M&quot;,
+      &quot;status&quot;: &quot;planned&quot;,
+      &quot;dependencies&quot;: [&quot;user-auth&quot;]
+    }
+  ]
+}</code></pre> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /wrap
+<span class="success" data-astro-cid-vl6nuuly>Vibe Score: 92/100</span>
+<span class="output" data-astro-cid-vl6nuuly>5 features planned. Backlog ready for /new-feature or /run-backlog.</span></code></pre> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="feature-session" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Building</span> <h2 data-astro-cid-vl6nuuly>Day 3: Building a Feature (Tier 2)</h2> <p data-astro-cid-vl6nuuly>This is where most of your time goes. A feature session follows the 6-phase cycle: Plan, UI Design, Code, Test, Review, Docs. Here's a complete walkthrough of building "User Authentication" in a single session.</p> <h3 data-astro-cid-vl6nuuly>Starting the feature</h3> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>$</span> claude
+<span class="accent" data-astro-cid-vl6nuuly>VibeCrew v1.4.0 | Foundation: complete | No active feature</span>
+<span class="output" data-astro-cid-vl6nuuly>Next in backlog: user-auth (P0, M complexity)</span>
 
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /wrap
-<span class="success">Vibe Score: 92/100</span>
-<span class="output">5 features planned. Backlog ready for /new-feature or /run-backlog.</span></code></pre>
-  </section>
+<span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /new-feature "user-auth"
+<span class="output" data-astro-cid-vl6nuuly>Created branch: feat/user-auth</span>
+<span class="output" data-astro-cid-vl6nuuly>Loaded spec from backlog. 6-phase tracking initialized.</span>
+<span class="output" data-astro-cid-vl6nuuly>Phases: [ ] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre> <h3 data-astro-cid-vl6nuuly>The 6 phases</h3> <h4 data-astro-cid-vl6nuuly>Phase 1: Plan (~3 min)</h4> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> "Plan the user authentication feature"
 
-  <hr>
+<span class="output" data-astro-cid-vl6nuuly>Writing feature spec at docs/features/user-auth.md</span>
+<span class="output" data-astro-cid-vl6nuuly>  - Email/password signup with Supabase Auth</span>
+<span class="output" data-astro-cid-vl6nuuly>  - Google OAuth via Supabase provider</span>
+<span class="output" data-astro-cid-vl6nuuly>  - Middleware for protected routes</span>
+<span class="output" data-astro-cid-vl6nuuly>  - Session handling with Supabase SSR helpers</span>
+<span class="output" data-astro-cid-vl6nuuly>  - Edge cases: expired tokens, deleted accounts, rate limiting</span>
 
-  <!-- ============ DAY 3: FEATURE SESSION ============ -->
-  <section class="section" id="feature-session">
-    <span class="section-label">Building</span>
-    <h2>Day 3: Building a Feature (Tier 2)</h2>
-    <p>This is where most of your time goes. A feature session follows the 6-phase cycle: Plan, UI Design, Code, Test, Review, Docs. Here's a complete walkthrough of building "User Authentication" in a single session.</p>
+<span class="success" data-astro-cid-vl6nuuly>Phase complete: Plan</span>
+<span class="output" data-astro-cid-vl6nuuly>Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre> <h4 data-astro-cid-vl6nuuly>Phase 2: UI Design (~5 min)</h4> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> "Design the auth UI components"
 
-    <h3>Starting the feature</h3>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">$</span> claude
-<span class="accent">VibeCrew v1.4.0 | Foundation: complete | No active feature</span>
-<span class="output">Next in backlog: user-auth (P0, M complexity)</span>
+<span class="output" data-astro-cid-vl6nuuly>Designing components using design-system.css tokens:</span>
+<span class="output" data-astro-cid-vl6nuuly>  - LoginForm: email input, password input, submit, OAuth buttons</span>
+<span class="output" data-astro-cid-vl6nuuly>  - SignupForm: extends LoginForm with name field, confirm password</span>
+<span class="output" data-astro-cid-vl6nuuly>  - AuthLayout: centered card layout, responsive breakpoints</span>
+<span class="output" data-astro-cid-vl6nuuly>  - ProtectedRoute: redirect wrapper component</span>
+<span class="output" data-astro-cid-vl6nuuly>All colors, spacing, and typography reference CSS custom properties.</span>
 
-<span class="prompt">&gt;</span> /new-feature "user-auth"
-<span class="output">Created branch: feat/user-auth</span>
-<span class="output">Loaded spec from backlog. 6-phase tracking initialized.</span>
-<span class="output">Phases: [ ] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
+<span class="success" data-astro-cid-vl6nuuly>Phase complete: UI Design</span>
+<span class="output" data-astro-cid-vl6nuuly>Phases: [x] Plan  [x] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre> <h4 data-astro-cid-vl6nuuly>Phase 3: Code (~15 min)</h4> <p data-astro-cid-vl6nuuly>This is the longest phase. The Builder agent writes the implementation, consulting Context7 for Supabase and Next.js APIs instead of guessing.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> "Implement user authentication"
 
-    <h3>The 6 phases</h3>
+<span class="output" data-astro-cid-vl6nuuly>Builder agent activated. Working within TDR boundaries.</span>
+<span class="output" data-astro-cid-vl6nuuly>  Checking Context7 for Supabase Auth API...</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/lib/supabase/client.ts</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/lib/supabase/server.ts</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/app/(auth)/login/page.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/app/(auth)/signup/page.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/middleware.ts</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/components/auth/LoginForm.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/components/auth/SignupForm.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/components/auth/OAuthButtons.tsx</span>
 
-    <h4>Phase 1: Plan (~3 min)</h4>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Plan the user authentication feature"
+<span class="success" data-astro-cid-vl6nuuly>Phase complete: Code</span>
+<span class="output" data-astro-cid-vl6nuuly>Phases: [x] Plan  [x] UI Design  [x] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre> <div class="callout tip"> <div class="callout-title">Capturing ideas mid-feature</div>  <p data-astro-cid-vl6nuuly>While building auth, you realize you'll need a "forgot password" flow. Don't start building it now &mdash; that's scope creep. Capture it instantly:</p>  </div> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /idea "forgot password flow with email reset link"
+<span class="output" data-astro-cid-vl6nuuly>Added to backlog: "forgot password flow with email reset link" (unplanned)</span></code></pre> <p data-astro-cid-vl6nuuly>One line of output. Zero context spent. The idea is safe. Back to work.</p> <h4 data-astro-cid-vl6nuuly>Phase 4: Test (~8 min)</h4> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> "Write tests for user authentication"
 
-<span class="output">Writing feature spec at docs/features/user-auth.md</span>
-<span class="output">  - Email/password signup with Supabase Auth</span>
-<span class="output">  - Google OAuth via Supabase provider</span>
-<span class="output">  - Middleware for protected routes</span>
-<span class="output">  - Session handling with Supabase SSR helpers</span>
-<span class="output">  - Edge cases: expired tokens, deleted accounts, rate limiting</span>
+<span class="output" data-astro-cid-vl6nuuly>Writing tests (TDD-hybrid approach):</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/__tests__/auth/login.test.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/__tests__/auth/signup.test.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>  Creating src/__tests__/auth/middleware.test.ts</span>
+<span class="output" data-astro-cid-vl6nuuly>  Running test suite...</span>
+<span class="success" data-astro-cid-vl6nuuly>12 tests passed, 0 failed</span>
 
-<span class="success">Phase complete: Plan</span>
-<span class="output">Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
+<span class="success" data-astro-cid-vl6nuuly>Phase complete: Test</span>
+<span class="output" data-astro-cid-vl6nuuly>Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [ ] Review  [ ] Docs</span></code></pre> <h4 data-astro-cid-vl6nuuly>Phase 5: Review (~3 min)</h4> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /review
 
-    <h4>Phase 2: UI Design (~5 min)</h4>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Design the auth UI components"
+<span class="output" data-astro-cid-vl6nuuly>Code Reviewer agent activated (read-only worktree).</span>
+<span class="output" data-astro-cid-vl6nuuly>Reviewing against: feature spec, TDR constraints, project conventions</span>
+<span class="output" data-astro-cid-vl6nuuly>  Checking TDR compliance... OK</span>
+<span class="output" data-astro-cid-vl6nuuly>  Checking conventional commit format... OK</span>
+<span class="output" data-astro-cid-vl6nuuly>  Checking design system token usage... OK</span>
+<span class="output" data-astro-cid-vl6nuuly>  1 warning: LoginForm missing aria-live region for error messages</span>
 
-<span class="output">Designing components using design-system.css tokens:</span>
-<span class="output">  - LoginForm: email input, password input, submit, OAuth buttons</span>
-<span class="output">  - SignupForm: extends LoginForm with name field, confirm password</span>
-<span class="output">  - AuthLayout: centered card layout, responsive breakpoints</span>
-<span class="output">  - ProtectedRoute: redirect wrapper component</span>
-<span class="output">All colors, spacing, and typography reference CSS custom properties.</span>
+<span class="success" data-astro-cid-vl6nuuly>Phase complete: Review</span>
+<span class="output" data-astro-cid-vl6nuuly>Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Review  [ ] Docs</span></code></pre> <h4 data-astro-cid-vl6nuuly>Phase 6: Docs (~2 min)</h4> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> "Generate documentation for user auth"
 
-<span class="success">Phase complete: UI Design</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
+<span class="output" data-astro-cid-vl6nuuly>Updating CHANGELOG.md</span>
+<span class="output" data-astro-cid-vl6nuuly>Updating docs/features/user-auth.md with implementation notes</span>
+<span class="output" data-astro-cid-vl6nuuly>Session log saved to .vibecrew/sessions/</span>
 
-    <h4>Phase 3: Code (~15 min)</h4>
-    <p>This is the longest phase. The Builder agent writes the implementation, consulting Context7 for Supabase and Next.js APIs instead of guessing.</p>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Implement user authentication"
+<span class="success" data-astro-cid-vl6nuuly>Phase complete: Docs</span>
+<span class="output" data-astro-cid-vl6nuuly>Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Review  [x] Docs</span></code></pre> <h3 data-astro-cid-vl6nuuly>Wrapping up</h3> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Tab 1</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /wrap
 
-<span class="output">Builder agent activated. Working within TDR boundaries.</span>
-<span class="output">  Checking Context7 for Supabase Auth API...</span>
-<span class="output">  Creating src/lib/supabase/client.ts</span>
-<span class="output">  Creating src/lib/supabase/server.ts</span>
-<span class="output">  Creating src/app/(auth)/login/page.tsx</span>
-<span class="output">  Creating src/app/(auth)/signup/page.tsx</span>
-<span class="output">  Creating src/middleware.ts</span>
-<span class="output">  Creating src/components/auth/LoginForm.tsx</span>
-<span class="output">  Creating src/components/auth/SignupForm.tsx</span>
-<span class="output">  Creating src/components/auth/OAuthButtons.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>Running quality gate...</span>
+<span class="success" data-astro-cid-vl6nuuly>  Build: passed</span>
+<span class="success" data-astro-cid-vl6nuuly>  Tests: 12/12 passed</span>
+<span class="success" data-astro-cid-vl6nuuly>  Lint: 0 errors</span>
+<span class="success" data-astro-cid-vl6nuuly>  Types: 0 errors</span>
 
-<span class="success">Phase complete: Code</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
+<span class="output" data-astro-cid-vl6nuuly>Performance Coach analysis:</span>
+<span class="success" data-astro-cid-vl6nuuly>  Vibe Score: 91/100</span>
+<span class="output" data-astro-cid-vl6nuuly>  Deductions: -5 (1 prompt refinement), -4 (minor context overhead)</span>
+<span class="output" data-astro-cid-vl6nuuly>  Bonus: +0</span>
+<span class="output" data-astro-cid-vl6nuuly>  Coaching: "Consider writing test stubs before implementation</span>
+<span class="output" data-astro-cid-vl6nuuly>   next time to catch edge cases earlier."</span>
+<span class="output" data-astro-cid-vl6nuuly>  Proposed CLAUDE.md rule: "Write test file stubs with describe</span>
+<span class="output" data-astro-cid-vl6nuuly>   blocks before implementing features."</span>
+<span class="output" data-astro-cid-vl6nuuly>  Accept rule? (y/n)</span>
 
-    <div class="callout tip">
-      <div class="callout-title">Capturing ideas mid-feature</div>
-      <p>While building auth, you realize you'll need a "forgot password" flow. Don't start building it now &mdash; that's scope creep. Capture it instantly:</p>
-    </div>
+<span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> y
 
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /idea "forgot password flow with email reset link"
-<span class="output">Added to backlog: "forgot password flow with email reset link" (unplanned)</span></code></pre>
-    <p>One line of output. Zero context spent. The idea is safe. Back to work.</p>
-
-    <h4>Phase 4: Test (~8 min)</h4>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Write tests for user authentication"
-
-<span class="output">Writing tests (TDD-hybrid approach):</span>
-<span class="output">  Creating src/__tests__/auth/login.test.tsx</span>
-<span class="output">  Creating src/__tests__/auth/signup.test.tsx</span>
-<span class="output">  Creating src/__tests__/auth/middleware.test.ts</span>
-<span class="output">  Running test suite...</span>
-<span class="success">12 tests passed, 0 failed</span>
-
-<span class="success">Phase complete: Test</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [ ] Review  [ ] Docs</span></code></pre>
-
-    <h4>Phase 5: Review (~3 min)</h4>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /review
-
-<span class="output">Code Reviewer agent activated (read-only worktree).</span>
-<span class="output">Reviewing against: feature spec, TDR constraints, project conventions</span>
-<span class="output">  Checking TDR compliance... OK</span>
-<span class="output">  Checking conventional commit format... OK</span>
-<span class="output">  Checking design system token usage... OK</span>
-<span class="output">  1 warning: LoginForm missing aria-live region for error messages</span>
-
-<span class="success">Phase complete: Review</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Review  [ ] Docs</span></code></pre>
-
-    <h4>Phase 6: Docs (~2 min)</h4>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> "Generate documentation for user auth"
-
-<span class="output">Updating CHANGELOG.md</span>
-<span class="output">Updating docs/features/user-auth.md with implementation notes</span>
-<span class="output">Session log saved to .vibecrew/sessions/</span>
-
-<span class="success">Phase complete: Docs</span>
-<span class="output">Phases: [x] Plan  [x] UI Design  [x] Code  [x] Test  [x] Review  [x] Docs</span></code></pre>
-
-    <h3>Wrapping up</h3>
-    <pre><code><span class="code-label">Tab 1</span><span class="prompt">&gt;</span> /wrap
-
-<span class="output">Running quality gate...</span>
-<span class="success">  Build: passed</span>
-<span class="success">  Tests: 12/12 passed</span>
-<span class="success">  Lint: 0 errors</span>
-<span class="success">  Types: 0 errors</span>
-
-<span class="output">Performance Coach analysis:</span>
-<span class="success">  Vibe Score: 91/100</span>
-<span class="output">  Deductions: -5 (1 prompt refinement), -4 (minor context overhead)</span>
-<span class="output">  Bonus: +0</span>
-<span class="output">  Coaching: "Consider writing test stubs before implementation</span>
-<span class="output">   next time to catch edge cases earlier."</span>
-<span class="output">  Proposed CLAUDE.md rule: "Write test file stubs with describe</span>
-<span class="output">   blocks before implementing features."</span>
-<span class="output">  Accept rule? (y/n)</span>
-
-<span class="prompt">&gt;</span> y
-
-<span class="output">Rule added to CLAUDE.md [Session Learnings].</span>
-<span class="output">Committed: feat(auth): implement user authentication</span>
-<span class="output">Branch feat/user-auth ready for PR.</span></code></pre>
-  </section>
-
-  <hr>
-
-  <!-- ============ DAY 4: MULTI-PANE ============ -->
-  <section class="section" id="parallel-features">
-    <span class="section-label">Advanced</span>
-    <h2>Day 4: Working Across Multiple Panes</h2>
-    <p>Once you've shipped a couple of features and feel comfortable with the rhythm, use the full 3-pane layout to stay productive while a feature builds. VibeCrew enforces a <strong>WIP limit of 1</strong> &mdash; only one feature can be in-progress at a time &mdash; but you can use the Planning pane for research and the Terminal pane for servers.</p>
-
-    <div class="callout info">
-      <div class="callout-title">Why one feature at a time?</div>
-      <p>The WIP limit of 1 is enforced at multiple levels: <code>state.json</code> tracks a single active feature, <code>backlog.json</code> limits the in-progress column to 1, and <code>claim-task.sh</code> blocks new claims when the limit is reached. This is by design &mdash; it prevents merge conflicts, keeps context focused, and produces higher Vibe Scores.</p>
-    </div>
-
-    <h3>The setup: 3 panes per project</h3>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon blue">&#9664;</div>
-        <h4>Left: Planning</h4>
-        <p>Your primary focus. Use <code>/plan-features</code> to refine upcoming specs, <code>/idea</code> to capture thoughts, <code>/status</code> to check progress, and <code>/check</code> to run quality gates.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon green">&#9650;</div>
-        <h4>Right top: Development</h4>
-        <p>The one in-progress feature moves through the 6 phases here. You guide decisions, review output, and run <code>/wrap</code> when done.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">&#9660;</div>
-        <h4>Right bottom: Terminal</h4>
-        <p>A raw shell for running dev servers (<code>npm run dev</code>), <code>git</code> commands, manual tests, or quick file browsing.</p>
-      </div>
-    </div>
-
-    <h3>How a multi-pane session flows</h3>
-
-    <div class="flow"><span class="highlight">9:00</span>  Development pane: <span class="green">/new-feature "trip-creation"</span>
-       Terminal pane: <span class="green">npm run dev</span>
-
-<span class="highlight">9:05</span>  Development: You guide the Plan phase for trip-creation.
-       Planning: <span class="green">/plan-features</span> &mdash; refine the itinerary-builder spec.
-
-<span class="highlight">9:15</span>  Development: Plan approved, UI Design starts.
+<span class="output" data-astro-cid-vl6nuuly>Rule added to CLAUDE.md [Session Learnings].</span>
+<span class="output" data-astro-cid-vl6nuuly>Committed: feat(auth): implement user authentication</span>
+<span class="output" data-astro-cid-vl6nuuly>Branch feat/user-auth ready for PR.</span></code></pre> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="parallel-features" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Advanced</span> <h2 data-astro-cid-vl6nuuly>Day 4: Working Across Multiple Panes</h2> <p data-astro-cid-vl6nuuly>Once you've shipped a couple of features and feel comfortable with the rhythm, use the full 3-pane layout to stay productive while a feature builds. VibeCrew enforces a <strong data-astro-cid-vl6nuuly>WIP limit of 1</strong> &mdash; only one feature can be in-progress at a time &mdash; but you can use the Planning pane for research and the Terminal pane for servers.</p> <div class="callout info"> <div class="callout-title">Why one feature at a time?</div>  <p data-astro-cid-vl6nuuly>The WIP limit of 1 is enforced at multiple levels: <code data-astro-cid-vl6nuuly>state.json</code> tracks a single active feature, <code data-astro-cid-vl6nuuly>backlog.json</code> limits the in-progress column to 1, and <code data-astro-cid-vl6nuuly>claim-task.sh</code> blocks new claims when the limit is reached. This is by design &mdash; it prevents merge conflicts, keeps context focused, and produces higher Vibe Scores.</p>  </div> <h3 data-astro-cid-vl6nuuly>The setup: 3 panes per project</h3> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon blue" data-astro-cid-vl6nuuly>&#9664;</div> <h4 data-astro-cid-vl6nuuly>Left: Planning</h4> <p data-astro-cid-vl6nuuly>Your primary focus. Use <code data-astro-cid-vl6nuuly>/plan-features</code> to refine upcoming specs, <code data-astro-cid-vl6nuuly>/idea</code> to capture thoughts, <code data-astro-cid-vl6nuuly>/status</code> to check progress, and <code data-astro-cid-vl6nuuly>/check</code> to run quality gates.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon green" data-astro-cid-vl6nuuly>&#9650;</div> <h4 data-astro-cid-vl6nuuly>Right top: Development</h4> <p data-astro-cid-vl6nuuly>The one in-progress feature moves through the 6 phases here. You guide decisions, review output, and run <code data-astro-cid-vl6nuuly>/wrap</code> when done.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon amber" data-astro-cid-vl6nuuly>&#9660;</div> <h4 data-astro-cid-vl6nuuly>Right bottom: Terminal</h4> <p data-astro-cid-vl6nuuly>A raw shell for running dev servers (<code data-astro-cid-vl6nuuly>npm run dev</code>), <code data-astro-cid-vl6nuuly>git</code> commands, manual tests, or quick file browsing.</p> </div> </div> <h3 data-astro-cid-vl6nuuly>How a multi-pane session flows</h3> <div class="flow" data-astro-cid-vl6nuuly><span class="highlight" data-astro-cid-vl6nuuly>9:00</span> Development pane: <span class="green" data-astro-cid-vl6nuuly>/new-feature "trip-creation"</span>
+Terminal pane: <span class="green" data-astro-cid-vl6nuuly>npm run dev</span> <span class="highlight" data-astro-cid-vl6nuuly>9:05</span> Development: You guide the Plan phase for trip-creation.
+       Planning: <span class="green" data-astro-cid-vl6nuuly>/plan-features</span> &mdash; refine the itinerary-builder spec.
+<span class="highlight" data-astro-cid-vl6nuuly>9:15</span> Development: Plan approved, UI Design starts.
        Planning: Itinerary-builder spec is polished and ready in the backlog.
-
-<span class="highlight">9:25</span>  Development: Code phase starts. Builder agent working.
-       Planning: <span class="green">/status</span>
-       <span class="muted">Dashboard: trip-creation (Code), 3 features planned.</span>
-
-<span class="highlight">9:30</span>  <span class="amber">Notification:</span> "Development pane &mdash; Code phase complete."
+<span class="highlight" data-astro-cid-vl6nuuly>9:25</span> Development: Code phase starts. Builder agent working.
+       Planning: <span class="green" data-astro-cid-vl6nuuly>/status</span> <span class="muted" data-astro-cid-vl6nuuly>Dashboard: trip-creation (Code), 3 features planned.</span> <span class="highlight" data-astro-cid-vl6nuuly>9:30</span> <span class="amber" data-astro-cid-vl6nuuly>Notification:</span> "Development pane &mdash; Code phase complete."
        You review the code, start the Test phase.
-
-<span class="highlight">9:35</span>  While Development runs tests, you capture an idea:
-       Planning: <span class="green">/idea "add map view to itinerary with Mapbox"</span>
-
-<span class="highlight">9:45</span>  Development: All phases done. <span class="green">/wrap</span> &rarr; Score 88
-       <span class="muted">WIP slot is now free.</span>
-
-<span class="highlight">9:46</span>  Development: <span class="green">/new-feature "itinerary-builder"</span>
-       Spec is already polished from earlier planning &mdash; Plan phase is fast.
-
-<span class="highlight">10:15</span> Development: <span class="green">/wrap</span> &rarr; Score 85
+<span class="highlight" data-astro-cid-vl6nuuly>9:35</span> While Development runs tests, you capture an idea:
+       Planning: <span class="green" data-astro-cid-vl6nuuly>/idea "add map view to itinerary with Mapbox"</span> <span class="highlight" data-astro-cid-vl6nuuly>9:45</span> Development: All phases done. <span class="green" data-astro-cid-vl6nuuly>/wrap</span> &rarr; Score 88
+<span class="muted" data-astro-cid-vl6nuuly>WIP slot is now free.</span> <span class="highlight" data-astro-cid-vl6nuuly>9:46</span> Development: <span class="green" data-astro-cid-vl6nuuly>/new-feature "itinerary-builder"</span>
+Spec is already polished from earlier planning &mdash; Plan phase is fast.
+<span class="highlight" data-astro-cid-vl6nuuly>10:15</span> Development: <span class="green" data-astro-cid-vl6nuuly>/wrap</span> &rarr; Score 85
        Two features shipped in ~75 minutes.
-       Planning: <span class="green">/status</span>
-       <span class="muted">Dashboard: 4/5 features done, 1 remaining.</span></div>
+       Planning: <span class="green" data-astro-cid-vl6nuuly>/status</span> <span class="muted" data-astro-cid-vl6nuuly>Dashboard: 4/5 features done, 1 remaining.</span></div> <h3 data-astro-cid-vl6nuuly>What you can do in each pane</h3> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <h4 data-astro-cid-vl6nuuly>Development pane (WIP slot)</h4> <p data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly>/new-feature</code>, <code data-astro-cid-vl6nuuly>/run-backlog</code>, active phase work (Plan &rarr; Code &rarr; Test &rarr; Review &rarr; Docs), <code data-astro-cid-vl6nuuly>/wrap</code>. Only one pane can do these at a time.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <h4 data-astro-cid-vl6nuuly>Planning pane (anytime)</h4> <p data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly>/plan-features</code>, <code data-astro-cid-vl6nuuly>/idea</code>, <code data-astro-cid-vl6nuuly>/status</code>, <code data-astro-cid-vl6nuuly>/check</code>, <code data-astro-cid-vl6nuuly>/heal</code>, <code data-astro-cid-vl6nuuly>/cost</code>, <code data-astro-cid-vl6nuuly>/simplify</code>, <code data-astro-cid-vl6nuuly>/audit</code>, <code data-astro-cid-vl6nuuly>/achievements</code>. These don't require the WIP slot.</p> </div> </div> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="dev-servers" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Practical</span> <h2 data-astro-cid-vl6nuuly>Running Dev &amp; Test Servers</h2> <p data-astro-cid-vl6nuuly>While VibeCrew builds your code, you'll want to see it running in the browser. Here's how to set up a dedicated tab for your dev server and run tests against it.</p> <h3 data-astro-cid-vl6nuuly>Dedicated dev server tab</h3> <p data-astro-cid-vl6nuuly>Keep one terminal tab exclusively for your development server. This tab runs outside Claude Code &mdash; it's just a normal shell running your framework's dev command.</p> <div class="terminal-grid" data-astro-cid-vl6nuuly> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Tab &mdash; Dev Server</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="prompt" data-astro-cid-vl6nuuly>$</span> <span class="cmd" data-astro-cid-vl6nuuly>npm run dev</span> <span class="output" data-astro-cid-vl6nuuly> ▲ Next.js 15.1.0</span> <span class="output" data-astro-cid-vl6nuuly> - Local: </span><span class="success" data-astro-cid-vl6nuuly>http://localhost:3000</span> <span class="output" data-astro-cid-vl6nuuly> - Network:  http://192.168.1.42:3000</span> <span class="output" data-astro-cid-vl6nuuly> ✓ Ready in 1.2s</span></div> </div> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Tab &mdash; VibeCrew Session</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="prompt" data-astro-cid-vl6nuuly>$</span> <span class="cmd" data-astro-cid-vl6nuuly>claude</span> <span class="accent" data-astro-cid-vl6nuuly>VibeCrew v1.4.0 | Feature: user-auth (Code phase)</span> <span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> <span class="cmd" data-astro-cid-vl6nuuly>"Implement the login page"</span> <span class="output" data-astro-cid-vl6nuuly>Builder agent working...</span> <span class="output" data-astro-cid-vl6nuuly> Creating src/app/(auth)/login/page.tsx</span> <span class="muted" data-astro-cid-vl6nuuly># Hot-reload updates your browser automatically</span></div> </div> </div> <div class="callout tip"> <div class="callout-title">Hot reload is your friend</div>  <p data-astro-cid-vl6nuuly>Next.js, Vite, and most modern frameworks hot-reload when files change. As VibeCrew writes code in one tab, your browser updates in real time. Keep your browser and dev server tab visible alongside your Claude Code tab to watch the UI take shape as it's built.</p>  </div> <h3 data-astro-cid-vl6nuuly>Running tests during development</h3> <p data-astro-cid-vl6nuuly>VibeCrew runs tests automatically during the Test phase and when you use <code data-astro-cid-vl6nuuly>/check</code> or <code data-astro-cid-vl6nuuly>/wrap</code>. But you can also run a test watcher in a separate tab for continuous feedback.</p> <div class="terminal-grid three-col" data-astro-cid-vl6nuuly> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Tab &mdash; Dev Server</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="output" data-astro-cid-vl6nuuly> ▲ Next.js 15.1.0</span> <span class="output" data-astro-cid-vl6nuuly> - Local: </span><span class="success" data-astro-cid-vl6nuuly>http://localhost:3000</span> <span class="output" data-astro-cid-vl6nuuly> ✓ Ready</span></div> </div> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Tab &mdash; Test Watcher</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="prompt" data-astro-cid-vl6nuuly>$</span> <span class="cmd" data-astro-cid-vl6nuuly>npm run test:watch</span> <span class="output" data-astro-cid-vl6nuuly> PASS  src/__tests__/auth/login.test.tsx</span> <span class="output" data-astro-cid-vl6nuuly> PASS  src/__tests__/auth/signup.test.tsx</span> <span class="success" data-astro-cid-vl6nuuly> Tests: 12 passed, 12 total</span> <span class="output" data-astro-cid-vl6nuuly> Watching for changes...</span></div> </div> <div class="terminal-window" data-astro-cid-vl6nuuly> <div class="terminal-titlebar" data-astro-cid-vl6nuuly> <div class="terminal-dots" data-astro-cid-vl6nuuly> <div class="terminal-dot red" data-astro-cid-vl6nuuly></div> <div class="terminal-dot yellow" data-astro-cid-vl6nuuly></div> <div class="terminal-dot green" data-astro-cid-vl6nuuly></div> </div> <span class="terminal-title" data-astro-cid-vl6nuuly>Tab &mdash; VibeCrew Session</span> </div> <div class="terminal-body" data-astro-cid-vl6nuuly><span class="accent" data-astro-cid-vl6nuuly>Building: user-auth</span> <span class="output" data-astro-cid-vl6nuuly>Code phase active</span> <span class="output" data-astro-cid-vl6nuuly>Builder agent working...</span> <span class="muted" data-astro-cid-vl6nuuly># Tests re-run as files change</span></div> </div> </div> <h3 data-astro-cid-vl6nuuly>Common dev server commands by framework</h3> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Reference</span><span class="accent" data-astro-cid-vl6nuuly># Next.js</span>
+npm run dev              <span class="output" data-astro-cid-vl6nuuly># starts on localhost:3000</span>
 
-    <h3>What you can do in each pane</h3>
-    <div class="card-grid">
-      <div class="card">
-        <h4>Development pane (WIP slot)</h4>
-        <p><code>/new-feature</code>, <code>/run-backlog</code>, active phase work (Plan &rarr; Code &rarr; Test &rarr; Review &rarr; Docs), <code>/wrap</code>. Only one pane can do these at a time.</p>
-      </div>
-      <div class="card">
-        <h4>Planning pane (anytime)</h4>
-        <p><code>/plan-features</code>, <code>/idea</code>, <code>/status</code>, <code>/check</code>, <code>/heal</code>, <code>/cost</code>, <code>/simplify</code>, <code>/audit</code>, <code>/achievements</code>. These don't require the WIP slot.</p>
-      </div>
-    </div>
-  </section>
+<span class="accent" data-astro-cid-vl6nuuly># Vite (React, Vue, Svelte)</span>
+npm run dev              <span class="output" data-astro-cid-vl6nuuly># starts on localhost:5173</span>
 
-  <hr>
+<span class="accent" data-astro-cid-vl6nuuly># Supabase (local development)</span>
+npx supabase start       <span class="output" data-astro-cid-vl6nuuly># starts local Supabase on localhost:54321</span>
+npx supabase studio      <span class="output" data-astro-cid-vl6nuuly># opens database UI on localhost:54323</span>
 
-  <!-- ============ DEV & TEST SERVERS ============ -->
-  <section class="section" id="dev-servers">
-    <span class="section-label">Practical</span>
-    <h2>Running Dev &amp; Test Servers</h2>
-    <p>While VibeCrew builds your code, you'll want to see it running in the browser. Here's how to set up a dedicated tab for your dev server and run tests against it.</p>
+<span class="accent" data-astro-cid-vl6nuuly># Testing</span>
+npm run test             <span class="output" data-astro-cid-vl6nuuly># single run</span>
+npm run test:watch       <span class="output" data-astro-cid-vl6nuuly># watch mode &mdash; re-runs on file changes</span>
+npm run test:coverage    <span class="output" data-astro-cid-vl6nuuly># with coverage report</span>
 
-    <h3>Dedicated dev server tab</h3>
-    <p>Keep one terminal tab exclusively for your development server. This tab runs outside Claude Code &mdash; it's just a normal shell running your framework's dev command.</p>
+<span class="accent" data-astro-cid-vl6nuuly># Linting &amp; type checking</span>
+npm run lint             <span class="output" data-astro-cid-vl6nuuly># ESLint</span>
+npx tsc --noEmit         <span class="output" data-astro-cid-vl6nuuly># TypeScript type check</span></code></pre> <h3 data-astro-cid-vl6nuuly>Using <code data-astro-cid-vl6nuuly>/check</code> to validate everything at once</h3> <p data-astro-cid-vl6nuuly>Instead of running each command manually, use <code data-astro-cid-vl6nuuly>/check</code> inside your VibeCrew session. The Verifier agent runs the full quality gate: build, tests, lint, and type check &mdash; in one shot.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>VibeCrew Tab</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /check
 
-    <div class="terminal-grid">
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab &mdash; Dev Server</span>
-        </div>
-        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">npm run dev</span>
+<span class="output" data-astro-cid-vl6nuuly>Verifier running quality gate...</span>
+<span class="success" data-astro-cid-vl6nuuly>  Build:  passed (3.2s)</span>
+<span class="success" data-astro-cid-vl6nuuly>  Tests:  24/24 passed (8.1s)</span>
+<span class="success" data-astro-cid-vl6nuuly>  Lint:   0 errors, 2 warnings</span>
+<span class="success" data-astro-cid-vl6nuuly>  Types:  0 errors</span>
+<span class="output" data-astro-cid-vl6nuuly>All gates passed. Ready for /wrap.</span></code></pre> <div class="callout info"> <div class="callout-title">Recommended tab layout for active development</div>  <p data-astro-cid-vl6nuuly>For the best workflow, arrange your screen like this: <strong data-astro-cid-vl6nuuly>Browser</strong> (left half) showing <code data-astro-cid-vl6nuuly>localhost:3000</code>, <strong data-astro-cid-vl6nuuly>VibeCrew tab</strong> (right top) for building, <strong data-astro-cid-vl6nuuly>Dev server tab</strong> (right bottom) to monitor for errors. If using Warp, create a <strong data-astro-cid-vl6nuuly>Launch Configuration</strong> that opens this layout automatically (see <a href="/vibe-crew/warp" data-astro-cid-vl6nuuly>Warp Tips</a>).</p>  </div> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="companion-docs" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Reference</span> <h2 data-astro-cid-vl6nuuly>Using the Companion Docs Website</h2> <p data-astro-cid-vl6nuuly>You're reading it right now. The VibeCrew documentation site is your reference companion during every session. Here's how to get the most out of it.</p> <h3 data-astro-cid-vl6nuuly>What's in each page</h3> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon purple" data-astro-cid-vl6nuuly>&#9733;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/why" data-astro-cid-vl6nuuly>Why VibeCrew</a></h4> <p data-astro-cid-vl6nuuly>Start here if you're explaining VibeCrew to a teammate or reminding yourself of the core philosophy. Covers the three problems (attention, tokens, architecture) and design principles.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon green" data-astro-cid-vl6nuuly>&#9881;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/setup" data-astro-cid-vl6nuuly>Setup Guide</a></h4> <p data-astro-cid-vl6nuuly>Your first-time installation checklist. System dependencies, plugin install, MCP server configuration, notification testing. Bookmark this &mdash; you'll revisit it when onboarding teammates.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon blue" data-astro-cid-vl6nuuly>&#10010;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/new-project" data-astro-cid-vl6nuuly>New Project</a></h4> <p data-astro-cid-vl6nuuly>The complete Tier 1 &amp; Tier 2 workflow reference. Foundation steps, the 6-phase feature cycle, phase gate enforcement, and all slash commands with examples.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon amber" data-astro-cid-vl6nuuly>&#8635;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/existing-project" data-astro-cid-vl6nuuly>Existing Projects</a></h4> <p data-astro-cid-vl6nuuly>How to bring VibeCrew into a codebase that already has code. Code auditing, convention extraction, and backlog mapping from existing issues.</p> </div> </div> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon red" data-astro-cid-vl6nuuly>&#9654;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/workflow" data-astro-cid-vl6nuuly>Detailed Workflow</a></h4> <p data-astro-cid-vl6nuuly>Advanced commands (<code data-astro-cid-vl6nuuly>/replay</code>, <code data-astro-cid-vl6nuuly>/simplify</code>, <code data-astro-cid-vl6nuuly>/heal</code>), the Opponent Processor, cost tracking, Vibe Score breakdown, and efficiency tips. Read this once you've completed your first few features.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon purple" data-astro-cid-vl6nuuly>&#9632;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/architecture" data-astro-cid-vl6nuuly>Architecture Deep Dive</a></h4> <p data-astro-cid-vl6nuuly>Technical details: the 13-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em data-astro-cid-vl6nuuly>how</em> VibeCrew works under the hood.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon blue" data-astro-cid-vl6nuuly>&#9000;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/warp" data-astro-cid-vl6nuuly>Warp Tips</a></h4> <p data-astro-cid-vl6nuuly>Warp Terminal-specific setup: Launch Configurations, keyboard shortcuts, Warp Drive for sharing, Notebooks for annotating sessions, and theme recommendations.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon green" data-astro-cid-vl6nuuly>&#9998;</div> <h4 data-astro-cid-vl6nuuly><a href="/vibe-crew/releases" data-astro-cid-vl6nuuly>Release Notes</a></h4> <p data-astro-cid-vl6nuuly>Complete changelog across all versions. Check here after updating VibeCrew to see what's new and whether any workflow changes are needed.</p> </div> </div> <h3 data-astro-cid-vl6nuuly>How to use the docs during a session</h3> <ol class="steps" data-astro-cid-vl6nuuly> <li data-astro-cid-vl6nuuly> <h4 data-astro-cid-vl6nuuly>Keep the docs open in a browser tab</h4> <p data-astro-cid-vl6nuuly>Open the docs site alongside your development browser tab. When you're waiting for the Builder agent to finish, reference the docs instead of guessing at commands or workflow steps.</p> </li> <li data-astro-cid-vl6nuuly> <h4 data-astro-cid-vl6nuuly>Use the right page for your current phase</h4> <p data-astro-cid-vl6nuuly>Starting a new project? Open <a href="/vibe-crew/new-project" data-astro-cid-vl6nuuly>New Project</a>. Building features? This page (Example Session) has the full walkthrough. Hit a CI failure? The <a href="/vibe-crew/workflow" data-astro-cid-vl6nuuly>Workflow</a> page covers <code data-astro-cid-vl6nuuly>/heal</code> in detail.</p> </li> <li data-astro-cid-vl6nuuly> <h4 data-astro-cid-vl6nuuly>Share pages with teammates</h4> <p data-astro-cid-vl6nuuly>Each page is self-contained. Send a teammate the <a href="/vibe-crew/setup" data-astro-cid-vl6nuuly>Setup Guide</a> link to onboard them, or the <a href="/vibe-crew/why" data-astro-cid-vl6nuuly>Why VibeCrew</a> page to explain the philosophy before they dive in.</p> </li> </ol> <div class="callout tip"> <div class="callout-title">Quick reference cheat sheet</div>  <p data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>Stuck?</strong> &rarr; <a href="/vibe-crew/workflow" data-astro-cid-vl6nuuly>Workflow</a> page for commands. <strong data-astro-cid-vl6nuuly>Error?</strong> &rarr; <code data-astro-cid-vl6nuuly>/heal</code> in your session, then check <a href="/vibe-crew/architecture" data-astro-cid-vl6nuuly>Architecture</a> for how hooks work. <strong data-astro-cid-vl6nuuly>New teammate?</strong> &rarr; Send them <a href="/vibe-crew/setup" data-astro-cid-vl6nuuly>Setup</a> then <a href="/vibe-crew/new-project" data-astro-cid-vl6nuuly>New Project</a>. <strong data-astro-cid-vl6nuuly>Updating?</strong> &rarr; Check <a href="/vibe-crew/releases" data-astro-cid-vl6nuuly>Release Notes</a> first.</p>  </div> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="capturing-ideas" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Workflow Tip</span> <h2 data-astro-cid-vl6nuuly>Capturing Ideas for the Backlog</h2> <p data-astro-cid-vl6nuuly>Ideas come at the worst times &mdash; mid-implementation, during testing, while reviewing code. VibeCrew gives you two tools to capture without losing flow.</p> <h3 data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly>/idea</code> &mdash; instant capture</h3> <p data-astro-cid-vl6nuuly>The fastest way. One line in, one line out. Zero context consumed. Use it anytime, in any tab.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>any tab</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /idea "add dark mode toggle to settings page"
+<span class="output" data-astro-cid-vl6nuuly>Added to backlog: "add dark mode toggle to settings page" (unplanned)</span>
 
-<span class="output">  ▲ Next.js 15.1.0</span>
-<span class="output">  - Local:    </span><span class="success">http://localhost:3000</span>
-<span class="output">  - Network:  http://192.168.1.42:3000</span>
+<span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /idea "export trip itinerary as PDF"
+<span class="output" data-astro-cid-vl6nuuly>Added to backlog: "export trip itinerary as PDF" (unplanned)</span>
 
-<span class="output">  ✓ Ready in 1.2s</span></div>
-      </div>
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab &mdash; VibeCrew Session</span>
-        </div>
-        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">claude</span>
-<span class="accent">VibeCrew v1.4.0 | Feature: user-auth (Code phase)</span>
-
-<span class="prompt">&gt;</span> <span class="cmd">"Implement the login page"</span>
-<span class="output">Builder agent working...</span>
-<span class="output">  Creating src/app/(auth)/login/page.tsx</span>
-
-<span class="muted"># Hot-reload updates your browser automatically</span></div>
-      </div>
-    </div>
-
-    <div class="callout tip">
-      <div class="callout-title">Hot reload is your friend</div>
-      <p>Next.js, Vite, and most modern frameworks hot-reload when files change. As VibeCrew writes code in one tab, your browser updates in real time. Keep your browser and dev server tab visible alongside your Claude Code tab to watch the UI take shape as it's built.</p>
-    </div>
-
-    <h3>Running tests during development</h3>
-    <p>VibeCrew runs tests automatically during the Test phase and when you use <code>/check</code> or <code>/wrap</code>. But you can also run a test watcher in a separate tab for continuous feedback.</p>
-
-    <div class="terminal-grid three-col">
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab &mdash; Dev Server</span>
-        </div>
-        <div class="terminal-body"><span class="output">  ▲ Next.js 15.1.0</span>
-<span class="output">  - Local: </span><span class="success">http://localhost:3000</span>
-<span class="output">  ✓ Ready</span></div>
-      </div>
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab &mdash; Test Watcher</span>
-        </div>
-        <div class="terminal-body"><span class="prompt">$</span> <span class="cmd">npm run test:watch</span>
-
-<span class="output"> PASS  src/__tests__/auth/login.test.tsx</span>
-<span class="output"> PASS  src/__tests__/auth/signup.test.tsx</span>
-<span class="success"> Tests: 12 passed, 12 total</span>
-<span class="output"> Watching for changes...</span></div>
-      </div>
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-          <span class="terminal-title">Tab &mdash; VibeCrew Session</span>
-        </div>
-        <div class="terminal-body"><span class="accent">Building: user-auth</span>
-<span class="output">Code phase active</span>
-<span class="output">Builder agent working...</span>
-
-<span class="muted"># Tests re-run as files change</span></div>
-      </div>
-    </div>
-
-    <h3>Common dev server commands by framework</h3>
-    <pre><code><span class="code-label">Reference</span><span class="accent"># Next.js</span>
-npm run dev              <span class="output"># starts on localhost:3000</span>
-
-<span class="accent"># Vite (React, Vue, Svelte)</span>
-npm run dev              <span class="output"># starts on localhost:5173</span>
-
-<span class="accent"># Supabase (local development)</span>
-npx supabase start       <span class="output"># starts local Supabase on localhost:54321</span>
-npx supabase studio      <span class="output"># opens database UI on localhost:54323</span>
-
-<span class="accent"># Testing</span>
-npm run test             <span class="output"># single run</span>
-npm run test:watch       <span class="output"># watch mode &mdash; re-runs on file changes</span>
-npm run test:coverage    <span class="output"># with coverage report</span>
-
-<span class="accent"># Linting &amp; type checking</span>
-npm run lint             <span class="output"># ESLint</span>
-npx tsc --noEmit         <span class="output"># TypeScript type check</span></code></pre>
-
-    <h3>Using <code>/check</code> to validate everything at once</h3>
-    <p>Instead of running each command manually, use <code>/check</code> inside your VibeCrew session. The Verifier agent runs the full quality gate: build, tests, lint, and type check &mdash; in one shot.</p>
-
-    <pre><code><span class="code-label">VibeCrew Tab</span><span class="prompt">&gt;</span> /check
-
-<span class="output">Verifier running quality gate...</span>
-<span class="success">  Build:  passed (3.2s)</span>
-<span class="success">  Tests:  24/24 passed (8.1s)</span>
-<span class="success">  Lint:   0 errors, 2 warnings</span>
-<span class="success">  Types:  0 errors</span>
-<span class="output">All gates passed. Ready for /wrap.</span></code></pre>
-
-    <div class="callout info">
-      <div class="callout-title">Recommended tab layout for active development</div>
-      <p>For the best workflow, arrange your screen like this: <strong>Browser</strong> (left half) showing <code>localhost:3000</code>, <strong>VibeCrew tab</strong> (right top) for building, <strong>Dev server tab</strong> (right bottom) to monitor for errors. If using Warp, create a <strong>Launch Configuration</strong> that opens this layout automatically (see <a href="warp.html">Warp Tips</a>).</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ COMPANION DOCS ============ -->
-  <section class="section" id="companion-docs">
-    <span class="section-label">Reference</span>
-    <h2>Using the Companion Docs Website</h2>
-    <p>You're reading it right now. The VibeCrew documentation site is your reference companion during every session. Here's how to get the most out of it.</p>
-
-    <h3>What's in each page</h3>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon purple">&#9733;</div>
-        <h4><a href="why.html">Why VibeCrew</a></h4>
-        <p>Start here if you're explaining VibeCrew to a teammate or reminding yourself of the core philosophy. Covers the three problems (attention, tokens, architecture) and design principles.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon green">&#9881;</div>
-        <h4><a href="setup.html">Setup Guide</a></h4>
-        <p>Your first-time installation checklist. System dependencies, plugin install, MCP server configuration, notification testing. Bookmark this &mdash; you'll revisit it when onboarding teammates.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">&#10010;</div>
-        <h4><a href="new-project.html">New Project</a></h4>
-        <p>The complete Tier 1 &amp; Tier 2 workflow reference. Foundation steps, the 6-phase feature cycle, phase gate enforcement, and all slash commands with examples.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">&#8635;</div>
-        <h4><a href="existing-project.html">Existing Projects</a></h4>
-        <p>How to bring VibeCrew into a codebase that already has code. Code auditing, convention extraction, and backlog mapping from existing issues.</p>
-      </div>
-    </div>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon red">&#9654;</div>
-        <h4><a href="workflow.html">Detailed Workflow</a></h4>
-        <p>Advanced commands (<code>/replay</code>, <code>/simplify</code>, <code>/heal</code>), the Opponent Processor, cost tracking, Vibe Score breakdown, and efficiency tips. Read this once you've completed your first few features.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon purple">&#9632;</div>
-        <h4><a href="architecture.html">Architecture Deep Dive</a></h4>
-        <p>Technical details: the 13-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em>how</em> VibeCrew works under the hood.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">&#9000;</div>
-        <h4><a href="warp.html">Warp Tips</a></h4>
-        <p>Warp Terminal-specific setup: Launch Configurations, keyboard shortcuts, Warp Drive for sharing, Notebooks for annotating sessions, and theme recommendations.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon green">&#9998;</div>
-        <h4><a href="releases.html">Release Notes</a></h4>
-        <p>Complete changelog across all versions. Check here after updating VibeCrew to see what's new and whether any workflow changes are needed.</p>
-      </div>
-    </div>
-
-    <h3>How to use the docs during a session</h3>
-    <ol class="steps">
-      <li>
-        <h4>Keep the docs open in a browser tab</h4>
-        <p>Open the docs site alongside your development browser tab. When you're waiting for the Builder agent to finish, reference the docs instead of guessing at commands or workflow steps.</p>
-      </li>
-      <li>
-        <h4>Use the right page for your current phase</h4>
-        <p>Starting a new project? Open <a href="new-project.html">New Project</a>. Building features? This page (Example Session) has the full walkthrough. Hit a CI failure? The <a href="workflow.html">Workflow</a> page covers <code>/heal</code> in detail.</p>
-      </li>
-      <li>
-        <h4>Share pages with teammates</h4>
-        <p>Each page is self-contained. Send a teammate the <a href="setup.html">Setup Guide</a> link to onboard them, or the <a href="why.html">Why VibeCrew</a> page to explain the philosophy before they dive in.</p>
-      </li>
-    </ol>
-
-    <div class="callout tip">
-      <div class="callout-title">Quick reference cheat sheet</div>
-      <p><strong>Stuck?</strong> &rarr; <a href="workflow.html">Workflow</a> page for commands. <strong>Error?</strong> &rarr; <code>/heal</code> in your session, then check <a href="architecture.html">Architecture</a> for how hooks work. <strong>New teammate?</strong> &rarr; Send them <a href="setup.html">Setup</a> then <a href="new-project.html">New Project</a>. <strong>Updating?</strong> &rarr; Check <a href="releases.html">Release Notes</a> first.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ CAPTURING IDEAS ============ -->
-  <section class="section" id="capturing-ideas">
-    <span class="section-label">Workflow Tip</span>
-    <h2>Capturing Ideas for the Backlog</h2>
-    <p>Ideas come at the worst times &mdash; mid-implementation, during testing, while reviewing code. VibeCrew gives you two tools to capture without losing flow.</p>
-
-    <h3><code>/idea</code> &mdash; instant capture</h3>
-    <p>The fastest way. One line in, one line out. Zero context consumed. Use it anytime, in any tab.</p>
-
-    <pre><code><span class="code-label">any tab</span><span class="prompt">&gt;</span> /idea "add dark mode toggle to settings page"
-<span class="output">Added to backlog: "add dark mode toggle to settings page" (unplanned)</span>
-
-<span class="prompt">&gt;</span> /idea "export trip itinerary as PDF"
-<span class="output">Added to backlog: "export trip itinerary as PDF" (unplanned)</span>
-
-<span class="prompt">&gt;</span> /idea "rate limiting on auth endpoints"
-<span class="output">Added to backlog: "rate limiting on auth endpoints" (unplanned)</span></code></pre>
-
-    <p>Ideas land in <code>.vibecrew/backlog.json</code> with status <code>"unplanned"</code>. They sit there until your next planning session.</p>
-
-    <h3><code>/plan-features</code> &mdash; structured planning</h3>
-    <p>When you've accumulated several ideas, run <code>/plan-features</code> to promote them to structured specs with acceptance criteria, priority, and complexity. This is best done in a dedicated planning session (see <a href="#planning-session">Day 2</a> above).</p>
-
-    <h3>The capture habit</h3>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon green">&#10003;</div>
-        <h4>Do this</h4>
-        <p>See something? <code>/idea "short description"</code> immediately. Don't stop to elaborate. Don't open the backlog file. Don't discuss it with the agent. Capture and continue.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon red">&#10007;</div>
-        <h4>Don't do this</h4>
-        <p>"Actually, let me also build dark mode real quick." Mid-feature diversions wreck your Vibe Score (prompt churn, context waste) and leave you with two half-finished features instead of one shipped one.</p>
-      </div>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ FULL WEEK ============ -->
-  <section class="section" id="full-week">
-    <span class="section-label">The Big Picture</span>
-    <h2>A Full Week with VibeCrew</h2>
-    <p>Here's what a productive week looks like from start to finish, building TripFlow from zero to a working MVP.</p>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon purple">Mo</div>
-        <h4>Monday: Foundation</h4>
-        <p><strong>1 tab, 1 session.</strong> Run <code>/new-project</code>. Complete all 6 foundation steps. Run <code>/plan-features</code> to spec out your first 5 features. End with <code>/wrap</code>. Total: ~45 min.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">Tu</div>
-        <h4>Tuesday: First features</h4>
-        <p><strong>1 tab, 2 sessions.</strong> Build user-auth in session 1. Build trip-creation in session 2. <code>/wrap</code> after each. Capture 3 ideas with <code>/idea</code> along the way. Total: ~2 hours.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon green">We</div>
-        <h4>Wednesday: Full 3-pane workflow</h4>
-        <p><strong>3 panes.</strong> Build itinerary-builder in the Development pane while planning group-invites in the Planning pane. Dev server running in the Terminal pane. Once itinerary-builder wraps, start group-invites immediately &mdash; spec is already polished. Total: ~2 hours, 2 features shipped.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">Th</div>
-        <h4>Thursday: Final feature + cleanup</h4>
-        <p><strong>3 panes.</strong> Development pane: Build expense-splitting. Planning pane: Run <code>/simplify</code> on earlier features to reduce complexity. Run <code>/heal</code> if CI has issues. Total: ~1.5 hours.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon red">Fr</div>
-        <h4>Friday: Polish + review</h4>
-        <p><strong>1 tab.</strong> Run <code>/status</code> to see the full picture. Review Vibe Score trends. Plan next week's features from the ideas you captured. Review and merge PRs. <code>/wrap</code> to close the week. Total: ~1 hour.</p>
-      </div>
-    </div>
-
-    <h4>Week summary</h4>
-    <div class="flow"><span class="highlight">Features shipped:</span>  5 (user-auth, trip-creation, itinerary-builder, group-invites, expense-splitting)
-<span class="highlight">Sessions:</span>           8
-<span class="highlight">Average Vibe Score:</span> 89
-<span class="highlight">Ideas captured:</span>     12 (ready for next week's /plan-features)
-<span class="highlight">CLAUDE.md rules:</span>    3 new rules added by Performance Coach
-<span class="highlight">Total active time:</span>  ~8 hours across 5 days</div>
-
-    <div class="callout tip">
-      <div class="callout-title">The compounding effect</div>
-      <p>Week 2 is faster than Week 1. The 3 CLAUDE.md rules from this week prevent token waste next week. Your <code>/replay</code> templates capture what worked. The Performance Coach learns your patterns. By Week 4, you're shipping at nearly double the pace of Week 1 &mdash; not because you're working harder, but because the system is eliminating waste automatically.</p>
-    </div>
-  </section>
-
-  <hr>
-
-  <!-- ============ BEST PRACTICES & GUARDRAILS ============ -->
-  <section class="section" id="best-practices">
-    <span class="section-label">Habits</span>
-    <h2>Best Practices &amp; Guardrails</h2>
-    <p>VibeCrew enforces many rules automatically through hooks, but some habits need to be built by you. These tips prevent the most common mistakes that cost time, tokens, and Vibe Score points.</p>
-
-    <!-- ---- GUARDRAIL 1: AUTO-WRAP ---- -->
-    <h3>Never close a tab without wrapping</h3>
-    <p>Closing a terminal kills the Claude Code session instantly &mdash; there's no chance to run <code>/wrap</code>. You lose the Performance Coach analysis, Vibe Score, session log, and any uncommitted work. Set up guardrails to prevent this.</p>
-
-    <h4>Option 1: Warp close confirmation</h4>
-    <p>Warp Terminal can warn you before closing a tab that has a running process. Go to <strong>Settings &rarr; Features &rarr; "Warn before closing a tab with a running process"</strong> and enable it. You'll get a confirmation dialog every time you try to close a tab with Claude Code running.</p>
-
-    <h4>Option 2: Shell exit reminder</h4>
-    <p>Add a trap to your shell config that fires when the terminal is about to close:</p>
-    <pre><code><span class="code-label">.zshrc</span><span class="accent"># Remind to /wrap before closing</span>
+<span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /idea "rate limiting on auth endpoints"
+<span class="output" data-astro-cid-vl6nuuly>Added to backlog: "rate limiting on auth endpoints" (unplanned)</span></code></pre> <p data-astro-cid-vl6nuuly>Ideas land in <code data-astro-cid-vl6nuuly>.vibecrew/backlog.json</code> with status <code data-astro-cid-vl6nuuly>"unplanned"</code>. They sit there until your next planning session.</p> <h3 data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly>/plan-features</code> &mdash; structured planning</h3> <p data-astro-cid-vl6nuuly>When you've accumulated several ideas, run <code data-astro-cid-vl6nuuly>/plan-features</code> to promote them to structured specs with acceptance criteria, priority, and complexity. This is best done in a dedicated planning session (see <a href="#planning-session" data-astro-cid-vl6nuuly>Day 2</a> above).</p> <h3 data-astro-cid-vl6nuuly>The capture habit</h3> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon green" data-astro-cid-vl6nuuly>&#10003;</div> <h4 data-astro-cid-vl6nuuly>Do this</h4> <p data-astro-cid-vl6nuuly>See something? <code data-astro-cid-vl6nuuly>/idea "short description"</code> immediately. Don't stop to elaborate. Don't open the backlog file. Don't discuss it with the agent. Capture and continue.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon red" data-astro-cid-vl6nuuly>&#10007;</div> <h4 data-astro-cid-vl6nuuly>Don't do this</h4> <p data-astro-cid-vl6nuuly>"Actually, let me also build dark mode real quick." Mid-feature diversions wreck your Vibe Score (prompt churn, context waste) and leave you with two half-finished features instead of one shipped one.</p> </div> </div> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="full-week" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>The Big Picture</span> <h2 data-astro-cid-vl6nuuly>A Full Week with VibeCrew</h2> <p data-astro-cid-vl6nuuly>Here's what a productive week looks like from start to finish, building TripFlow from zero to a working MVP.</p> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon purple" data-astro-cid-vl6nuuly>Mo</div> <h4 data-astro-cid-vl6nuuly>Monday: Foundation</h4> <p data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>1 tab, 1 session.</strong> Run <code data-astro-cid-vl6nuuly>/new-project</code>. Complete all 6 foundation steps. Run <code data-astro-cid-vl6nuuly>/plan-features</code> to spec out your first 5 features. End with <code data-astro-cid-vl6nuuly>/wrap</code>. Total: ~45 min.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon blue" data-astro-cid-vl6nuuly>Tu</div> <h4 data-astro-cid-vl6nuuly>Tuesday: First features</h4> <p data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>1 tab, 2 sessions.</strong> Build user-auth in session 1. Build trip-creation in session 2. <code data-astro-cid-vl6nuuly>/wrap</code> after each. Capture 3 ideas with <code data-astro-cid-vl6nuuly>/idea</code> along the way. Total: ~2 hours.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon green" data-astro-cid-vl6nuuly>We</div> <h4 data-astro-cid-vl6nuuly>Wednesday: Full 3-pane workflow</h4> <p data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>3 panes.</strong> Build itinerary-builder in the Development pane while planning group-invites in the Planning pane. Dev server running in the Terminal pane. Once itinerary-builder wraps, start group-invites immediately &mdash; spec is already polished. Total: ~2 hours, 2 features shipped.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon amber" data-astro-cid-vl6nuuly>Th</div> <h4 data-astro-cid-vl6nuuly>Thursday: Final feature + cleanup</h4> <p data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>3 panes.</strong> Development pane: Build expense-splitting. Planning pane: Run <code data-astro-cid-vl6nuuly>/simplify</code> on earlier features to reduce complexity. Run <code data-astro-cid-vl6nuuly>/heal</code> if CI has issues. Total: ~1.5 hours.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon red" data-astro-cid-vl6nuuly>Fr</div> <h4 data-astro-cid-vl6nuuly>Friday: Polish + review</h4> <p data-astro-cid-vl6nuuly><strong data-astro-cid-vl6nuuly>1 tab.</strong> Run <code data-astro-cid-vl6nuuly>/status</code> to see the full picture. Review Vibe Score trends. Plan next week's features from the ideas you captured. Review and merge PRs. <code data-astro-cid-vl6nuuly>/wrap</code> to close the week. Total: ~1 hour.</p> </div> </div> <h4 data-astro-cid-vl6nuuly>Week summary</h4> <div class="flow" data-astro-cid-vl6nuuly><span class="highlight" data-astro-cid-vl6nuuly>Features shipped:</span> 5 (user-auth, trip-creation, itinerary-builder, group-invites, expense-splitting)
+<span class="highlight" data-astro-cid-vl6nuuly>Sessions:</span> 8
+<span class="highlight" data-astro-cid-vl6nuuly>Average Vibe Score:</span> 89
+<span class="highlight" data-astro-cid-vl6nuuly>Ideas captured:</span> 12 (ready for next week's /plan-features)
+<span class="highlight" data-astro-cid-vl6nuuly>CLAUDE.md rules:</span> 3 new rules added by Performance Coach
+<span class="highlight" data-astro-cid-vl6nuuly>Total active time:</span> ~8 hours across 5 days</div> <div class="callout tip"> <div class="callout-title">The compounding effect</div>  <p data-astro-cid-vl6nuuly>Week 2 is faster than Week 1. The 3 CLAUDE.md rules from this week prevent token waste next week. Your <code data-astro-cid-vl6nuuly>/replay</code> templates capture what worked. The Performance Coach learns your patterns. By Week 4, you're shipping at nearly double the pace of Week 1 &mdash; not because you're working harder, but because the system is eliminating waste automatically.</p>  </div> </section> <hr data-astro-cid-vl6nuuly>  <section class="section" id="best-practices" data-astro-cid-vl6nuuly> <span class="section-label" data-astro-cid-vl6nuuly>Habits</span> <h2 data-astro-cid-vl6nuuly>Best Practices &amp; Guardrails</h2> <p data-astro-cid-vl6nuuly>VibeCrew enforces many rules automatically through hooks, but some habits need to be built by you. These tips prevent the most common mistakes that cost time, tokens, and Vibe Score points.</p> <h3 data-astro-cid-vl6nuuly>Never close a tab without wrapping</h3> <p data-astro-cid-vl6nuuly>Closing a terminal kills the Claude Code session instantly &mdash; there's no chance to run <code data-astro-cid-vl6nuuly>/wrap</code>. You lose the Performance Coach analysis, Vibe Score, session log, and any uncommitted work. Set up guardrails to prevent this.</p> <h4 data-astro-cid-vl6nuuly>Option 1: Warp close confirmation</h4> <p data-astro-cid-vl6nuuly>Warp Terminal can warn you before closing a tab that has a running process. Go to <strong data-astro-cid-vl6nuuly>Settings &rarr; Features &rarr; "Warn before closing a tab with a running process"</strong> and enable it. You'll get a confirmation dialog every time you try to close a tab with Claude Code running.</p> <h4 data-astro-cid-vl6nuuly>Option 2: Shell exit reminder</h4> <p data-astro-cid-vl6nuuly>Add a trap to your shell config that fires when the terminal is about to close:</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>.zshrc</span><span class="accent" data-astro-cid-vl6nuuly># Remind to /wrap before closing</span>
 vibecrew_exit_check() {
   if [ -f ".vibecrew/state.json" ]; then
     echo ""
-    echo "<span class="warn">Warning: Did you /wrap your VibeCrew session?</span>"
-    echo "<span class="output">Run /wrap to save your Vibe Score and session log.</span>"
+    echo "<span class="warn" data-astro-cid-vl6nuuly>Warning: Did you /wrap your VibeCrew session?</span>"
+    echo "<span class="output" data-astro-cid-vl6nuuly>Run /wrap to save your Vibe Score and session log.</span>"
     echo ""
   fi
 }
-trap vibecrew_exit_check EXIT</code></pre>
-
-    <h4>Option 3: Lightweight Stop hook (automatic)</h4>
-    <p>Extend the existing <code>Stop</code> hook to run a basic quality gate and save what it can. This runs automatically when Claude Code exits &mdash; even if you forget.</p>
-    <pre><code><span class="code-label">scripts/auto-wrap-lite.sh</span><span class="accent">#!/bin/bash</span>
-<span class="output"># Runs on session Stop event &mdash; lightweight /wrap fallback</span>
-<span class="output"># Cannot run agent tasks (Performance Coach, Vibe Score)</span>
-<span class="output"># but captures the basics.</span>
+trap vibecrew_exit_check EXIT</code></pre> <h4 data-astro-cid-vl6nuuly>Option 3: Lightweight Stop hook (automatic)</h4> <p data-astro-cid-vl6nuuly>Extend the existing <code data-astro-cid-vl6nuuly>Stop</code> hook to run a basic quality gate and save what it can. This runs automatically when Claude Code exits &mdash; even if you forget.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>scripts/auto-wrap-lite.sh</span><span class="accent" data-astro-cid-vl6nuuly>#!/bin/bash</span>
+<span class="output" data-astro-cid-vl6nuuly># Runs on session Stop event &mdash; lightweight /wrap fallback</span>
+<span class="output" data-astro-cid-vl6nuuly># Cannot run agent tasks (Performance Coach, Vibe Score)</span>
+<span class="output" data-astro-cid-vl6nuuly># but captures the basics.</span>
 
 SESSION_ID=$(date +%Y%m%d-%H%M%S)
 LOG_DIR=".vibecrew/sessions"
 mkdir -p "$LOG_DIR"
 
-<span class="accent"># Save basic session metadata</span>
+<span class="accent" data-astro-cid-vl6nuuly># Save basic session metadata</span>
 echo "{
   \"id\": \"$SESSION_ID\",
   \"type\": \"auto-wrap-lite\",
@@ -1498,182 +272,155 @@ echo "{
   \"note\": \"Session ended without /wrap\"
 }" > "$LOG_DIR/$SESSION_ID.json"
 
-<span class="accent"># Warn if there are uncommitted changes</span>
+<span class="accent" data-astro-cid-vl6nuuly># Warn if there are uncommitted changes</span>
 DIRTY=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
 if [ "$DIRTY" -gt 0 ]; then
-  echo "<span class="warn">auto-wrap-lite: $DIRTY uncommitted files on $(git branch --show-current)</span>"
-fi</code></pre>
+  echo "<span class="warn" data-astro-cid-vl6nuuly>auto-wrap-lite: $DIRTY uncommitted files on $(git branch --show-current)</span>"
+fi</code></pre> <div class="callout info"> <div class="callout-title">Use all three together</div>  <p data-astro-cid-vl6nuuly>These aren't mutually exclusive. Warp's confirmation is your first line of defense, the shell trap is a visual reminder if you bypass it, and the Stop hook is the automatic fallback that always runs. Layer them for maximum safety.</p>  </div> <h3 data-astro-cid-vl6nuuly>Detect unwrapped sessions on startup</h3> <p data-astro-cid-vl6nuuly>The Session Startup agent already checks project state when you run <code data-astro-cid-vl6nuuly>claude</code>. It can also detect if the last session ended without <code data-astro-cid-vl6nuuly>/wrap</code> by checking the session logs. If it finds an unwrapped session, it warns you and offers to run a retroactive analysis.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>What you'll see</span><span class="prompt" data-astro-cid-vl6nuuly>$</span> <span class="cmd" data-astro-cid-vl6nuuly>claude</span>
+<span class="warn" data-astro-cid-vl6nuuly>Warning: Previous session (2026-02-24 14:32) ended without /wrap.</span>
+<span class="output" data-astro-cid-vl6nuuly>  Branch: feat/trip-creation</span>
+<span class="output" data-astro-cid-vl6nuuly>  Uncommitted files: 4</span>
+<span class="output" data-astro-cid-vl6nuuly>  Session log: partial (auto-wrap-lite)</span>
+<span class="output" data-astro-cid-vl6nuuly>Recommendation: Review uncommitted changes, then continue or /wrap.</span>
+<span class="accent" data-astro-cid-vl6nuuly>VibeCrew v1.4.0 | Feature: trip-creation (Code phase)</span></code></pre> <div class="callout tip"> <div class="callout-title">This is automatic</div>  <p data-astro-cid-vl6nuuly>You don't need to configure anything. The Session Startup agent reads <code data-astro-cid-vl6nuuly>.vibecrew/sessions/</code> on every launch and flags incomplete sessions. It's one of the reasons every session should start with <code data-astro-cid-vl6nuuly>claude</code> (not by resuming a detached process).</p>  </div> <h3 data-astro-cid-vl6nuuly>Never build features on main</h3> <p data-astro-cid-vl6nuuly>VibeCrew creates a feature branch automatically when you run <code data-astro-cid-vl6nuuly>/new-feature</code>. But if you skip that and start coding directly, you might be on <code data-astro-cid-vl6nuuly>main</code>. The phase gate hook can catch this.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>What happens if you try</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> "Add a login form to the homepage"
 
-    <div class="callout info">
-      <div class="callout-title">Use all three together</div>
-      <p>These aren't mutually exclusive. Warp's confirmation is your first line of defense, the shell trap is a visual reminder if you bypass it, and the Stop hook is the automatic fallback that always runs. Layer them for maximum safety.</p>
-    </div>
+<span class="warn" data-astro-cid-vl6nuuly>Phase gate blocked: You're on the 'main' branch.</span>
+<span class="output" data-astro-cid-vl6nuuly>Source code writes are only allowed on feature branches (feat/*).</span>
+<span class="output" data-astro-cid-vl6nuuly>Run /new-feature "feature-name" to create a branch and start building.</span></code></pre> <div class="callout warn"> <div class="callout-title">Why this matters</div>  <p data-astro-cid-vl6nuuly>Building on <code data-astro-cid-vl6nuuly>main</code> means no PR, no code review, no isolation from other work. If something goes wrong, you can't just delete the branch &mdash; you have to revert commits on main. The branch guard prevents this entire class of mistakes.</p>  </div> <h3 data-astro-cid-vl6nuuly>Handle uncommitted changes before starting</h3> <p data-astro-cid-vl6nuuly>Starting a new feature with uncommitted changes from a previous feature is a recipe for tangled commits and merge conflicts. The Session Startup agent checks for this.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>What you'll see</span><span class="prompt" data-astro-cid-vl6nuuly>$</span> <span class="cmd" data-astro-cid-vl6nuuly>claude</span>
+<span class="warn" data-astro-cid-vl6nuuly>Warning: 7 uncommitted files detected on feat/user-auth.</span>
+<span class="output" data-astro-cid-vl6nuuly>  Modified: src/components/auth/LoginForm.tsx</span>
+<span class="output" data-astro-cid-vl6nuuly>  Modified: src/lib/supabase/client.ts</span>
+<span class="output" data-astro-cid-vl6nuuly>  ... and 5 more</span>
+<span class="output" data-astro-cid-vl6nuuly>Options:</span>
+<span class="output" data-astro-cid-vl6nuuly>  1. Continue working on feat/user-auth</span>
+<span class="output" data-astro-cid-vl6nuuly>  2. Commit changes and start a new feature</span>
+<span class="output" data-astro-cid-vl6nuuly>  3. Stash changes and start fresh</span></code></pre> <h3 data-astro-cid-vl6nuuly>Review PRs before building more features</h3> <p data-astro-cid-vl6nuuly>It's tempting to keep shipping features, but unreviewed PRs pile up fast &mdash; especially in parallel mode. Stale PRs lead to merge conflicts and integration bugs. Build a cadence: <strong data-astro-cid-vl6nuuly>review first, then build</strong>.</p> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon green" data-astro-cid-vl6nuuly>&#10003;</div> <h4 data-astro-cid-vl6nuuly>Good cadence</h4> <p data-astro-cid-vl6nuuly>Morning: review and merge yesterday's PRs. Then start new features. Use <code data-astro-cid-vl6nuuly>/status</code> to see open PRs. Keep the PR queue under 3 at all times.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon red" data-astro-cid-vl6nuuly>&#10007;</div> <h4 data-astro-cid-vl6nuuly>Danger zone</h4> <p data-astro-cid-vl6nuuly>5+ unmerged PRs across different feature branches. Each new feature increases the chance of conflicts. Merging becomes a full-day task instead of 10 minutes per PR.</p> </div> </div> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Quick PR check</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /status
 
-    <!-- ---- GUARDRAIL 2: STALE SESSION ---- -->
-    <h3>Detect unwrapped sessions on startup</h3>
-    <p>The Session Startup agent already checks project state when you run <code>claude</code>. It can also detect if the last session ended without <code>/wrap</code> by checking the session logs. If it finds an unwrapped session, it warns you and offers to run a retroactive analysis.</p>
+<span class="accent" data-astro-cid-vl6nuuly>Open PRs:</span>
+<span class="success" data-astro-cid-vl6nuuly>  #12 feat/user-auth        &mdash; approved, ready to merge</span>
+<span class="warn" data-astro-cid-vl6nuuly>  #13 feat/trip-creation    &mdash; review requested, 2 days old</span>
+<span class="output" data-astro-cid-vl6nuuly>  #14 feat/itinerary-builder &mdash; draft, tests passing</span>
 
-    <pre><code><span class="code-label">What you'll see</span><span class="prompt">$</span> <span class="cmd">claude</span>
-<span class="warn">Warning: Previous session (2026-02-24 14:32) ended without /wrap.</span>
-<span class="output">  Branch: feat/trip-creation</span>
-<span class="output">  Uncommitted files: 4</span>
-<span class="output">  Session log: partial (auto-wrap-lite)</span>
-<span class="output">Recommendation: Review uncommitted changes, then continue or /wrap.</span>
-<span class="accent">VibeCrew v1.4.0 | Feature: trip-creation (Code phase)</span></code></pre>
+<span class="output" data-astro-cid-vl6nuuly>Recommendation: Merge #12, review #13 before starting new work.</span></code></pre> <h3 data-astro-cid-vl6nuuly>One feature per session, no exceptions</h3> <p data-astro-cid-vl6nuuly>This is the single most impactful habit. Each Claude Code session has a finite context window. Cramming two features into one session means both get less attention, more token waste, and lower Vibe Scores.</p> <div class="card-grid" data-astro-cid-vl6nuuly> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon green" data-astro-cid-vl6nuuly>&#10003;</div> <h4 data-astro-cid-vl6nuuly>Do this</h4> <p data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly>/new-feature "user-auth"</code> &rarr; build all 6 phases &rarr; <code data-astro-cid-vl6nuuly>/wrap</code> &rarr; close session. New session: <code data-astro-cid-vl6nuuly>/new-feature "trip-creation"</code>. Clean context, clean branch, clean score.</p> </div> <div class="card" data-astro-cid-vl6nuuly> <div class="card-icon red" data-astro-cid-vl6nuuly>&#10007;</div> <h4 data-astro-cid-vl6nuuly>Don't do this</h4> <p data-astro-cid-vl6nuuly>"While I'm here, let me also start trip-creation." Mid-session feature switches waste context recapping the new feature, leave the first feature half-wrapped, and confuse the Performance Coach analysis.</p> </div> </div> <h3 data-astro-cid-vl6nuuly>Watch your context budget</h3> <p data-astro-cid-vl6nuuly>The <code data-astro-cid-vl6nuuly>check-context.sh</code> Stop hook warns at 60% and 80% context usage, but don't wait for the warning. Check proactively with <code data-astro-cid-vl6nuuly>/status</code>, especially during long Code phases.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Context warnings</span><span class="prompt" data-astro-cid-vl6nuuly>&gt;</span> /status
 
-    <div class="callout tip">
-      <div class="callout-title">This is automatic</div>
-      <p>You don't need to configure anything. The Session Startup agent reads <code>.vibecrew/sessions/</code> on every launch and flags incomplete sessions. It's one of the reasons every session should start with <code>claude</code> (not by resuming a detached process).</p>
-    </div>
-
-    <!-- ---- GUARDRAIL 3: BRANCH GUARD ---- -->
-    <h3>Never build features on main</h3>
-    <p>VibeCrew creates a feature branch automatically when you run <code>/new-feature</code>. But if you skip that and start coding directly, you might be on <code>main</code>. The phase gate hook can catch this.</p>
-
-    <pre><code><span class="code-label">What happens if you try</span><span class="prompt">&gt;</span> "Add a login form to the homepage"
-
-<span class="warn">Phase gate blocked: You're on the 'main' branch.</span>
-<span class="output">Source code writes are only allowed on feature branches (feat/*).</span>
-<span class="output">Run /new-feature "feature-name" to create a branch and start building.</span></code></pre>
-
-    <div class="callout warn">
-      <div class="callout-title">Why this matters</div>
-      <p>Building on <code>main</code> means no PR, no code review, no isolation from other work. If something goes wrong, you can't just delete the branch &mdash; you have to revert commits on main. The branch guard prevents this entire class of mistakes.</p>
-    </div>
-
-    <!-- ---- GUARDRAIL 4: DIRTY TREE ---- -->
-    <h3>Handle uncommitted changes before starting</h3>
-    <p>Starting a new feature with uncommitted changes from a previous feature is a recipe for tangled commits and merge conflicts. The Session Startup agent checks for this.</p>
-
-    <pre><code><span class="code-label">What you'll see</span><span class="prompt">$</span> <span class="cmd">claude</span>
-<span class="warn">Warning: 7 uncommitted files detected on feat/user-auth.</span>
-<span class="output">  Modified: src/components/auth/LoginForm.tsx</span>
-<span class="output">  Modified: src/lib/supabase/client.ts</span>
-<span class="output">  ... and 5 more</span>
-<span class="output">Options:</span>
-<span class="output">  1. Continue working on feat/user-auth</span>
-<span class="output">  2. Commit changes and start a new feature</span>
-<span class="output">  3. Stash changes and start fresh</span></code></pre>
-
-    <!-- ---- GUARDRAIL 5: PR REVIEW ---- -->
-    <h3>Review PRs before building more features</h3>
-    <p>It's tempting to keep shipping features, but unreviewed PRs pile up fast &mdash; especially in parallel mode. Stale PRs lead to merge conflicts and integration bugs. Build a cadence: <strong>review first, then build</strong>.</p>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon green">&#10003;</div>
-        <h4>Good cadence</h4>
-        <p>Morning: review and merge yesterday's PRs. Then start new features. Use <code>/status</code> to see open PRs. Keep the PR queue under 3 at all times.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon red">&#10007;</div>
-        <h4>Danger zone</h4>
-        <p>5+ unmerged PRs across different feature branches. Each new feature increases the chance of conflicts. Merging becomes a full-day task instead of 10 minutes per PR.</p>
-      </div>
-    </div>
-
-    <pre><code><span class="code-label">Quick PR check</span><span class="prompt">&gt;</span> /status
-
-<span class="accent">Open PRs:</span>
-<span class="success">  #12 feat/user-auth        &mdash; approved, ready to merge</span>
-<span class="warn">  #13 feat/trip-creation    &mdash; review requested, 2 days old</span>
-<span class="output">  #14 feat/itinerary-builder &mdash; draft, tests passing</span>
-
-<span class="output">Recommendation: Merge #12, review #13 before starting new work.</span></code></pre>
-
-    <!-- ---- GUARDRAIL 6: ONE FEATURE PER SESSION ---- -->
-    <h3>One feature per session, no exceptions</h3>
-    <p>This is the single most impactful habit. Each Claude Code session has a finite context window. Cramming two features into one session means both get less attention, more token waste, and lower Vibe Scores.</p>
-
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon green">&#10003;</div>
-        <h4>Do this</h4>
-        <p><code>/new-feature "user-auth"</code> &rarr; build all 6 phases &rarr; <code>/wrap</code> &rarr; close session. New session: <code>/new-feature "trip-creation"</code>. Clean context, clean branch, clean score.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon red">&#10007;</div>
-        <h4>Don't do this</h4>
-        <p>"While I'm here, let me also start trip-creation." Mid-session feature switches waste context recapping the new feature, leave the first feature half-wrapped, and confuse the Performance Coach analysis.</p>
-      </div>
-    </div>
-
-    <!-- ---- GUARDRAIL 7: CONTEXT BUDGET ---- -->
-    <h3>Watch your context budget</h3>
-    <p>The <code>check-context.sh</code> Stop hook warns at 60% and 80% context usage, but don't wait for the warning. Check proactively with <code>/status</code>, especially during long Code phases.</p>
-
-    <pre><code><span class="code-label">Context warnings</span><span class="prompt">&gt;</span> /status
-
-<span class="output">Context usage: </span><span class="warn">62%</span><span class="output"> (warning threshold: 60%)</span>
-<span class="output">Estimated remaining: ~15 tool calls</span>
-<span class="output">Recommendation: Finish current phase, then /wrap.</span>
-<span class="output">  Don't start a new phase in this session.</span></code></pre>
-
-    <div class="callout warn">
-      <div class="callout-title">What happens at high context usage</div>
-      <p>Above 70%, Claude Code starts losing early conversation context. It may forget your design decisions, repeat questions, or generate code that contradicts earlier choices. Above 85%, quality degrades significantly. The rule: <strong>if you're past 60%, wrap up and start fresh</strong>. A new session with full context is always better than pushing a depleted one.</p>
-    </div>
-
-    <!-- ---- GUARDRAIL 8: WEEKLY PLANNING ---- -->
-    <h3>Weekly planning ritual</h3>
-    <p>Every week, ideas accumulate in your backlog via <code>/idea</code>. If you don't process them, the backlog becomes a graveyard of forgotten thoughts. Set a recurring ritual.</p>
-
-    <div class="flow"><span class="highlight">Every Friday (or Monday morning):</span>
-
-<span class="green">1.</span> Run <span class="green">/status</span> to see the full picture
-<span class="green">2.</span> Run <span class="green">/plan-features</span> to promote unplanned ideas to specs
-<span class="green">3.</span> Review Vibe Score trends &mdash; are scores going up or down?
-<span class="green">4.</span> Review CLAUDE.md rules added by Performance Coach
-<span class="green">5.</span> Merge any remaining PRs
-<span class="green">6.</span> <span class="green">/wrap</span> to close the week
-
-<span class="muted">Total: ~30 minutes. Sets up the entire next week.</span></div>
-
-    <!-- ---- GUARDRAIL 9: COMMIT OFTEN ---- -->
-    <h3>Commit at every phase boundary</h3>
-    <p>Don't wait until <code>/wrap</code> to commit. Each phase completion (Plan, UI Design, Code, Test, Docs) is a natural commit point. If something goes wrong in a later phase, you can roll back to the last clean phase instead of losing everything.</p>
-
-    <pre><code><span class="code-label">Natural commit points</span><span class="success">[x] Plan</span>        <span class="output">&rarr; commit: "plan(auth): feature spec and acceptance criteria"</span>
-<span class="success">[x] UI Design</span>   <span class="output">&rarr; commit: "design(auth): component wireframes and token usage"</span>
-<span class="success">[x] Code</span>        <span class="output">&rarr; commit: "feat(auth): implement login, signup, and middleware"</span>
-<span class="success">[x] Test</span>        <span class="output">&rarr; commit: "test(auth): 12 tests covering auth flows"</span>
-<span class="success">[x] Docs</span>        <span class="output">&rarr; commit: "docs(auth): changelog and feature documentation"</span></code></pre>
-
-    <div class="callout tip">
-      <div class="callout-title">VibeCrew handles this automatically</div>
-      <p>The Builder and Verifier agents commit at phase boundaries by default. But if you're guiding the session manually (typing prompts instead of letting agents drive), remember to commit after each phase. The phase-gate hook tracks which phases are complete, so commits also serve as progress checkpoints.</p>
-    </div>
-
-    <!-- ---- GUARDRAIL 10: BACKUP STATE ---- -->
-    <h3>Commit your <code>.vibecrew/</code> folder</h3>
-    <p>The <code>.vibecrew/</code> folder contains your project state: backlog, session logs, scores, and config. If you lose it, you lose your history. Commit it to your repo so it's backed up and shared with teammates.</p>
-
-    <pre><code><span class="code-label">.gitignore</span><span class="accent"># DO commit .vibecrew/ (project state)</span>
-<span class="output"># DON'T commit sensitive runtime data</span>
+<span class="output" data-astro-cid-vl6nuuly>Context usage: </span><span class="warn" data-astro-cid-vl6nuuly>62%</span><span class="output" data-astro-cid-vl6nuuly> (warning threshold: 60%)</span>
+<span class="output" data-astro-cid-vl6nuuly>Estimated remaining: ~15 tool calls</span>
+<span class="output" data-astro-cid-vl6nuuly>Recommendation: Finish current phase, then /wrap.</span>
+<span class="output" data-astro-cid-vl6nuuly>  Don't start a new phase in this session.</span></code></pre> <div class="callout warn"> <div class="callout-title">What happens at high context usage</div>  <p data-astro-cid-vl6nuuly>Above 70%, Claude Code starts losing early conversation context. It may forget your design decisions, repeat questions, or generate code that contradicts earlier choices. Above 85%, quality degrades significantly. The rule: <strong data-astro-cid-vl6nuuly>if you're past 60%, wrap up and start fresh</strong>. A new session with full context is always better than pushing a depleted one.</p>  </div> <h3 data-astro-cid-vl6nuuly>Weekly planning ritual</h3> <p data-astro-cid-vl6nuuly>Every week, ideas accumulate in your backlog via <code data-astro-cid-vl6nuuly>/idea</code>. If you don't process them, the backlog becomes a graveyard of forgotten thoughts. Set a recurring ritual.</p> <div class="flow" data-astro-cid-vl6nuuly><span class="highlight" data-astro-cid-vl6nuuly>Every Friday (or Monday morning):</span> <span class="green" data-astro-cid-vl6nuuly>1.</span> Run <span class="green" data-astro-cid-vl6nuuly>/status</span> to see the full picture
+<span class="green" data-astro-cid-vl6nuuly>2.</span> Run <span class="green" data-astro-cid-vl6nuuly>/plan-features</span> to promote unplanned ideas to specs
+<span class="green" data-astro-cid-vl6nuuly>3.</span> Review Vibe Score trends &mdash; are scores going up or down?
+<span class="green" data-astro-cid-vl6nuuly>4.</span> Review CLAUDE.md rules added by Performance Coach
+<span class="green" data-astro-cid-vl6nuuly>5.</span> Merge any remaining PRs
+<span class="green" data-astro-cid-vl6nuuly>6.</span> <span class="green" data-astro-cid-vl6nuuly>/wrap</span> to close the week
+<span class="muted" data-astro-cid-vl6nuuly>Total: ~30 minutes. Sets up the entire next week.</span></div> <h3 data-astro-cid-vl6nuuly>Commit at every phase boundary</h3> <p data-astro-cid-vl6nuuly>Don't wait until <code data-astro-cid-vl6nuuly>/wrap</code> to commit. Each phase completion (Plan, UI Design, Code, Test, Docs) is a natural commit point. If something goes wrong in a later phase, you can roll back to the last clean phase instead of losing everything.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>Natural commit points</span><span class="success" data-astro-cid-vl6nuuly>[x] Plan</span>        <span class="output" data-astro-cid-vl6nuuly>&rarr; commit: "plan(auth): feature spec and acceptance criteria"</span>
+<span class="success" data-astro-cid-vl6nuuly>[x] UI Design</span>   <span class="output" data-astro-cid-vl6nuuly>&rarr; commit: "design(auth): component wireframes and token usage"</span>
+<span class="success" data-astro-cid-vl6nuuly>[x] Code</span>        <span class="output" data-astro-cid-vl6nuuly>&rarr; commit: "feat(auth): implement login, signup, and middleware"</span>
+<span class="success" data-astro-cid-vl6nuuly>[x] Test</span>        <span class="output" data-astro-cid-vl6nuuly>&rarr; commit: "test(auth): 12 tests covering auth flows"</span>
+<span class="success" data-astro-cid-vl6nuuly>[x] Docs</span>        <span class="output" data-astro-cid-vl6nuuly>&rarr; commit: "docs(auth): changelog and feature documentation"</span></code></pre> <div class="callout tip"> <div class="callout-title">VibeCrew handles this automatically</div>  <p data-astro-cid-vl6nuuly>The Builder and Verifier agents commit at phase boundaries by default. But if you're guiding the session manually (typing prompts instead of letting agents drive), remember to commit after each phase. The phase-gate hook tracks which phases are complete, so commits also serve as progress checkpoints.</p>  </div> <h3 data-astro-cid-vl6nuuly>Commit your <code data-astro-cid-vl6nuuly>.vibecrew/</code> folder</h3> <p data-astro-cid-vl6nuuly>The <code data-astro-cid-vl6nuuly>.vibecrew/</code> folder contains your project state: backlog, session logs, scores, and config. If you lose it, you lose your history. Commit it to your repo so it's backed up and shared with teammates.</p> <pre data-astro-cid-vl6nuuly><code data-astro-cid-vl6nuuly><span class="code-label" data-astro-cid-vl6nuuly>.gitignore</span><span class="accent" data-astro-cid-vl6nuuly># DO commit .vibecrew/ (project state)</span>
+<span class="output" data-astro-cid-vl6nuuly># DON'T commit sensitive runtime data</span>
 .vibecrew/sessions/*.tmp
-.vibecrew/cache/</code></pre>
+.vibecrew/cache/</code></pre> <h3 data-astro-cid-vl6nuuly>Quick reference: the 10 habits</h3> <div class="flow" data-astro-cid-vl6nuuly><span class="green" data-astro-cid-vl6nuuly> 1.</span> Always <span class="green" data-astro-cid-vl6nuuly>/wrap</span> before closing a tab
+<span class="green" data-astro-cid-vl6nuuly> 2.</span> Let Session Startup detect stale sessions
+<span class="green" data-astro-cid-vl6nuuly> 3.</span> Never build on <span class="highlight" data-astro-cid-vl6nuuly>main</span> &mdash; always use feature branches
+<span class="green" data-astro-cid-vl6nuuly> 4.</span> Resolve uncommitted changes before starting new work
+<span class="green" data-astro-cid-vl6nuuly> 5.</span> Review &amp; merge PRs before building more features
+<span class="green" data-astro-cid-vl6nuuly> 6.</span> One feature per session, no exceptions
+<span class="green" data-astro-cid-vl6nuuly> 7.</span> Wrap up at <span class="amber" data-astro-cid-vl6nuuly>60% context</span> &mdash; don't push to 80%+
+<span class="green" data-astro-cid-vl6nuuly> 8.</span> Run <span class="green" data-astro-cid-vl6nuuly>/plan-features</span> weekly to process ideas
+<span class="green" data-astro-cid-vl6nuuly> 9.</span> Commit at every phase boundary
+<span class="green" data-astro-cid-vl6nuuly>10.</span> Keep <span class="highlight" data-astro-cid-vl6nuuly>.vibecrew/</span> in version control</div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/tips.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Tips &amp; Troubleshooting</span></a><a href="/vibe-crew/architecture.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Overview</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
 
-    <h3>Quick reference: the 10 habits</h3>
-    <div class="flow"><span class="green"> 1.</span> Always <span class="green">/wrap</span> before closing a tab
-<span class="green"> 2.</span> Let Session Startup detect stale sessions
-<span class="green"> 3.</span> Never build on <span class="highlight">main</span> &mdash; always use feature branches
-<span class="green"> 4.</span> Resolve uncommitted changes before starting new work
-<span class="green"> 5.</span> Review &amp; merge PRs before building more features
-<span class="green"> 6.</span> One feature per session, no exceptions
-<span class="green"> 7.</span> Wrap up at <span class="amber">60% context</span> &mdash; don't push to 80%+
-<span class="green"> 8.</span> Run <span class="green">/plan-features</span> weekly to process ideas
-<span class="green"> 9.</span> Commit at every phase boundary
-<span class="green">10.</span> Keep <span class="highlight">.vibecrew/</span> in version control</div>
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
 
-  </section>
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
 
-</div>
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
 
-<footer class="footer">
-  <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p>
-  <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p>
-</footer>
-</div>
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
 
-</body>
-</html>
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html> 

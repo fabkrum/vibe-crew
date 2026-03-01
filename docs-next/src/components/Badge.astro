@@ -1,0 +1,10 @@
+---
+interface Props {
+  color?: 'purple' | 'green' | 'amber' | 'blue' | 'red';
+  text: string;
+}
+
+const { color = 'purple', text } = Astro.props;
+---
+
+<span class={`badge ${color}`}>{text}</span>

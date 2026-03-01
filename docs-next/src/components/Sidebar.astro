@@ -1,0 +1,43 @@
+---
+import { navigation } from '../data/navigation';
+import { url } from '../data/site';
+import ThemeToggle from './ThemeToggle.astro';
+import SearchButton from './SearchButton.astro';
+
+interface Props {
+  activeSlug?: string;
+}
+
+const { activeSlug } = Astro.props;
+---
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <a href={url('/index.html')} class="nav-brand"><span>&gt;_</span> VibeCrew</a>
+    <div class="sidebar-actions">
+      <SearchButton />
+      <ThemeToggle />
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    {navigation.map((group) => {
+      const isActive = group.links.some((l) => l.slug === activeSlug);
+      const collapsed = group.collapsed && !isActive;
+      return (
+        <div class={`sidebar-group${collapsed ? ' collapsed' : ''}`}>
+          <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">
+            {group.label}
+          </div>
+          {group.links.map((link) => (
+            <a
+              href={url(`/${link.slug}.html`)}
+              class={`sidebar-link${link.slug === activeSlug ? ' active' : ''}`}
+            >
+              {link.title}
+            </a>
+          ))}
+        </div>
+      );
+    })}
+  </nav>
+</aside>

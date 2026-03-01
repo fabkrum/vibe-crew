@@ -1,0 +1,12 @@
+---
+interface Props {
+  columns?: number;
+}
+
+const { columns } = Astro.props;
+const style = columns ? `grid-template-columns: repeat(${columns}, 1fr)` : undefined;
+---
+
+<div class="card-grid" style={style}>
+  <slot />
+</div>

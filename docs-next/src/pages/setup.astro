@@ -1,0 +1,428 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import Card from '../components/Card.astro';
+import CardGrid from '../components/CardGrid.astro';
+import TableWrap from '../components/TableWrap.astro';
+import { url } from '../data/site';
+---
+
+<DocsLayout title="Setup Guide" sectionLabel="Getting Started" activeSlug="setup">
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#install">Installation from Scratch</a></li>
+      <li><a href="#multi-project">Multi-Project Setup (Recommended)</a></li>
+      <li><a href="#warp">Warp Terminal</a></li>
+      <li><a href="#stitch">Enabling Google Stitch (UI Design)</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+    </ol>
+  </div>
+
+  <section class="section" id="install">
+    <span class="section-label">Getting Started</span>
+    <h2>Installation from Scratch</h2>
+    <p>A complete walkthrough from zero to a fully operational VibeCrew environment.</p>
+
+    <h3>Prerequisites</h3>
+    <p>VibeCrew needs 3 required dependencies and has 2 optional ones:</p>
+
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Requirement</th><th>Tier</th><th>Minimum Version</th><th>Check Command</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Git</strong></td><td>Required</td><td>2.30+</td><td><code>git --version</code></td></tr>
+          <tr><td><strong>Node.js</strong></td><td>Required</td><td>18+</td><td><code>node --version</code></td></tr>
+          <tr><td><strong>jq</strong></td><td>Required</td><td>1.6+</td><td><code>jq --version</code></td></tr>
+          <tr><td><strong>GitHub CLI</strong></td><td>Optional</td><td>2.0+</td><td><code>gh --version</code></td></tr>
+          <tr><td><strong>terminal-notifier</strong></td><td>Optional</td><td>any</td><td><code>which terminal-notifier</code></td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <p><strong>Optional dependencies:</strong> GitHub CLI enables PR automation (<code>/review</code>, <code>gh pr create</code>). <code>terminal-notifier</code> enables desktop notifications on macOS. VibeCrew works without both.</p>
+
+    <h3>Step-by-Step Installation</h3>
+
+    <ol class="steps">
+      <li>
+        <h4>Install dependencies</h4>
+        <p>Use the bootstrap script (recommended) or install manually:</p>
+        <CodeBlock label="bash" code={`# Option A: Bootstrap script (detects OS, installs only what's missing)
+cd claude-plugin-vibe-crew && ./install.sh
+
+# Option B: Manual install on macOS
+brew install jq node
+# Optional:
+brew install terminal-notifier gh && gh auth login`} />
+        <p>Alternatively, <code>/setup</code> inside Claude Code can auto-install missing required dependencies.</p>
+      </li>
+
+      <li>
+        <h4>Add the plugin to your project</h4>
+        <p>The recommended approach is a <strong>central clone + symlink</strong>, especially if you'll use VibeCrew across multiple projects. See <a href="#multi-project">Multi-Project Setup</a> below for the full guide.</p>
+        <CodeBlock label="bash" code={`# Recommended: Central clone + symlink (see Multi-Project Setup below)
+mkdir -p ~/claude-plugins && cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git
+cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
+        <p>For alternative approaches (direct copy, git submodule), see the <a href="#multi-project">comparison table</a> in the Multi-Project section.</p>
+      </li>
+
+      <li>
+        <h4>Verify plugin detection</h4>
+        <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeCrew automatically.</p>
+        <CodeBlock label="bash" code={`cd /path/to/your-project
+claude`} />
+        <p>You should see the VibeCrew session startup agent run on first launch.</p>
+      </li>
+
+      <li>
+        <h4>Run the setup wizard</h4>
+        <p>Inside Claude Code, run:</p>
+        <CodeBlock label="claude code" code={`/setup`} />
+        <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibecrew/</code> runtime directory.</p>
+      </li>
+
+      <li>
+        <h4>Personalize your experience (optional)</h4>
+        <p>Run the profile interview to adapt VibeCrew to your workflow. This takes about 2 minutes, or pick a preset (Builder, Explorer, Founder) for instant configuration.</p>
+        <CodeBlock label="claude code" code={`/profile`} />
+        <p>This personalizes message verbosity, autonomy level, PR format, code comments, gamification, and more. You can update it anytime by running <code>/profile</code> again. See <a href={`${url('/workflow')}#profile`}>User Profile &amp; Personalization</a> for full details.</p>
+      </li>
+
+      <li>
+        <h4>Install MCP servers (optional but recommended)</h4>
+        <p>VibeCrew ships with <strong>10 MCP servers</strong>. Three are enabled by default: <strong>Context7</strong> (documentation lookup, ~1,500 tokens saved per query), <strong>Chrome DevTools</strong> (browser debugging), and <strong>Playwright</strong> (E2E browser testing). All three require no authentication.</p>
+        <p>Seven additional servers ship disabled and are <strong>auto-enabled when your TDR selects matching technologies</strong>: <strong>Semgrep</strong> (security scanning), <strong>Sentry</strong> (error tracking), <strong>Supabase</strong> (database), <strong>Stripe</strong> (payments), <strong>Vercel</strong> (deployment), <strong>Figma</strong> (design), and <strong>Stitch</strong> (Google AI design). Authenticated servers require environment variables &mdash; the setup wizard shows which variables are needed.</p>
+      </li>
+
+      <li>
+        <h4>Verify the full pipeline</h4>
+        <ul>
+          <li><strong>Notifications:</strong> Tested during setup wizard</li>
+          <li><strong>Session startup:</strong> Exit and restart Claude Code &mdash; the startup agent should show a 3-line status summary</li>
+          <li><strong>Phase gate:</strong> Try writing a source file before running <code>/new-project</code> &mdash; it should be blocked</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3>Resulting Directory Structure</h3>
+    <pre><code><span class="code-label">tree</span>{`your-project/
+  claude-plugin-vibe-crew/          # The plugin (don't modify)
+    .claude-plugin/
+      plugin.json                 # Plugin manifest
+    .mcp.json                     # MCP server config (10 servers)
+    settings.json                 # Permission rules (allowed + denied tools)
+    hooks/
+      hooks.json                  # Event hook bindings
+    scripts/                      # ~67 bash automation scripts
+    agents/                       # 13 specialized AI agent prompts
+    skills/                       # 25 slash command definitions
+    templates/                    # Project templates and doc-site scaffold
+
+  .vibecrew/                        # Per-project runtime state
+    config.json                   # Terminal preference, notification settings
+    state.json                    # Foundation status + active feature
+    backlog.json                  # Feature backlog with specs
+    sessions/                     # Session logs (JSON)
+    scores/                       # Vibe Score breakdowns (JSON)
+    releases/                     # Release notes data (JSON)
+    handoffs/                     # Cross-session handoff documents
+    workflows/                    # Reusable workflow templates (/replay)
+    simplifications/              # Code simplification reports (/simplify)
+    ci-heals/                     # CI heal reports (/heal)
+    mutation-log.json             # CLAUDE.md mutation audit log`}</code></pre>
+  </section>
+
+  <hr>
+
+  <section class="section" id="multi-project">
+    <span class="section-label">Recommended</span>
+    <h2>Multi-Project Setup</h2>
+    <p>Most users work on multiple projects. Instead of copying VibeCrew into every project, install it once and share it. This gives you a single source of truth, instant updates across all projects, and zero duplication.</p>
+
+    <h3>How it works</h3>
+    <div class="flow"><span class="highlight">Central install</span> (one copy on your machine)
+  ~/claude-plugins/vibe-crew/            <span class="muted"># the plugin &mdash; shared by all projects</span>
+
+<span class="highlight">Per-project</span> (symlink + local state)
+  ~/projects/tripflow/
+    claude-plugin-vibe-crew &rarr;           <span class="muted"># symlink to central install</span>
+    .vibecrew/                             <span class="muted"># project-specific state</span>
+
+  ~/projects/saas-dashboard/
+    claude-plugin-vibe-crew &rarr;           <span class="muted"># same symlink, different project</span>
+    .vibecrew/                             <span class="muted"># its own state</span>
+
+  ~/projects/mobile-app/
+    claude-plugin-vibe-crew &rarr;           <span class="muted"># same symlink, different project</span>
+    .vibecrew/                             <span class="muted"># its own state</span></div>
+
+    <p>The plugin code (agents, hooks, scripts, commands) lives in one place. Each project gets its own <code>.vibecrew/</code> folder with its own backlog, session logs, scores, and config. Projects are fully isolated from each other.</p>
+
+    <h3>Step-by-step</h3>
+    <ol class="steps">
+      <li>
+        <h4>Clone VibeCrew to a central location</h4>
+        <p>Pick a permanent home for the plugin. <code>~/claude-plugins/</code> is a good convention.</p>
+        <CodeBlock label="bash" code={`mkdir -p ~/claude-plugins
+cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git`} />
+      </li>
+
+      <li>
+        <h4>Symlink into your first project</h4>
+        <p>Create a symbolic link from your project to the central install. Use an absolute path so the link works regardless of where you open the terminal.</p>
+        <CodeBlock label="bash" code={`cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
+      </li>
+
+      <li>
+        <h4>Run <code>/setup</code> in the project</h4>
+        <p>Start Claude Code and run the setup wizard. This creates the <code>.vibecrew/</code> folder with project-specific state. Each project runs <code>/setup</code> once.</p>
+        <CodeBlock label="bash" code={`claude`} />
+        <CodeBlock label="claude code" code={`/setup`} />
+      </li>
+
+      <li>
+        <h4>Repeat for each new project</h4>
+        <p>For every new project, just create the symlink and run <code>/setup</code>. Two commands, under 30 seconds.</p>
+        <CodeBlock label="bash" code={`cd ~/projects/another-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
+      </li>
+    </ol>
+
+    <h3>Updating VibeCrew across all projects</h3>
+    <p>Since every project symlinks to the same central location, updating is one command:</p>
+    <CodeBlock label="bash" code={`cd ~/claude-plugins/vibe-crew && git pull`} />
+    <p>Every project picks up the changes instantly. No need to copy files, run installers, or touch individual projects. Check the <a href={url('/releases')}>Release Notes</a> after updating to see what changed.</p>
+
+    <Callout type="tip" title="Make it even faster with a shell alias">
+      <p>Add this to your <code>~/.zshrc</code> to create new VibeCrew projects in one command:</p>
+    </Callout>
+    <CodeBlock label=".zshrc" code={`# Add to ~/.zshrc
+vibecrew-init() {
+  ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
+  echo "VibeCrew linked. Run 'claude' then '/setup' to initialize."
+}
+
+vibecrew-update() {
+  (cd ~/claude-plugins/vibe-crew && git pull)
+  echo "VibeCrew updated to $(cd ~/claude-plugins/vibe-crew && git describe --tags 2>/dev/null || git log -1 --format=%h)"
+}`} />
+    <p>Then for any new project: <code>cd ~/projects/new-project && vibecrew-init</code></p>
+
+    <h3>Git and symlinks</h3>
+    <p>By default, Git tracks symlinks as tiny pointer files (not the target contents). This means:</p>
+    <ul>
+      <li><strong>Your project repo stays small</strong> &mdash; only the symlink is committed, not the entire plugin</li>
+      <li><strong>Teammates need their own central install</strong> &mdash; the symlink points to your local path, so each person clones the plugin to the same location or updates the symlink</li>
+    </ul>
+
+    <Callout type="info" title="For teams: standardize the path">
+      <p>Agree on a team-wide convention like <code>~/claude-plugins/vibe-crew/</code>. If everyone uses the same path, symlinks work across the entire team with zero config. Document this in your project's README or onboarding guide.</p>
+    </Callout>
+
+    <h3>Comparing installation approaches</h3>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Approach</th><th>Best For</th><th>Update Method</th><th>Duplication</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Central clone + symlink</strong></td>
+            <td>Solo devs, small teams</td>
+            <td><code>git pull</code> once &rarr; all projects updated</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td><strong>Git submodule</strong></td>
+            <td>Teams needing pinned versions</td>
+            <td><code>git submodule update</code> per project</td>
+            <td>Full copy per project</td>
+          </tr>
+          <tr>
+            <td><strong>Direct copy</strong></td>
+            <td>Quick experiments, air-gapped</td>
+            <td>Manual copy per project</td>
+            <td>Full copy per project</td>
+          </tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <Callout type="warn" title="Don't mix approaches">
+      <p>Pick one method and stick with it. If some projects use symlinks and others use submodules, updates become confusing and you risk running different VibeCrew versions across projects without realizing it.</p>
+    </Callout>
+
+    <h3>What's shared vs. what's project-specific</h3>
+    <CardGrid>
+      <Card icon="&#8644;" iconColor="purple" title="Shared (via symlink)">
+        Agent prompts, hook scripts, slash commands, plugin manifest, MCP config, templates. These are the same across all projects and update together.
+      </Card>
+      <Card icon="&#9751;" iconColor="green" title="Project-specific (.vibecrew/)">
+        Backlog, session logs, Vibe Scores, config, state, handoffs, workflows. Each project has its own isolated state folder that's never shared.
+      </Card>
+    </CardGrid>
+    <CardGrid>
+      <Card icon="&#9997;" iconColor="blue" title="Project-specific (project root)">
+        <code>CLAUDE.md</code>, <code>VISION.md</code>, <code>design-system.css</code>, TDR, roadmap. These are created by VibeCrew during the foundation phase and are unique to each project.
+      </Card>
+      <Card icon="&#9881;" iconColor="amber" title="Machine-specific (~/.zshrc)">
+        Shell aliases (<code>vibecrew-init</code>, <code>vibecrew-update</code>), shell traps, Warp Terminal config. Each developer sets these up once on their machine.
+      </Card>
+    </CardGrid>
+  </section>
+
+  <hr>
+
+  <section class="section" id="warp">
+    <span class="section-label">Terminal Setup</span>
+    <h2>Warp Terminal</h2>
+    <p>Warp is the recommended terminal for VibeCrew. It provides tab deep-linking (click a notification and land on the exact session that needs attention), structured output blocks, Launch Configurations for instant workspace setup, and session restoration.</p>
+
+    <p>Everything you need &mdash; installation, deep-linking setup, keyboard shortcuts, Warp Drive, window layouts, and more &mdash; is covered on the dedicated Warp page:</p>
+
+    <p style="margin-top: 1.5rem;"><a href={url('/warp')} style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--color-accent-bg); border: 1px solid var(--color-accent-dim); color: var(--color-accent); padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; transition: all 0.15s;">Warp Tips &amp; Tricks &rarr;</a></p>
+
+    <Callout type="info" title="Using a different terminal?">
+      <p>VibeCrew works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <section class="section" id="stitch">
+    <span class="section-label">Optional MCP Server</span>
+    <h2>Enabling Google Stitch (UI Design)</h2>
+    <p><a href="https://labs.google/stitch">Google Stitch</a> is an AI design tool from Google Labs that transforms text prompts into complete UI designs and production-ready HTML/CSS. VibeCrew ships with the Stitch MCP server <strong>disabled by default</strong> &mdash; here's how to enable it and use it in your workflow.</p>
+
+    <Callout type="info" title="What does Stitch add?">
+      <p>Without Stitch, VibeCrew's Builder agent generates UI code from your design system tokens and feature specs. With Stitch, you get an additional option: generate a <strong>visual UI design first</strong> in Google Stitch, preview it, then pull the production HTML/CSS into your project. This is especially useful for complex layouts, landing pages, and when you want to iterate on the visual design before writing any code.</p>
+    </Callout>
+
+    <h3>Prerequisites</h3>
+    <ul>
+      <li>Node.js 18+ (already required for VibeCrew)</li>
+      <li>A Google account to access <a href="https://labs.google/stitch">Google Stitch</a></li>
+    </ul>
+
+    <h3>Setup</h3>
+    <ol class="steps">
+      <li>
+        <h4>Authenticate with Stitch</h4>
+        <p>Run the Stitch CLI init command to set up OAuth authentication or provide an API key.</p>
+        <CodeBlock label="bash" code={`npx @_davideast/stitch-mcp init`} />
+      </li>
+
+      <li>
+        <h4>Enable the MCP server</h4>
+        <p>Open <code>claude-plugin-vibe-crew/.mcp.json</code> and change <code>"disabled": true</code> to <code>"disabled": false</code> for the Stitch entry.</p>
+        <pre><code><span class="code-label">.mcp.json</span>{`{
+  "mcpServers": {
+    "context7": { ... },
+    "chrome-devtools": { ... },
+    "stitch": {
+      "command": "npx",
+      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
+      "env": {},
+      "disabled": false    `}<span style="color:var(--color-green);">&larr; change this from true to false</span>{`
+    }
+  }
+}`}</code></pre>
+      </li>
+
+      <li>
+        <h4>Restart Claude Code</h4>
+        <p>MCP servers are loaded on startup. Exit and relaunch Claude Code so it picks up the Stitch server.</p>
+      </li>
+    </ol>
+
+    <h3>UI Design Workflow with Stitch</h3>
+    <p>Once enabled, Stitch integrates into VibeCrew's <strong>Tier 2, Phase 2 (UI Design)</strong> workflow. Here's how a typical feature development cycle looks:</p>
+
+    <div class="flow"><span class="highlight">Phase 1: Plan</span>
+  Feature spec written &rarr; requirements defined
+       |
+<span class="highlight">Phase 2: UI Design (with Stitch)</span>
+       |
+  <span class="muted">1.</span> Create designs in <a href="https://labs.google/stitch" style="color:var(--color-accent);">labs.google/stitch</a>
+     <span class="muted">   Describe your UI in natural language.</span>
+     <span class="muted">   Stitch generates screens with full visual fidelity.</span>
+       |
+  <span class="muted">2.</span> Preview screens locally
+     <span class="muted">   npx @_davideast/stitch-mcp serve -p &lt;project-id&gt;</span>
+       |
+  <span class="muted">3.</span> Pull design code via MCP
+     <span class="muted">   The Builder agent calls get_screen_code to retrieve</span>
+     <span class="muted">   production HTML/CSS for each screen.</span>
+       |
+  <span class="muted">4.</span> Integrate into your project
+     <span class="muted">   Builder adapts the Stitch output to match your</span>
+     <span class="muted">   design-system.css tokens and component structure.</span>
+       |
+<span class="highlight">Phase 3: Code</span>
+  Builder implements business logic on top of the UI
+       |
+<span class="highlight">Phase 4: Test</span>  &rarr;  <span class="highlight">Phase 5: Docs</span></div>
+
+    <h3>Stitch MCP Tools</h3>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Description</th><th>Used By</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>build_site</code></td><td>Maps Stitch screens to routes and returns design HTML for each page</td><td>Builder agent</td></tr>
+          <tr><td><code>get_screen_code</code></td><td>Retrieves the HTML/CSS code for a single screen</td><td>Builder agent</td></tr>
+          <tr><td><code>get_screen_image</code></td><td>Downloads a screenshot of a screen as base64 for visual review</td><td>Builder agent, Verifier</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <Callout type="tip" title="When to use Stitch vs. direct coding">
+      <p><strong>Use Stitch</strong> for landing pages, complex multi-screen layouts, and when you want to iterate on visuals before writing code. <strong>Skip Stitch</strong> for simple CRUD interfaces, API-heavy features, or when your design system already has the components you need. The Builder agent handles both paths &mdash; Stitch is an accelerator, not a requirement.</p>
+    </Callout>
+
+    <Callout type="warn" title="Stitch is experimental">
+      <p>Google Stitch is a Google Labs experiment and may change or be discontinued. VibeCrew treats it as a fully optional enhancement &mdash; nothing in the core workflow depends on it. If Stitch is unavailable, the Builder agent generates UI code directly from your design system tokens and feature spec as usual.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <section class="section" id="troubleshooting">
+    <span class="section-label">Help</span>
+    <h2>Troubleshooting</h2>
+
+    <h3>Notifications don't appear</h3>
+    <ol>
+      <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li>
+      <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li>
+      <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li>
+      <li>Check VibeCrew config: verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code></li>
+      <li>Warp deep-links not working: see the <a href={`${url('/warp')}#deep-linking`}>deep-linking guide</a> on the Warp page</li>
+    </ol>
+
+    <h3>MCP servers not available</h3>
+    <ol>
+      <li><strong>Default servers (Context7, Chrome DevTools, Playwright):</strong> These should work out of the box via <code>npx</code>. Try restarting Claude Code.</li>
+      <li><strong>Bundled conditional servers (Supabase, Stripe, Vercel, Figma, Sentry, etc.):</strong> Set the required environment variables, then run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code>.</li>
+      <li><strong>Registry servers not yet in .mcp.json (Firebase, Clerk, MongoDB, etc.):</strong> Add from the registry with <code>bash scripts/add-mcp-server.sh &lt;key&gt;</code>, or see all available servers with <code>bash scripts/add-mcp-server.sh --list</code>.</li>
+      <li>All MCP servers are optional. VibeCrew agents gracefully fall back to built-in tools when servers are unavailable.</li>
+    </ol>
+
+    <h3>Stale locks or corrupted state</h3>
+    <ol>
+      <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li>
+      <li>This resets any in-progress tasks that were interrupted by a crashed session</li>
+    </ol>
+  </section>
+
+</DocsLayout>

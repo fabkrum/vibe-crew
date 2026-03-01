@@ -1,0 +1,24 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PrevNext from '../components/PrevNext.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  sectionLabel?: string;
+  activeSlug: string;
+  wide?: boolean;
+}
+
+const { title, description, sectionLabel, activeSlug, wide = false } = Astro.props;
+---
+
+<BaseLayout title={`VibeCrew — ${title}`} description={description} activeSlug={activeSlug}>
+  <div class="main" data-pagefind-body>
+    <Breadcrumbs title={title} slug={activeSlug} />
+    {sectionLabel && <span class="section-label">{sectionLabel}</span>}
+    <slot />
+    <PrevNext slug={activeSlug} />
+  </div>
+</BaseLayout>

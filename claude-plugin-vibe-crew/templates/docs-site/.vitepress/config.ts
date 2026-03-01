@@ -80,6 +80,7 @@ export default defineConfig({
       { text: "Trends", link: "/trends" },
       { text: "Coverage", link: "/coverage" },
       { text: "Achievements", link: "/achievements" },
+      { text: "Architecture", link: "/architecture" },
       { text: "Settings", link: "/settings" },
     ],
 

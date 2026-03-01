@@ -50,7 +50,7 @@ Read state via `jq` queries on `.vibecrew/state.json` and `.vibecrew/backlog.jso
 Guide the foundation sequence strictly in order. Do not skip steps. Do not allow parallel execution.
 
 1. **VISION.md** — Prompt the developer for project vision. Delegate to Builder for file creation.
-2. **design-system.css** — Delegate to Builder (UI Designer mode) once VISION.md is approved.
+2. **Design Discovery** — Run 3-phase Design Discovery interview (Product Context → Visual Direction → Component Preferences) to generate `design-system.css` and `design-brief.md`. This runs inline as the Orchestrator once VISION.md is approved.
 3. **TDR** — Delegate to Stack Scout for technology research. Wait for TDR completion.
 4. **roadmap.md** — Synthesize VISION.md + TDR into a phased roadmap. Delegate to Builder.
 5. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR + roadmap. Use the Stack Scout's preliminary system diagram as a starting point.
@@ -176,6 +176,20 @@ Active Teams:
 Last Signal: {signal_name} at {timestamp}
 ```
 
+## Architecture Context Injection
+
+After determining the routing target (Tier 1 vs Tier 2) and before delegating to any agent, inject the architecture diagrams into your context:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/inject-architecture.sh"
+```
+
+This loads all 5 Mermaid diagrams (~50–150 lines total) as a compressed architectural map. The cost is minimal but the benefit is significant — you and all downstream agents gain instant awareness of the system topology, data model, auth flows, API patterns, and component hierarchy without each agent loading diagrams independently.
+
+The script is a no-op when foundation is incomplete or diagrams don't exist yet, so it is safe to call unconditionally.
+
+**Why this matters:** Architecture diagrams are a perfectly compressed context for an AI. A 30-line Mermaid diagram encodes relationships that would take hundreds of lines of natural language to describe. Pre-loading them eliminates redundant file reads across agents and enables faster, more accurate responses to architecture questions.
+
 ## Context Budget: On-Demand Loading
 
 To stay within context limits, load agent and command details on-demand rather than keeping all 13 agent descriptions in memory:
@@ -183,6 +197,7 @@ To stay within context limits, load agent and command details on-demand rather t
 1. **Trigger table** — Use `${CLAUDE_PLUGIN_ROOT}/templates/trigger-table.md` as a compact routing reference (~60 lines) instead of reading all agent files. It maps every slash command to its agent, lists all agents with their models and triggers, and provides the state routing decision table.
 2. **Load agent prompts only when invoking** — Read the full agent `.md` file only when creating a team or delegating a task to that agent.
 3. **State via scripts** — Use `jq` queries and Bash scripts for state inspection instead of reading entire JSON files.
+4. **Architecture diagrams via script** — Use `inject-architecture.sh` once after routing instead of reading `.mmd` files individually. This single call replaces per-agent diagram loading.
 
 ## Profile-Aware Communication
 

@@ -998,7 +998,7 @@ The Test Writer, Quality Check, and Performance Coach scoring had a natural life
 All three are verification activities that answer the question "Is this work correct?" Merging them into Verifier creates a single agent responsible for all quality assurance:
 
 - **Testing:** Writes and runs tests (former Test Writer)
-- **Quality gates:** Runs build/lint/types (former Quality Check)
+- **Quality gates:** Runs build/lint/types (former Quality Check). Note: the `quality-gate.sh` Stop hook now runs lightweight typecheck/lint/build checks on modified files after every assistant turn, providing fast feedback. The Verifier handles the full test suite and deep quality checks on demand via `/check` and `/wrap`.
 - **Scoring:** Calculates Vibe Score during `/wrap` (former Performance Coach scoring)
 
 The standalone Performance Coach is deferred to v1.1 because its most advanced features (persistent `memory: project`, cross-session trend analysis, CLAUDE.md mutation proposals) require more infrastructure. For v1.0, the Verifier calculates the score and provides coaching suggestions without persistent memory or mutation capability.

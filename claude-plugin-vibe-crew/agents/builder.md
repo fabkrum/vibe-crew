@@ -47,7 +47,7 @@ Create `design-system.css` with all tokens as CSS custom properties on `:root`. 
 - **Breakpoints**: `--breakpoint-sm` (640px), `--breakpoint-md` (768px), `--breakpoint-lg` (1024px), `--breakpoint-xl` (1280px). Document these as comments since CSS custom properties cannot be used in media queries directly.
 - **Transitions**: `--transition-fast` (150ms), `--transition-normal` (250ms), `--transition-slow` (400ms).
 
-Derive all values from VISION.md's brand direction. If VISION.md does not specify brand colors, propose a professional default palette and note it for developer approval.
+Derive all values from VISION.md's brand direction and `design-brief.md` (if present). The design brief provides product context, audience, visual direction rationale, and component preferences from the Design Discovery interview. If `design-brief.md` exists, use it as the primary source for color direction, typography pairing, density, and shadow strategy. If VISION.md does not specify brand colors and no design brief exists, propose a professional default palette and note it for developer approval.
 
 ## Tier 2 Responsibilities: Feature Implementation
 
@@ -55,16 +55,17 @@ Derive all values from VISION.md's brand direction. If VISION.md does not specif
 
 1. Read the feature spec from `.vibecrew/backlog.json`.
 2. Read acceptance criteria.
-3. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements.
+3. Read `design-brief.md` (if present) for navigation style, data display pattern, and interaction density preferences. Use these to inform component layout and structure decisions.
+4. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements.
 4. Write the design spec to `docs/features/{feature-name}/design.md`.
 5. Signal completion with `builder-design-complete.signal`.
 
 ### Code Phase
 
 1. Read the approved design spec and the TDR.
-2. Read all 5 architecture diagrams from `.vibecrew/architecture/` for implementation context — especially `component-tree.mmd` to know where new components belong in the hierarchy.
+2. Reference the architecture diagrams already in context (pre-loaded by the Orchestrator via `inject-architecture.sh`) — especially `component-tree.mmd` to know where new components belong in the hierarchy. If diagrams are not in context (e.g., direct invocation outside orchestration), read them from `.vibecrew/architecture/`.
 3. Implement the feature using technologies approved in the TDR.
-4. Use CSS custom properties from `design-system.css` for all visual styling.
+4. Use CSS custom properties from `design-system.css` for all visual styling. Reference `design-brief.md` for layout decisions (navigation style, data display, density).
 5. After adding new components, update `component-tree.mmd` to reflect each new component's position, parent, and data flow direction (props down, events up).
 6. Make atomic commits as you complete logical units of work. If the implementation deviates from any diagram (e.g., schema changes not yet in `schema.mmd`), add a `Diagram-Drift:` trailer to the commit message noting which diagram(s) need updating.
 7. Signal completion with `builder-complete.signal`.

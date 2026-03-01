@@ -50,11 +50,15 @@ React/Vue/Svelte component hierarchy with data flow direction (props ↓, events
 3. Five `.mmd` files are written to `.vibecrew/architecture/`.
 4. The user approves, edits, or skips. State is recorded in `state.json` as `architecture_diagrams.status`.
 
+### Context Injection
+
+After routing is determined, the **Workflow Orchestrator** runs `inject-architecture.sh` to concatenate all 5 diagrams into a single context block. This gives every downstream agent (Builder, Code Reviewer, Doc Generator) instant architectural awareness without each loading diagrams independently. The script is also called by `compact-reinject.sh` so diagrams survive context compaction.
+
 ### Updates (Tier 2)
 
 During each feature development cycle:
 
-- **Builder** reads all 5 diagrams at the start of the Code Phase for implementation context. After adding new components, the Builder updates `component-tree.mmd` and notes diagram deviations via the `Diagram-Drift:` commit trailer.
+- **Builder** references the diagrams already in context (pre-loaded by the Orchestrator via `inject-architecture.sh`) for implementation context. After adding new components, the Builder updates `component-tree.mmd` and notes diagram deviations via the `Diagram-Drift:` commit trailer.
 - **Doc Generator** checks diagram freshness during `/wrap` using the same drift detection logic as feature docs. Stale diagrams are updated automatically.
 - **Code Reviewer** checks diagram consistency as a `warning`-level finding (not critical).
 
@@ -72,7 +76,7 @@ During each feature development cycle:
 
 | Agent | Reads | Writes | Purpose |
 |-------|-------|--------|---------|
-| Workflow Orchestrator | — | — | Coordinates generation during Tier 1 |
+| Workflow Orchestrator | All 5 (via `inject-architecture.sh`) | — | Pre-loads diagrams into agent context after routing; coordinates generation during Tier 1 |
 | Builder | All 5 | `component-tree.mmd` | Implementation context; extends component tree |
 | Code Reviewer | All 5 | — | Consistency checks vs actual code |
 | Doc Generator | All 5 | All 5 | Freshness detection and stale diagram updates |

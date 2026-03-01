@@ -28,7 +28,7 @@ CLAUDE.md                       # This file
 
 ### Two-Tier Workflow
 
-- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css, TDR (Technology Decision Record), roadmap, Architecture Diagrams (5 Mermaid `.mmd` files), and CLAUDE.md before any source code can be written. Enforced by a phase gate hook.
+- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css + design-brief.md (via Design Discovery interview), TDR (Technology Decision Record), roadmap, Architecture Diagrams (5 Mermaid `.mmd` files), and CLAUDE.md before any source code can be written. Enforced by a phase gate hook. Step 2 (Design Discovery) runs a 3-phase contextual interview: Product & Audience Context → Visual Direction → Component Preferences, producing both the CSS token file and a design brief that captures rationale for agents to reference.
 - **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`.
 
 ### Agent Topology (14 agents)
@@ -63,6 +63,9 @@ Opus agents handle planning, research, code, security, and analysis — tasks wh
 | Notification | notify.sh | Native OS notifications with Warp deep-linking |
 | PostToolUseFailure | notify.sh | Error notifications |
 | Stop | check-context.sh | Warns at 60% and 80% context usage |
+| Stop | cost-guardrails.sh | Session and daily cost tracking against thresholds |
+| Stop | claude-md-lint.sh | CLAUDE.md size and quality validation |
+| Stop | quality-gate.sh | Runs typecheck/lint/build on modified source files; blocks on failure |
 
 ### Interrupt Protocol
 
@@ -133,8 +136,8 @@ The `/profile` command runs an 8-question interview (or offers presets) that sto
 
 1. **Research before code** — The phase gate enforces architecture decisions (TDR) before any source code writes are allowed.
 2. **Human attention is the bottleneck** — The system stays silent during normal operation and interrupts only when blocked, complete, or failed.
-3. **Context window discipline** — Target <50% context usage. Subagents isolate expensive research. MCP servers (Context7) replace pasting docs. Warnings at 60%/80%.
-4. **Hooks over suggestions** — Enforce rules via deterministic bash scripts (zero tokens) rather than relying on the model to remember.
+3. **Context window discipline** — Target <50% context usage. Subagents isolate expensive research. MCP servers (Context7) replace pasting docs. Architecture diagrams pre-loaded once via `inject-architecture.sh` instead of per-agent reads. Warnings at 60%/80%.
+4. **Hooks over suggestions** — Enforce rules via deterministic bash scripts (zero tokens) rather than relying on the model to remember. The quality gate Stop hook (`quality-gate.sh`) catches typecheck/lint/build errors immediately after every task completion.
 5. **Self-improving** — Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules, creating a recursive efficiency improvement loop.
 6. **Parallel by default** — Planning and development can run simultaneously across terminal tabs.
 

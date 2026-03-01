@@ -1367,9 +1367,16 @@ For non-technical VibeCrew users, this is especially dangerous because the outpu
 | 80% | Hard warning | Native OS notification to user via `notify.sh`. Recommend `/wrap`. |
 | 90% | Force stop | Agent should gracefully terminate. Create WIP commit. Start new session. |
 
-### 8.3 Implementation via Stop Hook
+### 8.3 Implementation via Stop Hook Pipeline
 
-The `check-context.sh` script fires after each agent turn (Stop hook) and reads context usage from the hook payload. It also performs cost monitoring (see Section 9) and CLAUDE.md size checking (see Section 10):
+The Stop event fires four scripts sequentially after each agent turn. The first three are advisory (exit 0 always); the fourth can block:
+
+1. **`check-context.sh`** — Context window usage warnings
+2. **`cost-guardrails.sh`** — Session and daily cost tracking (see Section 9)
+3. **`claude-md-lint.sh`** — CLAUDE.md size and quality checks (see Section 10)
+4. **`quality-gate.sh`** — Runs typecheck/lint/build on modified source files (exit 1 on failure, respects `autonomy` profile)
+
+The `check-context.sh` script reads context usage from the hook payload:
 
 ```bash
 #!/bin/bash
@@ -2019,6 +2026,19 @@ The full `hooks.json` configuration for the VibeCrew safety system:
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/check-context.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/cost-guardrails.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/claude-md-lint.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/quality-gate.sh",
+            "timeout": 60
           }
         ]
       }
@@ -2041,10 +2061,13 @@ The full `hooks.json` configuration for the VibeCrew safety system:
 ## Appendix B: Safety Layer Architecture
 
 ```
-Layer 8: CLAUDE.md Size Management   (check-context.sh, Verifier pruning)
+Layer 9: Quality Gate                (quality-gate.sh)
+         |                          Catches typecheck/lint/build errors on every stop
+         v                          Auto-detects commands from package.json, blocks on failure
+Layer 8: CLAUDE.md Size Management   (claude-md-lint.sh, Verifier pruning)
          |                          Prevents instruction bloat and context waste
          v                          500-line soft limit, 600-line hard limit
-Layer 7: Cost Monitoring             (check-context.sh)
+Layer 7: Cost Monitoring             (cost-guardrails.sh)
          |                          Prevents uncontrolled API spend
          v                          $2/$5/$20 thresholds with hard stop
 Layer 6: Context Monitoring          (check-context.sh)

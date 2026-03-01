@@ -179,6 +179,7 @@
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
       <a href="setup.html" class="sidebar-link">Setup</a>
       <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
       <a href="existing-project.html" class="sidebar-link">Existing Project</a>
       <a href="warp.html" class="sidebar-link">Warp</a>
     </div>
@@ -558,9 +559,9 @@ args: feature_name
           </tr>
           <tr>
             <td><strong>Stop</strong></td>
-            <td><code>check-context.sh</code>, <code>cost-guardrails.sh</code>, <code>claude-md-lint.sh</code></td>
+            <td><code>check-context.sh</code>, <code>cost-guardrails.sh</code>, <code>claude-md-lint.sh</code>, <code>quality-gate.sh</code></td>
             <td>Session ending</td>
-            <td>Context warnings, cost threshold checks, CLAUDE.md validation</td>
+            <td>Context warnings, cost threshold checks, CLAUDE.md validation, typecheck/lint/build on modified files</td>
           </tr>
         </tbody>
       </table>
@@ -589,7 +590,9 @@ args: feature_name
           <tr><td><code>session-startup.sh</code></td><td>Environment check, state detection, routing on every session start</td><td>SessionStart hook</td></tr>
           <tr><td><code>sync-state.sh</code></td><td>Reconcile state.json with git branch and filesystem reality</td><td>SessionStart hook</td></tr>
           <tr><td><code>error-recovery.sh</code></td><td>Clear stale locks, clean temp files, detect orphaned processes</td><td>SessionStart hook</td></tr>
-          <tr><td><code>compact-reinject.sh</code></td><td>Re-inject project state (&lt;300 tokens) after context compaction</td><td>SessionStart (compact)</td></tr>
+          <tr><td><code>compact-reinject.sh</code></td><td>Re-inject project state + architecture diagrams after context compaction</td><td>SessionStart (compact)</td></tr>
+          <tr><td><code>inject-architecture.sh</code></td><td>Pre-load all 5 Mermaid diagrams into agent context as a compressed architecture map</td><td>Workflow Orchestrator (after routing)</td></tr>
+          <tr><td><code>quality-gate.sh</code></td><td>Run typecheck/lint/build on modified source files; blocks on failure</td><td>Stop hook</td></tr>
           <tr><td><code>statusline.sh</code></td><td>Render status bar: context %, cost, feature, score, duration</td><td>Every assistant message</td></tr>
           <tr><td><code>notify.sh</code></td><td>Native OS notification with terminal-specific deep-linking</td><td>Notification / Failure hooks</td></tr>
         </tbody>
@@ -769,9 +772,9 @@ args: feature_name
       </tbody>
     </table>
 
-    <p><strong>Lifecycle:</strong> Generated during Tier 1 (Step 5) from VISION.md + TDR + roadmap. Updated during Tier 2 by the Builder (<code>component-tree.mmd</code>) and Doc Generator (all diagrams, during <code>/wrap</code>). The Code Reviewer checks diagram consistency as a warning-level finding.</p>
+    <p><strong>Lifecycle:</strong> Generated during Tier 1 (Step 5) from VISION.md + TDR + roadmap. At the start of each Tier 2 feature, the Workflow Orchestrator runs <code>inject-architecture.sh</code> to pre-load all 5 diagrams into context as a compressed architecture map. This gives every downstream agent instant architectural awareness without each loading diagrams independently. Updated during Tier 2 by the Builder (<code>component-tree.mmd</code>) and Doc Generator (all diagrams, during <code>/wrap</code>). The Code Reviewer checks diagram consistency as a warning-level finding.</p>
 
-    <p><strong>Token savings:</strong> All 5 diagrams total ~250&ndash;600 tokens, compared to the TDR alone (2,000&ndash;5,000 tokens). Agents that need quick architectural context read the diagrams instead of re-reading the full TDR.</p>
+    <p><strong>Token savings:</strong> All 5 diagrams total ~250&ndash;600 tokens, compared to the TDR alone (2,000&ndash;5,000 tokens). Pre-loading them once via <code>inject-architecture.sh</code> eliminates redundant file reads across agents and enables faster, more accurate responses to architecture questions.</p>
 
     <!-- MCP SERVERS -->
     <h3 id="mcp-servers">MCP Server Integration</h3>

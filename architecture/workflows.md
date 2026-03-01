@@ -800,7 +800,8 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     |                          v                              |
     |                 +------------------+                    |
     |                 | QUALITY GATE     |                    |
-    |                 |  (Verifier)      |                    |
+    |                 |  (Verifier +     |                    |
+    |                 |   Stop hook)     |                    |
     |                 |  npm test        |                    |
     |                 |  npm run build   |                    |
     |                 |  npm run lint    |                    |
@@ -929,8 +930,12 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |       |     PostToolUseFailure -> notify.sh              |
     |       |     (fires error notification)                   |
     |       |                                                  |
-    |       +-- After each turn:                               |
-    |       |     Stop hook -> check-context.sh                |
+    |       +-- After each turn (Stop hook pipeline):            |
+    |       |     check-context.sh   -> context warnings       |
+    |       |     cost-guardrails.sh -> cost tracking           |
+    |       |     claude-md-lint.sh  -> CLAUDE.md validation    |
+    |       |     quality-gate.sh    -> typecheck/lint/build    |
+    |       |       (blocks on failure; agent fixes errors)     |
     |       |     60%: "Consider wrapping up."                 |
     |       |     80%: "Wrap now." + OS notification           |
     |       |                                                  |

@@ -68,6 +68,13 @@ if [[ -f "$CLAUDE_MD" ]]; then
   echo "CLAUDE.md: ${LINE_COUNT} lines, sections: ${SECTIONS}"
 fi
 
+# ── Architecture diagrams (compact injection) ──
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+INJECT_ARCH="$SCRIPT_DIR/inject-architecture.sh"
+if [[ -x "$INJECT_ARCH" ]]; then
+  bash "$INJECT_ARCH" 2>/dev/null || true
+fi
+
 # ── Current branch + last 5 commits ──
 echo "Branch: $GIT_BRANCH"
 echo "Recent commits:"

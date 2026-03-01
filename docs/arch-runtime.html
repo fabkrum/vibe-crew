@@ -168,6 +168,7 @@
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
       <a href="setup.html" class="sidebar-link">Setup</a>
       <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
       <a href="existing-project.html" class="sidebar-link">Existing Project</a>
       <a href="warp.html" class="sidebar-link">Warp</a>
     </div>
@@ -454,6 +455,7 @@ Outputs a &lt;300-token summary:
   &bull; Foundation status (complete/incomplete + missing steps)
   &bull; Active feature (name, branch, current phase, phases completed)
   &bull; Backlog summary (by Kanban column)
+  &bull; Architecture diagrams (all 5 Mermaid files, via inject-architecture.sh)
   &bull; Recent commits (last 5)
   &bull; CLAUDE.md summary (line count, section count)
     &darr;
@@ -562,6 +564,36 @@ Checks against thresholds:
   Daily warning ($20.00)  &rarr; emit daily spend alert</div>
 
     <p>All thresholds are configurable in <code>.vibecrew/config.json</code> under <code>cost_limits</code>. The <code>/cost</code> command reads this data to display the full financial picture.</p>
+
+    <!-- QUALITY GATE -->
+    <h3 id="quality-gate">Quality Gate</h3>
+
+    <div class="callout tip">
+      <div class="callout-title">What is the quality gate?</div>
+      <p>The quality gate is an <strong>automatic code checker</strong> that runs every time the AI finishes a task. It catches type errors, lint violations, and build failures immediately &mdash; before they pile up. Think of it as a spell-checker that runs after every paragraph instead of waiting until you're done writing the entire essay. If it finds problems, it tells the AI exactly what's wrong so it can fix them right away.</p>
+    </div>
+
+    <p>The <code>quality-gate.sh</code> script runs as the final Stop hook, after context warnings, cost guardrails, and CLAUDE.md linting. Unlike the other Stop hooks, it can <strong>block</strong> (exit non-zero) to signal errors back to the agent.</p>
+
+    <h4>How it works</h4>
+    <div class="flow"><span class="highlight">Stop hook fires</span> after every assistant turn
+    &darr;
+<span class="highlight">quality-gate.sh</span> checks prerequisites:
+  &bull; Foundation must be complete (no checks during Tier 1)
+  &bull; User profile autonomy must be <code>full_auto</code> or <code>checkpoints</code>
+    &darr;
+Detects modified source files via <code>git diff</code>
+  (skips if no .ts/.tsx/.js/.jsx/.vue/.svelte/.py etc. changed)
+    &darr;
+Discovers check commands from <span class="highlight">package.json</span> scripts:
+  typecheck &rarr; lint &rarr; build (runs in order, stops on first failure)
+    &darr;
+Auto-detects package manager (npm/bun/pnpm/yarn)
+    &darr;
+<span class="highlight">Pass:</span> exits 0 silently &mdash; no output, no interruption
+<span class="highlight">Fail:</span> exits 1 with error report (last 80 lines) &mdash; agent sees it and fixes</div>
+
+    <p>The quality gate complements the Verifier agent (which runs full test suites via <code>/check</code> and <code>/wrap</code>). The Stop hook catches <strong>fast signals</strong> (typecheck, lint, build) on every turn, while the Verifier handles <strong>deep signals</strong> (unit tests, integration tests, coverage) on demand.</p>
   </section>
 
 </div>

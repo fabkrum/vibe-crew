@@ -70,6 +70,10 @@ claude-plugin-vibe-crew/
     format-code.sh
     notify.sh
     check-context.sh
+    cost-guardrails.sh
+    claude-md-lint.sh
+    quality-gate.sh
+    inject-architecture.sh
     check-deps.sh
     migrate-state.sh
   templates/
@@ -433,6 +437,21 @@ The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeCrew autom
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/check-context.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/cost-guardrails.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/claude-md-lint.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/quality-gate.sh",
+            "timeout": 60
           }
         ]
       }
@@ -446,7 +465,7 @@ The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeCrew autom
 | Event | Matcher | Script | Purpose | Can Block? |
 |-------|---------|--------|---------|------------|
 | SessionStart | `startup` | `session-startup.sh` | Environment check, state detection, run migrations, route to correct workflow | No |
-| SessionStart | `compact` | `compact-reinject.sh` | Re-inject `.vibecrew/state.json` summary after context compaction | No |
+| SessionStart | `compact` | `compact-reinject.sh` | Re-inject `.vibecrew/state.json` summary + architecture diagrams after context compaction | No |
 | PreToolUse | `Write\|Edit` | `phase-gate.sh` | Block source code writes until `foundation.complete` is `true` | Yes (JSON deny) |
 | PreToolUse | `Write\|Edit` | `restrict-paths.sh` | Sandbox path validation, block writes outside project root | Yes (JSON deny) |
 | PreToolUse | `Bash` | `protect-data.sh` | Block destructive shell commands (rm -rf, force push, DROP TABLE) | Yes (JSON deny) |
@@ -455,10 +474,15 @@ The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeCrew autom
 | Notification | `idle_prompt` | `notify.sh` | macOS notification when task completes | No |
 | PostToolUseFailure | (all) | `notify.sh` | macOS notification on critical tool failures | No |
 | Stop | (all) | `check-context.sh` | Warn at 60% and 80% context usage | No |
+| Stop | (all) | `cost-guardrails.sh` | Session and daily cost tracking against thresholds | No |
+| Stop | (all) | `claude-md-lint.sh` | CLAUDE.md size and quality validation | No |
+| Stop | (all) | `quality-gate.sh` | Typecheck/lint/build on modified source files | Yes (exit 1) |
 
 **Changes from pre-review design:**
 - **Added:** `SessionStart` with `compact` matcher for context re-injection after compaction events. See [system-overview.md, Section 5.7](system-overview.md#57-context-re-injection-after-compaction).
 - **Added:** `restrict-paths.sh` for sandbox path validation.
+- **Added:** `cost-guardrails.sh`, `claude-md-lint.sh`, `quality-gate.sh` as Stop hook pipeline (3 advisory + 1 blocking).
+- **Added:** `inject-architecture.sh` for pre-loading Mermaid diagrams into agent context (called by Workflow Orchestrator and `compact-reinject.sh`).
 - **Removed:** `SessionEnd` / `coach-retro.sh` (Performance Coach deferred to v1.1; Vibe Score calculation handled by Verifier during `/wrap`).
 
 ### 4.3 Script Permissions

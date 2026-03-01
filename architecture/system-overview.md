@@ -79,6 +79,10 @@ claude-plugin-vibe-crew/                      # Plugin root
     format-code.sh                          #   PostToolUse(Write|Edit): auto-format
     notify.sh                               #   Notification + PostToolUseFailure: OS alerts
     check-context.sh                        #   Stop: context usage warnings (60%/80%/90%)
+    cost-guardrails.sh                      #   Stop: session/daily cost tracking
+    claude-md-lint.sh                       #   Stop: CLAUDE.md size and quality validation
+    quality-gate.sh                         #   Stop: typecheck/lint/build on modified source files
+    inject-architecture.sh                  #   Orchestrator: pre-loads Mermaid diagrams into context
   settings.json                             # Default permission rules (allow/deny lists)
   .mcp.json                                 # MCP server definitions (10 servers, 3 enabled by default)
   templates/
@@ -941,9 +945,20 @@ Two agents use Haiku instead of Opus:
 
 The Opus-first strategy reserves the most capable model for tasks that benefit from deep reasoning (research, code generation, security analysis, adversarial review), while Haiku handles the high-frequency, low-complexity tasks where cost efficiency matters most.
 
-### 5.6 Stop Hook: Context Warnings
+### 5.6 Stop Hook Pipeline
 
-The `check-context.sh` script fires on the Stop event (after each assistant turn) and reads context usage from the hook payload:
+The Stop event fires after each assistant turn and runs four scripts sequentially:
+
+1. **`check-context.sh`** — Context window usage warnings (advisory, exit 0 always)
+2. **`cost-guardrails.sh`** — Session and daily cost tracking against configurable thresholds (advisory, exit 0 always)
+3. **`claude-md-lint.sh`** — CLAUDE.md size, duplication, and quality checks (advisory, exit 0 always)
+4. **`quality-gate.sh`** — Runs typecheck/lint/build on modified source files (**blocking**, exit 1 on failure)
+
+The first three are advisory — they emit warnings but never block. The fourth (`quality-gate.sh`) is the only blocking Stop hook. It detects modified source files via `git diff`, discovers check commands from `package.json` scripts, and runs them sequentially. On failure, it exits non-zero with the error report so the agent sees it and can fix the issues. It respects the user profile `autonomy` setting — only active for `full_auto` and `checkpoints` profiles; `collaborative` and `supervised` users run checks explicitly via `/check`.
+
+#### Context Warnings
+
+The `check-context.sh` script reads context usage from the hook payload:
 
 | Threshold | Level | Response |
 |-----------|-------|----------|
@@ -1183,6 +1198,9 @@ The complete `hooks/hooks.json` routing table:
 | Notification | `idle_prompt` | `notify.sh` | command | No | Interrupt Protocol |
 | PostToolUseFailure | (all) | `notify.sh` | command | No | Error notifications |
 | Stop | (all) | `check-context.sh` | command | No | Context usage warnings |
+| Stop | (all) | `cost-guardrails.sh` | command | No | Session/daily cost tracking |
+| Stop | (all) | `claude-md-lint.sh` | command | No | CLAUDE.md size and quality validation |
+| Stop | (all) | `quality-gate.sh` | command | Yes (exit 1) | Typecheck/lint/build on modified source files |
 
 **New in v1.0 (post-review):** The `SessionStart` hook with `compact` matcher. This was not present in the pre-review design. It fires after every context compaction event and re-injects a summary of `.vibecrew/state.json` so the agent does not lose track of project state. See [Section 5.7](#57-context-re-injection-after-compaction) for details.
 

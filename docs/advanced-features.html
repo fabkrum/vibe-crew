@@ -502,6 +502,7 @@
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
       <a href="setup.html" class="sidebar-link">Setup</a>
       <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
       <a href="existing-project.html" class="sidebar-link">Existing Project</a>
       <a href="warp.html" class="sidebar-link">Warp</a>
     </div>
@@ -728,7 +729,7 @@ Presents suggestions one at a time for your approval
 
       <!-- COST GUARDRAILS -->
       <h3 id="cost-guardrails">Cost Guardrails</h3>
-      <p>The <code>cost-guardrails.sh</code> hook runs on every Stop event, calculating per-turn costs with model-aware pricing and accumulating totals in <code>.vibecrew/session-cost.json</code>.</p>
+      <p>The <code>cost-guardrails.sh</code> hook runs on every Stop event, calculating per-turn costs with model-aware pricing and accumulating totals in <code>.vibecrew/session-cost.json</code>. Alongside cost monitoring, the Stop hook also runs <code>quality-gate.sh</code>, which detects modified source files and runs typecheck/lint/build checks automatically. See <a href="arch-runtime.html#quality-gate">Runtime Systems &gt; Quality Gate</a> for details.</p>
 
       <div class="table-wrap">
         <table>

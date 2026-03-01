@@ -28,14 +28,8 @@ fi
 # Validate the write target
 VALIDATION_OUTPUT=$(sandbox_validate_write "$FILE_PATH" 2>&1)
 if [[ $? -ne 0 ]]; then
-  cat <<HOOK_OUTPUT
-{
-  "hookSpecificOutput": {
-    "permissionDecision": "deny",
-    "reason": "$VALIDATION_OUTPUT"
-  }
-}
-HOOK_OUTPUT
+  ESCAPED_REASON=$(printf '%s' "$VALIDATION_OUTPUT" | jq -Rs '.')
+  printf '{"hookSpecificOutput":{"permissionDecision":"deny","reason":%s}}' "$ESCAPED_REASON"
   exit 2
 fi
 

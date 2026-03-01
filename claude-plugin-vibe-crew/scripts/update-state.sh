@@ -11,12 +11,34 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 STATE_FILE="$VIBECREW_DIR/state.json"
 
-if [[ $# -lt 1 ]]; then
-  echo "Usage: update-state.sh '<jq-expression>'" >&2
+DRY_RUN=false
+
+# Parse arguments
+POSITIONAL_ARGS=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run) DRY_RUN=true; shift ;;
+    *) POSITIONAL_ARGS+=("$1"); shift ;;
+  esac
+done
+
+if [[ ${#POSITIONAL_ARGS[@]} -lt 1 ]]; then
+  echo "Usage: update-state.sh [--dry-run] '<jq-expression>'" >&2
   exit 1
 fi
 
-JQ_EXPR="$1"
+JQ_EXPR="${POSITIONAL_ARGS[0]}"
+
+# Validate jq expression against allowlist — reject dangerous builtins
+if echo "$JQ_EXPR" | grep -qE '\b(input|inputs|env|debug|halt|builtins|@base64d|@sh|@html|@uri|getpath|delpaths|modulemeta|limit|first|last|range|ascii_downcase|ascii_upcase|implode|explode|tojson|fromjson|scan|test|match|capture|splits|sub|gsub)\s*\(' 2>/dev/null; then
+  echo "ERROR: jq expression contains disallowed function calls" >&2
+  exit 1
+fi
+# Only allow safe state-update patterns: .key.path = value
+if ! echo "$JQ_EXPR" | grep -qE '^\.[a-zA-Z_]' 2>/dev/null; then
+  echo "ERROR: jq expression must start with a dot-path accessor" >&2
+  exit 1
+fi
 
 if [[ ! -f "$STATE_FILE" ]]; then
   echo "ERROR: state.json not found." >&2
@@ -37,6 +59,19 @@ UPDATED=$(echo "$CONTENT" | jq "$JQ_EXPR" 2>&1) || {
   release_state_lock
   exit 1
 }
+
+# Dry-run mode: show diff and exit
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "DRY RUN — Changes that would be applied:"
+  echo ""
+  echo "Before:"
+  jq . "$STATE_FILE" 2>/dev/null
+  echo ""
+  echo "After:"
+  echo "$UPDATED" | jq .
+  release_state_lock
+  exit 0
+fi
 
 # Validate JSON
 TMP="${STATE_FILE}.tmp.$$"

@@ -32,39 +32,58 @@ if [[ -z "$ENABLED_SERVERS" ]]; then
 fi
 
 TOTAL=0; HEALTHY=0; FAILED=0
+HEALTH_TMPDIR="$(mktemp -d)"
+trap 'rm -rf "$HEALTH_TMPDIR"' EXIT
 
 while IFS= read -r server; do
   [[ -z "$server" ]] && continue
   ((TOTAL++))
 
-  # Get command and args
+  # Get command and args as array (safe — no shell interpolation)
   CMD=$(jq -r ".mcpServers.\"$server\".command" "$MCP_CONFIG")
-  ARGS=$(jq -r ".mcpServers.\"$server\".args // [] | join(\" \")" "$MCP_CONFIG")
+  readarray -t ARGS_ARRAY < <(jq -r ".mcpServers.\"$server\".args // [] | .[]" "$MCP_CONFIG")
+
+  # Sanitize server name for temp file usage
+  SAFE_SERVER="$(printf '%s' "$server" | tr -cd '[:alnum:]._-')"
+  ERR_FILE="$HEALTH_TMPDIR/mcp-health-${SAFE_SERVER}.err"
 
   # Try to start the server with a timeout
   # We just check if the process starts without immediate error
   ERROR_MSG=""
-  if timeout "$TIMEOUT_SECS" bash -c "$CMD $ARGS </dev/null >/dev/null 2>/tmp/mcp-health-$server.err &
-    PID=\$!
+  if timeout "$TIMEOUT_SECS" bash -c '
+    "$@" </dev/null >/dev/null 2>"$0" &
+    PID=$!
     sleep 1
-    if kill -0 \$PID 2>/dev/null; then
-      kill \$PID 2>/dev/null || true
-      wait \$PID 2>/dev/null || true
+    if kill -0 $PID 2>/dev/null; then
+      kill $PID 2>/dev/null || true
+      wait $PID 2>/dev/null || true
       exit 0
     else
-      wait \$PID 2>/dev/null
-      exit \$?
-    fi" 2>/dev/null; then
+      wait $PID 2>/dev/null
+      exit $?
+    fi' "$ERR_FILE" "$CMD" "${ARGS_ARRAY[@]}" 2>/dev/null; then
     STATUS="ok"
     ((HEALTHY++))
   else
     STATUS="failed"
     ((FAILED++))
-    ERROR_MSG=$(head -1 /tmp/mcp-health-"$server".err 2>/dev/null || echo "Process exited or timed out")
+    ERROR_MSG=$(head -1 "$ERR_FILE" 2>/dev/null || echo "Process exited or timed out")
   fi
 
-  # Clean up temp file
-  rm -f /tmp/mcp-health-"$server".err
+    # Deep health check: send JSON-RPC initialize request
+    if [[ "$STATUS" == "ok" ]]; then
+      INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"vibecrew-healthcheck","version":"1.0.0"}}}'
+      INIT_RESPONSE=""
+      if command -v timeout &>/dev/null; then
+        INIT_RESPONSE=$(echo "$INIT_REQUEST" | timeout 2s "$CMD" "${ARGS_ARRAY[@]}" 2>/dev/null || echo "")
+      fi
+      if [[ -n "$INIT_RESPONSE" ]]; then
+        HAS_RESULT=$(echo "$INIT_RESPONSE" | jq -r '.result // empty' 2>/dev/null || echo "")
+        if [[ -z "$HAS_RESULT" ]]; then
+          STATUS="degraded"
+        fi
+      fi
+    fi
 
   if [[ -n "$ERROR_MSG" ]]; then
     RESULTS+=("{\"server\":\"$server\",\"status\":\"$STATUS\",\"error\":$(echo "$ERROR_MSG" | jq -Rs '.')}")

@@ -13,13 +13,13 @@ CONFIG_FILE="$VIBECREW_DIR/config.json"
 COST_FILE="$VIBECREW_DIR/session-cost.json"
 SESSIONS_DIR="$VIBECREW_DIR/sessions"
 
-# ── Helper: floating point math with awk (bc fallback not needed) ──
+# ── Helper: floating point math with awk (safe -v passing) ──
 calc() {
-  awk "BEGIN {printf \"%.6f\", $1}"
+  awk -v a="$1" -v b="${2:-0}" 'BEGIN {printf "%.6f", a + b}'
 }
 
 fmt_usd() {
-  awk "BEGIN {printf \"%.2f\", $1}"
+  awk -v val="$1" 'BEGIN {printf "%.2f", val}'
 }
 
 # ── Read hook payload from stdin ──
@@ -32,31 +32,37 @@ fi
 MODEL="$(echo "$PAYLOAD" | jq -r '.model // "unknown"' 2>/dev/null || echo "unknown")"
 
 # ── Pricing (per million tokens, model-specific) ──
+
+# ── Read custom pricing from config (with hardcoded fallbacks) ──
+CUSTOM_PRICING=""
+if [[ -f "$CONFIG_FILE" ]]; then
+  CUSTOM_PRICING="$(jq -r '.pricing // empty' "$CONFIG_FILE" 2>/dev/null || echo "")"
+fi
+
 case "$MODEL" in
   *opus*)
-    PRICE_INPUT="15.00"
-    PRICE_CACHE_CREATE="18.75"
-    PRICE_CACHE_READ="1.50"
-    PRICE_OUTPUT="75.00"
+    PRICE_INPUT="$(echo "$CUSTOM_PRICING" | jq -r '.opus.input // 15.00' 2>/dev/null || echo "15.00")"
+    PRICE_CACHE_CREATE="$(echo "$CUSTOM_PRICING" | jq -r '.opus.cache_create // 18.75' 2>/dev/null || echo "18.75")"
+    PRICE_CACHE_READ="$(echo "$CUSTOM_PRICING" | jq -r '.opus.cache_read // 1.50' 2>/dev/null || echo "1.50")"
+    PRICE_OUTPUT="$(echo "$CUSTOM_PRICING" | jq -r '.opus.output // 75.00' 2>/dev/null || echo "75.00")"
     ;;
   *sonnet*)
-    PRICE_INPUT="3.00"
-    PRICE_CACHE_CREATE="3.75"
-    PRICE_CACHE_READ="0.30"
-    PRICE_OUTPUT="15.00"
+    PRICE_INPUT="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.input // 3.00' 2>/dev/null || echo "3.00")"
+    PRICE_CACHE_CREATE="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.cache_create // 3.75' 2>/dev/null || echo "3.75")"
+    PRICE_CACHE_READ="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.cache_read // 0.30' 2>/dev/null || echo "0.30")"
+    PRICE_OUTPUT="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.output // 15.00' 2>/dev/null || echo "15.00")"
     ;;
   *haiku*)
-    PRICE_INPUT="0.25"
-    PRICE_CACHE_CREATE="0.30"
-    PRICE_CACHE_READ="0.03"
-    PRICE_OUTPUT="1.25"
+    PRICE_INPUT="$(echo "$CUSTOM_PRICING" | jq -r '.haiku.input // 0.25' 2>/dev/null || echo "0.25")"
+    PRICE_CACHE_CREATE="$(echo "$CUSTOM_PRICING" | jq -r '.haiku.cache_create // 0.30' 2>/dev/null || echo "0.30")"
+    PRICE_CACHE_READ="$(echo "$CUSTOM_PRICING" | jq -r '.haiku.cache_read // 0.03' 2>/dev/null || echo "0.03")"
+    PRICE_OUTPUT="$(echo "$CUSTOM_PRICING" | jq -r '.haiku.output // 1.25' 2>/dev/null || echo "1.25")"
     ;;
   *)
-    # Default to Sonnet pricing for unknown models
-    PRICE_INPUT="3.00"
-    PRICE_CACHE_CREATE="3.75"
-    PRICE_CACHE_READ="0.30"
-    PRICE_OUTPUT="15.00"
+    PRICE_INPUT="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.input // 3.00' 2>/dev/null || echo "3.00")"
+    PRICE_CACHE_CREATE="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.cache_create // 3.75' 2>/dev/null || echo "3.75")"
+    PRICE_CACHE_READ="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.cache_read // 0.30' 2>/dev/null || echo "0.30")"
+    PRICE_OUTPUT="$(echo "$CUSTOM_PRICING" | jq -r '.sonnet.output // 15.00' 2>/dev/null || echo "15.00")"
     ;;
 esac
 
@@ -67,7 +73,7 @@ CACHE_READ_TOKENS="$(echo "$PAYLOAD" | jq -r '.usage.cache_read_input_tokens // 
 OUTPUT_TOKENS="$(echo "$PAYLOAD" | jq -r '.usage.output_tokens // 0' 2>/dev/null || echo 0)"
 
 # ── Calculate turn cost ──
-TURN_COST="$(calc "($INPUT_TOKENS * $PRICE_INPUT / 1000000) + ($CACHE_CREATE_TOKENS * $PRICE_CACHE_CREATE / 1000000) + ($CACHE_READ_TOKENS * $PRICE_CACHE_READ / 1000000) + ($OUTPUT_TOKENS * $PRICE_OUTPUT / 1000000)")"
+TURN_COST="$(awk -v it="$INPUT_TOKENS" -v pi="$PRICE_INPUT" -v cct="$CACHE_CREATE_TOKENS" -v pcc="$PRICE_CACHE_CREATE" -v crt="$CACHE_READ_TOKENS" -v pcr="$PRICE_CACHE_READ" -v ot="$OUTPUT_TOKENS" -v po="$PRICE_OUTPUT" 'BEGIN {printf "%.6f", (it*pi/1000000)+(cct*pcc/1000000)+(crt*pcr/1000000)+(ot*po/1000000)}')"
 
 # ── Ensure .vibecrew directory exists ──
 mkdir -p "$VIBECREW_DIR"
@@ -82,7 +88,7 @@ else
 fi
 
 # ── Accumulate ──
-SESSION_COST="$(calc "$PREV_COST + $TURN_COST")"
+SESSION_COST="$(calc "$PREV_COST" "$TURN_COST")"
 TURN_COUNT="$(( PREV_TURNS + 1 ))"
 LAST_UPDATED="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
@@ -112,13 +118,13 @@ fi
 SESSION_COST_FMT="$(fmt_usd "$SESSION_COST")"
 
 # Check hard limit first (most severe)
-EXCEEDS_MAX="$(awk "BEGIN {print ($SESSION_COST > $SESSION_MAX) ? 1 : 0}")"
+EXCEEDS_MAX="$(awk -v a="$SESSION_COST" -v b="$SESSION_MAX" 'BEGIN {print (a > b) ? 1 : 0}')"
 if [[ "$EXCEEDS_MAX" == "1" ]]; then
   SESSION_MAX_FMT="$(fmt_usd "$SESSION_MAX")"
   echo "COST LIMIT: Session cost \$${SESSION_COST_FMT} exceeds hard limit (\$${SESSION_MAX_FMT}). Agent MUST pause and ask user for permission to continue."
 else
   # Check warning threshold
-  EXCEEDS_WARN="$(awk "BEGIN {print ($SESSION_COST > $SESSION_WARN) ? 1 : 0}")"
+  EXCEEDS_WARN="$(awk -v a="$SESSION_COST" -v b="$SESSION_WARN" 'BEGIN {print (a > b) ? 1 : 0}')"
   if [[ "$EXCEEDS_WARN" == "1" ]]; then
     SESSION_WARN_FMT="$(fmt_usd "$SESSION_WARN")"
     echo "COST WARNING: Session cost \$${SESSION_COST_FMT} exceeds warning threshold (\$${SESSION_WARN_FMT})."
@@ -136,13 +142,13 @@ if [[ -d "$SESSIONS_DIR" ]]; then
   for session_file in "$SESSIONS_DIR"/session-"${TODAY}"*.json; do
     if [[ -f "$session_file" ]]; then
       FILE_COST="$(jq -r '.tokens.estimated_cost_usd // 0' "$session_file" 2>/dev/null || echo 0)"
-      SESSIONS_TODAY_COST="$(calc "$SESSIONS_TODAY_COST + $FILE_COST")"
+      SESSIONS_TODAY_COST="$(calc "$SESSIONS_TODAY_COST" "$FILE_COST")"
     fi
   done
-  DAILY_COST="$(calc "$SESSIONS_TODAY_COST + $SESSION_COST")"
+  DAILY_COST="$(calc "$SESSIONS_TODAY_COST" "$SESSION_COST")"
 fi
 
-EXCEEDS_DAILY="$(awk "BEGIN {print ($DAILY_COST > $DAILY_WARN) ? 1 : 0}")"
+EXCEEDS_DAILY="$(awk -v a="$DAILY_COST" -v b="$DAILY_WARN" 'BEGIN {print (a > b) ? 1 : 0}')"
 if [[ "$EXCEEDS_DAILY" == "1" ]]; then
   DAILY_COST_FMT="$(fmt_usd "$DAILY_COST")"
   DAILY_WARN_FMT="$(fmt_usd "$DAILY_WARN")"

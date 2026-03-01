@@ -672,7 +672,6 @@ These servers ship disabled in `.mcp.json` and are auto-enabled when the TDR men
 | Stripe | `@stripe/mcp@latest` | `STRIPE_SECRET_KEY` | Product/price management during development | Builder |
 | Vercel | `mcp-remote https://mcp.vercel.com` | `VERCEL_TOKEN` | Deployment status and project configuration | Builder |
 | Figma | `mcp-remote https://mcp.figma.com/mcp` | `FIGMA_ACCESS_TOKEN` | Design spec extraction | Builder |
-| Stitch | `@_davideast/stitch-mcp proxy` | No | Google AI design platform (experimental) | Builder |
 
 Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy for compatibility.
 

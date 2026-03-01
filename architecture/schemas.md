@@ -111,8 +111,7 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
     "supabase": false,                   // Database schema inspection
     "stripe": false,                     // Payment product management
     "vercel": false,                     // Deployment management
-    "figma": false,                      // Design spec extraction
-    "stitch": false                      // Google AI design (experimental)
+    "figma": false                       // Design spec extraction
     // Additional servers added from registry (e.g. firebase, clerk, mongodb)
   },
 
@@ -166,7 +165,6 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
 | `mcp_servers.stripe` | boolean | yes | `false` | Stripe MCP enabled |
 | `mcp_servers.vercel` | boolean | yes | `false` | Vercel MCP enabled |
 | `mcp_servers.figma` | boolean | yes | `false` | Figma MCP enabled |
-| `mcp_servers.stitch` | boolean | yes | `false` | Stitch MCP enabled |
 | `formatting.auto_format` | boolean | yes | `true` | Auto-format on file writes |
 | `formatting.formatter` | enum | yes | `"prettier"` | Formatter to use |
 | `context_warnings.warn_at_percent` | integer | yes | `60` | Warning threshold (%) |

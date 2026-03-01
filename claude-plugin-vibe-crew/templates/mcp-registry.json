@@ -102,16 +102,6 @@
       },
       "docs_url": "https://www.figma.com/developers"
     },
-    "stitch": {
-      "name": "Google Stitch",
-      "description": "Google API integration proxy for Gemini, Maps, and more",
-      "category": "integration",
-      "patterns": ["stitch"],
-      "command": "npx",
-      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
-      "env": {},
-      "docs_url": "https://github.com/nichochar/stitch-mcp"
-    },
     "firebase": {
       "name": "Firebase",
       "description": "App platform with Firestore, auth, hosting, and cloud functions",

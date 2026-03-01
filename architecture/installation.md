@@ -281,11 +281,10 @@ VibeCrew ships with 10 MCP servers in `.mcp.json` and a **registry of 25 servers
 | Stripe | `@stripe/mcp@latest` | No | `STRIPE_SECRET_KEY` | Builder |
 | Vercel | `mcp-remote https://mcp.vercel.com` | No | `VERCEL_TOKEN` | Builder |
 | Figma | `mcp-remote https://mcp.figma.com/mcp` | No | `FIGMA_ACCESS_TOKEN` | Builder |
-| Stitch | `@_davideast/stitch-mcp proxy` | No | No | Builder |
 
 ### 3.2 .mcp.json Configuration
 
-The plugin ships `.mcp.json` at its root with all 10 bundled servers. Each has a `disabled` flag controlling activation. The always-enabled servers (Context7, Chrome DevTools, Playwright) require no API keys. Three scripts manage MCP servers:
+The plugin ships `.mcp.json` at its root with all 9 bundled servers. Each has a `disabled` flag controlling activation. The always-enabled servers (Context7, Chrome DevTools, Playwright) require no API keys. Three scripts manage MCP servers:
 
 ```bash
 # Toggle existing servers

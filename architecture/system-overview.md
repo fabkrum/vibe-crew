@@ -180,7 +180,6 @@ The `.mcp.json` file at the plugin root registers 10 bundled MCP servers. Three 
 | Stripe | No | Payment product management (Builder) |
 | Vercel | No | Deployment management (Builder) |
 | Figma | No | Design spec extraction (Builder) |
-| Stitch | No | Google AI design platform (experimental) |
 
 Servers are toggled via `scripts/enable-mcp-server.sh <name> [enable|disable]`. Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy. All agents gracefully degrade when MCP servers are unavailable.
 

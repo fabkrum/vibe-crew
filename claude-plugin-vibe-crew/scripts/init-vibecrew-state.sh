@@ -57,8 +57,7 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "supabase": false,
     "stripe": false,
     "vercel": false,
-    "figma": false,
-    "stitch": false
+    "figma": false
   },
   "mcp_discovery": {
     "auto_recommend": true,

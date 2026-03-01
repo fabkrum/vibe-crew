@@ -569,7 +569,7 @@ args: feature_name
       MCP servers are <strong>external tools that give the AI extra abilities</strong>. Normally, the AI can only read your files and run commands. MCP servers connect it to additional services &mdash; like a reference library (Context7, for looking up documentation) or a web browser (Chrome DevTools, for visiting websites and debugging). They're optional: VibeCrew works fine without them, but with them, the AI works faster and uses less of its "memory" because it can look things up on demand instead of trying to remember everything.
     </Callout>
 
-    <p>Ten MCP (Model Context Protocol) servers extend the agent's capabilities. Three ship enabled by default; seven are conditionally enabled when the TDR selects matching technologies.</p>
+    <p>Nine MCP (Model Context Protocol) servers extend the agent's capabilities. Three ship enabled by default; six are conditionally enabled when the TDR selects matching technologies.</p>
 
     <h4>Always Enabled (no auth required)</h4>
     <div class="card-grid">
@@ -621,11 +621,6 @@ args: feature_name
         <div class="card-icon amber">&#9673;</div>
         <h4>Figma</h4>
         <p><strong>Design spec extraction.</strong> Builder uses it to extract design specifications, spacing values, and component structures from Figma files. Requires <code>FIGMA_ACCESS_TOKEN</code>.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">&#9673;</div>
-        <h4>Google Stitch <span style="font-size:0.75rem;color:var(--color-text-muted);font-weight:400;">(experimental)</span></h4>
-        <p><strong>AI-powered UI design.</strong> Generates production-ready HTML/CSS from text prompts via Google Labs' Stitch platform. See the <a href="setup.html#stitch">setup guide</a>.</p>
       </div>
     </div>
 

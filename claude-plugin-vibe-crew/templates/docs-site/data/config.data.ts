@@ -104,8 +104,7 @@ const defaultConfig: ConfigData = {
     supabase: false,
     stripe: false,
     vercel: false,
-    figma: false,
-    stitch: false
+    figma: false
   },
   mcp_discovery: {
     auto_recommend: true,

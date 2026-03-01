@@ -124,7 +124,7 @@ function resetToDefaults() {
     terminal: form.terminal,
     notifications: { enabled: true, sound: "Submarine", on_permission_prompt: true, on_task_complete: true, on_failure: true },
     concurrency: { max_parallel_agents: 3 },
-    mcp_servers: { context7: true, chrome_devtools: true, playwright: true, semgrep: false, sentry: false, supabase: false, stripe: false, vercel: false, figma: false, stitch: false },
+    mcp_servers: { context7: true, chrome_devtools: true, playwright: true, semgrep: false, sentry: false, supabase: false, stripe: false, vercel: false, figma: false },
     mcp_discovery: { auto_recommend: true, auto_add: false },
     formatting: { auto_format: true, formatter: "prettier" },
     context_warnings: { warn_at_percent: 60, critical_at_percent: 80 },
@@ -174,7 +174,6 @@ const mcpServers = [
   { key: "stripe", label: "Stripe", description: "Payment integration" },
   { key: "vercel", label: "Vercel", description: "Deployment and hosting" },
   { key: "figma", label: "Figma", description: "Design file access" },
-  { key: "stitch", label: "Stitch", description: "Data pipeline integration" },
 ];
 
 // ── Formatter options ────────────────────────────────────────────────────────

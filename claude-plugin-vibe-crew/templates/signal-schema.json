@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VibeCrew Signal Schema",
+  "description": "Standard schema for all inter-agent signal files in .vibecrew/signals/",
+  "type": "object",
+  "required": ["feature_id", "phase", "timestamp", "agent", "status"],
+  "properties": {
+    "feature_id": {
+      "type": "string",
+      "description": "The feature ID this signal relates to"
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["plan", "design", "code", "test", "review", "docs"],
+      "description": "The workflow phase this signal belongs to"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of signal creation"
+    },
+    "agent": {
+      "type": "string",
+      "enum": ["builder", "verifier", "code-reviewer", "orchestrator", "ci-healer", "doc-generator", "performance-coach", "code-simplifier", "security-auditor", "code-auditor", "system-reviewer"],
+      "description": "The agent that produced this signal"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["complete", "blocked", "error"],
+      "description": "Outcome status of the signaling agent's work"
+    },
+    "branch": {
+      "type": "string",
+      "description": "Git branch name"
+    },
+    "commit": {
+      "type": "string",
+      "description": "HEAD commit SHA"
+    },
+    "changed_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "type"],
+        "properties": {
+          "path": { "type": "string" },
+          "type": { "type": "string", "enum": ["added", "modified", "deleted"] }
+        }
+      },
+      "description": "Files changed by this agent (builder-complete)"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error description (when status is blocked/error)"
+    },
+    "attempts": {
+      "type": "integer",
+      "description": "Number of retry attempts made"
+    },
+    "last_error_output": {
+      "type": "string",
+      "description": "Truncated output from the last error"
+    },
+    "wip_commit": {
+      "type": "string",
+      "description": "WIP commit SHA (when blocked)"
+    },
+    "tests_passed": {
+      "type": "integer",
+      "description": "Number of passing tests (verifier)"
+    },
+    "tests_failed": {
+      "type": "integer",
+      "description": "Number of failing tests (verifier)"
+    },
+    "tests_skipped": {
+      "type": "integer",
+      "description": "Number of skipped tests (verifier)"
+    },
+    "coverage_summary": {
+      "type": "string",
+      "description": "Line coverage percentage (verifier)"
+    },
+    "bugs_found": {
+      "type": "array",
+      "description": "Bugs discovered during testing (verifier)"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["approve", "request-changes", "comment-only"],
+      "description": "Review verdict (code-reviewer)"
+    },
+    "review_cycle": {
+      "type": "integer",
+      "description": "Which review-fix cycle this is"
+    }
+  }
+}

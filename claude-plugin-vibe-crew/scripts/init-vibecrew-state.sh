@@ -105,6 +105,38 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
   "quality_gate": {
     "timeout_seconds": 120
   },
+  "performance_coach": {
+    "enabled": true,
+    "min_sessions_for_trends": 3,
+    "min_sessions_for_mutations": 5
+  },
+  "doc_generator": {
+    "auto_changelog": true,
+    "auto_feature_docs": true,
+    "auto_sidebar_rebuild": true
+  },
+  "onboarding": {
+    "show_hints": true,
+    "dismissed_hints": []
+  },
+  "audit": {
+    "auto_github_issues": false,
+    "severity_threshold": "high"
+  },
+  "opponent_processor": {
+    "enabled": true,
+    "auto_invoke_after_tdr": true
+  },
+  "simplify": {
+    "enabled": true,
+    "min_files_for_analysis": 3,
+    "auto_revert_on_test_failure": true
+  },
+  "ci_healing": {
+    "enabled": true,
+    "max_attempts": 3,
+    "auto_checkpoint": true
+  },
   "gamification": {
     "enabled": false
   },

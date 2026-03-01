@@ -29,6 +29,7 @@
       "design": false,
       "code": false,
       "test": false,
+      "review": false,
       "docs": false
     },
     "quality": {

@@ -1,0 +1,59 @@
+{
+  "description": "Maps architecture diagrams to source file triggers for documentation drift detection",
+  "diagrams": {
+    "schema.mmd": {
+      "description": "Entity-relationship diagram",
+      "triggers": [
+        "**/migrations/**",
+        "**/models/**",
+        "**/*.prisma",
+        "**/schema.ts",
+        "**/schema.sql",
+        "**/drizzle/**"
+      ]
+    },
+    "api-sequences.mmd": {
+      "description": "API request/response patterns",
+      "triggers": [
+        "**/api/**",
+        "**/routes/**",
+        "**/handlers/**",
+        "**/controllers/**",
+        "**/middleware/**"
+      ]
+    },
+    "state-flows.mmd": {
+      "description": "Auth states and user flows",
+      "triggers": [
+        "**/auth/**",
+        "**/store/**",
+        "**/stores/**",
+        "**/reducers/**",
+        "**/context/**",
+        "**/providers/**"
+      ]
+    },
+    "component-tree.mmd": {
+      "description": "Component hierarchy with data flow",
+      "triggers": [
+        "**/components/**",
+        "**/pages/**",
+        "**/views/**",
+        "**/layouts/**",
+        "**/app/**"
+      ]
+    },
+    "system.mmd": {
+      "description": "Infrastructure topology",
+      "triggers": [
+        "docker-compose*.yml",
+        "Dockerfile*",
+        "**/infra/**",
+        "**/deploy/**",
+        "vercel.json",
+        "netlify.toml",
+        "*.tf"
+      ]
+    }
+  }
+}

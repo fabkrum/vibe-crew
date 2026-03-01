@@ -9,6 +9,7 @@
     "design",
     "code",
     "test",
+    "review",
     "docs"
   ],
   "branch_convention": "feat/{{feature-name}}",

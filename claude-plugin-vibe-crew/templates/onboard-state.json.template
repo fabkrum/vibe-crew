@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.5.0",
   "foundation": {
     "complete": true,
     "completed_at": "{{TIMESTAMP}}",
@@ -12,6 +12,7 @@
       "design_system": {
         "status": "skipped",
         "file": null,
+        "brief_file": null,
         "approved_at": null
       },
       "tdr": {
@@ -20,6 +21,11 @@
         "approved_at": null
       },
       "roadmap": {
+        "status": "skipped",
+        "file": null,
+        "approved_at": null
+      },
+      "architecture_diagrams": {
         "status": "skipped",
         "file": null,
         "approved_at": null
@@ -42,6 +48,7 @@
     "default_branch": "{{DEFAULT_BRANCH}}",
     "initialized": true
   },
+  "active_workflow": null,
   "onboarded": true,
   "onboarded_at": "{{TIMESTAMP}}",
   "updated_at": "{{TIMESTAMP}}"

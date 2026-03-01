@@ -5,10 +5,15 @@
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "docs:preview": "vitepress preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
+    "@vue/test-utils": "^2.4.0",
+    "jsdom": "^26.0.0",
     "vitepress": "^1.6.0",
+    "vitest": "^3.0.0",
     "vue": "^3.5.0"
   },
   "dependencies": {

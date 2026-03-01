@@ -50,8 +50,8 @@
       "Bash(head *)",
       "Bash(tail *)",
       "Bash(mkdir *)",
-      "Bash(cp *)",
-      "Bash(mv *)",
+      "Bash(cp * .vibecrew/*)",
+      "Bash(mv * .vibecrew/*)",
       "Bash(npm audit *)",
       "Bash(pip audit *)",
       "Bash(bundle audit *)",
@@ -66,7 +66,21 @@
       "Bash(gh run watch *)",
       "Bash(k6 *)",
       "Bash(npx k6 *)",
-      "Bash(npx @axe-core/playwright *)"
+      "Bash(npx @axe-core/playwright *)",
+      "Bash(npm install)",
+      "Bash(npm install *)",
+      "Bash(pnpm run *)",
+      "Bash(pnpm test)",
+      "Bash(pnpm install)",
+      "Bash(yarn run *)",
+      "Bash(yarn test)",
+      "Bash(yarn install)",
+      "Bash(bun run *)",
+      "Bash(bun test)",
+      "Bash(bun install)",
+      "Bash(bunx *)",
+      "Bash(git push origin docs/*)",
+      "Bash(git push -u origin docs/*)"
     ],
     "deniedTools": [
       "Bash(sudo *)",
@@ -91,7 +105,10 @@
       "Bash(systemctl *)",
       "Bash(crontab *)",
       "Bash(mkfs *)",
-      "Bash(dd if=*)"
+      "Bash(dd if=*)",
+      "Bash(rm -rf /*)",
+      "Bash(git push origin main)",
+      "Bash(git push origin master)"
     ]
   }
 }

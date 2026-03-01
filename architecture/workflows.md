@@ -815,9 +815,31 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     |           +-----------+   +--------------+             |
     |           | Create PR |   | STOP.        |             |
     |           | Mark done |   | Notify user  |             |
-    |           | Loop back |   | with failure |             |
-    |           | to START  |   | details.     |             |
-    |           +-----------+   +--------------+             |
+    |           +-----------+   | with failure |             |
+    |                 |         | details.     |             |
+    |                 v         +--------------+             |
+    |           +-----------------+                          |
+    |           | CONTEXT HYGIENE |                          |
+    |           | (inter-feature  |                          |
+    |           |  compaction)    |                          |
+    |           |                 |                          |
+    |           | If last feature:|                          |
+    |           |   Skip, go to  |                          |
+    |           |   completion   |                          |
+    |           |   summary      |                          |
+    |           | Else:          |                          |
+    |           |   /compact     |                          |
+    |           |   compact-     |                          |
+    |           |   reinject.sh  |                          |
+    |           |   re-injects   |                          |
+    |           |   state +      |                          |
+    |           |   architecture |                          |
+    |           |   diagrams     |                          |
+    |           +---------+-------+                          |
+    |                     |                                  |
+    |                     v                                  |
+    |               Loop back                                |
+    |               to START                                 |
     |                                                        |
     |  CONTEXT CHECK: After each feature, check context %.   |
     |  If > 60%: warn user, suggest wrapping.                |
@@ -1040,6 +1062,20 @@ When Claude Code compacts the context window (automatic or manual), the session 
     This is why frequent atomic commits are critical --
     they checkpoint progress to disk so compaction
     does not lose meaningful work.
+
+    INTER-FEATURE COMPACTION (/run-backlog)
+    ========================================
+    During /run-backlog, compaction is triggered deliberately
+    between features (not just reactively when context fills).
+    After a feature passes its quality gate and state is cleared,
+    the Orchestrator triggers /compact to compress conversation
+    history. The compact-reinject.sh script then re-injects
+    project state + architecture diagrams so the next feature
+    starts with a clean context window. The last feature in the
+    backlog skips compaction and goes straight to the completion
+    summary. This prevents "context rot" -- the gradual
+    accumulation of stale reasoning from previous features that
+    degrades output quality on later features.
 ```
 
 ### 4.4 Session State Machine
@@ -1733,6 +1769,7 @@ All telemetry data uses anonymous project aliases. The registry maps real paths 
 | **Session** | Context hits 80% | check-context.sh hook | Force wrap; new session picks up from committed state |
 | **Session** | Agent crashes without `/wrap` | Stale session detection | Clean up session entry; worktree has committed work |
 | **Session** | Context compacted | Claude Code compaction | Agent re-reads state.json, backlog.json, and git log to recover context |
+| **Feature** | Context rot across `/run-backlog` features | Inter-feature compaction (Step 3f) | Forced `/compact` between features; `compact-reinject.sh` re-injects state + architecture diagrams |
 | **Session** | Stale lock blocks shared file | Lock age > timeout or PID dead | Auto-remove stale lock on next access |
 | **Parallel** | Two worktrees modify same file | Conflict detected at merge time | Orchestrator merges sequentially; second merge gets conflict |
 | **Parallel** | Concurrent write to backlog.json | mkdir lock contention | Wait up to 30s; fail with clear error if timeout |

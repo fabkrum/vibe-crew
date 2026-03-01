@@ -463,6 +463,29 @@ Outputs a &lt;300-token summary:
 
     <p>This mechanism is why sessions can survive multiple compactions without degradation. The &lt;300-token reinject costs less than a single follow-up clarification question.</p>
 
+    <h4 id="inter-feature-compaction">Inter-feature context hygiene (<code>/run-backlog</code>)</h4>
+    <p>During autonomous backlog processing via <code>/run-backlog</code>, the context window accumulates stale conversation history from each completed feature &mdash; planning discussions, build output, test results, review findings. Left unchecked, this "context rot" degrades quality for later features as the model operates with an increasingly polluted window.</p>
+
+    <p>VibeCrew solves this with <strong>forced inter-feature compaction</strong>. After each feature passes its quality gate and state is cleared, the agent triggers <code>/compact</code> before starting the next feature. This compresses the stale history and fires <code>compact-reinject.sh</code> to re-inject fresh project state and architecture diagrams. Each feature effectively begins with a near-fresh context window.</p>
+
+    <div class="flow"><span class="highlight">/run-backlog</span> picks next feature from backlog
+    &darr;
+Feature N: Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs &rarr; quality gate passes
+    &darr;
+State cleared, commit created
+    &darr;
+<span class="highlight">/compact</span> triggered &rarr; stale history compressed
+    &darr;
+<span class="highlight">compact-reinject.sh</span> fires &rarr; project state + architecture diagrams re-injected
+    &darr;
+Feature N+1 begins with near-fresh context
+    <span class="muted">Last feature skips compaction (session ends with /wrap instead)</span></div>
+
+    <div class="callout info">
+      <div class="callout-title">Why the last feature skips compaction</div>
+      <p>The final feature in a backlog run is followed by <code>/wrap</code>, which generates the session log, Vibe Score, and handoff document. Compacting before <code>/wrap</code> would discard the context the Performance Coach needs to analyze the session. The last feature&rsquo;s context is preserved so the wrap phase has full visibility.</p>
+    </div>
+
     <!-- HANDOFF -->
     <h3 id="handoff">The Handoff System</h3>
 

@@ -155,6 +155,7 @@
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
       <a href="setup.html" class="sidebar-link">Setup</a>
       <a href="new-project.html" class="sidebar-link">New Project</a>
+      <a href="design-discovery.html" class="sidebar-link">Design Discovery</a>
       <a href="existing-project.html" class="sidebar-link">Existing Project</a>
       <a href="warp.html" class="sidebar-link">Warp</a>
     </div>
@@ -220,7 +221,7 @@
 
     <div class="callout tip">
       <div class="callout-title">Key commands</div>
-      <p><code>/new-feature "name"</code> starts a feature. <code>/check</code> runs quality checks mid-session. <code>/wrap</code> finalizes the session with Vibe Score, commit, and session log. <code>/run-backlog</code> automates the full cycle for each feature.</p>
+      <p><code>/new-feature "name"</code> starts a feature. <code>/check</code> runs quality checks mid-session. <code>/wrap</code> finalizes the session with Vibe Score, commit, and session log. <code>/run-backlog</code> automates the full cycle for each feature with <strong>inter-feature context hygiene</strong> &mdash; forced <code>/compact</code> between features to prevent context degradation across long autonomous runs.</p>
     </div>
 
     <h3>Vibe Score</h3>

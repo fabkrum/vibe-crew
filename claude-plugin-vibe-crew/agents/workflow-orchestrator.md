@@ -199,6 +199,12 @@ To stay within context limits, load agent and command details on-demand rather t
 3. **State via scripts** — Use `jq` queries and Bash scripts for state inspection instead of reading entire JSON files.
 4. **Architecture diagrams via script** — Use `inject-architecture.sh` once after routing instead of reading `.mmd` files individually. This single call replaces per-agent diagram loading.
 
+## Inter-Feature Context Hygiene
+
+During `/run-backlog`, trigger `/compact` between features to prevent context rot. After a feature passes its quality gate and state is cleared, compacting the conversation gives the next feature a near-fresh context window. The `compact-reinject.sh` hook automatically re-injects project state and architecture diagrams after compaction, so no context is lost — only stale conversation history from the prior feature is compressed.
+
+Skip compaction after the final feature (proceed directly to the completion summary).
+
 ## Profile-Aware Communication
 
 At the start of any orchestration sequence, read the user profile:

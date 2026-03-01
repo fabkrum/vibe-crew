@@ -226,7 +226,7 @@ Phase 2 must be complete. All 5 agents must be defined and the Agent Teams coord
 4. **/wrap completes full sequence**: Quality gate, Vibe Score calculation, session log creation, git commit with conventional format, optional PR.
 5. **Vibe Score calculates correctly**: Score 0-100 with itemized deductions/bonuses matching the formula in `architecture/schemas.md` Section 6.
 6. **/new-feature creates a full feature session**: Branch, worktree, phase tracker initialization, feature spec loading, agent handoff.
-7. **/run-backlog executes autonomously**: Picks features in priority order, respects dependencies, runs quality gates between features, stops on failure or completion.
+7. **/run-backlog executes autonomously**: Picks features in priority order, respects dependencies, runs quality gates between features, triggers forced `/compact` between features (inter-feature context hygiene via `compact-reinject.sh`) to prevent context rot, skips compaction for the last feature, and stops on failure or completion.
 8. **Session logs are persisted**: After /wrap, valid JSON exists in `.vibecrew/sessions/` matching the session log schema.
 
 ### Agent Teams Integration Points
@@ -300,7 +300,7 @@ None directly. The docs site reads from `.vibecrew/` state files that are popula
 
 ### Goal
 
-Build the intelligence features that make VibeCrew self-aware: context re-injection after compaction (building on the Phase 1 compact-reinject.sh), cost guardrails (session and daily spend tracking), CLAUDE.md size monitoring and pruning recommendations, and enhanced session analysis. This phase makes the system smarter about resource management.
+Build the intelligence features that make VibeCrew self-aware: context re-injection after compaction (building on the Phase 1 compact-reinject.sh, now also used for inter-feature context hygiene during `/run-backlog`), cost guardrails (session and daily spend tracking), CLAUDE.md size monitoring and pruning recommendations, and enhanced session analysis. This phase makes the system smarter about resource management.
 
 ### Key Deliverables (~8 files)
 
@@ -321,7 +321,7 @@ Phase 2 must be complete (agents defined, state files in use). Can run in parall
 
 ### Acceptance Criteria
 
-1. **Context re-injection is complete**: After compaction, the re-injected summary includes foundation status, active feature with phase, recent commits, and worktree path. Under 300 tokens.
+1. **Context re-injection is complete**: After compaction, the re-injected summary includes foundation status, active feature with phase, recent commits, worktree path, and architecture diagrams. Under 300 tokens. Works for both reactive compaction (context pressure) and proactive compaction (inter-feature context hygiene during `/run-backlog`).
 2. **Cost guardrails trigger correctly**: When session cost exceeds `session_warn_usd`, a warning appears. When it exceeds `session_max_usd`, the agent pauses and asks the user for permission to continue.
 3. **CLAUDE.md lint reports accurately**: Detects files over 200 lines (soft) / 400 lines (hard), identifies duplicate rules, flags hook-redundant rules, enforces 15-rule Session Learnings cap, and flags inlined content that should reference external files.
 4. **State migration works**: Files with older `schema_version` are migrated forward. Files with newer versions are refused with a warning.

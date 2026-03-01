@@ -667,7 +667,33 @@ Use these status indicators:
 
 ---
 
-### Step 3f: Cost Guardrail Check (between features)
+### Step 3f: Context Hygiene (between features)
+
+Before starting the next feature, reset the context window to prevent context rot across a long backlog run. This mirrors the "Ralph Loop" pattern — each feature gets a near-fresh context window.
+
+**If there are more features remaining in the queue:**
+
+1. Trigger context compaction by sending the `/compact` command. This compresses the conversation history and fires the `compact-reinject.sh` hook, which re-injects:
+   - Current project state (foundation, active feature, backlog summary)
+   - Architecture diagrams (all 5 Mermaid files)
+   - CLAUDE.md summary
+   - Git branch and recent commits
+
+2. After compaction completes, verify state is intact:
+
+```bash
+jq -c '{foundation: .foundation.complete, active_feature: .active_feature.id, backlog_total: (.features | length)}' .vibecrew/state.json 2>/dev/null
+```
+
+If `active_feature` is not null after the previous feature was cleared, something went wrong — re-run the state clear before proceeding.
+
+**If this is the last feature:** Skip compaction. Proceed directly to Step 4 (Completion Summary).
+
+**Why this matters:** Without inter-feature compaction, a 5-feature backlog run accumulates the full conversation history from all prior features. By feature 4-5, context usage is typically above 60%, triggering warnings and degrading agent quality. Compacting between features keeps each feature's working context lean.
+
+---
+
+### Step 3g: Cost Guardrail Check (between features)
 
 Before starting the next feature, check the estimated session cost.
 

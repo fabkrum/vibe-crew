@@ -886,6 +886,13 @@ Every VibeCrew agent session targets less than 50% context window utilization. T
 |  (compact hook)               auto-compact    matcher re-injects |
 |                                               state.json summary |
 |                                                                  |
+|  Inter-feature compaction     Prevents        /run-backlog       |
+|  (forced /compact between     context rot     triggers /compact  |
+|  features in /run-backlog)    across features after each feature; |
+|                                               compact-reinject.sh|
+|                                               restores state +   |
+|                                               architecture       |
+|                                                                  |
 |  Stop hook for warnings       Prevents        check-context.sh  |
 |  (60%/80%/90% thresholds)     exhaustion      fires after each  |
 |                                               assistant turn     |
@@ -1010,6 +1017,8 @@ When Claude Code automatically compacts the conversation to free context space, 
 This ensures the agent can resume work without losing track of where it is in the workflow. The re-injected data is minimal (under 200 tokens) but sufficient for the agent to make correct routing and continuation decisions.
 
 **Why this matters for non-technical users:** Compaction is invisible to the user. Without re-injection, the agent might restart foundation work that was already completed, re-plan a feature that is mid-implementation, or lose track of which worktree it should be operating in. The compact hook prevents these silent regressions.
+
+**Inter-feature compaction in `/run-backlog`:** The same `compact-reinject.sh` mechanism is also used deliberately during `/run-backlog`. After each feature passes its quality gate and state is cleared, the Orchestrator triggers `/compact` to flush stale reasoning from previous features. The re-injection restores project state and architecture diagrams so the next feature starts with a clean context window. This prevents "context rot" -- the gradual accumulation of stale in-memory reasoning that degrades output quality on later features. The last feature in the backlog skips compaction and proceeds directly to the completion summary.
 
 ### 5.8 CLAUDE.md Budget
 
@@ -1136,7 +1145,7 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 
 **`/new-feature "name"`** -- Starts a Tier 2 feature cycle. Verifies foundation is complete (reads `foundation.complete` from `state.json`). Looks up the named feature in `backlog.json` (or creates a new entry). Creates a worktree via `git worktree add`. Initializes the 6-phase tracker. Uses `TaskCreate` to launch the appropriate agent for the current phase.
 
-**`/run-backlog`** -- Automated batch processing. Repeatedly claims the next `planned` task from the backlog, creates a team via `TeamCreate`, and runs it through all six phases (Plan, Design, Code, Test, Review, Docs) using agent coordination. Continues until the backlog is empty or context is exhausted. Ideal for overnight or unattended runs.
+**`/run-backlog`** -- Automated batch processing. Repeatedly claims the next `planned` task from the backlog, creates a team via `TeamCreate`, and runs it through all six phases (Plan, Design, Code, Test, Review, Docs) using agent coordination. After each feature passes its quality gate and state is cleared, a forced `/compact` fires to compress conversation history, and `compact-reinject.sh` re-injects project state and architecture diagrams -- preventing context rot across features. The last feature skips compaction and goes straight to the completion summary. Continues until the backlog is empty or context is exhausted. Ideal for overnight or unattended runs.
 
 **`/profile`** -- User profile interview. Presents 8 questions covering role, code literacy, autonomy preference, PR review style, verbosity, gamification preference, learning style, and risk tolerance. Users can answer all questions (~2 minutes), pick a preset (Builder, Explorer, or Founder), or skip for balanced defaults. Saves to `config.json` under `user_profile`. All agents read the profile via `scripts/read-profile.sh` and adapt their communication style, approval gates, and output depth accordingly. Re-running `/profile` shows the current profile and lets users update any dimension.
 

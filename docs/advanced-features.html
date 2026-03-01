@@ -545,6 +545,7 @@
             <li><a href="#simplify">Code Simplification (/simplify)</a></li>
             <li><a href="#heal">Auto-Healing CI (/heal)</a></li>
             <li><a href="#opponent">Opponent Processor (TDR Debate)</a></li>
+            <li><a href="#context-hygiene">Inter-Feature Context Hygiene (/run-backlog)</a></li>
           </ol>
         </li>
         <li><a href="#cost-system">Cost Tracking &amp; Safety</a></li>
@@ -676,6 +677,17 @@ Presents suggestions one at a time for your approval
       <div class="callout tip">
         <div class="callout-title">Why adversarial review matters</div>
         <p>The Stack Scout is optimized to find the best answer quickly. The Opponent Processor is optimized to find where that answer might break. Together, they produce more robust technology decisions than either could alone. This is especially valuable for decisions that are expensive to reverse (database choice, state management, auth provider).</p>
+      </div>
+
+      <!-- INTER-FEATURE CONTEXT HYGIENE -->
+      <h3 id="context-hygiene">Inter-Feature Context Hygiene (<code>/run-backlog</code>)</h3>
+      <p>When <code>/run-backlog</code> processes multiple features autonomously, stale conversation history from earlier features &mdash; planning discussions, build output, test results &mdash; accumulates in the context window and degrades quality for later features. VibeCrew prevents this with <strong>forced inter-feature compaction</strong>.</p>
+
+      <p>After each feature passes its quality gate and state is cleared, the agent triggers <code>/compact</code> before starting the next feature. This compresses stale history and fires <code>compact-reinject.sh</code> to re-inject fresh project state and architecture diagrams. Each feature effectively begins with a near-fresh context window. The last feature in the backlog skips compaction so the <code>/wrap</code> phase retains full context for the Performance Coach analysis.</p>
+
+      <div class="callout tip">
+        <div class="callout-title">Impact on long autonomous runs</div>
+        <p>Without inter-feature compaction, feature 5 in a 6-feature backlog run would operate with a context window polluted by four features' worth of stale history. With compaction, every feature gets the same quality of context as the first. This is especially important for <code>/run-backlog</code> runs that process 5+ features unattended. See <a href="arch-runtime.html#inter-feature-compaction">Runtime Systems</a> for the full technical flow.</p>
       </div>
     </section>
 

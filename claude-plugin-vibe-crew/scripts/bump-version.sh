@@ -27,12 +27,14 @@ if ! echo "$NEW_VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
   exit 1
 fi
 
+sed_i() { if [[ "$(uname)" == "Darwin" ]]; then sed -i '' "$@"; else sed -i "$@"; fi; }
+
 echo "Bumping VibeCrew version to $NEW_VERSION..."
 
 # --- 1. plugin.json (sed to preserve exact formatting) ---
 PLUGIN_JSON="$PLUGIN_ROOT/.claude-plugin/plugin.json"
 if [[ -f "$PLUGIN_JSON" ]]; then
-  sed -i '' "s/\"version\": \"[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}\"/\"version\": \"${NEW_VERSION}\"/" "$PLUGIN_JSON"
+  sed_i "s/\"version\": \"[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}\"/\"version\": \"${NEW_VERSION}\"/" "$PLUGIN_JSON"
   echo "  Updated: .claude-plugin/plugin.json"
 else
   echo "  Warning: $PLUGIN_JSON not found, skipping" >&2
@@ -41,7 +43,7 @@ fi
 # --- 2. agents/session-startup.md (banner string) ---
 STARTUP_MD="$PLUGIN_ROOT/agents/session-startup.md"
 if [[ -f "$STARTUP_MD" ]]; then
-  sed -i '' "s/VibeCrew v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/VibeCrew v${NEW_VERSION}/g" "$STARTUP_MD"
+  sed_i "s/VibeCrew v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/VibeCrew v${NEW_VERSION}/g" "$STARTUP_MD"
   echo "  Updated: agents/session-startup.md"
 else
   echo "  Warning: $STARTUP_MD not found, skipping" >&2
@@ -51,9 +53,9 @@ fi
 INDEX_HTML="$REPO_ROOT/docs/index.html"
 if [[ -f "$INDEX_HTML" ]]; then
   # Hero badge: "Claude Code Plugin · v1.5.0"
-  sed -i '' "s/Plugin &middot; v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/Plugin \&middot; v${NEW_VERSION}/" "$INDEX_HTML"
+  sed_i "s/Plugin &middot; v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/Plugin \&middot; v${NEW_VERSION}/" "$INDEX_HTML"
   # Release card: "v1.0.0 through v1.5.0"
-  sed -i '' "s/through v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/through v${NEW_VERSION}/" "$INDEX_HTML"
+  sed_i "s/through v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/through v${NEW_VERSION}/" "$INDEX_HTML"
   echo "  Updated: docs/index.html"
 else
   echo "  Warning: $INDEX_HTML not found, skipping" >&2
@@ -62,7 +64,7 @@ fi
 # --- 4. CLAUDE.md (root — Current Status line) ---
 ROOT_CLAUDE_MD="$REPO_ROOT/CLAUDE.md"
 if [[ -f "$ROOT_CLAUDE_MD" ]]; then
-  sed -i '' "s/VibeCrew v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/VibeCrew v${NEW_VERSION}/g" "$ROOT_CLAUDE_MD"
+  sed_i "s/VibeCrew v[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}/VibeCrew v${NEW_VERSION}/g" "$ROOT_CLAUDE_MD"
   echo "  Updated: CLAUDE.md"
 else
   echo "  Warning: $ROOT_CLAUDE_MD not found, skipping" >&2
@@ -74,7 +76,7 @@ if [[ -f "$CHANGELOG" ]]; then
   TODAY=$(date +%Y-%m-%d)
   # Replace ## [Unreleased] with ## [X.Y.Z] - YYYY-MM-DD
   if grep -q '## \[Unreleased\]' "$CHANGELOG"; then
-    sed -i '' "s/## \[Unreleased\]/## [${NEW_VERSION}] - ${TODAY}/" "$CHANGELOG"
+    sed_i "s/## \[Unreleased\]/## [${NEW_VERSION}] - ${TODAY}/" "$CHANGELOG"
     echo "  Updated: CHANGELOG.md ([Unreleased] -> [${NEW_VERSION}] - ${TODAY})"
   else
     echo "  Skipped: CHANGELOG.md (no [Unreleased] heading found)"

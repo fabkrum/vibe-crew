@@ -83,7 +83,7 @@ cat > "$HANDOFF_FILE.tmp" << HANDOFF_EOF
 $(echo "$COMMITS" | head -5 | sed 's/^/- /')
 
 ## Blockers
-$(echo -e "$BLOCKERS")
+$(printf '%b' "$BLOCKERS")
 
 ## Next Steps
 1. Continue with the $PHASE phase for $FEATURE_NAME

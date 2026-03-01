@@ -92,7 +92,8 @@ VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 
 # Sidecar write: persist raw session JSON for dashboard
 if [[ -d "$VIBECREW_DIR" ]]; then
-  echo "$INPUT" > "$VIBECREW_DIR/live-session.json" 2>/dev/null || true
+  echo "$INPUT" > "$VIBECREW_DIR/live-session.json.tmp" 2>/dev/null && \
+    mv "$VIBECREW_DIR/live-session.json.tmp" "$VIBECREW_DIR/live-session.json" 2>/dev/null || true
 fi
 
 # Feature + phase from state.json

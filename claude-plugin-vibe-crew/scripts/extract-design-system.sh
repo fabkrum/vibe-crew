@@ -69,15 +69,18 @@ echo "" >&2
 info "Generating Chrome DevTools MCP extraction instructions..."
 echo "" >&2
 
-cat <<PAYLOAD
+REF_URL_JSON=$(printf '%s' "$REFERENCE_URL" | jq -Rs '.')
+OUTPUT_JSON=$(printf '%s' "$OUTPUT_PATH" | jq -Rs '.')
+
+cat <<'PAYLOAD' | sed "s|\"{{REF_URL}}\"|${REF_URL_JSON}|g" | sed "s|\"{{OUTPUT}}\"|${OUTPUT_JSON}|g"
 {
   "description": "VibeCrew Design Token Extraction — Chrome DevTools MCP Instructions",
-  "reference_url": "${REFERENCE_URL}",
-  "output_path": "${OUTPUT_PATH}",
+  "reference_url": "{{REF_URL}}",
+  "output_path": "{{OUTPUT}}",
   "steps": [
     {
       "action": "navigate",
-      "url": "${REFERENCE_URL}",
+      "url": "{{REF_URL}}",
       "description": "Navigate to the reference URL and wait for full page load"
     },
     {
@@ -275,7 +278,8 @@ CSS
 
 # Replace the placeholder URL and date in the generated file
 if command -v sed &>/dev/null; then
-  sed -i.bak "s|{{REFERENCE_URL}}|${REFERENCE_URL}|g" "$OUTPUT_PATH" 2>/dev/null && rm -f "${OUTPUT_PATH}.bak" || true
+  SAFE_URL=$(printf '%s' "$REFERENCE_URL" | sed 's/[&/\]/\\&/g')
+  sed -i.bak "s|{{REFERENCE_URL}}|${SAFE_URL}|g" "$OUTPUT_PATH" 2>/dev/null && rm -f "${OUTPUT_PATH}.bak" || true
   sed -i.bak "s|{{EXTRACTION_DATE}}|$(date -u +%Y-%m-%dT%H:%M:%SZ)|g" "$OUTPUT_PATH" 2>/dev/null && rm -f "${OUTPUT_PATH}.bak" || true
 fi
 

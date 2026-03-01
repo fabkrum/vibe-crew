@@ -14,6 +14,15 @@ CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 PKG_JSON="$PROJECT_ROOT/package.json"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-}"
 
+# ── Read configurable timeout ──
+QG_TIMEOUT=120
+if [[ -f "$CONFIG_FILE" ]]; then
+  CONFIGURED_TIMEOUT="$(jq -r '.quality_gate.timeout_seconds // 120' "$CONFIG_FILE" 2>/dev/null || echo "120")"
+  if [[ "$CONFIGURED_TIMEOUT" =~ ^[0-9]+$ ]] && [[ "$CONFIGURED_TIMEOUT" -gt 0 ]]; then
+    QG_TIMEOUT="$CONFIGURED_TIMEOUT"
+  fi
+fi
+
 # ── Skip if no VibeCrew state (not a VibeCrew project) ──
 if [[ ! -f "$STATE_FILE" ]]; then
   exit 0
@@ -113,14 +122,25 @@ fi
 ERRORS=""
 FAILED_CMD=""
 
+TIMEOUT_CMD=""
+if command -v timeout &>/dev/null; then
+  TIMEOUT_CMD="timeout ${QG_TIMEOUT}s"
+fi
+
 for check in "${CHECKS[@]}"; do
   OUTPUT=""
-  if OUTPUT="$($PKG_MANAGER run "$check" 2>&1)"; then
+  if OUTPUT="$($TIMEOUT_CMD "$PKG_MANAGER" run "$check" 2>&1)"; then
     # Check passed — continue to next
     continue
   else
-    ERRORS="$OUTPUT"
-    FAILED_CMD="$check"
+    EXIT_CODE=$?
+    if [[ "$EXIT_CODE" -eq 124 ]]; then
+      ERRORS="Quality gate check '$check' timed out after ${QG_TIMEOUT}s"
+      FAILED_CMD="$check (timeout)"
+    else
+      ERRORS="$OUTPUT"
+      FAILED_CMD="$check"
+    fi
     break
   fi
 done
@@ -136,7 +156,7 @@ TRUNCATED="$(echo "$ERRORS" | tail -80)"
 TOTAL_LINES="$(echo "$ERRORS" | wc -l | tr -d ' ')"
 SHOWN_LINES="$(echo "$TRUNCATED" | wc -l | tr -d ' ')"
 
-echo "QUALITY GATE FAILED: \`$PKG_MANAGER run $FAILED_CMD\` exited with errors."
+echo "QUALITY GATE FAILED: \`${PKG_MANAGER} run $FAILED_CMD\` exited with errors."
 echo ""
 if [[ "$TOTAL_LINES" -gt "$SHOWN_LINES" ]]; then
   echo "(showing last $SHOWN_LINES of $TOTAL_LINES lines)"

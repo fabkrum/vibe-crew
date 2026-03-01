@@ -80,16 +80,11 @@ while IFS= read -r line; do
       RATIONALE=$(echo "${line}" | sed -E "s/.*${CHOSEN}//" | sed 's/^[[:space:]]*[-—:.]*//' | head -c 200)
       RATIONALE="${RATIONALE:-See TDR section: ${CURRENT_SECTION_HEADING:-${CURRENT_CATEGORY}}}"
 
-      # Escape JSON strings
-      CHOSEN_ESC=$(echo "${CHOSEN}" | sed 's/"/\\"/g' | tr -d '\n')
-      RATIONALE_ESC=$(echo "${RATIONALE}" | sed 's/"/\\"/g' | tr -d '\n')
-      CATEGORY_ESC=$(echo "${CURRENT_CATEGORY}" | sed 's/"/\\"/g' | tr -d '\n')
-
-      # Add to decisions array using jq
+      # Add to decisions array using jq (--arg handles escaping)
       DECISIONS=$(echo "${DECISIONS}" | jq \
-        --arg cat "${CATEGORY_ESC}" \
-        --arg chosen "${CHOSEN_ESC}" \
-        --arg rationale "${RATIONALE_ESC}" \
+        --arg cat "${CURRENT_CATEGORY}" \
+        --arg chosen "${CHOSEN}" \
+        --arg rationale "${RATIONALE}" \
         '. + [{"category": $cat, "chosen_option": $chosen, "stated_rationale": $rationale}]')
 
       # Reset category after capturing to avoid duplicate entries
@@ -102,12 +97,9 @@ done < "${TDR_FILE}"
 DECISIONS=$(echo "${DECISIONS}" | jq '[group_by(.category)[] | first]')
 
 # --- Output JSON ---
-TDR_FILE_ESC=$(echo "${TDR_FILE}" | sed 's/"/\\"/g')
-PROJECT_NAME_ESC=$(echo "${PROJECT_NAME}" | sed 's/"/\\"/g')
-
 jq -n \
-  --arg tdr_file "${TDR_FILE_ESC}" \
-  --arg project_name "${PROJECT_NAME_ESC}" \
+  --arg tdr_file "${TDR_FILE}" \
+  --arg project_name "${PROJECT_NAME}" \
   --argjson decisions "${DECISIONS}" \
   '{
     "tdr_file": $tdr_file,

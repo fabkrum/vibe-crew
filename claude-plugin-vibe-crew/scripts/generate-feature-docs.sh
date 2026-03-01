@@ -72,7 +72,7 @@ $DESCRIPTION
 ## Details
 
 - **Feature ID**: $feature_id
-- **Priority**: $priority
+- **Priority**: $PRIORITY
 - **Labels**: $LABELS
 - **Created**: $CREATED_AT
 

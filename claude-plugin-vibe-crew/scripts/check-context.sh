@@ -56,7 +56,11 @@ if [[ -d "$LOCKS_DIR" ]]; then
       LOCKED_AT=$(jq -r '.locked_at // empty' "$INFO_FILE" 2>/dev/null || echo "")
       TIMEOUT=$(jq -r '.timeout_seconds // 30' "$INFO_FILE" 2>/dev/null || echo "30")
       if [[ -n "$LOCKED_AT" ]]; then
-        LOCKED_EPOCH=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$LOCKED_AT" "+%s" 2>/dev/null || echo "0")
+        if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$LOCKED_AT" "+%s" &>/dev/null; then
+          LOCKED_EPOCH=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$LOCKED_AT" "+%s")
+        else
+          LOCKED_EPOCH=$(date -d "$LOCKED_AT" "+%s" 2>/dev/null || echo "0")
+        fi
         NOW_EPOCH=$(date "+%s")
         ELAPSED=$(( NOW_EPOCH - LOCKED_EPOCH ))
         if [[ "$ELAPSED" -gt "$TIMEOUT" ]]; then

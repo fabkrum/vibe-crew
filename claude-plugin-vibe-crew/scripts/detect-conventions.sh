@@ -107,11 +107,11 @@ if [[ -n "$JS_FILES" ]]; then
   FIRST_FILE=$(echo "$JS_FILES" | head -1)
   if [[ -f "$FIRST_FILE" ]]; then
     # Check leading whitespace
-    if grep -qP '^\t' "$FIRST_FILE" 2>/dev/null; then
+    if grep -q '	' "$FIRST_FILE" 2>/dev/null; then
       INDENT="tabs"
-    elif grep -qP '^    ' "$FIRST_FILE" 2>/dev/null; then
+    elif grep -q '^    ' "$FIRST_FILE" 2>/dev/null; then
       INDENT="4-space"
-    elif grep -qP '^  [^ ]' "$FIRST_FILE" 2>/dev/null; then
+    elif grep -qE '^  [^ ]' "$FIRST_FILE" 2>/dev/null; then
       INDENT="2-space"
     fi
   fi
@@ -155,9 +155,9 @@ if [[ -n "$COMPONENT_FILES" ]]; then
   while IFS= read -r f; do
     [[ -z "$f" ]] && continue
     BASENAME=$(basename "$f" | sed 's/\..*//')
-    if echo "$BASENAME" | grep -qP '^[A-Z][a-zA-Z]+'; then
+    if echo "$BASENAME" | grep -qE '^[A-Z][a-zA-Z]+'; then
       ((PASCAL_COUNT++))
-    elif echo "$BASENAME" | grep -qP '^[a-z]+-[a-z]+'; then
+    elif echo "$BASENAME" | grep -qE '^[a-z]+-[a-z]+'; then
       ((KEBAB_COUNT++))
     fi
   done <<< "$COMPONENT_FILES"

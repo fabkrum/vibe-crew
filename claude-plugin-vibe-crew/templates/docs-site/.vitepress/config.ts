@@ -75,6 +75,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "Guide", link: "/system/getting-started" },
+      { text: "Features", link: "/features" },
       { text: "Kanban", link: "/kanban" },
       { text: "Stats", link: "/stats" },
       { text: "Trends", link: "/trends" },
@@ -91,6 +92,14 @@ export default defineConfig({
           items: [
             { text: "Getting Started", link: "/system/getting-started" },
             { text: "Commands", link: "/system/commands" },
+          ],
+        },
+      ],
+      "/features/": [
+        {
+          text: "Features",
+          items: [
+            { text: "Overview", link: "/features" },
           ],
         },
       ],

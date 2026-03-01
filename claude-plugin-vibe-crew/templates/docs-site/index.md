@@ -12,6 +12,9 @@ hero:
       text: Kanban Board
       link: /kanban
 features:
+  - title: Product Features
+    details: Browse completed features with descriptions, labels, and links to detailed docs.
+    link: /features
   - title: Kanban Board
     details: Track feature progress across 7 workflow stages — from idea to done.
     link: /kanban

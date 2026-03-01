@@ -65,11 +65,12 @@ fi
 # Look for the pattern: },  (closing of last sidebar section)
 #                        },  (closing of sidebar)
 
-# Generate the sidebar section
+# Generate the sidebar section (Overview link always first)
 SIDEBAR_SECTION='"/features/": [
         {
           text: "Features",
-          items: ['"$FEATURE_ITEMS"'
+          items: [
+            { text: "Overview", link: "/features" },'"$FEATURE_ITEMS"'
           ],
         },
       ],'

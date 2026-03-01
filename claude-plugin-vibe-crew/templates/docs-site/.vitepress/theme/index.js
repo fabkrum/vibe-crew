@@ -10,6 +10,7 @@ import AchievementsBoard from "../../components/AchievementsBoard.vue";
 import SettingsPanel from "../../components/SettingsPanel.vue";
 import LiveSessionPanel from "../../components/LiveSessionPanel.vue";
 import ArchitectureOverview from "../../components/ArchitectureOverview.vue";
+import ProductFeatures from "../../components/ProductFeatures.vue";
 
 export default {
   extends: DefaultTheme,
@@ -25,5 +26,6 @@ export default {
     app.component("SettingsPanel", SettingsPanel);
     app.component("LiveSessionPanel", LiveSessionPanel);
     app.component("ArchitectureOverview", ArchitectureOverview);
+    app.component("ProductFeatures", ProductFeatures);
   },
 };

@@ -228,6 +228,54 @@ if [[ -d "$PROJECT_ROOT/.vibecrew/a11y" ]]; then
   fi
 fi
 
+# --- 9.5. Visual verification detection ---
+VISUAL_VERIFIED=false
+VISUAL_CLEAN=false
+VISUAL_TOKEN_VIOLATIONS=0
+VISUAL_CONSOLE_ERRORS=0
+
+# Check builder-complete.signal for visual_verification data
+SIGNALS_DIR="$PROJECT_ROOT/.vibecrew/signals"
+if [[ -d "$SIGNALS_DIR" ]]; then
+  LATEST_BUILDER_SIGNAL=$(ls -1t "$SIGNALS_DIR"/builder-complete.signal 2>/dev/null | head -1 || true)
+  if [[ -n "$LATEST_BUILDER_SIGNAL" && -f "$LATEST_BUILDER_SIGNAL" ]]; then
+    VV_DATA=$(jq -r '.visual_verification // empty' "$LATEST_BUILDER_SIGNAL" 2>/dev/null || echo "")
+    if [[ -n "$VV_DATA" && "$VV_DATA" != "null" ]]; then
+      VV_SKIPPED=$(echo "$VV_DATA" | jq -r '.skipped // false' 2>/dev/null || echo "true")
+      if [[ "$VV_SKIPPED" != "true" ]]; then
+        VISUAL_VERIFIED=true
+        VISUAL_CONSOLE_ERRORS=$(echo "$VV_DATA" | jq -r '.console_errors // 0' 2>/dev/null || echo "0")
+        VISUAL_TOKEN_VIOLATIONS=$(echo "$VV_DATA" | jq -r '.token_violations // 0' 2>/dev/null || echo "0")
+        if [[ "$VISUAL_CONSOLE_ERRORS" -eq 0 && "$VISUAL_TOKEN_VIOLATIONS" -eq 0 ]]; then
+          VISUAL_CLEAN=true
+        fi
+      fi
+    fi
+  fi
+fi
+
+# Also check latest review report for visual-compliance findings
+if [[ -f "$STATE_FILE" && -d "$PROJECT_ROOT/.vibecrew/reviews" ]]; then
+  FEATURE_ID_VC=$(jq -r '.active_feature.id // empty' "$STATE_FILE" 2>/dev/null || echo "")
+  if [[ -n "$FEATURE_ID_VC" ]]; then
+    LATEST_REVIEW_VC=$(ls -1t "$PROJECT_ROOT/.vibecrew/reviews"/review-"${FEATURE_ID_VC}"-*.json 2>/dev/null | head -1 || true)
+    if [[ -n "$LATEST_REVIEW_VC" && -f "$LATEST_REVIEW_VC" ]]; then
+      REVIEW_VC_COUNT=$(jq '[.findings[]? | select(.category == "visual-compliance")] | length' "$LATEST_REVIEW_VC" 2>/dev/null || echo "0")
+      if [[ "$REVIEW_VC_COUNT" -gt 0 ]]; then
+        VISUAL_VERIFIED=true
+        # Add review visual violations to signal violations
+        REVIEW_TOKEN_V=$(jq '[.findings[]? | select(.category == "visual-compliance" and .severity != "critical")] | length' "$LATEST_REVIEW_VC" 2>/dev/null || echo "0")
+        REVIEW_CONSOLE_E=$(jq '[.findings[]? | select(.category == "visual-compliance" and .severity == "critical")] | length' "$LATEST_REVIEW_VC" 2>/dev/null || echo "0")
+        VISUAL_TOKEN_VIOLATIONS=$(( VISUAL_TOKEN_VIOLATIONS > REVIEW_TOKEN_V ? VISUAL_TOKEN_VIOLATIONS : REVIEW_TOKEN_V ))
+        VISUAL_CONSOLE_ERRORS=$(( VISUAL_CONSOLE_ERRORS > REVIEW_CONSOLE_E ? VISUAL_CONSOLE_ERRORS : REVIEW_CONSOLE_E ))
+        if [[ "$VISUAL_CONSOLE_ERRORS" -gt 0 || "$VISUAL_TOKEN_VIOLATIONS" -gt 0 ]]; then
+          VISUAL_CLEAN=false
+        fi
+      fi
+    fi
+  fi
+fi
+
 # --- 10. Code review detection ---
 REVIEW_COMPLETED=false
 REVIEW_FINDINGS=0
@@ -268,6 +316,10 @@ jq -n \
   --argjson e2e_passed "$E2E_PASSED" \
   --argjson a11y_exists "$A11Y_EXISTS" \
   --argjson a11y_clean "$A11Y_CLEAN" \
+  --argjson visual_verified "$VISUAL_VERIFIED" \
+  --argjson visual_clean "$VISUAL_CLEAN" \
+  --argjson visual_token_violations "$VISUAL_TOKEN_VIOLATIONS" \
+  --argjson visual_console_errors "$VISUAL_CONSOLE_ERRORS" \
   --argjson review_completed "$REVIEW_COMPLETED" \
   --argjson review_findings "$REVIEW_FINDINGS" \
   --argjson perf_baselines_exist "$PERF_BASELINES_EXIST" \
@@ -290,6 +342,10 @@ jq -n \
     e2e_passed: $e2e_passed,
     a11y_exists: $a11y_exists,
     a11y_clean: $a11y_clean,
+    visual_verified: $visual_verified,
+    visual_clean: $visual_clean,
+    visual_token_violations: $visual_token_violations,
+    visual_console_errors: $visual_console_errors,
     review_completed: $review_completed,
     review_findings: $review_findings,
     perf_baselines_exist: $perf_baselines_exist,

@@ -26,6 +26,12 @@
 - Stripe MCP: test keys (`sk_test_*`) only, never live.
 - If any MCP tool is unavailable, fall back to Bash/CLI equivalents.
 
+## Visual Development
+
+- After frontend changes, verify rendered output via Playwright MCP before signaling completion.
+- Use `design-brief.md` as the visual reference for layout, color, and typography decisions.
+- Never ship UI changes without a visual sanity check (screenshot + console error scan).
+
 ## Session Learnings
 
 <!-- VibeCrew appends learnings here during /wrap. Max 15 rules — oldest pruned automatically. -->

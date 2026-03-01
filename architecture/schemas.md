@@ -546,6 +546,13 @@ Per-session Vibe Score breakdown. Created by `/wrap` command (Verifier agent cal
       "coverage_percent": 78.5,
       "lint_clean": true,
       "build_passes": true
+    },
+    "visual_compliance": {
+      "verified": false,                   // Whether visual verification ran
+      "console_errors": 0,                 // Console error-level messages found
+      "token_violations": 0,               // Computed style vs design-system.css mismatches
+      "viewports_checked": 0,              // Number of viewports tested (Builder: 1, Code Reviewer: 3)
+      "clean": false                       // true when verified && zero errors && zero violations
     }
   },
 
@@ -728,10 +735,21 @@ Created by Builder when the code phase finishes. Includes a `changed_files` list
       {"path": "src/auth/login.ts", "type": "added"},
       {"path": "src/auth/oauth.ts", "type": "added"},
       {"path": "src/routes.ts", "type": "modified"}
-    ]
+    ],
+    "visual_verification": {               // Optional — included when frontend files changed
+      "screenshots": 1,                    // Number of screenshots taken
+      "console_errors": 0,                 // Console error-level messages found
+      "token_violations": 0,               // Computed style vs design-system.css mismatches
+      "viewport": "1440px",                // Viewport width used
+      "iterations": 1,                     // Visual-fix iterations (max 2)
+      "skipped": false,                    // true if visual verification was skipped
+      "reason": null                       // Reason for skipping: "playwright_unavailable" | "no_frontend_changes" | "no_dev_server" | null
+    }
   }
 }
 ```
+
+The `visual_verification` field is included when the Builder's changed files contain frontend extensions (`.tsx`, `.jsx`, `.vue`, `.svelte`, `.css`, `.scss`). If Playwright MCP is unavailable or no dev server can be started, `skipped` is `true` with a `reason`. The Verifier reads this field during Vibe Score calculation to apply visual compliance deductions and bonuses.
 
 The `changed_files` array is populated by running:
 
@@ -746,6 +764,14 @@ If the git command fails, the `changed_files` field may be omitted. The Verifier
 | `payload.changed_files` | array | no | Files changed during code phase |
 | `payload.changed_files[].path` | string | yes (if array present) | Relative file path |
 | `payload.changed_files[].type` | enum | yes (if array present) | `"added"` \| `"modified"` \| `"deleted"` |
+| `payload.visual_verification` | object | no | Visual verification results (frontend changes only) |
+| `payload.visual_verification.screenshots` | integer | no | Number of screenshots taken |
+| `payload.visual_verification.console_errors` | integer | no | Console error-level messages found |
+| `payload.visual_verification.token_violations` | integer | no | Computed style vs design-system.css mismatches |
+| `payload.visual_verification.viewport` | string | no | Viewport width (e.g., `"1440px"`) |
+| `payload.visual_verification.iterations` | integer | no | Visual-fix iterations performed (max 2) |
+| `payload.visual_verification.skipped` | boolean | no | Whether visual verification was skipped |
+| `payload.visual_verification.reason` | string\|null | no | Skip reason: `"playwright_unavailable"` \| `"no_frontend_changes"` \| `"no_dev_server"` |
 
 #### 7.5 Builder Review Feedback Signal
 

@@ -78,7 +78,7 @@ Notifications fire only on three conditions: permission stalls (permission_promp
 
 ### Vibe Score System
 
-Starts at 100, applies deductions: prompt churn (-5/sequence), tool loops (-10/loop), low cache utilization (-15), context violations (-20), no tests (-10), no feature spec (-5), skipped code review (-5), documentation drift (-3/stale doc). Bonuses up to +25 for complete phase artifacts, high cache utilization, full test coverage, clean sessions, TDD discipline (+3), E2E tests passing (+3), accessibility clean (+2), code review complete (+2), and performance baselines (+2). The Performance Coach proposes permanent CLAUDE.md rule mutations based on identified anti-patterns.
+Starts at 100, applies deductions: prompt churn (-5/sequence), tool loops (-10/loop), low cache utilization (-15), context violations (-20), no tests (-10), no feature spec (-5), skipped code review (-5), documentation drift (-3/stale doc), console errors on affected pages (-5), visual token violations (-3/violation, max -9). Bonuses up to +30 for complete phase artifacts, high cache utilization, full test coverage, clean sessions, TDD discipline (+3), E2E tests passing (+3), accessibility clean (+2), code review complete (+2), performance baselines (+2), and visual compliance clean (+3). The Performance Coach proposes permanent CLAUDE.md rule mutations based on identified anti-patterns.
 
 ### Per-Project Runtime State
 

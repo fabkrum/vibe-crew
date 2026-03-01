@@ -27,6 +27,11 @@ tools:
   - mcp__vercel__list-deployments
   - mcp__figma__get-file
   - mcp__figma__get-file-nodes
+  - mcp__playwright__browser_navigate
+  - mcp__playwright__browser_screenshot
+  - mcp__playwright__browser_console_messages
+  - mcp__playwright__browser_evaluate
+  - mcp__playwright__browser_resize
 maxTurns: 100
 isolation: worktree
 ---
@@ -68,7 +73,17 @@ Derive all values from VISION.md's brand direction and `design-brief.md` (if pre
 4. Use CSS custom properties from `design-system.css` for all visual styling. Reference `design-brief.md` for layout decisions (navigation style, data display, density).
 5. After adding new components, update `component-tree.mmd` to reflect each new component's position, parent, and data flow direction (props down, events up).
 6. Make atomic commits as you complete logical units of work. If the implementation deviates from any diagram (e.g., schema changes not yet in `schema.mmd`), add a `Diagram-Drift:` trailer to the commit message noting which diagram(s) need updating.
-7. Signal completion with `builder-complete.signal`.
+7. **Visual Verification** (frontend changes only):
+   - Check if `changed_files` include frontend extensions (`.tsx`, `.jsx`, `.vue`, `.svelte`, `.css`, `.scss`). If no frontend files were changed, skip this step entirely.
+   - Detect the dev server from `package.json` scripts (`dev`, `start`, or `serve`). Start it via Bash if not already running (try ports 3000-3010). Wait up to 10 seconds for a response.
+   - Use `browser_navigate` to visit affected pages (infer routes from file paths, e.g., `src/app/dashboard/page.tsx` → `/dashboard`).
+   - Use `browser_console_messages` — if any `error`-level messages appear, fix them immediately before proceeding.
+   - Use `browser_screenshot` at 1440px viewport width. Sanity check the screenshot against `design-brief.md` for obvious layout/color issues.
+   - Optionally run `visual-verify.sh` to get the token map and evaluate script, then use `browser_evaluate` to extract computed styles. Compare key values (font-family, font-size, color, background-color) against design-system.css tokens. Fix any violations found.
+   - **Max 2 visual-fix iterations.** After 2 rounds, commit remaining issues as `warning` findings in the signal payload and move on.
+   - Record results in the `visual_verification` field of the signal payload (see below).
+   - **Fallback:** If Playwright MCP tools are unavailable or the dev server cannot start, log a warning in the signal payload (`"visual_verification": { "skipped": true, "reason": "..." }`) and continue. Never hard-fail.
+8. Signal completion with `builder-complete.signal`.
 
 ### TDD Integration
 
@@ -159,6 +174,14 @@ These MCP servers are only available when the TDR selects matching technologies 
 - Translate Figma tokens to CSS custom properties from `design-system.css`.
 - **Fallback:** Use design specs provided in the feature spec document or ask the developer for screenshots.
 
+### Playwright MCP (Visual Verification)
+
+- Use for visual feedback during frontend development. Navigate to pages, take screenshots, extract computed styles, and check console messages.
+- Only invoke during the Code Phase visual verification step (step 7) and the verification loop (step 4.5). Do not use Playwright during the Design Phase.
+- Budget: 1 screenshot + 1 `browser_evaluate` per iteration. Max 2 iterations per Code Phase.
+- **NEVER leave a dev server running** when signaling completion. Kill any server you started.
+- **Fallback:** If Playwright MCP tools are unavailable (server not installed or disabled), skip visual verification entirely. Log `"visual_verification": { "skipped": true, "reason": "playwright_unavailable" }` in the signal payload and proceed with the standard verification loop.
+
 ### General Fallback Rule
 
 If any MCP tool call fails or the server is unavailable, continue with the standard approach (Context7, Bash commands, file reads). Never hard-fail because an MCP tool is missing.
@@ -217,6 +240,7 @@ Run these checks after every meaningful change. This is CRITICAL — do not skip
 2. **Lint passes**: Run `npm run lint`. Apply auto-fix first (`npm run lint -- --fix`). Manually fix any remaining issues. Max 3 retries.
 3. **Design system token compliance**: Run `grep -rn` for hardcoded colors (`#[0-9a-fA-F]{3,8}`, `rgb(`, `rgba(`, `hsl(`, `hsla(`) in source files excluding `design-system.css` itself. Any match not wrapped in `var()` is a violation. Fix by replacing with the appropriate design token. Max 2 retries.
 4. **WCAG AA contrast**: For every foreground/background color pair you introduce, verify the contrast ratio meets 4.5:1 for normal text or 3:1 for large text (18px+ or 14px+ bold). Use the HSL values from design-system.css to calculate. Max 2 retries.
+4.5. **Visual verification** (frontend changes only): If Playwright MCP is available and a dev server is running, navigate to affected pages, check `browser_console_messages` for errors, and take a screenshot for sanity check. Fix any console errors immediately. Max 1 retry. If Playwright is unavailable, skip silently.
 5. **Conventional commit format**: Before each commit, verify the message matches `type(scope): description`. Reformat inline if needed. No retry limit — just fix it.
 6. **Acceptance criteria progress**: After each code phase session, check each acceptance criterion from the feature spec. Report how many are met vs remaining. This is informational — it does not block commits.
 
@@ -259,7 +283,16 @@ Signal file format:
   "changed_files": [
     {"path": "src/components/Example.tsx", "type": "added"},
     {"path": "src/utils/helpers.ts", "type": "modified"}
-  ]
+  ],
+  "visual_verification": {
+    "screenshots": 1,
+    "console_errors": 0,
+    "token_violations": 0,
+    "viewport": "1440px",
+    "iterations": 1,
+    "skipped": false,
+    "reason": null
+  }
 }
 ```
 

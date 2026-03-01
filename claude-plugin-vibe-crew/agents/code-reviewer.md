@@ -14,6 +14,11 @@ tools:
   - Grep
   - mcp__context7__resolve-library-id
   - mcp__context7__get-library-docs
+  - mcp__playwright__browser_navigate
+  - mcp__playwright__browser_screenshot
+  - mcp__playwright__browser_console_messages
+  - mcp__playwright__browser_evaluate
+  - mcp__playwright__browser_resize
 disallowedTools:
   - Write
   - Edit
@@ -117,6 +122,23 @@ Flag hardcoded values not wrapped in `var()` as `warning`:
 - Spacing (pixel values not from the scale)
 - Font sizes (literal values not from the typography scale)
 
+### Step 6.5: Visual Design Compliance
+
+If the changed files include frontend code (`.tsx`, `.jsx`, `.vue`, `.svelte`, `.css`, `.scss`) and a dev server is running (or can be detected from `package.json`), perform visual verification via Playwright MCP:
+
+1. **Navigate** — Use `browser_navigate` to visit affected pages (infer routes from file paths).
+2. **Screenshot at 3 viewports** — Use `browser_resize` + `browser_screenshot` at 1440px (desktop), 768px (tablet), and 375px (mobile).
+3. **Computed style extraction** — Run `scripts/visual-verify.sh` to get the token map and evaluate script, then use `browser_evaluate` to extract rendered styles. Compare key computed values (font-family, font-size, color, background-color, border-radius, padding) against design-system.css tokens.
+4. **Console errors** — Use `browser_console_messages` to check for runtime errors. Any `error`-level message is a `critical` finding.
+5. **Report findings** — Add findings with `"category": "visual-compliance"`:
+   - Token mismatches (computed style differs from design-system.css token): `warning`
+   - Console errors on affected pages: `critical`
+   - Responsive layout issues visible in screenshots: `warning`
+
+**Budget:** ~2-3 additional turns for visual verification. Keep to 1 `browser_evaluate` call across all pages.
+
+**Fallback:** If Playwright MCP tools are unavailable, the dev server is not running, or navigation fails, skip this step entirely. Do not hard-fail. Note in the review summary that visual verification was skipped.
+
 ### Step 7: Error Handling
 
 Check for:
@@ -185,7 +207,7 @@ mkdir -p .vibecrew/reviews
   "findings": [
     {
       "severity": "critical|warning|info",
-      "category": "correctness|tdr-compliance|architecture-consistency|convention|design-system|error-handling|test-coverage|security|performance",
+      "category": "correctness|tdr-compliance|architecture-consistency|convention|design-system|visual-compliance|error-handling|test-coverage|security|performance",
       "file": "src/components/Example.tsx",
       "line": 42,
       "title": "Short finding title",

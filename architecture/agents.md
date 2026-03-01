@@ -58,10 +58,11 @@
 | Session Startup | x | - | - | x | x | x | - | - | - | - | - | - | - | - | - | - | - | - |
 | Workflow Orchestrator | x | - | - | x | x | x | - | - | - | - | - | - | - | - | - | - | - | x |
 | Stack Scout | x | - | - | x | x | x | x | x | x | x | - | - | - | x | - | - | - | - |
-| Builder | x | x | x | x | x | x | - | - | x | - | - | - | - | x | x | x | x | - |
+| Builder | x | x | x | x | x | x | - | - | x | - | x | - | - | x | x | x | x | - |
 | Verifier | x | x | x | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |
 | Security Auditor | x | - | - | x | x | x | - | - | - | - | - | x | - | - | - | - | - | - |
 | CI Healer | x | x | x | x | x | x | - | - | - | - | - | - | x | - | - | - | - | - |
+| Code Reviewer | x | - | - | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |
 | System Reviewer | x | - | - | x | x | x | x | x | x | - | - | - | - | - | - | - | - | - |
 
 Note: Conditional MCP servers (Supabase, Stripe, Vercel, Figma, Sentry, Semgrep) only expose tools when enabled. Agents list these tools in frontmatter regardless — they activate when the server is enabled.
@@ -479,7 +480,8 @@ description: >
   Tier 1 and implements features during Tier 2. Uses Context7 for library
   documentation. Works in an isolated worktree for parallel development.
   Handles component design specs, source code implementation, conventional
-  commits, and PR preparation.
+  commits, and PR preparation. Uses Playwright MCP for visual verification
+  of frontend changes.
 model: opus
 tools:
   - Read
@@ -490,6 +492,11 @@ tools:
   - Grep
   - mcp__context7__resolve-library-id
   - mcp__context7__get-library-docs
+  - mcp__playwright__browser_navigate
+  - mcp__playwright__browser_screenshot
+  - mcp__playwright__browser_console_messages
+  - mcp__playwright__browser_evaluate
+  - mcp__playwright__browser_resize
 maxTurns: 100
 isolation: worktree
 ---
@@ -598,6 +605,7 @@ The Builder's verification loop is the most critical in the system. Every code c
 | 2. **Verify lint passes** | After build succeeds, run `npm run lint` to confirm no linting violations were introduced | Read lint errors, apply auto-fixes where possible (`npm run lint -- --fix`), then manually fix remaining issues. Max 3 retries. |
 | 3. **Verify design system tokens** | After writing CSS or styled components, grep for hardcoded color values (`#[0-9a-fA-F]{3,8}`, `rgb(`, `hsl(` not using variables) to confirm all styling uses CSS custom properties | Replace any hardcoded values with the appropriate `var(--*)` token. Max 2 retries. |
 | 4. **Verify WCAG AA contrast** | After design system creation (Tier 1), verify that all foreground/background color combinations meet WCAG AA contrast ratio (4.5:1 for normal text, 3:1 for large text) | Adjust lightness values to achieve compliant contrast. Max 2 retries. |
+| 4.5. **Visual verification (frontend only)** | After frontend changes (`.tsx`, `.jsx`, `.vue`, `.svelte`, `.css`, `.scss`): navigate to affected pages via Playwright MCP, check `browser_console_messages` for errors, screenshot at 1440px viewport. Optionally run `visual-verify.sh` + `browser_evaluate` for computed style extraction against design-system.css tokens. | Fix console errors immediately. Fix token violations if found. Max 2 visual-fix iterations. If Playwright unavailable, skip silently and log in signal payload. |
 | 5. **Verify conventional commits** | Before committing, verify the commit message follows the conventional format (`type(scope): description`) | Reformat the commit message if it does not match. No retry needed -- fix inline. |
 | 6. **Verify acceptance criteria progress** | After implementing a feature, check each acceptance criterion from the feature spec and report which are met vs. remaining | If criteria are unmet due to a bug, fix the implementation. If unmet due to scope (not yet implemented), include the status in the commit message. No retry -- informational. |
 
@@ -638,7 +646,7 @@ The Builder is the most context-intensive agent because it must hold the feature
 1. **During work:** Makes frequent conventional commits that serve as progress markers. The Orchestrator can inspect `git log` on the feature branch to see progress.
 2. **On design completion (Tier 1):** Reports completion by writing `design-system.css` to the project root. The Orchestrator detects this file's existence to advance the foundation status.
 3. **On design completion (Tier 2):** Creates a signal file: `.vibecrew/signals/builder-design-complete.signal` with the component design spec summary.
-4. **On code completion:** Runs the `complete-phase.sh` script to advance the feature from `in-progress` to `testing` in `backlog.json` and creates a signal file: `.vibecrew/signals/builder-complete.signal`.
+4. **On code completion:** Runs the `complete-phase.sh` script to advance the feature from `in-progress` to `testing` in `backlog.json` and creates a signal file: `.vibecrew/signals/builder-complete.signal`. If frontend files were changed, the signal includes a `visual_verification` payload (screenshots taken, console errors found, token violations detected, or skipped reason).
 5. **On PR creation:** Creates a pull request via `gh pr create` with a structured description referencing the feature spec and acceptance criteria.
 6. **On blockage:** Creates `.vibecrew/signals/builder-blocked.signal` with error details if verification fails after max retries.
 

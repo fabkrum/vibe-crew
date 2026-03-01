@@ -64,6 +64,8 @@ score -= 5  * (1 if no_spec else 0)                            # no-spec: max -5
 score -= 3  * min(phases_skipped, 6)                           # missing-phase: -3 each, max -18
 score -= 5  * (1 if skipped_review else 0)                     # skipped-review: max -5
 score -= 3  * min(stale_docs, 3)                               # doc-drift: -3 each, max -9
+score -= 5  * (1 if visual_console_errors > 0 else 0)          # visual-console-errors: max -5
+score -= 3  * min(visual_token_violations, 3)                   # visual-token-violations: -3 each, max -9
 
 # Apply bonuses
 score += 5  * (1 if all_six_phases_complete else 0)            # all-phases: +5
@@ -75,6 +77,7 @@ score += 3  * (1 if e2e_tests_passing else 0)                  # e2e-passing: +3
 score += 2  * (1 if a11y_clean else 0)                         # a11y-clean: +2
 score += 2  * (1 if review_complete else 0)                    # review-complete: +2
 score += 2  * (1 if perf_baselines else 0)                     # perf-baselines: +2
+score += 3  * (1 if visual_verified and visual_clean else 0)   # visual-clean: +3
 
 # Clamp
 score = max(0, min(100, score))
@@ -94,11 +97,13 @@ Each deduction category has a per-category cap. Deductions are applied at most t
 | `no-spec` | -5 | -5 | Feature work started without acceptance criteria in `backlog.json`. See [Section 3.5](#35-phase-completion-metrics). | Implementation began without a deliberate plan. Increases rework probability. |
 | `missing-phase` | -3 per phase | -18 (6 phases) | Any Tier 2 phase skipped (no artifacts recorded in `state.json`). See [Section 3.5](#35-phase-completion-metrics). | Skipping phases reduces the quality feedback loop. |
 | `doc-drift` | -3 per stale doc | -9 (3 docs) | Source code changed but matching feature docs not updated. New API endpoints/routes without doc coverage. See [Section 3.6](#36-documentation-drift-detection). | Stale docs mislead future sessions and accumulate technical debt. Counted within the `missing-phase` category for the Docs phase. |
+| `visual-console-errors` | -5 | -5 | Console errors detected on affected pages during Playwright visual verification (from `visual_verification.console_errors` in builder signal or `visual-compliance` critical findings in review report). | Runtime errors visible to users indicate broken functionality that should be caught before shipping. |
+| `visual-token-violations` | -3 per violation | -9 (3 violations) | Computed style mismatches against design-system.css tokens (from `visual_verification.token_violations` in builder signal or `visual-compliance` warning findings in review report). | Design system drift undermines visual consistency and makes the token system unreliable. |
 
 **Total deduction caps:**
 
-- Sum of all per-category caps: -15 + -30 + -15 + -20 + -10 + -5 + -18 + -5 + -9 = **-127** (theoretical maximum if every rule fires at its cap)
-- Practical maximum: **-75** (unlikely that all categories fire simultaneously at cap)
+- Sum of all per-category caps: -15 + -30 + -15 + -20 + -10 + -5 + -18 + -5 + -9 + -5 + -9 = **-141** (theoretical maximum if every rule fires at its cap)
+- Practical maximum: **-80** (unlikely that all categories fire simultaneously at cap)
 - Minimum possible score: **0** (clamped). Realistically around **25** in a worst-case session.
 
 ### 2.3 Bonus Rules
@@ -116,12 +121,13 @@ Bonuses reward quality signals. They are applied after deductions but cannot pus
 | `a11y-clean` | +2 | axe-core report in `.vibecrew/a11y/` with zero critical/serious violations | Accessible software reaches more users and avoids legal risk. |
 | `review-complete` | +2 | Review report exists in `.vibecrew/reviews/` for active feature | Code review catches defects, enforces conventions, and validates TDR compliance. |
 | `perf-baselines` | +2 | k6 results exist in `.vibecrew/perf-tests/` for active feature | Performance baselines prevent regressions and set expectations for scaling. |
+| `visual-clean` | +3 | `visual_verified == true && visual_clean == true` -- Builder ran visual verification via Playwright and found zero console errors and zero token violations. | Visual verification catches CSS cascade issues, runtime errors, and design drift that grep-based checks miss. |
 
-**Maximum total bonuses:** +27. **Maximum possible score:** 100 (clamped).
+**Maximum total bonuses:** +30. **Maximum possible score:** 100 (clamped).
 
 ### 2.4 Why Bonuses Cannot Compensate for Anti-Patterns
 
-Bonuses are capped at +27 total. A session with 3 tool loops (-30) but clean lint, high cache, and TDD (+13) should still score poorly (83). Bonuses reward completeness; they do not compensate for waste.
+Bonuses are capped at +30 total. A session with 3 tool loops (-30) but clean lint, high cache, and TDD (+13) should still score poorly (83). Bonuses reward completeness; they do not compensate for waste.
 
 ---
 

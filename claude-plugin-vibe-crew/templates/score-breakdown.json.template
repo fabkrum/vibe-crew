@@ -37,6 +37,13 @@
       "coverage_percent": 0,
       "lint_clean": false,
       "build_passes": false
+    },
+    "visual_compliance": {
+      "verified": false,
+      "console_errors": 0,
+      "token_violations": 0,
+      "viewports_checked": 0,
+      "clean": false
     }
   },
   "deductions": [],

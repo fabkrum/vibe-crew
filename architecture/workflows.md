@@ -726,6 +726,20 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     Builder completes code phase
               |
               v
+    [If frontend files changed]
+    Builder runs visual verification:
+    - Starts dev server (ports 3000-3010)
+    - Playwright: navigate, console check,
+      screenshot at 1440px
+    - Optional: visual-verify.sh + browser_evaluate
+      for computed style extraction
+    - Fix console errors and token violations
+    - Max 2 visual-fix iterations
+    - Record results in builder-complete.signal
+      visual_verification payload
+    - If Playwright unavailable: skip, log reason
+              |
+              v
     Orchestrator advances to testing
               |
               v
@@ -770,6 +784,13 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
 
     REVIEW-FIX CYCLE (after tests pass):
     Code Reviewer produces review report with verdict.
+    If frontend files in scope, Code Reviewer also runs
+    visual design compliance (Step 6.5):
+      - Playwright: screenshots at 3 viewports (1440/768/375px)
+      - visual-verify.sh + browser_evaluate for token comparison
+      - Console error check (critical findings)
+      - Results reported as "visual-compliance" category findings
+      - Skipped if Playwright unavailable (noted in summary)
     If verdict is request-changes with critical findings:
       1. Orchestrator extracts critical findings
       2. Writes builder-review-feedback.json

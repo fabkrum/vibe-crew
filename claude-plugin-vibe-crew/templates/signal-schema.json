@@ -93,6 +93,40 @@
     "review_cycle": {
       "type": "integer",
       "description": "Which review-fix cycle this is"
+    },
+    "visual_verification": {
+      "type": "object",
+      "description": "Visual verification results from Playwright MCP (builder-complete)",
+      "properties": {
+        "screenshots": {
+          "type": "integer",
+          "description": "Number of screenshots taken"
+        },
+        "console_errors": {
+          "type": "integer",
+          "description": "Number of console error-level messages found"
+        },
+        "token_violations": {
+          "type": "integer",
+          "description": "Number of computed style vs design-system.css token mismatches"
+        },
+        "viewport": {
+          "type": "string",
+          "description": "Viewport width used for verification (e.g., '1440px')"
+        },
+        "iterations": {
+          "type": "integer",
+          "description": "Number of visual-fix iterations performed (max 2)"
+        },
+        "skipped": {
+          "type": "boolean",
+          "description": "Whether visual verification was skipped entirely"
+        },
+        "reason": {
+          "type": ["string", "null"],
+          "description": "Reason for skipping (e.g., 'playwright_unavailable', 'no_frontend_changes', 'no_dev_server')"
+        }
+      }
     }
   }
 }

@@ -153,6 +153,8 @@ Calculate the session Vibe Score using this formula:
 | No feature spec | -5 | Check for feature spec in backlog |
 | Missing phase artifact | -3 each | Check for expected artifacts per phase |
 | Documentation drift | -3 per stale doc | Source code changed but feature docs not updated (max -9, within missing-phase cap) |
+| Console errors on affected pages | -5 | `visual_verification.console_errors > 0` in builder signal or `visual-compliance` critical findings in review |
+| Visual token violations | -3 per violation (max -9) | `visual_verification.token_violations > 0` in builder signal or `visual-compliance` warning findings in review |
 | Skipped code review | -5 | No review report in `.vibecrew/reviews/` for active feature |
 
 ### Bonuses
@@ -166,6 +168,7 @@ Calculate the session Vibe Score using this formula:
 | TDD discipline | +3 | Commits with `TDD cycle:` trailer detected via `detect-tdd-discipline.sh` |
 | E2E tests passing | +3 | Playwright spec files exist and test results show pass |
 | Accessibility clean | +2 | axe-core report in `.vibecrew/a11y/` with zero critical/serious violations |
+| Visual compliance clean | +3 | `visual_verified == true && visual_clean == true` — no console errors or token violations |
 | Code review complete | +2 | Review report exists in `.vibecrew/reviews/` for active feature |
 | Performance baselines | +2 | k6 results exist in `.vibecrew/perf-tests/` for active feature |
 

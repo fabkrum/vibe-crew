@@ -96,15 +96,18 @@ Output: `.vibecrew/releases/release-{date}.json`
 
 ### 5. Architecture Diagram Freshness
 
-Check if architecture diagrams in `.vibecrew/architecture/` are stale based on source file changes:
+### Manifest-Driven Diagram Staleness Detection
 
-| Diagram | Stale when these files change |
-|---------|-------------------------------|
-| `schema.mmd` | Migration files, model definitions, schema files (`*.prisma`, `migrations/`, `models/`, `schema.*`) |
-| `api-sequences.mmd` | Route handlers, API endpoints, middleware files (`routes/`, `api/`, `middleware/`) |
-| `state-flows.mmd` | Auth logic, state machines, workflow files (`auth/`, `store/`, `state/`, `*machine*`) |
-| `system.mmd` | Infrastructure config, deployment files, service integrations (`docker*`, `vercel.json`, `.env*`, `infra/`) |
-| `component-tree.mmd` | Component files added, renamed, or deleted (`components/`, `*.tsx`, `*.vue`, `*.svelte`) |
+Use `templates/architecture-manifest.json` to determine which diagrams may be stale:
+
+1. Read the manifest file to get the trigger globs for each diagram.
+2. Get the list of changed source files:
+   ```bash
+   git diff --name-only HEAD~$(git rev-list --count origin/main..HEAD) -- 2>/dev/null || git diff --name-only HEAD~1
+   ```
+3. For each diagram in the manifest, check if any changed files match its trigger globs.
+4. Flag matching diagrams as potentially stale.
+5. For each stale diagram, compare the diagram content against the current source files and update if needed.
 
 When a diagram is stale, update it to reflect the current implementation. Read the relevant source files and regenerate the affected Mermaid syntax while preserving any custom annotations.
 

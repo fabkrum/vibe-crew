@@ -21,7 +21,7 @@ sandbox_canonicalize() {
     if [[ -d "$parent" ]]; then
       echo "$(realpath "$parent")/$name"
     else
-      realpath -m "$path" 2>/dev/null || python3 -c "import os; print(os.path.abspath('$path'))" 2>/dev/null || echo "$path"
+      realpath -m "$path" 2>/dev/null || ABSPATH="$path" python3 -c "import os; print(os.path.abspath(os.environ['ABSPATH']))" 2>/dev/null || echo "$path"
     fi
   fi
 }

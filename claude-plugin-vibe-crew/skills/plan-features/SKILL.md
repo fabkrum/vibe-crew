@@ -125,60 +125,35 @@ After collecting all information, update the backlog using `jq`:
 For **new features** (from roadmap, not yet in backlog):
 
 ```bash
-jq --arg id "feat-NNN" \
-   --arg name "<feature name>" \
-   --arg desc "<description>" \
-   --argjson priority <number> \
-   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
-   --arg ui "<ui description>" \
-   --arg logic "<business logic>" \
-   --arg tech "<technical notes>" \
-   --argjson labels '["label1", "label2"]' \
-   --argjson deps '["feat-XXX"]' \
-   --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '.features += [{
-     id: $id,
-     name: $name,
-     description: $desc,
-     column: "planned",
-     priority: $priority,
-     labels: $labels,
-     spec: {
-       acceptance_criteria: $criteria,
-       ui_description: $ui,
-       business_logic: $logic,
-       technical_notes: $tech
-     },
-     dependencies: $deps,
-     phases_completed: [],
-     created_at: $ts,
-     updated_at: $ts
-   }]' .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
+  '.features += [{id: $id, name: $name, description: $desc, column: "planned", priority: ($priority | tonumber), labels: $labels, spec: {acceptance_criteria: $criteria, ui_description: $ui, business_logic: $logic, technical_notes: $tech}, dependencies: $deps, phases_completed: [], created_at: $ts, updated_at: $ts}]' \
+  --arg id "feat-NNN" \
+  --arg name "<feature name>" \
+  --arg desc "<description>" \
+  --arg priority "<number>" \
+  --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
+  --arg ui "<ui description>" \
+  --arg logic "<business logic>" \
+  --arg tech "<technical notes>" \
+  --argjson labels '["label1", "label2"]' \
+  --argjson deps '["feat-XXX"]' \
+  --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
 For **existing features** (ideas or incomplete planned features):
 
 ```bash
-jq --arg id "<feature-id>" \
-   --argjson priority <number> \
-   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
-   --arg ui "<ui description>" \
-   --arg logic "<business logic>" \
-   --arg tech "<technical notes>" \
-   --argjson labels '["label1", "label2"]' \
-   --argjson deps '["feat-XXX"]' \
-   --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (
-     .column = "planned" |
-     .priority = $priority |
-     .labels = $labels |
-     .spec.acceptance_criteria = $criteria |
-     .spec.ui_description = $ui |
-     .spec.business_logic = $logic |
-     .spec.technical_notes = $tech |
-     .dependencies = $deps |
-     .updated_at = $ts
-   )' .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
+  '(.features[] | select(.id == $id)) |= (.column = "planned" | .priority = ($priority | tonumber) | .labels = $labels | .spec.acceptance_criteria = $criteria | .spec.ui_description = $ui | .spec.business_logic = $logic | .spec.technical_notes = $tech | .dependencies = $deps | .updated_at = $ts)' \
+  --arg id "<feature-id>" \
+  --arg priority "<number>" \
+  --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
+  --arg ui "<ui description>" \
+  --arg logic "<business logic>" \
+  --arg tech "<technical notes>" \
+  --argjson labels '["label1", "label2"]' \
+  --argjson deps '["feat-XXX"]' \
+  --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
 Confirm to the user: "Saved feat-NNN: <name> with full spec."
@@ -208,9 +183,7 @@ A feature is **ready to build** if:
 For each feature that meets all criteria, move it to `planned`:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (.column = "planned" | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature-id>" column planned
 ```
 
 ---
@@ -251,7 +224,7 @@ Next steps:
 ## Rules
 
 - **Be conversational.** This is a collaborative planning session. Ask clarifying questions when the user's answers are vague or incomplete. Suggest improvements to acceptance criteria.
-- **Save progress after EACH feature.** Use the `jq` temp-file pattern (write to `.tmp`, then `mv`) for all backlog mutations to avoid corruption.
+- **Save progress after EACH feature.** Use locked scripts (`update-backlog-raw.sh`, `update-backlog.sh`) for all backlog mutations. NEVER write to `backlog.json` with inline jq + temp file patterns.
 - **If the user wants to stop mid-session**, save all progress immediately and report what was planned.
 - **Reference VISION.md and the roadmap** when suggesting priorities and acceptance criteria. Ground suggestions in the project's stated goals.
 - **Suggest sensible defaults** for priority and labels based on the roadmap tier (Tier 1 features get priority 1-10, Tier 2 gets 11-30, Tier 3 gets 31+).

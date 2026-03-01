@@ -104,7 +104,11 @@ fi
 
 # Priority 3: osascript
 if [[ "$notify_sent" == "false" ]] && command -v osascript &> /dev/null; then
-  osascript -e "display notification \"$BODY\" with title \"$TITLE\" sound name \"$SOUND\"" 2>/dev/null && notify_sent=true || true
+  osascript \
+    -e 'on run {notifBody, notifTitle, notifSound}' \
+    -e '  display notification notifBody with title notifTitle sound name notifSound' \
+    -e 'end run' \
+    -- "$BODY" "$TITLE" "$SOUND" 2>/dev/null && notify_sent=true || true
 fi
 
 # Priority 4: OSC 777 escape sequence
@@ -118,10 +122,30 @@ if [[ "$notify_sent" == "false" ]]; then
 fi
 
 # Priority 6: Silent log (always write, regardless of other methods)
-LOG_DIR="$PROJECT_ROOT/.vibecrew"
-if [[ -d "$LOG_DIR" ]]; then
+VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
+if [[ -d "$VIBECREW_DIR" ]]; then
+  # ── Log rotation ──
+  NOTIFICATION_LOG="$VIBECREW_DIR/notifications.log"
+  if [[ -f "$NOTIFICATION_LOG" ]]; then
+    # Check file size (cross-platform)
+    LOG_SIZE=0
+    if stat -f "%z" "$NOTIFICATION_LOG" &>/dev/null; then
+      LOG_SIZE=$(stat -f "%z" "$NOTIFICATION_LOG" 2>/dev/null || echo "0")
+    else
+      LOG_SIZE=$(stat -c "%s" "$NOTIFICATION_LOG" 2>/dev/null || echo "0")
+    fi
+
+    # Rotate if >1MB (1048576 bytes)
+    if [[ "$LOG_SIZE" -gt 1048576 ]]; then
+      mv "$NOTIFICATION_LOG" "${NOTIFICATION_LOG}.1"
+    fi
+
+    # Delete old rotated logs (>7 days)
+    find "$(dirname "$NOTIFICATION_LOG")" -name "notifications.log.*" -mtime +7 -delete 2>/dev/null || true
+  fi
+
   TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-  echo "{\"timestamp\":\"$TIMESTAMP\",\"title\":\"$TITLE\",\"body\":\"$BODY\",\"terminal\":\"$TERMINAL\"}" >> "$LOG_DIR/notifications.log" 2>/dev/null || true
+  echo "{\"timestamp\":\"$TIMESTAMP\",\"title\":\"$TITLE\",\"body\":\"$BODY\",\"terminal\":\"$TERMINAL\"}" >> "$VIBECREW_DIR/notifications.log" 2>/dev/null || true
 fi
 
 exit 0

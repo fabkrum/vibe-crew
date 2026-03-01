@@ -623,14 +623,14 @@ Each VibeCrew agent is launched with a tailored tool permission set defined in i
 # Orchestrator advances a feature phase via Bash (NOT via Write tool)
 Bash("${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh feat-001 code")
 
-# Orchestrator updates state via jq + Bash (NOT via Write tool)
-Bash("jq '.foundation.complete = true' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json")
+# Orchestrator updates state via locked scripts (NOT via Write tool or inline jq)
+Bash("${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh '.foundation.complete = true'")
 
 # Orchestrator processes a signal file via Bash (NOT via Write tool)
 Bash("${CLAUDE_PLUGIN_ROOT}/scripts/process-signal.sh builder-complete")
 ```
 
-The scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`) are the same validated code paths used by all agents. This ensures consistent state mutations regardless of which agent triggers them, while maintaining the Orchestrator's `disallowedTools: Write, Edit` constraint.
+The scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`, `update-backlog-raw.sh`, `update-state.sh`) are the same validated, locked code paths used by all agents and SKILL.md files. Every state mutation acquires an advisory lock, validates the jq expression against a disallowed-builtins allowlist, writes to a temp file, validates JSON output, and atomically renames. This ensures consistent, race-free state mutations regardless of which agent or skill triggers them.
 
 **Principle of least privilege.** Stack Scout has no file write access. Session Startup has no file write access. The Orchestrator cannot write files directly -- only via shared Bash scripts that modify `.vibecrew/` state. This limits the blast radius if any agent behaves unexpectedly.
 

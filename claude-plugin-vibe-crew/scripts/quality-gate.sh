@@ -7,6 +7,7 @@
 # Respects user profile autonomy setting — only blocks for full_auto/checkpoints.
 
 set -euo pipefail
+trap 'kill 0 2>/dev/null' EXIT
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
@@ -125,6 +126,10 @@ FAILED_CMD=""
 TIMEOUT_CMD=""
 if command -v timeout &>/dev/null; then
   TIMEOUT_CMD="timeout ${QG_TIMEOUT}s"
+elif command -v gtimeout &>/dev/null; then
+  TIMEOUT_CMD="gtimeout ${QG_TIMEOUT}s"
+elif command -v perl &>/dev/null; then
+  TIMEOUT_CMD="perl -e 'alarm shift; exec @ARGV' ${QG_TIMEOUT}"
 fi
 
 for check in "${CHECKS[@]}"; do

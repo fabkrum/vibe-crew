@@ -167,21 +167,7 @@ Skipped {name} ({id}) — already claimed by another session.
 
 Move to the next feature.
 
-After a successful claim, update `state.json` with the active feature:
-
-```bash
-jq --arg id "<feature-id>" --arg name "<feature-name>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  '.active_feature = {id: $id, name: $name, phase: "plan", started_at: $ts}' \
-  .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
-```
-
-Move the feature to `in-progress` in the backlog:
-
-```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  '(.features[] | select(.id == $id)) |= (.column = "in-progress" | .updated_at = $ts)' \
-  .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
-```
+After a successful claim, the `claim-task.sh` script already updates both `state.json` (sets the active feature) and `backlog.json` (moves to `in-progress`). No additional mutations needed here.
 
 Create a feature branch:
 
@@ -210,9 +196,7 @@ Execute each of the six phases in order: **Plan > Design > Code > Test > Review 
 Update `state.json` active phase before each phase begins:
 
 ```bash
-jq --arg phase "<phase-name>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  '.active_feature.phase = $phase | .active_feature.phase_started_at = $ts' \
-  .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature.phase = "<phase-name>" | .active_feature.phase_started_at = "<ISO-timestamp>"'
 ```
 
 ---
@@ -233,11 +217,7 @@ jq --arg id "<feature-id>" '.features[] | select(.id == $id) | .spec' .vibecrew/
 4. Save them back to the backlog:
 
 ```bash
-jq --arg id "<feature-id>" \
-   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
-   --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (.spec.acceptance_criteria = $criteria | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature-id>" spec.acceptance_criteria '["criterion 1", "criterion 2", "criterion 3"]'
 ```
 
 **If acceptance criteria exist**, verify they are specific and testable. If they are vague, refine them.
@@ -245,9 +225,7 @@ jq --arg id "<feature-id>" \
 Mark phase complete:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (if (.phases_completed | index("plan")) == null then .phases_completed += ["plan"] else . end | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "plan"
 ```
 
 Report: `  [1/6] Plan — complete`
@@ -285,9 +263,7 @@ Write a brief design spec to `docs/features/<feature-id>-design.md` containing:
 Mark phase complete:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (if (.phases_completed | index("design")) == null then .phases_completed += ["design"] else . end | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "design"
 ```
 
 Report: `  [2/6] Design — complete`
@@ -334,9 +310,7 @@ If the build fails, fix the issues before proceeding. If the build cannot be fix
 Mark phase complete:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (if (.phases_completed | index("code")) == null then .phases_completed += ["code"] else . end | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "code"
 ```
 
 Report: `  [3/6] Code — complete`
@@ -364,21 +338,25 @@ echo "EXIT_CODE: $?"
    - Re-run the test suite
    - Maximum 3 fix-and-retry cycles
 
-5. **After 3 failures**, mark the feature as blocked:
+5. **Before marking as blocked**, attempt auto-recovery:
+   - Check for missing dependencies: `npm install 2>&1`
+   - Re-run the test suite once after dependency install
+   - If tests pass after recovery, continue to the next phase
+
+6. **After recovery fails (or 3 total retries)**, mark the feature as blocked:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   --arg reason "Tests failed after 3 retries" \
-   '(.features[] | select(.id == $id)) |= (.column = "blocked" | .blocked_reason = $reason | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
+  '(.features[] | select(.id == $fid)) |= (.column = "blocked" | .blocked_reason = $reason | .updated_at = $ts)' \
+  --arg fid "<feature-id>" \
+  --arg reason "Tests failed after 3 retries" \
+  --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
 Clear the active feature from state:
 
 ```bash
-jq --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  '.active_feature = null | .last_updated = $ts' \
-  .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature = null | .updated_at = (now | todate)'
 ```
 
 Send notification:
@@ -392,9 +370,7 @@ Report the failure and **skip to the next feature**.
 6. If all tests pass, mark phase complete:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (if (.phases_completed | index("test")) == null then .phases_completed += ["test"] else . end | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "test"
 ```
 
 Report: `  [4/6] Test — complete (X passed, Y failed)`
@@ -419,21 +395,33 @@ VERDICT=$(jq -r '.verdict // "none"' "$LATEST_REVIEW" 2>/dev/null || echo "none"
 CRITICAL_COUNT=$(jq -r '.stats.critical // 0' "$LATEST_REVIEW" 2>/dev/null || echo "0")
 ```
 
-3. **If verdict is `request-changes` with critical findings**, enter a fix cycle:
-   - Read the critical findings from the review report
-   - Apply fixes for each critical finding
-   - Re-run tests to verify fixes don't break anything
-   - Re-invoke the code reviewer for a follow-up review
-   - **Maximum 2 review-fix cycles.** After 2 cycles, proceed to docs with remaining findings noted.
+3. **If verdict is `request-changes` with critical findings**, enter a structured fix cycle:
+   - Extract critical findings from the review report as JSON:
+     ```bash
+     jq '[.findings[] | select(.severity == "critical")]' "$LATEST_REVIEW"
+     ```
+   - Write the feedback file for the Builder:
+     ```bash
+     jq -n --arg fid "<feature-id>" --arg rf "$LATEST_REVIEW" --argjson cycle 1 \
+       --argjson findings "$(jq '[.findings[] | select(.severity == "critical") | {file, line, title, description, suggestion}]' "$LATEST_REVIEW")" \
+       --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+       '{feature_id: $fid, review_file: $rf, cycle: $cycle, critical_findings: $findings, timestamp: $ts}' \
+       > .vibecrew/signals/builder-review-feedback.json
+     ```
+   - Fix each critical finding, then re-run tests before re-review:
+     ```bash
+     npm test 2>&1
+     echo "EXIT_CODE: $?"
+     ```
+   - Re-invoke the code reviewer for a follow-up review scoped to changed files
+   - Track the cycle count. **Maximum 2 review-fix cycles.** After 2 cycles, proceed to docs with remaining findings noted as unresolved.
 
 4. **If verdict is `approve` or `comment-only`**, proceed to docs.
 
 Mark review complete:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (if (.phases_completed | index("review")) == null then .phases_completed += ["review"] else . end | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "review"
 ```
 
 Report: `  [5/6] Review — {verdict} ({critical} critical, {warning} warnings)`
@@ -479,9 +467,7 @@ Write a JSON file to `.vibecrew/releases/<feature-id>.json`:
 Mark phase complete:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (if (.phases_completed | index("docs")) == null then .phases_completed += ["docs"] else . end | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "docs"
 ```
 
 Report: `  [6/6] Docs — complete`
@@ -527,17 +513,13 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "all"
 Move the feature to `review` column:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  '(.features[] | select(.id == $id)) |= (.column = "review" | .updated_at = $ts)' \
-  .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature-id>" column review
 ```
 
 Clear the active feature from state:
 
 ```bash
-jq --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  '.active_feature = null | .last_updated = $ts' \
-  .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature = null | .updated_at = (now | todate)'
 ```
 
 Commit all remaining changes on the feature branch:
@@ -557,23 +539,27 @@ Enter a fix-and-retry cycle:
 3. Re-run the full quality check.
 4. Retry up to **3 times** total.
 
-After 3 failed retries:
+5. **Before marking as blocked**, attempt auto-recovery:
+   - Run `npm install` to check for missing dependencies
+   - Re-run the full quality check once
+   - If all checks pass after recovery, proceed normally
+
+If recovery also fails:
 
 Mark the feature as blocked:
 
 ```bash
-jq --arg id "<feature-id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   --arg reason "Quality gate failed after 3 retries" \
-   '(.features[] | select(.id == $id)) |= (.column = "blocked" | .blocked_reason = $reason | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
+  '(.features[] | select(.id == $fid)) |= (.column = "blocked" | .blocked_reason = $reason | .updated_at = $ts)' \
+  --arg fid "<feature-id>" \
+  --arg reason "Quality gate failed after 3 retries" \
+  --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ```
 
 Clear the active feature from state:
 
 ```bash
-jq --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-  '.active_feature = null | .last_updated = $ts' \
-  .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature = null | .updated_at = (now | todate)'
 ```
 
 Send notification:
@@ -819,7 +805,7 @@ Write to `.vibecrew/sessions/backlog-run-<timestamp>.json`:
 - **Use `${CLAUDE_PLUGIN_ROOT}`** for all plugin-relative paths to scripts and templates.
 - **If the user interrupts** (Ctrl+C or sends a message), stop gracefully after the current feature completes. Do NOT abandon a feature mid-phase. Finish the current feature's in-progress phase, run the quality gate, and then stop. Report progress as if the run completed early.
 - **Send OS notification on completion** via `${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh`. Notify on: run complete, feature blocked, cost limit reached.
-- **Use the jq temp-file pattern** (write to `.tmp`, then `mv`) for ALL state and backlog mutations to prevent file corruption.
+- **Use locked scripts for ALL state and backlog mutations**: `update-state.sh`, `update-backlog.sh`, `update-backlog-raw.sh`, or `complete-phase.sh`. NEVER write to `state.json` or `backlog.json` with inline jq + temp file patterns.
 - **Do NOT modify files outside the project directory.** All writes go to the project tree, `.vibecrew/`, or `docs/`.
 - **If backlog.json becomes corrupted** (invalid JSON), stop immediately, report the error, and do NOT attempt to fix it automatically. The user must resolve corruption manually.
 - **Track all feature results** for the session log. Every feature must have a recorded outcome (completed, blocked, or skipped) with a reason.

@@ -8,6 +8,8 @@ set -euo pipefail
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
+source "$(dirname "$0")/lib/error-log.sh"
+
 # Read hook payload from stdin
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
@@ -57,12 +59,12 @@ fi
 case "$FORMATTER" in
   "prettier")
     if command -v npx &> /dev/null && [[ -f "$PROJECT_ROOT/node_modules/.bin/prettier" || -f "$PROJECT_ROOT/.prettierrc" || -f "$PROJECT_ROOT/.prettierrc.json" || -f "$PROJECT_ROOT/prettier.config.js" ]]; then
-      npx prettier --write "$FILE_PATH" 2>/dev/null || true
+      npx prettier --write "$FILE_PATH" 2>/dev/null || log_error "format-code" "Failed to format with prettier: $FILE_PATH"
     fi
     ;;
   "biome")
     if command -v npx &> /dev/null && [[ -f "$PROJECT_ROOT/biome.json" || -f "$PROJECT_ROOT/biome.jsonc" ]]; then
-      npx @biomejs/biome format --write "$FILE_PATH" 2>/dev/null || true
+      npx @biomejs/biome format --write "$FILE_PATH" 2>/dev/null || log_error "format-code" "Failed to format with biome: $FILE_PATH"
     fi
     ;;
   "none")

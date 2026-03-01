@@ -39,7 +39,35 @@ if [[ -f "$CONFIG_FILE" ]]; then
   fi
 fi
 
-# --- Guardrail 1: Minimum 5 sessions ---
+# --- Guardrail 1: Cooldown check (early exit before expensive checks) ---
+if [[ -n "$PATTERN" && -f "$MUTATION_LOG" ]]; then
+  # Check rejection count and dynamic cooldown (cooldown_days = rejection_count * 7)
+  REJECTION_DATA=$(jq --arg p "$PATTERN" '
+    [.mutations // [] | .[] | select(.reasoning == $p and .status == "rejected")] |
+    {
+      rejection_count: length,
+      cooldown_until: (map(.cooldown_until // empty) | last // null)
+    }
+  ' "$MUTATION_LOG" 2>/dev/null || echo '{"rejection_count":0,"cooldown_until":null}')
+
+  REJECTION_COUNT=$(echo "$REJECTION_DATA" | jq -r '.rejection_count')
+  COOLDOWN_UNTIL=$(echo "$REJECTION_DATA" | jq -r '.cooldown_until // empty')
+
+  if [[ "$REJECTION_COUNT" -ge 3 ]]; then
+    COOLDOWN_DAYS=$(( REJECTION_COUNT * 7 ))
+    if [[ -n "$COOLDOWN_UNTIL" && "$COOLDOWN_UNTIL" != "null" ]]; then
+      # Check if cooldown has expired
+      NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+      if [[ "$NOW" < "$COOLDOWN_UNTIL" ]]; then
+        result false "Pattern '$PATTERN' is in cooldown until $COOLDOWN_UNTIL (rejected $REJECTION_COUNT times, ${COOLDOWN_DAYS}-day cooldown)"
+      fi
+    else
+      result false "Pattern '$PATTERN' has been rejected $REJECTION_COUNT times (${COOLDOWN_DAYS}-day cooldown required)"
+    fi
+  fi
+fi
+
+# --- Guardrail 2: Minimum 5 sessions ---
 SCORE_COUNT=0
 if [[ -d "$SCORES_DIR" ]]; then
   SCORE_COUNT=$(ls -1 "$SCORES_DIR"/score-*.json 2>/dev/null | wc -l | tr -d ' ')
@@ -49,7 +77,7 @@ if [[ "$SCORE_COUNT" -lt 5 ]]; then
   result false "Minimum 5 sessions required (have $SCORE_COUNT)"
 fi
 
-# --- Guardrail 2: Session limit (max 1 mutation per session) ---
+# --- Guardrail 3: Session limit (max 1 mutation per session) ---
 # Check if a mutation was already proposed/applied in the current session
 TODAY=$(date -u +%Y-%m-%d)
 LATEST_SCORE=$(ls -1t "$SCORES_DIR"/score-*.json 2>/dev/null | head -1)
@@ -67,7 +95,7 @@ if [[ -n "$CURRENT_SESSION_ID" && -f "$MUTATION_LOG" ]]; then
   fi
 fi
 
-# --- Guardrail 3: Frequency threshold (3+ in last 10 sessions) ---
+# --- Guardrail 4: Frequency threshold (3+ in last 10 sessions) ---
 if [[ -n "$PATTERN" ]]; then
   # Count how many of the last 10 sessions have this pattern
   PATTERN_COUNT=0
@@ -87,7 +115,7 @@ if [[ -n "$PATTERN" ]]; then
   fi
 fi
 
-# --- Guardrail 4: No duplicate rules in CLAUDE.md ---
+# --- Guardrail 5: No duplicate rules in CLAUDE.md ---
 # This check is done at proposal time by the agent, but we verify here too
 if [[ -n "$PATTERN" && -f "$MUTATION_LOG" ]]; then
   # Check if an applied mutation for this pattern already exists
@@ -96,33 +124,6 @@ if [[ -n "$PATTERN" && -f "$MUTATION_LOG" ]]; then
     "$MUTATION_LOG" 2>/dev/null || echo "0")
   if [[ "$APPLIED_COUNT" -gt 0 ]]; then
     result false "A mutation for '$PATTERN' was already applied"
-  fi
-fi
-
-# --- Guardrail 5: Cooldown check ---
-if [[ -n "$PATTERN" && -f "$MUTATION_LOG" ]]; then
-  # Check rejection count and cooldown
-  REJECTION_DATA=$(jq --arg p "$PATTERN" '
-    [.mutations // [] | .[] | select(.reasoning == $p and .status == "rejected")] |
-    {
-      rejection_count: length,
-      cooldown_until: (map(.cooldown_until // empty) | last // null)
-    }
-  ' "$MUTATION_LOG" 2>/dev/null || echo '{"rejection_count":0,"cooldown_until":null}')
-
-  REJECTION_COUNT=$(echo "$REJECTION_DATA" | jq -r '.rejection_count')
-  COOLDOWN_UNTIL=$(echo "$REJECTION_DATA" | jq -r '.cooldown_until // empty')
-
-  if [[ "$REJECTION_COUNT" -ge 3 ]]; then
-    if [[ -n "$COOLDOWN_UNTIL" && "$COOLDOWN_UNTIL" != "null" ]]; then
-      # Check if cooldown has expired
-      NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-      if [[ "$NOW" < "$COOLDOWN_UNTIL" ]]; then
-        result false "Pattern '$PATTERN' is in cooldown until $COOLDOWN_UNTIL (rejected $REJECTION_COUNT times)"
-      fi
-    else
-      result false "Pattern '$PATTERN' has been rejected $REJECTION_COUNT times (cooldown required)"
-    fi
   fi
 fi
 

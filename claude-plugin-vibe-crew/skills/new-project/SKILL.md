@@ -94,7 +94,7 @@ Present the completed VISION.md to the user and ask: "Does this capture your vis
 Update state.json after this artifact:
 
 ```bash
-jq '.foundation.artifacts.vision.status = "complete" | .foundation.artifacts.vision.file = "VISION.md" | .foundation.artifacts.vision.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.foundation.artifacts.vision.status = "complete" | .foundation.artifacts.vision.file = "VISION.md" | .foundation.artifacts.vision.approved_at = (now | todate)'
 ```
 
 ---
@@ -270,7 +270,7 @@ cat "${CLAUDE_PLUGIN_ROOT}/templates/design-brief.md.template"
 5. Update state.json with both file paths:
 
 ```bash
-jq '.foundation.artifacts.design_system.status = "complete" | .foundation.artifacts.design_system.file = "design-system.css" | .foundation.artifacts.design_system.brief_file = "design-brief.md" | .foundation.artifacts.design_system.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.foundation.artifacts.design_system.status = "complete" | .foundation.artifacts.design_system.file = "design-system.css" | .foundation.artifacts.design_system.brief_file = "design-brief.md" | .foundation.artifacts.design_system.approved_at = (now | todate)'
 ```
 
 ---
@@ -310,90 +310,21 @@ Present the TDR summary to the user and ask: "Do you agree with these technology
 Update state.json:
 
 ```bash
-jq '.foundation.artifacts.tdr.status = "complete" | .foundation.artifacts.tdr.file = "docs/tdr-001-tech-stack.md" | .foundation.artifacts.tdr.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.foundation.artifacts.tdr.status = "complete" | .foundation.artifacts.tdr.file = "docs/tdr-001-tech-stack.md" | .foundation.artifacts.tdr.approved_at = (now | todate)'
 ```
 
 ---
 
-## Step 3.5: Opponent Processor (TDR Challenge)
-
-After the TDR is created, invoke the Opponent Processor to stress-test the technology decisions.
-
-### Run Counter-Analysis
-
-Extract the decisions from the TDR:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-counter-tdr.sh"
-```
-
-Launch the `opponent-processor` agent with the TDR and VISION.md as context. The agent will produce a counter-analysis for each major technology decision.
-
-### Present Both Analyses
-
-Display the original TDR decisions alongside the opponent's counter-arguments. For each decision, show:
-
-1. **Original recommendation** and rationale
-2. **Counter-argument** and alternative
-3. **Debate matrix** (6-criteria comparison table)
-4. **Opponent's verdict**: Keep or Reconsider
-
-Ask the user: "The Opponent Processor has challenged your technology choices. Review the debate above. Would you like to: (keep all / reconsider specific decisions / skip)"
-
-- **keep all**: Proceed with the original TDR as-is.
-- **reconsider specific decisions**: Ask which decision(s) to revisit. For each, re-run the relevant TDR section with the counter-argument in mind. Update the TDR file.
-- **skip**: Proceed without opponent analysis (mark as skipped).
-
-The opponent analysis is saved to `docs/counter-tdr.md` for reference.
-
----
-
-## Step 4: Roadmap
-
-Read VISION.md for the core features list and the TDR for technical context:
-
-```bash
-cat VISION.md
-cat docs/tdr-001-tech-stack.md
-```
-
-Guide the user through prioritization:
-
-1. List all features from VISION.md.
-2. For each feature, ask the user to categorize:
-   - **Tier 1 (MVP)**: Must have for initial launch
-   - **Tier 2 (Growth)**: Important but not blocking launch
-   - **Tier 3 (Scale)**: Nice to have, future roadmap
-3. Within each tier, ask the user to rank by priority.
-4. Identify dependencies between features.
-
-Read the roadmap template:
-
-```bash
-cat "${CLAUDE_PLUGIN_ROOT}/templates/roadmap.md.template"
-```
-
-Populate and write to `docs/roadmap.md`.
-
-Present the roadmap to the user and ask: "Does this prioritization look right? (approve / edit / skip)"
-
-Update state.json:
-
-```bash
-jq '.foundation.artifacts.roadmap.status = "complete" | .foundation.artifacts.roadmap.file = "docs/roadmap.md" | .foundation.artifacts.roadmap.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
-```
-
----
-
-## Step 5: Architecture Diagrams
+## Step 4: Architecture Diagrams
 
 Read the previously created foundation artifacts for context:
 
 ```bash
 cat VISION.md 2>/dev/null
 cat docs/tdr-001-tech-stack.md 2>/dev/null
-cat docs/roadmap.md 2>/dev/null
 ```
+
+Generating architecture diagrams before the roadmap and Opponent Processor ensures both have access to the full architectural picture for more informed analysis.
 
 Read the 5 architecture diagram templates:
 
@@ -428,7 +359,78 @@ Present a summary of all 5 diagrams to the user and ask: "Do these architecture 
 Update state.json:
 
 ```bash
-jq '.foundation.artifacts.architecture_diagrams.status = "complete" | .foundation.artifacts.architecture_diagrams.file = ".vibecrew/architecture/" | .foundation.artifacts.architecture_diagrams.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.foundation.artifacts.architecture_diagrams.status = "complete" | .foundation.artifacts.architecture_diagrams.file = ".vibecrew/architecture/" | .foundation.artifacts.architecture_diagrams.approved_at = (now | todate)'
+```
+
+---
+
+## Step 4.5: Opponent Processor (TDR Challenge)
+
+After the TDR and architecture diagrams are created, invoke the Opponent Processor to stress-test the technology decisions. The Opponent Processor now has access to the architecture diagrams for more informed counter-analysis.
+
+### Run Counter-Analysis
+
+Extract the decisions from the TDR:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-counter-tdr.sh"
+```
+
+Launch the `opponent-processor` agent with the TDR, VISION.md, and architecture diagrams as context. The agent will produce a counter-analysis for each major technology decision.
+
+### Present Both Analyses
+
+Display the original TDR decisions alongside the opponent's counter-arguments. For each decision, show:
+
+1. **Original recommendation** and rationale
+2. **Counter-argument** and alternative
+3. **Debate matrix** (6-criteria comparison table)
+4. **Opponent's verdict**: Keep or Reconsider
+
+Ask the user: "The Opponent Processor has challenged your technology choices. Review the debate above. Would you like to: (keep all / reconsider specific decisions / skip)"
+
+- **keep all**: Proceed with the original TDR as-is.
+- **reconsider specific decisions**: Ask which decision(s) to revisit. For each, re-run the relevant TDR section with the counter-argument in mind. Update the TDR file.
+- **skip**: Proceed without opponent analysis (mark as skipped).
+
+The opponent analysis is saved to `docs/counter-tdr.md` for reference.
+
+---
+
+## Step 5: Roadmap
+
+Read VISION.md for the core features list, the TDR for technical context, and the architecture diagrams for structural awareness:
+
+```bash
+cat VISION.md
+cat docs/tdr-001-tech-stack.md
+ls .vibecrew/architecture/*.mmd 2>/dev/null
+```
+
+Guide the user through prioritization:
+
+1. List all features from VISION.md.
+2. For each feature, ask the user to categorize:
+   - **Tier 1 (MVP)**: Must have for initial launch
+   - **Tier 2 (Growth)**: Important but not blocking launch
+   - **Tier 3 (Scale)**: Nice to have, future roadmap
+3. Within each tier, ask the user to rank by priority.
+4. Identify dependencies between features.
+
+Read the roadmap template:
+
+```bash
+cat "${CLAUDE_PLUGIN_ROOT}/templates/roadmap.md.template"
+```
+
+Populate and write to `docs/roadmap.md`.
+
+Present the roadmap to the user and ask: "Does this prioritization look right? (approve / edit / skip)"
+
+Update state.json:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.foundation.artifacts.roadmap.status = "complete" | .foundation.artifacts.roadmap.file = "docs/roadmap.md" | .foundation.artifacts.roadmap.approved_at = (now | todate)'
 ```
 
 ---
@@ -470,7 +472,7 @@ Present the CLAUDE.md to the user and ask: "Does this capture the right conventi
 Update state.json:
 
 ```bash
-jq '.foundation.artifacts.claude_md.status = "complete" | .foundation.artifacts.claude_md.file = "CLAUDE.md" | .foundation.artifacts.claude_md.approved_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.foundation.artifacts.claude_md.status = "complete" | .foundation.artifacts.claude_md.file = "CLAUDE.md" | .foundation.artifacts.claude_md.approved_at = (now | todate)'
 ```
 
 ---
@@ -480,12 +482,6 @@ jq '.foundation.artifacts.claude_md.status = "complete" | .foundation.artifacts.
 After all 6 artifacts are complete (or skipped):
 
 1. Mark the foundation as complete:
-
-```bash
-jq '.foundation.complete = true | .foundation.completed_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
-```
-
-2. Run the phase completion script:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" foundation
@@ -501,8 +497,8 @@ Artifacts created:
   1. VISION.md              — Project vision and requirements
   2. design-system.css      — Design tokens and visual language
   3. docs/tdr-001-tech-stack.md — Technology decisions with rationale
-  4. docs/roadmap.md        — Prioritized feature roadmap
-  5. .vibecrew/architecture/ — Mermaid architecture diagrams (5 files)
+  4. .vibecrew/architecture/ — Mermaid architecture diagrams (5 files)
+  5. docs/roadmap.md        — Prioritized feature roadmap
   6. CLAUDE.md              — AI coding conventions and rules
 
 The phase gate is now open. Source code writes are permitted.
@@ -523,4 +519,4 @@ Next steps:
 - **Create directories** (like `docs/`) as needed before writing files.
 - **Do not write any source code** (application code, components, APIs). This workflow creates only planning and configuration artifacts.
 - **Be conversational** when gathering requirements. Ask follow-up questions if the user's answers are vague.
-- **Use jq with temp file pattern** for all state.json mutations to avoid corruption: write to `.tmp`, then `mv`.
+- **Use locked scripts for ALL state.json mutations**: `update-state.sh` or `complete-phase.sh`. NEVER write to `state.json` with inline jq + temp file patterns.

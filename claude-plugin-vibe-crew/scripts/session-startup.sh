@@ -8,21 +8,29 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+# Source error logging
+source "$SCRIPT_DIR/lib/error-log.sh"
 STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
 CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 
 # --- Environment check ---
-MISSING_DEPS=()
+MISSING_REQUIRED=()
+MISSING_OPTIONAL=()
 
-command -v git &>/dev/null || MISSING_DEPS+=("git")
-command -v jq &>/dev/null || MISSING_DEPS+=("jq")
-command -v node &>/dev/null || MISSING_DEPS+=("node")
-command -v gh &>/dev/null || MISSING_DEPS+=("gh")
+command -v git &>/dev/null || MISSING_REQUIRED+=("git")
+command -v jq &>/dev/null || MISSING_REQUIRED+=("jq")
+command -v node &>/dev/null || MISSING_REQUIRED+=("node")
+command -v gh &>/dev/null || MISSING_OPTIONAL+=("gh")
 
-if [[ ${#MISSING_DEPS[@]} -gt 0 ]]; then
-  echo "VibeCrew: Missing dependencies: ${MISSING_DEPS[*]}"
+if [[ ${#MISSING_REQUIRED[@]} -gt 0 ]]; then
+  echo "VibeCrew: Missing required dependencies: ${MISSING_REQUIRED[*]}"
   echo "  Run /setup to install required tools."
   exit 0
+fi
+
+if [[ ${#MISSING_OPTIONAL[@]} -gt 0 ]]; then
+  echo "VibeCrew: Optional tools not found: ${MISSING_OPTIONAL[*]} (PR automation unavailable)"
 fi
 
 # --- Check if VibeCrew is initialized ---
@@ -39,7 +47,7 @@ fi
 
 # --- Run state migrations ---
 if [[ -f "$SCRIPT_DIR/migrate-state.sh" ]]; then
-  bash "$SCRIPT_DIR/migrate-state.sh" 2>/dev/null || true
+  bash "$SCRIPT_DIR/migrate-state.sh" 2>/dev/null || log_error "session-startup" "State migration failed"
 fi
 
 # --- Read state and route ---

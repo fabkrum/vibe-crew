@@ -114,7 +114,7 @@ FEATURE_ID="$1"
 COMPLETED_PHASE="$2"
 
 # Validate phase name
-VALID_PHASES=("plan" "design" "code" "test" "docs")
+VALID_PHASES=("plan" "design" "code" "test" "review" "docs")
 PHASE_VALID=false
 for p in "${VALID_PHASES[@]}"; do
   if [[ "$p" == "$COMPLETED_PHASE" ]]; then
@@ -124,7 +124,7 @@ for p in "${VALID_PHASES[@]}"; do
 done
 
 if [[ "$PHASE_VALID" == "false" ]]; then
-  echo "ERROR: Invalid phase '$COMPLETED_PHASE'. Must be one of: plan, design, code, test, docs" >&2
+  echo "ERROR: Invalid phase '$COMPLETED_PHASE'. Must be one of: plan, design, code, test, review, docs" >&2
   exit 1
 fi
 
@@ -136,6 +136,7 @@ determine_next_column() {
     design) echo "in-progress" ;;
     code)   echo "testing" ;;
     test)   echo "review" ;;
+    review) echo "review" ;;
     docs)   echo "review" ;;
     *)      echo "in-progress" ;;
   esac
@@ -148,7 +149,8 @@ determine_next_phase() {
     plan)   echo "design" ;;
     design) echo "code" ;;
     code)   echo "test" ;;
-    test)   echo "docs" ;;
+    test)   echo "review" ;;
+    review) echo "docs" ;;
     docs)   echo "done" ;;
     *)      echo "plan" ;;
   esac

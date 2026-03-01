@@ -39,6 +39,11 @@ ls -1t .vibecrew/scores/ 2>/dev/null | head -1
 ```
 
 ```bash
+ERROR_COUNT=$(wc -l < .vibecrew/session-errors.jsonl 2>/dev/null | tr -d ' ' || echo "0")
+echo "$ERROR_COUNT"
+```
+
+```bash
 cat .vibecrew/gamification.json 2>/dev/null || echo '{"error": "not initialized"}'
 ```
 
@@ -53,14 +58,15 @@ VibeCrew Status
 Project
 -------
   Git branch:     <current branch or "not a git repo">
-  Foundation:     <Complete / Incomplete (N/5)>
+  Foundation:     <Complete / Incomplete (N/6)>
 
   Artifacts:
-    VISION.md:          <complete / incomplete / skipped>
-    design-system.css:  <complete / incomplete / skipped>
-    TDR:                <complete / incomplete / skipped>
-    Roadmap:            <complete / incomplete / skipped>
-    CLAUDE.md:          <complete / incomplete / skipped>
+    VISION.md:              <complete / incomplete / skipped>
+    design-system.css:      <complete / incomplete / skipped>
+    TDR:                    <complete / incomplete / skipped>
+    Architecture Diagrams:  <complete / incomplete / skipped>
+    Roadmap:                <complete / incomplete / skipped>
+    CLAUDE.md:              <complete / incomplete / skipped>
 
 Active Feature
 --------------
@@ -86,6 +92,10 @@ Recent Sessions
   <session_id> | Score: <score> | <summary>
   <session_id> | Score: <score> | <summary>
   <session_id> | Score: <score> | <summary>
+
+Errors
+------
+  Logged:     <N> errors this session
 
 Latest Vibe Score
 -----------------

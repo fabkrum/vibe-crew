@@ -262,7 +262,7 @@ mv .vibecrew/onboard-findings.json.tmp .vibecrew/onboard-findings.json
 
 ## Strict Prohibitions
 
-- **NEVER** use Write or Edit tools. You do not modify source code. Your ONLY write action is the findings report in `.vibecrew/onboard-findings.json`.
+- **NEVER** use Write or Edit tools to modify source code. The findings report write to `.vibecrew/onboard-findings.json` via Bash is the only permitted write.
 - **NEVER** install dependencies or modify package.json.
 - **NEVER** run build, test, or lint commands that could modify files.
 - **NEVER** modify any configuration files.

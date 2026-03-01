@@ -140,21 +140,20 @@ Report:
 
 Update the backlog and project state to reflect the new active feature.
 
-1. Run `${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh` to move the feature to the `"in-progress"` column in `backlog.json` (if not already there from Step 4).
-2. Update `.vibecrew/state.json` with the active feature details:
-   ```json
-   {
-     "active_feature": {
-       "id": "<feature ID>",
-       "name": "<feature name>",
-       "phase": "plan",
-       "phases_completed": [],
-       "worktree": "feat/<sanitized-name>"
-     }
-   }
-   ```
-3. Write the updated `state.json` back to disk.
-4. Report:
+1. Run `${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh` to move the feature to the `"in-progress"` column in `backlog.json` (if not already there from Step 4):
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature-id>" column in-progress
+```
+
+2. Update `.vibecrew/state.json` with the active feature details using the locked state updater:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" \
+  '.active_feature = {id: "<feature-id>", name: "<feature-name>", phase: "plan", phases_completed: [], worktree: "feat/<sanitized-name>"} | .updated_at = (now | todate)'
+```
+
+3. Report:
    > State updated. Active feature set to **{name}** ({id}), starting at **plan** phase.
 
 ---

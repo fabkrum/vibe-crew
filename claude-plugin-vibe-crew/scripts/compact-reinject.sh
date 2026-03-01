@@ -6,7 +6,11 @@
 
 set -euo pipefail
 
+SCRIPT_DIR_CR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+# Source error logging
+source "$SCRIPT_DIR_CR/lib/error-log.sh"
 STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
 BACKLOG_FILE="$PROJECT_ROOT/.vibecrew/backlog.json"
 CLAUDE_MD="$PROJECT_ROOT/CLAUDE.md"
@@ -30,12 +34,18 @@ jq -c --arg branch "$GIT_BRANCH" '{
 # ── Foundation artifact status (only if foundation incomplete) ──
 FOUNDATION_COMPLETE="$(jq -r '.foundation.complete // false' "$STATE_FILE" 2>/dev/null || echo "false")"
 if [[ "$FOUNDATION_COMPLETE" != "true" ]]; then
-  ARTIFACTS=("VISION.md" "design-system.css" "TDR.md" "roadmap.md" "CLAUDE.md")
+  ARTIFACTS=("VISION.md" "design-system.css" "TDR.md" "architecture" "roadmap.md" "CLAUDE.md")
   complete=()
   pending=()
   for artifact in "${ARTIFACTS[@]}"; do
-    # Check common locations for each artifact
-    if [[ -f "$PROJECT_ROOT/$artifact" ]] || [[ -f "$PROJECT_ROOT/docs/$artifact" ]]; then
+    if [[ "$artifact" == "architecture" ]]; then
+      # Check for .mmd files in the architecture directory
+      if ls "$PROJECT_ROOT/.vibecrew/architecture/"*.mmd &>/dev/null; then
+        complete+=("Architecture Diagrams")
+      else
+        pending+=("Architecture Diagrams")
+      fi
+    elif [[ -f "$PROJECT_ROOT/$artifact" ]] || [[ -f "$PROJECT_ROOT/docs/$artifact" ]]; then
       complete+=("$artifact")
     else
       pending+=("$artifact")
@@ -44,9 +54,24 @@ if [[ "$FOUNDATION_COMPLETE" != "true" ]]; then
   echo "Tier 1 artifacts: done=[${complete[*]:-none}] pending=[${pending[*]:-none}]"
 fi
 
-# ── Backlog summary (compact) ──
+# ── Backlog summary (human-readable instead of raw JSON) ──
 if [[ -f "$BACKLOG_FILE" ]]; then
-  jq -c '{backlog: {total: (.features | length), by_column: ([.features[]?.column // empty] | group_by(.) | map({key: .[0], value: length}) | from_entries)}}' "$BACKLOG_FILE" 2>/dev/null || true
+  TOTAL=$(jq '.features | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+  PLANNED=$(jq '[.features[] | select(.column == "planned")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+  IN_PROGRESS=$(jq '[.features[] | select(.column == "in-progress")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+  TESTING=$(jq '[.features[] | select(.column == "testing")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+  DONE=$(jq '[.features[] | select(.column == "done")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+  BLOCKED=$(jq '[.features[] | select(.column == "blocked")] | length' "$BACKLOG_FILE" 2>/dev/null || echo "0")
+
+  BY_COLUMN=""
+  [[ "$PLANNED" -gt 0 ]] && BY_COLUMN="${BY_COLUMN}${PLANNED} planned, "
+  [[ "$IN_PROGRESS" -gt 0 ]] && BY_COLUMN="${BY_COLUMN}${IN_PROGRESS} in-progress, "
+  [[ "$TESTING" -gt 0 ]] && BY_COLUMN="${BY_COLUMN}${TESTING} testing, "
+  [[ "$DONE" -gt 0 ]] && BY_COLUMN="${BY_COLUMN}${DONE} done, "
+  [[ "$BLOCKED" -gt 0 ]] && BY_COLUMN="${BY_COLUMN}${BLOCKED} blocked, "
+  BY_COLUMN="${BY_COLUMN%, }"
+
+  echo "Backlog: $TOTAL total ($BY_COLUMN)"
 fi
 
 # ── Worktree status ──
@@ -72,7 +97,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 INJECT_ARCH="$SCRIPT_DIR/inject-architecture.sh"
 if [[ -x "$INJECT_ARCH" ]]; then
-  bash "$INJECT_ARCH" 2>/dev/null || true
+  bash "$INJECT_ARCH" 2>/dev/null || log_error "compact-reinject" "Architecture injection failed"
 fi
 
 # ── Current branch + last 5 commits ──

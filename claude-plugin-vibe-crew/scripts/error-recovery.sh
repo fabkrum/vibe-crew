@@ -42,6 +42,19 @@ parse_timestamp() {
 # =============================================================================
 
 cleanup_stale_locks() {
+  # Use lock timeout constant if available
+  local stale_timeout=60
+  local lock_lib="$(dirname "$0")/lib/lock.sh"
+  if [[ -f "$lock_lib" ]]; then
+    # Source just the config-reading portion
+    local config_file="$VIBECREW_DIR/config.json"
+    if [[ -f "$config_file" ]]; then
+      local cfg_stale
+      cfg_stale="$(jq -r '.locks.stale_timeout_secs // empty' "$config_file" 2>/dev/null || echo "")"
+      [[ -n "$cfg_stale" && "$cfg_stale" =~ ^[0-9]+$ ]] && stale_timeout="$cfg_stale"
+    fi
+  fi
+
   local locks_dir="$VIBECREW_DIR/locks"
   if [[ ! -d "$locks_dir" ]]; then
     return 0
@@ -73,7 +86,7 @@ cleanup_stale_locks() {
         local lock_epoch
         lock_epoch=$(parse_timestamp "$locked_at")
         local age=$(( now_epoch - lock_epoch ))
-        if [[ "$age" -gt 60 ]]; then
+        if [[ "$age" -gt "$stale_timeout" ]]; then
           is_stale=true
         fi
       fi

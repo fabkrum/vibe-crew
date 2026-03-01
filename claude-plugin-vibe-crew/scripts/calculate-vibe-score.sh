@@ -7,6 +7,11 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Source error logging
+source "$SCRIPT_DIR/lib/error-log.sh"
+
 PROJECT_ROOT="${1:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
 BACKLOG_FILE="$PROJECT_ROOT/.vibecrew/backlog.json"
@@ -103,7 +108,7 @@ if [[ -f "$PROJECT_ROOT/package.json" ]]; then
   HAS_TEST_SCRIPT=$(jq -r '.scripts.test // empty' "$PROJECT_ROOT/package.json" 2>/dev/null || echo "")
 
   if [[ -n "$HAS_TEST_SCRIPT" ]]; then
-    TEST_OUTPUT=$(cd "$PROJECT_ROOT" && npm test -- --reporter=json 2>/dev/null || true)
+    TEST_OUTPUT=$(cd "$PROJECT_ROOT" && npm test -- --reporter=json 2>/dev/null || { log_error "calculate-vibe-score" "Test suite failed"; echo ""; })
 
     if [[ -n "$TEST_OUTPUT" ]]; then
       # Try to parse as JSON (vitest/jest JSON reporter output)

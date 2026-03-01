@@ -70,8 +70,8 @@ if echo "$COMMAND" | grep -qE '>\s*/dev/(sd|hd|nvme)'; then
   block "Destructive" "Writing directly to a block device destroys data."
 fi
 
-if echo "$COMMAND" | grep -qE '\btruncate\s+'; then
-  block "Destructive" "truncate destroys file contents." "Use a backup before truncating."
+if echo "$COMMAND" | grep -qE '\btruncate\s+' && echo "$COMMAND" | grep -qE '(\.vibecrew/|state\.json|backlog\.json|\.env|/etc/)'; then
+  block "Destructive" "truncate destroys file contents of sensitive files." "Use a backup before truncating."
 fi
 
 # =============================================================================
@@ -102,8 +102,8 @@ if echo "$COMMAND" | grep -qE 'chmod\s+(-[a-zA-Z]*R).*777'; then
   block "Privilege" "Recursive chmod 777 is extremely dangerous." "Use chmod -R 755 or more restrictive permissions."
 fi
 
-if echo "$COMMAND" | grep -qE '\bchown\b'; then
-  block "Privilege" "chown changes file ownership, which can affect system security."
+if echo "$COMMAND" | grep -qE '(sudo\s+chown|chown\s+root|chown\s+0:)'; then
+  block "Privilege" "chown to root/system user changes file ownership, which can affect system security."
 fi
 
 if echo "$COMMAND" | grep -qE 'chmod\s+([ugoa+]*s|[2467][0-7]{3})'; then

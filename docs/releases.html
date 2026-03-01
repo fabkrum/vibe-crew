@@ -302,6 +302,7 @@
   </section>
 
   <div class="version-nav">
+    <a href="#v1.7.0">v1.7.0</a>
     <a href="#v1.6.0">v1.6.0</a>
     <a href="#v1.5.0">v1.5.0</a>
     <a href="#v1.4.0">v1.4.0</a>
@@ -309,6 +310,164 @@
     <a href="#v1.2.0">v1.2.0</a>
     <a href="#v1.1.0">v1.1.0</a>
     <a href="#v1.0.0">v1.0.0</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.7.0                                                   -->
+  <!-- ============================================================ -->
+  <div class="release" id="v1.7.0">
+    <div class="release-header">
+      <h2>v1.7.0</h2>
+      <span class="release-date">2026-03-01</span>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.7.0" class="release-tag" style="background:var(--color-accent-bg);color:var(--color-accent);">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Review &rarr; Builder Feedback Loop (R1)</h4>
+      <ul class="file-list">
+        <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">6-step feedback procedure when Code Reviewer returns <code>REQUEST_CHANGES</code>: extract findings, write <code>builder-review-feedback.json</code>, re-invoke Builder, re-review, max 2 cycles before blocking</span></li>
+        <li><code>agents/builder.md</code> &mdash; <span class="file-desc">New "Review Feedback Integration" subsection: reads feedback file, fixes critical findings, commits with <code>fix(&lt;scope&gt;): address review finding</code></span></li>
+        <li><code>skills/run-backlog/SKILL.md</code> &mdash; <span class="file-desc">Phase 4.5 strengthened with structured review-fix cycle, jq extraction of critical findings, test re-run before re-review</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Builder Auto-Recovery (R2)</h4>
+      <ul class="file-list">
+        <li><code>agents/workflow-orchestrator.md</code> &mdash; <span class="file-desc">Auto-escalation on <code>builder-blocked.signal</code>: check deps &rarr; invoke CI Healer &rarr; resume or escalate</span></li>
+        <li><code>skills/run-backlog/SKILL.md</code> &mdash; <span class="file-desc">Before marking blocked on test/QG failures: <code>npm install</code> &rarr; re-run once &rarr; CI Healer if still failing</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Builder &rarr; Verifier Changed Files (R3)</h4>
+      <ul class="file-list">
+        <li><code>agents/builder.md</code> &mdash; <span class="file-desc">Signal format extended with <code>changed_files</code> array (<code>path</code>, <code>type</code>) populated via <code>git diff --name-status</code></span></li>
+        <li><code>agents/verifier.md</code> &mdash; <span class="file-desc">New "Changed Files Optimization" section: reads <code>changed_files</code> from signal, focuses testing, falls back to <code>git diff</code></span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Signal Schema Standardization (R4)</h4>
+      <ul class="file-list">
+        <li><code>templates/signal-schema.json</code> &mdash; <span class="file-desc">JSON Schema (draft-07) with required fields (<code>feature_id</code>, <code>phase</code>, <code>timestamp</code>, <code>agent</code>, <code>status</code>) and per-type optional fields</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Documentation Drift Manifest (R6)</h4>
+      <ul class="file-list">
+        <li><code>templates/architecture-manifest.json</code> &mdash; <span class="file-desc">Maps each <code>.mmd</code> diagram to source file glob triggers for manifest-driven stale detection</span></li>
+        <li><code>agents/doc-generator.md</code> &mdash; <span class="file-desc">Replaced hardcoded stale detection with manifest-driven logic</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>State Backup &amp; Recovery (R8)</h4>
+      <ul class="file-list">
+        <li><code>skills/recover-state/SKILL.md</code> &mdash; <span class="file-desc">New <code>/recover-state</code> command: lists backups, interactive restore, runs <code>sync-state.sh</code> after</span></li>
+        <li><code>scripts/sync-state.sh</code> &mdash; <span class="file-desc">Automatic backup of state.json and backlog.json before modifications, rotating last 5</span></li>
+        <li><code>scripts/migrate-state.sh</code> &mdash; <span class="file-desc">Pre-migration backup of all state files to <code>.backup/</code></span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>New Skills (R9, R10)</h4>
+      <ul class="file-list">
+        <li><code>skills/apply-simplifications/SKILL.md</code> &mdash; <span class="file-desc"><code>/apply-simplifications</code>: reads Code Simplifier report, filters high-confidence suggestions, applies with verification</span></li>
+        <li><code>skills/reconsider/SKILL.md</code> &mdash; <span class="file-desc"><code>/reconsider "category"</code>: re-evaluates TDR decisions with fresh research via Stack Scout</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Config-Driven Pricing (R11)</h4>
+      <ul class="file-list">
+        <li><code>scripts/cost-guardrails.sh</code> &mdash; <span class="file-desc">Reads model pricing from <code>config.json .pricing</code> with hardcoded fallbacks</span></li>
+        <li><code>scripts/refresh-pricing.sh</code> &mdash; <span class="file-desc">New utility to update pricing section with before/after comparison</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Silent Failure Accounting (R14)</h4>
+      <ul class="file-list">
+        <li><code>scripts/lib/error-log.sh</code> &mdash; <span class="file-desc">New <code>log_error()</code> library appending JSON to <code>.vibecrew/session-errors.jsonl</code></span></li>
+        <li><code>scripts/format-code.sh</code>, <code>scripts/migrate-state.sh</code> &mdash; <span class="file-desc">Replaced silent <code>|| true</code> with <code>|| log_error</code></span></li>
+        <li><code>skills/status/SKILL.md</code> &mdash; <span class="file-desc">Error count display in status dashboard</span></li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-badge changed">Changed</span></h3>
+    </div>
+      <ul class="file-list">
+        <li><span class="file-desc">Tier 1 step ordering: Architecture Diagrams now generated before Opponent Processor (R5), giving it structural context</span></li>
+        <li><code>scripts/quality-gate.sh</code> &mdash; <span class="file-desc">Configurable timeout via <code>config.json .quality_gate.timeout_seconds</code> (default 120s) with exit code 124 handling (R7)</span></li>
+        <li><code>hooks/hooks.json</code> &mdash; <span class="file-desc">Quality gate Stop hook timeout increased from 60s to 180s</span></li>
+        <li><code>scripts/lib/lock.sh</code> &mdash; <span class="file-desc">Configurable stale/wait timeouts via <code>config.json .locks</code> (R13)</span></li>
+        <li><code>scripts/error-recovery.sh</code> &mdash; <span class="file-desc">Uses configurable stale timeout from lock.sh</span></li>
+        <li><code>scripts/check-mutation-eligibility.sh</code> &mdash; <span class="file-desc">Cooldown check moved to Guardrail 1 with dynamic calculation: <code>rejection_count * 7</code> days (R12)</span></li>
+        <li><code>scripts/init-vibecrew-state.sh</code> &mdash; <span class="file-desc">Prints detected terminal (R15), added <code>.backup</code> to directory structure, expanded gitignore entries (R19), added pricing/locks/quality_gate to config</span></li>
+        <li><code>scripts/update-state.sh</code> &mdash; <span class="file-desc">Added <code>--dry-run</code> flag for state update previews (R16)</span></li>
+        <li><code>scripts/check-mcp-health.sh</code> &mdash; <span class="file-desc">JSON-RPC <code>initialize</code> probe with 2s timeout, <code>"degraded"</code> status on failure (R17)</span></li>
+        <li><code>scripts/notify.sh</code> &mdash; <span class="file-desc">Log rotation: rotates at 1MB, deletes logs older than 7 days (R18)</span></li>
+        <li><code>scripts/compact-reinject.sh</code> &mdash; <span class="file-desc">Human-readable backlog format: <code>"Backlog: 12 total (5 planned, 3 in-progress)"</code> (R20)</span></li>
+        <li><code>.claude-plugin/plugin.json</code> &mdash; <span class="file-desc">Version bumped to 1.7.0</span></li>
+        <li><span class="file-desc">Schema version bumped to 1.5.0 across all templates and init script</span></li>
+        <li><span class="file-desc">31 slash commands (added <code>/apply-simplifications</code>, <code>/reconsider</code>, <code>/recover-state</code>)</span></li>
+      </ul>
+
+    <div class="change-category">
+      <h3><span class="change-badge fixed">Fixed</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Locked State Mutations (F1)</h4>
+      <ul class="file-list">
+        <li><code>scripts/update-backlog-raw.sh</code> &mdash; <span class="file-desc">New locked backlog.json updater for arbitrary jq expressions with allowlist validation, atomic writes, and <code>--arg</code>/<code>--argjson</code> passthrough</span></li>
+        <li><code>skills/run-backlog/SKILL.md</code>, <code>skills/new-project/SKILL.md</code>, <code>skills/plan-features/SKILL.md</code>, <code>skills/wrap/SKILL.md</code>, <code>skills/idea/SKILL.md</code>, <code>skills/new-feature/SKILL.md</code> &mdash; <span class="file-desc">All 33 inline jq state mutations replaced with calls to locked scripts (<code>update-state.sh</code>, <code>update-backlog.sh</code>, <code>update-backlog-raw.sh</code>, <code>complete-phase.sh</code>), eliminating race conditions during autonomous <code>/run-backlog</code></span></li>
+        <li><code>scripts/complete-phase.sh</code> &mdash; <span class="file-desc">Added <code>review</code> to valid phases with correct next-column and next-phase routing</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Security Fixes (F3, F7)</h4>
+      <ul class="file-list">
+        <li><code>scripts/notify.sh</code> &mdash; <span class="file-desc">Fixed AppleScript injection: replaced string interpolation with safe <code>on run</code> argument passing via <code>osascript</code></span></li>
+        <li><code>scripts/sandbox.sh</code> &mdash; <span class="file-desc">Fixed Python injection: replaced shell-interpolated string with <code>os.environ</code> lookup</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Script Hardening (F4, F5, F7, F9, F11, F12)</h4>
+      <ul class="file-list">
+        <li><code>scripts/quality-gate.sh</code> &mdash; <span class="file-desc">Added <code>trap</code> cleanup for child processes on exit; added <code>gtimeout</code> and <code>perl</code> fallbacks for cross-platform timeout support</span></li>
+        <li><code>scripts/cost-guardrails.sh</code> &mdash; <span class="file-desc">Added trap cleanup for temp files; replaced silent <code>|| true</code> with <code>log_error</code></span></li>
+        <li><code>scripts/session-startup.sh</code>, <code>scripts/create-checkpoint.sh</code>, <code>scripts/sync-state.sh</code>, <code>scripts/compact-reinject.sh</code>, <code>scripts/calculate-vibe-score.sh</code> &mdash; <span class="file-desc">Replaced critical <code>|| true</code> error swallowing with <code>log_error</code> calls; added <code>error-log.sh</code> sourcing</span></li>
+        <li><code>scripts/protect-data.sh</code> &mdash; <span class="file-desc">Narrowed <code>truncate</code> rule to sensitive paths only; narrowed <code>chown</code> rule to <code>sudo chown</code>/<code>chown root</code> only</span></li>
+        <li><code>scripts/session-startup.sh</code> &mdash; <span class="file-desc">Separated optional deps (<code>gh</code>) from required deps (<code>git</code>, <code>jq</code>, <code>node</code>) to avoid blocking startup</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Prompt &amp; Configuration Fixes (F6, F8, F10)</h4>
+      <ul class="file-list">
+        <li><code>agents/session-startup.md</code> &mdash; <span class="file-desc">Fixed "3-line" &rarr; "4-line" banner count contradiction</span></li>
+        <li><code>agents/code-auditor.md</code> &mdash; <span class="file-desc">Clarified Write/Edit prohibition to allow findings report write via Bash</span></li>
+        <li><code>skills/status/SKILL.md</code>, <code>scripts/compact-reinject.sh</code> &mdash; <span class="file-desc">Fixed artifact count from 5 to 6, added Architecture Diagrams to artifact checklist</span></li>
+        <li><code>.mcp.json</code> &mdash; <span class="file-desc">Replaced all <code>YOUR_TOKEN_HERE</code> placeholders with <code>${ENV_VAR}</code> references</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Tests (F2)</h4>
+      <ul class="file-list">
+        <li><code>tests/update-backlog-raw.bats</code> &mdash; <span class="file-desc">10 test cases: disallowed function rejection, expression validation, dot-path and parenthesized expressions, JSON validation, dry-run, <code>--arg</code>/<code>--argjson</code> passthrough, missing file, no-args usage</span></li>
+      </ul>
+    </div>
   </div>
 
   <!-- ============================================================ -->

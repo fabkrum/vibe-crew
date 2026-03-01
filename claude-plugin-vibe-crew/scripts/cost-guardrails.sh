@@ -7,7 +7,11 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+# Source error logging
+source "$SCRIPT_DIR/lib/error-log.sh"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 CONFIG_FILE="$VIBECREW_DIR/config.json"
 COST_FILE="$VIBECREW_DIR/session-cost.json"
@@ -94,6 +98,7 @@ LAST_UPDATED="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
 # ── Write updated session cost file (temp-file-then-mv for atomicity) ──
 COST_TMP="$(mktemp "${COST_FILE}.XXXXXX")"
+trap 'rm -f "$COST_TMP"' EXIT
 jq -n \
   --argjson cost "$SESSION_COST" \
   --argjson turns "$TURN_COUNT" \
@@ -101,7 +106,8 @@ jq -n \
   --argjson turn_cost "$TURN_COST" \
   --arg model "$MODEL" \
   '{session_cost_usd: $cost, turn_count: $turns, last_turn_cost_usd: $turn_cost, model: $model, last_updated: $updated}' \
-  > "$COST_TMP" 2>/dev/null && mv "$COST_TMP" "$COST_FILE" || { rm -f "$COST_TMP"; true; }
+  > "$COST_TMP" 2>/dev/null && mv "$COST_TMP" "$COST_FILE" && COST_TMP="" \
+  || { rm -f "$COST_TMP"; log_error "cost-guardrails" "Failed to write cost file"; }
 
 # ── Read thresholds from config.json ──
 SESSION_WARN="2.00"

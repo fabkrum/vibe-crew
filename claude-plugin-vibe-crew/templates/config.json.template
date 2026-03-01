@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.4.0",
+  "schema_version": "1.5.0",
   "terminal": "{{TERMINAL}}",
   "notifications": {
     "enabled": true,
@@ -75,6 +75,34 @@
     "enabled": true,
     "max_attempts": 3,
     "auto_checkpoint": true
+  },
+  "pricing": {
+    "opus": {
+      "input": 15.00,
+      "cache_create": 18.75,
+      "cache_read": 1.50,
+      "output": 75.00
+    },
+    "sonnet": {
+      "input": 3.00,
+      "cache_create": 3.75,
+      "cache_read": 0.30,
+      "output": 15.00
+    },
+    "haiku": {
+      "input": 0.25,
+      "cache_create": 0.30,
+      "cache_read": 0.03,
+      "output": 1.25
+    },
+    "last_updated": "2026-03-01"
+  },
+  "locks": {
+    "stale_timeout_secs": 60,
+    "wait_timeout_secs": 30
+  },
+  "quality_gate": {
+    "timeout_seconds": 120
   },
   "gamification": {
     "enabled": true,

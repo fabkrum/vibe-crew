@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.5.0",
   "columns": [
     { "id": "idea",        "title": "Ideas",          "wip_limit": null },
     { "id": "planning",    "title": "Planning",       "wip_limit": 2 },

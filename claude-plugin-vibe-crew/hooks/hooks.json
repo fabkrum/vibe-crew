@@ -136,7 +136,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/quality-gate.sh",
-            "timeout": 60,
+            "timeout": 180,
             "statusMessage": "Running quality checks on modified files..."
           }
         ]

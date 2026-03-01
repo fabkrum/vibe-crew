@@ -8,7 +8,11 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+# Source error logging
+source "$SCRIPT_DIR/lib/error-log.sh"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 STATE_FILE="$VIBECREW_DIR/state.json"
 BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
@@ -87,6 +91,24 @@ if ! acquire_state_lock "sync-state"; then
   echo "State sync: skipped (could not acquire lock)"
   exit 0
 fi
+
+# =============================================================================
+# Create backup before modifications
+# =============================================================================
+
+BACKUP_DIR="$VIBECREW_DIR/.backup"
+mkdir -p "$BACKUP_DIR"
+
+BACKUP_TS=$(date -u +%Y-%m-%dT%H-%M-%SZ)
+
+# Backup current files
+cp "$STATE_FILE" "$BACKUP_DIR/state.json.$BACKUP_TS" 2>/dev/null || log_error "sync-state" "Failed to backup state.json"
+cp "$BACKLOG_FILE" "$BACKUP_DIR/backlog.json.$BACKUP_TS" 2>/dev/null || log_error "sync-state" "Failed to backup backlog.json"
+
+# Rotate: keep only last 5 backups per file
+for prefix in state.json backlog.json; do
+  ls -1t "$BACKUP_DIR/${prefix}."* 2>/dev/null | tail -n +6 | xargs rm -f 2>/dev/null || true
+done
 
 # =============================================================================
 # Read current state

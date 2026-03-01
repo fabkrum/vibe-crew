@@ -84,12 +84,12 @@ Run the eligibility guardrails. A mutation can only be proposed if ALL condition
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-mutation-eligibility.sh"
 ```
 
-The script checks:
-1. **Minimum sessions**: At least 5 score files exist in `.vibecrew/scores/`.
-2. **Frequency threshold**: The anti-pattern occurred in 3+ of the last 10 sessions.
+The script checks (in order, with early exit):
+1. **Cooldown**: The pattern has not been rejected 3+ times and is not in cooldown. Cooldown duration is dynamic: `rejection_count * 7` days.
+2. **Minimum sessions**: At least 5 score files exist in `.vibecrew/scores/`.
 3. **Session limit**: No mutation has been proposed in this session yet.
-4. **No duplicate**: The proposed rule text does not already exist in the project's CLAUDE.md.
-5. **Cooldown**: The pattern has not been rejected 3 times and is not in cooldown.
+4. **Frequency threshold**: The anti-pattern occurred in 3+ of the last 10 sessions.
+5. **No duplicate**: The proposed rule text does not already exist in the project's CLAUDE.md.
 
 If any guardrail fails, record the reason in MEMORY.md and skip to Step 7.
 

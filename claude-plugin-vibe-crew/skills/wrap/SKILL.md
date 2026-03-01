@@ -1021,13 +1021,13 @@ If no features completed, skip Doc Generator invocation and print:
 If the active feature's work is complete (all 6 phases done, or the feature column is `done` or `review`), clear the active feature:
 
 ```bash
-jq '.active_feature = {id: null, name: null, worktree: null, phase: null, phases_completed: []} | .updated_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature = {id: null, name: null, worktree: null, phase: null, phases_completed: []} | .updated_at = (now | todate)'
 ```
 
 If the feature is still in progress (not all phases done), leave `active_feature` as-is so the next session can resume:
 
 ```bash
-jq '.updated_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tmp && mv .vibecrew/state.json.tmp .vibecrew/state.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.updated_at = (now | todate)'
 ```
 
 ### 10.2 Update backlog (if applicable)
@@ -1035,9 +1035,7 @@ jq '.updated_at = (now | todate)' .vibecrew/state.json > .vibecrew/state.json.tm
 If an active feature exists and all work is complete, move it to the `review` column in the backlog:
 
 ```bash
-jq --arg id "<feature_id>" --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-   '(.features[] | select(.id == $id)) |= (.column = "review" | .updated_at = $ts)' \
-   .vibecrew/backlog.json > .vibecrew/backlog.json.tmp && mv .vibecrew/backlog.json.tmp .vibecrew/backlog.json
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature_id>" column review
 ```
 
 ### 10.3 Print session complete message
@@ -1055,7 +1053,7 @@ Session wrapped. Good work!
 - Never skip the quality gate, even if no tests exist. Report SKIP for unavailable checks.
 - Always write both the session log file (Step 6) and the score file (Step 5). These are mandatory artifacts.
 - Use `${CLAUDE_PLUGIN_ROOT}` for all references to plugin scripts and templates.
-- Use the temp file pattern (write to `.tmp`, then `mv`) for all JSON file mutations to prevent corruption.
+- Use locked scripts (`update-state.sh`, `update-backlog.sh`) for all state.json and backlog.json mutations. NEVER write to these files with inline jq + temp file patterns.
 
 ### Git rules
 - Never auto-push to a remote repository without explicit user confirmation.

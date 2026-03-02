@@ -12,7 +12,8 @@ import '../styles/pages/releases.css';
   </section>
 
   <div class="version-nav">
-    <a href="#v1.7.0" class="latest">v1.7.0</a>
+    <a href="#v1.8.0" class="latest">v1.8.0</a>
+    <a href="#v1.7.0">v1.7.0</a>
     <a href="#v1.6.0">v1.6.0</a>
     <a href="#v1.5.0">v1.5.0</a>
     <a href="#v1.4.0">v1.4.0</a>
@@ -23,13 +24,95 @@ import '../styles/pages/releases.css';
   </div>
 
   <!-- ============================================================ -->
+  <!-- v1.8.0                                                       -->
+  <!-- ============================================================ -->
+  <div class="release-section" id="v1.8.0">
+    <div class="release-header">
+      <span class="release-version">v1.8.0</span>
+      <span class="release-date">2026-03-02</span>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.8.0" class="release-badge latest">GitHub Release</a>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-type added">Added</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>GitHub Issues Auto-Fix Integration</h4>
+      <ul class="file-list">
+        <li><code>/fix-issue</code> &mdash; Fetches a GitHub Issue by number, diagnoses the problem, implements the fix, runs tests, and opens a PR referencing the issue</li>
+        <li><code>/sync-issues</code> &mdash; Imports open GitHub Issues as backlog features for prioritization and tracking</li>
+        <li><code>templates/issue-fix-report.json.template</code> &mdash; Structured report schema for issue diagnosis, fix description, and verification results</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Mechanical Workflow Enforcement Hooks</h4>
+      <ul class="file-list">
+        <li><code>validate-phase-transition.sh</code> &mdash; New PreToolUse hook enforcing sequential phase progression (plan &rarr; design &rarr; code &rarr; test &rarr; review &rarr; docs)</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Vibe Dashboard Enhancements</h4>
+      <ul class="file-list">
+        <li>Product Features page with feature cards, status indicators, and spec previews</li>
+        <li>Architecture Overview page rendering Mermaid diagrams from <code>.vibecrew/architecture/*.mmd</code></li>
+        <li>Vitest test suite for 5 dashboard components</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Design Discovery &amp; Planning Improvements</h4>
+      <ul class="file-list">
+        <li>&ldquo;What problem does it solve?&rdquo; question added to Design Discovery interview</li>
+        <li>Problem statement now required during feature planning</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Visual Feedback Loop</h4>
+      <ul class="file-list">
+        <li>Builder agent captures screenshots after UI changes and compares against design brief</li>
+        <li>Code Reviewer validates visual consistency against design system</li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-type fixed">Fixed</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <ul class="file-list">
+        <li>Hardened safety-critical hooks (phase-gate, protect-data, restrict-paths) against edge cases</li>
+        <li>Architecture diagram re-rendering when <code>.mmd</code> files change</li>
+        <li>Removed deprecated Stitch MCP server from plugin and documentation</li>
+        <li>12 weakness findings addressed across scripts, skills, agents, and configuration</li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-type changed">Changed</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>Documentation Site Migration</h4>
+      <ul class="file-list">
+        <li>Migrated from static HTML to Astro 5.5 with component-based layouts, self-hosted fonts, dark/light theme, and Pagefind search</li>
+        <li>Added <code>.nojekyll</code> persistence and regression tests to prevent GitHub Pages styling breakage</li>
+        <li>Reorganized setup guide to lead with automated <code>install.sh</code> workflow</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
   <!-- v1.7.0                                                       -->
   <!-- ============================================================ -->
   <div class="release-section" id="v1.7.0">
     <div class="release-header">
       <span class="release-version">v1.7.0</span>
       <span class="release-date">2026-03-01</span>
-      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.7.0" class="release-badge latest">GitHub Release</a>
+      <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.7.0" class="release-badge">GitHub Release</a>
     </div>
 
     <div class="change-category">

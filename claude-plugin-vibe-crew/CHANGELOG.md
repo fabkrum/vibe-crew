@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-03-02
+
+### Added
+
+#### GitHub Issues Auto-Fix Integration
+
+- `skills/fix-issue/SKILL.md` -- `/fix-issue` slash command: fetches a GitHub Issue by number, diagnoses the problem, implements the fix, runs tests, and opens a PR referencing the issue
+- `skills/sync-issues/SKILL.md` -- `/sync-issues` slash command: imports open GitHub Issues as backlog features for prioritization and tracking
+- `templates/issue-fix-report.json.template` -- Structured report schema for issue diagnosis, fix description, and verification results
+
+#### Mechanical Workflow Enforcement Hooks
+
+- `hooks/hooks.json` -- Added `validate-phase-transition.sh` PreToolUse hook: validates phase ordering and foundation artifact completeness before allowing phase transitions
+- `scripts/validate-phase-transition.sh` -- Enforces sequential phase progression (plan → design → code → test → review → docs) and blocks skipping required phases
+
+#### Vibe Dashboard Enhancements
+
+- `templates/docs-site/components/ProductFeatures.vue` -- Product Features page with feature cards, status indicators, and spec previews
+- `templates/docs-site/components/ArchitectureOverview.vue` -- Architecture Overview page rendering Mermaid diagrams from `.vibecrew/architecture/*.mmd` with live reload
+- Vitest test suite for dashboard components (KanbanBoard, StatsPage, ScoreTrend, ProductFeatures, ArchitectureOverview)
+
+#### Design Discovery & Planning Improvements
+
+- `skills/new-project/SKILL.md` -- Added "What problem does it solve?" question to Design Discovery interview for sharper product-market fit analysis
+- `agents/workflow-orchestrator.md` -- Problem statement now required during feature planning (`/plan-features`, `/new-feature`)
+
+#### Visual Feedback Loop
+
+- `agents/builder.md` -- Builder agent captures screenshots after UI changes and compares against design brief token values
+- `agents/code-reviewer.md` -- Code Reviewer validates visual consistency against design system during review phase
+
+### Fixed
+
+- `scripts/phase-gate.sh`, `scripts/protect-data.sh`, `scripts/restrict-paths.sh` -- Hardened safety-critical hooks against edge cases and race conditions
+- `scripts/calculate-vibe-score.sh` -- Fixed architecture diagram re-rendering when `.mmd` files change during a session
+- Removed Stitch MCP server from plugin configuration and all documentation (deprecated upstream)
+- 12 weakness findings addressed across scripts, skills, agents, and configuration
+
+### Changed
+
+#### Documentation Site Migration
+
+- Migrated documentation from static HTML to Astro 5.5 with component-based layouts, self-hosted fonts, dark/light theme, and Pagefind search
+- `docs-next/` -- Full Astro source with 26 pages, reusable components, CSS design token system
+- `docs/` -- Compiled static output served via GitHub Pages at `fabkrum.github.io/vibe-crew/`
+- Added `.nojekyll` to `docs-next/public/` to persist across Astro rebuilds (prevents GitHub Pages Jekyll from ignoring `_astro/` directory)
+- Added docs build regression tests (`tests/docs-build.bats`) to prevent GitHub Pages styling breakage
+
+#### Configuration
+
+- `.claude-plugin/plugin.json` -- Version bumped to 1.8.0
+- `agents/session-startup.md` -- Banner version bumped to 1.8.0
+- `docs(setup)` -- Reorganized setup guide to lead with automated `install.sh` workflow
+
+---
+
 ## [1.7.0] - 2026-03-01
 
 ### Fixed
@@ -561,6 +617,7 @@ Documentation, cleanup utilities, and finalized configurations.
 
 **Total: ~81 files across 6 implementation phases.**
 
+[1.8.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.8.0
 [1.7.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.7.0
 [1.6.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.6.0
 [1.5.0]: https://github.com/fabkrum/vibe-crew/releases/tag/v1.5.0

@@ -37,8 +37,7 @@
 </script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Getting Started</span>  <span class="separator">/</span> <span>Quick Start</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Getting Started"},{"@type":"ListItem","position":3,"name":"Quick Start"}]}</script>  <h2>Quick Start Guide</h2> <p>Get from zero to your first feature in under 10 minutes. This guide covers the essentials &mdash; see the <a href="/vibe-crew/setup.html">full Setup Guide</a> for advanced options.</p> <section class="section"> <h3>Prerequisites</h3> <p>Make sure you have these installed:</p> <ul> <li><strong>Git</strong> 2.30+ &mdash; <code>git --version</code></li> <li><strong>Node.js</strong> 18+ &mdash; <code>node --version</code></li> <li><strong>jq</strong> 1.6+ &mdash; <code>jq --version</code> (install: <code>brew install jq</code>)</li> <li><strong>Claude Code</strong> &mdash; <a href="https://claude.ai/code">claude.ai/code</a></li> </ul> </section> <section class="section"> <h3>1. Install VibeCrew</h3> <p>Clone once, symlink to every project:</p> <pre class="copyable" data-copy="mkdir -p ~/claude-plugins &#38;&#38; cd ~/claude-plugins
 git clone https://github.com/fabkrum/vibe-crew.git
 cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-claude plugin install ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -46,8 +45,7 @@ claude plugin install ./claude-plugin-vibe-crew"><button class="copy-btn" aria-l
   </button><code><span class="code-label">bash</span>mkdir -p ~/claude-plugins &amp;&amp; cd ~/claude-plugins
 git clone https://github.com/fabkrum/vibe-crew.git
 cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-claude plugin install ./claude-plugin-vibe-crew</code></pre> </section> <section class="section"> <h3>2. Run Setup</h3> <p>Start Claude Code in your project directory and run the setup wizard:</p> <pre class="copyable" data-copy="claude"><button class="copy-btn" aria-label="Copy to clipboard">
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> </section> <section class="section"> <h3>2. Run Setup</h3> <p>Start Claude Code in your project directory and run the setup wizard:</p> <pre class="copyable" data-copy="claude"><button class="copy-btn" aria-label="Copy to clipboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>

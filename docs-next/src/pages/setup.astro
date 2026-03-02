@@ -47,7 +47,6 @@ git clone https://github.com/fabkrum/vibe-crew.git`} />
         <p>Symlink the plugin into your project, start Claude Code, and run the setup wizard.</p>
         <CodeBlock label="bash" code={`cd ~/projects/my-project
 ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-claude plugin install ./claude-plugin-vibe-crew
 claude`} />
         <CodeBlock label="claude code" code={`/setup`} />
         <p>The wizard creates the <code>.vibecrew/</code> runtime directory, tests notifications, verifies MCP servers, and checks git configuration.</p>
@@ -137,8 +136,7 @@ claude`} />
     <h3>Adding a new project</h3>
     <p>Two commands, under 30 seconds:</p>
     <CodeBlock label="bash" code={`cd ~/projects/another-project
-ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-claude plugin install ./claude-plugin-vibe-crew`} />
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
     <p>Then start Claude Code and run <code>/setup</code>.</p>
 
     <h3>Updating VibeCrew across all projects</h3>
@@ -152,8 +150,7 @@ claude plugin install ./claude-plugin-vibe-crew`} />
     <CodeBlock label=".zshrc" code={`# Add to ~/.zshrc
 vibecrew-init() {
   ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-  claude plugin install ./claude-plugin-vibe-crew
-  echo "VibeCrew installed. Run 'claude' then '/setup' to initialize."
+  echo "VibeCrew linked. Run 'claude' then '/setup' to initialize."
 }
 
 vibecrew-update() {
@@ -286,13 +283,6 @@ jq --version     # 1.6+`} />
   <section class="section" id="troubleshooting">
     <span class="section-label">Help</span>
     <h2>Troubleshooting</h2>
-
-    <h3>/setup says "Unknown skill"</h3>
-    <ol>
-      <li>The plugin must be <strong>registered</strong> with Claude Code, not just symlinked. Run: <code>claude plugin install ./claude-plugin-vibe-crew</code></li>
-      <li>Restart Claude Code after installing.</li>
-      <li>Verify with: <code>claude plugin list</code></li>
-    </ol>
 
     <h3>Notifications don't appear</h3>
     <ol>

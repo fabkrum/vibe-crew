@@ -1,0 +1,525 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Self-Improving System</title><meta name="description" content="How VibeCrew learns across sessions through Vibe Scores, Performance Coach analysis, CLAUDE.md mutations, and cross-session handoffs."><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.tiC8ikNY.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/learning-system.html" class="sidebar-link active"> Self-Improving System </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Workflows</span>  <span class="separator">/</span> <span>Self-Improving System</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Workflows"},{"@type":"ListItem","position":3,"name":"Self-Improving System"}]}</script>
+
+ <div class="toc"> <h3>On This Page</h3> <ol> <li><a href="#intro">How VibeCrew Gets Smarter</a></li> <li><a href="#learning-loop">The Learning Loop</a></li> <li><a href="#vibe-score">Vibe Score &mdash; Quantified Feedback</a></li> <li><a href="#performance-coach">The Performance Coach</a></li> <li><a href="#session-learnings">CLAUDE.md Session Learnings</a></li> <li><a href="#cross-session">Cross-Session Data Transfer</a></li> <li><a href="#cross-project">Cross-Project Learning</a></li> <li><a href="#practical-tips">Practical Tips</a></li> </ol> </div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: Introduction -->
+<!-- ============================================================ -->
+<section class="section" id="intro">
+<h2>How VibeCrew Gets Smarter</h2>
+<p>VibeCrew improves with every session through a recursive feedback loop. Unlike tools that reset to a blank slate, VibeCrew measures what happened, identifies patterns across sessions, proposes permanent rule changes, and transfers context to the next session &mdash; so the same mistakes never happen twice.</p>
+<p>The system rests on <strong>four pillars</strong>:</p>
+<div class="card-grid">
+<div class="card">
+<div class="card-icon green">&#9650;</div>
+<h4>Vibe Score</h4>
+<p>Quantified measurement of every session. Starts at 100, applies deductions for anti-patterns and bonuses for best practices.</p>
+</div>
+<div class="card">
+<div class="card-icon purple">&#9881;</div>
+<h4>Performance Coach</h4>
+<p>Cross-session trend analysis that detects recurring anti-patterns and proposes permanent rule changes.</p>
+</div>
+<div class="card">
+<div class="card-icon blue">&#9998;</div>
+<h4>CLAUDE.md Mutations</h4>
+<p>Approved rule proposals become permanent instructions in your project&rsquo;s CLAUDE.md, read by every future agent.</p>
+</div>
+<div class="card">
+<div class="card-icon amber">&#8644;</div>
+<h4>Cross-Session Handoffs</h4>
+<p>Structured handoff documents, state files, and persistent memory transfer context between sessions.</p>
+</div>
+</div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: The Learning Loop -->
+<!-- ============================================================ -->
+<section class="section" id="learning-loop">
+<span class="section-label">Core Cycle</span>
+<h2>The Learning Loop</h2>
+<p>Every session participates in a recursive improvement cycle. What the system learns in session N directly improves behavior in session N+1:</p>
+<div class="flow"><span class="highlight">Session Start</span> &rarr; reads state.json + latest handoff + CLAUDE.md (with learned rules)
+    &darr;
+<span class="highlight">Work phase</span> &mdash; Tier 2 feature development (Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs)
+    &darr;
+<span class="highlight">/wrap</span> &rarr; Verifier runs quality checks (typecheck, lint, build, tests)
+    &darr;
+<span class="highlight">Vibe Score</span> calculated &rarr; saved to <code>.vibecrew/scores/score-{timestamp}.json</code>
+    &darr;
+<span class="highlight">Performance Coach</span> analyzes score against 3&ndash;5 session window
+    &darr;
+<span class="highlight">Anti-pattern detection</span> &rarr; checks if any pattern recurred across 3+ sessions
+    &darr;
+<span class="muted">Mutation proposal (if eligible) &rarr; presented for your approval</span>
+    &darr;
+<span class="highlight">Handoff document</span> generated &rarr; saved to <code>.vibecrew/handoffs/</code>
+    &darr;
+<span class="highlight">Next session</span> reads updated CLAUDE.md + handoff &rarr; <em>better behavior</em></div>
+<div class="callout info">
+<div class="callout-title">The recursive effect</div>
+Each loop iteration compounds. Session 1 establishes baselines. By session 5, the system has learned your project&rsquo;s specific patterns &mdash; which test strategies work, which code paths cause issues, which conventions matter most.
+</div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: Vibe Score -->
+<!-- ============================================================ -->
+<section class="section" id="vibe-score">
+<span class="section-label">Measurement</span>
+<h2>Vibe Score &mdash; Quantified Feedback</h2>
+<p>Every session produces a Vibe Score: a numerical measure of session quality that feeds the learning loop. The score starts at <strong>100</strong> and is adjusted by deductions (anti-patterns) and bonuses (best practices).</p>
+
+<h3>Key deductions</h3>
+<div class="card-grid">
+<div class="card">
+<div class="card-icon red">-5</div>
+<h4>Prompt Churn</h4>
+<p>Multiple clarification sequences that should have been resolved upfront in planning.</p>
+</div>
+<div class="card">
+<div class="card-icon red">-10</div>
+<h4>Tool Loops</h4>
+<p>Repeated tool calls that don&rsquo;t make progress &mdash; indicates the agent is stuck.</p>
+</div>
+<div class="card">
+<div class="card-icon red">-15</div>
+<h4>Low Cache Utilization</h4>
+<p>Poor use of prompt caching, wasting tokens on repeated context.</p>
+</div>
+<div class="card">
+<div class="card-icon red">-20</div>
+<h4>Context Violations</h4>
+<p>Exceeding context window thresholds, degrading response quality.</p>
+</div>
+</div>
+
+<h3>Key bonuses</h3>
+<div class="card-grid">
+<div class="card">
+<div class="card-icon green">+5</div>
+<h4>All Phases Complete</h4>
+<p>Every phase artifact present &mdash; spec, tests, code, review, docs.</p>
+</div>
+<div class="card">
+<div class="card-icon green">+3</div>
+<h4>TDD Discipline</h4>
+<p>Tests written before implementation code, verified by commit order.</p>
+</div>
+<div class="card">
+<div class="card-icon green">+3</div>
+<h4>Visual Compliance</h4>
+<p>No design-system token violations detected in the UI.</p>
+</div>
+<div class="card">
+<div class="card-icon green">+2</div>
+<h4>Accessibility Clean</h4>
+<p>No accessibility issues found by automated checks.</p>
+</div>
+</div>
+
+<h3>Full scoring breakdown</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th>Category</th><th>Condition</th><th>Impact</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Prompt churn</strong></td><td>Multiple clarification sequences</td><td>-5 per sequence</td></tr>
+<tr><td><strong>Tool loops</strong></td><td>Repeated tool calls without progress</td><td>-10 per loop</td></tr>
+<tr><td><strong>Cache utilization</strong></td><td>Below threshold</td><td>-15</td></tr>
+<tr><td><strong>Context violations</strong></td><td>Exceeded 80% context window</td><td>-20</td></tr>
+<tr><td><strong>No tests</strong></td><td>Feature shipped without tests</td><td>-10</td></tr>
+<tr><td><strong>No feature spec</strong></td><td>Missing planning artifact</td><td>-5</td></tr>
+<tr><td><strong>Skipped code review</strong></td><td>Review phase bypassed</td><td>-5</td></tr>
+<tr><td><strong>Documentation drift</strong></td><td>Source changed, docs not updated</td><td>-3 per stale doc</td></tr>
+<tr><td><strong>Console errors</strong></td><td>Runtime errors on affected pages</td><td>-5</td></tr>
+<tr><td><strong>Visual token violations</strong></td><td>Design-system deviations</td><td>-3 each (max -9)</td></tr>
+<tr><td colspan="3" style="padding-top: 1rem;"><strong>Bonuses</strong></td></tr>
+<tr><td><strong>All phases</strong></td><td>Complete phase artifacts</td><td>up to +30</td></tr>
+<tr><td><strong>High cache utilization</strong></td><td>Above 60% cache hit rate</td><td>+5</td></tr>
+<tr><td><strong>Full test coverage</strong></td><td>Tests cover all feature paths</td><td>+5</td></tr>
+<tr><td><strong>Clean session</strong></td><td>No tool loops or context violations</td><td>+5</td></tr>
+<tr><td><strong>TDD discipline</strong></td><td>Tests before implementation</td><td>+3</td></tr>
+<tr><td><strong>E2E tests passing</strong></td><td>End-to-end tests green</td><td>+3</td></tr>
+<tr><td><strong>Accessibility clean</strong></td><td>No a11y issues</td><td>+2</td></tr>
+<tr><td><strong>Code review complete</strong></td><td>Review phase finished</td><td>+2</td></tr>
+<tr><td><strong>Performance baselines</strong></td><td>Perf budget met</td><td>+2</td></tr>
+<tr><td><strong>Visual compliance</strong></td><td>No design-system violations</td><td>+3</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout tip">
+<div class="callout-title">When scores become meaningful</div>
+Individual session scores fluctuate. The real value emerges after 3&ndash;5 sessions, when the Performance Coach has enough data to identify trends and the system begins proposing targeted improvements.
+</div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: Performance Coach -->
+<!-- ============================================================ -->
+<section class="section" id="performance-coach">
+<span class="section-label">Pattern Recognition</span>
+<h2>The Performance Coach</h2>
+<p>The Performance Coach is an Opus-powered agent that runs during <code>/wrap</code> to perform cross-session trend analysis. It doesn&rsquo;t just look at the current session &mdash; it compares scores across a 3&ndash;5 session window to identify <strong>recurring</strong> anti-patterns that a single session can&rsquo;t detect.</p>
+
+<h3>The 7-step mutation workflow</h3>
+<ol class="steps">
+<li>
+<h4>Detection</h4>
+<p>The coach reads the current Vibe Score and checks which deductions were applied.</p>
+</li>
+<li>
+<h4>Correlation</h4>
+<p>It cross-references with the previous 3&ndash;5 session scores stored in <code>.vibecrew/scores/</code> and its persistent memory file.</p>
+</li>
+<li>
+<h4>Eligibility check</h4>
+<p>A mutation is only proposed if the same anti-pattern appeared in 3+ sessions within the analysis window.</p>
+</li>
+<li>
+<h4>Proposal generation</h4>
+<p>The coach drafts a concrete CLAUDE.md rule using its anti-pattern template library.</p>
+</li>
+<li>
+<h4>Presentation</h4>
+<p>The proposal is shown to you with context: which sessions triggered it, what the expected score improvement is, and the exact rule text.</p>
+</li>
+<li>
+<h4>Decision</h4>
+<p>You approve, reject, or modify the proposed rule. The coach records your decision.</p>
+</li>
+<li>
+<h4>Recording</h4>
+<p>Approved rules are appended to the &ldquo;Session Learnings&rdquo; section of your project&rsquo;s CLAUDE.md. Rejections are logged and the pattern enters a 3-rejection cooldown.</p>
+</li>
+</ol>
+
+<h3>Anti-pattern templates</h3>
+<p>The Performance Coach watches for six categories of recurring issues:</p>
+<div class="card-grid">
+<div class="card">
+<div class="card-icon red">&#10227;</div>
+<h4>Tool Loops</h4>
+<p>Agent repeatedly calls the same tool without making progress. Rule: &ldquo;If a tool fails twice with the same error, try a different approach.&rdquo;</p>
+</div>
+<div class="card">
+<div class="card-icon amber">&#9888;</div>
+<h4>Context Bloat</h4>
+<p>Sessions consistently exceed context thresholds. Rule: &ldquo;Use subagents for research tasks over 3 queries.&rdquo;</p>
+</div>
+<div class="card">
+<div class="card-icon blue">&#128196;</div>
+<h4>Missing Artifacts</h4>
+<p>Same phase artifact repeatedly missing. Rule: &ldquo;Always create feature spec before implementation.&rdquo;</p>
+</div>
+<div class="card">
+<div class="card-icon purple">&#128203;</div>
+<h4>Test Gaps</h4>
+<p>Features shipped without tests across sessions. Rule: &ldquo;Write tests before marking any feature as code-complete.&rdquo;</p>
+</div>
+<div class="card">
+<div class="card-icon green">&#128206;</div>
+<h4>Documentation Drift</h4>
+<p>Docs consistently lag behind code changes. Rule: &ldquo;Update feature documentation in the same session as code changes.&rdquo;</p>
+</div>
+<div class="card">
+<div class="card-icon red">$</div>
+<h4>Cost Spikes</h4>
+<p>Sessions repeatedly exceed cost thresholds. Rule: &ldquo;Prefer Haiku for mechanical tasks; reserve Opus for analysis.&rdquo;</p>
+</div>
+</div>
+
+<div class="callout tip">
+<div class="callout-title">Guardrails</div>
+The Performance Coach has strict limits to prevent runaway rule accumulation: mutations are <strong>never auto-applied</strong> (always require your approval), at most <strong>1 mutation per session</strong>, a <strong>3-rejection cooldown</strong> (won&rsquo;t re-propose the same pattern after 3 rejections), and the Session Learnings section is capped at <strong>15 rules</strong>.
+</div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: CLAUDE.md Session Learnings -->
+<!-- ============================================================ -->
+<section class="section" id="session-learnings">
+<span class="section-label">Permanent Memory</span>
+<h2>CLAUDE.md Session Learnings</h2>
+<p>When you approve a Performance Coach mutation, the rule is appended to a dedicated &ldquo;Session Learnings&rdquo; section in your project&rsquo;s CLAUDE.md. Because every agent reads CLAUDE.md at session start, these rules become <strong>permanent behavioral changes</strong> &mdash; the system literally cannot forget them.</p>
+
+<h3>The recursive loop</h3>
+<div class="flow"><span class="highlight">Session N</span>: Performance Coach detects recurring tool loops
+    &darr;
+Proposes rule: &ldquo;If a tool fails twice with the same error, try a different approach&rdquo;
+    &darr;
+You <span class="highlight">approve</span> &rarr; rule appended to CLAUDE.md Session Learnings
+    &darr;
+<span class="highlight">Session N+1</span>: All agents read updated CLAUDE.md
+    &darr;
+Builder agent encounters a failing tool &rarr; <span class="highlight">switches approach after 2 failures</span> instead of looping
+    &darr;
+Vibe Score improves &rarr; tool loop deduction no longer applies</div>
+
+<h3>What it looks like</h3>
+<pre><code>## Session Learnings
+
+- Always run `npm run typecheck` before committing — 3 sessions had late-caught type errors (2026-02-15)
+- Use subagents for file searches spanning more than 3 directories — context bloat in sessions 12-14 (2026-02-18)
+- Write API integration tests before frontend components that depend on them (2026-02-20)
+- Update architecture diagrams when adding new database tables — missed in sessions 17-19 (2026-02-25)</code></pre>
+
+<h3>Auto-pruning</h3>
+<p>The Session Learnings section is capped at <strong>15 rules</strong>. When a new rule is added and the count exceeds 15, the oldest rule is automatically removed. This prevents CLAUDE.md from growing unbounded and keeps only the most recent and relevant learnings.</p>
+
+<div class="callout tip">
+<div class="callout-title">Monthly curation</div>
+Review your Session Learnings monthly. Remove rules for patterns you&rsquo;ve outgrown, and promote critical rules to your project&rsquo;s main CLAUDE.md conventions section so they become permanent fixtures rather than prunable learnings.
+</div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: Cross-Session Data Transfer -->
+<!-- ============================================================ -->
+<section class="section" id="cross-session">
+<span class="section-label">Persistence</span>
+<h2>Cross-Session Data Transfer</h2>
+<p>Beyond CLAUDE.md mutations, VibeCrew transfers context between sessions through multiple channels:</p>
+
+<h3 id="handoffs">Handoff documents</h3>
+<p>Every <code>/wrap</code> generates a structured handoff document saved to <code>.vibecrew/handoffs/</code>. The next session&rsquo;s Session Startup agent reads the latest handoff to understand what was accomplished, what&rsquo;s pending, and any known issues.</p>
+<p>Handoffs include: features completed, current backlog position, open blockers, test status, branch state, and recommended next actions.</p>
+
+<h3 id="state-persistence">State persistence</h3>
+<p>Two JSON files survive across sessions and provide continuity:</p>
+<ul>
+<li><strong><code>state.json</code></strong> &mdash; Foundation status, active feature, current phase within the Tier 2 cycle</li>
+<li><strong><code>backlog.json</code></strong> &mdash; Feature backlog with specs, priorities, and completion status</li>
+</ul>
+<p>On session start, <code>sync-state.sh</code> validates these files and repairs any corruption from interrupted sessions.</p>
+
+<h3 id="context-compaction">Context compaction</h3>
+<p>When <code>/compact</code> runs (manually or automatically during <code>/run-backlog</code>), the <code>compact-reinject.sh</code> hook re-injects fewer than 300 tokens of critical state: current feature, phase, active branch, and architecture diagram references. This gives the compressed context window just enough to continue seamlessly.</p>
+
+<h3 id="error-recovery">Error recovery</h3>
+<p>On every session start, <code>error-recovery.sh</code> cleans up stale state from interrupted sessions: releases advisory locks, detects orphaned processes, repairs inconsistent git state, and resolves signal file conflicts.</p>
+
+<h3 id="persistent-memory">Performance Coach memory</h3>
+<p>The Performance Coach maintains a persistent <code>MEMORY.md</code> file with anti-pattern history, mutation decisions, score trends, and cross-session observations. This file is read at the start of every <code>/wrap</code> analysis, giving the coach continuity that doesn&rsquo;t depend on the conversation context window.</p>
+
+<h3>Data flow between sessions</h3>
+<div class="flow"><span class="highlight">Session N ends</span> (/wrap)
+    &darr;
+Generates: <span class="highlight">score-{ts}.json</span> + <span class="highlight">handoff-{ts}.json</span> + <span class="highlight">session-{ts}.json</span>
+Updates: <span class="highlight">state.json</span> + <span class="highlight">backlog.json</span> + <span class="highlight">CLAUDE.md</span> (if mutation approved)
+    &darr;
+<span class="muted">--- session boundary ---</span>
+    &darr;
+<span class="highlight">Session N+1 starts</span>
+    &darr;
+<span class="highlight">session-startup.sh</span> &rarr; environment check
+<span class="highlight">sync-state.sh</span> &rarr; validates state.json + backlog.json
+<span class="highlight">error-recovery.sh</span> &rarr; cleans stale locks, orphaned processes
+    &darr;
+Session Startup agent reads: <span class="highlight">state.json</span> + <span class="highlight">latest handoff</span> + <span class="highlight">CLAUDE.md</span>
+    &darr;
+<span class="highlight">Routing decision</span>: resume in-progress feature, start next backlog item, or await instructions</div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- SECTION 7: Cross-Project Learning -->
+<!-- ============================================================ -->
+<section class="section" id="cross-project">
+<span class="section-label">Ecosystem</span>
+<h2>Cross-Project Learning</h2>
+<p>Learning isn&rsquo;t limited to a single project. When you use VibeCrew across multiple projects, the <code>/system-review</code> command aggregates anonymized performance data to identify patterns at the plugin level.</p>
+<p>The System Reviewer agent analyzes:</p>
+<ul>
+<li><strong>Vibe Score trends</strong> across projects &mdash; are some project types consistently lower-scoring?</li>
+<li><strong>Agent usage patterns</strong> &mdash; which agents are used most, which are underutilized?</li>
+<li><strong>Cost distribution</strong> &mdash; how costs break down across agents and project types</li>
+<li><strong>MCP server adoption</strong> &mdash; which MCP integrations provide the most value?</li>
+</ul>
+<p>All data is anonymized: project paths and names are replaced with aliases (project-001, project-002). Telemetry is stored locally at <code>${CLAUDE_PLUGIN_ROOT}/telemetry/aggregate.json</code>.</p>
+<div class="callout info">
+<div class="callout-title">Learn more</div>
+For the full details on cross-project telemetry, see <a href="/vibe-crew/tips.html#system-review">Tips &amp; Troubleshooting &gt; System Review</a>.
+</div>
+</section>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- SECTION 8: Practical Tips -->
+<!-- ============================================================ -->
+<section class="section" id="practical-tips">
+<span class="section-label">Best Practices</span>
+<h2>Practical Tips</h2>
+<div class="card-grid">
+<div class="card">
+<div class="card-icon green">&#10003;</div>
+<h4>Always /wrap</h4>
+<p>End every session with <code>/wrap</code>. This is what triggers the Vibe Score calculation, Performance Coach analysis, and handoff generation. Without it, the session&rsquo;s learnings are lost.</p>
+</div>
+<div class="card">
+<div class="card-icon blue">&#128203;</div>
+<h4>Review CLAUDE.md monthly</h4>
+<p>Curate your Session Learnings section. Remove rules that no longer apply, and promote universally-valuable rules to your main conventions section.</p>
+</div>
+<div class="card">
+<div class="card-icon purple">&#9881;</div>
+<h4>Trust the coach</h4>
+<p>The Performance Coach only proposes a mutation when it detects a pattern across 3+ sessions. If it suggests something, the data backs it up. Give proposed rules a fair trial.</p>
+</div>
+<div class="card">
+<div class="card-icon amber">&#9654;</div>
+<h4>Use /replay for proven patterns</h4>
+<p>When a session scores 90+, capture it as a workflow template with <code>/replay --create</code>. Future features can reuse the proven approach, compounding the learning effect.</p>
+</div>
+</div>
+</section>
+
+ <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/advanced-features.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Advanced Features</span></a><a href="/vibe-crew/personalization.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Personalization</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html>

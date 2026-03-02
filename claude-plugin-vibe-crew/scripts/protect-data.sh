@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # scripts/protect-data.sh
 # PreToolUse hook for Bash -- blocks dangerous shell commands
-# 8 categories, 51 patterns
+# 9 categories, 54 patterns
 # Exit 0 = allow, Exit 2 = deny with hookSpecificOutput
 
 set -euo pipefail
@@ -70,8 +70,8 @@ if echo "$COMMAND" | grep -qE '>\s*/dev/(sd|hd|nvme)'; then
   block "Destructive" "Writing directly to a block device destroys data."
 fi
 
-if echo "$COMMAND" | grep -qE '\btruncate\s+' && echo "$COMMAND" | grep -qE '(\.vibecrew/|state\.json|backlog\.json|\.env|/etc/)'; then
-  block "Destructive" "truncate destroys file contents of sensitive files." "Use a backup before truncating."
+if echo "$COMMAND" | grep -qE '\btruncate\s+'; then
+  block "Destructive" "truncate destroys file contents." "Use a backup before truncating."
 fi
 
 # =============================================================================
@@ -273,12 +273,28 @@ if echo "$COMMAND" | grep -qE '\byes\s*\|'; then
   block "Resource" "yes | can overwhelm processes with infinite input."
 fi
 
-if echo "$COMMAND" | grep -qE 'while\s+true\s*;.*do'; then
+if echo "$COMMAND" | grep -qE 'while\s+(true|:)\s*;.*do'; then
   block "Resource" "Infinite loop without break condition." "Add a break condition or use a bounded loop."
 fi
 
 if echo "$COMMAND" | grep -qE '\bkill\s+(-9|-SIGKILL)\b'; then
   block "Resource" "kill -9 forcefully terminates a process without cleanup." "Use kill (SIGTERM) first to allow graceful shutdown."
+fi
+
+# =============================================================================
+# Category 9: Indirect Execution
+# =============================================================================
+
+if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)\beval\b'; then
+  block "Indirect" "eval executes arbitrary code, bypassing all safety checks." "Write the command directly instead of using eval."
+fi
+
+if echo "$COMMAND" | grep -qE '\b(bash|sh)\s+-c\b'; then
+  block "Indirect" "bash -c / sh -c executes arbitrary code in a subshell." "Write the command directly instead of wrapping in bash -c."
+fi
+
+if echo "$COMMAND" | grep -qE '\bbase64\b.*\|\s*(bash|sh)\b'; then
+  block "Indirect" "Decoding and piping to shell executes obfuscated code."
 fi
 
 # All checks passed

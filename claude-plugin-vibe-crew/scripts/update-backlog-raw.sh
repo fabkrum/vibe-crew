@@ -43,8 +43,17 @@ if [[ -z "$JQ_EXPR" ]]; then
 fi
 
 # Validate jq expression against allowlist — reject dangerous builtins
-if echo "$JQ_EXPR" | grep -qE '\b(input|inputs|env|debug|halt|builtins|@base64d|@sh|@html|@uri|getpath|delpaths|modulemeta|limit|first|last|range|ascii_downcase|ascii_upcase|implode|explode|tojson|fromjson|scan|test|match|capture|splits|sub|gsub)\s*\(' 2>/dev/null; then
+if echo "$JQ_EXPR" | grep -qE '\b(input|inputs|env|debug|halt|halt_error|builtins|@base64d|@sh|@html|@uri|getpath|delpaths|modulemeta|limit|first|last|range|ascii_downcase|ascii_upcase|implode|explode|tojson|fromjson|scan|test|match|capture|splits|sub|gsub)\s*\(' 2>/dev/null; then
   echo "ERROR: jq expression contains disallowed function calls" >&2
+  exit 1
+fi
+# Block pipe-to-builtin and assignment-from-builtin patterns (no parens needed)
+if echo "$JQ_EXPR" | grep -qE '\|\s*(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
+  echo "ERROR: jq expression contains disallowed builtin via pipe" >&2
+  exit 1
+fi
+if echo "$JQ_EXPR" | grep -qE '=\s*(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
+  echo "ERROR: jq expression contains disallowed builtin via assignment" >&2
   exit 1
 fi
 

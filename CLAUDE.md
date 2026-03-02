@@ -11,12 +11,12 @@ VibeCrew is a Claude Code plugin that transforms Claude Code into an autonomous 
 ```
 claude-plugin-vibe-crew/          # The plugin — install this into your projects
   .claude-plugin/plugin.json    # Plugin manifest
-  .mcp.json                     # MCP server config (10 servers)
+  .mcp.json                     # MCP server config (9 servers)
   settings.json                 # Permission rules
   hooks/hooks.json              # Event hook bindings
   scripts/                      # ~80 bash automation scripts
   agents/                       # 14 specialized AI agent prompts
-  skills/                       # 31 slash command definitions
+  skills/                       # 33 slash command definitions
   tests/                        # BATS test suite
   templates/                    # Project templates and doc-site scaffold
 
@@ -189,7 +189,7 @@ The Performance Coach can propose a CLAUDE.md mutation if documentation drift re
 
 ## Current Status
 
-VibeCrew v1.7.0 — the plugin is feature-complete. The repository contains:
+VibeCrew v1.8.0 — the plugin is feature-complete. The repository contains:
 - The full plugin (`claude-plugin-vibe-crew/`) with all agents, hooks, scripts, skills, and templates
 - Architecture design docs (`architecture/`) for contributor reference
 - Companion documentation website (`docs/`) with setup guide, workflows, example sessions, and best practices

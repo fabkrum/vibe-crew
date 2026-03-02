@@ -41,7 +41,10 @@ while IFS= read -r server; do
 
   # Get command and args as array (safe — no shell interpolation)
   CMD=$(jq -r ".mcpServers.\"$server\".command" "$MCP_CONFIG")
-  readarray -t ARGS_ARRAY < <(jq -r ".mcpServers.\"$server\".args // [] | .[]" "$MCP_CONFIG")
+  ARGS_ARRAY=()
+  while IFS= read -r arg; do
+    [[ -n "$arg" ]] && ARGS_ARRAY+=("$arg")
+  done < <(jq -r ".mcpServers.\"$server\".args // [] | .[]" "$MCP_CONFIG")
 
   # Sanitize server name for temp file usage
   SAFE_SERVER="$(printf '%s' "$server" | tr -cd '[:alnum:]._-')"
@@ -49,8 +52,14 @@ while IFS= read -r server; do
 
   # Try to start the server with a timeout
   # We just check if the process starts without immediate error
+  TIMEOUT_CMD=""
+  if command -v timeout &>/dev/null; then
+    TIMEOUT_CMD="timeout"
+  elif command -v gtimeout &>/dev/null; then
+    TIMEOUT_CMD="gtimeout"
+  fi
   ERROR_MSG=""
-  if timeout "$TIMEOUT_SECS" bash -c '
+  if ${TIMEOUT_CMD:-timeout} "$TIMEOUT_SECS" bash -c '
     "$@" </dev/null >/dev/null 2>"$0" &
     PID=$!
     sleep 1
@@ -74,8 +83,8 @@ while IFS= read -r server; do
     if [[ "$STATUS" == "ok" ]]; then
       INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"vibecrew-healthcheck","version":"1.0.0"}}}'
       INIT_RESPONSE=""
-      if command -v timeout &>/dev/null; then
-        INIT_RESPONSE=$(echo "$INIT_REQUEST" | timeout 2s "$CMD" "${ARGS_ARRAY[@]}" 2>/dev/null || echo "")
+      if [[ -n "${TIMEOUT_CMD:-}" ]]; then
+        INIT_RESPONSE=$(echo "$INIT_REQUEST" | "$TIMEOUT_CMD" 2s "$CMD" "${ARGS_ARRAY[@]}" 2>/dev/null || echo "")
       fi
       if [[ -n "$INIT_RESPONSE" ]]; then
         HAS_RESULT=$(echo "$INIT_RESPONSE" | jq -r '.result // empty' 2>/dev/null || echo "")

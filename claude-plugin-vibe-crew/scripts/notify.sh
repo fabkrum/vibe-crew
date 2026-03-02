@@ -102,7 +102,7 @@ if command -v terminal-notifier &> /dev/null; then
   esac
 fi
 
-# Priority 3: osascript
+# Priority 3: osascript (macOS)
 if [[ "$notify_sent" == "false" ]] && command -v osascript &> /dev/null; then
   osascript \
     -e 'on run {notifBody, notifTitle, notifSound}' \
@@ -111,17 +111,22 @@ if [[ "$notify_sent" == "false" ]] && command -v osascript &> /dev/null; then
     -- "$BODY" "$TITLE" "$SOUND" 2>/dev/null && notify_sent=true || true
 fi
 
-# Priority 4: OSC 777 escape sequence
-if [[ "$notify_sent" == "false" ]]; then
-  printf '\e]777;notify;%s;%s\a' "$TITLE" "$BODY" 2>/dev/null || true
+# Priority 4: notify-send (Linux / libnotify)
+if [[ "$notify_sent" == "false" ]] && command -v notify-send &> /dev/null; then
+  notify-send "$TITLE" "$BODY" 2>/dev/null && notify_sent=true || true
 fi
 
-# Priority 5: Terminal bell
+# Priority 5: OSC 777 escape sequence
+if [[ "$notify_sent" == "false" ]]; then
+  printf '\e]777;notify;%s;%s\a' "$TITLE" "$BODY" 2>/dev/null && notify_sent=true || true
+fi
+
+# Priority 6: Terminal bell
 if [[ "$notify_sent" == "false" ]]; then
   printf '\a' 2>/dev/null || true
 fi
 
-# Priority 6: Silent log (always write, regardless of other methods)
+# Priority 7: Silent log (always write, regardless of other methods)
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 if [[ -d "$VIBECREW_DIR" ]]; then
   # ── Log rotation ──

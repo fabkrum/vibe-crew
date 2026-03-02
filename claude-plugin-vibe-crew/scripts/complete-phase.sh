@@ -23,38 +23,10 @@ TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 source "$(dirname "$0")/lib/lock.sh"
 
 # =============================================================================
-# Atomic write with validation
+# Atomic write with validation (shared library)
 # =============================================================================
 
-atomic_write() {
-  local target="$1"
-  local content="$2"
-  local tmp="${target}.tmp"
-  local backup="${target}.bak"
-
-  # Create backup
-  if [[ -f "$target" ]]; then
-    cp "$target" "$backup"
-  fi
-
-  # Write to temp file
-  echo "$content" > "$tmp"
-
-  # Validate JSON
-  if ! jq empty "$tmp" 2>/dev/null; then
-    echo "ERROR: JSON validation failed for $target" >&2
-    rm -f "$tmp"
-    # Restore from backup
-    if [[ -f "$backup" ]]; then
-      cp "$backup" "$target"
-    fi
-    return 1
-  fi
-
-  # Atomic rename (caller manages .bak cleanup for rollback safety)
-  mv "$tmp" "$target"
-  return 0
-}
+source "$(dirname "$0")/lib/atomic-write.sh"
 
 # =============================================================================
 # Validation

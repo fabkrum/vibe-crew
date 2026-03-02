@@ -7,7 +7,6 @@
 # Respects user profile autonomy setting — only blocks for full_auto/checkpoints.
 
 set -euo pipefail
-trap 'kill 0 2>/dev/null' EXIT
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"

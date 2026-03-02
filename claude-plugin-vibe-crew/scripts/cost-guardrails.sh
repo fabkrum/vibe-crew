@@ -3,7 +3,7 @@
 # Stop hook helper: monitors session cost against config.json limits
 # Reads token usage from stdin (hook payload JSON), calculates estimated cost,
 # accumulates in session-cost.json, compares against thresholds, emits warnings.
-# Exit 0 always (fail open)
+# Exit 0 = within limits, Exit 2 = session hard limit exceeded (when hard_stop is true)
 
 set -euo pipefail
 
@@ -113,11 +113,13 @@ jq -n \
 SESSION_WARN="2.00"
 SESSION_MAX="5.00"
 DAILY_WARN="20.00"
+HARD_STOP="true"
 
 if [[ -f "$CONFIG_FILE" ]]; then
   SESSION_WARN="$(jq -r '.cost_limits.session_warn_usd // 2.00' "$CONFIG_FILE" 2>/dev/null || echo "2.00")"
   SESSION_MAX="$(jq -r '.cost_limits.session_max_usd // 5.00' "$CONFIG_FILE" 2>/dev/null || echo "5.00")"
   DAILY_WARN="$(jq -r '.cost_limits.daily_warn_usd // 20.00' "$CONFIG_FILE" 2>/dev/null || echo "20.00")"
+  HARD_STOP="$(jq -r 'if .cost_limits.hard_stop == false then "false" else "true" end' "$CONFIG_FILE" 2>/dev/null || echo "true")"
 fi
 
 # ── Session cost checks ──
@@ -125,9 +127,13 @@ SESSION_COST_FMT="$(fmt_usd "$SESSION_COST")"
 
 # Check hard limit first (most severe)
 EXCEEDS_MAX="$(awk -v a="$SESSION_COST" -v b="$SESSION_MAX" 'BEGIN {print (a > b) ? 1 : 0}')"
+COST_EXIT_CODE=0
 if [[ "$EXCEEDS_MAX" == "1" ]]; then
   SESSION_MAX_FMT="$(fmt_usd "$SESSION_MAX")"
   echo "COST LIMIT: Session cost \$${SESSION_COST_FMT} exceeds hard limit (\$${SESSION_MAX_FMT}). Agent MUST pause and ask user for permission to continue."
+  if [[ "$HARD_STOP" == "true" ]]; then
+    COST_EXIT_CODE=2
+  fi
 else
   # Check warning threshold
   EXCEEDS_WARN="$(awk -v a="$SESSION_COST" -v b="$SESSION_WARN" 'BEGIN {print (a > b) ? 1 : 0}')"
@@ -161,4 +167,4 @@ if [[ "$EXCEEDS_DAILY" == "1" ]]; then
   echo "DAILY COST WARNING: Estimated daily spend \$${DAILY_COST_FMT} exceeds daily warning threshold (\$${DAILY_WARN_FMT})."
 fi
 
-exit 0
+exit "$COST_EXIT_CODE"

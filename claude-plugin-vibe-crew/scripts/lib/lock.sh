@@ -53,7 +53,13 @@ _lock_cleanup() {
   fi
 }
 
-trap _lock_cleanup EXIT
+# Composable trap: append _lock_cleanup to any existing EXIT trap
+_lock_existing_trap="$(trap -p EXIT | sed "s/^trap -- '//;s/' EXIT$//" 2>/dev/null || echo "")"
+if [[ -n "$_lock_existing_trap" ]]; then
+  trap "${_lock_existing_trap}; _lock_cleanup" EXIT
+else
+  trap '_lock_cleanup' EXIT
+fi
 
 # --- Check if existing lock is stale (older than configured timeout) ---
 _lock_is_stale() {

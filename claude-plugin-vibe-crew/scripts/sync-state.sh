@@ -30,26 +30,19 @@ LOCK_FAIL_OPEN=true
 source "$(dirname "$0")/lib/lock.sh"
 
 # =============================================================================
-# Atomic write with validation
+# Atomic write with validation (shared library — no-backup for sync-state)
 # =============================================================================
 
-atomic_write() {
+source "$(dirname "$0")/lib/atomic-write.sh"
+
+# Wrap atomic_write for sync-state: pass --no-backup, capture warnings
+_sync_atomic_write() {
   local target="$1"
   local content="$2"
-  local tmp="${target}.tmp.$$"
-
-  # Write to temp file
-  echo "$content" > "$tmp"
-
-  # Validate JSON
-  if ! jq empty "$tmp" 2>/dev/null; then
-    rm -f "$tmp"
+  if ! atomic_write "$target" "$content" --no-backup; then
     WARNINGS+=("JSON validation failed writing $(basename "$target"), skipped")
     return 1
   fi
-
-  # Atomic rename
-  mv "$tmp" "$target"
   return 0
 }
 
@@ -275,13 +268,13 @@ fi
 # =============================================================================
 
 if [[ "$STATE_MODIFIED" == "true" ]]; then
-  if ! atomic_write "$STATE_FILE" "$STATE"; then
+  if ! _sync_atomic_write "$STATE_FILE" "$STATE"; then
     WARNINGS+=("Failed to write state.json fixes")
   fi
 fi
 
 if [[ "$BACKLOG_MODIFIED" == "true" ]]; then
-  if ! atomic_write "$BACKLOG_FILE" "$BACKLOG"; then
+  if ! _sync_atomic_write "$BACKLOG_FILE" "$BACKLOG"; then
     WARNINGS+=("Failed to write backlog.json fixes")
   fi
 fi

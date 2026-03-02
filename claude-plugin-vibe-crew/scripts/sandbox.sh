@@ -30,14 +30,14 @@ sandbox_canonicalize() {
 sandbox_check_path() {
   local path="$1"
   local canonical=$(sandbox_canonicalize "$path")
-  if [[ "$canonical" != "$SANDBOX_PROJECT_ROOT"* ]]; then
+  if [[ "$canonical" != "$SANDBOX_PROJECT_ROOT" && "$canonical" != "$SANDBOX_PROJECT_ROOT/"* ]]; then
     return 1
   fi
   local current="$canonical"
   while [[ "$current" != "$SANDBOX_PROJECT_ROOT" && "$current" != "/" ]]; do
     if [[ -L "$current" ]]; then
       local target=$(readlink -f "$current")
-      if [[ "$target" != "$SANDBOX_PROJECT_ROOT"* ]]; then
+      if [[ "$target" != "$SANDBOX_PROJECT_ROOT" && "$target" != "$SANDBOX_PROJECT_ROOT/"* ]]; then
         return 1
       fi
     fi

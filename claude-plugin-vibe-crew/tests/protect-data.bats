@@ -672,3 +672,59 @@ EOF'
   assert_failure 2
   assert_output --partial "Indirect"
 }
+
+# =============================================================================
+# Config-driven allowlist REMOVED — verify no bypass possible
+# =============================================================================
+
+@test "config allowed_patterns cannot bypass rm -rf /" {
+  # Even if config.json has a catch-all allowlist, rules still block
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+  mkdir -p "$tmpdir/.vibecrew"
+  git init "$tmpdir" --initial-branch=main >/dev/null 2>&1
+  cat > "$tmpdir/.vibecrew/config.json" <<'CONF'
+{"protect_data":{"allowed_patterns":[".*"]}}
+CONF
+  local tmpfile
+  tmpfile="$(mktemp)"
+  jq -n --arg cmd "rm -rf /" '{tool_name: "Bash", tool_input: {command: $cmd}}' > "$tmpfile"
+  run bash -c "export GIT_CEILING_DIRECTORIES='$(dirname "$tmpdir")' && cd '$tmpdir' && cat '$tmpfile' | bash '$SCRIPT'"
+  rm -f "$tmpfile" && rm -rf "$tmpdir"
+  assert_failure 2
+  assert_output --partial "Destructive"
+}
+
+@test "config allowed_patterns cannot bypass git push --force" {
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+  mkdir -p "$tmpdir/.vibecrew"
+  git init "$tmpdir" --initial-branch=main >/dev/null 2>&1
+  cat > "$tmpdir/.vibecrew/config.json" <<'CONF'
+{"protect_data":{"allowed_patterns":["git push"]}}
+CONF
+  local tmpfile
+  tmpfile="$(mktemp)"
+  jq -n --arg cmd "git push --force origin main" '{tool_name: "Bash", tool_input: {command: $cmd}}' > "$tmpfile"
+  run bash -c "export GIT_CEILING_DIRECTORIES='$(dirname "$tmpdir")' && cd '$tmpdir' && cat '$tmpfile' | bash '$SCRIPT'"
+  rm -f "$tmpfile" && rm -rf "$tmpdir"
+  assert_failure 2
+  assert_output --partial "Git"
+}
+
+@test "config allowed_patterns cannot bypass sudo" {
+  local tmpdir
+  tmpdir="$(mktemp -d)"
+  mkdir -p "$tmpdir/.vibecrew"
+  git init "$tmpdir" --initial-branch=main >/dev/null 2>&1
+  cat > "$tmpdir/.vibecrew/config.json" <<'CONF'
+{"protect_data":{"allowed_patterns":["sudo"]}}
+CONF
+  local tmpfile
+  tmpfile="$(mktemp)"
+  jq -n --arg cmd "sudo apt-get update" '{tool_name: "Bash", tool_input: {command: $cmd}}' > "$tmpfile"
+  run bash -c "export GIT_CEILING_DIRECTORIES='$(dirname "$tmpdir")' && cd '$tmpdir' && cat '$tmpfile' | bash '$SCRIPT'"
+  rm -f "$tmpfile" && rm -rf "$tmpdir"
+  assert_failure 2
+  assert_output --partial "Privilege"
+}

@@ -62,6 +62,23 @@ run_restrict() {
   assert_output --partial "sensitive"
 }
 
+@test "blocks .vibecrew/config.json writes" {
+  run_restrict "$TEST_PROJECT_DIR/.vibecrew/config.json"
+  assert_failure 2
+  assert_output --partial "sensitive"
+}
+
+@test "allows other .vibecrew/ file writes" {
+  run_restrict "$TEST_PROJECT_DIR/.vibecrew/state.json"
+  assert_success
+}
+
+@test "allows src/config.json writes (not .vibecrew)" {
+  mkdir -p "$TEST_PROJECT_DIR/src"
+  run_restrict "$TEST_PROJECT_DIR/src/config.json"
+  assert_success
+}
+
 @test "non-Write tool is allowed through" {
   local payload='{"tool_name": "Bash", "tool_input": {"command": "echo hello"}}'
   run bash -c "cd '$TEST_PROJECT_DIR' && echo '$payload' | bash '$SCRIPT'"

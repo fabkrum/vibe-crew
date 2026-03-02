@@ -21,22 +21,6 @@ if [[ -z "$COMMAND" ]]; then
   exit 0
 fi
 
-# --- Config-driven allowlist ---
-# Read allowed patterns from .vibecrew/config.json protect_data.allowed_patterns[]
-_PD_PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-_PD_CONFIG="${_PD_PROJECT_ROOT}/.vibecrew/config.json"
-if [[ -f "$_PD_CONFIG" ]]; then
-  _PD_ALLOWED=$(jq -r '.protect_data.allowed_patterns // [] | .[]' "$_PD_CONFIG" 2>/dev/null || true)
-  if [[ -n "$_PD_ALLOWED" ]]; then
-    while IFS= read -r pattern; do
-      [[ -z "$pattern" ]] && continue
-      if echo "$COMMAND" | grep -qE "$pattern" 2>/dev/null; then
-        exit 0
-      fi
-    done <<< "$_PD_ALLOWED"
-  fi
-fi
-
 # --- Helper: block with message ---
 block() {
   local category="$1"

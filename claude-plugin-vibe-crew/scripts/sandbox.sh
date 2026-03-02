@@ -72,6 +72,11 @@ sandbox_check_sensitive_file() {
   if [[ "$canonical" == *"/.ssh/"* || "$canonical" == *"/.aws/"* ]]; then
     return 1
   fi
+  # Block direct writes to .vibecrew/config.json — agents must use
+  # dedicated scripts (save-profile.sh, enable-mcp-server.sh, etc.)
+  if [[ "$canonical" == *"/.vibecrew/config.json" ]]; then
+    return 1
+  fi
   return 0
 }
 

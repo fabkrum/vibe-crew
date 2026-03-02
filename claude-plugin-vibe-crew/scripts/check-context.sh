@@ -63,7 +63,11 @@ if [[ -d "$LOCKS_DIR" ]]; then
         NOW_EPOCH=$(date "+%s")
         ELAPSED=$(( NOW_EPOCH - LOCKED_EPOCH ))
         if [[ "$ELAPSED" -gt "$TIMEOUT" ]]; then
-          rm -rf "$lock_dir" 2>/dev/null || true
+          # Only remove if owning process is dead
+          _lock_pid=$(jq -r '.pid // empty' "$INFO_FILE" 2>/dev/null || echo "")
+          if [[ -z "$_lock_pid" ]] || ! kill -0 "$_lock_pid" 2>/dev/null; then
+            rm -rf "$lock_dir" 2>/dev/null || true
+          fi
         fi
       fi
     else

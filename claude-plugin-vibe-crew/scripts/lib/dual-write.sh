@@ -90,10 +90,15 @@ recover_dual_write() {
   content1=$(cat "$journal_dir/journal-file1.staged")
   content2=$(cat "$journal_dir/journal-file2.staged")
 
-  atomic_write "$file1" "$content1" --no-backup || true
-  atomic_write "$file2" "$content2" --no-backup || true
+  local rc=0
+  atomic_write "$file1" "$content1" --no-backup || rc=1
+  atomic_write "$file2" "$content2" --no-backup || rc=1
 
   # Clean up journal
   rm -f "$journal" "$journal_dir/journal-file1.staged" "$journal_dir/journal-file2.staged"
-  return 0
+
+  if [[ "$rc" -ne 0 ]]; then
+    echo "WARNING: Dual-write recovery completed with errors" >&2
+  fi
+  return "$rc"
 }

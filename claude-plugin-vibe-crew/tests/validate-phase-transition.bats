@@ -161,3 +161,20 @@ teardown() {
   run bash -c "cd '$TEST_PROJECT_DIR' && echo '$INPUT' | bash '$SCRIPT'"
   assert_success
 }
+
+# =============================================================================
+# Fix 9: Quoted phase argument handled correctly
+# =============================================================================
+
+@test "feature: allows completing quoted phase argument" {
+  set_active_feature "feat-001" "Test Feature" "design"
+
+  # Build JSON with jq to properly escape embedded quotes in the command
+  local tmpjson
+  tmpjson="$(mktemp)"
+  jq -n --arg cmd 'bash scripts/complete-phase.sh feat-001 "design"' \
+    '{tool_name: "Bash", tool_input: {command: $cmd}}' > "$tmpjson"
+  run bash -c "cd '$TEST_PROJECT_DIR' && cat '$tmpjson' | bash '$SCRIPT'"
+  rm -f "$tmpjson"
+  assert_success
+}

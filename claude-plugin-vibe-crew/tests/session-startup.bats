@@ -177,6 +177,27 @@ run_startup() {
 # 9. Error state: session-errors.jsonl with prior logged errors
 # =============================================================================
 
+# =============================================================================
+# Fix 5: Gamification reads config.json with guard
+# =============================================================================
+
+@test "gamification: missing config.json does not crash when gamification.json exists" {
+  # Create gamification file but remove config.json
+  cat > "$VIBECREW_DIR/gamification.json" <<'EOF'
+{"level": 3, "streak": {"current": 5}, "active_challenges": [{"name": "Speed Run"}]}
+EOF
+  rm -f "$VIBECREW_DIR/config.json"
+
+  run_startup
+  assert_success
+  # Should NOT show gamification line (config guard prevents reading)
+  refute_output --partial "Level 3"
+}
+
+# =============================================================================
+# 9. Error state
+# =============================================================================
+
 @test "prior errors in session-errors.jsonl: script runs normally and exits 0" {
   # Simulate prior errors logged by other hooks
   cat > "$VIBECREW_DIR/session-errors.jsonl" <<'EOF'

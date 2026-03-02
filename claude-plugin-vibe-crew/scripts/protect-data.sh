@@ -336,8 +336,8 @@ if echo "$COMMAND" | grep -qE '\bbase64\b.*\|\s*(bash|sh)\b'; then
   block "Indirect" "Decoding and piping to shell executes obfuscated code."
 fi
 
-if echo "$COMMAND" | grep -qE '\b(bash|sh|zsh)\s*<<<'; then
-  block "Indirect" "Here-string to shell executes arbitrary code." "Write the command directly."
+if echo "$COMMAND" | grep -qE '\b(bash|sh|zsh)\s*(<<<|<<)'; then
+  block "Indirect" "Here-string/here-document to shell executes arbitrary code." "Write the command directly."
 fi
 
 # All checks passed

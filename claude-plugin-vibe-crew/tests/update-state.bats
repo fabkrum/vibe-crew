@@ -170,3 +170,43 @@ teardown() {
   run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.active_feature.phase = \"code\"'"
   assert_success
 }
+
+# =============================================================================
+# Fix 6: Expanded jq function blocklist
+# =============================================================================
+
+@test "blocks walk() function call" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = walk(if type == \"string\" then . else . end)'"
+  assert_failure
+  assert_output --partial "disallowed function calls"
+}
+
+@test "blocks recurse() function call" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = recurse(.children[]?)'"
+  assert_failure
+  assert_output --partial "disallowed function calls"
+}
+
+@test "blocks setpath() function call" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = setpath([\"a\",\"b\"]; 1)'"
+  assert_failure
+  assert_output --partial "disallowed function calls"
+}
+
+@test "blocks to_entries as word match" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = to_entries'"
+  assert_failure
+  assert_output --partial "disallowed builtin reference"
+}
+
+@test "blocks from_entries as word match" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = from_entries'"
+  assert_failure
+  assert_output --partial "disallowed builtin reference"
+}
+
+@test "blocks with_entries as word match" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = with_entries'"
+  assert_failure
+  assert_output --partial "disallowed builtin reference"
+}

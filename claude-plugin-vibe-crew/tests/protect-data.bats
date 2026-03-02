@@ -655,3 +655,20 @@ run_protect_non_bash() {
   assert_failure 2
   assert_output --partial "Indirect"
 }
+
+# --- Fix 7: here-document to shell blocked ---
+@test "blocks bash << here-document" {
+  run_protect 'bash <<EOF
+echo pwned
+EOF'
+  assert_failure 2
+  assert_output --partial "Indirect"
+}
+
+@test "blocks sh << here-document" {
+  run_protect 'sh <<EOF
+echo pwned
+EOF'
+  assert_failure 2
+  assert_output --partial "Indirect"
+}

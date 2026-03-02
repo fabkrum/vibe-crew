@@ -76,6 +76,12 @@ _lock_is_stale() {
   if [[ ! -f "$lock_info" ]]; then
     return 0  # No info file means stale
   fi
+  # PID liveness check — if owning process is alive, lock is NOT stale
+  local lock_pid
+  lock_pid=$(jq -r '.pid // empty' "$lock_info" 2>/dev/null || echo "")
+  if [[ -n "$lock_pid" ]] && kill -0 "$lock_pid" 2>/dev/null; then
+    return 1  # Process alive — NOT stale
+  fi
   local locked_at
   locked_at=$(jq -r '.locked_at // empty' "$lock_info" 2>/dev/null || echo "")
   if [[ -z "$locked_at" ]]; then
@@ -120,11 +126,19 @@ acquire_state_lock() {
   # Lock exists -- check if stale (atomic claim via rename)
   if _lock_is_stale; then
     mv "$_LOCK_DIR" "${_LOCK_DIR}.stale.$$" 2>/dev/null && {
-      rm -rf "${_LOCK_DIR}.stale.$$"
-      if mkdir "$_LOCK_DIR" 2>/dev/null; then
-        _LOCK_ACQUIRED=true
-        _lock_write_info "$caller"
-        return 0
+      # Post-move verification: re-check PID liveness on moved dir
+      local _stale_pid
+      _stale_pid=$(jq -r '.pid // empty' "${_LOCK_DIR}.stale.$$/info.json" 2>/dev/null || echo "")
+      if [[ -n "$_stale_pid" ]] && kill -0 "$_stale_pid" 2>/dev/null; then
+        # Process came alive — put lock back
+        mv "${_LOCK_DIR}.stale.$$" "$_LOCK_DIR" 2>/dev/null || true
+      else
+        rm -rf "${_LOCK_DIR}.stale.$$"
+        if mkdir "$_LOCK_DIR" 2>/dev/null; then
+          _LOCK_ACQUIRED=true
+          _lock_write_info "$caller"
+          return 0
+        fi
       fi
     }
   fi
@@ -141,7 +155,15 @@ acquire_state_lock() {
     fi
     # Check for stale lock while waiting (atomic claim via rename)
     if _lock_is_stale; then
-      mv "$_LOCK_DIR" "${_LOCK_DIR}.stale.$$" 2>/dev/null && rm -rf "${_LOCK_DIR}.stale.$$"
+      mv "$_LOCK_DIR" "${_LOCK_DIR}.stale.$$" 2>/dev/null && {
+        local _stale_pid2
+        _stale_pid2=$(jq -r '.pid // empty' "${_LOCK_DIR}.stale.$$/info.json" 2>/dev/null || echo "")
+        if [[ -n "$_stale_pid2" ]] && kill -0 "$_stale_pid2" 2>/dev/null; then
+          mv "${_LOCK_DIR}.stale.$$" "$_LOCK_DIR" 2>/dev/null || true
+        else
+          rm -rf "${_LOCK_DIR}.stale.$$"
+        fi
+      }
     fi
     attempts=$((attempts + 1))
   done
@@ -180,11 +202,18 @@ acquire_named_lock() {
   # Lock exists -- check if stale
   if _lock_is_stale_named "$lock_dir"; then
     mv "$lock_dir" "${lock_dir}.stale.$$" 2>/dev/null && {
-      rm -rf "${lock_dir}.stale.$$"
-      if mkdir "$lock_dir" 2>/dev/null; then
-        _LOCK_ACTIVE_NAMES+=("$lock_name")
-        _lock_write_named_info "$lock_dir" "$caller" "$lock_name"
-        return 0
+      # Post-move verification: re-check PID liveness on moved dir
+      local _stale_npid
+      _stale_npid=$(jq -r '.pid // empty' "${lock_dir}.stale.$$/info.json" 2>/dev/null || echo "")
+      if [[ -n "$_stale_npid" ]] && kill -0 "$_stale_npid" 2>/dev/null; then
+        mv "${lock_dir}.stale.$$" "$lock_dir" 2>/dev/null || true
+      else
+        rm -rf "${lock_dir}.stale.$$"
+        if mkdir "$lock_dir" 2>/dev/null; then
+          _LOCK_ACTIVE_NAMES+=("$lock_name")
+          _lock_write_named_info "$lock_dir" "$caller" "$lock_name"
+          return 0
+        fi
       fi
     }
   fi
@@ -200,7 +229,15 @@ acquire_named_lock() {
       return 0
     fi
     if _lock_is_stale_named "$lock_dir"; then
-      mv "$lock_dir" "${lock_dir}.stale.$$" 2>/dev/null && rm -rf "${lock_dir}.stale.$$"
+      mv "$lock_dir" "${lock_dir}.stale.$$" 2>/dev/null && {
+        local _stale_npid2
+        _stale_npid2=$(jq -r '.pid // empty' "${lock_dir}.stale.$$/info.json" 2>/dev/null || echo "")
+        if [[ -n "$_stale_npid2" ]] && kill -0 "$_stale_npid2" 2>/dev/null; then
+          mv "${lock_dir}.stale.$$" "$lock_dir" 2>/dev/null || true
+        else
+          rm -rf "${lock_dir}.stale.$$"
+        fi
+      }
     fi
     attempts=$((attempts + 1))
   done
@@ -251,6 +288,12 @@ _lock_is_stale_named() {
   local lock_info="$lock_dir/info.json"
   if [[ ! -f "$lock_info" ]]; then
     return 0
+  fi
+  # PID liveness check — if owning process is alive, lock is NOT stale
+  local lock_pid
+  lock_pid=$(jq -r '.pid // empty' "$lock_info" 2>/dev/null || echo "")
+  if [[ -n "$lock_pid" ]] && kill -0 "$lock_pid" 2>/dev/null; then
+    return 1  # Process alive — NOT stale
   fi
   local locked_at
   locked_at=$(jq -r '.locked_at // empty' "$lock_info" 2>/dev/null || echo "")

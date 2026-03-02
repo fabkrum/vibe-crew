@@ -78,3 +78,25 @@ make_payload() {
   run bash -c "cd '$TEST_PROJECT_DIR' && echo '' | bash '$SCRIPT'"
   assert_success
 }
+
+# =============================================================================
+# Fix 10: Warning emitted on cost file write failure
+# =============================================================================
+
+@test "warning emitted when cost file write fails" {
+  [[ "$(id -u)" -eq 0 ]] && skip "Cannot test permission denial as root"
+
+  # Create a read-only directory at the cost file path — mv will fail
+  # trying to move into a non-writable directory
+  mkdir -p "$VIBECREW_DIR/session-cost.json"
+  chmod 555 "$VIBECREW_DIR/session-cost.json"
+
+  local payload
+  payload=$(make_payload 1000 500)
+  run bash -c "cd '$TEST_PROJECT_DIR' && echo '$payload' | bash '$SCRIPT' 2>&1"
+  # Restore permissions for cleanup
+  chmod 755 "$VIBECREW_DIR/session-cost.json" 2>/dev/null || true
+  rm -rf "$VIBECREW_DIR/session-cost.json" 2>/dev/null || true
+  assert_success
+  assert_output --partial "WARNING: Cost tracking file write failed"
+}

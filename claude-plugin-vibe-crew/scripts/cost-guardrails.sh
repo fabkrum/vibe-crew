@@ -127,7 +127,7 @@ jq -n \
   --arg model "$MODEL" \
   '{session_cost_usd: $cost, turn_count: $turns, last_turn_cost_usd: $turn_cost, model: $model, last_updated: $updated}' \
   > "$COST_TMP" 2>/dev/null && mv "$COST_TMP" "$COST_FILE" && COST_TMP="" \
-  || { rm -f "$COST_TMP"; log_error "cost-guardrails" "Failed to write cost file"; }
+  || { rm -f "$COST_TMP"; COST_WRITE_FAILED=true; log_error "cost-guardrails" "Failed to write cost file"; echo "WARNING: Cost tracking file write failed — cost data may be stale" >&2; }
 
 # ── Read thresholds from config.json ──
 SESSION_WARN="2.00"

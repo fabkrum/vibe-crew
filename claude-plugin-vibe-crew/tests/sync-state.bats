@@ -143,6 +143,30 @@ run_sync() {
 # Locking
 # =============================================================================
 
+# =============================================================================
+# Fix 8: Backup failure logged
+# =============================================================================
+
+@test "backup failure: logs error but continues" {
+  [[ "$(id -u)" -eq 0 ]] && skip "Cannot test permission denial as root"
+
+  # Make backup directory read-only so cp fails
+  mkdir -p "$VIBECREW_DIR/.backup"
+  chmod 555 "$VIBECREW_DIR/.backup"
+
+  run_sync
+  assert_success
+  # Script should still complete (backup failure is non-fatal)
+  assert_output --partial "consistent"
+
+  # Restore permissions for cleanup
+  chmod 755 "$VIBECREW_DIR/.backup"
+}
+
+# =============================================================================
+# Locking
+# =============================================================================
+
 @test "stale lock: recovers and proceeds" {
   # Create a stale lock (old timestamp)
   mkdir -p "$VIBECREW_DIR/locks/state-files"

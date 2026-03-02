@@ -147,6 +147,59 @@ teardown() {
 # End-to-end: simulate interrupted complete-phase
 # =============================================================================
 
+# =============================================================================
+# Fix 2: recover propagates write failures
+# =============================================================================
+
+@test "recover returns non-zero when atomic_write fails" {
+  [[ "$(id -u)" -eq 0 ]] && skip "Cannot test permission denial as root"
+
+  local file1="$VIBECREW_DIR/backlog.json"
+  local file2="$VIBECREW_DIR/state.json"
+  local content1='{"features":[],"recovered":true}'
+  local content2='{"active_feature":null,"recovered":true}'
+
+  prepare_dual_write "$VIBECREW_DIR" "$file1" "$content1" "$file2" "$content2"
+
+  # Make file1's parent read-only so atomic_write fails for it
+  chmod 555 "$VIBECREW_DIR"
+  run recover_dual_write "$VIBECREW_DIR"
+  chmod 755 "$VIBECREW_DIR"
+  assert_failure
+  assert_output --partial "Dual-write recovery completed with errors"
+}
+
+@test "recover writes file2 even when file1 fails" {
+  [[ "$(id -u)" -eq 0 ]] && skip "Cannot test permission denial as root"
+
+  # Create a scenario where file1 is in a read-only dir but file2 is writable
+  local readonly_dir="$VIBECREW_DIR/readonly_sub"
+  mkdir -p "$readonly_dir"
+  local file1="$readonly_dir/file1.json"
+  local file2="$VIBECREW_DIR/file2.json"
+  echo '{"old":true}' > "$file1"
+  echo '{"old":true}' > "$file2"
+
+  local content1='{"new1":true}'
+  local content2='{"new2":true}'
+
+  prepare_dual_write "$VIBECREW_DIR" "$file1" "$content1" "$file2" "$content2"
+
+  # Make file1's directory read-only
+  chmod 555 "$readonly_dir"
+  run recover_dual_write "$VIBECREW_DIR"
+  chmod 755 "$readonly_dir"
+  assert_failure
+
+  # file2 should have been written successfully despite file1 failure
+  run jq -r '.new2' "$file2"
+  assert_output "true"
+}
+
+# =============================================================================
+# End-to-end: simulate interrupted complete-phase
+# =============================================================================
+
 @test "e2e: sync-state recovers interrupted phase completion" {
   # Setup: feature in-progress, phase=code
   add_feature_to_backlog "feat-001" "Test Feature" "in-progress"

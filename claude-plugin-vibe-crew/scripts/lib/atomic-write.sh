@@ -51,6 +51,13 @@ atomic_write() {
   _compat_fsync "$tmp"
 
   # Atomic rename
-  mv "$tmp" "$target"
+  if ! mv "$tmp" "$target"; then
+    echo "ERROR: Atomic rename failed for $target" >&2
+    rm -f "$tmp"
+    if [[ -f "$backup" ]]; then
+      cp "$backup" "$target" 2>/dev/null || true
+    fi
+    return 1
+  fi
   return 0
 }

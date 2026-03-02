@@ -96,13 +96,20 @@ fi
 # =============================================================================
 
 BACKUP_DIR="$VIBECREW_DIR/.backup"
-mkdir -p "$BACKUP_DIR"
+if ! mkdir -p "$BACKUP_DIR" 2>/dev/null; then
+  log_error "sync-state" "Cannot create backup directory — aborting sync"
+  exit 1
+fi
 
 BACKUP_TS=$(date -u +%Y-%m-%dT%H-%M-%SZ)
 
 # Backup current files
-cp "$STATE_FILE" "$BACKUP_DIR/state.json.$BACKUP_TS" 2>/dev/null || log_error "sync-state" "Failed to backup state.json"
-cp "$BACKLOG_FILE" "$BACKUP_DIR/backlog.json.$BACKUP_TS" 2>/dev/null || log_error "sync-state" "Failed to backup backlog.json"
+BACKUP_FAILED=false
+cp "$STATE_FILE" "$BACKUP_DIR/state.json.$BACKUP_TS" 2>/dev/null || BACKUP_FAILED=true
+cp "$BACKLOG_FILE" "$BACKUP_DIR/backlog.json.$BACKUP_TS" 2>/dev/null || BACKUP_FAILED=true
+if [[ "$BACKUP_FAILED" == "true" ]]; then
+  log_error "sync-state" "Backup failed — proceeding with caution"
+fi
 
 # Rotate: keep only last 5 backups per file
 for prefix in state.json backlog.json; do

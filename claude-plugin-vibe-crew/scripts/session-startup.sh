@@ -77,7 +77,7 @@ fi
 # --- Read gamification state ---
 GAMIFICATION_FILE="$PROJECT_ROOT/.vibecrew/gamification.json"
 GAMIFICATION_LINE=""
-if [[ -f "$GAMIFICATION_FILE" ]]; then
+if [[ -f "$GAMIFICATION_FILE" && -f "$CONFIG_FILE" ]]; then
   GAM_ENABLED=$(jq -r 'if .gamification.enabled == false then "false" else "true" end' "$CONFIG_FILE" 2>/dev/null || echo "true")
   if [[ "$GAM_ENABLED" != "false" ]]; then
     GAM_LEVEL=$(jq -r '.level // 1' "$GAMIFICATION_FILE" 2>/dev/null || echo "1")

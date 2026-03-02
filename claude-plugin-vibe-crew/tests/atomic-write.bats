@@ -66,3 +66,47 @@ teardown() {
   run jq -r '.created' "$target"
   assert_output "true"
 }
+
+# =============================================================================
+# Fix 1: mv failure returns non-zero, restores from backup
+# =============================================================================
+
+@test "mv failure returns 1 with error message" {
+  local target="$TEST_DIR/test.json"
+  echo '{"old": true}' > "$target"
+  # Override mv to simulate failure inside a subshell
+  run bash -c "
+    source '$SCRIPTS_DIR/lib/atomic-write.sh'
+    mv() { return 1; }
+    atomic_write '$target' '{\"new\": true}'
+  "
+  assert_failure
+  assert_output --partial "Atomic rename failed"
+}
+
+@test "mv failure restores from backup when available" {
+  local target="$TEST_DIR/test2.json"
+  echo '{"original": true}' > "$target"
+  run bash -c "
+    source '$SCRIPTS_DIR/lib/atomic-write.sh'
+    mv() { return 1; }
+    atomic_write '$target' '{\"new\": true}'
+  "
+  assert_failure
+  # Original backup should still exist (was created before mv)
+  [ -f "${target}.bak" ]
+  run jq -r '.original' "${target}.bak"
+  assert_output "true"
+}
+
+@test "mv failure with --no-backup still returns 1" {
+  local target="$TEST_DIR/test3.json"
+  echo '{"old": true}' > "$target"
+  run bash -c "
+    source '$SCRIPTS_DIR/lib/atomic-write.sh'
+    mv() { return 1; }
+    atomic_write '$target' '{\"new\": true}' --no-backup
+  "
+  assert_failure
+  assert_output --partial "Atomic rename failed"
+}

@@ -71,6 +71,8 @@ fi
 # Extract the phase argument (second arg after complete-phase.sh)
 # Pattern: complete-phase.sh <feature-id> <phase>
 PHASE=$(echo "$COMMAND" | grep -oE 'complete-phase\.sh\s+\S+\s+(\S+)' | awk '{print $3}' || true)
+PHASE="${PHASE//\"/}"  # Strip any surrounding quotes
+PHASE="${PHASE//\'/}"
 
 if [[ -z "$PHASE" ]]; then
   # Can't parse phase — let complete-phase.sh handle validation

@@ -82,6 +82,44 @@ run_context() {
   assert_success
 }
 
+# =============================================================================
+# Fix 4: Lock cleanup respects PID liveness
+# =============================================================================
+
+@test "lock cleanup: dead PID lock removed when stale" {
+  # Create a stale lock with dead PID
+  mkdir -p "$VIBECREW_DIR/locks/test-lock"
+  cat > "$VIBECREW_DIR/locks/test-lock/info.json" <<EOF
+{
+  "locked_by": "dead-process",
+  "pid": 99999,
+  "locked_at": "2020-01-01T00:00:00Z",
+  "timeout_seconds": 1
+}
+EOF
+  run_context 30
+  assert_success
+  # Lock directory should be cleaned up (PID 99999 is dead)
+  [ ! -d "$VIBECREW_DIR/locks/test-lock" ]
+}
+
+@test "lock cleanup: live PID lock NOT removed even when stale" {
+  # Create a stale lock with OUR PID (alive)
+  mkdir -p "$VIBECREW_DIR/locks/test-lock"
+  cat > "$VIBECREW_DIR/locks/test-lock/info.json" <<EOF
+{
+  "locked_by": "live-process",
+  "pid": $$,
+  "locked_at": "2020-01-01T00:00:00Z",
+  "timeout_seconds": 1
+}
+EOF
+  run_context 30
+  assert_success
+  # Lock directory should NOT be cleaned up (PID is alive)
+  [ -d "$VIBECREW_DIR/locks/test-lock" ]
+}
+
 @test "cleans up stale signal files" {
   # Create a stale signal file (we can't easily backdate mtime in a test,
   # but verify the script doesn't crash when signals dir exists)

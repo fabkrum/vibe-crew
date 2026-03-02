@@ -22,41 +22,67 @@ teardown() {
 @test "blocks | env pattern" {
   run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo | env'"
   assert_failure
-  assert_output --partial "disallowed builtin via pipe"
+  assert_output --partial "disallowed builtin reference"
 }
 
 @test "blocks = env pattern" {
   run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = env'"
   assert_failure
-  assert_output --partial "disallowed builtin via assignment"
+  assert_output --partial "disallowed builtin reference"
 }
 
 @test "blocks | debug pattern" {
   run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo | debug'"
   assert_failure
-  assert_output --partial "disallowed builtin via pipe"
+  assert_output --partial "disallowed builtin reference"
 }
 
 @test "blocks | halt pattern" {
   run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo | halt'"
   assert_failure
-  assert_output --partial "disallowed builtin via pipe"
+  assert_output --partial "disallowed builtin reference"
 }
 
 @test "blocks | halt_error pattern" {
   run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo | halt_error'"
   assert_failure
-  assert_output --partial "disallowed builtin via pipe"
+  assert_output --partial "disallowed builtin reference"
 }
 
 @test "blocks function calls with parens" {
   run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = env()'"
   assert_failure
-  assert_output --partial "disallowed function calls"
+  assert_output --partial "disallowed builtin reference"
+}
+
+# --- Bypass attempts (Fix #3) ---
+
+@test "blocks subexpression bypass: .foo = (.bar // env.SECRET)" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = (.bar // env.SECRET)'"
+  assert_failure
+  assert_output --partial "disallowed builtin reference"
+}
+
+@test "blocks parenthesized env: .foo = (env)" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = (env)'"
+  assert_failure
+  assert_output --partial "disallowed builtin reference"
+}
+
+@test "blocks \$ENV reference" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = \$ENV.SECRET'"
+  assert_failure
+  assert_output --partial "disallowed ENV reference"
+}
+
+@test "blocks .ENV reference" {
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' '.foo = .ENV.PATH'"
+  assert_failure
+  assert_output --partial "disallowed ENV reference"
 }
 
 @test "blocks expressions not starting with dot-path" {
-  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' 'env'"
+  run bash -c "cd '$TEST_PROJECT_DIR' && bash '$SCRIPT' 'keys'"
   assert_failure
   assert_output --partial "must start with a dot-path"
 }

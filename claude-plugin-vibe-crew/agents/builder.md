@@ -147,44 +147,15 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ## Conditional MCP Server Usage
 
-These MCP servers are only available when the TDR selects matching technologies and the servers are enabled via `scripts/enable-mcp-server.sh`. Use them when available; fall back to standard approaches when not.
+These servers are available only when the TDR selects matching technologies and `scripts/enable-mcp-server.sh` enables them. If any MCP tool fails or is unavailable, fall back to standard approaches (Context7, Bash, file reads). Never hard-fail because an MCP tool is missing.
 
-### Supabase MCP
-
-- Use `mcp__supabase__list-tables` and `mcp__supabase__get-table` to inspect the database schema before writing queries or migrations.
-- Use `mcp__supabase__execute-sql` for running migrations and seed data.
-- **NEVER use Supabase MCP against production data.** Only use with development or staging project URLs.
-- **Fallback:** Read schema from migration files in `supabase/migrations/` or use `supabase db dump` via Bash.
-
-### Stripe MCP
-
-- Use for creating products, prices, and verifying webhook configurations during development.
-- **ALWAYS use test mode keys** (keys starting with `sk_test_`). Never use live keys.
-- **Fallback:** Use `curl` or the Stripe CLI (`stripe` via Bash) for API interactions.
-
-### Vercel MCP
-
-- Use to inspect project configuration, check deployment status, and review environment variables.
-- Useful for diagnosing deployment failures alongside CI Healer.
-- **Fallback:** Use `vercel` CLI via Bash or read `vercel.json` configuration directly.
-
-### Figma MCP
-
-- Use `mcp__figma__get-file` and `mcp__figma__get-file-nodes` to extract design specifications, spacing values, and component structures.
-- Translate Figma tokens to CSS custom properties from `design-system.css`.
-- **Fallback:** Use design specs provided in the feature spec document or ask the developer for screenshots.
-
-### Playwright MCP (Visual Verification)
-
-- Use for visual feedback during frontend development. Navigate to pages, take screenshots, extract computed styles, and check console messages.
-- Only invoke during the Code Phase visual verification step (step 7) and the verification loop (step 4.5). Do not use Playwright during the Design Phase.
-- Budget: 1 screenshot + 1 `browser_evaluate` per iteration. Max 2 iterations per Code Phase.
-- **NEVER leave a dev server running** when signaling completion. Kill any server you started.
-- **Fallback:** If Playwright MCP tools are unavailable (server not installed or disabled), skip visual verification entirely. Log `"visual_verification": { "skipped": true, "reason": "playwright_unavailable" }` in the signal payload and proceed with the standard verification loop.
-
-### General Fallback Rule
-
-If any MCP tool call fails or the server is unavailable, continue with the standard approach (Context7, Bash commands, file reads). Never hard-fail because an MCP tool is missing.
+| Server | Key Tools | Safety Rule | Fallback |
+|--------|-----------|------------|----------|
+| **Supabase** | `list-tables`, `get-table`, `execute-sql` | Never use against production | Read `supabase/migrations/` or `supabase db dump` |
+| **Stripe** | Products, prices, webhooks | Test mode keys only (`sk_test_`) | `stripe` CLI or `curl` |
+| **Vercel** | Project config, deployments, env vars | — | `vercel` CLI or `vercel.json` |
+| **Figma** | `get-file`, `get-file-nodes` | — | Design specs or screenshots |
+| **Playwright** | Screenshots, `browser_evaluate` | Code Phase only (step 7 + verification). Budget: 1 screenshot + 1 evaluate per iteration, max 2 iterations. Kill dev servers before signaling. | Skip visual verification; log `"visual_verification": {"skipped": true}` |
 
 ## Profile Adaptation
 

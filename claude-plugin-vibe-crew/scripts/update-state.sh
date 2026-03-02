@@ -30,17 +30,19 @@ fi
 JQ_EXPR="${POSITIONAL_ARGS[0]}"
 
 # Validate jq expression against allowlist — reject dangerous builtins
-if echo "$JQ_EXPR" | grep -qE '\b(input|inputs|env|debug|halt|halt_error|builtins|@base64d|@sh|@html|@uri|getpath|delpaths|modulemeta|limit|first|last|range|ascii_downcase|ascii_upcase|implode|explode|tojson|fromjson|scan|test|match|capture|splits|sub|gsub)\s*\(' 2>/dev/null; then
+# Consolidated check: block dangerous builtins as word matches in ANY context
+if echo "$JQ_EXPR" | grep -qE '\b(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
+  echo "ERROR: jq expression contains disallowed builtin reference" >&2
+  exit 1
+fi
+# Block $ENV and ENV references (jq environment access)
+if echo "$JQ_EXPR" | grep -qE '(\$ENV\b|\.ENV\b)' 2>/dev/null; then
+  echo "ERROR: jq expression contains disallowed ENV reference" >&2
+  exit 1
+fi
+# Block dangerous function calls with parens
+if echo "$JQ_EXPR" | grep -qE '\b(@base64d|@sh|@html|@uri|getpath|delpaths|modulemeta|limit|first|last|range|ascii_downcase|ascii_upcase|implode|explode|tojson|fromjson|scan|test|match|capture|splits|sub|gsub)\s*\(' 2>/dev/null; then
   echo "ERROR: jq expression contains disallowed function calls" >&2
-  exit 1
-fi
-# Block pipe-to-builtin and assignment-from-builtin patterns (no parens needed)
-if echo "$JQ_EXPR" | grep -qE '\|\s*(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
-  echo "ERROR: jq expression contains disallowed builtin via pipe" >&2
-  exit 1
-fi
-if echo "$JQ_EXPR" | grep -qE '=\s*(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
-  echo "ERROR: jq expression contains disallowed builtin via assignment" >&2
   exit 1
 fi
 # Only allow safe state-update patterns: .key.path = value

@@ -18,7 +18,7 @@ source "$(dirname "$0")/lib/lock.sh"
 source "$(dirname "$0")/lib/atomic-write.sh"
 
 # --- Check gamification is enabled ---
-ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
+ENABLED=$(jq -r 'if .gamification.enabled == false then "false" else "true" end' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
   echo '{"xp_awarded":0,"breakdown":[],"message":"Gamification disabled"}'
   exit 0
@@ -34,7 +34,7 @@ fi
 TODAY=$(date -u +%Y-%m-%d)
 LATEST_SCORE=""
 if [[ -d "$VIBECREW_DIR/scores" ]]; then
-  LATEST_SCORE=$(ls -1t "$VIBECREW_DIR/scores"/score-*.json 2>/dev/null | head -1)
+  LATEST_SCORE=$(ls -1t "$VIBECREW_DIR/scores"/score-*.json 2>/dev/null | head -1 || true)
 fi
 
 if [[ -z "$LATEST_SCORE" ]]; then

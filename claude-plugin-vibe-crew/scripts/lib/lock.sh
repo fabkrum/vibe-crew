@@ -144,7 +144,7 @@ acquire_state_lock() {
     if _lock_is_stale; then
       mv "$_LOCK_DIR" "${_LOCK_DIR}.stale.$$" 2>/dev/null && rm -rf "${_LOCK_DIR}.stale.$$"
     fi
-    ((attempts++))
+    attempts=$((attempts + 1))
   done
 
   # Timeout
@@ -203,7 +203,7 @@ acquire_named_lock() {
     if _lock_is_stale_named "$lock_dir"; then
       mv "$lock_dir" "${lock_dir}.stale.$$" 2>/dev/null && rm -rf "${lock_dir}.stale.$$"
     fi
-    ((attempts++))
+    attempts=$((attempts + 1))
   done
 
   # Timeout

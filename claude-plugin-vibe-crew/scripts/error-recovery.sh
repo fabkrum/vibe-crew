@@ -11,6 +11,8 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 GIT_DIR="$PROJECT_ROOT/.git"
 
+source "$(dirname "$0")/lib/compat.sh"
+
 ACTIONS_TAKEN=()
 REQUIRES_ATTENTION=()
 
@@ -24,16 +26,11 @@ GIT_ISSUES=()
 TEMP_CLEANED=0
 
 # =============================================================================
-# Timestamp helpers (macOS + GNU compatible)
+# Timestamp helpers — delegate to compat.sh
 # =============================================================================
 
 parse_timestamp() {
-  local ts="$1"
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" &>/dev/null; then
-    date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" 2>/dev/null || echo "0"
-  else
-    date -d "$ts" "+%s" 2>/dev/null || echo "0"
-  fi
+  _compat_parse_timestamp "$1"
 }
 
 # =============================================================================

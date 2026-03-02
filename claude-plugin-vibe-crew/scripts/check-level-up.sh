@@ -16,7 +16,7 @@ source "$(dirname "$0")/lib/lock.sh"
 source "$(dirname "$0")/lib/atomic-write.sh"
 
 # --- Check gamification is enabled ---
-ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
+ENABLED=$(jq -r 'if .gamification.enabled == false then "false" else "true" end' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
   echo '{"leveled_up":false,"message":"Gamification disabled"}'
   exit 0

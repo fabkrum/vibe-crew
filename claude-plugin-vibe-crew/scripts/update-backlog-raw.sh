@@ -43,17 +43,19 @@ if [[ -z "$JQ_EXPR" ]]; then
 fi
 
 # Validate jq expression against allowlist — reject dangerous builtins
-if echo "$JQ_EXPR" | grep -qE '\b(input|inputs|env|debug|halt|halt_error|builtins|@base64d|@sh|@html|@uri|getpath|delpaths|modulemeta|limit|first|last|range|ascii_downcase|ascii_upcase|implode|explode|tojson|fromjson|scan|test|match|capture|splits|sub|gsub)\s*\(' 2>/dev/null; then
+# Consolidated check: block dangerous builtins as word matches in ANY context
+if echo "$JQ_EXPR" | grep -qE '\b(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
+  echo "ERROR: jq expression contains disallowed builtin reference" >&2
+  exit 1
+fi
+# Block $ENV and ENV references (jq environment access)
+if echo "$JQ_EXPR" | grep -qE '(\$ENV\b|\.ENV\b)' 2>/dev/null; then
+  echo "ERROR: jq expression contains disallowed ENV reference" >&2
+  exit 1
+fi
+# Block dangerous function calls with parens
+if echo "$JQ_EXPR" | grep -qE '\b(@base64d|@sh|@html|@uri|getpath|delpaths|modulemeta|limit|first|last|range|ascii_downcase|ascii_upcase|implode|explode|tojson|fromjson|scan|test|match|capture|splits|sub|gsub)\s*\(' 2>/dev/null; then
   echo "ERROR: jq expression contains disallowed function calls" >&2
-  exit 1
-fi
-# Block pipe-to-builtin and assignment-from-builtin patterns (no parens needed)
-if echo "$JQ_EXPR" | grep -qE '\|\s*(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
-  echo "ERROR: jq expression contains disallowed builtin via pipe" >&2
-  exit 1
-fi
-if echo "$JQ_EXPR" | grep -qE '=\s*(env|debug|halt|halt_error|input|inputs|builtins)\b' 2>/dev/null; then
-  echo "ERROR: jq expression contains disallowed builtin via assignment" >&2
   exit 1
 fi
 
@@ -71,7 +73,7 @@ fi
 # Source shared lock library
 source "$(dirname "$0")/lib/lock.sh"
 
-acquire_state_lock "update-backlog-raw"
+acquire_named_lock "backlog" "update-backlog-raw"
 
 # Read current backlog
 CONTENT=$(cat "$BACKLOG_FILE")
@@ -79,7 +81,7 @@ CONTENT=$(cat "$BACKLOG_FILE")
 # Apply jq expression with any extra args
 UPDATED=$(echo "$CONTENT" | jq "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}" "$JQ_EXPR" 2>&1) || {
   echo "ERROR: jq expression failed: $UPDATED" >&2
-  release_state_lock
+  release_named_lock "backlog"
   exit 1
 }
 
@@ -92,7 +94,7 @@ if [[ "$DRY_RUN" == "true" ]]; then
   echo ""
   echo "After:"
   echo "$UPDATED" | jq .
-  release_state_lock
+  release_named_lock "backlog"
   exit 0
 fi
 
@@ -102,12 +104,12 @@ echo "$UPDATED" > "$TMP"
 if ! jq empty "$TMP" 2>/dev/null; then
   echo "ERROR: JSON validation failed after jq expression" >&2
   rm -f "$TMP"
-  release_state_lock
+  release_named_lock "backlog"
   exit 1
 fi
 
 # Atomic rename
 mv "$TMP" "$BACKLOG_FILE"
 
-release_state_lock
+release_named_lock "backlog"
 exit 0

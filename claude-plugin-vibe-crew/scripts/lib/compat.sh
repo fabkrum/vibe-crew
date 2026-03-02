@@ -82,6 +82,18 @@ _compat_timeout_cmd() {
   fi
 }
 
+# --- Parse ISO 8601 timestamp to epoch seconds ---
+# Usage: _compat_parse_timestamp "2026-01-01T00:00:00Z"
+# Returns epoch seconds, or "0" on failure
+_compat_parse_timestamp() {
+  local ts="$1"
+  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" &>/dev/null; then
+    date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" 2>/dev/null || echo "0"
+  else
+    date -d "$ts" "+%s" 2>/dev/null || echo "0"
+  fi
+}
+
 # --- Get file size in bytes ---
 # Usage: _compat_stat_size "/path/to/file"
 _compat_stat_size() {

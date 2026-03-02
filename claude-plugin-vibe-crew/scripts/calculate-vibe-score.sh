@@ -9,8 +9,21 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Source error logging
+# Source error logging and compat
 source "$SCRIPT_DIR/lib/error-log.sh"
+source "$SCRIPT_DIR/lib/compat.sh"
+
+# --- Timeout helper (120s default) ---
+_VIBE_TIMEOUT_CMD=$(_compat_timeout_cmd)
+_run_with_timeout() {
+  local seconds="${1:-120}"
+  shift
+  if [[ -n "$_VIBE_TIMEOUT_CMD" ]]; then
+    "$_VIBE_TIMEOUT_CMD" "$seconds" "$@"
+  else
+    "$@"
+  fi
+}
 
 PROJECT_ROOT="${1:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 STATE_FILE="$PROJECT_ROOT/.vibecrew/state.json"
@@ -108,7 +121,7 @@ if [[ -f "$PROJECT_ROOT/package.json" ]]; then
   HAS_TEST_SCRIPT=$(jq -r '.scripts.test // empty' "$PROJECT_ROOT/package.json" 2>/dev/null || echo "")
 
   if [[ -n "$HAS_TEST_SCRIPT" ]]; then
-    TEST_OUTPUT=$(cd "$PROJECT_ROOT" && npm test -- --reporter=json 2>/dev/null || { log_error "calculate-vibe-score" "Test suite failed"; echo ""; })
+    TEST_OUTPUT=$(cd "$PROJECT_ROOT" && _run_with_timeout 120 npm test -- --reporter=json 2>/dev/null || { log_error "calculate-vibe-score" "Test suite failed or timed out"; echo ""; })
 
     if [[ -n "$TEST_OUTPUT" ]]; then
       # Try to parse as JSON (vitest/jest JSON reporter output)
@@ -152,7 +165,7 @@ if [[ -f "$PROJECT_ROOT/package.json" ]]; then
   HAS_BUILD=$(jq -r '.scripts.build // empty' "$PROJECT_ROOT/package.json" 2>/dev/null || echo "")
 
   if [[ -n "$HAS_BUILD" ]]; then
-    if (cd "$PROJECT_ROOT" && npm run build 2>/dev/null 1>/dev/null); then
+    if (cd "$PROJECT_ROOT" && _run_with_timeout 120 npm run build 2>/dev/null 1>/dev/null); then
       BUILD_PASSES=true
     fi
   else
@@ -171,7 +184,7 @@ if [[ -f "$PROJECT_ROOT/package.json" ]]; then
   HAS_LINT=$(jq -r '.scripts.lint // empty' "$PROJECT_ROOT/package.json" 2>/dev/null || echo "")
 
   if [[ -n "$HAS_LINT" ]]; then
-    if (cd "$PROJECT_ROOT" && npm run lint 2>/dev/null 1>/dev/null); then
+    if (cd "$PROJECT_ROOT" && _run_with_timeout 120 npm run lint 2>/dev/null 1>/dev/null); then
       LINT_CLEAN=true
     fi
   else

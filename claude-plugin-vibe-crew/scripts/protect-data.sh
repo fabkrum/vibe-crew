@@ -226,6 +226,10 @@ if echo "$COMMAND" | grep -qE '\bprintenv\b|env\s*$|\bset\s*$'; then
   block "Credentials" "Printing all environment variables may expose secrets." "Print specific variables: echo \$VARIABLE_NAME"
 fi
 
+if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)(source|\.)\s+.*\.env\b'; then
+  block "Credentials" "Sourcing .env files loads secrets into the shell environment." "Use specific environment variables instead."
+fi
+
 # =============================================================================
 # Category 6: System Modification
 # =============================================================================
@@ -289,6 +293,13 @@ if echo "$COMMAND" | grep -qE 'wget\s+.*-O\s*-\s*\|'; then
   block "Network" "wget piped to another command may execute remote code."
 fi
 
+if echo "$COMMAND" | grep -qE 'wget\s+.*--post-(data|file)\b'; then
+  # Exempt localhost/loopback addresses
+  if ! echo "$COMMAND" | grep -qE 'localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]'; then
+    block "Network" "wget --post-data/--post-file may exfiltrate information." "Review the request body and destination before sending."
+  fi
+fi
+
 # =============================================================================
 # Category 8: Resource Exhaustion
 # =============================================================================
@@ -317,12 +328,16 @@ if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)\beval\b'; then
   block "Indirect" "eval executes arbitrary code, bypassing all safety checks." "Write the command directly instead of using eval."
 fi
 
-if echo "$COMMAND" | grep -qE '\b(bash|sh|zsh|dash|ksh|fish)\s+-c\b'; then
+if echo "$COMMAND" | grep -qE '\b(bash|sh|zsh|dash|ksh|fish)\s+(-[a-zA-Z]*\s+)*-c\b'; then
   block "Indirect" "Shell -c executes arbitrary code in a subshell." "Write the command directly instead of wrapping in a shell -c."
 fi
 
 if echo "$COMMAND" | grep -qE '\bbase64\b.*\|\s*(bash|sh)\b'; then
   block "Indirect" "Decoding and piping to shell executes obfuscated code."
+fi
+
+if echo "$COMMAND" | grep -qE '\b(bash|sh|zsh)\s*<<<'; then
+  block "Indirect" "Here-string to shell executes arbitrary code." "Write the command directly."
 fi
 
 # All checks passed

@@ -78,7 +78,7 @@ fi
 GAMIFICATION_FILE="$PROJECT_ROOT/.vibecrew/gamification.json"
 GAMIFICATION_LINE=""
 if [[ -f "$GAMIFICATION_FILE" ]]; then
-  GAM_ENABLED=$(jq -r '.gamification.enabled // true' "$CONFIG_FILE" 2>/dev/null || echo "true")
+  GAM_ENABLED=$(jq -r 'if .gamification.enabled == false then "false" else "true" end' "$CONFIG_FILE" 2>/dev/null || echo "true")
   if [[ "$GAM_ENABLED" != "false" ]]; then
     GAM_LEVEL=$(jq -r '.level // 1' "$GAMIFICATION_FILE" 2>/dev/null || echo "1")
     GAM_STREAK=$(jq -r '.streak.current // 0' "$GAMIFICATION_FILE" 2>/dev/null || echo "0")

@@ -281,95 +281,25 @@ The Verifier does NOT mutate CLAUDE.md. Calculate the score and provide coaching
 
 ## Gamification Processing (/wrap)
 
-After writing the score file and session log, run the gamification processing pipeline. Execute these scripts sequentially — each depends on the previous step's output.
-
-### Gamification Pre-check
+After writing the score file and session log, run the gamification pipeline if enabled. Check first:
 
 ```bash
-jq -r '.gamification.enabled // true' .vibecrew/config.json 2>/dev/null || echo "true"
+jq -r 'if .gamification.enabled == false then "false" else "true" end' .vibecrew/config.json
 ```
 
-If `false`, skip all gamification processing and proceed to the coaching display.
+If `"false"`, skip all gamification. Otherwise run these scripts sequentially (each depends on the previous), capturing JSON output for display:
 
-### Gamification Pipeline
+| # | Script | Capture |
+|---|--------|---------|
+| 1 | `refresh-challenges.sh` | — |
+| 2 | `award-xp.sh` | XP breakdown |
+| 3 | `check-badges.sh` | New badges |
+| 4 | `update-streak.sh` | Streak count |
+| 5 | `distribute-skill-xp.sh` | Skill level-ups |
+| 6 | `update-challenges.sh` | Completed challenges |
+| 7 | `check-level-up.sh` | Level-up events |
 
-Run in this exact order:
-
-1. **Refresh Challenges** — Refresh active challenge pool before scoring:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/refresh-challenges.sh"
-   ```
-
-2. **Award XP** — Calculate and apply session XP:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/award-xp.sh"
-   ```
-   Capture the JSON output for display.
-
-3. **Check Badges** — Evaluate badge conditions:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-badges.sh"
-   ```
-   Capture newly earned badges for display.
-
-4. **Update Streak** — Update the daily streak counter:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-streak.sh"
-   ```
-
-5. **Distribute Skill XP** — Allocate XP to skill domains:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/distribute-skill-xp.sh"
-   ```
-   Capture skill level-ups for display.
-
-6. **Update Challenges** — Check active challenge progress:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-challenges.sh"
-   ```
-   Capture completed challenges for display.
-
-7. **Check Level Up** — Process level advancement and unlocks:
-   ```bash
-   bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-level-up.sh"
-   ```
-   Capture level-up events for display.
-
-### Gamification Display
-
-After the coaching output, append a progression section:
-
-```
---- Progression ---
-Level {level} "{title}" | {xp_this_level}/{xp_to_next_level} XP to Level {next_level}
-+{session_xp} (session) +{score_bonus} (score bonus) +{other} (other) = +{total} XP
-Streak: {current} days
-
-{skill_level_ups if any, e.g.:}
-Skill: testing +15 XP (Level 2 -> Level 3)
-
-{new_badges if any, e.g.:}
---- New Badges ---
-[BADGE] Shipper -- First feature shipped! (+50 XP)
-
-{completed_challenges if any, e.g.:}
---- Challenges Completed ---
-[Daily] Clean Sweep -- 0-deduction session (+20 XP)
-
-{level_up if applicable, e.g.:}
-*** LEVEL UP! Level 6 -> Level 7 "Focused Builder" ***
-{unlocks if any:}
-Unlocked: Weekly challenges, Skill tree in /achievements
-```
-
-### Gamification Display Rules
-
-- Only show sections that have content (skip empty sections)
-- Keep the progression summary to 1-2 lines minimum
-- Show new badges prominently with the badge name and description
-- Show level-ups with celebratory emphasis (*** markers)
-- List new unlocks when they occur
-- If gamification is disabled, skip the entire progression section
+All scripts live at `${CLAUDE_PLUGIN_ROOT}/scripts/`. Append a `--- Progression ---` section after coaching output showing: level + XP bar, streak, new badges, completed challenges, skill level-ups, and level-ups with `***` emphasis. Only show sections with content.
 
 ## Verification Loop
 

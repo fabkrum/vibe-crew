@@ -43,6 +43,26 @@ if [[ -f "$CONFIG_FILE" ]]; then
   CUSTOM_PRICING="$(jq -r '.pricing // empty' "$CONFIG_FILE" 2>/dev/null || echo "")"
 fi
 
+# ── Warn if custom pricing is stale (>90 days) ──
+if [[ -n "$CUSTOM_PRICING" && "$CUSTOM_PRICING" != "null" ]]; then
+  PRICING_UPDATED="$(echo "$CUSTOM_PRICING" | jq -r '.last_updated // empty' 2>/dev/null || echo "")"
+  if [[ -n "$PRICING_UPDATED" ]]; then
+    # Parse date to epoch
+    if date -j -f "%Y-%m-%d" "$PRICING_UPDATED" "+%s" &>/dev/null; then
+      PRICING_EPOCH=$(date -j -f "%Y-%m-%d" "$PRICING_UPDATED" "+%s" 2>/dev/null || echo "0")
+    else
+      PRICING_EPOCH=$(date -d "$PRICING_UPDATED" "+%s" 2>/dev/null || echo "0")
+    fi
+    NOW_EPOCH=$(date "+%s")
+    if [[ "$PRICING_EPOCH" -gt 0 ]]; then
+      PRICING_AGE_DAYS=$(( (NOW_EPOCH - PRICING_EPOCH) / 86400 ))
+      if [[ "$PRICING_AGE_DAYS" -gt 90 ]]; then
+        echo "PRICING WARNING: Custom pricing last updated ${PRICING_AGE_DAYS} days ago (${PRICING_UPDATED}). Check for model price changes."
+      fi
+    fi
+  fi
+fi
+
 case "$MODEL" in
   *opus*)
     PRICE_INPUT="$(echo "$CUSTOM_PRICING" | jq -r '.opus.input // 15.00' 2>/dev/null || echo "15.00")"

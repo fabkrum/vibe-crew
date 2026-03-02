@@ -202,7 +202,7 @@ add_all_recommended() {
   while IFS= read -r key; do
     echo "--- Adding $key ---"
     add_server "$key" || true
-    ((added++))
+    added=$((added + 1))
   done <<< "$recommended"
 
   echo ""

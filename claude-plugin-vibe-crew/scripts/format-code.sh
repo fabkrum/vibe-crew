@@ -9,6 +9,7 @@ set -euo pipefail
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 source "$(dirname "$0")/lib/error-log.sh"
+source "$(dirname "$0")/lib/compat.sh"
 
 # Read hook payload from stdin
 INPUT=$(cat)
@@ -49,8 +50,8 @@ case "$EXT" in
 esac
 
 # Skip files outside project root (safety check)
-CANONICAL=$(realpath "$FILE_PATH" 2>/dev/null || echo "$FILE_PATH")
-PROJECT_CANONICAL=$(realpath "$PROJECT_ROOT" 2>/dev/null || echo "$PROJECT_ROOT")
+CANONICAL=$(_compat_realpath "$FILE_PATH")
+PROJECT_CANONICAL=$(_compat_realpath "$PROJECT_ROOT")
 if [[ "$CANONICAL" != "$PROJECT_CANONICAL"* ]]; then
   exit 0
 fi

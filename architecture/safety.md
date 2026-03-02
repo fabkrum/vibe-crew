@@ -317,7 +317,7 @@ exit 0
 
 ## 3. Blocked Operations
 
-The `protect-data.sh` PreToolUse hook script inspects the `command` field of every Bash tool invocation and blocks dangerous patterns. Commands are organized into eight categories totaling 51 blocked patterns.
+The `protect-data.sh` PreToolUse hook script inspects the `command` field of every Bash tool invocation and blocks dangerous patterns. Commands are organized into nine categories totaling 59 blocked patterns.
 
 ### 3.1 Category 1: Destructive File Operations
 
@@ -377,40 +377,53 @@ The `protect-data.sh` PreToolUse hook script inspects the `command` field of eve
 | 32 | Read AWS credentials | `cat\s+.*\.aws/(credentials\|config)` | Critical |
 | 33 | `curl` with credentials | `curl\s+.*(-u\|--user)` | High |
 | 34 | Print all environment vars | `\bprintenv\b\|env\s*$\|\bset\s*$` | Medium |
+| 35 | `source .env` | `(source\|\.)\s+.*\.env\b` | High |
 
 ### 3.6 Category 6: System Modification
 
 | # | Pattern | Regex | Risk |
 |---|---------|-------|------|
-| 35 | `npm install -g` | `npm\s+install\s+(-g\|--global)` | High |
-| 36 | `brew install` | `\bbrew\s+install\b` | Medium |
-| 37 | `apt install` | `\bapt(-get)?\s+install\b` | High |
-| 38 | Modify shell profiles | `>>?\s+.*\.(bashrc\|zshrc\|profile\|bash_profile)` | High |
-| 39 | `launchctl` | `\blaunchctl\b` | High |
-| 40 | `systemctl` | `\bsystemctl\b` | High |
-| 41 | `crontab` | `\bcrontab\b` | High |
-| 42 | `defaults write` | `\bdefaults\s+write\b` | High |
+| 36 | `npm install -g` | `npm\s+install\s+(-g\|--global)` | High |
+| 37 | `brew install` | `\bbrew\s+install\b` | Medium |
+| 38 | `apt install` | `\bapt(-get)?\s+install\b` | High |
+| 39 | Modify shell profiles | `>>?\s+.*\.(bashrc\|zshrc\|profile\|bash_profile)` | High |
+| 40 | `launchctl` | `\blaunchctl\b` | High |
+| 41 | `systemctl` | `\bsystemctl\b` | High |
+| 42 | `crontab` | `\bcrontab\b` | High |
+| 43 | `defaults write` | `\bdefaults\s+write\b` | High |
 
 ### 3.7 Category 7: Network Exfiltration
 
 | # | Pattern | Regex | Risk |
 |---|---------|-------|------|
-| 43 | `curl` POST with data | `curl\s+.*(-X\s+POST\|-d\|--data)` | Medium |
-| 44 | `nc` (netcat) | `\bnc\b\|\bncat\b\|\bnetcat\b` | High |
-| 45 | `scp` | `\bscp\b` | High |
-| 46 | `rsync` to remote | `rsync\s+.*:` | High |
-| 47 | `wget` to pipe | `wget\s+.*-O\s*-\s*\|` | Medium |
+| 44 | `curl` POST with data | `curl\s+.*(-X\s+POST\|-d\|--data)` | Medium |
+| 45 | `nc` (netcat) | `\bnc\b\|\bncat\b\|\bnetcat\b` | High |
+| 46 | `scp` | `\bscp\b` | High |
+| 47 | `rsync` to remote | `rsync\s+.*:` | High |
+| 48 | `wget` to pipe | `wget\s+.*-O\s*-\s*\|` | Medium |
+| 49 | `wget --post-data/--post-file` | `wget\s+.*--post-(data\|file)\b` (localhost exempt) | High |
 
 ### 3.8 Category 8: Resource Exhaustion
 
 | # | Pattern | Regex | Risk |
 |---|---------|-------|------|
-| 48 | Fork bomb | `:\(\)\{.*:\|.*\}\s*;` | Critical |
-| 49 | `yes \|` | `\byes\s*\|` | Medium |
-| 50 | `while true` (no break) | `while\s+true\s*;.*do` | Medium |
-| 51 | `kill -9` | `\bkill\s+(-9\|-SIGKILL)\b` | High |
+| 50 | Fork bomb | `:\(\)\{.*:\|.*\}\s*;` | Critical |
+| 51 | `yes \|` | `\byes\s*\|` | Medium |
+| 52 | `while true` (no break) | `while\s+true\s*;.*do` | Medium |
+| 53 | `kill -9` | `\bkill\s+(-9\|-SIGKILL)\b` | High |
 
-### 3.9 Block Response Messages
+### 3.9 Category 9: Indirect Execution
+
+| # | Pattern | Regex | Risk |
+|---|---------|-------|------|
+| 54 | `eval` | `\beval\b` | Critical |
+| 55 | `bash -c` (with flag variants) | `\b(bash\|sh\|zsh\|dash\|ksh\|fish)\s+(-[a-zA-Z]*\s+)*-c\b` | High |
+| 56 | `bash <<<` here-string | `\b(bash\|sh\|zsh)\s*<<<` | High |
+| 57 | `xargs` with `rm` | `xargs\s+.*\brm\b` | High |
+| 58 | `find -delete` | `find\s+.*-delete` | High |
+| 59 | `find -exec rm` | `find\s+.*-exec\s+rm` | High |
+
+### 3.10 Block Response Messages
 
 When `protect-data.sh` blocks a command, it prints a descriptive message that the model receives. The message includes: (1) what was blocked, (2) why it is dangerous, and (3) a safer alternative when one exists.
 
@@ -1256,7 +1269,7 @@ git log --oneline --grep="^wip(" -5
 
 When multiple agents share state files (`.vibecrew/state.json`, `.vibecrew/backlog.json`), advisory lock files prevent concurrent write conflicts. See `architecture/schemas.md` Section 8 for the canonical lock file schema. Locks can become stale if an agent crashes while holding one.
 
-**Dual-file atomicity via write-ahead journal:** Operations that mutate both `state.json` and `backlog.json` (phase transitions, task claiming) use `scripts/lib/dual-write.sh` to ensure consistency. Before either file is written, a journal records both intended states in `.vibecrew/locks/dual-write.journal` with staged content files. After both writes succeed, the journal is finalized (deleted). If the process dies mid-write, `sync-state.sh` detects the journal on the next session start and replays both writes from the staged content, restoring consistency.
+**Dual-file atomicity via write-ahead journal:** Operations that mutate both `state.json` and `backlog.json` (phase transitions, task claiming) use `scripts/lib/dual-write.sh` to ensure consistency. Before either file is written, a journal records both intended states in `.vibecrew/locks/dual-write.journal` with staged content files. After both writes succeed, the journal is finalized (deleted). On error paths, the journal is intentionally NOT finalized — this ensures that if the process crashes or a write fails, `sync-state.sh` detects the journal on the next session start and replays both writes from the staged content, restoring consistency.
 
 **Stale lock detection uses two mechanisms:**
 

@@ -767,18 +767,19 @@ Hook scripts provide conditional logic that `settings.json` deny rules cannot ex
 
 **`phase-gate.sh`** (matcher: `Write|Edit`) -- Reads `.vibecrew/state.json` and blocks source code writes when `foundation.complete` is `false` (see [schemas.md, Section 3: state.json](schemas.md#3-statejson)). Foundation artifacts (VISION.md, design-system.css, TDR, etc.) are allowed through. This enforces the Research-First Protocol: architecture decisions must be made before code is written.
 
-**`protect-data.sh`** (matcher: `Bash`) -- Inspects the command string via regex and blocks 40+ dangerous patterns across eight categories:
+**`protect-data.sh`** (matcher: `Bash`) -- Inspects the command string via regex and blocks 59 dangerous patterns across nine categories:
 
 | Category | Pattern Count | Examples |
 |----------|--------------|---------|
-| Destructive file operations | 7 | `rm -rf`, `mkfs`, `dd if=`, `truncate` |
+| Destructive file operations | 8 | `rm -rf`, `mkfs`, `dd if=`, `truncate` |
 | Privilege escalation | 8 | `sudo`, `su -`, `doas`, `chmod 777`, `setuid` |
-| Git danger zone | 8 | `push --force`, `reset --hard`, `clean -f`, `branch -D main` |
-| Database destruction | 5 | `DROP TABLE`, `DROP DATABASE`, `TRUNCATE TABLE` |
-| Credential exposure | 5 | `cat .ssh/`, `cat .aws/`, `cat .env`, `printenv` |
+| Git danger zone | 9 | `push --force`, `reset --hard`, `clean -f`, `branch -D main` |
+| Database destruction | 6 | `DROP TABLE`, `DROP DATABASE`, `TRUNCATE TABLE` |
+| Credential exposure | 6 | `cat .ssh/`, `cat .aws/`, `cat .env`, `source .env`, `printenv` |
 | System modification | 8 | `npm install -g`, `brew install`, `crontab`, `systemctl` |
-| Network exfiltration | 4 | `nc`, `scp`, `rsync` to remote |
-| Resource exhaustion | 3 | Fork bombs, `yes |`, infinite loops |
+| Network exfiltration | 6 | `nc`, `scp`, `rsync` to remote, `wget --post-data` |
+| Resource exhaustion | 4 | Fork bombs, `yes |`, infinite loops, `kill -9` |
+| Indirect execution | 4 | `eval`, `bash -c` (flag variants), `bash <<<`, `find -delete` |
 
 **`restrict-paths.sh`** (matcher: `Write|Edit`) -- Validates that file write targets are within the project root using `realpath` canonicalization. Defends against path traversal (`../`), absolute paths outside the project, symlink escape attacks, and writes to sensitive files (`.env`, `.git/`, SSH keys, AWS credentials).
 

@@ -78,7 +78,7 @@ Build the plugin skeleton, safety layer, session startup hook, and runtime state
 | 2 | `hooks/hooks.json` | Event-to-script routing table for all lifecycle hooks |
 | 3 | `scripts/session-startup.sh` | SessionStart hook: environment check (git, gh, node, jq, terminal-notifier), state detection, routing |
 | 4 | `scripts/compact-reinject.sh` | SessionStart (compact matcher): re-injects state.json summary after context compaction |
-| 5 | `scripts/protect-data.sh` | PreToolUse (Bash): blocks 40+ dangerous shell patterns (rm -rf, DROP TABLE, force push, sudo) |
+| 5 | `scripts/protect-data.sh` | PreToolUse (Bash): blocks 59 dangerous shell patterns across 9 categories (rm -rf, DROP TABLE, force push, sudo, eval, source .env) |
 | 6 | `scripts/restrict-paths.sh` | PreToolUse (Write/Edit): validates writes are within project root, blocks .git/, .env, credentials |
 | 7 | `scripts/phase-gate.sh` | PreToolUse (Write/Edit): blocks source code writes until `foundation.complete == true` in state.json |
 | 8 | `scripts/format-code.sh` | PostToolUse (Write/Edit): auto-detects file type, runs appropriate formatter. Silent skip if none found. |

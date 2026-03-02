@@ -41,7 +41,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `scripts/phase-gate.sh`, `scripts/protect-data.sh`, `scripts/restrict-paths.sh` -- Hardened safety-critical hooks against edge cases and race conditions
 - `scripts/calculate-vibe-score.sh` -- Fixed architecture diagram re-rendering when `.mmd` files change during a session
 - Removed Stitch MCP server from plugin configuration and all documentation (deprecated upstream)
-- 12 weakness findings addressed across scripts, skills, agents, and configuration
+- 12 weakness findings addressed with 77 new BATS tests (556 total):
+  - `scripts/claim-task.sh`, `scripts/complete-phase.sh` -- Dual-write journal no longer finalized on error paths, ensuring crash recovery via `sync-state.sh`
+  - `scripts/update-state.sh`, `scripts/update-backlog-raw.sh` -- Consolidated jq sanitizer blocks dangerous builtins (`env`, `debug`, `halt`, `$ENV`) in any context
+  - `scripts/lib/lock.sh`, `scripts/add-mcp-server.sh` -- Replaced `((var++))` with safe `$((var + 1))` arithmetic to prevent `set -e` termination
+  - `scripts/protect-data.sh` -- Added 4 new security patterns: `bash -e -c` flag bypass, `wget --post-data` exfiltration, `source .env` credential loading, `bash <<<` here-string injection (51 → 59 patterns, 8 → 9 categories)
+  - `scripts/lib/compat.sh` -- Added `_compat_parse_timestamp()` for cross-platform timestamp parsing; used in `error-recovery.sh` and `format-code.sh`
+  - `scripts/calculate-vibe-score.sh` -- npm test/build/lint wrapped with 120s timeout to prevent runaway processes
+  - `scripts/cost-guardrails.sh` -- Warns when custom pricing data is >90 days stale
+  - 8 gamification scripts -- Fixed jq `//` operator treating `false` as falsy (`award-xp.sh`, `check-level-up.sh`, `update-streak.sh`, `check-badges.sh`, `distribute-skill-xp.sh`, `refresh-challenges.sh`, `update-challenges.sh`, `session-startup.sh`)
+  - `scripts/award-xp.sh` -- Fixed `ls | head` pipeline crash under `set -o pipefail` when no score files exist
+  - `scripts/update-backlog.sh`, `scripts/update-backlog-raw.sh` -- Switched to named `"backlog"` lock for independent locking from state file operations
+  - `agents/verifier.md` (-70 lines), `agents/builder.md` (-30 lines) -- Condensed gamification pipeline and MCP server sections into tables
 
 ### Changed
 

@@ -75,6 +75,13 @@
     "max_attempts": 3,
     "auto_checkpoint": true
   },
+  "github_issues": {
+    "enabled": false,
+    "autofix_label": "autofix",
+    "default_mode": "hotfix",
+    "auto_pr": true,
+    "sync_limit": 10
+  },
   "pricing": {
     "opus": {
       "input": 15.00,

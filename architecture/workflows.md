@@ -1940,6 +1940,91 @@ When errors cannot be automatically recovered, VibeCrew degrades gracefully in t
 
 ---
 
+## 8. GitHub Issue Fix Lifecycle
+
+### 8.1 Overview
+
+The GitHub Issue Fix workflow connects GitHub Issues directly to VibeCrew's development pipeline. It operates in two modes:
+
+- **Interactive** (`/fix-issue <number>`): A developer triggers a fix from the CLI. The agent fetches the issue, implements a fix, runs quality checks, and opens a PR.
+- **CI-triggered** (GitHub Actions): A label event triggers the workflow automatically via the `github-actions-autofix.yml` template.
+
+Both paths converge on the same scripts and agents. The only difference is the entry point and autonomy level.
+
+### 8.2 Dual-Mode Paths
+
+**Hotfix path** (default for bugs): Code → Test → Review → PR. Skips Plan and Design since bugs don't need upfront design work.
+
+**Full feature path** (`--full` flag or `enhancement`/`feature-request` labels): Plan → Design → Code → Test → Review → Docs → PR. Uses the standard Tier 2 cycle.
+
+### 8.3 Sequence Diagram
+
+```
+┌─────────┐   ┌──────────────┐   ┌─────────────┐   ┌─────────┐   ┌──────────────┐   ┌────────┐
+│  GitHub  │   │ fetch-github │   │ import-issue │   │ Builder │   │   Verifier   │   │   gh   │
+│  Issue   │   │  -issue.sh   │   │ -to-backlog  │   │  Agent  │   │   Agent      │   │   CLI  │
+└────┬─────┘   └──────┬───────┘   └──────┬───────┘   └────┬────┘   └──────┬───────┘   └───┬────┘
+     │                │                   │                │               │               │
+     │  gh issue view │                   │                │               │               │
+     │◄───────────────┤                   │                │               │               │
+     │  issue JSON    │                   │                │               │               │
+     ├───────────────►│                   │                │               │               │
+     │                │  pipe JSON        │                │               │               │
+     │                ├──────────────────►│                │               │               │
+     │                │  backlog entry    │                │               │               │
+     │                │◄─────────────────┤                │               │               │
+     │                │                   │  issue context │               │               │
+     │                │                   ├───────────────►│               │               │
+     │                │                   │  fix applied   │               │               │
+     │                │                   │◄───────────────┤               │               │
+     │                │                   │                │  run checks   │               │
+     │                │                   │                ├──────────────►│               │
+     │                │                   │                │  PASS/FAIL    │               │
+     │                │                   │                │◄──────────────┤               │
+     │                │                   │                │               │  gh pr create │
+     │                │                   │                ├───────────────┼──────────────►│
+     │                │                   │                │               │  PR URL       │
+     │                │                   │                │◄──────────────┼───────────────┤
+     │                │                   │                │               │               │
+```
+
+### 8.4 State Transitions (Hotfix Mode)
+
+```
+planned → in-progress → testing → review → done
+```
+
+| Transition | Trigger |
+|-----------|---------|
+| `planned → in-progress` | `/fix-issue` imports issue and starts Builder |
+| `in-progress → testing` | Builder completes code phase |
+| `testing → review` | Verifier passes quality checks |
+| `review → done` | Code review passes (or skipped per profile), PR created |
+
+### 8.5 Integration with /sync-issues and /run-backlog
+
+The `/sync-issues` command provides batch import:
+
+1. `/sync-issues` fetches issues by label and imports them into the backlog
+2. Each imported issue becomes a backlog entry with `source: "github-issue"`
+3. `/run-backlog` processes them in priority order using the standard Tier 2 cycle
+4. Hotfix entries start at `planned` column (skip planning phase)
+5. Feature entries start at `idea` column (full 6-phase cycle)
+
+### 8.6 GitHub Actions Integration
+
+The `github-actions-autofix.yml` template provides fully automated CI-triggered fixes:
+
+1. Issue receives the configured label (default: `autofix`)
+2. GitHub Actions workflow triggers on `issues.labeled` event
+3. Workflow runs `claude --print "/fix-issue <number>"` headless
+4. On success: comments on issue with PR link
+5. On failure: comments with workflow run link for manual investigation
+
+Template placeholders (`{{AUTOFIX_LABEL}}`, `{{NODE_VERSION}}`) are filled by `/setup`.
+
+---
+
 ## Document References
 
 | Document | Relevance |

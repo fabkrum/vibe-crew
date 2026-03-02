@@ -100,6 +100,10 @@ ALLOWED_FIELDS=(
   "spec.ui_description"
   "spec.business_logic"
   "spec.technical_notes"
+  "source"
+  "type"
+  "github_issue_number"
+  "github_issue_url"
 )
 
 FIELD_VALID=false

@@ -1,0 +1,91 @@
+# VibeCrew Auto-Fix GitHub Actions Workflow
+# Triggers when an issue is labeled with the autofix label.
+# Installs Claude Code CLI, runs /fix-issue, and reports results.
+#
+# Required secrets:
+#   ANTHROPIC_API_KEY — Claude API key for Claude Code CLI
+#
+# Template placeholders (filled by /setup):
+#   {{AUTOFIX_LABEL}} — Label that triggers auto-fix (default: "autofix")
+#   {{NODE_VERSION}}  — Node.js version from TDR (default: "20")
+
+name: VibeCrew Auto-Fix
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  autofix:
+    if: github.event.label.name == '{{AUTOFIX_LABEL}}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '{{NODE_VERSION}}'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run VibeCrew fix-issue
+        id: fix
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          echo "Fixing issue #${ISSUE_NUMBER}..."
+
+          # Run Claude Code in headless mode
+          if claude --print "/fix-issue ${ISSUE_NUMBER}" 2>&1 | tee fix-output.txt; then
+            echo "fix_success=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fix_success=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          # Extract PR URL if created
+          PR_URL=$(grep -oP 'https://github\.com/[^\s]+/pull/\d+' fix-output.txt | head -1 || echo "")
+          echo "pr_url=${PR_URL}" >> "$GITHUB_OUTPUT"
+
+      - name: Comment on issue (success)
+        if: steps.fix.outputs.fix_success == 'true' && steps.fix.outputs.pr_url != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "VibeCrew auto-fix created a PR: ${{ steps.fix.outputs.pr_url }}
+
+          The fix will be reviewed and merged. This issue will auto-close when the PR is merged.
+
+          ---
+          *Automated by [VibeCrew](https://docs.vibecrew.dev) \`/fix-issue\`*"
+
+      - name: Comment on issue (failure)
+        if: steps.fix.outputs.fix_success == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} \
+            --body "VibeCrew auto-fix was unable to resolve this issue automatically.
+
+          [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.
+
+          A developer will need to investigate manually.
+
+          ---
+          *Automated by [VibeCrew](https://docs.vibecrew.dev) \`/fix-issue\`*"

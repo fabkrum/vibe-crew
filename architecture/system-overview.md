@@ -47,7 +47,7 @@ claude-plugin-vibe-crew/                      # Plugin root
     ci-healer.md                            #   Opus   -- CI/CD failure diagnosis and repair
     opponent-processor.md                   #   Opus   -- adversarial review, edge case discovery
     system-reviewer.md                      #   Opus   -- plugin meta-analysis, telemetry, ecosystem research
-  skills/                                   # 26 slash commands (SKILL.md per command)
+  skills/                                   # 28 slash commands (SKILL.md per command)
     setup/
       SKILL.md                              #   /setup -- first-run installation wizard
     new-project/
@@ -66,6 +66,10 @@ claude-plugin-vibe-crew/                      # Plugin root
       SKILL.md                              #   /check -- run tests, build, lint
     wrap/
       SKILL.md                              #   /wrap -- session end with coaching
+    fix-issue/
+      SKILL.md                              #   /fix-issue -- GitHub issue auto-fix
+    sync-issues/
+      SKILL.md                              #   /sync-issues -- batch issue import
     system-review/
       SKILL.md                              #   /system-review -- plugin meta-analysis
   hooks/
@@ -83,6 +87,9 @@ claude-plugin-vibe-crew/                      # Plugin root
     claude-md-lint.sh                       #   Stop: CLAUDE.md size and quality validation
     quality-gate.sh                         #   Stop: typecheck/lint/build on modified source files
     inject-architecture.sh                  #   Orchestrator: pre-loads Mermaid diagrams into context
+    check-gh-auth.sh                        #   GitHub CLI validation utility
+    fetch-github-issue.sh                   #   Single GitHub issue fetcher
+    import-issue-to-backlog.sh              #   Issue-to-backlog mapper
   settings.json                             # Default permission rules (allow/deny lists)
   .mcp.json                                 # MCP server definitions (10 servers, 3 enabled by default)
   install.sh                                # Bootstrap script for dependency installation
@@ -1055,7 +1062,7 @@ The Vibe Score deducts 15 points when cache utilization drops below 20%, incenti
 
 ### 6.1 Overview
 
-VibeCrew exposes 26 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
+VibeCrew exposes 28 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
 
 All VibeCrew commands use `disable-model-invocation: true` to prevent Claude from auto-loading them. They are user-triggered workflows, not background capabilities. Two commands (`/status` and `/check`) also allow model invocation for internal use by the Orchestrator.
 
@@ -1091,6 +1098,8 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 |  /status         Project state dashboard (read-only)              |
 |  /wrap           End session with scoring, commit                 |
 |  /heal           Diagnose and repair CI failures                  |
+|  /fix-issue      Fix a GitHub issue (fetch, code, test, PR)      |
+|  /sync-issues    Import GitHub issues by label into backlog       |
 |  /simplify       Dead code detection, complexity reduction        |
 |  /handoff        Generate cross-session context transfer          |
 |  /replay         Re-run a saved workflow template                 |
@@ -1140,6 +1149,8 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 | `/perf-test` | `perf-test` | `"endpoint-or-flow"` | Inline | Verifier | Haiku |
 | `/a11y` | `a11y` | None | Inline | Verifier | Haiku |
 | `/profile` | `profile` | None | Inline | -- | Inherit |
+| `/fix-issue` | `fix-issue` | `<number> [--full]` | Inline | Builder, Verifier, Code Reviewer | Opus |
+| `/sync-issues` | `sync-issues` | `[--label <name>] [--limit <n>]` | Inline (script only) | -- | Inherit |
 | `/system-review` | `system-review` | None | Worktree | System Reviewer | Opus |
 
 ### 6.4 Command Details

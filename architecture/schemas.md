@@ -172,6 +172,11 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
 | `cost_limits.session_warn_usd` | number | yes | `2.00` | Session cost warning |
 | `cost_limits.session_max_usd` | number | yes | `5.00` | Session cost hard limit |
 | `cost_limits.daily_warn_usd` | number | yes | `20.00` | Daily cost warning |
+| `github_issues.enabled` | boolean | yes | `false` | GitHub Issues integration enabled |
+| `github_issues.autofix_label` | string | yes | `"autofix"` | Label that triggers auto-fix |
+| `github_issues.default_mode` | enum | yes | `"hotfix"` | `hotfix\|feature` — default fix mode |
+| `github_issues.auto_pr` | boolean | yes | `true` | Auto-create PR after fix |
+| `github_issues.sync_limit` | integer | yes | `10` | Max issues to import per sync |
 | `user_profile.interview_completed` | boolean | yes | `false` | Profile interview done |
 | `user_profile.role` | enum\|null | yes | `null` | `developer\|technical_pm\|designer\|non_technical\|learner` |
 | `user_profile.code_literacy` | enum | yes | `"conversational"` | `fluent\|conversational\|basic\|none` |
@@ -389,6 +394,10 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `created_at` | string | yes | Creation timestamp |
 | `updated_at` | string | yes | Last modification timestamp |
 | `completed_at` | string\|null | yes | Completion timestamp |
+| `source` | string\|null | no | Origin: `"github-issue"` or null |
+| `type` | string\|null | no | `"hotfix"` or `"feature"` or null |
+| `github_issue_number` | integer\|null | no | GitHub issue number |
+| `github_issue_url` | string\|null | no | GitHub issue URL |
 
 ---
 
@@ -821,7 +830,80 @@ Created by the Orchestrator when a Code Reviewer verdict is `request-changes`. C
 
 ---
 
-## 8. Lock Files
+## 8. Issue Fix Reports
+
+Per-issue fix reports. Created by `/fix-issue` on completion. Used by Performance Coach for trend analysis and by `/status` for issue fix history.
+
+**File pattern:** `.vibecrew/issue-fixes/fix-<number>-<YYYYMMDDTHHMMSSZ>.json`
+
+```jsonc
+{
+  "schema_version": "1.8.0",
+
+  // Issue identity
+  "issue_number": 42,                    // GitHub issue number
+  "title": "Login button unresponsive",  // Issue title
+  "url": "https://github.com/user/repo/issues/42",
+
+  // Backlog mapping
+  "feature_id": "feat-007",             // VibeCrew backlog feature ID
+
+  // Fix details
+  "branch": "fix/issue-42",             // Git branch used for the fix
+  "mode": "hotfix",                      // "hotfix" | "feature"
+  "outcome": "fixed",                    // "fixed" | "failed" | "skipped"
+  "pr_url": "https://github.com/user/repo/pull/43",
+  "pr_number": 43,                       // PR number | null
+  "commit_sha": "abc1234",              // Fix commit SHA | null
+
+  // Files changed
+  "files_modified": [
+    "src/components/LoginButton.tsx",
+    "src/components/__tests__/LoginButton.test.tsx"
+  ],
+
+  // Quality gate results
+  "quality_gate": {
+    "tests": "pass",                     // "pass" | "fail" | null
+    "build": "pass",
+    "lint": "pass",
+    "typecheck": "pass"
+  },
+
+  // Execution metadata
+  "attempts": 1,                         // Number of quality gate attempts (1-3)
+  "started_at": "2026-03-01T10:00:00Z",
+  "completed_at": "2026-03-01T10:15:00Z"
+}
+```
+
+### Field Reference
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `schema_version` | string | yes | Schema version |
+| `issue_number` | integer | yes | GitHub issue number |
+| `title` | string | yes | Issue title |
+| `url` | string | yes | GitHub issue URL |
+| `feature_id` | string | yes | Backlog feature ID |
+| `branch` | string | yes | Git branch for the fix |
+| `mode` | enum | yes | `"hotfix"` or `"feature"` |
+| `outcome` | enum | yes | `"fixed"`, `"failed"`, or `"skipped"` |
+| `pr_url` | string\|null | yes | PR URL or null |
+| `pr_number` | integer\|null | yes | PR number or null |
+| `commit_sha` | string\|null | yes | Commit SHA or null |
+| `files_modified` | string[] | yes | Paths of modified files |
+| `quality_gate.tests` | enum\|null | yes | `"pass"`, `"fail"`, or null |
+| `quality_gate.build` | enum\|null | yes | `"pass"`, `"fail"`, or null |
+| `quality_gate.lint` | enum\|null | yes | `"pass"`, `"fail"`, or null |
+| `quality_gate.typecheck` | enum\|null | yes | `"pass"`, `"fail"`, or null |
+| `attempts` | integer | yes | Number of quality gate attempts |
+| `started_at` | string | yes | ISO 8601 start timestamp |
+| `completed_at` | string | yes | ISO 8601 completion timestamp |
+
+---
+
+## 9. Lock Files
 
 Atomic locks to prevent concurrent writes to the same resource. Uses `mkdir`-based locking (atomic on all filesystems).
 
@@ -863,7 +945,7 @@ Atomic locks to prevent concurrent writes to the same resource. Uses `mkdir`-bas
 
 ---
 
-## 9. Migration Strategy
+## 10. Migration Strategy
 
 ### Version History
 
@@ -924,7 +1006,7 @@ done
 
 ---
 
-## 10. Gamification State
+## 11. Gamification State
 
 Persistent progression state for the gamification system. Created by `/setup` (via `init-vibecrew-state.sh`). Updated by gamification scripts during `/wrap`.
 
@@ -1132,7 +1214,7 @@ Three competing definitions existed:
 
 ---
 
-## 11. Project Registry
+## 12. Project Registry
 
 Central registry of projects using VibeCrew. Lives at `${CLAUDE_PLUGIN_ROOT}/project-registry.json` (plugin root, not per-project). Created automatically during `/setup` if missing.
 
@@ -1171,7 +1253,7 @@ Central registry of projects using VibeCrew. Lives at `${CLAUDE_PLUGIN_ROOT}/pro
 
 ---
 
-## 12. Telemetry Aggregate
+## 13. Telemetry Aggregate
 
 Anonymized cross-project performance data. Generated by `collect-telemetry.sh` from all registered projects. Read by the System Reviewer agent during `/system-review`.
 
@@ -1279,7 +1361,7 @@ The following data is **NOT collected**:
 
 ---
 
-## 13. System Review Report
+## 14. System Review Report
 
 Structured output from the System Reviewer agent. Created by `/system-review`. Both JSON and markdown versions are saved.
 

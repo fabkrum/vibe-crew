@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.8.0",
+  "issue_number": null,
+  "title": null,
+  "url": null,
+  "feature_id": null,
+  "branch": null,
+  "mode": null,
+  "outcome": null,
+  "pr_url": null,
+  "pr_number": null,
+  "commit_sha": null,
+  "files_modified": [],
+  "quality_gate": {
+    "tests": null,
+    "build": null,
+    "lint": null,
+    "typecheck": null
+  },
+  "attempts": 0,
+  "started_at": null,
+  "completed_at": null
+}

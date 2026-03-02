@@ -14,6 +14,7 @@ import TableWrap from '../components/TableWrap.astro';
             <li><a href="#replay">Workflow Templates (/replay)</a></li>
             <li><a href="#simplify">Code Simplification (/simplify)</a></li>
             <li><a href="#heal">Auto-Healing CI (/heal)</a></li>
+            <li><a href="#github-issues">GitHub Issues Integration (/fix-issue)</a></li>
             <li><a href="#opponent">Opponent Processor (TDR Debate)</a></li>
             <li><a href="#context-hygiene">Inter-Feature Context Hygiene (/run-backlog)</a></li>
           </ol>
@@ -116,6 +117,35 @@ Presents suggestions one at a time for your approval
           </tbody>
         </table>
       </TableWrap>
+
+      <!-- GITHUB ISSUES -->
+      <h3 id="github-issues">GitHub Issues Integration (<code>/fix-issue</code>)</h3>
+      <p>Connect GitHub Issues directly to VibeCrew&rsquo;s development pipeline. Someone files a bug, a human labels it for auto-fix, and VibeCrew diagnoses, implements, tests, and opens a PR &mdash; all autonomously.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon blue">&#128295;</div>
+          <h4><code>/fix-issue &lt;number&gt;</code></h4>
+          <p>Interactive single-issue fix. Fetches the issue, imports it into the backlog, creates a branch, implements the fix with the Builder agent, runs quality checks, and opens a PR with <code>Fixes #N</code> for auto-close.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#128259;</div>
+          <h4><code>/sync-issues</code></h4>
+          <p>Batch-import open issues by label (default: <code>autofix</code>) into the backlog. Zero token cost &mdash; pure bash. Then run <code>/run-backlog</code> to process them automatically.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon amber">&#9889;</div>
+          <h4>GitHub Actions</h4>
+          <p>Fully automated CI-triggered fixes. The <code>github-actions-autofix.yml</code> template triggers on <code>issues.labeled</code> events and runs Claude Code CLI headless. Results are commented back on the issue.</p>
+        </div>
+      </div>
+
+      <h4>Hotfix vs Full Feature</h4>
+      <p>Bug issues use a <strong>hotfix path</strong> (Code &rarr; Test &rarr; Review) that skips planning and design since bugs don&rsquo;t need upfront design work. Issues labeled <code>enhancement</code> or <code>feature-request</code>, or those invoked with <code>--full</code>, use the standard 6-phase Tier 2 cycle.</p>
+
+      <Callout type="tip" title="Deduplication built in">
+        The import script tracks <code>github_issue_number</code> on each backlog entry. Running <code>/sync-issues</code> multiple times or calling <code>/fix-issue</code> on an already-imported issue will detect the duplicate and offer to resume instead of creating a new entry.
+      </Callout>
 
       <!-- OPPONENT -->
       <h3 id="opponent">Opponent Processor (TDR Debate)</h3>

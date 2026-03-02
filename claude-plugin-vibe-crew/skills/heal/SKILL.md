@@ -42,36 +42,17 @@ Not inside a git repository. /heal requires git to create checkpoints and commit
 
 And stop.
 
-### Check 3: GitHub CLI Available
+### Check 3: Provider CLI Available
 
 ```bash
-command -v gh >/dev/null 2>&1 && echo "gh_ok" || echo "no_gh"
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-gh-auth.sh"
 ```
 
-If `gh` is not installed, output:
+Parse the JSON output. If `status` is not `"ok"`, display the `message` field and stop.
 
-```
-GitHub CLI (gh) not found. /heal requires gh to fetch CI run logs.
-Install: https://cli.github.com/
-```
+Store the `provider` field from the output (`"github"` or `"gitlab"`) for use when fetching CI logs.
 
-And stop.
-
-### Check 4: GitHub Authentication
-
-```bash
-gh auth status 2>&1
-```
-
-If `gh` is not authenticated, output:
-
-```
-GitHub CLI not authenticated. Run `gh auth login` first.
-```
-
-And stop.
-
-### Check 5: Clean Working Tree
+### Check 4: Clean Working Tree
 
 ```bash
 git status --porcelain 2>/dev/null

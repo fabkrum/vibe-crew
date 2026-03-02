@@ -67,6 +67,7 @@ check_dep "jq"      "jq"   "1.6"    "required" "jq"   "jq"   "--version"
 
 # Optional dependencies (warn but don't block)
 check_dep "GitHub CLI"        "gh"                  "2.0.0" "optional" "gh"                  "gh"                  "--version"
+check_dep "GitLab CLI"        "glab"                "1.0.0" "optional" "glab"                "glab"                "--version"
 check_dep "terminal-notifier" "terminal-notifier"   "2.0.0" "optional" "terminal-notifier"   "terminal-notifier"   "--version"
 
 # Check gh auth status (informational, never blocks)
@@ -79,6 +80,16 @@ if command -v gh &>/dev/null; then
   fi
 fi
 
+# Check glab auth status (informational, never blocks)
+GLAB_AUTH="not_installed"
+if command -v glab &>/dev/null; then
+  if glab auth status &>/dev/null 2>&1; then
+    GLAB_AUTH="ok"
+  else
+    GLAB_AUTH="not_authenticated"
+  fi
+fi
+
 # Build output JSON
 DEPS_JSON=$(printf '%s,' "${RESULTS[@]}" | sed 's/,$//')
 
@@ -88,14 +99,14 @@ if [[ "$AUTO_INSTALL" == "true" ]]; then
   if [[ ${#INSTALL_CMDS[@]} -gt 0 ]]; then
     CMDS_JSON=$(printf '%s\n' "${INSTALL_CMDS[@]}" | jq -R . | jq -s .)
   fi
-  jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
+  jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" --arg glab_auth "$GLAB_AUTH" \
     --argjson pass "$PASS" --argjson fail "$FAIL" --argjson warn "$WARN" \
     --argjson cmds "$CMDS_JSON" --arg pkg_mgr "$PKG_MGR" \
-    '{dependencies:$deps, gh_authenticated:$gh_auth, package_manager:$pkg_mgr, install_commands:$cmds, summary:{passed:$pass, required_failed:$fail, optional_missing:$warn, ready:($fail==0)}}'
+    '{dependencies:$deps, gh_authenticated:$gh_auth, glab_authenticated:$glab_auth, package_manager:$pkg_mgr, install_commands:$cmds, summary:{passed:$pass, required_failed:$fail, optional_missing:$warn, ready:($fail==0)}}'
 else
-  jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
+  jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" --arg glab_auth "$GLAB_AUTH" \
     --argjson pass "$PASS" --argjson fail "$FAIL" --argjson warn "$WARN" \
-    '{dependencies:$deps, gh_authenticated:$gh_auth, summary:{passed:$pass, required_failed:$fail, optional_missing:$warn, ready:($fail==0)}}'
+    '{dependencies:$deps, gh_authenticated:$gh_auth, glab_authenticated:$glab_auth, summary:{passed:$pass, required_failed:$fail, optional_missing:$warn, ready:($fail==0)}}'
 fi
 
 [[ "$FAIL" -gt 0 ]] && exit 1 || exit 0

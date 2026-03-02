@@ -182,7 +182,8 @@ These enhance the experience but degrade gracefully when missing. The setup wiza
 
 | Dependency | Minimum Version | Purpose | Degradation Without It | Installation |
 |------------|----------------|---------|----------------------|--------------|
-| GitHub CLI (`gh`) | 2.0+ | Automated PR creation, issue management | PR automation (`/review`, `gh pr create`) disabled | `brew install gh` |
+| GitHub CLI (`gh`) | 2.0+ | Automated PR creation, issue management (GitHub) | PR automation (`/review`, `gh pr create`) disabled on GitHub repos | `brew install gh` |
+| GitLab CLI (`glab`) | 1.30+ | Automated MR creation, issue management (GitLab) | MR automation (`/review`, `glab mr create`) disabled on GitLab repos | `brew install glab` |
 | `terminal-notifier` | 2.0+ | Native macOS notifications for the Interrupt Protocol | Falls back to OSC 9 escape sequences; user may miss permission prompts and task completions | `brew install terminal-notifier` |
 | Context7 MCP | latest | Library documentation lookup on demand | Agents fall back to `WebSearch`/`WebFetch`; higher token cost but functional | Auto-installed via `npx -y` |
 | Chrome DevTools MCP | latest | Browser debugging and automation for research and visual testing | Stack Scout skips browser-based research; Verifier skips visual regression tests | Auto-installed via `npx -y` |
@@ -199,7 +200,7 @@ For users who prefer a single-command setup, `install.sh` at the plugin root ins
 ./install.sh --yes
 ```
 
-The script detects the OS and package manager (Homebrew on macOS, apt/dnf/yum on Linux), checks each dependency, consolidates missing packages into a single install command, and optionally prompts `gh auth login` if GitHub CLI was just installed. It does NOT install Claude Code itself.
+The script detects the OS and package manager (Homebrew on macOS, apt/dnf/yum on Linux), checks each dependency, consolidates missing packages into a single install command, and optionally prompts `gh auth login` or `glab auth login` if the respective CLI was just installed. It does NOT install Claude Code itself.
 
 ### 2.4 Auto-Install During `/setup`
 
@@ -244,20 +245,23 @@ check_dep() {
 check_dep "Claude Code" "claude" "2.0.0" "npm install -g @anthropic-ai/claude-code" "required"
 check_dep "Git" "git" "2.30.0" "xcode-select --install" "required"
 check_dep "GitHub CLI" "gh" "2.0.0" "brew install gh" "required"
+check_dep "GitLab CLI" "glab" "1.30.0" "brew install glab" "optional"
 check_dep "Node.js" "node" "18.0.0" "brew install node" "required" "--version"
 check_dep "jq" "jq" "1.6" "brew install jq" "required"
 
 # Recommended
 check_dep "terminal-notifier" "terminal-notifier" "2.0.0" "brew install terminal-notifier" "recommended"
 
-# Check gh auth
+# Check gh/glab auth
 GH_AUTH="ok"
 command -v gh &>/dev/null && ! gh auth status &>/dev/null && GH_AUTH="not_authenticated" && ((FAIL++))
+GLAB_AUTH="ok"
+command -v glab &>/dev/null && ! glab auth status &>/dev/null && GLAB_AUTH="not_authenticated" && ((WARN++))
 
 DEPS_JSON=$(printf '%s,' "${RESULTS[@]}" | sed 's/,$//')
-jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" \
+jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" --arg glab_auth "$GLAB_AUTH" \
   --argjson pass "$PASS" --argjson fail "$FAIL" --argjson warn "$WARN" \
-  '{dependencies:$deps, gh_authenticated:$gh_auth, summary:{passed:$pass, required_failed:$fail, recommended_missing:$warn, ready:($fail==0)}}'
+  '{dependencies:$deps, gh_authenticated:$gh_auth, glab_authenticated:$glab_auth, summary:{passed:$pass, required_failed:$fail, recommended_missing:$warn, ready:($fail==0)}}'
 
 [ "$FAIL" -gt 0 ] && exit 1 || exit 0
 ```
@@ -659,6 +663,7 @@ VibeCrew Dependency Check
 
   OPTIONAL
   GitHub CLI       2.49.2    optional 2.0+     PASS (authenticated)
+  GitLab CLI       1.36.0    optional 1.30+    PASS (authenticated)
   terminal-notifier  2.0.0   optional          PASS
 
 MCP Server Health:

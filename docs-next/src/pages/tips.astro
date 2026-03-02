@@ -228,9 +228,9 @@ claude
 
       <h3>/heal can't fetch CI logs</h3>
       <ol>
-        <li>Verify GitHub CLI is authenticated: <code>gh auth status</code></li>
+        <li>Verify the CLI is authenticated: <code>gh auth status</code> (GitHub) or <code>glab auth status</code> (GitLab)</li>
         <li>Ensure the repo has a remote: <code>git remote -v</code></li>
-        <li>Check that a recent CI run exists: <code>gh run list --limit 5</code></li>
+        <li>Check that a recent CI run exists: <code>gh run list --limit 5</code> (GitHub) or <code>glab ci list</code> (GitLab)</li>
         <li>If the failure is on a different branch, switch to it first</li>
       </ol>
 

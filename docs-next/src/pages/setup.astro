@@ -68,6 +68,7 @@ claude`} />
           <tr><td><strong>Node.js</strong></td><td>Required</td><td>18+</td><td>MCP servers, build tools</td></tr>
           <tr><td><strong>jq</strong></td><td>Required</td><td>1.6+</td><td>JSON parsing in hook scripts</td></tr>
           <tr><td><strong>GitHub CLI</strong></td><td>Optional</td><td>2.0+</td><td>PR automation (<code>/review</code>, <code>gh pr create</code>)</td></tr>
+          <tr><td><strong>GitLab CLI</strong></td><td>Optional</td><td>1.36+</td><td>MR automation (<code>/review</code>, <code>glab mr create</code>)</td></tr>
           <tr><td><strong>terminal-notifier</strong></td><td>Optional</td><td>any</td><td>Desktop notifications on macOS</td></tr>
         </tbody>
       </table>
@@ -251,9 +252,12 @@ vibecrew-update() {
     <CodeBlock label="bash" code={`# Required
 brew install jq node
 
-# Optional (PR automation + desktop notifications)
+# Optional (PR/MR automation + desktop notifications)
 brew install terminal-notifier gh
-gh auth login`} />
+gh auth login
+# Or for GitLab:
+brew install glab
+glab auth login`} />
 
     <h3>Linux (apt)</h3>
     <CodeBlock label="bash" code={`# Required
@@ -261,7 +265,10 @@ sudo apt-get install -y git nodejs jq
 
 # Optional
 sudo apt-get install -y gh
-gh auth login`} />
+gh auth login
+# Or for GitLab:
+sudo apt-get install -y glab
+glab auth login`} />
 
     <p>Verify with:</p>
     <CodeBlock label="bash" code={`git --version    # 2.30+

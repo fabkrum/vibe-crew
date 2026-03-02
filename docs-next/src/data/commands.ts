@@ -38,8 +38,8 @@ export const commands: Command[] = [
   { name: '/debug', category: 'Development', purpose: 'Structured debugging workflow with hypothesis testing', agent: 'Builder', tier: '2', args: '' },
   { name: '/release', category: 'Session', purpose: 'Generate release notes from git history and session logs', agent: 'Doc Generator', tier: '2', args: '' },
   { name: '/profile', category: 'Setup', purpose: '8-question interview or preset selection for personalization', agent: 'None (inline)', tier: 'Any', args: '' },
-  { name: '/fix-issue', category: 'Development', purpose: 'Fix a GitHub issue — fetch, diagnose, implement, test, PR with auto-close', agent: 'Builder, Verifier, Code Reviewer', tier: '2', args: '<number>' },
-  { name: '/sync-issues', category: 'Planning', purpose: 'Import open GitHub issues by label into the VibeCrew backlog', agent: 'None (script only)', tier: '2', args: '--label <name> --limit <n>' },
+  { name: '/fix-issue', category: 'Development', purpose: 'Fix an issue (GitHub/GitLab) — fetch, diagnose, implement, test, PR/MR with auto-close', agent: 'Builder, Verifier, Code Reviewer', tier: '2', args: '<number>' },
+  { name: '/sync-issues', category: 'Planning', purpose: 'Import open issues by label into the VibeCrew backlog', agent: 'None (script only)', tier: '2', args: '--label <name> --limit <n>' },
   { name: '/system-review', category: 'Quality', purpose: 'Plugin meta-analysis, cross-project telemetry, ecosystem research', agent: 'System Reviewer', tier: 'Any', args: '' },
 ];
 

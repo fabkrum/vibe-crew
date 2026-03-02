@@ -19,7 +19,7 @@ cd claude-plugin-vibe-crew
 ```
 
 This detects your OS and package manager, installs any missing dependencies, and
-prompts for GitHub CLI authentication. Pass `--yes` to skip confirmation prompts.
+prompts for GitHub/GitLab CLI authentication. Pass `--yes` to skip confirmation prompts.
 
 **Option B: Manual install**
 
@@ -29,11 +29,13 @@ prompts for GitHub CLI authentication. Pass `--yes` to skip confirmation prompts
 | Node.js | Required | 18+ | `brew install node` |
 | `jq` | Required | any | `brew install jq` |
 | GitHub CLI (`gh`) | Optional | 2.0+ | `brew install gh` |
+| GitLab CLI (`glab`) | Optional | 1.36+ | `brew install glab` |
 | `terminal-notifier` (macOS) | Optional | any | `brew install terminal-notifier` |
 
-> **Note:** GitHub CLI is only needed for PR automation (`/review`, `gh pr create`).
-> `terminal-notifier` enables desktop notifications. Both are optional — VibeCrew
-> works without them.
+> **Note:** GitHub CLI or GitLab CLI is only needed for PR/MR automation (`/review`,
+> `gh pr create` / `glab mr create`). The provider is auto-detected from the git
+> remote URL. `terminal-notifier` enables desktop notifications. All optional
+> dependencies are optional — VibeCrew works without them.
 
 **Install the plugin**
 
@@ -131,8 +133,8 @@ directory and invoked directly from the Claude Code prompt.
 |---|---|
 | `/cost` | Display the real-time token cost dashboard: current session cost, daily/weekly/monthly aggregates, threshold proximity, and model pricing reference. |
 | `/undo` | Checkpoint rollback: list VibeCrew checkpoints and recent commits, pick a target, and safely revert (pushed) or reset (unpushed) while preserving your working tree. |
-| `/audit` | OWASP Top 10 security review: scan codebase for injection, auth, XSS, misconfig, and 7 more vulnerability categories. Runs dependency audit, secret detection, and optionally creates GitHub issues for critical findings. |
-| `/heal` | Auto-heal failing CI: fetch logs from GitHub Actions, diagnose failure category (build/test/lint/dep/env), apply targeted fix (max 3 attempts), verify, and commit. Creates a checkpoint before any changes. |
+| `/audit` | OWASP Top 10 security review: scan codebase for injection, auth, XSS, misconfig, and 7 more vulnerability categories. Runs dependency audit, secret detection, and optionally creates issues for critical findings. |
+| `/heal` | Auto-heal failing CI: fetch logs from GitHub Actions or GitLab CI, diagnose failure category (build/test/lint/dep/env), apply targeted fix (max 3 attempts), verify, and commit. Creates a checkpoint before any changes. |
 
 ### Code Quality
 

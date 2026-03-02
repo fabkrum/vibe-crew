@@ -87,8 +87,10 @@ claude-plugin-vibe-crew/                      # Plugin root
     claude-md-lint.sh                       #   Stop: CLAUDE.md size and quality validation
     quality-gate.sh                         #   Stop: typecheck/lint/build on modified source files
     inject-architecture.sh                  #   Orchestrator: pre-loads Mermaid diagrams into context
-    check-gh-auth.sh                        #   GitHub CLI validation utility
-    fetch-github-issue.sh                   #   Single GitHub issue fetcher
+    check-gh-auth.sh                        #   Git provider CLI validation (GitHub and GitLab)
+    fetch-github-issue.sh                   #   Single issue fetcher (GitHub and GitLab)
+    lib/
+      git-provider.sh                       #   Provider detection library (github/gitlab/auto-detect)
     import-issue-to-backlog.sh              #   Issue-to-backlog mapper
   settings.json                             # Default permission rules (allow/deny lists)
   .mcp.json                                 # MCP server definitions (10 servers, 3 enabled by default)
@@ -1156,7 +1158,7 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 
 ### 6.4 Command Details
 
-**`/setup`** -- First-run installation wizard. Verifies prerequisites (Git 2.30+, GitHub CLI 2.0+, Node.js 18+, jq, terminal-notifier). Creates the `.vibecrew/` directory with initial `config.json`, `state.json`, and `backlog.json` (see [schemas.md](schemas.md) for initial file structures). Configures MCP servers. Runs in a forked context to avoid polluting the main session.
+**`/setup`** -- First-run installation wizard. Verifies prerequisites (Git 2.30+, GitHub CLI or GitLab CLI, Node.js 18+, jq, terminal-notifier). Creates the `.vibecrew/` directory with initial `config.json`, `state.json`, and `backlog.json` (see [schemas.md](schemas.md) for initial file structures). Configures MCP servers. Runs in a forked context to avoid polluting the main session.
 
 **`/new-project`** -- Triggers the Tier 1 foundation workflow. Sequentially produces VISION.md, design-system.css, TDR, roadmap, architecture diagrams (5 Mermaid `.mmd` files), and CLAUDE.md. Sets `foundation.complete` to `true` in `state.json` when all six artifacts are created and approved. This is the command that unlocks Tier 2.
 

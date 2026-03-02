@@ -1,12 +1,12 @@
 ---
 name: sync-issues
-description: Import open GitHub issues by label into the VibeCrew backlog
+description: Import open issues by label into the VibeCrew backlog (GitHub/GitLab)
 disable-model-invocation: true
 ---
 
 # /sync-issues
 
-Batch-import open GitHub issues into the VibeCrew backlog. Fetches issues matching a label (default: `autofix`), imports each one as a backlog entry, and reports results. Zero token cost — pure bash execution.
+Batch-import open issues (GitHub or GitLab, auto-detected) into the VibeCrew backlog. Fetches issues matching a label (default: `autofix`), imports each one as a backlog entry, and reports results. Zero token cost — pure bash execution.
 
 **Usage:** `/sync-issues` or `/sync-issues --label <name> --limit <n>`
 
@@ -26,7 +26,7 @@ If `.vibecrew/state.json` does not exist, output EXACTLY this and stop:
 VibeCrew not initialized. Run /setup first.
 ```
 
-### Check 2: GitHub CLI
+### Check 2: Provider CLI
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-gh-auth.sh"
@@ -34,14 +34,16 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-gh-auth.sh"
 
 Parse the JSON output. If `status` is not `"ok"`, display the `message` field and stop.
 
+Store the `provider` field from the JSON output (`"github"` or `"gitlab"`) for use in later steps.
+
 ---
 
 ## Step 1: Read Config
 
-Read the GitHub Issues configuration for defaults.
+Read the issue tracker configuration for defaults.
 
 ```bash
-jq -r '.github_issues // {}' .vibecrew/config.json 2>/dev/null
+jq -r '.issues // .github_issues // {}' .vibecrew/config.json 2>/dev/null
 ```
 
 Extract:
@@ -60,8 +62,16 @@ Override with command-line flags if provided:
 
 List open issues matching the label.
 
+**GitHub:**
+
 ```bash
 gh issue list --label "<label>" --state open --limit <limit> --json number,title,labels,state,url,author,createdAt
+```
+
+**GitLab:**
+
+```bash
+glab issue list --label "<label>" --per-page <limit> --output json
 ```
 
 Parse the JSON output. If no issues are found, output:
@@ -141,7 +151,7 @@ Errors:
 
 - **Zero token cost.** This skill uses `disable-model-invocation: true`. All operations are bash scripts.
 - **Use `${CLAUDE_PLUGIN_ROOT}`** for all plugin-relative paths.
-- **Deduplication.** Never create duplicate backlog entries. The import script checks `github_issue_number`.
+- **Deduplication.** Never create duplicate backlog entries. The import script checks `issue_number` (and legacy `github_issue_number`).
 - **Respect sync_limit.** Never import more issues than the configured limit.
 - **Default label is `autofix`.** Only issues explicitly labeled for auto-fix are imported.
 - **Do not modify issues.** This command only reads from GitHub and writes to the local backlog. It does not label, comment on, or close issues.

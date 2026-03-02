@@ -334,7 +334,8 @@ The phase gate is the enforcement mechanism that prevents source code writes bef
     |  REQUIRED (blocks setup if missing):                 |
     |    [x] Claude Code >= 2.0.0                          |
     |    [x] Git >= 2.30                                   |
-    |    [x] GitHub CLI >= 2.0 (authenticated)             |
+    |    [x] GitHub CLI >= 2.0 or GitLab CLI >= 1.30       |
+    |        (authenticated for detected provider)         |
     |                                                      |
     |  RECOMMENDED (warns but continues):                  |
     |    [ ] Node.js >= 18                                 |
@@ -459,8 +460,8 @@ idea -> planning -> planned -> in-progress -> testing -> review -> done
                                          |              |
                                          |    REVIEW    |
                                          |              |
-                                         | PR open on   |
-                                         | GitHub       |
+                                         | PR/MR open   |
+                                         | on provider  |
                                          +------+-------+
                                                 |
                               User merges PR
@@ -708,11 +709,11 @@ Orchestrator
     +--- TaskCreate(assignee: builder,
     |        task: "Create PR for feat-003")
     |         |
-    |         +--- Builder: gh pr create --title "..." --body "..."
+    |         +--- Builder: gh pr create (or glab mr create) --title "..." --body "..."
     |         +--- Signal: builder-pr-created.signal
     |
     +--- SendMessage(to: developer,
-         "feat-003 ready for review. PR: <url>")
+         "feat-003 ready for review. PR/MR: <url>")
 ```
 
 ### 3.8 Verify-Fix Loop Detail
@@ -1072,7 +1073,7 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |  STEP 6: Optional PR creation                            |
     |    Feature complete + all tests pass?                    |
     |    -> "Create a PR? (y/n)"                               |
-    |    -> gh pr create --title "..." --body "..."            |
+    |    -> gh pr create (or glab mr create) --title "..." --body "..."            |
     |                                                          |
     |       |                                                  |
     |       v                                                  |
@@ -1940,14 +1941,14 @@ When errors cannot be automatically recovered, VibeCrew degrades gracefully in t
 
 ---
 
-## 8. GitHub Issue Fix Lifecycle
+## 8. Issue Fix Lifecycle
 
 ### 8.1 Overview
 
-The GitHub Issue Fix workflow connects GitHub Issues directly to VibeCrew's development pipeline. It operates in two modes:
+The Issue Fix workflow connects GitHub Issues or GitLab Issues directly to VibeCrew's development pipeline. The provider is auto-detected from the git remote (or overridden via `git_provider` in `config.json`). It operates in two modes:
 
-- **Interactive** (`/fix-issue <number>`): A developer triggers a fix from the CLI. The agent fetches the issue, implements a fix, runs quality checks, and opens a PR.
-- **CI-triggered** (GitHub Actions): A label event triggers the workflow automatically via the `github-actions-autofix.yml` template.
+- **Interactive** (`/fix-issue <number>`): A developer triggers a fix from the CLI. The agent fetches the issue, implements a fix, runs quality checks, and opens a PR (GitHub) or MR (GitLab).
+- **CI-triggered** (GitHub Actions or GitLab CI): A label event triggers the workflow automatically via the provider-appropriate CI template.
 
 Both paths converge on the same scripts and agents. The only difference is the entry point and autonomy level.
 
@@ -1961,11 +1962,13 @@ Both paths converge on the same scripts and agents. The only difference is the e
 
 ```
 ┌─────────┐   ┌──────────────┐   ┌─────────────┐   ┌─────────┐   ┌──────────────┐   ┌────────┐
-│  GitHub  │   │ fetch-github │   │ import-issue │   │ Builder │   │   Verifier   │   │   gh   │
-│  Issue   │   │  -issue.sh   │   │ -to-backlog  │   │  Agent  │   │   Agent      │   │   CLI  │
+│  Issue   │   │ fetch-github │   │ import-issue │   │ Builder │   │   Verifier   │   │ gh/    │
+│ (GH/GL) │   │  -issue.sh   │   │ -to-backlog  │   │  Agent  │   │   Agent      │   │ glab   │
 └────┬─────┘   └──────┬───────┘   └──────┬───────┘   └────┬────┘   └──────┬───────┘   └───┬────┘
      │                │                   │                │               │               │
      │  gh issue view │                   │                │               │               │
+     │  (or glab      │                   │                │               │               │
+     │   issue view)  │                   │                │               │               │
      │◄───────────────┤                   │                │               │               │
      │  issue JSON    │                   │                │               │               │
      ├───────────────►│                   │                │               │               │
@@ -1982,8 +1985,10 @@ Both paths converge on the same scripts and agents. The only difference is the e
      │                │                   │                │  PASS/FAIL    │               │
      │                │                   │                │◄──────────────┤               │
      │                │                   │                │               │  gh pr create │
+     │                │                   │                │               │  (or glab mr  │
+     │                │                   │                │               │   create)     │
      │                │                   │                ├───────────────┼──────────────►│
-     │                │                   │                │               │  PR URL       │
+     │                │                   │                │               │  PR/MR URL    │
      │                │                   │                │◄──────────────┼───────────────┤
      │                │                   │                │               │               │
 ```
@@ -2005,15 +2010,15 @@ planned → in-progress → testing → review → done
 
 The `/sync-issues` command provides batch import:
 
-1. `/sync-issues` fetches issues by label and imports them into the backlog
-2. Each imported issue becomes a backlog entry with `source: "github-issue"`
+1. `/sync-issues` fetches issues by label and imports them into the backlog (from GitHub or GitLab, based on detected provider)
+2. Each imported issue becomes a backlog entry with `source: "github-issue"` or `"gitlab-issue"` and a `provider` field
 3. `/run-backlog` processes them in priority order using the standard Tier 2 cycle
 4. Hotfix entries start at `planned` column (skip planning phase)
 5. Feature entries start at `idea` column (full 6-phase cycle)
 
-### 8.6 GitHub Actions Integration
+### 8.6 CI Integration (GitHub Actions / GitLab CI)
 
-The `github-actions-autofix.yml` template provides fully automated CI-triggered fixes:
+**GitHub Actions:** The `github-actions-autofix.yml` template provides fully automated CI-triggered fixes:
 
 1. Issue receives the configured label (default: `autofix`)
 2. GitHub Actions workflow triggers on `issues.labeled` event
@@ -2021,7 +2026,15 @@ The `github-actions-autofix.yml` template provides fully automated CI-triggered 
 4. On success: comments on issue with PR link
 5. On failure: comments with workflow run link for manual investigation
 
-Template placeholders (`{{AUTOFIX_LABEL}}`, `{{NODE_VERSION}}`) are filled by `/setup`.
+**GitLab CI:** The `gitlab-ci-autofix.yml` template provides the equivalent for GitLab:
+
+1. Issue receives the configured label (default: `autofix`)
+2. GitLab CI pipeline triggers on issue label events
+3. Pipeline runs `claude --print "/fix-issue <number>"` headless
+4. On success: comments on issue with MR link
+5. On failure: comments with pipeline link for manual investigation
+
+Template placeholders (`{{AUTOFIX_LABEL}}`, `{{NODE_VERSION}}`) are filled by `/setup`. The commit message close keyword adapts to the provider: `Fixes #N` for GitHub, `Closes #N` for GitLab.
 
 ---
 

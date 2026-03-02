@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-CURRENT_VERSION="1.5.0"
+CURRENT_VERSION="1.6.0"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 # Source shared libraries
@@ -224,6 +224,53 @@ migrate_1_4_to_1_5() {
   esac
 }
 
+# --- Migration: 1.5.0 -> 1.6.0 ---
+migrate_1_5_to_1_6() {
+  local file="$1"
+  local basename
+  basename=$(basename "$file")
+
+  case "$basename" in
+    config.json)
+      # Add git_provider, rename github_issues → issues, rename audit.auto_github_issues → audit.auto_issues
+      local updated
+      updated=$(jq '. + {
+        git_provider: (.git_provider // null),
+        issues: (.issues // .github_issues // {
+          enabled: false,
+          autofix_label: "autofix",
+          default_mode: "hotfix",
+          auto_pr: true,
+          sync_limit: 10
+        })
+      }
+      | .audit = ((.audit // {}) | . + {auto_issues: (.auto_issues // .auto_github_issues // false)} | del(.auto_github_issues))
+      | del(.github_issues)' "$file")
+      atomic_write "$file" "$updated" --no-backup
+      ;;
+    state.json)
+      # No structural changes needed for state in 1.6.0
+      ;;
+    backlog.json)
+      # Rename github_issue_number → issue_number, github_issue_url → issue_url,
+      # add provider field, change source/labels
+      local updated
+      updated=$(jq '.features = [.features[] |
+        if .github_issue_number then
+          . + {
+            issue_number: .github_issue_number,
+            issue_url: .github_issue_url,
+            provider: "github",
+            source: (if .source == "github-issue" then "issue" else .source end),
+            labels: [.labels[] | if . == "github-issue" then "issue" else . end]
+          } | del(.github_issue_number, .github_issue_url)
+        else . end
+      ]' "$file")
+      atomic_write "$file" "$updated" --no-backup
+      ;;
+  esac
+}
+
 # --- Migrate a single file ---
 migrate_file() {
   local file="$1"
@@ -261,6 +308,9 @@ migrate_file() {
   fi
   if version_lt "$version" "1.5.0"; then
     migrate_1_4_to_1_5 "$file"
+  fi
+  if version_lt "$version" "1.6.0"; then
+    migrate_1_5_to_1_6 "$file"
   fi
 
   # Update schema_version to current

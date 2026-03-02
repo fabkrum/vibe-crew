@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 # tests/fetch-ci-logs.bats
-# Tests for scripts/fetch-ci-logs.sh — CI failure log fetching
+# Tests for scripts/fetch-ci-logs.sh — CI failure log fetching (GitHub + GitLab)
 
 setup() {
   load 'test_helper/common-setup'
@@ -87,6 +87,7 @@ GHEOF
   export PATH="$MOCK_BIN_DIR:/usr/bin:/bin"
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
 
@@ -120,6 +121,7 @@ GHEOF
   chmod +x "$MOCK_BIN_DIR/gh"
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
 
@@ -140,6 +142,7 @@ GHEOF
   _mock_gh_no_failures
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
 
@@ -160,6 +163,7 @@ GHEOF
   _mock_gh_with_failed_run "FAIL: expected 1 got 2"
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
 
@@ -199,6 +203,7 @@ GHEOF
   _mock_gh_with_failed_run "$long_log"
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
 
@@ -223,6 +228,7 @@ GHEOF
   _mock_gh_with_failed_run "Fallback log output from full log" "true"
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
 
@@ -247,6 +253,7 @@ GHEOF
   export PATH="$MOCK_BIN_DIR:/usr/bin:/bin"
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
   echo "$output" | jq empty
@@ -266,4 +273,119 @@ GHEOF
   run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
   assert_success
   echo "$output" | jq empty
+}
+
+@test "github success includes provider field" {
+  _mock_gh_with_failed_run "error line"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
+  run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
+  assert_success
+
+  local provider
+  provider=$(echo "$output" | jq -r '.provider')
+  [[ "$provider" == "github" ]]
+}
+
+# =============================================================================
+# GitLab provider — glab CI
+# =============================================================================
+
+_mock_glab_with_failed_pipeline() {
+  local log_content="${1:-Error: test failed on line 42}"
+
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+    export PATH="$MOCK_BIN_DIR:$PATH"
+  fi
+
+  cat > "$MOCK_BIN_DIR/glab" <<GLABEOF
+#!/usr/bin/env bash
+if [[ "\$1" == "auth" && "\$2" == "status" ]]; then
+  echo "Logged in to gitlab.com as testuser"
+  exit 0
+elif [[ "\$1" == "ci" && "\$2" == "list" ]]; then
+  echo '[{"id":99999,"ref":"feature-x","status":"failed","created_at":"2026-01-15T10:00:00Z"}]'
+  exit 0
+elif [[ "\$1" == "ci" && "\$2" == "view" ]]; then
+  echo '{"jobs":[{"id":55555,"status":"failed","name":"test-job"}]}'
+  exit 0
+elif [[ "\$1" == "ci" && "\$2" == "trace" ]]; then
+  echo '$log_content'
+  exit 0
+fi
+exit 0
+GLABEOF
+  chmod +x "$MOCK_BIN_DIR/glab"
+}
+
+@test "gitlab: fetch failed pipeline returns fetched with provider" {
+  _mock_glab_with_failed_pipeline "FAIL: assertion error"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "fetched" ]]
+
+  local provider
+  provider=$(echo "$output" | jq -r '.provider')
+  [[ "$provider" == "gitlab" ]]
+
+  local log
+  log=$(echo "$output" | jq -r '.log')
+  [[ "$log" == *"FAIL"* ]]
+}
+
+@test "gitlab: pipeline-to-job resolution uses trace" {
+  _mock_glab_with_failed_pipeline "Job 55555 failed: exit code 1"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
+  assert_success
+
+  local run_id
+  run_id=$(echo "$output" | jq -r '.run_id')
+  [[ "$run_id" == "99999" ]]
+
+  local branch
+  branch=$(echo "$output" | jq -r '.branch')
+  [[ "$branch" == "feature-x" ]]
+}
+
+@test "gitlab: no failed pipelines returns no_failures" {
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+    export PATH="$MOCK_BIN_DIR:$PATH"
+  fi
+
+  cat > "$MOCK_BIN_DIR/glab" <<'GLABEOF'
+#!/usr/bin/env bash
+if [[ "$1" == "auth" && "$2" == "status" ]]; then
+  echo "Logged in"
+  exit 0
+elif [[ "$1" == "ci" && "$2" == "list" ]]; then
+  echo '[]'
+  exit 0
+fi
+exit 0
+GLABEOF
+  chmod +x "$MOCK_BIN_DIR/glab"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/fetch-ci-logs.sh"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "no_failures" ]]
 }

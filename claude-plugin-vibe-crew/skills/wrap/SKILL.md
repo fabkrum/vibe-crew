@@ -604,7 +604,9 @@ If the merge fails, fall back to creating a PR with summary format.
 
 ### If `pr_review` = `summary`
 
-Auto-create a PR with a brief 3-line body. Do not ask the user:
+Auto-create a PR/MR with a brief 3-line body. Do not ask the user.
+
+**GitHub:**
 
 ```bash
 gh pr create --title "<type>(<scope>): <summary>" --body "$(cat <<'PR_EOF'
@@ -612,6 +614,17 @@ gh pr create --title "<type>(<scope>): <summary>" --body "$(cat <<'PR_EOF'
 - <why>
 - <what to test>
 PR_EOF
+)"
+```
+
+**GitLab:**
+
+```bash
+glab mr create --title "<type>(<scope>): <summary>" --description "$(cat <<'MR_EOF'
+- <what changed>
+- <why>
+- <what to test>
+MR_EOF
 )"
 ```
 
@@ -639,7 +652,9 @@ Determine the PR details:
 - **Base branch:** Use the default branch from `state.json` (`git.default_branch`, typically `main`).
 - **Body:** Structured markdown with summary, test results, and Vibe Score.
 
-Create the PR:
+Create the PR/MR (use `gh pr create` for GitHub, `glab mr create --description` for GitLab):
+
+**GitHub:**
 
 ```bash
 gh pr create --title "<type>(<scope>): <summary>" --body "$(cat <<'PR_EOF'
@@ -671,7 +686,39 @@ PR_EOF
 )"
 ```
 
-Report the PR URL to the user.
+**GitLab:**
+
+```bash
+glab mr create --title "<type>(<scope>): <summary>" --description "$(cat <<'MR_EOF'
+## Summary
+
+- <1-3 bullet points describing what this MR does>
+
+## Quality Gate
+
+| Check  | Result |
+|--------|--------|
+| Tests  | PASS / FAIL / SKIP |
+| Build  | PASS / FAIL / SKIP |
+| Lint   | PASS / FAIL / SKIP |
+| Types  | PASS / FAIL / SKIP |
+
+## Vibe Score
+
+**Score:** <score>/100 (<rating>)
+
+<coaching observation if any>
+
+## Test Plan
+
+- [ ] Verify acceptance criteria from feature spec
+- [ ] Run full test suite
+- [ ] Manual smoke test of key flows
+MR_EOF
+)"
+```
+
+Report the PR/MR URL to the user.
 
 ### If no:
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 # tests/check-gh-auth.bats
-# Tests for scripts/check-gh-auth.sh — 4-step GitHub auth validation
+# Tests for scripts/check-gh-auth.sh — provider auth validation (GitHub + GitLab)
 
 setup() {
   load 'test_helper/common-setup'
@@ -48,12 +48,11 @@ GHEOF
   if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
     MOCK_BIN_DIR="$(mktemp -d)"
   fi
-  # Create a gh that exits 127 to simulate not found — but check-gh-auth uses
-  # `command -v gh`, so we need to ensure gh is truly absent.
   # Override PATH to exclude real gh
   export PATH="$MOCK_BIN_DIR:/usr/bin:/bin"
 
   cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
   run bash "$SCRIPTS_DIR/check-gh-auth.sh"
   assert_success
 
@@ -96,11 +95,11 @@ GHEOF
 # No git remote
 # =============================================================================
 
-@test "no git remote: status is error with git_remote check" {
+@test "no git remote: status is error with provider_detect check" {
   _mock_gh_full 0 "Logged in"
 
   cd "$TEST_PROJECT_DIR"
-  # No remote added — git remote get-url origin will fail
+  # No remote added — provider detection returns "unknown"
 
   run bash "$SCRIPTS_DIR/check-gh-auth.sh"
   assert_success
@@ -111,7 +110,7 @@ GHEOF
 
   local check
   check=$(echo "$output" | jq -r '.check')
-  [[ "$check" == "git_remote" ]]
+  [[ "$check" == "provider_detect" ]]
 }
 
 # =============================================================================
@@ -208,4 +207,152 @@ GHEOF
   cd "$TEST_PROJECT_DIR"
   run bash "$SCRIPTS_DIR/check-gh-auth.sh"
   assert_success
+}
+
+@test "github success includes provider field" {
+  _mock_gh_full 0 "Logged in" 0 "testuser/test-repo"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/check-gh-auth.sh"
+  assert_success
+
+  local provider
+  provider=$(echo "$output" | jq -r '.provider')
+  [[ "$provider" == "github" ]]
+}
+
+# =============================================================================
+# GitLab provider — glab CLI
+# =============================================================================
+
+# Helper: create a smart glab mock
+_mock_glab_full() {
+  local auth_exit="${1:-0}"
+  local auth_msg="${2:-Logged in to gitlab.com as testuser}"
+  local repo_exit="${3:-0}"
+  local repo_output="${4-{\"full_name\":\"testuser/test-repo\"}}"
+
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+    export PATH="$MOCK_BIN_DIR:$PATH"
+  fi
+
+  cat > "$MOCK_BIN_DIR/glab" <<GLABEOF
+#!/usr/bin/env bash
+if [[ "\$1" == "auth" && "\$2" == "status" ]]; then
+  echo '$auth_msg'
+  exit $auth_exit
+elif [[ "\$1" == "repo" && "\$2" == "view" ]]; then
+  echo '$repo_output'
+  exit $repo_exit
+fi
+exit 0
+GLABEOF
+  chmod +x "$MOCK_BIN_DIR/glab"
+}
+
+@test "gitlab: glab not installed returns error" {
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+  fi
+  export PATH="$MOCK_BIN_DIR:/usr/bin:/bin"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/check-gh-auth.sh"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "error" ]]
+
+  local check
+  check=$(echo "$output" | jq -r '.check')
+  [[ "$check" == "glab_installed" ]]
+}
+
+@test "gitlab: glab not authenticated returns error" {
+  _mock_glab_full 1 "not logged in"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/check-gh-auth.sh"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "error" ]]
+
+  local check
+  check=$(echo "$output" | jq -r '.check')
+  [[ "$check" == "glab_authenticated" ]]
+}
+
+@test "gitlab: repo not accessible returns error" {
+  _mock_glab_full 0 "Logged in" 1 ""
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/check-gh-auth.sh"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "error" ]]
+
+  local check
+  check=$(echo "$output" | jq -r '.check')
+  [[ "$check" == "repo_access" ]]
+}
+
+@test "gitlab: all checks pass with provider gitlab" {
+  _mock_glab_full 0 "Logged in" 0 '{"full_name":"testuser/test-repo"}'
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/check-gh-auth.sh"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "ok" ]]
+
+  local provider
+  provider=$(echo "$output" | jq -r '.provider')
+  [[ "$provider" == "gitlab" ]]
+
+  local repo
+  repo=$(echo "$output" | jq -r '.repo')
+  [[ "$repo" == "testuser/test-repo" ]]
+}
+
+# =============================================================================
+# Unknown provider
+# =============================================================================
+
+@test "unknown provider: returns error with config suggestion" {
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+  fi
+  export PATH="$MOCK_BIN_DIR:/usr/bin:/bin"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://bitbucket.org/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/check-gh-auth.sh"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "error" ]]
+
+  local check
+  check=$(echo "$output" | jq -r '.check')
+  [[ "$check" == "provider_detect" ]]
 }

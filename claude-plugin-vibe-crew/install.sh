@@ -7,7 +7,7 @@
 #
 # Installs missing required and optional dependencies:
 #   Required:  Git 2.30+, Node.js 18+, jq
-#   Optional:  GitHub CLI (gh), terminal-notifier (macOS)
+#   Optional:  GitHub CLI (gh), GitLab CLI (glab), terminal-notifier (macOS)
 #
 # Does NOT install Claude Code itself — you must already have it.
 # Idempotent: safe to run multiple times.
@@ -99,6 +99,7 @@ check "Git"                "git"                 "required" "git"               
 check "Node.js"            "node"                "required" "node"               "nodejs"
 check "jq"                 "jq"                  "required" "jq"                 "jq"
 check "GitHub CLI"         "gh"                  "optional" "gh"                 "gh"
+check "GitLab CLI"         "glab"                "optional" "glab"               "glab"
 check "terminal-notifier"  "terminal-notifier"   "optional" "terminal-notifier"  "terminal-notifier"
 echo ""
 
@@ -112,6 +113,12 @@ if [[ ${#INSTALL_CMDS[@]} -eq 0 ]]; then
   if command -v gh &>/dev/null && ! gh auth status &>/dev/null 2>&1; then
     echo "Note: GitHub CLI is installed but not authenticated."
     echo "  Run: gh auth login"
+    echo ""
+  fi
+
+  if command -v glab &>/dev/null && ! glab auth status &>/dev/null 2>&1; then
+    echo "Note: GitLab CLI is installed but not authenticated."
+    echo "  Run: glab auth login"
     echo ""
   fi
 
@@ -157,7 +164,8 @@ echo ""
 
 if [[ ${#MISSING_REQUIRED[@]} -eq 0 ]]; then
   echo "Only optional dependencies are missing — VibeCrew works without them."
-  echo "  GitHub CLI: enables PR automation (/review, gh pr create)"
+  echo "  GitHub CLI: enables PR automation for GitHub repos (/review, gh pr create)"
+  echo "  GitLab CLI: enables MR automation for GitLab repos (glab mr create)"
   echo "  terminal-notifier: enables desktop notifications"
   echo ""
 fi
@@ -186,6 +194,12 @@ done
 if command -v gh &>/dev/null && ! gh auth status &>/dev/null 2>&1; then
   echo "GitHub CLI installed. Authenticate now for PR features:"
   echo "  gh auth login"
+  echo ""
+fi
+
+if command -v glab &>/dev/null && ! glab auth status &>/dev/null 2>&1; then
+  echo "GitLab CLI installed. Authenticate now for MR features:"
+  echo "  glab auth login"
   echo ""
 fi
 

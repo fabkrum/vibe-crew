@@ -8,12 +8,12 @@ setup() {
   setup_vibecrew_dir
   SCRIPT="$SCRIPTS_DIR/session-startup.sh"
 
-  # Upgrade schema versions to 1.5.0 so migrate-state.sh is a no-op.
+  # Upgrade schema versions to 1.6.0 so migrate-state.sh is a no-op.
   # This isolates session-startup logic from migration side effects.
   for f in "$VIBECREW_DIR/state.json" "$VIBECREW_DIR/backlog.json" "$VIBECREW_DIR/config.json"; do
     if [[ -f "$f" ]]; then
       local tmp="${f}.tmp"
-      jq '.schema_version = "1.5.0"' "$f" > "$tmp" && mv "$tmp" "$f"
+      jq '.schema_version = "1.6.0"' "$f" > "$tmp" && mv "$tmp" "$f"
     fi
   done
 

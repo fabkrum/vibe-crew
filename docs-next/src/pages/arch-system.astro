@@ -451,7 +451,7 @@ args: feature_name
           <tr><td><code>update-changelog.sh</code></td><td>Update CHANGELOG.md from git history</td></tr>
           <tr><td><code>rebuild-sidebar.sh</code></td><td>Regenerate VitePress sidebar navigation</td></tr>
           <tr><td><code>diagnose-ci-failure.sh</code></td><td>Parse CI logs and categorize failures (build, test, lint, dependency, environment)</td></tr>
-          <tr><td><code>fetch-ci-logs.sh</code></td><td>Retrieve CI logs via GitHub CLI for analysis</td></tr>
+          <tr><td><code>fetch-ci-logs.sh</code></td><td>Retrieve CI logs via GitHub CLI (<code>gh</code>) or GitLab CLI (<code>glab</code>) for analysis</td></tr>
         </tbody>
       </table>
     </TableWrap>
@@ -486,7 +486,8 @@ args: feature_name
           <tr><td><code>detect-terminal.sh</code></td><td>Detect terminal type (Warp, iTerm, VS Code, Terminal.app) for notification routing</td></tr>
           <tr><td><code>cost-guardrails.sh</code></td><td>Per-turn cost tracking, threshold monitoring, historical aggregation</td></tr>
           <tr><td><code>aggregate-costs.sh</code></td><td>Calculate session, daily, weekly, monthly cost totals</td></tr>
-          <tr><td><code>check-deps.sh</code></td><td>Verify system dependencies (Git, Node.js, jq, terminal-notifier)</td></tr>
+          <tr><td><code>check-deps.sh</code></td><td>Verify system dependencies (Git, Node.js, jq, gh/glab, terminal-notifier)</td></tr>
+          <tr><td><code>lib/git-provider.sh</code></td><td>Provider abstraction library: auto-detects GitHub/GitLab from git remote URL with config override</td></tr>
           <tr><td><code>validate-plugin.sh</code></td><td>Verify plugin structure and hook configuration</td></tr>
         </tbody>
       </table>
@@ -507,7 +508,7 @@ args: feature_name
       <li><strong>File operations</strong> &mdash; All Read, Write, Edit, Glob, Grep</li>
       <li><strong>npm scripts</strong> &mdash; test, lint, build, format, type-check, audit</li>
       <li><strong>Git operations</strong> &mdash; status, log, diff, add, commit, checkout, branch, worktree, revert, reset --soft, tags</li>
-      <li><strong>GitHub CLI</strong> &mdash; pr create/list/view, run list/view/watch</li>
+      <li><strong>GitHub CLI</strong> &mdash; pr create/list/view, run list/view/watch; <strong>GitLab CLI</strong> &mdash; mr create/list/view, pipeline list/view</li>
       <li><strong>Shell utilities</strong> &mdash; jq, cat, ls, wc, sort, head, tail, mkdir, cp, mv</li>
       <li><strong>Security audits</strong> &mdash; npm audit, pip audit, bundle audit, govulncheck, cargo audit, composer audit</li>
     </ul>

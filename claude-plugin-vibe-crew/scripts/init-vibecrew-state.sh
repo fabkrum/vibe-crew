@@ -31,7 +31,7 @@ mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,ha
 if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
   cat > "$VIBECREW_DIR/config.json" <<EOF
 {
-  "schema_version": "1.5.0",
+  "schema_version": "1.6.0",
   "created_at": "$TIMESTAMP",
   "terminal": "$TERMINAL",
   "notifications": {
@@ -118,9 +118,17 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "show_hints": true,
     "dismissed_hints": []
   },
+  "git_provider": null,
   "audit": {
-    "auto_github_issues": false,
+    "auto_issues": false,
     "severity_threshold": "high"
+  },
+  "issues": {
+    "enabled": false,
+    "autofix_label": "autofix",
+    "default_mode": "hotfix",
+    "auto_pr": true,
+    "sync_limit": 10
   },
   "opponent_processor": {
     "enabled": true,
@@ -162,7 +170,7 @@ fi
 if [[ ! -f "$VIBECREW_DIR/state.json" ]]; then
   cat > "$VIBECREW_DIR/state.json" <<EOF
 {
-  "schema_version": "1.5.0",
+  "schema_version": "1.6.0",
   "foundation": {
     "complete": false,
     "completed_at": null,
@@ -226,7 +234,7 @@ fi
 if [[ ! -f "$VIBECREW_DIR/backlog.json" ]]; then
   cat > "$VIBECREW_DIR/backlog.json" <<EOF
 {
-  "schema_version": "1.5.0",
+  "schema_version": "1.6.0",
   "columns": [
     { "id": "idea",        "title": "Ideas",          "wip_limit": null },
     { "id": "planning",    "title": "Planning",       "wip_limit": 2 },
@@ -339,9 +347,9 @@ fi
 
 echo ""
 echo "VibeCrew state initialized in $VIBECREW_DIR"
-echo "  config.json        -- User preferences (schema v1.5.0)"
-echo "  state.json         -- Project state (schema v1.5.0)"
-echo "  backlog.json       -- Feature backlog (schema v1.5.0)"
+echo "  config.json        -- User preferences (schema v1.6.0)"
+echo "  state.json         -- Project state (schema v1.6.0)"
+echo "  backlog.json       -- Feature backlog (schema v1.6.0)"
 echo "  sessions/          -- Session logs"
 echo "  scores/            -- Vibe Score history"
 echo "  signals/           -- Inter-agent signals"

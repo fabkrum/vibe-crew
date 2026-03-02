@@ -1,0 +1,59 @@
+# VibeCrew Auto-Fix GitLab CI Pipeline
+# Triggers via pipeline trigger token when an issue is labeled.
+# Installs Claude Code CLI, runs /fix-issue, and reports results.
+#
+# Required CI/CD variables:
+#   ANTHROPIC_API_KEY — Claude API key for Claude Code CLI
+#   GITLAB_TOKEN      — GitLab personal access token for glab CLI
+#
+# Template placeholders (filled by /setup):
+#   {{AUTOFIX_LABEL}} — Label that triggers auto-fix (default: "autofix")
+#   {{NODE_VERSION}}  — Node.js version from TDR (default: "20")
+#
+# Usage: trigger this pipeline from a webhook or manually with ISSUE_IID variable.
+
+stages:
+  - autofix
+
+autofix:
+  stage: autofix
+  image: node:{{NODE_VERSION}}
+  timeout: 30 minutes
+  rules:
+    - if: $ISSUE_IID
+      when: always
+  variables:
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "0"
+  before_script:
+    - npm ci
+    - npm install -g @anthropic-ai/claude-code
+    - apt-get update -qq && apt-get install -y -qq glab >/dev/null 2>&1 || true
+    - glab auth login --token "$GITLAB_TOKEN" --hostname "$CI_SERVER_HOST" 2>/dev/null || true
+  script:
+    - echo "Fixing issue #${ISSUE_IID}..."
+    - |
+      FIX_SUCCESS=false
+      if claude --print "/fix-issue ${ISSUE_IID}" 2>&1 | tee fix-output.txt; then
+        FIX_SUCCESS=true
+      fi
+
+      MR_URL=$(grep -oE 'https://[^ ]+/merge_requests/[0-9]+' fix-output.txt | head -1 || echo "")
+
+      if [ "$FIX_SUCCESS" = "true" ] && [ -n "$MR_URL" ]; then
+        glab issue note "$ISSUE_IID" --message "VibeCrew auto-fix created an MR: ${MR_URL}
+
+      The fix will be reviewed and merged. This issue will auto-close when the MR is merged.
+
+      ---
+      *Automated by [VibeCrew](https://docs.vibecrew.dev) \`/fix-issue\`*"
+      else
+        glab issue note "$ISSUE_IID" --message "VibeCrew auto-fix was unable to resolve this issue automatically.
+
+      [View pipeline](${CI_PIPELINE_URL}) for details.
+
+      A developer will need to investigate manually.
+
+      ---
+      *Automated by [VibeCrew](https://docs.vibecrew.dev) \`/fix-issue\`*"
+      fi

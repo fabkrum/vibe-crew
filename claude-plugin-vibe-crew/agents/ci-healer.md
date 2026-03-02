@@ -99,7 +99,7 @@ Common patterns: missing packages, version conflicts, peer dependency warnings, 
 Common patterns: missing environment variables, wrong runtime version, permission errors, command not found.
 
 **Strategy:**
-- For **missing env vars**: check `.env.example` or the CI configuration for required variables. If a new env var was added to the code but not to CI, add it to the CI workflow file (`.github/workflows/*.yml`).
+- For **missing env vars**: check `.env.example` or the CI configuration for required variables. If a new env var was added to the code but not to CI, add it to the CI configuration (`.github/workflows/*.yml` for GitHub Actions, `.gitlab-ci.yml` for GitLab CI).
 - For **wrong Node/runtime version**: check `.nvmrc`, `engines` in `package.json`, and the CI workflow matrix. Align them.
 - For **command not found**: check if the command is a dev dependency that needs `npx`, or if it needs to be added to the CI setup steps.
 - For **permission denied**: check file permissions. CI runners typically need `chmod +x` for shell scripts.

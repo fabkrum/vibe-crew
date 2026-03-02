@@ -14,7 +14,7 @@ import TableWrap from '../components/TableWrap.astro';
             <li><a href="#replay">Workflow Templates (/replay)</a></li>
             <li><a href="#simplify">Code Simplification (/simplify)</a></li>
             <li><a href="#heal">Auto-Healing CI (/heal)</a></li>
-            <li><a href="#github-issues">GitHub Issues Integration (/fix-issue)</a></li>
+            <li><a href="#issue-tracker">Issue Tracker Integration (/fix-issue)</a></li>
             <li><a href="#opponent">Opponent Processor (TDR Debate)</a></li>
             <li><a href="#context-hygiene">Inter-Feature Context Hygiene (/run-backlog)</a></li>
           </ol>
@@ -81,13 +81,13 @@ Presents suggestions one at a time for your approval
 
       <!-- HEAL -->
       <h3 id="heal">Auto-Healing CI (<code>/heal</code>)</h3>
-      <p>When CI fails, run <code>/heal</code> instead of manually debugging logs. The CI Healer fetches the failure logs from GitHub Actions, diagnoses the root cause, and applies targeted fixes &mdash; up to 3 attempts.</p>
+      <p>When CI fails, run <code>/heal</code> instead of manually debugging logs. The CI Healer fetches the failure logs from GitHub Actions or GitLab CI pipelines, diagnoses the root cause, and applies targeted fixes &mdash; up to 3 attempts.</p>
 
       <h4>How it works</h4>
       <ol class="steps">
         <li>
           <h4>Fetch and diagnose</h4>
-          <p><code>/heal</code> runs <code>gh run view --log-failed</code> to retrieve the CI output, then pattern-matches errors to categorize the failure: <strong>build</strong>, <strong>test</strong>, <strong>lint</strong>, <strong>dependency</strong>, or <strong>environment</strong>.</p>
+          <p><code>/heal</code> runs <code>gh run view --log-failed</code> (GitHub) or <code>glab ci view</code> (GitLab) to retrieve the CI output, then pattern-matches errors to categorize the failure: <strong>build</strong>, <strong>test</strong>, <strong>lint</strong>, <strong>dependency</strong>, or <strong>environment</strong>.</p>
         </li>
         <li>
           <h4>Checkpoint</h4>
@@ -118,25 +118,25 @@ Presents suggestions one at a time for your approval
         </table>
       </TableWrap>
 
-      <!-- GITHUB ISSUES -->
-      <h3 id="github-issues">GitHub Issues Integration (<code>/fix-issue</code>)</h3>
-      <p>Connect GitHub Issues directly to VibeCrew&rsquo;s development pipeline. Someone files a bug, a human labels it for auto-fix, and VibeCrew diagnoses, implements, tests, and opens a PR &mdash; all autonomously.</p>
+      <!-- ISSUE TRACKER -->
+      <h3 id="issue-tracker">Issue Tracker Integration (<code>/fix-issue</code>)</h3>
+      <p>Connect GitHub Issues or GitLab Issues directly to VibeCrew&rsquo;s development pipeline. Someone files a bug, a human labels it for auto-fix, and VibeCrew diagnoses, implements, tests, and opens a PR or MR &mdash; all autonomously. The provider is auto-detected from the git remote URL, with a config override in <code>.vibecrew/config.json</code>.</p>
 
       <div class="card-grid">
         <div class="card">
           <div class="card-icon blue">&#128295;</div>
           <h4><code>/fix-issue &lt;number&gt;</code></h4>
-          <p>Interactive single-issue fix. Fetches the issue, imports it into the backlog, creates a branch, implements the fix with the Builder agent, runs quality checks, and opens a PR with <code>Fixes #N</code> for auto-close.</p>
+          <p>Interactive single-issue fix. Fetches the issue from GitHub or GitLab, imports it into the backlog, creates a branch, implements the fix with the Builder agent, runs quality checks, and opens a PR/MR with <code>Fixes #N</code> (or <code>Closes #N</code> on GitLab) for auto-close.</p>
         </div>
         <div class="card">
           <div class="card-icon green">&#128259;</div>
           <h4><code>/sync-issues</code></h4>
-          <p>Batch-import open issues by label (default: <code>autofix</code>) into the backlog. Zero token cost &mdash; pure bash. Then run <code>/run-backlog</code> to process them automatically.</p>
+          <p>Batch-import open issues by label (default: <code>autofix</code>) from GitHub or GitLab into the backlog. Zero token cost &mdash; pure bash. Then run <code>/run-backlog</code> to process them automatically.</p>
         </div>
         <div class="card">
           <div class="card-icon amber">&#9889;</div>
-          <h4>GitHub Actions</h4>
-          <p>Fully automated CI-triggered fixes. The <code>github-actions-autofix.yml</code> template triggers on <code>issues.labeled</code> events and runs Claude Code CLI headless. Results are commented back on the issue.</p>
+          <h4>CI Automation</h4>
+          <p>Fully automated CI-triggered fixes. On GitHub, the <code>github-actions-autofix.yml</code> template triggers on <code>issues.labeled</code> events. On GitLab, the <code>gitlab-ci-autofix.yml.template</code> provides equivalent pipeline-triggered fixes. Both run Claude Code CLI headless and comment results back on the issue.</p>
         </div>
       </div>
 
@@ -144,7 +144,7 @@ Presents suggestions one at a time for your approval
       <p>Bug issues use a <strong>hotfix path</strong> (Code &rarr; Test &rarr; Review) that skips planning and design since bugs don&rsquo;t need upfront design work. Issues labeled <code>enhancement</code> or <code>feature-request</code>, or those invoked with <code>--full</code>, use the standard 6-phase Tier 2 cycle.</p>
 
       <Callout type="tip" title="Deduplication built in">
-        The import script tracks <code>github_issue_number</code> on each backlog entry. Running <code>/sync-issues</code> multiple times or calling <code>/fix-issue</code> on an already-imported issue will detect the duplicate and offer to resume instead of creating a new entry.
+        The import script tracks <code>issue_number</code> on each backlog entry. Running <code>/sync-issues</code> multiple times or calling <code>/fix-issue</code> on an already-imported issue will detect the duplicate and offer to resume instead of creating a new entry.
       </Callout>
 
       <!-- OPPONENT -->
@@ -292,7 +292,7 @@ Presents suggestions one at a time for your approval
       </div>
 
       <h4>Permission rules</h4>
-      <p><code>settings.json</code> defines 71+ permission rules: 53 allowed tool patterns (npm, git, gh, jq, standard dev tools) and 18 denied patterns (sudo, force push, hard reset, kill -9, mkfs, dd). These are enforced at the Claude Code level before any hook runs.</p>
+      <p><code>settings.json</code> defines 71+ permission rules: 53 allowed tool patterns (npm, git, gh, glab, jq, standard dev tools) and 18 denied patterns (sudo, force push, hard reset, kill -9, mkfs, dd). These are enforced at the Claude Code level before any hook runs.</p>
 
       <Callout type="warn" title="Checkpoint safety net">
         Both <code>/heal</code> and <code>/new-feature</code> create a git checkpoint (<code>vibecrew-checkpoint-&lt;timestamp&gt;</code>) before making changes. If anything goes wrong, <code>/undo</code> can roll back to any checkpoint. Checkpoints are lightweight git tags that don&rsquo;t add repository overhead.

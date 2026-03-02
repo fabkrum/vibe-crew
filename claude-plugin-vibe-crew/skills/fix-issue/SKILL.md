@@ -1,12 +1,12 @@
 ---
 name: fix-issue
-description: Fix a GitHub issue — fetch, diagnose, implement, test, and open a PR with auto-close
+description: Fix an issue (GitHub/GitLab) — fetch, diagnose, implement, test, and open a PR/MR with auto-close
 disable-model-invocation: false
 ---
 
 # /fix-issue
 
-Fix a GitHub issue end-to-end. Fetches the issue details, imports it into the backlog, creates a branch, implements the fix, runs quality checks, optionally runs code review, and opens a PR with `Fixes #<number>` for auto-close.
+Fix an issue end-to-end. Fetches the issue details (from GitHub or GitLab, auto-detected), imports it into the backlog, creates a branch, implements the fix, runs quality checks, optionally runs code review, and opens a PR/MR with the appropriate close keyword (`Fixes #N` for GitHub, `Closes #N` for GitLab) for auto-close.
 
 **Usage:** `/fix-issue <issue-number>` or `/fix-issue <issue-number> --full`
 
@@ -48,13 +48,15 @@ Project foundation incomplete. Run /new-project first to complete Tier 1.
 
 And stop.
 
-### Check 3: GitHub CLI
+### Check 3: Provider CLI
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-gh-auth.sh"
 ```
 
 Parse the JSON output. If `status` is not `"ok"`, display the `message` field and stop.
+
+Store the `provider` field from the JSON output (`"github"` or `"gitlab"`) for use in later steps.
 
 ### Check 4: Parse Arguments
 
@@ -92,8 +94,8 @@ Parse the JSON output. Check the `status` field:
 - If `"fetched"`: display a summary to the user:
 
 ```
-GitHub Issue #<number>
-=====================
+Issue #<number>
+===============
 Title:   <title>
 Author:  <author>
 Labels:  <labels, comma-separated>
@@ -219,7 +221,7 @@ Checkpoint: <tag_name>
 Set the active feature in state.json to track progress.
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" 'active_feature' '{"id":"<feature-id>","source":"github-issue","github_issue_number":<number>}'
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" 'active_feature' '{"id":"<feature-id>","source":"issue","issue_number":<number>}'
 ```
 
 ---
@@ -320,11 +322,13 @@ Stage changes, commit, and open a pull request.
 
 ### Commit
 
+Use the provider-appropriate close keyword (`Fixes` for GitHub, `Closes` for GitLab):
+
 ```bash
 git add -A
 git commit -m "fix: <issue-title-slug>
 
-Fixes #<number>
+<close-keyword> #<number>
 
 Co-Authored-By: VibeCrew Builder <noreply@vibecrew.dev>"
 ```
@@ -337,7 +341,9 @@ For full feature mode, use `feat:` prefix instead of `fix:`.
 git push -u origin fix/issue-<number>
 ```
 
-### Create PR
+### Create PR/MR
+
+**GitHub:**
 
 ```bash
 gh pr create \
@@ -363,18 +369,44 @@ Fixes #<number>
 *Automated fix by VibeCrew `/fix-issue`*"
 ```
 
-Adjust PR title prefix to `feat:` for full feature mode.
+**GitLab:**
 
-Store the PR URL from the output.
+```bash
+glab mr create \
+  --title "fix: <issue-title>" \
+  --description "## Summary
+
+Closes #<number>
+
+<brief description of the fix based on what the Builder agent did>
+
+## Changes
+
+<list of modified files with brief description of each change>
+
+## Quality Gate
+
+- Tests: PASS
+- Build: PASS
+- Lint: PASS
+- Types: PASS
+
+---
+*Automated fix by VibeCrew `/fix-issue`*"
+```
+
+Adjust PR/MR title prefix to `feat:` for full feature mode.
+
+Store the PR/MR URL from the output.
 
 Display:
 
 ```
-PR Created
-==========
+<PR|MR> Created
+===============
 URL:    <pr-url>
 Branch: fix/issue-<number>
-Fixes:  #<number> (will auto-close on merge)
+<close-keyword>:  #<number> (will auto-close on merge)
 ```
 
 ---
@@ -449,7 +481,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" <feature-id> column done
 - **Minimal fixes only.** For hotfix mode, apply the smallest possible change to fix the issue. No refactoring, no "improvements," no unrelated changes.
 - **Always create a checkpoint first.** Before any file modifications, a checkpoint MUST be created via `create-checkpoint.sh`.
 - **Never push to main/master.** Always work on the `fix/issue-<number>` branch.
-- **Auto-close via PR body.** The PR body MUST include `Fixes #<number>` to auto-close the issue when merged.
+- **Auto-close via PR/MR body.** The PR/MR body MUST include the provider-appropriate close keyword (`Fixes #<number>` for GitHub, `Closes #<number>` for GitLab) to auto-close the issue when merged.
 - **Maximum 3 quality gate attempts.** After 3 failures, stop and report.
 - **Respect user autonomy settings.** Check the profile before proceeding at decision points.
 - **Deduplication.** If the issue is already in the backlog, offer to resume rather than creating a duplicate.

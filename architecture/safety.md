@@ -60,7 +60,7 @@ Operations that modify the project in standard ways but are part of normal devel
 | Write source code | `Write`, `Edit` to `src/`, `app/`, `lib/`, `components/` | `source-write` | Auto-approved after foundation is complete |
 | Install project dependencies | `Bash(npm install <package>)` | `npm-install` | Modifies lockfile |
 | Push to feature branch | `Bash(git push origin feat/*)` | `git-push-feature` | Affects remote state |
-| Create pull request | `Bash(gh pr create *)` | `pr-create` | Affects collaboration workflow |
+| Create pull request / merge request | `Bash(gh pr create *)`, `Bash(glab mr create *)` | `pr-create` | Affects collaboration workflow |
 | Delete files within project | `Bash(rm src/old-component.tsx)` | `file-delete` | Data loss potential |
 | Create new files in source directories | `Write` to new path in `src/` | `file-create` | First time only |
 | Run dev server | `Bash(npm run dev)` | `dev-server` | Binds a port |
@@ -497,6 +497,11 @@ The `settings.json` file provides declarative, zero-token permission control. It
       "Bash(gh pr create *)",
       "Bash(gh pr list *)",
       "Bash(gh pr view *)",
+      "Bash(glab mr create *)",
+      "Bash(glab mr list *)",
+      "Bash(glab mr view *)",
+      "Bash(glab issue view *)",
+      "Bash(glab issue list *)",
       "Bash(jq *)",
       "Bash(cat .vibecrew/*)",
       "Bash(ls *)",

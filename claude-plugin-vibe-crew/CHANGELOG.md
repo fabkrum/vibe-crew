@@ -20,6 +20,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.9.0] — 2026-03-02
+
+### Added
+- **GitLab support**: Auto-detect GitHub/GitLab from git remote URL, with config override
+- New `scripts/lib/git-provider.sh` provider abstraction library
+- GitLab CLI (`glab`) permissions in `settings.json`
+- GitLab CI auto-fix template (`templates/gitlab-ci-autofix.yml.template`)
+- `glab` dependency check in `install.sh` and `check-deps.sh`
+
+### Changed
+- `check-gh-auth.sh` now supports both GitHub (`gh`) and GitLab (`glab`) CLIs
+- `fetch-github-issue.sh` normalizes GitHub/GitLab issue data to unified format
+- `fetch-ci-logs.sh` fetches from GitHub Actions or GitLab CI pipelines
+- `import-issue-to-backlog.sh` uses generic `issue_number`/`issue_url` fields with `provider` tag
+- Skills (`/fix-issue`, `/sync-issues`, `/wrap`, `/heal`) now branch on provider for PR/MR creation
+- CI Healer agent prompt updated for both GitHub Actions and GitLab CI
+- Schema version bumped to 1.6.0
+
+### Migration (1.5.0 → 1.6.0)
+- `config.json`: `github_issues` → `issues`, `audit.auto_github_issues` → `audit.auto_issues`, added `git_provider`
+- `backlog.json`: `github_issue_number` → `issue_number`, `github_issue_url` → `issue_url`, added `provider` field
+- Backward-compatible deduplication checks both old and new field names
+
+---
+
 ## [1.8.0] - 2026-03-02
 
 ### Added

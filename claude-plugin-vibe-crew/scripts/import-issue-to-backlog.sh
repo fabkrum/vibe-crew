@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # scripts/import-issue-to-backlog.sh
-# Import a GitHub issue into the VibeCrew backlog.
+# Import an issue (GitHub or GitLab) into the VibeCrew backlog.
 # Reads issue JSON from stdin (output of fetch-github-issue.sh).
 # Flags: --full (use 6-phase feature cycle instead of hotfix)
 # Exit 0 always — errors are reported in the JSON output.
@@ -49,6 +49,7 @@ ISSUE_TITLE=$(echo "$ISSUE_JSON" | jq -r '.title')
 ISSUE_BODY=$(echo "$ISSUE_JSON" | jq -r '.body // ""')
 ISSUE_URL=$(echo "$ISSUE_JSON" | jq -r '.url')
 ISSUE_LABELS=$(echo "$ISSUE_JSON" | jq -c '.labels // []')
+ISSUE_PROVIDER=$(echo "$ISSUE_JSON" | jq -r '.provider // "github"')
 
 # Check if backlog exists
 if [[ ! -f "$BACKLOG_FILE" ]]; then
@@ -60,13 +61,14 @@ if [[ ! -f "$BACKLOG_FILE" ]]; then
 fi
 
 # Deduplication: check if issue is already in the backlog
+# Check both new field (issue_number) and legacy field (github_issue_number)
 EXISTING=$(jq --argjson num "$ISSUE_NUMBER" \
-  '[.features[] | select(.github_issue_number == $num)] | length' \
+  '[.features[] | select(.issue_number == $num or .github_issue_number == $num)] | length' \
   "$BACKLOG_FILE" 2>/dev/null || echo "0")
 
 if [[ "$EXISTING" -gt 0 ]]; then
   EXISTING_ID=$(jq -r --argjson num "$ISSUE_NUMBER" \
-    '[.features[] | select(.github_issue_number == $num)][0].id' \
+    '[.features[] | select(.issue_number == $num or .github_issue_number == $num)][0].id' \
     "$BACKLOG_FILE" 2>/dev/null || echo "unknown")
   jq -n --arg id "$EXISTING_ID" --argjson num "$ISSUE_NUMBER" '{
     status: "duplicate",
@@ -118,6 +120,7 @@ bash "$SCRIPT_DIR/update-backlog-raw.sh" \
     --arg type "$TYPE" \
     --argjson issue_num "$ISSUE_NUMBER" \
     --arg issue_url "$ISSUE_URL" \
+    --arg provider "$ISSUE_PROVIDER" \
     --argjson criteria "$ACCEPTANCE_CRITERIA" \
     --arg ts "$TIMESTAMP" \
     '{
@@ -126,7 +129,7 @@ bash "$SCRIPT_DIR/update-backlog-raw.sh" \
       description: $desc,
       column: $column,
       priority: 1,
-      labels: ["github-issue"],
+      labels: ["issue"],
       spec: {
         problem_statement: $desc,
         acceptance_criteria: $criteria,
@@ -134,10 +137,11 @@ bash "$SCRIPT_DIR/update-backlog-raw.sh" \
         business_logic: [],
         technical_notes: null
       },
-      source: "github-issue",
+      source: "issue",
       type: $type,
-      github_issue_number: $issue_num,
-      github_issue_url: $issue_url,
+      provider: $provider,
+      issue_number: $issue_num,
+      issue_url: $issue_url,
       worktree: null,
       phases_completed: [],
       sessions: [],

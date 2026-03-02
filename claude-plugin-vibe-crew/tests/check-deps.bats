@@ -165,11 +165,11 @@ teardown() {
 # Dependency count
 # =============================================================================
 
-@test "checks exactly 5 dependencies (3 required + 2 optional)" {
+@test "checks exactly 6 dependencies (3 required + 3 optional)" {
   run bash "$SCRIPT"
   local count
   count=$(echo "$output" | jq '.dependencies | length')
-  [ "$count" = "5" ]
+  [ "$count" = "6" ]
 }
 
 # =============================================================================

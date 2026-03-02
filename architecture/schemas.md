@@ -172,11 +172,12 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
 | `cost_limits.session_warn_usd` | number | yes | `2.00` | Session cost warning |
 | `cost_limits.session_max_usd` | number | yes | `5.00` | Session cost hard limit |
 | `cost_limits.daily_warn_usd` | number | yes | `20.00` | Daily cost warning |
-| `github_issues.enabled` | boolean | yes | `false` | GitHub Issues integration enabled |
-| `github_issues.autofix_label` | string | yes | `"autofix"` | Label that triggers auto-fix |
-| `github_issues.default_mode` | enum | yes | `"hotfix"` | `hotfix\|feature` — default fix mode |
-| `github_issues.auto_pr` | boolean | yes | `true` | Auto-create PR after fix |
-| `github_issues.sync_limit` | integer | yes | `10` | Max issues to import per sync |
+| `git_provider` | enum\|null | no | `null` | `"github"\|"gitlab"\|null` (null = auto-detect from remote) |
+| `issues.enabled` | boolean | yes | `false` | Issue tracking integration enabled (migrated from `github_issues`) |
+| `issues.autofix_label` | string | yes | `"autofix"` | Label that triggers auto-fix |
+| `issues.default_mode` | enum | yes | `"hotfix"` | `hotfix\|feature` — default fix mode |
+| `issues.auto_pr` | boolean | yes | `true` | Auto-create PR/MR after fix |
+| `issues.sync_limit` | integer | yes | `10` | Max issues to import per sync |
 | `user_profile.interview_completed` | boolean | yes | `false` | Profile interview done |
 | `user_profile.role` | enum\|null | yes | `null` | `developer\|technical_pm\|designer\|non_technical\|learner` |
 | `user_profile.code_literacy` | enum | yes | `"conversational"` | `fluent\|conversational\|basic\|none` |
@@ -394,10 +395,11 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `created_at` | string | yes | Creation timestamp |
 | `updated_at` | string | yes | Last modification timestamp |
 | `completed_at` | string\|null | yes | Completion timestamp |
-| `source` | string\|null | no | Origin: `"github-issue"` or null |
+| `source` | string\|null | no | Origin: `"github-issue"`, `"gitlab-issue"`, or null |
 | `type` | string\|null | no | `"hotfix"` or `"feature"` or null |
-| `github_issue_number` | integer\|null | no | GitHub issue number |
-| `github_issue_url` | string\|null | no | GitHub issue URL |
+| `provider` | string\|null | no | `"github"`, `"gitlab"`, or null |
+| `issue_number` | integer\|null | no | Issue number (migrated from `github_issue_number`) |
+| `issue_url` | string\|null | no | Issue URL (migrated from `github_issue_url`) |
 
 ---
 
@@ -841,7 +843,8 @@ Per-issue fix reports. Created by `/fix-issue` on completion. Used by Performanc
   "schema_version": "1.8.0",
 
   // Issue identity
-  "issue_number": 42,                    // GitHub issue number
+  "issue_number": 42,                    // Issue number (GitHub or GitLab)
+  "provider": "github",                  // "github" | "gitlab"
   "title": "Login button unresponsive",  // Issue title
   "url": "https://github.com/user/repo/issues/42",
 
@@ -852,8 +855,8 @@ Per-issue fix reports. Created by `/fix-issue` on completion. Used by Performanc
   "branch": "fix/issue-42",             // Git branch used for the fix
   "mode": "hotfix",                      // "hotfix" | "feature"
   "outcome": "fixed",                    // "fixed" | "failed" | "skipped"
-  "pr_url": "https://github.com/user/repo/pull/43",
-  "pr_number": 43,                       // PR number | null
+  "pr_url": "https://github.com/user/repo/pull/43",  // PR (GitHub) or MR (GitLab) URL
+  "pr_number": 43,                       // PR/MR number | null
   "commit_sha": "abc1234",              // Fix commit SHA | null
 
   // Files changed
@@ -882,15 +885,16 @@ Per-issue fix reports. Created by `/fix-issue` on completion. Used by Performanc
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `schema_version` | string | yes | Schema version |
-| `issue_number` | integer | yes | GitHub issue number |
+| `issue_number` | integer | yes | Issue number (GitHub or GitLab) |
+| `provider` | enum | yes | `"github"` or `"gitlab"` |
 | `title` | string | yes | Issue title |
-| `url` | string | yes | GitHub issue URL |
+| `url` | string | yes | Issue URL (GitHub or GitLab) |
 | `feature_id` | string | yes | Backlog feature ID |
 | `branch` | string | yes | Git branch for the fix |
 | `mode` | enum | yes | `"hotfix"` or `"feature"` |
 | `outcome` | enum | yes | `"fixed"`, `"failed"`, or `"skipped"` |
-| `pr_url` | string\|null | yes | PR URL or null |
-| `pr_number` | integer\|null | yes | PR number or null |
+| `pr_url` | string\|null | yes | PR/MR URL or null |
+| `pr_number` | integer\|null | yes | PR/MR number or null |
 | `commit_sha` | string\|null | yes | Commit SHA or null |
 | `files_modified` | string[] | yes | Paths of modified files |
 | `quality_gate.tests` | enum\|null | yes | `"pass"`, `"fail"`, or null |

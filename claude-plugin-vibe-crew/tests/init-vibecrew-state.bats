@@ -69,7 +69,7 @@ run_init() {
   # Check top-level keys
   local schema_version
   schema_version=$(jq -r '.schema_version' "$VIBECREW_DIR/state.json")
-  [ "$schema_version" = "1.5.0" ]
+  [ "$schema_version" = "1.6.0" ]
 
   # Check foundation structure
   local foundation_complete
@@ -112,7 +112,7 @@ run_init() {
   # Check schema version
   local schema_version
   schema_version=$(jq -r '.schema_version' "$VIBECREW_DIR/config.json")
-  [ "$schema_version" = "1.5.0" ]
+  [ "$schema_version" = "1.6.0" ]
 
   # Check notifications section
   local notif_enabled
@@ -160,7 +160,7 @@ run_init() {
   # Check schema version
   local schema_version
   schema_version=$(jq -r '.schema_version' "$VIBECREW_DIR/backlog.json")
-  [ "$schema_version" = "1.5.0" ]
+  [ "$schema_version" = "1.6.0" ]
 
   # Check columns array exists with 7 columns
   local column_count

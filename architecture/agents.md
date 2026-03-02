@@ -37,7 +37,7 @@
 | 8 | Code Auditor | Opus | `/audit`, `/onboard` | <40% | Worktree | 40 |
 | 9 | Security Auditor | Opus | Security analysis (manual trigger) | <40% | Worktree | 40 |
 | 10 | Code Simplifier | Opus | `/simplify` | <35% | Worktree | 30 |
-| 11 | CI Healer | Opus | `/heal` | <30% | Inline | 15 |
+| 11 | CI Healer | Opus | `/heal` (GitHub Actions and GitLab CI) | <30% | Inline | 15 |
 | 12 | Opponent Processor | Opus | TDR counter-analysis (Tier 1 Step 3.5) | <35% | Worktree | 30 |
 | 13 | Code Reviewer | Opus | `/review`, `/run-backlog` Phase 4.5 | <35% | Worktree | 30 |
 | 14 | System Reviewer | Opus | `/system-review` | <30% | Worktree | 25 |
@@ -647,7 +647,7 @@ The Builder is the most context-intensive agent because it must hold the feature
 2. **On design completion (Tier 1):** Reports completion by writing `design-system.css` to the project root. The Orchestrator detects this file's existence to advance the foundation status.
 3. **On design completion (Tier 2):** Creates a signal file: `.vibecrew/signals/builder-design-complete.signal` with the component design spec summary.
 4. **On code completion:** Runs the `complete-phase.sh` script to advance the feature from `in-progress` to `testing` in `backlog.json` and creates a signal file: `.vibecrew/signals/builder-complete.signal`. If frontend files were changed, the signal includes a `visual_verification` payload (screenshots taken, console errors found, token violations detected, or skipped reason).
-5. **On PR creation:** Creates a pull request via `gh pr create` with a structured description referencing the feature spec and acceptance criteria.
+5. **On PR/MR creation:** Creates a pull request (GitHub, via `gh pr create`) or merge request (GitLab, via `glab mr create`) with a structured description referencing the feature spec and acceptance criteria. The provider is auto-detected from the git remote.
 6. **On blockage:** Creates `.vibecrew/signals/builder-blocked.signal` with error details if verification fails after max retries.
 
 ---
@@ -989,7 +989,7 @@ builder-complete.signal           reads signal,                 verifier-test-co
 12. Code Reviewer     produces review report with verdict
 13. Orchestrator      if REQUEST_CHANGES: routes findings → Builder → re-review (max 2 cycles)
 14. Orchestrator      if builder-blocked: attempts auto-recovery via CI Healer before escalating
-15. Builder           creates PR via gh pr create
+15. Builder           creates PR via gh pr create (GitHub) or MR via glab mr create (GitLab)
 16. Developer         reviews and merges PR
 17. Verifier          runs /wrap: final quality check, Vibe Score, session log
 ```

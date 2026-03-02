@@ -412,7 +412,7 @@ No charts, no dedicated dev server port, no auto-rebuild hooks. Charts and addit
 | **Visual regression** | Playwright screenshots | Built-in pixel-diff comparison |
 | **API mocking** | MSW (Mock Service Worker) | Network-level HTTP interception |
 | **Coverage** | @vitest/coverage-v8 | V8-native code coverage |
-| **CI** | GitHub Actions | Parallel test execution with sharding |
+| **CI** | GitHub Actions / GitLab CI | Parallel test execution with sharding |
 
 ### 4.2 Why These Tools
 
@@ -785,7 +785,7 @@ VibeCrew-Generated SaaS Project
 |- Infrastructure
 |   |- Deployment:   Vercel (zero-config, preview URLs)
 |   |- Analytics:    Vercel Analytics or Plausible
-|   |- CI/CD:        GitHub Actions (parallel, sharded)
+|   |- CI/CD:        GitHub Actions / GitLab CI (parallel, sharded)
 |   |- PWA:          Serwist (optional)
 |
 |- Documentation
@@ -814,7 +814,7 @@ The VitePress docs site runs on VitePress defaults during `npx vitepress dev doc
 
 - Claude Code 2.0+
 - Git 2.30+
-- GitHub CLI 2.0+
+- GitHub CLI 2.0+ or GitLab CLI 1.30+
 - Node.js 18+ (22 recommended)
 - `jq` (JSON parsing in hook scripts)
 - `terminal-notifier` (macOS notifications, via Homebrew)

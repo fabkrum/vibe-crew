@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 # tests/fetch-github-issue.bats
-# Tests for scripts/fetch-github-issue.sh — GitHub issue fetching
+# Tests for scripts/fetch-github-issue.sh — issue fetching (GitHub + GitLab)
 
 setup() {
   load 'test_helper/common-setup'
@@ -256,4 +256,114 @@ GHEOF
   run bash "$SCRIPTS_DIR/fetch-github-issue.sh" "abc"
   assert_success
   echo "$output" | jq empty
+}
+
+@test "github success includes provider field" {
+  _mock_gh_with_issue "OPEN"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://github.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/fetch-github-issue.sh" "42"
+  assert_success
+
+  local provider
+  provider=$(echo "$output" | jq -r '.provider')
+  [[ "$provider" == "github" ]]
+}
+
+# =============================================================================
+# GitLab provider — glab CLI
+# =============================================================================
+
+_mock_glab_with_issue() {
+  local issue_state="${1:-opened}"
+  local issue_json
+  issue_json=$(cat <<IJEOF
+{"iid":42,"title":"Fix login bug","description":"The login page crashes","labels":["bug"],"state":"$issue_state","web_url":"https://gitlab.com/testuser/test-repo/-/issues/42","author":{"username":"testuser"},"assignees":[{"username":"dev1"}],"created_at":"2026-01-15T10:00:00Z","updated_at":"2026-01-16T12:00:00Z"}
+IJEOF
+  )
+
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+    export PATH="$MOCK_BIN_DIR:$PATH"
+  fi
+
+  cat > "$MOCK_BIN_DIR/glab" <<GLABEOF
+#!/usr/bin/env bash
+if [[ "\$1" == "auth" && "\$2" == "status" ]]; then
+  echo "Logged in to gitlab.com as testuser"
+  exit 0
+elif [[ "\$1" == "repo" && "\$2" == "view" ]]; then
+  echo '{"full_name":"testuser/test-repo"}'
+  exit 0
+elif [[ "\$1" == "issue" && "\$2" == "view" ]]; then
+  echo '$issue_json'
+  exit 0
+fi
+exit 0
+GLABEOF
+  chmod +x "$MOCK_BIN_DIR/glab"
+}
+
+@test "gitlab: fetch open issue returns fetched with normalized fields" {
+  _mock_glab_with_issue "opened"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/fetch-github-issue.sh" "42"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "fetched" ]]
+
+  local provider
+  provider=$(echo "$output" | jq -r '.provider')
+  [[ "$provider" == "gitlab" ]]
+
+  local state
+  state=$(echo "$output" | jq -r '.state')
+  [[ "$state" == "OPEN" ]]
+
+  local title
+  title=$(echo "$output" | jq -r '.title')
+  [[ "$title" == "Fix login bug" ]]
+
+  local url
+  url=$(echo "$output" | jq -r '.url')
+  [[ "$url" == *"gitlab.com"* ]]
+}
+
+@test "gitlab: closed issue returns error" {
+  _mock_glab_with_issue "closed"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/fetch-github-issue.sh" "42"
+  assert_success
+
+  local status
+  status=$(echo "$output" | jq -r '.status')
+  [[ "$status" == "error" ]]
+
+  local msg
+  msg=$(echo "$output" | jq -r '.message')
+  [[ "$msg" == *"closed"* ]]
+}
+
+@test "gitlab: state normalization maps opened to OPEN" {
+  _mock_glab_with_issue "opened"
+
+  cd "$TEST_PROJECT_DIR"
+  git remote add origin https://gitlab.com/testuser/test-repo.git
+
+  run bash "$SCRIPTS_DIR/fetch-github-issue.sh" "42"
+  assert_success
+
+  local state
+  state=$(echo "$output" | jq -r '.state')
+  [[ "$state" == "OPEN" ]]
 }

@@ -9,10 +9,5 @@
   "homepage": "https://docs.vibecrew.dev",
   "repository": "https://github.com/fabkrum/vibe-crew",
   "license": "MIT",
-  "keywords": ["vibe-coding", "automation", "multi-agent", "sdlc"],
-  "agents": "./agents/",
-  "skills": "./skills/",
-  "hooks": "./hooks/hooks.json",
-  "mcpServers": "./.mcp.json",
-  "settings": "./settings.json"
+  "keywords": ["vibe-coding", "automation", "multi-agent", "sdlc"]
 }

@@ -33,7 +33,7 @@ result() {
 
 # --- Guardrail 0: Master toggle ---
 if [[ -f "$CONFIG_FILE" ]]; then
-  ENABLED=$(jq -r '.performance_coach.enabled // true' "$CONFIG_FILE" 2>/dev/null || echo "true")
+  ENABLED=$(jq -r 'if .performance_coach.enabled == false then "false" else "true" end' "$CONFIG_FILE" 2>/dev/null || echo "true")
   if [[ "$ENABLED" == "false" ]]; then
     result false "Performance Coach is disabled in config.json"
   fi
@@ -70,7 +70,8 @@ fi
 # --- Guardrail 2: Minimum 5 sessions ---
 SCORE_COUNT=0
 if [[ -d "$SCORES_DIR" ]]; then
-  SCORE_COUNT=$(ls -1 "$SCORES_DIR"/score-*.json 2>/dev/null | wc -l | tr -d ' ')
+  SCORE_COUNT=$(ls -1 "$SCORES_DIR"/score-*.json 2>/dev/null | wc -l | tr -d ' ' || true)
+  SCORE_COUNT=${SCORE_COUNT:-0}
 fi
 
 if [[ "$SCORE_COUNT" -lt 5 ]]; then
@@ -80,7 +81,7 @@ fi
 # --- Guardrail 3: Session limit (max 1 mutation per session) ---
 # Check if a mutation was already proposed/applied in the current session
 TODAY=$(date -u +%Y-%m-%d)
-LATEST_SCORE=$(ls -1t "$SCORES_DIR"/score-*.json 2>/dev/null | head -1)
+LATEST_SCORE=$(ls -1t "$SCORES_DIR"/score-*.json 2>/dev/null | head -1 || true)
 CURRENT_SESSION_ID=""
 if [[ -n "$LATEST_SCORE" && -f "$LATEST_SCORE" ]]; then
   CURRENT_SESSION_ID=$(jq -r '.session_id // ""' "$LATEST_SCORE" 2>/dev/null || echo "")
@@ -99,7 +100,7 @@ fi
 if [[ -n "$PATTERN" ]]; then
   # Count how many of the last 10 sessions have this pattern
   PATTERN_COUNT=0
-  SCORE_FILES=$(ls -1t "$SCORES_DIR"/score-*.json 2>/dev/null | head -10)
+  SCORE_FILES=$(ls -1t "$SCORES_DIR"/score-*.json 2>/dev/null | head -10 || true)
   while IFS= read -r file; do
     [[ -z "$file" || ! -f "$file" ]] && continue
     HAS_PATTERN=$(jq --arg p "$PATTERN" \

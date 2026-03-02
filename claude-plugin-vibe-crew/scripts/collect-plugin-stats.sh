@@ -36,6 +36,7 @@ fi
 MCP_COUNT=0
 if [[ -f "$PLUGIN_ROOT/.mcp.json" ]]; then
   MCP_COUNT=$(jq '.mcpServers | length // 0' "$PLUGIN_ROOT/.mcp.json" 2>/dev/null || echo 0)
+  MCP_COUNT=${MCP_COUNT:-0}
 fi
 
 # --- Count MCP registry entries ---

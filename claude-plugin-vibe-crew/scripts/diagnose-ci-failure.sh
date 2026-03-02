@@ -28,7 +28,7 @@ COUNT_BUILD=$(echo "$LOG_CONTENT" | grep -ciE "error TS[0-9]|SyntaxError|Cannot 
 COUNT_TEST=$(echo "$LOG_CONTENT" | grep -ciE "FAIL[^U]|AssertionError|AssertionError|Expected.*received|test failed|Tests:.*failed|FAILED|jest.*fail|vitest.*fail|✗|✕|assert\." 2>/dev/null || echo "0")
 COUNT_LINT=$(echo "$LOG_CONTENT" | grep -ciE "eslint|prettier|Lint error|style error|lint.*warning|lint.*error|formatting" 2>/dev/null || echo "0")
 COUNT_DEP=$(echo "$LOG_CONTENT" | grep -ciE "npm ERR|Could not resolve|peer dep|ERESOLVE|ModuleNotFoundError|No matching version|ENOENT.*node_modules|package.*not found|yarn error" 2>/dev/null || echo "0")
-COUNT_ENV=$(echo "$LOG_CONTENT" | grep -ciE "ENOENT(?!.*node_modules)|env:.*not found|command not found|Permission denied|ENOMEM|EACCES|No such file or directory|\.nvmrc|engines.*node" 2>/dev/null || echo "0")
+COUNT_ENV=$(echo "$LOG_CONTENT" | grep -ciE "ENOENT|env:.*not found|command not found|Permission denied|ENOMEM|EACCES|No such file or directory|\.nvmrc|engines.*node" 2>/dev/null || echo "0")
 
 # Trim whitespace from counts
 COUNT_BUILD=$(echo "$COUNT_BUILD" | tr -d '[:space:]')

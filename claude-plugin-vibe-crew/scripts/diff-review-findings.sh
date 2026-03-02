@@ -47,7 +47,7 @@ PREVIOUS_IDS=$(jq -r '[.findings[]?.id // empty] | sort | unique' "$PREVIOUS" 2>
 
 # Compute set differences
 NEW_IDS=$(jq -n --argjson c "$CURRENT_IDS" --argjson p "$PREVIOUS_IDS" '$c - $p')
-RECURRING_IDS=$(jq -n --argjson c "$CURRENT_IDS" --argjson p "$PREVIOUS_IDS" '[$c[] as $id | select($p | index($id))]')
+RECURRING_IDS=$(jq -n --argjson c "$CURRENT_IDS" --argjson p "$PREVIOUS_IDS" '[$c[] as $id | select($p | index($id)) | $id]')
 RESOLVED_IDS=$(jq -n --argjson c "$CURRENT_IDS" --argjson p "$PREVIOUS_IDS" '$p - $c')
 
 NEW_COUNT=$(echo "$NEW_IDS" | jq 'length')

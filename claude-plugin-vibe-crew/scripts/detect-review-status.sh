@@ -21,7 +21,7 @@ if [[ -f "$STATE_FILE" && -d "$REVIEWS_DIR" ]]; then
 
   if [[ -n "$FEATURE_ID" ]]; then
     # Find the most recent review for this feature
-    LATEST_REVIEW=$(ls -1t "$REVIEWS_DIR"/review-"${FEATURE_ID}"-*.json 2>/dev/null | head -1)
+    LATEST_REVIEW=$(ls -1t "$REVIEWS_DIR"/review-"${FEATURE_ID}"-*.json 2>/dev/null | head -1 || true)
 
     if [[ -n "$LATEST_REVIEW" && -f "$LATEST_REVIEW" ]]; then
       REVIEW_COMPLETED=true

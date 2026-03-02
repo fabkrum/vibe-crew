@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- 11 robustness bugs across scripts, with 455 new BATS tests (1074 total, 0 failures):
+  - `scripts/scan-dependencies.sh` -- Fixed `${2:-{}}` bash quoting bug producing invalid JSON `{}}`
+  - `scripts/diagnose-ci-failure.sh` -- Removed PCRE `(?!...)` negative lookahead incompatible with macOS BSD grep
+  - `scripts/diff-review-findings.sh` -- Fixed jq `select()` returning null instead of bound variable
+  - `scripts/collect-plugin-stats.sh` -- Added fallback for empty jq output on empty `.mcp.json`
+  - `scripts/check-mutation-eligibility.sh` -- Fixed jq `//` treating boolean `false` as falsy; fixed `ls | wc -l || echo 0` with pipefail producing doubled output
+  - `scripts/detect-anti-patterns.sh`, `scripts/aggregate-scores.sh`, `scripts/collect-telemetry.sh`, `scripts/detect-conventions.sh`, `scripts/detect-review-status.sh`, `scripts/detect-tdd-discipline.sh` -- Fixed `ls -1t | head` pipeline crashes under `set -o pipefail` when no files match
+  - `tests/test_helper/common-setup.bash` -- Added `mock_command`, `mock_command_stdin`, `cleanup_mocks`, `create_signal_write_input` test utilities
+
+---
+
 ## [1.8.0] - 2026-03-02
 
 ### Added

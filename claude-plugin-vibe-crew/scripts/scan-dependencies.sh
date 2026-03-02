@@ -15,7 +15,7 @@ SCANNED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 # Usage: build_result "status" "vulnerabilities_json"
 build_result() {
   local status="$1"
-  local vulns="${2:-{}}"
+  local vulns="${2:-"{}"}"
   jq -n --arg s "$status" --argjson v "$vulns" '{"status": $s, "vulnerabilities": $v}'
 }
 

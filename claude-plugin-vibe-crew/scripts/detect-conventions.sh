@@ -173,7 +173,8 @@ COMMIT_FORMAT="freeform"
 if command -v git &>/dev/null; then
   RECENT_COMMITS=$(git log --oneline -20 --format='%s' 2>/dev/null || echo "")
   if [[ -n "$RECENT_COMMITS" ]]; then
-    CONVENTIONAL_COUNT=$(echo "$RECENT_COMMITS" | grep -cE '^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert)\(' 2>/dev/null || echo "0")
+    CONVENTIONAL_COUNT=$(echo "$RECENT_COMMITS" | grep -cE '^(feat|fix|docs|style|refactor|test|chore|ci|build|perf|revert)\(' 2>/dev/null || true)
+    CONVENTIONAL_COUNT=${CONVENTIONAL_COUNT:-0}
     TOTAL_COMMITS=$(echo "$RECENT_COMMITS" | wc -l | tr -d ' ')
     if [[ "$TOTAL_COMMITS" -gt 0 ]]; then
       RATIO=$((CONVENTIONAL_COUNT * 100 / TOTAL_COMMITS))

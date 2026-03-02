@@ -245,14 +245,16 @@ fi
 
 # --- Most common deductions ---
 COMMON_DEDUCTIONS="[]"
-if [[ -n "$ALL_DEDUCTIONS" ]]; then
-  COMMON_DEDUCTIONS=$(echo "$ALL_DEDUCTIONS" | tr ' ' '\n' | grep -v '^$' | sort | uniq -c | sort -rn | head -5 | awk '{printf "{\"category\": \"%s\", \"count\": %s},", $2, $1}' | sed 's/,$//' | sed 's/^/[/' | sed 's/$/]/')
+TRIMMED_DEDUCTIONS=$(echo "$ALL_DEDUCTIONS" | tr ' ' '\n' | grep -v '^$' || true)
+if [[ -n "$TRIMMED_DEDUCTIONS" ]]; then
+  COMMON_DEDUCTIONS=$(echo "$TRIMMED_DEDUCTIONS" | sort | uniq -c | sort -rn | head -5 | awk '{printf "{\"category\": \"%s\", \"count\": %s},", $2, $1}' | sed 's/,$//' | sed 's/^/[/' | sed 's/$/]/')
 fi
 
 # --- MCP adoption ---
 MCP_ADOPTION="{}"
-if [[ -n "$ALL_MCP" ]]; then
-  MCP_ADOPTION=$(echo "$ALL_MCP" | tr ' ' '\n' | grep -v '^$' | sort | uniq -c | sort -rn | awk '{printf "\"%s\": %s,", $2, $1}' | sed 's/,$//' | sed 's/^/{/' | sed 's/$/}/')
+TRIMMED_MCP=$(echo "$ALL_MCP" | tr ' ' '\n' | grep -v '^$' || true)
+if [[ -n "$TRIMMED_MCP" ]]; then
+  MCP_ADOPTION=$(echo "$TRIMMED_MCP" | sort | uniq -c | sort -rn | awk '{printf "\"%s\": %s,", $2, $1}' | sed 's/,$//' | sed 's/^/{/' | sed 's/$/}/')
 fi
 
 # --- Build aggregate JSON ---

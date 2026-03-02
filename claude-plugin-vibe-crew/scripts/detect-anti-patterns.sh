@@ -15,8 +15,9 @@ if [[ ! -d "$SCORES_DIR" ]]; then
   exit 0
 fi
 
-SCORE_FILES=$(ls -1t "$SCORES_DIR"/score-*.json 2>/dev/null | head -10)
-FILE_COUNT=$(echo "$SCORE_FILES" | grep -c '.' 2>/dev/null || echo "0")
+SCORE_FILES=$(ls -1t "$SCORES_DIR"/score-*.json 2>/dev/null | head -10 || true)
+FILE_COUNT=$(echo "$SCORE_FILES" | grep -c '.' 2>/dev/null || true)
+FILE_COUNT=${FILE_COUNT:-0}
 
 if [[ "$FILE_COUNT" -eq 0 ]]; then
   echo '{"patterns":[],"total_sessions":0}'

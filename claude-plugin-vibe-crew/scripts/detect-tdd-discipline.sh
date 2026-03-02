@@ -15,7 +15,8 @@ CYCLE_COUNT=0
 if command -v git &>/dev/null && git -C "$PROJECT_ROOT" rev-parse --git-dir &>/dev/null; then
   # Search last 50 commits for TDD cycle trailers
   CYCLE_COUNT=$(git -C "$PROJECT_ROOT" log --format='%B' -50 2>/dev/null \
-    | grep -c "TDD cycle:" 2>/dev/null || echo "0")
+    | grep -c "TDD cycle:" 2>/dev/null || true)
+  CYCLE_COUNT=${CYCLE_COUNT:-0}
 
   if [[ "$CYCLE_COUNT" -gt 0 ]]; then
     DISCIPLINE_DETECTED=true

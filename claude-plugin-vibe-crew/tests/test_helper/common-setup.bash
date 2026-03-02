@@ -248,6 +248,55 @@ set_phases_completed() {
     "$state_file" > "$tmp" && mv "$tmp" "$state_file"
 }
 
+# --- External Command Mocking ---
+
+mock_command() {
+  # Creates an executable stub in a temp directory prepended to PATH.
+  # Usage: mock_command <command_name> <exit_code> [stdout_output]
+  # Example: mock_command "gh" 0 '{"login":"user"}'
+  local cmd="$1"
+  local exit_code="${2:-0}"
+  local output="${3:-}"
+
+  # Create mock bin directory once per test
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+    export PATH="$MOCK_BIN_DIR:$PATH"
+  fi
+
+  cat > "$MOCK_BIN_DIR/$cmd" <<MOCK_EOF
+#!/usr/bin/env bash
+echo '$output'
+exit $exit_code
+MOCK_EOF
+  chmod +x "$MOCK_BIN_DIR/$cmd"
+}
+
+mock_command_stdin() {
+  # Creates a stub that reads stdin and outputs based on it.
+  # Usage: mock_command_stdin <command_name> <script_body>
+  local cmd="$1"
+  local body="$2"
+
+  if [[ -z "${MOCK_BIN_DIR:-}" ]]; then
+    MOCK_BIN_DIR="$(mktemp -d)"
+    export PATH="$MOCK_BIN_DIR:$PATH"
+  fi
+
+  cat > "$MOCK_BIN_DIR/$cmd" <<MOCK_EOF
+#!/usr/bin/env bash
+$body
+MOCK_EOF
+  chmod +x "$MOCK_BIN_DIR/$cmd"
+}
+
+cleanup_mocks() {
+  if [[ -n "${MOCK_BIN_DIR:-}" && -d "$MOCK_BIN_DIR" ]]; then
+    rm -rf "$MOCK_BIN_DIR"
+    unset MOCK_BIN_DIR
+  fi
+}
+
 create_signal_write_input() {
   # Usage: create_signal_write_input "/path/to/signal.json" '{"feature_id":"feat-001",...}'
   # Builds a Write hook JSON payload with custom file content

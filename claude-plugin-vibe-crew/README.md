@@ -37,15 +37,16 @@ prompts for GitHub/GitLab CLI authentication. Pass `--yes` to skip confirmation 
 > remote URL. `terminal-notifier` enables desktop notifications. All optional
 > dependencies are optional — VibeCrew works without them.
 
-**Install the plugin**
+**Load the plugin**
 
 ```bash
-claude plugin install /path/to/claude-plugin-vibe-crew
+claude --plugin-dir /path/to/claude-plugin-vibe-crew
 ```
 
-Installation takes under 5 minutes. The plugin registers hooks, agents, slash
-commands, permission rules, and optional MCP servers automatically. The `/setup`
-command can also auto-install missing dependencies from within Claude Code.
+Start Claude Code with the `--plugin-dir` flag pointing to the plugin directory.
+This registers hooks, agents, slash commands, permission rules, and optional MCP
+servers automatically. Then run `/setup` inside Claude Code to verify your
+environment. The `/setup` command can also auto-install missing dependencies.
 
 **Optional MCP servers**
 
@@ -81,8 +82,7 @@ in your browser, or browse them on GitHub:
 ## Quick Start
 
 1. Run `./install.sh` to install dependencies (or install them manually).
-2. Install the plugin: `claude plugin install /path/to/claude-plugin-vibe-crew`
-3. Open a new Claude Code session in any directory.
+2. Start Claude Code with the plugin: `claude --plugin-dir /path/to/claude-plugin-vibe-crew`
 4. Run `/setup` to verify your environment and initialize VibeCrew. If any
    dependencies are missing, `/setup` offers to install them automatically.
 5. Run `/new-project` to create a fresh project. VibeCrew walks you through

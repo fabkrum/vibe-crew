@@ -17,10 +17,10 @@ VibeCrew is a Claude Code plugin that transforms Claude Code into an autonomous 
 
 ## Installation
 
-Install the VibeCrew plugin:
+Start Claude Code with the VibeCrew plugin:
 
 ```bash
-claude plugin install /path/to/claude-plugin-vibe-crew
+claude --plugin-dir /path/to/claude-plugin-vibe-crew
 ```
 
 ## Initial Setup

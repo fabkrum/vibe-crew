@@ -32,8 +32,8 @@ ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-cr
 
   <section class="section">
     <h3>2. Run Setup</h3>
-    <p>Start Claude Code in your project directory and run the setup wizard:</p>
-    <CodeBlock code={`claude`} label="bash" />
+    <p>Start Claude Code with the plugin loaded and run the setup wizard:</p>
+    <CodeBlock code={`claude --plugin-dir ./claude-plugin-vibe-crew`} label="bash" />
     <p>Then inside Claude Code:</p>
     <CodeBlock code={`/setup`} label="claude code" />
     <p>The wizard verifies dependencies, detects your terminal, and creates the <code>.vibecrew/</code> runtime directory.</p>

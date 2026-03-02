@@ -45,12 +45,12 @@ ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-cr
   </button><code><span class="code-label">bash</span>mkdir -p ~/claude-plugins &amp;&amp; cd ~/claude-plugins
 git clone https://github.com/fabkrum/vibe-crew.git
 cd ~/projects/my-project
-ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> </section> <section class="section"> <h3>2. Run Setup</h3> <p>Start Claude Code in your project directory and run the setup wizard:</p> <pre class="copyable" data-copy="claude"><button class="copy-btn" aria-label="Copy to clipboard">
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> </section> <section class="section"> <h3>2. Run Setup</h3> <p>Start Claude Code with the plugin loaded and run the setup wizard:</p> <pre class="copyable" data-copy="claude --plugin-dir ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
-  </button><code><span class="code-label">bash</span>claude</code></pre> <p>Then inside Claude Code:</p> <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard">
+  </button><code><span class="code-label">bash</span>claude --plugin-dir ./claude-plugin-vibe-crew</code></pre> <p>Then inside Claude Code:</p> <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>

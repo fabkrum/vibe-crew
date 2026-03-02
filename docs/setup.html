@@ -48,16 +48,16 @@ git clone https://github.com/fabkrum/vibe-crew.git</code></pre> </li> <li> <h4>R
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
   </button><code><span class="code-label">bash</span>cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew
-./install.sh</code></pre> <p>Use <code>./install.sh --yes</code> to skip the confirmation prompt.</p> </li> <li> <h4>Link to your project and run setup</h4> <p>Symlink the plugin into your project, start Claude Code, and run the setup wizard.</p> <pre class="copyable" data-copy="cd ~/projects/my-project
+./install.sh</code></pre> <p>Use <code>./install.sh --yes</code> to skip the confirmation prompt.</p> </li> <li> <h4>Link to your project and run setup</h4> <p>Symlink the plugin into your project, start Claude Code with the <code>--plugin-dir</code> flag, and run the setup wizard.</p> <pre class="copyable" data-copy="cd ~/projects/my-project
 ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-claude"><button class="copy-btn" aria-label="Copy to clipboard">
+claude --plugin-dir ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
   </button><code><span class="code-label">bash</span>cd ~/projects/my-project
 ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-claude</code></pre> <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard">
+claude --plugin-dir ./claude-plugin-vibe-crew</code></pre> <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -103,7 +103,12 @@ ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-cr
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
   </button><code><span class="code-label">bash</span>cd ~/projects/another-project
-ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> <p>Then start Claude Code and run <code>/setup</code>.</p> <h3>Updating VibeCrew across all projects</h3> <p>Since every project symlinks to the same central location, updating is one command:</p> <pre class="copyable" data-copy="cd ~/claude-plugins/vibe-crew &#38;&#38; git pull"><button class="copy-btn" aria-label="Copy to clipboard">
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> <p>Then start Claude Code with the plugin flag and run <code>/setup</code>:</p> <pre class="copyable" data-copy="claude --plugin-dir ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>claude --plugin-dir ./claude-plugin-vibe-crew</code></pre> <h3>Updating VibeCrew across all projects</h3> <p>Since every project symlinks to the same central location, updating is one command:</p> <pre class="copyable" data-copy="cd ~/claude-plugins/vibe-crew &#38;&#38; git pull"><button class="copy-btn" aria-label="Copy to clipboard">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -111,7 +116,7 @@ ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-cr
   </button><code><span class="code-label">bash</span>cd ~/claude-plugins/vibe-crew &amp;&amp; git pull</code></pre> <p>Every project picks up the changes instantly. No need to copy files, run installers, or touch individual projects. Check the <a href="/vibe-crew/releases">Release Notes</a> after updating to see what changed.</p> <div class="callout tip"> <div class="callout-title">Make it even faster with a shell alias</div>  <p>Add this to your <code>~/.zshrc</code> to create new VibeCrew projects in one command:</p>  </div> <pre class="copyable" data-copy="# Add to ~/.zshrc
 vibecrew-init() {
   ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-  echo &#34;VibeCrew linked. Run 'claude' then '/setup' to initialize.&#34;
+  echo &#34;VibeCrew linked. Run 'claude --plugin-dir ./claude-plugin-vibe-crew' then '/setup'.&#34;
 }
 
 vibecrew-update() {
@@ -125,7 +130,7 @@ vibecrew-update() {
   </button><code><span class="code-label">.zshrc</span># Add to ~/.zshrc
 vibecrew-init() {
   ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-  echo &quot;VibeCrew linked. Run &#39;claude&#39; then &#39;/setup&#39; to initialize.&quot;
+  echo &quot;VibeCrew linked. Run &#39;claude --plugin-dir ./claude-plugin-vibe-crew&#39; then &#39;/setup&#39;.&quot;
 }
 
 vibecrew-update() {
@@ -189,7 +194,7 @@ jq --version     # 1.6+"><button class="copy-btn" aria-label="Copy to clipboard"
     </svg>
   </button><code><span class="code-label">bash</span>git --version    # 2.30+
 node --version   # 18+
-jq --version     # 1.6+</code></pre> <p>Then follow steps 1 and 3 from the <a href="#install">Quick Install</a> above (clone and link).</p> </section> <hr> <section class="section" id="troubleshooting"> <span class="section-label">Help</span> <h2>Troubleshooting</h2> <h3>Notifications don't appear</h3> <ol> <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li> <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li> <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li> <li>Check VibeCrew config: verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code></li> <li>Warp deep-links not working: see the <a href="/vibe-crew/warp#deep-linking">deep-linking guide</a> on the Warp page</li> </ol> <h3>MCP servers not available</h3> <ol> <li><strong>Default servers (Context7, Chrome DevTools, Playwright):</strong> These should work out of the box via <code>npx</code>. Try restarting Claude Code.</li> <li><strong>Bundled conditional servers (Supabase, Stripe, Vercel, Figma, Sentry, etc.):</strong> Set the required environment variables, then run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code>.</li> <li><strong>Registry servers not yet in .mcp.json (Firebase, Clerk, MongoDB, etc.):</strong> Add from the registry with <code>bash scripts/add-mcp-server.sh &lt;key&gt;</code>, or see all available servers with <code>bash scripts/add-mcp-server.sh --list</code>.</li> <li>All MCP servers are optional. VibeCrew agents gracefully fall back to built-in tools when servers are unavailable.</li> </ol> <h3>Stale locks or corrupted state</h3> <ol> <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li> <li>This resets any in-progress tasks that were interrupted by a crashed session</li> </ol> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/quick-start.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Quick Start</span></a><a href="/vibe-crew/new-project.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">New Project</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+jq --version     # 1.6+</code></pre> <p>Then follow steps 1 and 3 from the <a href="#install">Quick Install</a> above (clone and link).</p> </section> <hr> <section class="section" id="troubleshooting"> <span class="section-label">Help</span> <h2>Troubleshooting</h2> <h3>/setup says "Unknown skill"</h3> <ol> <li>Claude Code does not auto-discover local plugins. You must load the plugin with the <code>--plugin-dir</code> flag: <code>claude --plugin-dir ./claude-plugin-vibe-crew</code></li> <li>Verify the symlink target exists: <code>ls -la claude-plugin-vibe-crew/.claude-plugin/plugin.json</code></li> <li>Restart Claude Code if you added the flag to an already-running session.</li> </ol> <h3>Notifications don't appear</h3> <ol> <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li> <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li> <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li> <li>Check VibeCrew config: verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code></li> <li>Warp deep-links not working: see the <a href="/vibe-crew/warp#deep-linking">deep-linking guide</a> on the Warp page</li> </ol> <h3>MCP servers not available</h3> <ol> <li><strong>Default servers (Context7, Chrome DevTools, Playwright):</strong> These should work out of the box via <code>npx</code>. Try restarting Claude Code.</li> <li><strong>Bundled conditional servers (Supabase, Stripe, Vercel, Figma, Sentry, etc.):</strong> Set the required environment variables, then run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code>.</li> <li><strong>Registry servers not yet in .mcp.json (Firebase, Clerk, MongoDB, etc.):</strong> Add from the registry with <code>bash scripts/add-mcp-server.sh &lt;key&gt;</code>, or see all available servers with <code>bash scripts/add-mcp-server.sh --list</code>.</li> <li>All MCP servers are optional. VibeCrew agents gracefully fall back to built-in tools when servers are unavailable.</li> </ol> <h3>Stale locks or corrupted state</h3> <ol> <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li> <li>This resets any in-progress tasks that were interrupted by a crashed session</li> </ol> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/quick-start.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Quick Start</span></a><a href="/vibe-crew/new-project.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">New Project</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');

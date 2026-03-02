@@ -44,10 +44,10 @@ git clone https://github.com/fabkrum/vibe-crew.git`} />
 
       <li>
         <h4>Link to your project and run setup</h4>
-        <p>Symlink the plugin into your project, start Claude Code, and run the setup wizard.</p>
+        <p>Symlink the plugin into your project, start Claude Code with the <code>--plugin-dir</code> flag, and run the setup wizard.</p>
         <CodeBlock label="bash" code={`cd ~/projects/my-project
 ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-claude`} />
+claude --plugin-dir ./claude-plugin-vibe-crew`} />
         <CodeBlock label="claude code" code={`/setup`} />
         <p>The wizard creates the <code>.vibecrew/</code> runtime directory, tests notifications, verifies MCP servers, and checks git configuration.</p>
       </li>
@@ -137,7 +137,8 @@ claude`} />
     <p>Two commands, under 30 seconds:</p>
     <CodeBlock label="bash" code={`cd ~/projects/another-project
 ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew`} />
-    <p>Then start Claude Code and run <code>/setup</code>.</p>
+    <p>Then start Claude Code with the plugin flag and run <code>/setup</code>:</p>
+    <CodeBlock label="bash" code={`claude --plugin-dir ./claude-plugin-vibe-crew`} />
 
     <h3>Updating VibeCrew across all projects</h3>
     <p>Since every project symlinks to the same central location, updating is one command:</p>
@@ -150,7 +151,7 @@ ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-cr
     <CodeBlock label=".zshrc" code={`# Add to ~/.zshrc
 vibecrew-init() {
   ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
-  echo "VibeCrew linked. Run 'claude' then '/setup' to initialize."
+  echo "VibeCrew linked. Run 'claude --plugin-dir ./claude-plugin-vibe-crew' then '/setup'."
 }
 
 vibecrew-update() {
@@ -283,6 +284,13 @@ jq --version     # 1.6+`} />
   <section class="section" id="troubleshooting">
     <span class="section-label">Help</span>
     <h2>Troubleshooting</h2>
+
+    <h3>/setup says "Unknown skill"</h3>
+    <ol>
+      <li>Claude Code does not auto-discover local plugins. You must load the plugin with the <code>--plugin-dir</code> flag: <code>claude --plugin-dir ./claude-plugin-vibe-crew</code></li>
+      <li>Verify the symlink target exists: <code>ls -la claude-plugin-vibe-crew/.claude-plugin/plugin.json</code></li>
+      <li>Restart Claude Code if you added the flag to an already-running session.</li>
+    </ol>
 
     <h3>Notifications don't appear</h3>
     <ol>

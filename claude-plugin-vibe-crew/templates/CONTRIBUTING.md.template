@@ -17,10 +17,10 @@ Thank you for your interest in contributing to the VibeCrew Claude Code plugin. 
    - Node.js 18+
    - `jq` (for JSON processing in hook scripts)
 
-3. Install the plugin locally for testing:
+3. Start Claude Code with the plugin loaded for testing:
 
    ```bash
-   claude plugin install ./claude-plugin-vibe-crew
+   claude --plugin-dir ./claude-plugin-vibe-crew
    ```
 
 4. Verify the installation by running the validation script:

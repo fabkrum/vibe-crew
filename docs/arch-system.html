@@ -114,11 +114,12 @@ MCP servers are <strong>external tools that give the AI extra abilities</strong>
 A single session might query Supabase auth docs, Next.js routing docs, and Tailwind utility references. Without Context7, that's ~4,500 tokens of pasted documentation. With Context7, the agent fetches exactly what it needs on demand &mdash; and those tokens are served from the MCP server, not your context window. The Performance Coach tracks this and deducts points (-15) for low cache utilization when Context7 isn't being used.
  </div> <div class="callout info"> <div class="callout-title">MCP Tool Search (automatic)</div> 
 Claude Code's built-in Tool Search (January 2026) dynamically loads only 3&ndash;5 relevant tool definitions per task instead of preloading all MCP tools into context. It activates automatically when combined tool definitions exceed 10% of the context window. For VibeCrew projects that enable 5+ servers after TDR selection, this prevents tool definitions from consuming context &mdash; reducing overhead from ~60K tokens to ~8.5K. VibeCrew's &ldquo;disabled by default, enable from TDR&rdquo; pattern complements this: baseline projects start with only 3 servers, and Tool Search handles the scaling.
- </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/architecture.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Overview</span></a><a href="/vibe-crew/arch-runtime.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Runtime Systems</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+ </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/architecture.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Overview</span></a><a href="/vibe-crew/arch-runtime.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Runtime Systems</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');
     var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
     var loaded = false;
 
     function openSearch() {
@@ -128,16 +129,17 @@ Claude Code's built-in Tool Search (January 2026) dynamically loads only 3&ndash
         // Dynamically load Pagefind UI
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/pagefind/pagefind-ui.css';
+        link.href = base + '/pagefind/pagefind-ui.css';
         document.head.appendChild(link);
 
         var script = document.createElement('script');
-        script.src = '/pagefind/pagefind-ui.js';
+        script.src = base + '/pagefind/pagefind-ui.js';
         script.onload = function() {
           new PagefindUI({
             element: '#search-container',
             showSubResults: true,
             showImages: false,
+            bundlePath: base + '/pagefind/',
           });
           setTimeout(function() {
             var input = container.querySelector('input');

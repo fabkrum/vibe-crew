@@ -64,11 +64,12 @@ Identifies language from: <span class="highlight">package.json</span>, <span cla
     &darr;
 Results feed into <span class="highlight">Code Auditor</span> and <span class="highlight">CLAUDE.md generation</span></div> <h3>Where language support applies</h3> <ul> <li><strong><code>/onboard</code></strong> &mdash; Code Auditor detects language, conventions, frameworks, and test gaps for all 7 languages</li> <li><strong><code>/audit</code></strong> &mdash; Security Auditor runs language-specific dependency audit tools and adapts OWASP scanning patterns</li> <li><strong>PostToolUse formatting</strong> &mdash; <code>format-code.sh</code> auto-formats with the correct tool: Prettier (JS/TS), Black (Python), rustfmt (Rust), gofmt (Go)</li> <li><strong><code>/new-project</code></strong> &mdash; Stack Scout research adapts to the detected or chosen language ecosystem</li> </ul> <div class="callout info"> <div class="callout-title">Non-Node.js confidence levels</div> 
 Node.js/TypeScript projects receive &ldquo;high&rdquo; confidence from the Code Auditor due to deeper ecosystem integration. Other languages receive &ldquo;medium&rdquo; confidence &mdash; the core workflow (Tier 1 foundation, Tier 2 cycle, Vibe Score, hooks) works identically, but framework-specific patterns may need manual refinement in CLAUDE.md.
- </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/workflow.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Core Workflow</span></a><a href="/vibe-crew/personalization.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Personalization</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+ </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/workflow.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Core Workflow</span></a><a href="/vibe-crew/personalization.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Personalization</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');
     var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
     var loaded = false;
 
     function openSearch() {
@@ -78,16 +79,17 @@ Node.js/TypeScript projects receive &ldquo;high&rdquo; confidence from the Code 
         // Dynamically load Pagefind UI
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/pagefind/pagefind-ui.css';
+        link.href = base + '/pagefind/pagefind-ui.css';
         document.head.appendChild(link);
 
         var script = document.createElement('script');
-        script.src = '/pagefind/pagefind-ui.js';
+        script.src = base + '/pagefind/pagefind-ui.js';
         script.onload = function() {
           new PagefindUI({
             element: '#search-container',
             showSubResults: true,
             showImages: false,
+            bundlePath: base + '/pagefind/',
           });
           setTimeout(function() {
             var input = container.querySelector('input');

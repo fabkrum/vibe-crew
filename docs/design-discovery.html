@@ -77,11 +77,12 @@ The <code>design-brief.md</code> file gives the Builder agent <strong>product aw
 &bull; <strong>Interaction density</strong> &mdash; How much whitespace between elements?<br>
 &bull; <strong>Audience context</strong> &mdash; Are users technical or non-technical? Quick glances or deep sessions?<br><br>
 This transforms the Builder from &ldquo;apply these tokens&rdquo; to &ldquo;design for this audience with these tokens.&rdquo;
- </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/new-project.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">New Project</span></a><a href="/vibe-crew/existing-project.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Existing Project</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+ </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/new-project.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">New Project</span></a><a href="/vibe-crew/existing-project.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Existing Project</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');
     var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
     var loaded = false;
 
     function openSearch() {
@@ -91,16 +92,17 @@ This transforms the Builder from &ldquo;apply these tokens&rdquo; to &ldquo;desi
         // Dynamically load Pagefind UI
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/pagefind/pagefind-ui.css';
+        link.href = base + '/pagefind/pagefind-ui.css';
         document.head.appendChild(link);
 
         var script = document.createElement('script');
-        script.src = '/pagefind/pagefind-ui.js';
+        script.src = base + '/pagefind/pagefind-ui.js';
         script.onload = function() {
           new PagefindUI({
             element: '#search-container',
             showSubResults: true,
             showImages: false,
+            bundlePath: base + '/pagefind/',
           });
           setTimeout(function() {
             var input = container.querySelector('input');

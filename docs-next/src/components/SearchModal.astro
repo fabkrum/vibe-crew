@@ -1,7 +1,7 @@
 ---
 ---
 
-<div class="search-modal-overlay" id="search-modal-overlay">
+<div class="search-modal-overlay" id="search-modal-overlay" data-base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
   <div class="search-modal">
     <div id="search-container"></div>
   </div>
@@ -27,6 +27,7 @@
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');
     var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
     var loaded = false;
 
     function openSearch() {
@@ -36,16 +37,17 @@
         // Dynamically load Pagefind UI
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/pagefind/pagefind-ui.css';
+        link.href = base + '/pagefind/pagefind-ui.css';
         document.head.appendChild(link);
 
         var script = document.createElement('script');
-        script.src = '/pagefind/pagefind-ui.js';
+        script.src = base + '/pagefind/pagefind-ui.js';
         script.onload = function() {
           new PagefindUI({
             element: '#search-container',
             showSubResults: true,
             showImages: false,
+            bundlePath: base + '/pagefind/',
           });
           setTimeout(function() {
             var input = container.querySelector('input');

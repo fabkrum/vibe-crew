@@ -42,11 +42,12 @@ Status bar, interrupt protocol, phase gate, Vibe Score &amp; Performance Coach, 
 Full slash commands reference tables, <code>.vibecrew/</code> state management, git strategy, and schema migration.
 </p> <div class="card-arrow">Read more &rarr;</div></a> <a href="/vibe-crew/arch-design.html" class="card"><div class="card-icon amber">▲</div><h4>Design &amp; Operations</h4> <p>
 Design principles, VitePress documentation dashboard, cross-project telemetry, and troubleshooting.
-</p> <div class="card-arrow">Read more &rarr;</div></a>  </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/example-session.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Example Session</span></a><a href="/vibe-crew/arch-system.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">System Deep Dive</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+</p> <div class="card-arrow">Read more &rarr;</div></a>  </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/example-session.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Example Session</span></a><a href="/vibe-crew/arch-system.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">System Deep Dive</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');
     var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
     var loaded = false;
 
     function openSearch() {
@@ -56,16 +57,17 @@ Design principles, VitePress documentation dashboard, cross-project telemetry, a
         // Dynamically load Pagefind UI
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/pagefind/pagefind-ui.css';
+        link.href = base + '/pagefind/pagefind-ui.css';
         document.head.appendChild(link);
 
         var script = document.createElement('script');
-        script.src = '/pagefind/pagefind-ui.js';
+        script.src = base + '/pagefind/pagefind-ui.js';
         script.onload = function() {
           new PagefindUI({
             element: '#search-container',
             showSubResults: true,
             showImages: false,
+            bundlePath: base + '/pagefind/',
           });
           setTimeout(function() {
             var input = container.querySelector('input');

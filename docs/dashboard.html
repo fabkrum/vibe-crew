@@ -59,11 +59,12 @@ npm run docs:build</code></pre> <p data-astro-cid-3nssi2tu>The output goes to <c
       <rect x="9" y="9" width="13" height="13" rx="2"></rect>
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
     </svg>
-  </button><code><span class="code-label">bash</span>npm run docs:dev -- --port 5200</code></pre> <h3 data-astro-cid-3nssi2tu>Drag-and-drop not working</h3> <p data-astro-cid-3nssi2tu>Interactive features (drag-and-drop, adding ideas, editing cards) only work when running the dev server. Static builds render the board read-only.</p> <h3 data-astro-cid-3nssi2tu>Settings changes don't persist</h3> <p data-astro-cid-3nssi2tu>The Settings tab can only write to <code data-astro-cid-3nssi2tu>.vibecrew/config.json</code> when VitePress is running in dev mode (<code data-astro-cid-3nssi2tu>npm run docs:dev</code>). If you're viewing a static build, Settings shows a read-only view with copyable JSON that you can paste into <code data-astro-cid-3nssi2tu>.vibecrew/config.json</code> manually.</p> <h3 data-astro-cid-3nssi2tu>Hot-reload isn't working</h3> <ol data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu>Make sure you're running the dev server (<code data-astro-cid-3nssi2tu>npm run docs:dev</code>), not viewing a static build</li> <li data-astro-cid-3nssi2tu>Check that <code data-astro-cid-3nssi2tu>.vibecrew/</code> is in the same project root where you started VitePress</li> <li data-astro-cid-3nssi2tu>Try restarting the dev server &mdash; VitePress occasionally needs a restart after major file structure changes</li> </ol> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/arch-design.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Design &amp; Operations</span></a><a href="/vibe-crew/commands.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Slash Commands</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  </button><code><span class="code-label">bash</span>npm run docs:dev -- --port 5200</code></pre> <h3 data-astro-cid-3nssi2tu>Drag-and-drop not working</h3> <p data-astro-cid-3nssi2tu>Interactive features (drag-and-drop, adding ideas, editing cards) only work when running the dev server. Static builds render the board read-only.</p> <h3 data-astro-cid-3nssi2tu>Settings changes don't persist</h3> <p data-astro-cid-3nssi2tu>The Settings tab can only write to <code data-astro-cid-3nssi2tu>.vibecrew/config.json</code> when VitePress is running in dev mode (<code data-astro-cid-3nssi2tu>npm run docs:dev</code>). If you're viewing a static build, Settings shows a read-only view with copyable JSON that you can paste into <code data-astro-cid-3nssi2tu>.vibecrew/config.json</code> manually.</p> <h3 data-astro-cid-3nssi2tu>Hot-reload isn't working</h3> <ol data-astro-cid-3nssi2tu> <li data-astro-cid-3nssi2tu>Make sure you're running the dev server (<code data-astro-cid-3nssi2tu>npm run docs:dev</code>), not viewing a static build</li> <li data-astro-cid-3nssi2tu>Check that <code data-astro-cid-3nssi2tu>.vibecrew/</code> is in the same project root where you started VitePress</li> <li data-astro-cid-3nssi2tu>Try restarting the dev server &mdash; VitePress occasionally needs a restart after major file structure changes</li> </ol> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/arch-design.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Design &amp; Operations</span></a><a href="/vibe-crew/commands.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Slash Commands</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');
     var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
     var loaded = false;
 
     function openSearch() {
@@ -73,16 +74,17 @@ npm run docs:build</code></pre> <p data-astro-cid-3nssi2tu>The output goes to <c
         // Dynamically load Pagefind UI
         var link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/pagefind/pagefind-ui.css';
+        link.href = base + '/pagefind/pagefind-ui.css';
         document.head.appendChild(link);
 
         var script = document.createElement('script');
-        script.src = '/pagefind/pagefind-ui.js';
+        script.src = base + '/pagefind/pagefind-ui.js';
         script.onload = function() {
           new PagefindUI({
             element: '#search-container',
             showSubResults: true,
             showImages: false,
+            bundlePath: base + '/pagefind/',
           });
           setTimeout(function() {
             var input = container.querySelector('input');

@@ -84,13 +84,18 @@ _compat_timeout_cmd() {
 
 # --- Parse ISO 8601 timestamp to epoch seconds ---
 # Usage: _compat_parse_timestamp "2026-01-01T00:00:00Z"
+#        _compat_parse_timestamp "2026-01-01T00:00:00.123Z"
+# Handles both second and fractional-second precision.
 # Returns epoch seconds, or "0" on failure
 _compat_parse_timestamp() {
   local ts="$1"
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" &>/dev/null; then
-    date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" 2>/dev/null || echo "0"
+  # Strip fractional seconds (e.g., .123Z -> Z) before parsing
+  local ts_clean
+  ts_clean=$(echo "$ts" | sed 's/\.[0-9]*Z$/Z/')
+  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts_clean" "+%s" &>/dev/null; then
+    date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts_clean" "+%s" 2>/dev/null || echo "0"
   else
-    date -d "$ts" "+%s" 2>/dev/null || echo "0"
+    date -d "$ts_clean" "+%s" 2>/dev/null || echo "0"
   fi
 }
 
@@ -105,4 +110,43 @@ _compat_stat_size() {
     return 0
   fi
   wc -c < "$file" 2>/dev/null | tr -d ' '
+}
+
+# --- Best-effort fsync on a file ---
+# Usage: _compat_fsync "/path/to/file"
+# Uses python3 os.fsync(); falls back to no-op if python3 is missing.
+_compat_fsync() {
+  local file="$1"
+  if command -v python3 &>/dev/null; then
+    COMPAT_FSYNC_PATH="$file" python3 -c "
+import os
+fd = os.open(os.environ['COMPAT_FSYNC_PATH'], os.O_RDONLY)
+try:
+    os.fsync(fd)
+finally:
+    os.close(fd)
+" 2>/dev/null || true
+  fi
+  # No python3 — silent no-op (best-effort)
+}
+
+# --- ISO 8601 timestamp with millisecond precision ---
+# Usage: ts=$(_compat_timestamp_ms)
+# Output: 2026-01-15T12:30:45.123Z
+# Tries GNU date %N (Linux) → python3 (macOS) → falls back to second precision.
+_compat_timestamp_ms() {
+  # Try python3 first (most reliable, works on macOS and Linux)
+  if command -v python3 &>/dev/null; then
+    python3 -c "from datetime import datetime, timezone; print(datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:23] + 'Z')" 2>/dev/null && return 0
+  fi
+  # Try GNU date with nanoseconds (Linux without python3)
+  local ns_ts
+  ns_ts=$(date -u +%Y-%m-%dT%H:%M:%S.%NZ 2>/dev/null || echo "")
+  if [[ -n "$ns_ts" && "$ns_ts" != *"%N"* ]]; then
+    # Truncate nanoseconds to milliseconds: .123456789Z -> .123Z
+    echo "${ns_ts}" | sed 's/\.\([0-9][0-9][0-9]\)[0-9]*Z$/.\1Z/'
+    return 0
+  fi
+  # Fallback: second precision with .000
+  date -u +%Y-%m-%dT%H:%M:%S.000Z
 }

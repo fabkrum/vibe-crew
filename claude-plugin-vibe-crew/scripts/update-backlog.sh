@@ -123,7 +123,7 @@ fi
 # Acquire lock and read backlog
 # =============================================================================
 
-acquire_named_lock "backlog" "update-backlog"
+acquire_state_lock "update-backlog"
 
 BACKLOG=$(cat "$BACKLOG_FILE")
 
@@ -136,7 +136,7 @@ FEATURE_INDEX=$(echo "$BACKLOG" | jq --arg id "$FEATURE_ID" \
 
 if [[ "$FEATURE_INDEX" == "-1" ]] || [[ "$FEATURE_INDEX" == "null" ]]; then
   echo "ERROR: Feature '$FEATURE_ID' not found in backlog." >&2
-  release_named_lock "backlog"
+  release_state_lock
   exit 1
 fi
 
@@ -194,11 +194,11 @@ fi
 
 if ! atomic_write "$BACKLOG_FILE" "$UPDATED_BACKLOG"; then
   echo "ERROR: Failed to write backlog.json" >&2
-  release_named_lock "backlog"
+  release_state_lock
   exit 1
 fi
 
-release_named_lock "backlog"
+release_state_lock
 
 # Truncate long values for the summary
 DISPLAY_VALUE="$VALUE"

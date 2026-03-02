@@ -7,6 +7,9 @@
 set -euo pipefail
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+# Load cross-platform helpers
+source "$(dirname "$0")/lib/compat.sh"
 CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 SIGNALS_DIR="$PROJECT_ROOT/.vibecrew/signals"
 
@@ -54,13 +57,9 @@ if [[ -d "$LOCKS_DIR" ]]; then
     INFO_FILE="$lock_dir/info.json"
     if [[ -f "$INFO_FILE" ]]; then
       LOCKED_AT=$(jq -r '.locked_at // empty' "$INFO_FILE" 2>/dev/null || echo "")
-      TIMEOUT=$(jq -r '.timeout_seconds // 30' "$INFO_FILE" 2>/dev/null || echo "30")
+      TIMEOUT=$(jq -r '.timeout_seconds // 60' "$INFO_FILE" 2>/dev/null || echo "60")
       if [[ -n "$LOCKED_AT" ]]; then
-        if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$LOCKED_AT" "+%s" &>/dev/null; then
-          LOCKED_EPOCH=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$LOCKED_AT" "+%s")
-        else
-          LOCKED_EPOCH=$(date -d "$LOCKED_AT" "+%s" 2>/dev/null || echo "0")
-        fi
+        LOCKED_EPOCH=$(_compat_parse_timestamp "$LOCKED_AT")
         NOW_EPOCH=$(date "+%s")
         ELAPSED=$(( NOW_EPOCH - LOCKED_EPOCH ))
         if [[ "$ELAPSED" -gt "$TIMEOUT" ]]; then

@@ -18,6 +18,10 @@
 #   - Trap-based cleanup on EXIT (cleans up ALL acquired named locks)
 #   - Caller sets LOCK_FAIL_OPEN=true before sourcing for fail-open behavior
 
+# Load cross-platform helpers (timestamp parsing, millisecond timestamps)
+_LOCK_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$_LOCK_SCRIPT_DIR/compat.sh"
+
 # Resolve project root and lock path
 _LOCK_PROJECT_ROOT="${PROJECT_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 _LOCK_VIBECREW_DIR="$_LOCK_PROJECT_ROOT/.vibecrew"
@@ -40,14 +44,9 @@ if [[ -f "$_LOCK_CONFIG_FILE" ]]; then
   [[ -n "$_CFG_WAIT" && "$_CFG_WAIT" =~ ^[0-9]+$ ]] && _LOCK_WAIT_TIMEOUT_SECS="$_CFG_WAIT"
 fi
 
-# --- Cross-platform timestamp parsing ---
+# --- Cross-platform timestamp parsing (delegates to compat.sh) ---
 _lock_parse_timestamp() {
-  local ts="$1"
-  if date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" &>/dev/null; then
-    date -j -f "%Y-%m-%dT%H:%M:%SZ" "$ts" "+%s" 2>/dev/null || echo "0"
-  else
-    date -d "$ts" "+%s" 2>/dev/null || echo "0"
-  fi
+  _compat_parse_timestamp "$1"
 }
 
 # --- Cleanup on exit ---
@@ -93,14 +92,14 @@ _lock_is_stale() {
 _lock_write_info() {
   local caller="$1"
   local ts
-  ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  ts=$(_compat_timestamp_ms)
   cat > "$_LOCK_DIR/info.json" <<EOF
 {
   "locked_by": "$caller",
   "pid": $$,
   "locked_at": "$ts",
   "target_files": "state.json,backlog.json",
-  "timeout_seconds": $_LOCK_WAIT_TIMEOUT_SECS
+  "timeout_seconds": $_LOCK_STALE_TIMEOUT_SECS
 }
 EOF
 }
@@ -235,14 +234,14 @@ _lock_write_named_info() {
   local caller="$2"
   local lock_name="$3"
   local ts
-  ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  ts=$(_compat_timestamp_ms)
   cat > "$lock_dir/info.json" <<EOF
 {
   "locked_by": "$caller",
   "pid": $$,
   "locked_at": "$ts",
   "lock_name": "$lock_name",
-  "timeout_seconds": $_LOCK_WAIT_TIMEOUT_SECS
+  "timeout_seconds": $_LOCK_STALE_TIMEOUT_SECS
 }
 EOF
 }

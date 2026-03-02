@@ -66,7 +66,7 @@ PROFILE=$(jq -n \
   }')
 
 # --- Write profile to config.json ---
-TMP="${CONFIG_FILE}.tmp"
+TMP="${CONFIG_FILE}.tmp.$$"
 jq --argjson profile "$PROFILE" '.user_profile = $profile' "$CONFIG_FILE" > "$TMP" && mv "$TMP" "$CONFIG_FILE"
 
 # --- Sync gamification config based on preference ---

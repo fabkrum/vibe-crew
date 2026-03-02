@@ -72,8 +72,9 @@ fi
 
 # Source shared lock library
 source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
 
-acquire_named_lock "backlog" "update-backlog-raw"
+acquire_state_lock "update-backlog-raw"
 
 # Read current backlog
 CONTENT=$(cat "$BACKLOG_FILE")
@@ -81,7 +82,7 @@ CONTENT=$(cat "$BACKLOG_FILE")
 # Apply jq expression with any extra args
 UPDATED=$(echo "$CONTENT" | jq "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}" "$JQ_EXPR" 2>&1) || {
   echo "ERROR: jq expression failed: $UPDATED" >&2
-  release_named_lock "backlog"
+  release_state_lock
   exit 1
 }
 
@@ -94,22 +95,16 @@ if [[ "$DRY_RUN" == "true" ]]; then
   echo ""
   echo "After:"
   echo "$UPDATED" | jq .
-  release_named_lock "backlog"
+  release_state_lock
   exit 0
 fi
 
-# Validate JSON
-TMP="${BACKLOG_FILE}.tmp.$$"
-echo "$UPDATED" > "$TMP"
-if ! jq empty "$TMP" 2>/dev/null; then
+# Atomic write with validation, backup, and fsync
+if ! atomic_write "$BACKLOG_FILE" "$UPDATED"; then
   echo "ERROR: JSON validation failed after jq expression" >&2
-  rm -f "$TMP"
-  release_named_lock "backlog"
+  release_state_lock
   exit 1
 fi
 
-# Atomic rename
-mv "$TMP" "$BACKLOG_FILE"
-
-release_named_lock "backlog"
+release_state_lock
 exit 0

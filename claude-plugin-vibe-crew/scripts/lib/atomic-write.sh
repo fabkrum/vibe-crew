@@ -12,6 +12,10 @@
 #   - On validation failure: restores from .bak (if it exists), removes temp file
 #   - Never deletes .bak — callers manage rollback and cleanup
 
+# Load cross-platform helpers (fsync)
+_ATOMIC_WRITE_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$_ATOMIC_WRITE_SCRIPT_DIR/compat.sh"
+
 atomic_write() {
   local target="$1"
   local content="$2"
@@ -42,6 +46,9 @@ atomic_write() {
     fi
     return 1
   fi
+
+  # Fsync before atomic rename to ensure data is on disk
+  _compat_fsync "$tmp"
 
   # Atomic rename
   mv "$tmp" "$target"

@@ -101,7 +101,7 @@ NEXT_NUM=$((LAST_ID + 1))
 FEATURE_ID=$(printf "feat-%03d" "$NEXT_NUM")
 
 # Extract acceptance criteria from checkbox items in the issue body (best-effort)
-ACCEPTANCE_CRITERIA=$(echo "$ISSUE_BODY" | grep -E '^\s*-\s*\[[ x]\]' | sed 's/^\s*-\s*\[[ x]\]\s*//' | jq -R -s 'split("\n") | map(select(length > 0))' 2>/dev/null || echo '[]')
+ACCEPTANCE_CRITERIA=$(echo "$ISSUE_BODY" | { grep -E '^\s*-\s*\[[ x]\]' || true; } | sed 's/^\s*-\s*\[[ x]\]\s*//' | jq -R -s 'split("\n") | map(select(length > 0))' 2>/dev/null || echo '[]')
 # If no checkboxes found, use empty array
 if [[ "$ACCEPTANCE_CRITERIA" == "[]" ]] || [[ -z "$ACCEPTANCE_CRITERIA" ]]; then
   ACCEPTANCE_CRITERIA='[]'

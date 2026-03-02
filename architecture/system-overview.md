@@ -1219,7 +1219,9 @@ The complete `hooks/hooks.json` routing table:
 | SessionStart | `compact` | `compact-reinject.sh` | command | No | Re-injects state after compaction |
 | PreToolUse | `Write\|Edit` | `phase-gate.sh` | command | Yes (deny) | Blocks source writes when `foundation.complete` is `false` |
 | PreToolUse | `Write\|Edit` | `restrict-paths.sh` | command | Yes (deny) | Sandbox path validation |
+| PreToolUse | `Write\|Edit` | `validate-signal.sh` | command | Yes (deny) | Signal file schema, enum, and feature_id validation |
 | PreToolUse | `Bash` | `protect-data.sh` | command | Yes (deny) | Dangerous command blocker |
+| PreToolUse | `Bash` | `validate-phase-transition.sh` | command | Yes (deny) | Phase ordering and foundation artifact completeness |
 | PostToolUse | `Write\|Edit` | `format-code.sh` | command | No | Auto-format written files |
 | Notification | `permission_prompt` | `notify.sh` | command | No | Interrupt Protocol |
 | Notification | `idle_prompt` | `notify.sh` | command | No | Interrupt Protocol |

@@ -209,15 +209,15 @@ VibeCrew uses 14 specialized agents, each with a dedicated system prompt:
 ### Hook System
 
 Hooks enforce rules deterministically via bash scripts, consuming zero LLM
-tokens. The `hooks/hooks.json` file binds 10 hook entries across 6 lifecycle
+tokens. The `hooks/hooks.json` file binds 12 hook entries across 6 lifecycle
 events:
 
 | Event | Scripts | Purpose |
 |---|---|---|
 | SessionStart | `session-startup.sh`, `sync-state.sh`, `error-recovery.sh` | Initialize session, reconcile state, clear stale locks. |
 | SessionStart (compact) | `compact-reinject.sh` | Re-inject project state after context compaction. |
-| PreToolUse (Write/Edit) | `phase-gate.sh`, `restrict-paths.sh` | Block source writes before foundation; validate write targets. |
-| PreToolUse (Bash) | `protect-data.sh` | Block dangerous commands (rm -rf, force push, DROP TABLE). |
+| PreToolUse (Write/Edit) | `phase-gate.sh`, `restrict-paths.sh`, `validate-signal.sh` | Block source writes before foundation; validate write targets; validate signal file schema. |
+| PreToolUse (Bash) | `protect-data.sh`, `validate-phase-transition.sh` | Block dangerous commands (rm -rf, force push, DROP TABLE); validate phase transition ordering. |
 | PostToolUse (Write/Edit) | `format-code.sh` | Auto-format written files with Prettier. |
 | Notification | `notify.sh` | Native OS notifications on permission stalls and task completion. |
 | PostToolUseFailure | `notify.sh error` | Error notifications on tool failures. |

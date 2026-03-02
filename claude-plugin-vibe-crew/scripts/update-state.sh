@@ -49,6 +49,50 @@ if ! echo "$JQ_EXPR" | grep -qE '^\.[a-zA-Z_]' 2>/dev/null; then
   exit 1
 fi
 
+# =============================================================================
+# Semantic validation — enforce workflow invariants
+# =============================================================================
+
+# Block .foundation.complete = true when any artifact is not complete/skipped
+if echo "$JQ_EXPR" | grep -qE '\.foundation\.complete\s*=\s*true' 2>/dev/null; then
+  if [[ -f "$STATE_FILE" ]]; then
+    INCOMPLETE=$(jq -r '
+      [.foundation.artifacts | to_entries[] |
+       select(.value.status != "complete" and .value.status != "skipped") |
+       .key] | join(", ")' "$STATE_FILE" 2>/dev/null || true)
+    if [[ -n "$INCOMPLETE" ]]; then
+      echo "ERROR: Cannot set foundation.complete = true: incomplete artifacts: $INCOMPLETE" >&2
+      exit 1
+    fi
+  fi
+fi
+
+# Block .active_feature.phase = "X" when X is not the legal next phase
+if echo "$JQ_EXPR" | grep -qE '\.active_feature\.phase\s*=' 2>/dev/null; then
+  # Extract the target phase value
+  TARGET_PHASE=$(echo "$JQ_EXPR" | grep -oE '\.active_feature\.phase\s*=\s*"([^"]+)"' | sed 's/.*"\(.*\)"/\1/' || true)
+  if [[ -n "$TARGET_PHASE" ]] && [[ -f "$STATE_FILE" ]]; then
+    CURRENT_PHASE=$(jq -r '.active_feature.phase // empty' "$STATE_FILE" 2>/dev/null || true)
+    # Allow "plan" as reset for new features (or when current phase is null/empty)
+    if [[ "$TARGET_PHASE" != "plan" ]] && [[ -n "$CURRENT_PHASE" ]] && [[ "$CURRENT_PHASE" != "null" ]]; then
+      # Determine legal next phase from current
+      case "$CURRENT_PHASE" in
+        plan)   LEGAL_NEXT="design" ;;
+        design) LEGAL_NEXT="code" ;;
+        code)   LEGAL_NEXT="test" ;;
+        test)   LEGAL_NEXT="review" ;;
+        review) LEGAL_NEXT="docs" ;;
+        docs)   LEGAL_NEXT="done" ;;
+        *)      LEGAL_NEXT="" ;;
+      esac
+      if [[ -n "$LEGAL_NEXT" ]] && [[ "$TARGET_PHASE" != "$LEGAL_NEXT" ]]; then
+        echo "ERROR: Cannot set active_feature.phase to '$TARGET_PHASE': current phase is '$CURRENT_PHASE', legal next phase is '$LEGAL_NEXT'" >&2
+        exit 1
+      fi
+    fi
+  fi
+fi
+
 if [[ ! -f "$STATE_FILE" ]]; then
   echo "ERROR: state.json not found." >&2
   exit 1

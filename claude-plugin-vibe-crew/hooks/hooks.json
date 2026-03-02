@@ -52,6 +52,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/restrict-paths.sh",
             "timeout": 5,
             "statusMessage": "Validating write target..."
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-signal.sh",
+            "timeout": 5,
+            "statusMessage": "Validating signal file..."
           }
         ]
       },
@@ -63,6 +69,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/protect-data.sh",
             "timeout": 5,
             "statusMessage": "Validating command safety..."
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-phase-transition.sh",
+            "timeout": 5,
+            "statusMessage": "Validating phase transition..."
           }
         ]
       }

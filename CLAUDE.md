@@ -59,7 +59,9 @@ Opus agents handle planning, research, code, security, and analysis — tasks wh
 |---|---|---|
 | SessionStart | session-startup.sh | Environment check and state routing |
 | PreToolUse (Write/Edit) | phase-gate.sh | Blocks source code writes until foundation complete |
+| PreToolUse (Write/Edit) | validate-signal.sh | Validates signal file schema, enums, and feature_id cross-reference |
 | PreToolUse (Bash) | protect-data.sh | Blocks dangerous commands (rm -rf, DROP TABLE, force push) |
+| PreToolUse (Bash) | validate-phase-transition.sh | Validates phase ordering and foundation artifact completeness |
 | PostToolUse (Write/Edit) | format-code.sh | Auto-formats written files |
 | Notification | notify.sh | Native OS notifications with Warp deep-linking |
 | PostToolUseFailure | notify.sh | Error notifications |

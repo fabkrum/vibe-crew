@@ -230,3 +230,41 @@ set_foundation_complete() {
       .foundation.artifacts.claude_md.status = "complete"' \
     "$state_file" > "$tmp" && mv "$tmp" "$state_file"
 }
+
+set_phases_completed() {
+  # Usage: set_phases_completed "plan" "design" "code"
+  # Sets active_feature.phases_completed to the given array
+  local state_file="$VIBECREW_DIR/state.json"
+  local tmp="${state_file}.tmp"
+
+  # Build JSON array from arguments
+  local json_array="[]"
+  for phase in "$@"; do
+    json_array=$(echo "$json_array" | jq --arg p "$phase" '. + [$p]')
+  done
+
+  jq --argjson phases "$json_array" \
+    '.active_feature.phases_completed = $phases' \
+    "$state_file" > "$tmp" && mv "$tmp" "$state_file"
+}
+
+create_signal_write_input() {
+  # Usage: create_signal_write_input "/path/to/signal.json" '{"feature_id":"feat-001",...}'
+  # Builds a Write hook JSON payload with custom file content
+  local file_path="$1"
+  local content="$2"
+
+  # Escape the content for embedding in JSON
+  local escaped_content
+  escaped_content=$(printf '%s' "$content" | jq -Rs '.')
+
+  cat <<EOF
+{
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "$file_path",
+    "content": $escaped_content
+  }
+}
+EOF
+}

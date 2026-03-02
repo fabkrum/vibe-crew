@@ -509,7 +509,7 @@ The Builder handles both the Design and Code phases. The Verifier handles Test. 
 
 ### 3.4 Feature State Machine
 
-Every feature in `backlog.json` progresses through a seven-state lifecycle. Transitions are triggered by agent actions and recorded atomically using advisory locks.
+Every feature in `backlog.json` progresses through a seven-state lifecycle. Transitions are triggered by agent actions and recorded atomically using advisory locks. Dual-file mutations (e.g., `state.json` + `backlog.json` during phase transitions) use a write-ahead journal (`scripts/lib/dual-write.sh`) to guarantee both files stay consistent even if the process is interrupted mid-write. The `sync-state.sh` startup hook replays any incomplete journal on the next session start.
 
 > **Schema reference:** The feature object schema and Kanban column definitions are in [schemas.md, Section 4: backlog.json](schemas.md#4-backlogjson).
 

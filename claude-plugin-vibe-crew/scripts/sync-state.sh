@@ -35,6 +35,12 @@ source "$(dirname "$0")/lib/lock.sh"
 
 source "$(dirname "$0")/lib/atomic-write.sh"
 
+# =============================================================================
+# Write-ahead journal recovery (shared library)
+# =============================================================================
+
+source "$(dirname "$0")/lib/dual-write.sh"
+
 # Wrap atomic_write for sync-state: pass --no-backup, capture warnings
 _sync_atomic_write() {
   local target="$1"
@@ -106,6 +112,17 @@ done
 # =============================================================================
 # Read current state
 # =============================================================================
+
+# =============================================================================
+# Check 0: Recover interrupted dual writes
+# If a write-ahead journal exists, a previous dual write was interrupted.
+# Replay both writes from the journal to reach a consistent state.
+# =============================================================================
+
+if recover_dual_write "$VIBECREW_DIR" 2>/dev/null; then
+  ISSUES=$(( ISSUES + 1 ))
+  FIXES+=("Recovered interrupted dual write from journal (replayed both state.json and backlog.json)")
+fi
 
 STATE=$(cat "$STATE_FILE")
 BACKLOG=$(cat "$BACKLOG_FILE")

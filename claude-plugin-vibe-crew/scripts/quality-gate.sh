@@ -139,7 +139,7 @@ for check in "${CHECKS[@]}"; do
   else
     CMD_PREFIX=()
   fi
-  if OUTPUT="$("${CMD_PREFIX[@]}" "$PKG_MANAGER" run "$check" 2>&1)"; then
+  if OUTPUT="$(${CMD_PREFIX[@]+"${CMD_PREFIX[@]}"} "$PKG_MANAGER" run "$check" 2>&1)"; then
     # Check passed — continue to next
     continue
   else

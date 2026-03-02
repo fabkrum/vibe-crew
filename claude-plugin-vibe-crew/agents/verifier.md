@@ -192,7 +192,7 @@ Calculate the session Vibe Score using this formula:
 
 ## Phase Advancement
 
-After completing the test phase, run `scripts/complete-phase.sh {feature_id} testing` to advance the feature from `testing` to `review`.
+After completing the test phase, run `scripts/complete-phase.sh {feature_id} test` to advance the feature from `testing` to `review`.
 
 ## Signal Files
 

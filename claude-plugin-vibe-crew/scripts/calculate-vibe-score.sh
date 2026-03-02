@@ -32,13 +32,13 @@ PHASES_SKIPPED=0
 ALL_PHASES_COMPLETE=false
 
 if [[ -f "$STATE_FILE" ]]; then
-  # Read active feature's phase data from state
-  ACTIVE_FEATURE=$(safe_jq "$STATE_FILE" '.active_feature // empty' "")
+  # Read active feature ID from state (use .id specifically, not the whole object)
+  ACTIVE_FEATURE_ID=$(safe_jq "$STATE_FILE" '.active_feature.id // empty' "")
 
-  if [[ -n "$ACTIVE_FEATURE" && "$ACTIVE_FEATURE" != "null" ]]; then
+  if [[ -n "$ACTIVE_FEATURE_ID" && "$ACTIVE_FEATURE_ID" != "null" ]]; then
     # Tier 2 phases: plan, design, code, test, docs
     PHASES_COMPLETED=$(jq -c \
-      '[.features[.active_feature].phases // {} | to_entries[] | select(.value.status == "complete") | .key]' \
+      '.active_feature.phases_completed // []' \
       "$STATE_FILE" 2>/dev/null || echo "[]")
 
     TOTAL_PHASES=5
@@ -71,12 +71,12 @@ HAS_SPEC=false
 
 if [[ -f "$BACKLOG_FILE" ]]; then
   # Check if any active feature in the backlog has non-empty acceptance_criteria
-  ACTIVE_FEATURE=$(safe_jq "$STATE_FILE" '.active_feature // empty' "")
+  ACTIVE_FEATURE_ID=$(safe_jq "$STATE_FILE" '.active_feature.id // empty' "")
 
-  if [[ -n "$ACTIVE_FEATURE" && "$ACTIVE_FEATURE" != "null" ]]; then
+  if [[ -n "$ACTIVE_FEATURE_ID" && "$ACTIVE_FEATURE_ID" != "null" ]]; then
     CRITERIA=$(jq -r \
-      --arg feat "$ACTIVE_FEATURE" \
-      '.features[]? | select(.id == $feat or .name == $feat) | .acceptance_criteria // empty' \
+      --arg feat "$ACTIVE_FEATURE_ID" \
+      '.features[]? | select(.id == $feat or .name == $feat) | .spec.acceptance_criteria // empty' \
       "$BACKLOG_FILE" 2>/dev/null || echo "")
 
     if [[ -n "$CRITERIA" && "$CRITERIA" != "null" && "$CRITERIA" != "[]" && "$CRITERIA" != "" ]]; then

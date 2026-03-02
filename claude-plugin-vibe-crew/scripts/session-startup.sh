@@ -111,6 +111,27 @@ if [[ -n "$GAMIFICATION_LINE" ]]; then
   echo "  $GAMIFICATION_LINE"
 fi
 
+# --- MCP health check (quick, bounded by timeout) ---
+if [[ -x "$SCRIPT_DIR/check-mcp-health.sh" ]]; then
+  MCP_RESULT=""
+  if command -v timeout &>/dev/null; then
+    MCP_RESULT=$(timeout 15 bash "$SCRIPT_DIR/check-mcp-health.sh" 2>/dev/null || echo "")
+  elif command -v gtimeout &>/dev/null; then
+    MCP_RESULT=$(gtimeout 15 bash "$SCRIPT_DIR/check-mcp-health.sh" 2>/dev/null || echo "")
+  else
+    # No timeout command — run directly (health check has internal per-server timeouts)
+    MCP_RESULT=$(bash "$SCRIPT_DIR/check-mcp-health.sh" 2>/dev/null || echo "")
+  fi
+
+  if [[ -n "$MCP_RESULT" ]]; then
+    MCP_FAILED=$(echo "$MCP_RESULT" | jq -r '.summary.failed // 0' 2>/dev/null || echo "0")
+    if [[ "$MCP_FAILED" -gt 0 ]]; then
+      MCP_NAMES=$(echo "$MCP_RESULT" | jq -r '[.servers[] | select(.status != "ok") | .server] | join(", ")' 2>/dev/null || echo "unknown")
+      echo "  MCP: $MCP_FAILED server(s) unhealthy ($MCP_NAMES)"
+    fi
+  fi
+fi
+
 # --- Show handoff summary if available ---
 if [[ -n "$HANDOFF_FILE" && -f "$HANDOFF_FILE" ]]; then
   echo "---"

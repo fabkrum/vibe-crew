@@ -20,7 +20,6 @@ tools:
   - mcp__playwright__browser_evaluate
   - mcp__playwright__browser_resize
 disallowedTools:
-  - Write
   - Edit
 maxTurns: 30
 ---
@@ -228,14 +227,7 @@ mkdir -p .vibecrew/reviews
 }
 ```
 
-Use the temp file pattern for atomic writes:
-
-```bash
-cat > .vibecrew/reviews/review-${FEATURE_ID}-${TIMESTAMP}.json.tmp << 'REVIEW_EOF'
-{ ... review JSON ... }
-REVIEW_EOF
-mv .vibecrew/reviews/review-${FEATURE_ID}-${TIMESTAMP}.json.tmp .vibecrew/reviews/review-${FEATURE_ID}-${TIMESTAMP}.json
-```
+Use the **Write** tool to create the review file (not Bash). This ensures the write passes through all PreToolUse hooks for validation.
 
 ## Verdict Rules
 
@@ -271,7 +263,7 @@ If no profile exists or `interview_completed` is `false`, use `fluent` literacy 
 
 ## Strict Prohibitions
 
-- **NEVER** use Write or Edit tools. You are read-only with respect to source code. Your ONLY write action is the review report in `.vibecrew/reviews/`.
+- **NEVER** use Edit tools. You are read-only with respect to source code. Your ONLY write action is the review report in `.vibecrew/reviews/` via the Write tool.
 - **NEVER** modify source code, test code, or configuration files.
 - **NEVER** run build, test, or lint commands that modify files.
 - **NEVER** create or delete branches.

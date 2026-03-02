@@ -341,7 +341,7 @@ Discovery preferences in `.vibecrew/config.json`:
 
 ### 3.5 MCP Health Checks
 
-The `scripts/check-mcp-health.sh` script validates enabled MCP servers during `/setup`. For each enabled server:
+The `scripts/check-mcp-health.sh` script validates enabled MCP servers during `/setup` and on every session startup (with a 15-second timeout). For each enabled server:
 
 1. Attempt to start the server command with a 5-second timeout
 2. Check if the process starts without immediate error
@@ -753,10 +753,11 @@ All state files are initialized during `/setup` (Step 4) with `schema_version: "
 
 ### 9.2 Session Startup State Check
 
-On every session start, the `session-startup.sh` script performs two tasks:
+On every session start, the `session-startup.sh` script performs three tasks:
 
 1. **Migration check:** Calls `migrate-state.sh` to verify `schema_version` on all `.vibecrew/*.json` files and apply any pending migrations.
-2. **State routing:** Reads `foundation.complete` from `.vibecrew/state.json` and routes the user to the appropriate workflow.
+2. **MCP health check:** Runs `check-mcp-health.sh` with a 15-second timeout and reports any unhealthy servers. Failures are non-blocking — the session continues with degraded MCP availability.
+3. **State routing:** Reads `foundation.complete` from `.vibecrew/state.json` and routes the user to the appropriate workflow.
 
 ```bash
 # session-startup.sh (excerpt)

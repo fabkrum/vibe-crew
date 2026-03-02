@@ -1256,6 +1256,8 @@ git log --oneline --grep="^wip(" -5
 
 When multiple agents share state files (`.vibecrew/state.json`, `.vibecrew/backlog.json`), advisory lock files prevent concurrent write conflicts. See `architecture/schemas.md` Section 8 for the canonical lock file schema. Locks can become stale if an agent crashes while holding one.
 
+**Dual-file atomicity via write-ahead journal:** Operations that mutate both `state.json` and `backlog.json` (phase transitions, task claiming) use `scripts/lib/dual-write.sh` to ensure consistency. Before either file is written, a journal records both intended states in `.vibecrew/locks/dual-write.journal` with staged content files. After both writes succeed, the journal is finalized (deleted). If the process dies mid-write, `sync-state.sh` detects the journal on the next session start and replays both writes from the staged content, restoring consistency.
+
 **Stale lock detection uses two mechanisms:**
 
 1. **PID-based detection.** Each lock records the locking process's PID. If the process is no longer running (`kill -0 $PID` fails), the lock is stale.

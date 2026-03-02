@@ -28,6 +28,12 @@ source "$(dirname "$0")/lib/lock.sh"
 source "$(dirname "$0")/lib/atomic-write.sh"
 
 # =============================================================================
+# Write-ahead journal for dual-file atomicity
+# =============================================================================
+
+source "$(dirname "$0")/lib/dual-write.sh"
+
+# =============================================================================
 # Validation
 # =============================================================================
 
@@ -209,11 +215,15 @@ UPDATED_STATE=$(echo "$STATE" | jq \
   ')
 
 # =============================================================================
-# Write both files atomically
+# Write both files atomically (with write-ahead journal)
 # =============================================================================
+
+# Prepare write-ahead journal (both intended states recorded before any write)
+prepare_dual_write "$VIBECREW_DIR" "$BACKLOG_FILE" "$UPDATED_BACKLOG" "$STATE_FILE" "$UPDATED_STATE"
 
 if ! atomic_write "$BACKLOG_FILE" "$UPDATED_BACKLOG"; then
   echo "ERROR: Failed to write backlog.json" >&2
+  finalize_dual_write "$VIBECREW_DIR"
   release_state_lock
   exit 1
 fi
@@ -224,12 +234,14 @@ if ! atomic_write "$STATE_FILE" "$UPDATED_STATE"; then
   if [[ -f "${BACKLOG_FILE}.bak" ]]; then
     mv "${BACKLOG_FILE}.bak" "$BACKLOG_FILE"
   fi
+  finalize_dual_write "$VIBECREW_DIR"
   rm -f "${STATE_FILE}.bak"
   release_state_lock
   exit 1
 fi
 
-# Both writes succeeded — clean up backups
+# Both writes succeeded — clean up journal and backups
+finalize_dual_write "$VIBECREW_DIR"
 rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
 
 release_state_lock

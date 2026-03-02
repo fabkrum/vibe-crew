@@ -62,7 +62,7 @@
 | Verifier | x | x | x | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |
 | Security Auditor | x | - | - | x | x | x | - | - | - | - | - | x | - | - | - | - | - | - |
 | CI Healer | x | x | x | x | x | x | - | - | - | - | - | - | x | - | - | - | - | - |
-| Code Reviewer | x | - | - | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |
+| Code Reviewer | x | x | - | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |
 | System Reviewer | x | - | - | x | x | x | x | x | x | - | - | - | - | - | - | - | - | - |
 
 Note: Conditional MCP servers (Supabase, Stripe, Vercel, Figma, Sentry, Semgrep) only expose tools when enabled. Agents list these tools in frontmatter regardless — they activate when the server is enabled.

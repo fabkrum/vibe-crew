@@ -23,7 +23,27 @@
   }
 
   #search-container {
-    padding: 0 1.25rem 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  /* Tame the default Pagefind input styling */
+  .search-modal :global(.pagefind-ui__search-input) {
+    background-color: var(--color-surface-2) !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-border) !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .search-modal :global(.pagefind-ui__search-input:focus) {
+    border-color: var(--color-accent) !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .search-modal :global(.pagefind-ui__search-clear) {
+    background-color: transparent !important;
+    color: var(--color-text-secondary) !important;
   }
 </style>
 

@@ -13,6 +13,10 @@ GAMIFICATION_FILE="$VIBECREW_DIR/gamification.json"
 STATE_FILE="$VIBECREW_DIR/state.json"
 BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
 
+# Shared locking and atomic writes
+source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
+
 # --- Check gamification is enabled ---
 ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
@@ -116,6 +120,8 @@ if [[ "$TESTS_PASSED" == "true" ]]; then
 fi
 
 # --- Apply XP to gamification.json ---
+acquire_named_lock "gamification" "award-xp"
+
 CURRENT_XP=$(jq -r '.xp // 0' "$GAMIFICATION_FILE")
 CURRENT_LEVEL=$(jq -r '.level // 1' "$GAMIFICATION_FILE")
 CURRENT_XP_THIS_LEVEL=$(jq -r '.xp_this_level // 0' "$GAMIFICATION_FILE")
@@ -141,8 +147,7 @@ fi
 # Update score history (keep last 30 entries)
 SCORE_ENTRY="{\"date\":\"$TODAY\",\"score\":$VIBE_SCORE}"
 
-TMP_FILE="${GAMIFICATION_FILE}.tmp"
-jq --argjson xp "$NEW_XP" \
+UPDATED=$(jq --argjson xp "$NEW_XP" \
    --argjson xp_this "$NEW_XP_THIS_LEVEL" \
    --argjson sessions "$NEW_SESSIONS" \
    --argjson best "$NEW_BEST" \
@@ -155,7 +160,11 @@ jq --argjson xp "$NEW_XP" \
    .stats.best_vibe_score = $best |
    .stats.perfect_sessions = $perfect |
    .stats.score_history = ((.stats.score_history // []) + [$score_entry] | .[-30:])
-   ' "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+   ' "$GAMIFICATION_FILE")
+
+atomic_write "$GAMIFICATION_FILE" "$UPDATED" --no-backup
+
+release_named_lock "gamification"
 
 # --- Output result ---
 jq -n --argjson total "$XP_TOTAL" --argjson breakdown "$BREAKDOWN" \

@@ -220,11 +220,11 @@ fi
 
 if ! atomic_write "$STATE_FILE" "$UPDATED_STATE"; then
   echo "ERROR: Failed to write state.json, rolling back backlog.json" >&2
-  # Rollback backlog from backup
+  # Rollback backlog from backup (mv is atomic on same filesystem)
   if [[ -f "${BACKLOG_FILE}.bak" ]]; then
-    cp "${BACKLOG_FILE}.bak" "$BACKLOG_FILE"
+    mv "${BACKLOG_FILE}.bak" "$BACKLOG_FILE"
   fi
-  rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
+  rm -f "${STATE_FILE}.bak"
   release_state_lock
   exit 1
 fi

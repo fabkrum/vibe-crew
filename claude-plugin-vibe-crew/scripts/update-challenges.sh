@@ -14,6 +14,10 @@ STATE_FILE="$VIBECREW_DIR/state.json"
 BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
+# Shared locking and atomic writes
+source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
+
 # --- Check gamification is enabled ---
 ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
@@ -63,6 +67,8 @@ fi
 # --- Evaluate each active challenge ---
 COMPLETED_CHALLENGES="[]"
 XP_FROM_CHALLENGES=0
+
+acquire_named_lock "gamification" "update-challenges"
 
 ACTIVE_COUNT=$(jq '.active_challenges | length' "$GAMIFICATION_FILE")
 
@@ -133,15 +139,18 @@ for ((i = ACTIVE_COUNT - 1; i >= 0; i--)); do
     XP_FROM_CHALLENGES=$((XP_FROM_CHALLENGES + CHALLENGE_XP))
 
     # Move from active to completed
-    TMP_FILE="${GAMIFICATION_FILE}.tmp"
-    jq --arg id "$CHALLENGE_ID" --argjson xp "$CHALLENGE_XP" --arg ts "$TIMESTAMP" '
+    local challenge_updated
+    challenge_updated=$(jq --arg id "$CHALLENGE_ID" --argjson xp "$CHALLENGE_XP" --arg ts "$TIMESTAMP" '
       .active_challenges = [.active_challenges[] | select(.id != $id)] |
       .completed_challenges += [{"id": $id, "completed_at": $ts, "xp_awarded": $xp}] |
       .xp = (.xp + $xp) |
       .xp_this_level = (.xp_this_level + $xp)
-    ' "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+    ' "$GAMIFICATION_FILE")
+    atomic_write "$GAMIFICATION_FILE" "$challenge_updated" --no-backup
   fi
 done
+
+release_named_lock "gamification"
 
 # --- Output result ---
 jq -n --argjson completed "$COMPLETED_CHALLENGES" --argjson total_xp "$XP_FROM_CHALLENGES" \

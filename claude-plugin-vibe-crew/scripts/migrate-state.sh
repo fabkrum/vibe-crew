@@ -12,6 +12,7 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
 # Source shared libraries
 source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
 source "$(dirname "$0")/lib/error-log.sh"
 
 # --- Semver comparison ---
@@ -29,12 +30,14 @@ migrate_1_0_to_1_1() {
   case "$basename" in
     state.json)
       # Add onboarded and onboarded_at fields (optional, default false/null)
-      jq '. + {onboarded: (.onboarded // false), onboarded_at: (.onboarded_at // null)}' \
-        "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      local updated
+      updated=$(jq '. + {onboarded: (.onboarded // false), onboarded_at: (.onboarded_at // null)}' "$file")
+      atomic_write "$file" "$updated" --no-backup
       ;;
     config.json)
       # Add performance_coach, doc_generator, and onboarding config sections
-      jq '. + {
+      local updated
+      updated=$(jq '. + {
         performance_coach: (.performance_coach // {
           enabled: true,
           min_sessions_for_trends: 3,
@@ -49,7 +52,8 @@ migrate_1_0_to_1_1() {
           show_hints: true,
           dismissed_hints: []
         })
-      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      }' "$file")
+      atomic_write "$file" "$updated" --no-backup
       ;;
     backlog.json)
       # No structural changes needed for backlog in 1.1.0
@@ -61,21 +65,25 @@ migrate_1_0_to_1_1() {
 migrate_score_1_0_to_1_1() {
   local file="$1"
   # Add user_feedback and trend fields (optional, default null/unknown)
-  jq '. + {
+  local updated
+  updated=$(jq '. + {
     user_feedback: (.user_feedback // {rating: null, comment: null}),
     trend: (.trend // {direction: "unknown", window_size: 0, average_score: 0})
-  }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+  }' "$file")
+  atomic_write "$file" "$updated" --no-backup
 }
 
 # --- Migrate mutation log: 1.0.0 -> 1.1.0 ---
 migrate_mutation_log_1_0_to_1_1() {
   local file="$1"
   # Add rejection_count, cooldown_until, confidence to each mutation entry
-  jq '.mutations = [.mutations[] | . + {
+  local updated
+  updated=$(jq '.mutations = [.mutations[] | . + {
     rejection_count: (.rejection_count // 0),
     cooldown_until: (.cooldown_until // null),
     confidence: (.confidence // "medium")
-  }]' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+  }]' "$file")
+  atomic_write "$file" "$updated" --no-backup
 }
 
 # --- Migration: 1.1.0 -> 1.2.0 ---
@@ -87,12 +95,14 @@ migrate_1_1_to_1_2() {
   case "$basename" in
     config.json)
       # Add audit config section
-      jq '. + {
+      local updated
+      updated=$(jq '. + {
         audit: (.audit // {
           auto_github_issues: false,
           severity_threshold: "high"
         })
-      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      }' "$file")
+      atomic_write "$file" "$updated" --no-backup
       ;;
     state.json)
       # No structural changes needed for state in 1.2.0
@@ -112,7 +122,8 @@ migrate_1_2_to_1_3() {
   case "$basename" in
     config.json)
       # Add opponent_processor, simplify, and ci_healing config sections
-      jq '. + {
+      local updated
+      updated=$(jq '. + {
         opponent_processor: (.opponent_processor // {
           enabled: true,
           auto_invoke_after_tdr: true
@@ -127,12 +138,14 @@ migrate_1_2_to_1_3() {
           max_attempts: 3,
           auto_checkpoint: true
         })
-      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      }' "$file")
+      atomic_write "$file" "$updated" --no-backup
       ;;
     state.json)
       # Add active_workflow field
-      jq '. + {active_workflow: (.active_workflow // null)}' \
-        "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      local updated
+      updated=$(jq '. + {active_workflow: (.active_workflow // null)}' "$file")
+      atomic_write "$file" "$updated" --no-backup
       ;;
     backlog.json)
       # No structural changes needed for backlog in 1.3.0
@@ -149,7 +162,8 @@ migrate_1_3_to_1_4() {
   case "$basename" in
     config.json)
       # Add user_profile section with null defaults
-      jq '. + {
+      local updated
+      updated=$(jq '. + {
         user_profile: (.user_profile // {
           interview_completed: false,
           role: null,
@@ -162,7 +176,8 @@ migrate_1_3_to_1_4() {
           risk_tolerance: null,
           updated_at: null
         })
-      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      }' "$file")
+      atomic_write "$file" "$updated" --no-backup
       ;;
     state.json)
       # No structural changes needed for state in 1.4.0
@@ -182,7 +197,8 @@ migrate_1_4_to_1_5() {
   case "$basename" in
     config.json)
       # Add quality_gate, pricing, and locks config sections
-      jq '. + {
+      local updated
+      updated=$(jq '. + {
         quality_gate: (.quality_gate // {
           timeout_seconds: 120
         }),
@@ -196,7 +212,8 @@ migrate_1_4_to_1_5() {
           stale_timeout_secs: 60,
           wait_timeout_secs: 30
         })
-      }' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
+      }' "$file")
+      atomic_write "$file" "$updated" --no-backup
       ;;
     state.json)
       # No structural changes needed for state in 1.5.0
@@ -247,8 +264,9 @@ migrate_file() {
   fi
 
   # Update schema_version to current
-  local tmp="${file}.tmp"
-  jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$file" > "$tmp" && mv "$tmp" "$file"
+  local ver_updated
+  ver_updated=$(jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$file")
+  atomic_write "$file" "$ver_updated" --no-backup
 
   echo "Migrated $(basename "$file") from $version to $CURRENT_VERSION"
 }
@@ -280,7 +298,8 @@ if acquire_state_lock "migrate-state"; then
       local_version=$(jq -r '.schema_version // "1.0.0"' "$f" 2>/dev/null || echo "1.0.0")
       if version_lt "$local_version" "1.1.0"; then
         migrate_score_1_0_to_1_1 "$f"
-        jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$f" > "${f}.tmp" && mv "${f}.tmp" "$f"
+        score_ver=$(jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$f")
+        atomic_write "$f" "$score_ver" --no-backup
       fi
     done
   fi
@@ -291,7 +310,8 @@ if acquire_state_lock "migrate-state"; then
     local_version=$(jq -r '.schema_version // "1.0.0"' "$MUTATION_LOG" 2>/dev/null || echo "1.0.0")
     if version_lt "$local_version" "1.1.0"; then
       migrate_mutation_log_1_0_to_1_1 "$MUTATION_LOG"
-      jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$MUTATION_LOG" > "${MUTATION_LOG}.tmp" && mv "${MUTATION_LOG}.tmp" "$MUTATION_LOG"
+      mut_ver=$(jq --arg v "$CURRENT_VERSION" '.schema_version = $v' "$MUTATION_LOG")
+      atomic_write "$MUTATION_LOG" "$mut_ver" --no-backup
       echo "Migrated mutation-log.json from $local_version to $CURRENT_VERSION"
     fi
   fi

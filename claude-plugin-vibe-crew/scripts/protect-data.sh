@@ -21,6 +21,22 @@ if [[ -z "$COMMAND" ]]; then
   exit 0
 fi
 
+# --- Config-driven allowlist ---
+# Read allowed patterns from .vibecrew/config.json protect_data.allowed_patterns[]
+_PD_PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+_PD_CONFIG="${_PD_PROJECT_ROOT}/.vibecrew/config.json"
+if [[ -f "$_PD_CONFIG" ]]; then
+  _PD_ALLOWED=$(jq -r '.protect_data.allowed_patterns // [] | .[]' "$_PD_CONFIG" 2>/dev/null || true)
+  if [[ -n "$_PD_ALLOWED" ]]; then
+    while IFS= read -r pattern; do
+      [[ -z "$pattern" ]] && continue
+      if echo "$COMMAND" | grep -qE "$pattern" 2>/dev/null; then
+        exit 0
+      fi
+    done <<< "$_PD_ALLOWED"
+  fi
+fi
+
 # --- Helper: block with message ---
 block() {
   local category="$1"
@@ -54,7 +70,7 @@ if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*[rR]|--recursive).*\s+/'; then
   block "Destructive" "Recursive rm targeting / destroys the filesystem." "Remove specific directories instead."
 fi
 
-if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*[rR]|--recursive).*(\s+~|\$HOME)'; then
+if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*[rR]|--recursive).*(\s+~|\$\{?HOME\}?)'; then
   block "Destructive" "Recursive rm targeting ~ destroys the home directory." "Remove specific directories instead."
 fi
 
@@ -74,11 +90,19 @@ if echo "$COMMAND" | grep -qE '\btruncate\s+'; then
   block "Destructive" "truncate destroys file contents." "Use a backup before truncating."
 fi
 
+if echo "$COMMAND" | grep -qE '\bfind\b.*\s-delete\b'; then
+  block "Destructive" "find -delete permanently removes matched files." "Use -print first to preview, then delete manually."
+fi
+
+if echo "$COMMAND" | grep -qE '\bxargs\s+rm\b'; then
+  block "Destructive" "xargs rm can delete files in bulk unpredictably." "Review the file list first, then delete manually."
+fi
+
 # =============================================================================
 # Category 2: Privilege Escalation
 # =============================================================================
 
-if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)(sudo|/usr/bin/sudo|command\s+sudo|env\s+sudo)\b'; then
+if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)\\?(sudo|/usr/bin/sudo|command\s+sudo|env\s+sudo)\b'; then
   block "Privilege" "sudo executes commands with elevated privileges." "Run without sudo if possible."
 fi
 
@@ -174,6 +198,10 @@ if echo "$COMMAND" | grep -qiE 'DELETE\s+FROM\s+\w+\s*;'; then
   block "Database" "DELETE FROM without WHERE deletes all rows." "Add a WHERE clause to target specific rows."
 fi
 
+if echo "$COMMAND" | grep -qiE 'DELETE\s+FROM\s+\w+\s+WHERE\s+1\s*=\s*1'; then
+  block "Database" "DELETE FROM WHERE 1=1 deletes all rows." "Add a meaningful WHERE clause to target specific rows."
+fi
+
 # =============================================================================
 # Category 5: Credential and Secret Exposure
 # =============================================================================
@@ -238,7 +266,7 @@ fi
 # Category 7: Network Exfiltration
 # =============================================================================
 
-if echo "$COMMAND" | grep -qE 'curl\s+.*(-X\s+POST|-d|--data)'; then
+if echo "$COMMAND" | grep -qE 'curl\s+.*(-X\s+POST|-d|--data|--json)'; then
   # Exempt localhost/loopback addresses
   if ! echo "$COMMAND" | grep -qE 'localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]'; then
     block "Network" "curl POST with data may exfiltrate information." "Review the request body and destination before sending."
@@ -289,8 +317,8 @@ if echo "$COMMAND" | grep -qE '(^|[;&|]\s*)\beval\b'; then
   block "Indirect" "eval executes arbitrary code, bypassing all safety checks." "Write the command directly instead of using eval."
 fi
 
-if echo "$COMMAND" | grep -qE '\b(bash|sh)\s+-c\b'; then
-  block "Indirect" "bash -c / sh -c executes arbitrary code in a subshell." "Write the command directly instead of wrapping in bash -c."
+if echo "$COMMAND" | grep -qE '\b(bash|sh|zsh|dash|ksh|fish)\s+-c\b'; then
+  block "Indirect" "Shell -c executes arbitrary code in a subshell." "Write the command directly instead of wrapping in a shell -c."
 fi
 
 if echo "$COMMAND" | grep -qE '\bbase64\b.*\|\s*(bash|sh)\b'; then

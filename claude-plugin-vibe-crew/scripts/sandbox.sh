@@ -3,8 +3,12 @@
 # Shared module: source from other hook scripts
 # Usage: source "${CLAUDE_PLUGIN_ROOT}/scripts/sandbox.sh"
 
+# Load cross-platform helpers
+_SANDBOX_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$_SANDBOX_SCRIPT_DIR/lib/compat.sh"
+
 SANDBOX_PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-SANDBOX_PROJECT_ROOT=$(realpath "$SANDBOX_PROJECT_ROOT" 2>/dev/null) || {
+SANDBOX_PROJECT_ROOT=$(_compat_readlink_f "$SANDBOX_PROJECT_ROOT") || {
   echo "ERROR: Cannot resolve project root" >&2; return 1
 }
 
@@ -14,14 +18,14 @@ sandbox_canonicalize() {
   path="${path/#\~/$HOME}"
   [[ "$path" != /* ]] && path="$SANDBOX_PROJECT_ROOT/$path"
   if [[ -e "$path" ]]; then
-    realpath "$path"
+    _compat_readlink_f "$path"
   else
     local parent=$(dirname "$path")
     local name=$(basename "$path")
     if [[ -d "$parent" ]]; then
-      echo "$(realpath "$parent")/$name"
+      echo "$(_compat_readlink_f "$parent")/$name"
     else
-      realpath -m "$path" 2>/dev/null || ABSPATH="$path" python3 -c "import os; print(os.path.abspath(os.environ['ABSPATH']))" 2>/dev/null || echo "$path"
+      _compat_realpath "$path"
     fi
   fi
 }
@@ -36,7 +40,7 @@ sandbox_check_path() {
   local current="$canonical"
   while [[ "$current" != "$SANDBOX_PROJECT_ROOT" && "$current" != "/" ]]; do
     if [[ -L "$current" ]]; then
-      local target=$(readlink -f "$current")
+      local target=$(_compat_readlink_f "$current")
       if [[ "$target" != "$SANDBOX_PROJECT_ROOT" && "$target" != "$SANDBOX_PROJECT_ROOT/"* ]]; then
         return 1
       fi

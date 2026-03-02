@@ -106,7 +106,7 @@ if [[ -n "$PATTERN" ]]; then
       '[.deductions // [] | .[] | select(.category == $p)] | length' \
       "$file" 2>/dev/null || echo "0")
     if [[ "$HAS_PATTERN" -gt 0 ]]; then
-      ((PATTERN_COUNT++))
+      PATTERN_COUNT=$(( PATTERN_COUNT + 1 ))
     fi
   done <<< "$SCORE_FILES"
 

@@ -8,6 +8,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/lib/compat.sh"
+
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 DOCS_DIR="$PROJECT_ROOT/docs"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
@@ -28,7 +31,18 @@ fi
 # Find available port (default 5173, fallback to 5174-5180)
 PORT=5173
 for p in 5173 5174 5175 5176 5177 5178 5179 5180; do
-  if ! lsof -i :"$p" &>/dev/null; then
+  if command -v lsof &>/dev/null; then
+    if ! lsof -i :"$p" &>/dev/null; then
+      PORT=$p
+      break
+    fi
+  elif command -v ss &>/dev/null; then
+    if ! ss -tlnp "sport = :$p" 2>/dev/null | grep -q ":$p"; then
+      PORT=$p
+      break
+    fi
+  else
+    # No port-check tool available — use default
     PORT=$p
     break
   fi
@@ -48,7 +62,7 @@ fi
 
 # Auto-open browser after short delay (unless --no-open)
 if [[ "${1:-}" != "--no-open" ]]; then
-  (sleep 3 && open "http://localhost:$PORT") &
+  (sleep 3 && _compat_open_url "http://localhost:$PORT") &
 fi
 
 echo "Starting Vibe Dashboard at http://localhost:$PORT"

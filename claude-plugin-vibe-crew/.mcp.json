@@ -20,13 +20,13 @@
     },
     "semgrep": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/semgrep-mcp@latest"],
+      "args": ["-y", "@anthropic-ai/semgrep-mcp@0.1.0"],
       "env": {},
       "disabled": true
     },
     "sentry": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.sentry.dev/mcp"],
+      "args": ["-y", "mcp-remote@0.1.38", "https://mcp.sentry.dev/mcp"],
       "env": {
         "SENTRY_AUTH_TOKEN": "${SENTRY_AUTH_TOKEN}"
       },
@@ -34,7 +34,7 @@
     },
     "supabase": {
       "command": "npx",
-      "args": ["-y", "supabase-mcp-server@latest"],
+      "args": ["-y", "supabase-mcp-server@0.3.0"],
       "env": {
         "SUPABASE_URL": "${SUPABASE_URL}",
         "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
@@ -51,7 +51,7 @@
     },
     "vercel": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.vercel.com"],
+      "args": ["-y", "mcp-remote@0.1.38", "https://mcp.vercel.com"],
       "env": {
         "VERCEL_TOKEN": "${VERCEL_TOKEN}"
       },
@@ -59,7 +59,7 @@
     },
     "figma": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.figma.com/mcp"],
+      "args": ["-y", "mcp-remote@0.1.38", "https://mcp.figma.com/mcp"],
       "env": {
         "FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN}"
       },

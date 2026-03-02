@@ -123,17 +123,23 @@ ERRORS=""
 FAILED_CMD=""
 
 TIMEOUT_CMD=""
+TIMEOUT_ARGS=""
 if command -v timeout &>/dev/null; then
-  TIMEOUT_CMD="timeout ${QG_TIMEOUT}s"
+  TIMEOUT_CMD="timeout"
+  TIMEOUT_ARGS="${QG_TIMEOUT}s"
 elif command -v gtimeout &>/dev/null; then
-  TIMEOUT_CMD="gtimeout ${QG_TIMEOUT}s"
-elif command -v perl &>/dev/null; then
-  TIMEOUT_CMD="perl -e 'alarm shift; exec @ARGV' ${QG_TIMEOUT}"
+  TIMEOUT_CMD="gtimeout"
+  TIMEOUT_ARGS="${QG_TIMEOUT}s"
 fi
 
 for check in "${CHECKS[@]}"; do
   OUTPUT=""
-  if OUTPUT="$($TIMEOUT_CMD "$PKG_MANAGER" run "$check" 2>&1)"; then
+  if [[ -n "$TIMEOUT_CMD" ]]; then
+    CMD_PREFIX=("$TIMEOUT_CMD" "$TIMEOUT_ARGS")
+  else
+    CMD_PREFIX=()
+  fi
+  if OUTPUT="$("${CMD_PREFIX[@]}" "$PKG_MANAGER" run "$check" 2>&1)"; then
     # Check passed — continue to next
     continue
   else

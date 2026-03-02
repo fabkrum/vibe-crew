@@ -42,7 +42,7 @@ for md_file in "$FEATURES_DIR"/*.md; do
   fi
   FEATURE_ITEMS="${FEATURE_ITEMS}
             { text: \"${TITLE}\", link: \"/features/${BASENAME}\" }"
-  ((FEATURE_COUNT++))
+  FEATURE_COUNT=$(( FEATURE_COUNT + 1 ))
 done
 
 if [[ "$FEATURE_COUNT" -eq 0 ]]; then

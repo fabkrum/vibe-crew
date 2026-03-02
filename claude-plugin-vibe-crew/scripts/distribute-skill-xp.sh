@@ -12,6 +12,10 @@ VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 GAMIFICATION_FILE="$VIBECREW_DIR/gamification.json"
 STATE_FILE="$VIBECREW_DIR/state.json"
 
+# Shared locking and atomic writes
+source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
+
 # --- Check gamification is enabled ---
 ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
@@ -160,12 +164,13 @@ update_skill() {
   fi
 
   # Update gamification.json
-  TMP_FILE="${GAMIFICATION_FILE}.tmp"
-  jq --arg skill "$skill_name" \
+  local skill_updated
+  skill_updated=$(jq --arg skill "$skill_name" \
      --argjson xp "$new_xp" \
      --argjson level "$new_level" \
      '.skills[$skill].xp = $xp | .skills[$skill].level = $level' \
-     "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+     "$GAMIFICATION_FILE")
+  atomic_write "$GAMIFICATION_FILE" "$skill_updated" --no-backup
 
   # Record change for output
   local leveled_up="false"
@@ -183,11 +188,15 @@ update_skill() {
     '. + [{"skill": $name, "xp_added": $xp_added, "old_level": $old_level, "new_level": $new_level, "total_xp": $new_xp, "leveled_up": $leveled_up}]')
 }
 
+acquire_named_lock "gamification" "distribute-skill-xp"
+
 update_skill "prompting" "$XP_PROMPTING"
 update_skill "architecture" "$XP_ARCHITECTURE"
 update_skill "testing" "$XP_TESTING"
 update_skill "context_management" "$XP_CONTEXT"
 update_skill "workflow_discipline" "$XP_WORKFLOW"
+
+release_named_lock "gamification"
 
 # --- Output result ---
 TOTAL_SKILL_XP=$((XP_PROMPTING + XP_ARCHITECTURE + XP_TESTING + XP_CONTEXT + XP_WORKFLOW))

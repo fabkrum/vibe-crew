@@ -67,9 +67,9 @@ if [[ -n "$JS_FILES" ]]; then
     HAS_SEMI=$(grep -c ';\s*$' "$f" 2>/dev/null || echo "0")
     NO_SEMI=$(grep -cE '[^;{}\s]\s*$' "$f" 2>/dev/null || echo "0")
     if [[ "$HAS_SEMI" -gt "$NO_SEMI" ]]; then
-      ((SEMI_COUNT++))
+      SEMI_COUNT=$(( SEMI_COUNT + 1 ))
     else
-      ((NO_SEMI_COUNT++))
+      NO_SEMI_COUNT=$(( NO_SEMI_COUNT + 1 ))
     fi
   done <<< "$JS_FILES"
   if [[ "$SEMI_COUNT" -gt "$NO_SEMI_COUNT" ]]; then
@@ -89,9 +89,9 @@ if [[ -n "$JS_FILES" ]]; then
     SINGLES=$(grep -c "'" "$f" 2>/dev/null || echo "0")
     DOUBLES=$(grep -c '"' "$f" 2>/dev/null || echo "0")
     if [[ "$SINGLES" -gt "$DOUBLES" ]]; then
-      ((SINGLE_COUNT++))
+      SINGLE_COUNT=$(( SINGLE_COUNT + 1 ))
     else
-      ((DOUBLE_COUNT++))
+      DOUBLE_COUNT=$(( DOUBLE_COUNT + 1 ))
     fi
   done <<< "$JS_FILES"
   if [[ "$SINGLE_COUNT" -gt "$DOUBLE_COUNT" ]]; then
@@ -156,9 +156,9 @@ if [[ -n "$COMPONENT_FILES" ]]; then
     [[ -z "$f" ]] && continue
     BASENAME=$(basename "$f" | sed 's/\..*//')
     if echo "$BASENAME" | grep -qE '^[A-Z][a-zA-Z]+'; then
-      ((PASCAL_COUNT++))
+      PASCAL_COUNT=$(( PASCAL_COUNT + 1 ))
     elif echo "$BASENAME" | grep -qE '^[a-z]+-[a-z]+'; then
-      ((KEBAB_COUNT++))
+      KEBAB_COUNT=$(( KEBAB_COUNT + 1 ))
     fi
   done <<< "$COMPONENT_FILES"
   if [[ "$PASCAL_COUNT" -gt "$KEBAB_COUNT" ]]; then

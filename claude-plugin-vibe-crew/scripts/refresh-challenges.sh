@@ -16,6 +16,10 @@ VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 GAMIFICATION_FILE="$VIBECREW_DIR/gamification.json"
 CHALLENGE_POOL="$PLUGIN_ROOT/templates/challenge-pool.json"
 
+# Shared locking and atomic writes
+source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
+
 # --- Check gamification is enabled ---
 ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
@@ -67,8 +71,9 @@ WEAKEST_SKILL=$(jq -r '
 # --- Expire old challenges ---
 # Remove daily challenges that started before today
 # Remove weekly challenges that started before this week's Monday
-TMP_FILE="${GAMIFICATION_FILE}.tmp"
-jq --arg today "$TODAY_START" --arg week "$WEEK_START_TS" '
+acquire_named_lock "gamification" "refresh-challenges"
+
+UPDATED=$(jq --arg today "$TODAY_START" --arg week "$WEEK_START_TS" '
   .active_challenges = [
     .active_challenges[] |
     select(
@@ -77,7 +82,8 @@ jq --arg today "$TODAY_START" --arg week "$WEEK_START_TS" '
       (.type == "onetime")
     )
   ]
-' "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+' "$GAMIFICATION_FILE")
+atomic_write "$GAMIFICATION_FILE" "$UPDATED" --no-backup
 
 # --- Get already-active and completed challenge IDs ---
 ACTIVE_IDS=$(jq -r '[.active_challenges[].id] | join(",")' "$GAMIFICATION_FILE" 2>/dev/null || echo "")
@@ -148,10 +154,11 @@ pick_challenge() {
     challenge_json=$(echo "$available" | jq --arg ts "$NOW" --arg exp "$expires_at" \
       ".[$i] | {id: .id, type: .type, name: .name, description: .description, started_at: \$ts, expires_at: \$exp, progress: 0, target: 1, xp_reward: .xp_reward}")
 
-    TMP_FILE="${GAMIFICATION_FILE}.tmp"
-    jq --argjson challenge "$challenge_json" \
+    local pick_updated
+    pick_updated=$(jq --argjson challenge "$challenge_json" \
       '.active_challenges += [$challenge]' \
-      "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+      "$GAMIFICATION_FILE")
+    atomic_write "$GAMIFICATION_FILE" "$pick_updated" --no-backup
 
     picked=$((picked + 1))
     ACTIVE_IDS="${ACTIVE_IDS},${cid}"
@@ -182,6 +189,9 @@ fi
 
 # --- Output summary ---
 FINAL_ACTIVE=$(jq '.active_challenges | length' "$GAMIFICATION_FILE")
+
+release_named_lock "gamification"
+
 echo "Challenges: $FINAL_ACTIVE active"
 
 exit 0

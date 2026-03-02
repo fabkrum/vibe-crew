@@ -37,7 +37,7 @@ trap 'rm -rf "$HEALTH_TMPDIR"' EXIT
 
 while IFS= read -r server; do
   [[ -z "$server" ]] && continue
-  ((TOTAL++))
+  TOTAL=$(( TOTAL + 1 ))
 
   # Get command and args as array (safe — no shell interpolation)
   CMD=$(jq -r ".mcpServers.\"$server\".command" "$MCP_CONFIG")
@@ -59,7 +59,23 @@ while IFS= read -r server; do
     TIMEOUT_CMD="gtimeout"
   fi
   ERROR_MSG=""
-  if ${TIMEOUT_CMD:-timeout} "$TIMEOUT_SECS" bash -c '
+  _RUN_WITH_TIMEOUT() {
+    if [[ -n "${TIMEOUT_CMD:-}" ]]; then
+      "$TIMEOUT_CMD" "$TIMEOUT_SECS" "$@"
+    else
+      # No timeout command available — run with background kill pattern
+      "$@" &
+      local pid=$!
+      ( sleep "$TIMEOUT_SECS" && kill "$pid" 2>/dev/null ) &
+      local watchdog=$!
+      wait "$pid" 2>/dev/null
+      local rc=$?
+      kill "$watchdog" 2>/dev/null || true
+      wait "$watchdog" 2>/dev/null || true
+      return $rc
+    fi
+  }
+  if _RUN_WITH_TIMEOUT bash -c '
     "$@" </dev/null >/dev/null 2>"$0" &
     PID=$!
     sleep 1
@@ -70,12 +86,12 @@ while IFS= read -r server; do
     else
       wait $PID 2>/dev/null
       exit $?
-    fi' "$ERR_FILE" "$CMD" "${ARGS_ARRAY[@]}" 2>/dev/null; then
+    fi' "$ERR_FILE" "$CMD" ${ARGS_ARRAY[@]+"${ARGS_ARRAY[@]}"} 2>/dev/null; then
     STATUS="ok"
-    ((HEALTHY++))
+    HEALTHY=$(( HEALTHY + 1 ))
   else
     STATUS="failed"
-    ((FAILED++))
+    FAILED=$(( FAILED + 1 ))
     ERROR_MSG=$(head -1 "$ERR_FILE" 2>/dev/null || echo "Process exited or timed out")
   fi
 
@@ -83,9 +99,7 @@ while IFS= read -r server; do
     if [[ "$STATUS" == "ok" ]]; then
       INIT_REQUEST='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"vibecrew-healthcheck","version":"1.0.0"}}}'
       INIT_RESPONSE=""
-      if [[ -n "${TIMEOUT_CMD:-}" ]]; then
-        INIT_RESPONSE=$(echo "$INIT_REQUEST" | "$TIMEOUT_CMD" 2s "$CMD" "${ARGS_ARRAY[@]}" 2>/dev/null || echo "")
-      fi
+      INIT_RESPONSE=$(echo "$INIT_REQUEST" | _RUN_WITH_TIMEOUT "$CMD" ${ARGS_ARRAY[@]+"${ARGS_ARRAY[@]}"} 2>/dev/null || echo "")
       if [[ -n "$INIT_RESPONSE" ]]; then
         HAS_RESULT=$(echo "$INIT_RESPONSE" | jq -r '.result // empty' 2>/dev/null || echo "")
         if [[ -z "$HAS_RESULT" ]]; then

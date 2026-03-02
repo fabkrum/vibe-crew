@@ -11,6 +11,10 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 GAMIFICATION_FILE="$VIBECREW_DIR/gamification.json"
 
+# Shared locking and atomic writes
+source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
+
 # --- Check gamification is enabled ---
 ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
@@ -24,6 +28,8 @@ if [[ ! -f "$GAMIFICATION_FILE" ]]; then
 fi
 
 # --- Read current state ---
+acquire_named_lock "gamification" "check-level-up"
+
 CURRENT_LEVEL=$(jq -r '.level // 1' "$GAMIFICATION_FILE")
 XP_THIS_LEVEL=$(jq -r '.xp_this_level // 0' "$GAMIFICATION_FILE")
 XP_TO_NEXT=$(jq -r '.xp_to_next_level // 100' "$GAMIFICATION_FILE")
@@ -98,8 +104,7 @@ NEW_TITLE=$(get_level_title "$NEW_LEVEL")
 
 # --- Update gamification.json ---
 if [[ "$LEVELED_UP" == "true" || $NEW_LEVEL -ne $CURRENT_LEVEL ]]; then
-  TMP_FILE="${GAMIFICATION_FILE}.tmp"
-  jq --argjson level "$NEW_LEVEL" \
+  UPDATED=$(jq --argjson level "$NEW_LEVEL" \
      --argjson xp_this "$REMAINING_XP" \
      --argjson xp_next "$XP_TO_NEXT" \
      --argjson new_unlocks "$NEW_UNLOCKS" \
@@ -108,17 +113,20 @@ if [[ "$LEVELED_UP" == "true" || $NEW_LEVEL -ne $CURRENT_LEVEL ]]; then
      .xp_this_level = $xp_this |
      .xp_to_next_level = $xp_next |
      .unlocked_features = ((.unlocked_features // []) + $new_unlocks | unique)
-     ' "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+     ' "$GAMIFICATION_FILE")
+  atomic_write "$GAMIFICATION_FILE" "$UPDATED" --no-backup
 fi
 
 # Even if no level up, recalculate xp_to_next in case it was stale
 if [[ "$LEVELED_UP" == "false" ]]; then
   CORRECT_XP_TO_NEXT=$(calc_xp_needed "$CURRENT_LEVEL")
-  TMP_FILE="${GAMIFICATION_FILE}.tmp"
-  jq --argjson xp_next "$CORRECT_XP_TO_NEXT" \
+  UPDATED=$(jq --argjson xp_next "$CORRECT_XP_TO_NEXT" \
      '.xp_to_next_level = $xp_next' \
-     "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+     "$GAMIFICATION_FILE")
+  atomic_write "$GAMIFICATION_FILE" "$UPDATED" --no-backup
 fi
+
+release_named_lock "gamification"
 
 # --- Output result ---
 jq -n \

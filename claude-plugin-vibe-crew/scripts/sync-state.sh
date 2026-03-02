@@ -171,7 +171,7 @@ if [[ -n "$ACTIVE_ID" ]]; then
       .updated_at = $ts
     ')
     STATE_MODIFIED=true
-    ((ISSUES++))
+    ISSUES=$(( ISSUES + 1 ))
     FIXES+=("Cleared active_feature '$ACTIVE_ID' (not found in backlog)")
     ACTIVE_ID=""
   fi
@@ -205,7 +205,7 @@ if [[ -n "$ACTIVE_ID" ]] && [[ -n "$ACTIVE_PHASE" ]]; then
         ]
       ')
       BACKLOG_MODIFIED=true
-      ((ISSUES++))
+      ISSUES=$(( ISSUES + 1 ))
       FIXES+=("Updated backlog column for '$ACTIVE_ID': '$CURRENT_COLUMN' -> '$EXPECTED_COLUMN' (to match phase '$ACTIVE_PHASE')")
     fi
   fi
@@ -221,7 +221,7 @@ ORPHANED_FEATURES=$(echo "$BACKLOG" | jq -r --arg active "${ACTIVE_ID:-__none__}
 
 if [[ -n "$ORPHANED_FEATURES" ]]; then
   while IFS= read -r orphan; do
-    ((ISSUES++))
+    ISSUES=$(( ISSUES + 1 ))
     WARNINGS+=("Orphaned in-progress feature: $orphan")
   done <<< "$ORPHANED_FEATURES"
 fi
@@ -249,7 +249,7 @@ if [[ "$FOUNDATION_COMPLETE" == "true" ]]; then
       .updated_at = $ts
     ')
     STATE_MODIFIED=true
-    ((ISSUES++))
+    ISSUES=$(( ISSUES + 1 ))
 
     INCOMPLETE_LIST=""
     while IFS= read -r artifact; do

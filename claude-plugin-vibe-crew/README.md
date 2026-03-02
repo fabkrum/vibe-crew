@@ -330,6 +330,73 @@ claude-plugin-vibe-crew/
 
 ---
 
+## Testing
+
+VibeCrew uses [BATS](https://github.com/bats-core/bats-core) (Bash Automated
+Testing System) for all hook and script tests. The test framework is bundled in
+the repository — no global installation required.
+
+**Run all tests:**
+
+```bash
+./tests/bats/bin/bats tests/*.bats
+```
+
+**Run a single test file:**
+
+```bash
+./tests/bats/bin/bats tests/protect-data.bats
+```
+
+**Test suite structure:**
+
+| Test file | Script under test | Coverage |
+|---|---|---|
+| `apply-mutation.bats` | `apply-mutation.sh` | CLAUDE.md mutation application |
+| `atomic-write.bats` | `lib/atomic-write.sh` | Safe JSON file writes with backup/rollback |
+| `check-deps.bats` | `check-deps.sh` | Dependency validation (Git, Node.js, jq, gh) |
+| `check-mcp-health.bats` | `check-mcp-health.sh` | MCP server health checks |
+| `claim-task.bats` | `claim-task.sh` | Backlog feature claiming with WIP limits |
+| `compact-reinject.bats` | `compact-reinject.sh` | Context re-injection after `/compact` |
+| `complete-phase.bats` | `complete-phase.sh` | Phase completion and state transitions |
+| `cost-guardrails.bats` | `cost-guardrails.sh` | Session/daily cost threshold enforcement |
+| `docs-build.bats` | — | Documentation site build verification |
+| `error-log.bats` | `lib/error-log.sh` | JSONL error logging |
+| `error-recovery.bats` | `error-recovery.sh` | Stale lock cleanup, git state detection |
+| `init-vibecrew-state.bats` | `init-vibecrew-state.sh` | `.vibecrew/` directory initialization |
+| `lock.bats` | `lib/lock.sh` | Advisory locking (state-files lock) |
+| `lock-config.bats` | `lib/lock.sh` | Lock timeout configuration |
+| `lock-named.bats` | `lib/lock.sh` | Named lock API (independent resource groups) |
+| `migrate-state.bats` | `migrate-state.sh` | Schema version migrations (1.0.0 → 1.5.0) |
+| `phase-gate.bats` | `phase-gate.sh` | Source code write blocking before foundation |
+| `protect-data.bats` | `protect-data.sh` | Dangerous command blocking (9 categories, 54 patterns) |
+| `quality-gate-timeout.bats` | `quality-gate.sh` | Quality gate timeout configuration |
+| `restrict-paths.bats` | `restrict-paths.sh` | Write path restriction enforcement |
+| `review-feedback-loop.bats` | `review-feedback-loop.sh` | Code review feedback generation |
+| `session-startup.bats` | `session-startup.sh` | Session start routing and status output |
+| `signal-schema.bats` | `validate-signal.sh` | Inter-agent signal file validation |
+| `state-backup.bats` | `lib/atomic-write.sh` | State file backup and rotation |
+| `sync-state.bats` | `sync-state.sh` | State file consistency checks |
+| `update-backlog-raw.bats` | `update-backlog-raw.sh` | Safe backlog jq expressions |
+| `update-state.bats` | `update-state.sh` | Safe state jq expressions |
+| `validate-phase-transition.bats` | `validate-phase-transition.sh` | Phase ordering validation |
+| `validate-signal.bats` | `validate-signal.sh` | Signal file schema and enum validation |
+| `visual-verify.bats` | `visual-verify.sh` | Visual verification token parsing |
+| `visual-verification-integration.bats` | — | Visual compliance scoring integration |
+
+**Writing new tests:**
+
+Tests use shared helpers from `tests/test_helper/common-setup.bash` which
+provides `setup_vibecrew_dir`, `teardown_vibecrew_dir`, `set_active_feature`,
+`set_foundation_complete`, `add_feature_to_backlog`, and hook input builders.
+
+**Bash arithmetic pitfall:** All scripts use `set -euo pipefail`. When
+incrementing counters, use `VAR=$(( VAR + 1 ))` instead of `((VAR++))` —
+the latter evaluates to 0 (falsy) when `VAR` is 0, causing `set -e` to
+terminate the script.
+
+---
+
 ## Troubleshooting
 
 **Phase gate blocked -- "VibeCrew designs before it codes"**

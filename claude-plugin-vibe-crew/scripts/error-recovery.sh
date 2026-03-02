@@ -94,7 +94,7 @@ cleanup_stale_locks() {
 
     if [[ "$is_stale" == "true" ]]; then
       rm -rf "$lock_dir"
-      ((STALE_LOCKS++))
+      STALE_LOCKS=$(( STALE_LOCKS + 1 ))
       ACTIONS_TAKEN+=("Removed stale lock: $lock_name")
     fi
   done
@@ -114,7 +114,7 @@ check_port_conflicts() {
     port_info=$(lsof -iTCP:"$port" -sTCP:LISTEN -P -n 2>/dev/null | tail -n +2 || true)
 
     if [[ -n "$port_info" ]]; then
-      ((PORTS_IN_USE++))
+      PORTS_IN_USE=$(( PORTS_IN_USE + 1 ))
       local proc_name pid
       proc_name=$(echo "$port_info" | head -1 | awk '{print $1}')
       pid=$(echo "$port_info" | head -1 | awk '{print $2}')
@@ -158,7 +158,7 @@ detect_orphaned_processes() {
         done
 
         if [[ "$already_reported" == "false" ]]; then
-          ((ORPHANED_PROCS++))
+          ORPHANED_PROCS=$(( ORPHANED_PROCS + 1 ))
           ORPHANED_LIST+=("PID $pid: $cmd")
           REQUIRES_ATTENTION+=("Orphaned process PID $pid: $cmd")
         fi
@@ -241,7 +241,7 @@ cleanup_temp_files() {
     local age=$(( now_epoch - file_epoch ))
     if [[ "$age" -gt "$five_minutes" ]]; then
       rm -f "$tmp_file"
-      ((TEMP_CLEANED++))
+      TEMP_CLEANED=$(( TEMP_CLEANED + 1 ))
       ACTIONS_TAKEN+=("Removed stale temp file: $(basename "$tmp_file")")
     fi
   done

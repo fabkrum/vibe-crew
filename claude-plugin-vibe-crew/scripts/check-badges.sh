@@ -17,6 +17,10 @@ BACKLOG_FILE="$VIBECREW_DIR/backlog.json"
 BADGE_CATALOG="$PLUGIN_ROOT/templates/badge-catalog.json"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
+# Shared locking and atomic writes
+source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
+
 # --- Check gamification is enabled ---
 ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
@@ -201,15 +205,18 @@ done
 # --- Write newly earned badges to gamification.json ---
 NEW_BADGE_COUNT=$(echo "$NEW_BADGES" | jq 'length')
 if [[ "$NEW_BADGE_COUNT" -gt 0 ]]; then
-  # Add badges and bonus XP
-  TMP_FILE="${GAMIFICATION_FILE}.tmp"
-  jq --argjson new_badges "$NEW_BADGES" \
+  acquire_named_lock "gamification" "check-badges"
+
+  UPDATED=$(jq --argjson new_badges "$NEW_BADGES" \
      --argjson badge_xp "$XP_FROM_BADGES" \
      '
      .badges = (.badges + [$new_badges[] | {id: .id, earned_at: .earned_at}]) |
      .xp = (.xp + $badge_xp) |
      .xp_this_level = (.xp_this_level + $badge_xp)
-     ' "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+     ' "$GAMIFICATION_FILE")
+  atomic_write "$GAMIFICATION_FILE" "$UPDATED" --no-backup
+
+  release_named_lock "gamification"
 fi
 
 # --- Output result ---

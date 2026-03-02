@@ -28,13 +28,13 @@ RESULTS=()
 
 pass() {
   local description="$1"
-  ((PASS_COUNT++))
+  PASS_COUNT=$(( PASS_COUNT + 1 ))
   RESULTS+=("[PASS] $description")
 }
 
 fail() {
   local description="$1"
-  ((FAIL_COUNT++))
+  FAIL_COUNT=$(( FAIL_COUNT + 1 ))
   RESULTS+=("[FAIL] $description")
 }
 

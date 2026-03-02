@@ -117,7 +117,7 @@ DOC_EOF
   fi
 
   mv "$DOC_FILE.tmp" "$DOC_FILE"
-  ((GENERATED++))
+  GENERATED=$(( GENERATED + 1 ))
   echo "Generated: $DOC_FILE"
 done <<< "$COMPLETED"
 

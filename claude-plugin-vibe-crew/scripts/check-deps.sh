@@ -45,10 +45,10 @@ check_dep() {
   if ! command -v "$command" &>/dev/null; then
     RESULTS+=("{\"name\":\"$name\",\"command\":\"$command\",\"status\":\"missing\",\"required\":\"$min_version\",\"install\":\"$install_hint\",\"level\":\"$level\"}")
     if [[ "$level" == "required" ]]; then
-      ((FAIL++))
+      FAIL=$(( FAIL + 1 ))
       INSTALL_CMDS+=("$install_hint")
     else
-      ((WARN++))
+      WARN=$(( WARN + 1 ))
       INSTALL_CMDS+=("$install_hint")
     fi
     return
@@ -57,7 +57,7 @@ check_dep() {
   local version
   version=$("$command" $version_flag 2>&1 | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)
   RESULTS+=("{\"name\":\"$name\",\"command\":\"$command\",\"status\":\"ok\",\"found\":\"${version:-unknown}\",\"required\":\"$min_version\",\"level\":\"$level\"}")
-  ((PASS++))
+  PASS=$(( PASS + 1 ))
 }
 
 # Required dependencies (block /setup if missing)

@@ -15,6 +15,10 @@ PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 VIBECREW_DIR="$PROJECT_ROOT/.vibecrew"
 GAMIFICATION_FILE="$VIBECREW_DIR/gamification.json"
 
+# Shared locking and atomic writes
+source "$(dirname "$0")/lib/lock.sh"
+source "$(dirname "$0")/lib/atomic-write.sh"
+
 # --- Check gamification is enabled ---
 ENABLED=$(jq -r '.gamification.enabled // true' "$VIBECREW_DIR/config.json" 2>/dev/null || echo "true")
 if [[ "$ENABLED" == "false" ]]; then
@@ -33,6 +37,8 @@ DAY_OF_WEEK=$(date -u +%u)  # 1=Monday, 7=Sunday
 DAY_OF_MONTH=$(date -u +%d)
 
 # --- Read current streak state ---
+acquire_named_lock "gamification" "update-streak"
+
 CURRENT_STREAK=$(jq -r '.streak.current // 0' "$GAMIFICATION_FILE")
 LONGEST_STREAK=$(jq -r '.streak.longest // 0' "$GAMIFICATION_FILE")
 LAST_SESSION_DATE=$(jq -r '.streak.last_session_date // "none"' "$GAMIFICATION_FILE")
@@ -129,8 +135,7 @@ if [[ $NEW_STREAK -gt $LONGEST_STREAK ]]; then
 fi
 
 # --- Write updated state ---
-TMP_FILE="${GAMIFICATION_FILE}.tmp"
-jq --argjson streak "$NEW_STREAK" \
+UPDATED=$(jq --argjson streak "$NEW_STREAK" \
    --argjson longest "$NEW_LONGEST" \
    --arg last "$TODAY" \
    --argjson grace "$GRACE_REMAINING" \
@@ -141,7 +146,11 @@ jq --argjson streak "$NEW_STREAK" \
    .streak.last_session_date = $last |
    .streak.grace_days_remaining = $grace |
    .streak.frozen_today = $frozen
-   ' "$GAMIFICATION_FILE" > "$TMP_FILE" && mv "$TMP_FILE" "$GAMIFICATION_FILE"
+   ' "$GAMIFICATION_FILE")
+
+atomic_write "$GAMIFICATION_FILE" "$UPDATED" --no-backup
+
+release_named_lock "gamification"
 
 # --- Output result ---
 jq -n \

@@ -11,19 +11,7 @@ export interface NavGroup {
 
 export const navigation: NavGroup[] = [
   {
-    label: 'Getting Started',
-    links: [
-      { title: 'Quick Start', slug: 'quick-start' },
-      { title: 'Setup', slug: 'setup' },
-      { title: 'New Project', slug: 'new-project' },
-      { title: 'Design Discovery', slug: 'design-discovery' },
-      { title: 'Existing Project', slug: 'existing-project' },
-      { title: 'Warp', slug: 'warp' },
-    ],
-  },
-  {
     label: 'Workflows',
-    collapsed: true,
     links: [
       { title: 'Core Workflow', slug: 'workflow' },
       { title: 'Advanced Features', slug: 'advanced-features' },

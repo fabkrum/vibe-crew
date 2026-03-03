@@ -3,6 +3,11 @@ import { url } from '../../data/site';
 ---
 
 <div class="ob-wizard" id="ob-wizard">
+  <div class="ob-header">
+    <h2 class="ob-title">Get started in minutes</h2>
+    <p class="ob-subtitle">Answer 3 quick questions. Get a personalized setup guide.</p>
+  </div>
+
   <div class="ob-progress" id="ob-progress">
     <span class="ob-dot active" data-dot="1"></span>
     <span class="ob-dot" data-dot="2"></span>
@@ -11,7 +16,7 @@ import { url } from '../../data/site';
 
   <!-- Step 1: Project type -->
   <div class="ob-step" data-step="1">
-    <p class="ob-question">What are you building?</p>
+    <p class="ob-question">What do you want to build today?</p>
     <div class="ob-options">
       <button class="ob-btn" data-key="project" data-value="new">
         <span class="ob-btn-icon">&#10010;</span>
@@ -45,13 +50,13 @@ import { url } from '../../data/site';
 
   <!-- Result: Personalized guide -->
   <div class="ob-result hidden" id="ob-result">
-    <div class="ob-result-header">Your setup guide</div>
+    <div class="ob-result-header" id="ob-result-header">Your personalized setup guide</div>
     <div class="ob-result-context" id="ob-result-context"></div>
-    <ol class="ob-guide" id="ob-guide"></ol>
+    <div class="ob-guide" id="ob-guide"></div>
     <div class="ob-actions">
       <button class="ob-restart" id="ob-restart">Start over</button>
-      <a class="ob-action-link" href={url('/quick-start.html')}>Full Quick Start &rarr;</a>
-      <a class="ob-action-link" href={url('/setup.html')}>Full Setup Guide &rarr;</a>
+      <a class="ob-action-link" href={url('/workflow.html')}>Core Workflow &rarr;</a>
+      <a class="ob-action-link" href={url('/faq.html')}>FAQ &rarr;</a>
     </div>
   </div>
 </div>
@@ -62,7 +67,26 @@ import { url } from '../../data/site';
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
     padding: 1.5rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  /* ── Header ──────────────────────────────────────────── */
+  .ob-header {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .ob-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0 0 0.3rem;
+  }
+
+  .ob-subtitle {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin: 0;
   }
 
   /* ── Progress dots ─────────────────────────────────────── */
@@ -142,7 +166,7 @@ import { url } from '../../data/site';
   /* ── Result panel ──────────────────────────────────────── */
   .ob-result-header {
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     color: var(--color-text);
     margin-bottom: 0.75rem;
   }
@@ -151,7 +175,7 @@ import { url } from '../../data/site';
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   .ob-pill {
@@ -165,31 +189,129 @@ import { url } from '../../data/site';
     border: 1px solid rgba(167, 139, 250, 0.2);
   }
 
+  /* ── Guide steps ───────────────────────────────────────── */
   .ob-guide {
-    padding-left: 1.5rem;
-    margin: 0 0 1.25rem;
-    list-style: decimal;
+    counter-reset: guide-step;
   }
 
-  .ob-guide li {
-    margin-bottom: 0.85rem;
-    font-size: 0.9rem;
-    color: var(--color-text-secondary);
-    line-height: 1.55;
+  .ob-step-card {
+    counter-increment: guide-step;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
   }
 
-  .ob-guide li strong {
+  .ob-step-title {
+    font-weight: 700;
+    font-size: 0.95rem;
     color: var(--color-text);
-    display: block;
-    margin-bottom: 0.15rem;
+    margin: 0 0 0.5rem;
   }
 
-  .ob-guide li code {
-    font-size: 0.82rem;
-    padding: 0.15rem 0.35rem;
-    border-radius: 3px;
-    background: var(--color-code-bg, rgba(167, 139, 250, 0.08));
+  .ob-step-title::before {
+    content: counter(guide-step) ". ";
+    color: var(--color-blue);
+    font-weight: 800;
+  }
+
+  .ob-step-desc {
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .ob-step-desc a {
     color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .ob-step-desc a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Code blocks with copy button ──────────────────────── */
+  .ob-code-wrap {
+    position: relative;
+    margin-top: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .ob-code {
+    display: block;
+    font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
+    font-size: 0.8rem;
+    line-height: 1.55;
+    padding: 0.65rem 2.75rem 0.65rem 0.85rem;
+    border-radius: var(--radius-xs);
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  :root[data-theme="light"] .ob-code {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .ob-copy-btn {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ob-copy-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent-dim);
+  }
+
+  .ob-copy-btn.copied {
+    color: var(--color-green);
+    border-color: var(--color-green);
+  }
+
+  .ob-code-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+    margin-bottom: 0.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Checklist inside steps ────────────────────────────── */
+  .ob-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .ob-checklist li {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    padding: 0.15rem 0 0.15rem 1.25rem;
+    position: relative;
+  }
+
+  .ob-checklist li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    color: var(--color-green);
+    font-weight: 700;
   }
 
   /* ── Actions footer ────────────────────────────────────── */
@@ -240,8 +362,25 @@ import { url } from '../../data/site';
     var result = document.getElementById('ob-result');
     var guide = document.getElementById('ob-guide');
     var context = document.getElementById('ob-result-context');
+    var resultHeader = document.getElementById('ob-result-header');
+    var obHeader = wizard.querySelector('.ob-header');
 
     wizard.addEventListener('click', function(e) {
+      // Handle copy buttons
+      var copyBtn = e.target.closest('.ob-copy-btn');
+      if (copyBtn) {
+        var code = copyBtn.getAttribute('data-copy');
+        navigator.clipboard.writeText(code).then(function() {
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('copied');
+          setTimeout(function() {
+            copyBtn.textContent = 'Copy';
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        });
+        return;
+      }
+
       var btn = e.target.closest('.ob-btn');
       if (!btn) return;
 
@@ -259,89 +398,164 @@ import { url } from '../../data/site';
       dots[stepNum - 1].classList.add('done');
 
       if (stepNum < 3) {
-        // Show next step
         var next = wizard.querySelector('[data-step="' + (stepNum + 1) + '"]');
         if (next) {
           next.classList.remove('hidden');
           dots[stepNum].classList.add('active');
         }
       } else {
-        // Build result
         buildGuide();
       }
     });
 
     document.getElementById('ob-restart').addEventListener('click', function() {
       answers = {};
-      // Reset steps visibility
       steps.forEach(function(s, i) {
         if (i === 0) s.classList.remove('hidden');
         else s.classList.add('hidden');
         s.querySelectorAll('.ob-btn').forEach(function(b) { b.classList.remove('selected'); });
       });
-      // Reset dots
       dots.forEach(function(d, i) {
         d.classList.remove('done', 'active');
         if (i === 0) d.classList.add('active');
       });
-      // Hide result
       result.classList.add('hidden');
       guide.innerHTML = '';
       context.innerHTML = '';
+      obHeader.style.display = '';
     });
+
+    function codeBlock(code, label) {
+      var escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var labelHtml = label ? '<span class="ob-code-label">' + label + '</span>' : '';
+      return labelHtml +
+        '<div class="ob-code-wrap">' +
+          '<pre class="ob-code">' + escaped + '</pre>' +
+          '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '">Copy</button>' +
+        '</div>';
+    }
+
+    function checklist(items) {
+      return '<ul class="ob-checklist">' + items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>';
+    }
 
     function buildGuide() {
       var allSteps = [
         {
-          title: 'Prerequisites',
-          desc: 'Install Git 2.30+, Node.js 18+, jq, and <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">Claude Code</a>.',
+          title: 'Install prerequisites',
+          desc: '<p class="ob-step-desc">You need 4 things installed on your machine before starting. Open your terminal and check each one:</p>' +
+            checklist([
+              '<strong>Git</strong> 2.30+ &mdash; check with <code>git --version</code>',
+              '<strong>Node.js</strong> 18+ &mdash; check with <code>node --version</code>',
+              '<strong>jq</strong> (JSON tool) &mdash; check with <code>jq --version</code>',
+              '<strong>Claude Code</strong> &mdash; install from <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">docs.anthropic.com</a>'
+            ]) +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">Missing something? On macOS, install with Homebrew:</p>' +
+            codeBlock('brew install git node jq', 'terminal'),
           show: true
         },
         {
-          title: 'Install VibeCrew',
-          desc: '<code>git clone https://github.com/fabkrum/vibe-crew.git</code> then symlink into your project:<br><code>ln -s /path/to/vibe-crew/claude-plugin-vibe-crew .claude-plugin</code>',
+          title: 'Download VibeCrew',
+          desc: '<p class="ob-step-desc">Clone VibeCrew to a central location on your computer. You only do this once &mdash; it serves all your projects.</p>' +
+            codeBlock('mkdir -p ~/claude-plugins && cd ~/claude-plugins\ngit clone https://github.com/fabkrum/vibe-crew.git', 'terminal') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">Then run the bootstrap script. It checks everything and installs any missing dependencies automatically:</p>' +
+            codeBlock('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew\n./install.sh', 'terminal'),
+          show: true
+        },
+        {
+          title: 'Connect VibeCrew to your project',
+          desc: '<p class="ob-step-desc">Navigate to your project folder and create a symlink (shortcut) that connects VibeCrew to your project. Then start Claude Code with the plugin:</p>' +
+            codeBlock('cd ~/projects/my-project\nln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew\nclaude --plugin-dir ./claude-plugin-vibe-crew', 'terminal') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">Replace <code>~/projects/my-project</code> with the actual path to your project folder.</p>',
           show: true
         },
         {
           title: 'Install GitHub CLI',
-          desc: '<code>brew install gh</code> then <code>gh auth login</code> &mdash; enables PR automation, issue sync, and release management.',
+          desc: '<p class="ob-step-desc">The GitHub CLI lets VibeCrew automate pull requests, sync issues, and create releases on your behalf. Install it and log in:</p>' +
+            codeBlock('brew install gh\ngh auth login', 'terminal') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">Follow the prompts to authenticate with your GitHub account. Choose "HTTPS" and "Login with a web browser" when asked.</p>',
           show: answers.host === 'github'
         },
         {
           title: 'Install GitLab CLI',
-          desc: '<code>brew install glab</code> then <code>glab auth login</code> &mdash; enables MR automation and issue sync.',
+          desc: '<p class="ob-step-desc">The GitLab CLI lets VibeCrew automate merge requests and sync issues. Install it and log in:</p>' +
+            codeBlock('brew install glab\nglab auth login', 'terminal') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">Follow the prompts to authenticate with your GitLab account.</p>',
           show: answers.host === 'gitlab'
         },
         {
           title: 'Set up Warp Terminal',
-          desc: 'Configure <a href="https://docs.warp.dev/features/sessions" target="_blank">Launch Configs</a> for multi-tab workflows. VibeCrew auto-detects Warp and enables deep-link notifications via <code>warp://</code> URIs.',
+          desc: '<p class="ob-step-desc">VibeCrew auto-detects Warp and enables deep-link notifications &mdash; when an agent finishes or needs your attention, clicking the notification takes you directly to the right tab.</p>' +
+            '<p class="ob-step-desc" style="margin-top:0.35rem">For the best experience, set up <a href="https://docs.warp.dev/features/sessions" target="_blank">Launch Configurations</a> so you can open multi-tab layouts with one click. This is optional but makes parallel workflows much smoother.</p>',
           show: answers.terminal === 'warp'
         },
         {
-          title: 'Run <code>/setup</code>',
-          desc: 'Environment check, dependency validation, and auto-installation of any missing tools.',
+          title: 'Run environment setup',
+          desc: '<p class="ob-step-desc">Inside Claude Code, type this command. It verifies all dependencies, detects your terminal, creates the <code>.vibecrew/</code> runtime directory, tests notifications, and checks your git configuration:</p>' +
+            codeBlock('/setup', 'type in claude code') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">If anything is missing, the wizard offers to install it for you automatically.</p>',
           show: true
         },
         {
-          title: 'Run <code>/profile</code>',
-          desc: '2-minute interview or pick a preset (Founder, Builder, Explorer). Personalizes verbosity, autonomy, and review style.',
+          title: 'Personalize your experience',
+          desc: '<p class="ob-step-desc">This 2-minute step adapts VibeCrew to how you work. Type this command in Claude Code:</p>' +
+            codeBlock('/profile', 'type in claude code') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">You can answer 8 questions or pick a preset:</p>' +
+            checklist([
+              '<strong>Founder</strong> &mdash; for non-technical users. Detailed explanations, supervised autonomy, educational walkthroughs',
+              '<strong>Builder</strong> &mdash; for developers. Minimal explanations, full autonomy, auto-merge PRs',
+              '<strong>Explorer</strong> &mdash; for learners. Inline explanations, reference docs, collaborative decisions'
+            ]) +
+            '<p class="ob-step-desc" style="margin-top:0.35rem">This controls verbosity, how much VibeCrew asks before acting, PR review style, code comments, and more. You can change it anytime.</p>',
           show: true
         },
         {
-          title: 'Run <code>/new-project</code>',
-          desc: 'Guided foundation: vision document, design system, tech stack research, and architecture diagrams &mdash; all before any code.',
+          title: 'Build your project foundation',
+          desc: '<p class="ob-step-desc">This is the most important step. VibeCrew will guide you through a conversation to establish your project\'s architecture <em>before</em> any code is written. Type:</p>' +
+            codeBlock('/new-project', 'type in claude code') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">This takes 15&ndash;30 minutes and creates 6 artifacts:</p>' +
+            checklist([
+              '<strong>VISION.md</strong> &mdash; what you\'re building, who it\'s for, and what success looks like',
+              '<strong>Design system</strong> &mdash; visual identity via a 3-phase design interview (colors, typography, spacing)',
+              '<strong>Tech stack</strong> &mdash; the Stack Scout agent researches and recommends technologies, documented in a TDR',
+              '<strong>Architecture diagrams</strong> &mdash; 5 visual diagrams of your system (database, APIs, components, user flows)',
+              '<strong>Roadmap</strong> &mdash; your planned features in priority order',
+              '<strong>CLAUDE.md</strong> &mdash; project rules that all agents follow in future sessions'
+            ]) +
+            '<p class="ob-step-desc" style="margin-top:0.35rem">This is a one-time investment. After this, every feature session starts instantly because the architecture decisions are already made.</p>',
           show: answers.project === 'new'
         },
         {
-          title: 'Run <code>/onboard</code>',
-          desc: 'Code Auditor analyzes your codebase, extracts conventions, and generates a CLAUDE.md &mdash; so agents understand your project immediately.',
+          title: 'Onboard your existing codebase',
+          desc: '<p class="ob-step-desc">VibeCrew will analyze your existing code to understand your project before making any changes. Nothing is modified &mdash; this is read-only. Type:</p>' +
+            codeBlock('/onboard', 'type in claude code') +
+            '<p class="ob-step-desc" style="margin-top:0.5rem">The Code Auditor agent scans your project and:</p>' +
+            checklist([
+              '<strong>Detects your stack</strong> &mdash; language, framework, package manager, build tools',
+              '<strong>Extracts conventions</strong> &mdash; naming patterns, formatters, linters, commit style, import conventions',
+              '<strong>Identifies test gaps</strong> &mdash; compares source files vs test files, estimates coverage',
+              '<strong>Derives your design system</strong> &mdash; extracts existing CSS variables, colors, and spacing',
+              '<strong>Generates CLAUDE.md</strong> &mdash; project-specific rules so agents understand your codebase immediately'
+            ]) +
+            '<p class="ob-step-desc" style="margin-top:0.35rem">After onboarding, the phase gate unlocks and you can start building features right away.</p>',
           show: answers.project === 'existing'
         },
         {
           title: 'Build your first feature',
           desc: answers.project === 'new'
-            ? 'Run <code>/new-feature "your first feature"</code> &mdash; VibeCrew handles plan, UI design, code, tests, review, and docs.'
-            : 'Run <code>/plan-features</code> to define your backlog, then <code>/new-feature "name"</code> to start the full development cycle.',
+            ? '<p class="ob-step-desc">You\'re ready to build! Type a command like this in Claude Code:</p>' +
+              codeBlock('/new-feature "user authentication"', 'type in claude code') +
+              '<p class="ob-step-desc" style="margin-top:0.5rem">Replace the text in quotes with whatever feature you want to build first. VibeCrew handles the full cycle automatically: planning, UI design, coding, testing, code review, and documentation.</p>' +
+              '<p class="ob-step-desc" style="margin-top:0.35rem">When the feature is done, wrap up the session:</p>' +
+              codeBlock('/wrap', 'type in claude code') +
+              '<p class="ob-step-desc" style="margin-top:0.35rem">This runs the quality gate (tests, linting, build), calculates your Vibe Score, and commits your work.</p>'
+            : '<p class="ob-step-desc">First, define your feature backlog by typing:</p>' +
+              codeBlock('/plan-features', 'type in claude code') +
+              '<p class="ob-step-desc" style="margin-top:0.5rem">This creates structured specifications for each feature. Then start building:</p>' +
+              codeBlock('/new-feature "your feature name"', 'type in claude code') +
+              '<p class="ob-step-desc" style="margin-top:0.35rem">VibeCrew handles the full cycle: planning, UI design, coding, testing, code review, and documentation. When done, wrap up:</p>' +
+              codeBlock('/wrap', 'type in claude code') +
+              '<p class="ob-step-desc" style="margin-top:0.35rem">This runs the quality gate, calculates your Vibe Score, and commits your work.</p>',
           show: true
         }
       ];
@@ -360,15 +574,20 @@ import { url } from '../../data/site';
         context.appendChild(pill);
       });
 
-      // Build guide list
+      // Build guide
       guide.innerHTML = '';
+      var visibleCount = 0;
       allSteps.forEach(function(s) {
         if (!s.show) return;
-        var li = document.createElement('li');
-        li.innerHTML = '<strong>' + s.title + '</strong>' + s.desc;
-        guide.appendChild(li);
+        visibleCount++;
+        var div = document.createElement('div');
+        div.className = 'ob-step-card';
+        div.innerHTML = '<div class="ob-step-title">' + s.title + '</div>' + s.desc;
+        guide.appendChild(div);
       });
 
+      resultHeader.textContent = 'Your ' + visibleCount + '-step setup guide';
+      obHeader.style.display = 'none';
       result.classList.remove('hidden');
     }
   })();

@@ -62,14 +62,14 @@ import { url } from '../data/site';
     <details class="faq-item">
       <summary>What terminals does VibeCrew support?</summary>
       <div class="faq-answer">
-        <p>VibeCrew works with any terminal. <a href={url('/warp.html')}>Warp Terminal</a> is recommended because it provides tab deep-linking (click a notification to jump to the exact session), structured output blocks, and Launch Configurations. But iTerm2, VS Code Terminal, Terminal.app, and others all work fine.</p>
+        <p>VibeCrew works with any terminal. Warp Terminal is recommended because it provides tab deep-linking (click a notification to jump to the exact session), structured output blocks, and Launch Configurations. But iTerm2, VS Code Terminal, Terminal.app, and others all work fine.</p>
       </div>
     </details>
 
     <details class="faq-item">
       <summary>How do I install VibeCrew on multiple projects?</summary>
       <div class="faq-answer">
-        <p>Clone VibeCrew once to a central location (e.g., <code>~/claude-plugins/vibe-crew/</code>), then symlink into each project. See the <a href={url('/setup.html') + '#multi-project'}>Multi-Project Setup</a> guide.</p>
+        <p>Clone VibeCrew once to a central location (e.g., <code>~/claude-plugins/vibe-crew/</code>), then symlink into each project: <code>ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew .claude/plugins/vibe-crew</code>.</p>
       </div>
     </details>
   </section>
@@ -96,7 +96,7 @@ import { url } from '../data/site';
     <details class="faq-item">
       <summary>How do I add VibeCrew to an existing project?</summary>
       <div class="faq-answer">
-        <p>Use <code>/onboard</code> instead of <code>/new-project</code>. The Code Auditor agent analyzes your codebase, extracts conventions, derives a design system from existing styles, and generates a CLAUDE.md. See <a href={url('/existing-project.html')}>Existing Projects</a>.</p>
+        <p>Use <code>/onboard</code> instead of <code>/new-project</code>. The Code Auditor agent analyzes your codebase, extracts conventions, derives a design system from existing styles, and generates a CLAUDE.md.</p>
       </div>
     </details>
 
@@ -193,7 +193,7 @@ import { url } from '../data/site';
     <details class="faq-item">
       <summary>Notifications aren't working.</summary>
       <div class="faq-answer">
-        <p>Check these in order: (1) Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code>. (2) Check macOS: System Settings &rarr; Notifications &rarr; terminal-notifier. (3) Verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code>. See the full <a href={url('/setup.html') + '#troubleshooting'}>troubleshooting guide</a>.</p>
+        <p>Check these in order: (1) Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code>. (2) Check macOS: System Settings &rarr; Notifications &rarr; terminal-notifier. (3) Verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code>. See <a href={url('/tips.html')}>Tips &amp; Troubleshooting</a> for more details.</p>
       </div>
     </details>
 

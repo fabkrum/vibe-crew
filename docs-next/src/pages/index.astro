@@ -1,6 +1,5 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
-import Callout from '../components/Callout.astro';
 import OnboardingWizard from '../components/why/OnboardingWizard.astro';
 import { url } from '../data/site';
 ---
@@ -10,8 +9,8 @@ import { url } from '../data/site';
   <!-- ── Hero: title + subtitle + wizard ───────────────────── -->
   <section class="hero-section" id="start">
     <h1 class="hero-title">VibeCrew</h1>
-    <p class="hero-subtitle">The autonomous vibe-coding operating system for Claude Code</p>
-    <p class="hero-desc">Orchestrates 14 AI agents across the full development lifecycle &mdash; architecture, design, code, tests, review, and docs. You describe what you want. VibeCrew builds it right.</p>
+    <p class="hero-subtitle">You describe what you want. VibeCrew builds it right.</p>
+    <p class="hero-desc">The autonomous vibe-coding OS for Claude Code. 14 AI agents handle architecture, design, code, tests, review, and docs &mdash; so you can focus on what to build, not how.</p>
     <OnboardingWizard />
   </section>
 
@@ -20,58 +19,104 @@ import { url } from '../data/site';
     <h3>The hard parts, handled</h3>
     <div class="why-cards">
       <div class="card why-card">
-        <h4><span class="card-icon green">&#9670;</span> Architecture before code</h4>
-        <p>Vision, design system, tech stack, and architecture are locked in before any code is written. A phase gate enforces this &mdash; no shortcuts.</p>
+        <h4>Ship faster without cutting corners</h4>
+        <p>Architecture, design system, and tech stack are decided before the first line of code. You skip the rework that usually eats half a project.</p>
       </div>
 
       <div class="card why-card">
-        <h4><span class="card-icon blue">&#9670;</span> Quality on autopilot</h4>
-        <p>Tests, linting, type checking, build verification, code review, and security auditing run automatically on every feature.</p>
+        <h4>Stop reviewing everything yourself</h4>
+        <p>Every feature is automatically tested, linted, type-checked, reviewed, and security-audited. You approve the result, not every step.</p>
       </div>
 
       <div class="card why-card">
-        <h4><span class="card-icon purple">&#9670;</span> Patterns that convert</h4>
-        <p>Built-in UI and business pattern libraries guide agents toward production-quality output &mdash; proper error states, accessible interactions, conversion-optimized layouts.</p>
+        <h4>Get production-quality output from day one</h4>
+        <p>Your app launches with proper error handling, accessible interactions, and layouts that actually convert &mdash; not a prototype you have to rebuild later.</p>
       </div>
 
       <div class="card why-card">
-        <h4><span class="card-icon amber">&#9670;</span> Tokens spent wisely</h4>
-        <p>Worktree isolation, MCP servers, zero-token hooks, and forced compaction between features keep costs down. Free and open source.</p>
+        <h4>Free, open source, runs locally</h4>
+        <p>Your code never leaves your machine. No vendor lock-in, no proprietary formats. Stop using it anytime and keep everything.</p>
       </div>
     </div>
   </section>
 
-  <!-- ── How it works ────────────────────────────────────────── -->
-  <section class="section" id="how-it-works">
-    <h3>How it works</h3>
-
-    <details class="how-details">
-      <summary>Parallel multi-project workflows</summary>
-      <div class="how-answer">
-        <p>Plan Project A while VibeCrew codes Project B and tests Project C. Notifications fire only when an agent needs a decision, finishes a task, or hits an error &mdash; one click takes you to the right tab.</p>
+  <!-- ── Features ───────────────────────────────────────────── -->
+  <section class="section" id="features">
+    <h3>Everything included</h3>
+    <div class="features-grid">
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>14 specialized AI agents</span>
       </div>
-    </details>
-
-    <details class="how-details">
-      <summary>Smart context management</summary>
-      <div class="how-answer">
-        <p>Worktree isolation keeps research tokens separate. Forced compaction between features prevents context rot. MCP servers replace pasting docs. You never hit the context wall.</p>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span>Design system generation</span>
       </div>
-    </details>
-
-    <details class="how-details">
-      <summary>Self-improving Performance Coach</summary>
-      <div class="how-answer">
-        <p>Every session gets a Vibe Score. The coach identifies waste, proposes a permanent rule to prevent it, and writes it with your approval. Each session more efficient than the last.</p>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Automated testing</span>
       </div>
-    </details>
-
-    <details class="how-details">
-      <summary>Adapts to you</summary>
-      <div class="how-answer">
-        <p>Run <code>/profile</code> &mdash; a 2-minute interview or pick a preset. Personalizes verbosity, autonomy, PR format, code comments, and risk tolerance.</p>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Security auditing</span>
       </div>
-    </details>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span>Code review</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Auto-generated docs</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <span>Parallel workflows</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Personalization profiles</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>Vibe Score per session</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>UI &amp; business pattern libraries</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        <span>Cost tracking &amp; guardrails</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span>Smart notifications</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Performance coaching</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+        <span>33 slash commands</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <span>9 MCP servers included</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        <span>Phase gate enforcement</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>GitHub &amp; GitLab integration</span>
+      </div>
+      <div class="feature-item">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        <span>Architecture diagrams</span>
+      </div>
+    </div>
   </section>
 
   <!-- ── Community ───────────────────────────────────────────── -->
@@ -100,17 +145,20 @@ import { url } from '../data/site';
 <style>
   /* ── Hero ───────────────────────────────────────────────── */
   .hero-section {
+    text-align: center;
     margin-bottom: 2.5rem;
   }
 
   .hero-title {
-    font-size: 2rem;
-    margin: 0 0 0.25rem;
-    color: var(--color-text);
+    font-size: 2.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: var(--color-blue);
   }
 
   .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 500;
     color: var(--color-accent);
     margin: 0 0 0.75rem;
@@ -120,7 +168,8 @@ import { url } from '../data/site';
     color: var(--color-text-secondary);
     font-size: 0.95rem;
     line-height: 1.6;
-    margin-bottom: 0;
+    margin: 0 auto;
+    max-width: 540px;
   }
 
   /* ── Card grid for "hard parts" ──────────────────────────── */
@@ -151,15 +200,6 @@ import { url } from '../data/site';
     font-size: 0.85rem;
     color: var(--color-text-secondary);
   }
-
-  .card-icon {
-    font-size: 0.65rem;
-    margin-right: 0.2rem;
-  }
-  .card-icon.green { color: var(--color-green); }
-  .card-icon.blue { color: var(--color-blue); }
-  .card-icon.purple { color: var(--color-accent); }
-  .card-icon.amber { color: var(--color-amber); }
 
   /* ── Accordion (how it works) ────────────────────────────── */
   .how-details {
@@ -209,6 +249,42 @@ import { url } from '../data/site';
     margin: 0;
     padding-top: 0.5rem;
     font-size: 0.9rem;
+  }
+
+  /* ── Features grid ──────────────────────────────────────── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem 1.5rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+  }
+
+  .feature-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--color-text-muted);
   }
 
   /* ── Community grid ──────────────────────────────────────── */

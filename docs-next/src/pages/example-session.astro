@@ -601,18 +601,13 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       </div>
       <div class="card">
         <div class="card-icon green">&#9881;</div>
-        <h4><a href={url('/setup')}>Setup Guide</a></h4>
-        <p>Your first-time installation checklist. System dependencies, plugin install, MCP server configuration, notification testing. Bookmark this &mdash; you'll revisit it when onboarding teammates.</p>
+        <h4><a href={url('/index.html')}>Setup Guide</a></h4>
+        <p>The homepage has an interactive setup wizard. Answer 3 questions and get a personalized step-by-step installation guide. Bookmark this &mdash; you'll revisit it when onboarding teammates.</p>
       </div>
       <div class="card">
         <div class="card-icon blue">&#10010;</div>
-        <h4><a href={url('/new-project')}>New Project</a></h4>
-        <p>The complete Tier 1 &amp; Tier 2 workflow reference. Foundation steps, the 6-phase feature cycle, phase gate enforcement, and all slash commands with examples.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon amber">&#8635;</div>
-        <h4><a href={url('/existing-project')}>Existing Projects</a></h4>
-        <p>How to bring VibeCrew into a codebase that already has code. Code auditing, convention extraction, and backlog mapping from existing issues.</p>
+        <h4><a href={url('/commands.html')}>Slash Commands</a></h4>
+        <p>Complete reference for all 33 slash commands. Foundation commands (<code>/new-project</code>, <code>/onboard</code>), feature workflow, quality tools, and session management.</p>
       </div>
     </div>
 
@@ -626,11 +621,6 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
         <div class="card-icon purple">&#9632;</div>
         <h4><a href={url('/architecture')}>Architecture Deep Dive</a></h4>
         <p>Technical details: the 13-agent system, hook scripts, interrupt protocol, state management, and the VitePress dashboard. For when you want to understand <em>how</em> VibeCrew works under the hood.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">&#9000;</div>
-        <h4><a href={url('/warp')}>Warp Tips</a></h4>
-        <p>Warp Terminal-specific setup: Launch Configurations, keyboard shortcuts, Warp Drive for sharing, Notebooks for annotating sessions, and theme recommendations.</p>
       </div>
       <div class="card">
         <div class="card-icon green">&#9998;</div>
@@ -647,7 +637,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
       </li>
       <li>
         <h4>Use the right page for your current phase</h4>
-        <p>Starting a new project? Open <a href={url('/new-project')}>New Project</a>. Building features? This page (Example Session) has the full walkthrough. Hit a CI failure? The <a href={url('/workflow')}>Workflow</a> page covers <code>/heal</code> in detail.</p>
+        <p>Starting a new project? Use the <a href={url('/index.html')}>homepage setup guide</a>. Building features? This page (Example Session) has the full walkthrough. Hit a CI failure? The <a href={url('/workflow')}>Workflow</a> page covers <code>/heal</code> in detail.</p>
       </li>
       <li>
         <h4>Share pages with teammates</h4>
@@ -656,7 +646,7 @@ npx tsc --noEmit         <span class="output"># TypeScript type check</span></co
     </ol>
 
     <Callout type="tip" title="Quick reference cheat sheet">
-      <p><strong>Stuck?</strong> &rarr; <a href={url('/workflow')}>Workflow</a> page for commands. <strong>Error?</strong> &rarr; <code>/heal</code> in your session, then check <a href={url('/architecture')}>Architecture</a> for how hooks work. <strong>New teammate?</strong> &rarr; Send them <a href={url('/setup')}>Setup</a> then <a href={url('/new-project')}>New Project</a>. <strong>Updating?</strong> &rarr; Check <a href={url('/releases')}>Release Notes</a> first.</p>
+      <p><strong>Stuck?</strong> &rarr; <a href={url('/workflow')}>Workflow</a> page for commands. <strong>Error?</strong> &rarr; <code>/heal</code> in your session, then check <a href={url('/architecture')}>Architecture</a> for how hooks work. <strong>New teammate?</strong> &rarr; Send them the <a href={url('/index.html')}>homepage setup guide</a>. <strong>Updating?</strong> &rarr; Check <a href={url('/releases')}>Release Notes</a> first.</p>
     </Callout>
   </section>
 

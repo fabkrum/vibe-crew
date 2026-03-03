@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
+import { faqSvgs } from '../components/faq/faq-svgs';
 import { url } from '../data/site';
 ---
 
@@ -8,6 +9,52 @@ import { url } from '../data/site';
   <h2>Frequently Asked Questions</h2>
   <p>Common questions about VibeCrew, organized by topic. Can't find your answer? Check <a href={url('/tips.html')}>Tips &amp; Troubleshooting</a> for more detailed guidance.</p>
 
+  <!-- ── Before You Start (trust section) ──────────────────────── -->
+  <section class="section">
+    <h3>Before You Start</h3>
+
+    <details class="faq-item" open>
+      <summary>Will I lose control of my codebase?</summary>
+      <div class="faq-answer faq-answer--illustrated">
+        <div class="faq-illustration" set:html={faqSvgs['your-control']} />
+        <div class="faq-text">
+          <p>No. Everything runs in your terminal, in your Git repo. You see every change, approve every commit, stop any agent at any time. Run <code>/profile</code> to set your autonomy level &mdash; from fully supervised to fully autonomous.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Is my code private?</summary>
+      <div class="faq-answer faq-answer--illustrated">
+        <div class="faq-illustration" set:html={faqSvgs['privacy']} />
+        <div class="faq-text">
+          <p>Yes. VibeCrew runs entirely locally. Your code goes to the Claude API (same as vanilla Claude Code) and nowhere else. No external servers, no telemetry, no data collection. Open source &mdash; verify for yourself.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>What if VibeCrew makes a mistake?</summary>
+      <div class="faq-answer faq-answer--illustrated">
+        <div class="faq-illustration" set:html={faqSvgs['safety-net']} />
+        <div class="faq-text">
+          <p>Every change goes through Git. The quality gate catches type errors, lint issues, and build failures after every task. Review diffs before committing, revert commits with <code>git revert</code>, or use <code>/undo</code> to roll back an entire feature.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I stop using VibeCrew and keep my code?</summary>
+      <div class="faq-answer faq-answer--illustrated">
+        <div class="faq-illustration" set:html={faqSvgs['no-lockin']} />
+        <div class="faq-text">
+          <p>Yes. Your project is standard code in your chosen framework. Remove the plugin symlink, delete the <code>.vibecrew/</code> folder, and you have a normal codebase. No lock-in, no proprietary formats, no generated code that depends on VibeCrew to run.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ── Getting Started ───────────────────────────────────────── -->
   <section class="section">
     <h3>Getting Started</h3>
 
@@ -40,6 +87,7 @@ import { url } from '../data/site';
     </details>
   </section>
 
+  <!-- ── Workflow ──────────────────────────────────────────────── -->
   <section class="section">
     <h3>Workflow</h3>
 
@@ -71,15 +119,29 @@ import { url } from '../data/site';
         <p><code>/run-backlog</code> auto-executes features from your backlog by priority. It runs the full Tier 2 cycle for each feature, including code review, and stops on failure for human review. VibeCrew forces a <code>/compact</code> between features to prevent context rot during long autonomous runs.</p>
       </div>
     </details>
+
+    <details class="faq-item">
+      <summary>What are the UI and business pattern libraries?</summary>
+      <div class="faq-answer">
+        <p>VibeCrew includes two pattern libraries that guide agents toward production-quality output. The <a href={url('/ui-patterns.html')}>UI Pattern Guide</a> covers component implementation &mdash; forms, navigation, data display, feedback, overlays, and keyboard interactions. The <a href={url('/business-patterns.html')}>Business Pattern Guide</a> covers conversion-oriented patterns &mdash; landing pages, pricing, onboarding, empty states, trust signals, and retention.</p>
+        <p>Agents automatically reference these patterns when building features, so you get proper error states, accessible interactions, and conversion-optimized layouts without having to specify them.</p>
+      </div>
+    </details>
   </section>
 
+  <!-- ── Cost & Performance ────────────────────────────────────── -->
   <section class="section">
     <h3>Cost &amp; Performance</h3>
 
     <details class="faq-item">
       <summary>How much does VibeCrew cost to run?</summary>
       <div class="faq-answer">
-        <p>VibeCrew itself is free and open source. The cost comes from Claude API usage. A typical foundation session costs $5-15, and feature sessions cost $2-8 depending on complexity. Use <code>/cost</code> to see real-time spending and <code>/profile</code> to configure cost guardrails.</p>
+        <p>VibeCrew itself is free and open source. You need a Claude subscription or API access to use Claude Code:</p>
+        <ul>
+          <li><strong>Claude Pro ($20/month) or Max ($100-200/month)</strong> &mdash; recommended for most users. Fixed monthly cost, no per-token billing. Max gives higher usage limits for intensive workflows like <code>/run-backlog</code>.</li>
+          <li><strong>Claude API</strong> &mdash; pay-per-token alternative. A typical foundation session costs $5-15, feature sessions $2-8 depending on complexity. Use <code>/cost</code> for real-time spending and <code>/profile</code> to configure cost guardrails.</li>
+        </ul>
+        <p>Both are fully supported. Start with Pro if you&rsquo;re unsure.</p>
       </div>
     </details>
 
@@ -98,6 +160,32 @@ import { url } from '../data/site';
     </details>
   </section>
 
+  <!-- ── Community & Contributing ──────────────────────────────── -->
+  <section class="section">
+    <h3>Community &amp; Contributing</h3>
+
+    <details class="faq-item">
+      <summary>How can I contribute or suggest features?</summary>
+      <div class="faq-answer">
+        <p>VibeCrew is open source and community-driven. You can:</p>
+        <ul>
+          <li><strong>Propose features</strong> &mdash; <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement">open a GitHub issue</a> with your idea</li>
+          <li><strong>Report bugs</strong> &mdash; <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug">file a bug report</a> with your <code>/status</code> output</li>
+          <li><strong>Share your project</strong> &mdash; built something with VibeCrew? <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell">show it off</a> in Discussions</li>
+          <li><strong>Submit a PR</strong> &mdash; bug fixes, documentation improvements, and new templates are welcome</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>Where can I see what others have built?</summary>
+      <div class="faq-answer">
+        <p>Check the <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell">Show &amp; Tell</a> section in GitHub Discussions. Users share their projects, screenshots, and lessons learned. It&rsquo;s also a great place to find inspiration for your next build.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ── Troubleshooting ───────────────────────────────────────── -->
   <section class="section">
     <h3>Troubleshooting</h3>
 
@@ -163,7 +251,7 @@ import { url } from '../data/site';
   }
 
   .faq-item[open] summary::after {
-    content: '−';
+    content: '\2212';
   }
 
   .faq-item summary:hover {
@@ -177,5 +265,40 @@ import { url } from '../data/site';
 
   .faq-answer p:last-child {
     margin-bottom: 0;
+  }
+
+  /* ── Illustrated trust answers ───────────────────────────── */
+  .faq-answer--illustrated {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .faq-illustration {
+    flex-shrink: 0;
+    width: 120px;
+    height: 60px;
+    margin-top: 0.75rem;
+  }
+
+  .faq-illustration :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .faq-text {
+    flex: 1;
+  }
+
+  @media (max-width: 640px) {
+    .faq-answer--illustrated {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .faq-illustration {
+      margin-top: 0.5rem;
+    }
   }
 </style>

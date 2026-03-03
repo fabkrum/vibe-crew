@@ -1,41 +1,8 @@
-<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Why VibeCrew</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
-  (function() {
-    var t = localStorage.getItem('theme');
-    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
-  })();
-</script><link rel="stylesheet" href="/vibe-crew/_astro/why.GeFmeRLV.css">
-<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.tiC8ikNY.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
-  document.getElementById('hamburger').addEventListener('click', function() {
-    document.body.classList.toggle('sidebar-open');
-  });
-  document.getElementById('sidebar-overlay').addEventListener('click', function() {
-    document.body.classList.remove('sidebar-open');
-  });
-</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
-  document.getElementById('theme-toggle').addEventListener('click', function() {
-    var html = document.documentElement;
-    var isLight = html.getAttribute('data-theme') === 'light';
-    if (isLight) {
-      html.removeAttribute('data-theme');
-      localStorage.removeItem('theme');
-    } else {
-      html.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
-    }
-  });
-</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/vibe-crew/why.html" class="sidebar-link active"> Why VibeCrew </a><a href="/vibe-crew/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/vibe-crew/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/vibe-crew/setup.html" class="sidebar-link"> Setup </a><a href="/vibe-crew/new-project.html" class="sidebar-link"> New Project </a><a href="/vibe-crew/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/vibe-crew/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/vibe-crew/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
-  (function() {
-    var bar = document.getElementById('scroll-progress-bar');
-    if (!bar) return;
-    function update() {
-      var scrollTop = window.scrollY || document.documentElement.scrollTop;
-      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
-    }
-    window.addEventListener('scroll', update, { passive: true });
-    update();
-  })();
-</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Intro</span>  <span class="separator">/</span> <span>Why VibeCrew</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Intro"},{"@type":"ListItem","position":3,"name":"Why VibeCrew"}]}</script>   <section class="section" id="vision" data-astro-cid-yqiszuht> <span class="section-label" data-astro-cid-yqiszuht>The Vision</span> <h2 data-astro-cid-yqiszuht>You describe it. VibeCrew builds it right.</h2> <p data-astro-cid-yqiszuht>You have an idea &mdash; a SaaS product, a marketplace, a tool. VibeCrew makes sure what you build is production-ready: accessible, performant, designed to convert. No framework expertise. No best practices to memorize. Just describe what you want.</p> <div class="why-illustration why-illustration--hero" data-astro-cid-me2ufqve><svg viewBox="0 0 360 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+/** SVG illustrations for the Why VibeCrew page */
+export const whySvgs: Record<string, string> = {
+
+/* ── Section 1: Aspirational hero ─────────────────────────────── */
+'idea-to-product': `<svg viewBox="0 0 360 140" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Lightbulb -->
   <circle cx="40" cy="56" r="22" style="fill: var(--color-amber-dim)"/>
   <path d="M40 38 C28 38 20 48 20 58 C20 66 26 72 32 76 L32 84 L48 84 L48 76 C54 72 60 66 60 58 C60 48 52 38 40 38Z" style="fill: var(--color-amber); opacity: 0.8"/>
@@ -81,7 +48,10 @@
   <circle cx="344" cy="35" r="1.5" style="fill: var(--color-green); opacity: 0.5"/>
   <polyline points="340,58 344,62 352,52" style="stroke: var(--color-green); fill: none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
   <text x="345" y="120" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Production-ready</text>
-</svg></div> </section>  <section class="section" id="origin" data-astro-cid-yqiszuht> <div class="callout info"> <div class="callout-title">Why this exists</div>  <div class="origin-content" data-astro-cid-yqiszuht> <div class="origin-text" data-astro-cid-yqiszuht> <p data-astro-cid-yqiszuht>Born from painful experience. Before building this system, the creator tried vibe-coding without a plan &mdash; wrong tech stack three features deep, context windows filling mid-feature, token bills from re-explaining context, output that looked fine in demos but fell apart in production.</p> <p data-astro-cid-yqiszuht>VibeCrew encodes every one of those lessons into an automated system, so you don&rsquo;t have to learn them the hard way.</p> </div> <div class="why-illustration why-illustration--card" data-astro-cid-me2ufqve><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Section 2: Before VibeCrew (pain) ────────────────────────── */
+'before-vibecrew': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Code editor with red squiggles -->
   <rect x="8" y="8" width="80" height="56" rx="4" style="stroke: var(--color-red); fill: var(--color-surface)" stroke-width="1.5"/>
   <rect x="8" y="8" width="80" height="12" rx="4" style="fill: var(--color-surface-2)"/>
@@ -112,7 +82,10 @@
   <line x1="76" y1="92" x2="64" y2="100" style="stroke: var(--color-red)" stroke-width="1.5" stroke-linecap="round"/>
   <text x="150" y="90" text-anchor="middle" style="fill: var(--color-red); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Broken in</text>
   <text x="150" y="102" text-anchor="middle" style="fill: var(--color-red); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">production</text>
-</svg></div> </div>  </div> </section>  <section class="section" id="parallel" data-astro-cid-yqiszuht> <h3 data-astro-cid-yqiszuht>Work on everything at once</h3> <div class="why-illustration why-illustration--hero" data-astro-cid-me2ufqve><svg viewBox="0 0 360 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Section 3: Parallel workflow ─────────────────────────────── */
+'parallel-workflow': `<svg viewBox="0 0 360 160" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Terminal A: Coding (blue spinner) -->
   <rect x="8" y="8" width="104" height="100" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
   <rect x="8" y="8" width="104" height="16" rx="6" style="fill: var(--color-surface-2)"/>
@@ -167,7 +140,10 @@
   <text x="126" y="144" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Feature complete — click to review</text>
   <!-- Arrow pointing up to center terminal -->
   <line x1="180" y1="126" x2="180" y2="112" style="stroke: var(--color-amber)" stroke-width="1.5" stroke-dasharray="3 2"/>
-</svg></div> <p data-astro-cid-yqiszuht>Picture this &mdash; you&rsquo;re planning the next feature for Project A while VibeCrew is coding Project B and running tests on Project C. Three projects, all progressing. When an agent finishes, needs a decision, or hits a problem &mdash; a notification takes you straight to the right tab. The rest of the time? Silence. Your attention goes exactly where it&rsquo;s needed, when it&rsquo;s needed.</p> </section>  <section class="section" id="hard-parts" data-astro-cid-yqiszuht> <h3 data-astro-cid-yqiszuht>The hard parts, handled</h3> <p data-astro-cid-yqiszuht>VibeCrew takes care of everything that makes AI-generated code unreliable.</p> <div class="why-cards" data-astro-cid-yqiszuht> <div class="card why-card" data-astro-cid-yqiszuht> <div class="why-illustration why-illustration--card" data-astro-cid-me2ufqve><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Card 1: Architecture before code ─────────────────────────── */
+'foundation': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Bottom layer: Vision (widest) -->
   <rect x="20" y="76" width="160" height="28" rx="4" style="fill: var(--color-green-dim); stroke: var(--color-green)" stroke-width="1.5"/>
   <text x="100" y="94" text-anchor="middle" style="fill: var(--color-green); font-size: 10px; font-weight: 700; font-family: var(--font-sans)">Vision</text>
@@ -184,7 +160,10 @@
   <rect x="168" y="40" width="20" height="16" rx="3" style="fill: var(--color-green-dim); stroke: var(--color-green)" stroke-width="1.5"/>
   <path d="M172 40 L172 36 C172 30 184 30 184 36 L184 40" style="stroke: var(--color-green); fill: none" stroke-width="1.5" stroke-linecap="round"/>
   <circle cx="178" cy="48" r="2" style="fill: var(--color-green)"/>
-</svg></div> <div class="why-card-body" data-astro-cid-yqiszuht> <h4 data-astro-cid-yqiszuht><span class="card-icon green" data-astro-cid-yqiszuht>&#9670;</span> Architecture before code</h4> <p data-astro-cid-yqiszuht>Vision, design system, tech stack, and architecture are established before any code is written. A phase gate enforces this &mdash; no shortcuts. Solid foundation from day one.</p> </div> </div> <div class="card why-card" data-astro-cid-yqiszuht> <div class="why-illustration why-illustration--card" data-astro-cid-me2ufqve><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Card 2: Quality on autopilot ─────────────────────────────── */
+'auto-quality': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Gear icon at top -->
   <circle cx="100" cy="12" r="8" style="stroke: var(--color-blue); fill: var(--color-blue-dim)" stroke-width="1.5"/>
   <circle cx="100" cy="12" r="3" style="fill: var(--color-blue)"/>
@@ -215,7 +194,10 @@
     <text x="10" y="12" style="fill: var(--color-text-secondary); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Security</text>
     <polyline points="124,4 128,10 136,2" style="stroke: var(--color-green); fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-</svg></div> <div class="why-card-body" data-astro-cid-yqiszuht> <h4 data-astro-cid-yqiszuht><span class="card-icon blue" data-astro-cid-yqiszuht>&#9670;</span> Quality on autopilot</h4> <p data-astro-cid-yqiszuht>Tests, linting, type checking, build verification, code review, and security auditing run automatically. You don&rsquo;t need to know what ESLint is &mdash; every feature meets production standards before reaching your main branch.</p> </div> </div> <div class="card why-card" data-astro-cid-yqiszuht> <div class="why-illustration why-illustration--card" data-astro-cid-me2ufqve><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Card 3: Patterns that convert ────────────────────────────── */
+'patterns': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Left: Form with error state -->
   <rect x="8" y="8" width="84" height="104" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
   <text x="16" y="24" style="fill: var(--color-text-secondary); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Email</text>
@@ -242,7 +224,10 @@
   <text x="128" y="84" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Priority</text>
   <rect x="116" y="96" width="68" height="12" rx="4" style="fill: var(--color-accent)"/>
   <text x="150" y="105" text-anchor="middle" style="fill: #fff; font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Get started</text>
-</svg></div> <div class="why-card-body" data-astro-cid-yqiszuht> <h4 data-astro-cid-yqiszuht><span class="card-icon purple" data-astro-cid-yqiszuht>&#9670;</span> Patterns that convert</h4> <p data-astro-cid-yqiszuht>Built-in UI and business pattern libraries teach agents what production-quality means. Forms get proper error states. Pricing pages use tiered anchoring. Onboarding follows proven conversion funnels.</p> </div> </div> </div> </section>  <section class="section" id="how-it-works" data-astro-cid-yqiszuht> <h3 data-astro-cid-yqiszuht>How it works</h3> <p data-astro-cid-yqiszuht>Type slash commands, agents do the work, you get notified when needed. Here&rsquo;s what&rsquo;s under the hood.</p> <details class="how-details" data-astro-cid-yqiszuht> <summary data-astro-cid-yqiszuht>Smart context management</summary> <div class="how-answer" data-astro-cid-yqiszuht> <div class="why-illustration why-illustration--accordion" data-astro-cid-me2ufqve><svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Accordion 1: Context management ──────────────────────────── */
+'context-mgmt': `<svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Without VibeCrew -->
   <text x="48" y="10" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Without VibeCrew</text>
   <rect x="4" y="14" width="88" height="18" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
@@ -264,7 +249,10 @@
   <!-- Techniques -->
   <text x="150" y="62" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Worktree isolation</text>
   <text x="150" y="72" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">MCP + compaction</text>
-</svg></div> <p data-astro-cid-yqiszuht>Worktree isolation keeps research tokens separate. Forced compaction between features prevents context rot. MCP servers replace pasting docs. You never hit the context wall.</p> </div> </details> <details class="how-details" data-astro-cid-yqiszuht> <summary data-astro-cid-yqiszuht>The Performance Coach</summary> <div class="how-answer" data-astro-cid-yqiszuht> <div class="why-illustration why-illustration--accordion" data-astro-cid-me2ufqve><svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Accordion 2: Vibe Score ──────────────────────────────────── */
+'vibe-score': `<svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Chart area -->
   <rect x="20" y="6" width="160" height="58" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
   <line x1="32" y1="56" x2="168" y2="56" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
@@ -291,7 +279,10 @@
 
   <!-- Label -->
   <text x="100" y="78" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Each session more efficient</text>
-</svg></div> <p data-astro-cid-yqiszuht>Every session gets a Vibe Score. The coach identifies waste, proposes a rule to prevent it, and writes it permanently with your approval. Each session more efficient than the last.</p> </div> </details> <details class="how-details" data-astro-cid-yqiszuht> <summary data-astro-cid-yqiszuht>The Interrupt Protocol</summary> <div class="how-answer" data-astro-cid-yqiszuht> <div class="why-illustration why-illustration--accordion" data-astro-cid-me2ufqve><svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Accordion 3: Interrupt Protocol ──────────────────────────── */
+'interrupt': `<svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Silent terminal -->
   <rect x="4" y="8" width="52" height="40" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
   <rect x="4" y="8" width="52" height="10" rx="4" style="fill: var(--color-surface-2)"/>
@@ -316,7 +307,10 @@
   <text x="146" y="22" style="fill: var(--color-text-secondary); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">VibeCrew</text>
   <text x="130" y="36" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Click to open</text>
   <text x="158" y="60" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">One-click jump</text>
-</svg></div> <p data-astro-cid-yqiszuht>Terminal stays silent during work. OS notifications fire only on: permission needed, task complete, critical error. One-click deep link to the exact tab.</p> </div> </details> <details class="how-details" data-astro-cid-yqiszuht> <summary data-astro-cid-yqiszuht>Adapts to you</summary> <div class="how-answer" data-astro-cid-yqiszuht> <div class="why-illustration why-illustration--accordion" data-astro-cid-me2ufqve><svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+</svg>`,
+
+/* ── Accordion 4: User profiles ───────────────────────────────── */
+'profiles': `<svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Founder card -->
   <rect x="8" y="12" width="56" height="48" rx="6" style="stroke: var(--color-amber); fill: var(--color-surface)" stroke-width="1.5"/>
   <circle cx="36" cy="30" r="8" style="fill: var(--color-amber); opacity: 0.2"/>
@@ -339,129 +333,6 @@
   <text x="164" y="51" text-anchor="middle" style="fill: #fff; font-size: 6px; font-weight: 700; font-family: var(--font-sans)">Explorer</text>
 
   <text x="100" y="76" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">2-minute interview or pick a preset</text>
-</svg></div> <p data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/profile</code> &mdash; a 2-minute interview or pick a preset. Personalizes verbosity, autonomy, PR format, code comments, risk tolerance. The system meets you where you are.</p> </div> </details> </section>  <section class="section" id="getting-started" data-astro-cid-yqiszuht> <h3 data-astro-cid-yqiszuht>Get started in minutes</h3> <p data-astro-cid-yqiszuht>Whether you&rsquo;re starting fresh or bringing an existing codebase, VibeCrew guides you through every step.</p> <div class="onboarding-paths" data-astro-cid-yqiszuht> <div class="card onboarding-path" data-astro-cid-yqiszuht> <div class="onboarding-header green" data-astro-cid-yqiszuht> <span class="onboarding-icon" data-astro-cid-yqiszuht>&#10010;</span> <h4 data-astro-cid-yqiszuht>New project</h4> </div> <ol class="onboarding-steps" data-astro-cid-yqiszuht> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Install VibeCrew</strong> &mdash; clone and symlink into your project directory</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/setup</code></strong> &mdash; VibeCrew checks your environment and installs missing tools</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/profile</code></strong> &mdash; 2-minute interview or pick a preset (Founder, Builder, Explorer)</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/new-project</code></strong> &mdash; guided foundation: vision, design system, tech stack, architecture</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/new-feature "your first feature"</code></strong> &mdash; full development cycle starts</li> </ol> <a class="onboarding-link" href="/vibe-crew/quick-start.html" data-astro-cid-yqiszuht>Quick Start Guide &rarr;</a> </div> <div class="card onboarding-path" data-astro-cid-yqiszuht> <div class="onboarding-header blue" data-astro-cid-yqiszuht> <span class="onboarding-icon" data-astro-cid-yqiszuht>&#8599;</span> <h4 data-astro-cid-yqiszuht>Existing project</h4> </div> <ol class="onboarding-steps" data-astro-cid-yqiszuht> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Install VibeCrew</strong> &mdash; clone and symlink into your project root</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/setup</code></strong> &mdash; environment check and dependency installation</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/profile</code></strong> &mdash; set your experience level and preferences</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/onboard</code></strong> &mdash; Code Auditor analyzes your codebase, extracts conventions, generates CLAUDE.md</li> <li data-astro-cid-yqiszuht><strong data-astro-cid-yqiszuht>Run <code data-astro-cid-yqiszuht>/plan-features</code></strong> &mdash; define your backlog, then <code data-astro-cid-yqiszuht>/new-feature</code> to start building</li> </ol> <a class="onboarding-link" href="/vibe-crew/existing-project.html" data-astro-cid-yqiszuht>Existing Projects Guide &rarr;</a> </div> </div> </section>  <section class="section" id="community" data-astro-cid-yqiszuht> <h3 data-astro-cid-yqiszuht>Built with the community</h3> <p data-astro-cid-yqiszuht>VibeCrew is open source and shaped by the people who use it. Your feedback, ideas, and projects make it better for everyone.</p> <div class="community-grid" data-astro-cid-yqiszuht> <div class="card community-card" data-astro-cid-yqiszuht> <div class="card-icon accent" data-astro-cid-yqiszuht>&#128172;</div> <h4 data-astro-cid-yqiszuht>Propose a feature</h4> <p data-astro-cid-yqiszuht>Have an idea that would make VibeCrew better? Open a GitHub issue. The best features come from real workflows.</p> <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement&template=feature_request.md" class="community-link" data-astro-cid-yqiszuht>Open a feature request &rarr;</a> </div> <div class="card community-card" data-astro-cid-yqiszuht> <div class="card-icon red" data-astro-cid-yqiszuht>&#128027;</div> <h4 data-astro-cid-yqiszuht>Report a problem</h4> <p data-astro-cid-yqiszuht>Found a bug or something that doesn&rsquo;t work right? File an issue and we&rsquo;ll fix it. Include your <code data-astro-cid-yqiszuht>/status</code> output for faster diagnosis.</p> <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug&template=bug_report.md" class="community-link" data-astro-cid-yqiszuht>Report an issue &rarr;</a> </div> <div class="card community-card" data-astro-cid-yqiszuht> <div class="card-icon green" data-astro-cid-yqiszuht>&#127942;</div> <h4 data-astro-cid-yqiszuht>Share what you built</h4> <p data-astro-cid-yqiszuht>Built something with VibeCrew? Show it off! Share your project to inspire others and help us showcase what&rsquo;s possible.</p> <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell" class="community-link" data-astro-cid-yqiszuht>Share your project &rarr;</a> </div> </div> </section>  <section class="section" id="cta" data-astro-cid-yqiszuht> <div class="callout tip"> <div class="callout-title">What do you want to build next?</div>  <p data-astro-cid-yqiszuht>A SaaS product? A marketplace? A tool? VibeCrew handles architecture, testing, review, docs, and cost tracking. You bring the vision.</p>  </div> <div class="why-cta" data-astro-cid-yqiszuht> <a class="hero-btn primary" href="/vibe-crew/quick-start.html" data-astro-cid-yqiszuht>Get Started &rarr;</a> <a class="hero-btn secondary" href="/vibe-crew/example-session.html" data-astro-cid-yqiszuht>See an Example Session</a> </div> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/comparison.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Comparison</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
-  (function() {
-    var overlay = document.getElementById('search-modal-overlay');
-    var container = document.getElementById('search-container');
-    var searchBtn = document.getElementById('search-btn');
-    var base = overlay.getAttribute('data-base') || '';
-    var loaded = false;
+</svg>`,
 
-    function openSearch() {
-      overlay.classList.add('open');
-      if (!loaded) {
-        loaded = true;
-        // Dynamically load Pagefind UI
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = base + '/pagefind/pagefind-ui.css';
-        document.head.appendChild(link);
-
-        var script = document.createElement('script');
-        script.src = base + '/pagefind/pagefind-ui.js';
-        script.onload = function() {
-          new PagefindUI({
-            element: '#search-container',
-            showSubResults: true,
-            showImages: false,
-            bundlePath: base + '/pagefind/',
-          });
-          setTimeout(function() {
-            var input = container.querySelector('input');
-            if (input) input.focus();
-          }, 100);
-        };
-        document.head.appendChild(script);
-      } else {
-        setTimeout(function() {
-          var input = container.querySelector('input');
-          if (input) input.focus();
-        }, 50);
-      }
-    }
-
-    function closeSearch() {
-      overlay.classList.remove('open');
-    }
-
-    if (searchBtn) searchBtn.addEventListener('click', openSearch);
-
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) closeSearch();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
-        var tag = document.activeElement && document.activeElement.tagName;
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-        e.preventDefault();
-        openSearch();
-      }
-      if (e.key === 'Escape' && overlay.classList.contains('open')) {
-        closeSearch();
-      }
-    });
-  })();
-</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
-  (function() {
-    var tooltip = document.getElementById('kbd-tooltip');
-    document.addEventListener('keydown', function(e) {
-      var tag = document.activeElement && document.activeElement.tagName;
-      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-      if (e.ctrlKey || e.metaKey || e.altKey) return;
-
-      switch (e.key) {
-        case '?':
-          e.preventDefault();
-          tooltip.classList.toggle('visible');
-          break;
-        case 'n': {
-          var next = document.querySelector('.prev-next-link.next');
-          if (next) { e.preventDefault(); next.click(); }
-          break;
-        }
-        case 'p': {
-          var prev = document.querySelector('.prev-next-link.prev');
-          if (prev) { e.preventDefault(); prev.click(); }
-          break;
-        }
-        case 't': {
-          var toc = document.querySelector('.toc-sidebar');
-          if (toc) {
-            e.preventDefault();
-            toc.style.display = toc.style.display === 'none' ? '' : 'none';
-          }
-          break;
-        }
-      }
-    });
-  })();
-</script> <!-- Global copy button handler --> <script>
-    document.addEventListener('click', function(e) {
-      var btn = e.target.closest('.copy-btn');
-      if (!btn) return;
-      var pre = btn.closest('pre');
-      var text = pre && pre.getAttribute('data-copy');
-      if (!text) {
-        var code = pre && pre.querySelector('code');
-        if (code) text = code.textContent;
-      }
-      if (text) {
-        navigator.clipboard.writeText(text).then(function() {
-          btn.classList.add('copied');
-          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
-        });
-      }
-    });
-
-    // Auto-inject copy buttons on any pre without one
-    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
-      if (pre.classList.contains('mermaid')) return;
-      var btn = document.createElement('button');
-      btn.className = 'copy-btn';
-      btn.setAttribute('aria-label', 'Copy to clipboard');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-      pre.style.position = 'relative';
-      pre.appendChild(btn);
-    });
-  </script> </body> </html> 
+};

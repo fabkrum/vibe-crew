@@ -1,0 +1,43 @@
+---
+import { whySvgs } from './why-svgs';
+
+interface Props {
+  name: string;
+  size?: 'hero' | 'card' | 'accordion';
+}
+
+const { name, size = 'card' } = Astro.props;
+const svg = whySvgs[name];
+---
+
+{svg && (
+  <div class:list={['why-illustration', `why-illustration--${size}`]} set:html={svg} />
+)}
+
+<style>
+  .why-illustration {
+    flex-shrink: 0;
+    margin: 0 auto;
+  }
+
+  .why-illustration :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .why-illustration--hero {
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .why-illustration--card {
+    width: 200px;
+    height: 120px;
+  }
+
+  .why-illustration--accordion {
+    width: 200px;
+    height: 80px;
+  }
+</style>

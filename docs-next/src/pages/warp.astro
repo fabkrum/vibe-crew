@@ -7,6 +7,15 @@ import TableWrap from '../components/TableWrap.astro';
 <DocsLayout title="Warp Terminal Tips & Tricks" sectionLabel="Warp Terminal" activeSlug="warp">
   <style>
     kbd { font-family: var(--font-mono); font-size: 0.8em; background: var(--color-surface-2); border: 1px solid var(--color-border); border-bottom-width: 2px; border-radius: 4px; padding: 0.15em 0.45em; color: var(--color-text); white-space: nowrap; }
+
+    .layout-diagram { display: flex; gap: 2px; background: var(--color-border); border: 1px solid var(--color-border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 1.5rem; font-family: var(--font-mono); font-size: 0.85rem; }
+    .layout-right { display: flex; flex-direction: column; gap: 2px; flex: 0 0 38%; }
+    .layout-pane { background: var(--color-surface); padding: 1rem 1.25rem; }
+    .layout-planning { flex: 1; }
+    .layout-development, .layout-terminal { flex: 1; }
+    .layout-pane-title { color: var(--color-accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .layout-pane-content p { margin: 0.15rem 0; color: var(--color-text); }
+    .layout-pane-content .muted { color: var(--color-text-muted); }
   </style>
 
   <div class="toc">
@@ -155,17 +164,35 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
     <h3>One launch config per project, three panes each</h3>
     <p>VibeCrew creates <strong>one launch config per project</strong>. Each config opens a single tab with three split panes so you can plan, build, and run servers without switching context. Launch only the projects you need &mdash; no wasted resources.</p>
 
-    <div class="flow">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
-&#9474;                      &#9474;  <span class="highlight">Development</span>  &#9474;
-&#9474;   <span class="highlight">Planning</span>            &#9474;  claude       &#9474;
-&#9474;   claude              &#9474;  (active      &#9474;
-&#9474;                      &#9474;   feature)    &#9474;
-&#9474;   /plan-features     &#9500;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9508;
-&#9474;   /idea              &#9474;  <span class="highlight">Terminal</span>      &#9474;
-&#9474;   /status            &#9474;  raw shell    &#9474;
-&#9474;   /check             &#9474;  npm run dev  &#9474;
-&#9474;                      &#9474;  git, tests   &#9474;
-&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</div>
+    <div class="layout-diagram">
+      <div class="layout-pane layout-planning">
+        <div class="layout-pane-title">Planning</div>
+        <div class="layout-pane-content">
+          <p>claude</p>
+          <p class="muted">/plan-features</p>
+          <p class="muted">/idea</p>
+          <p class="muted">/status</p>
+          <p class="muted">/check</p>
+        </div>
+      </div>
+      <div class="layout-right">
+        <div class="layout-pane layout-development">
+          <div class="layout-pane-title">Development</div>
+          <div class="layout-pane-content">
+            <p>claude</p>
+            <p class="muted">(active feature)</p>
+          </div>
+        </div>
+        <div class="layout-pane layout-terminal">
+          <div class="layout-pane-title">Terminal</div>
+          <div class="layout-pane-content">
+            <p>raw shell</p>
+            <p class="muted">npm run dev</p>
+            <p class="muted">git, tests</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <ul>
       <li><strong>Left pane (large)</strong> &mdash; Planning. Runs Claude Code for <code>/plan-features</code>, <code>/idea</code>, <code>/status</code>, <code>/check</code>, and other utility commands. This is your primary focus pane.</li>

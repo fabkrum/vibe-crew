@@ -137,7 +137,35 @@ Context window discipline, token efficiency strategies, workflow best practices,
       }
     });
   })();
-</script> </body></html> <script>(function(){const redirects = {"#advanced":"advanced-features.html#advanced","#replay":"advanced-features.html#replay","#simplify":"advanced-features.html#simplify","#heal":"advanced-features.html#heal","#opponent":"advanced-features.html#opponent","#cost-system":"advanced-features.html#cost-system","#cost-dashboard":"advanced-features.html#cost-dashboard","#cost-guardrails":"advanced-features.html#cost-guardrails","#safety-hooks":"advanced-features.html#safety-hooks","#multi-lang":"advanced-features.html#multi-lang","#profile":"personalization.html#profile","#gamification":"personalization.html#gamification","#xp-leveling":"personalization.html#xp-leveling","#badges-section":"personalization.html#badges-section","#skill-tree":"personalization.html#skill-tree","#streaks":"personalization.html#streaks","#challenges":"personalization.html#challenges","#quizzes":"personalization.html#quizzes","#achievements-dashboard":"personalization.html#achievements-dashboard","#efficiency":"tips.html#efficiency","#system-review":"tips.html#system-review","#troubleshooting":"tips.html#troubleshooting"};
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html> <script>(function(){const redirects = {"#advanced":"advanced-features.html#advanced","#replay":"advanced-features.html#replay","#simplify":"advanced-features.html#simplify","#heal":"advanced-features.html#heal","#opponent":"advanced-features.html#opponent","#cost-system":"advanced-features.html#cost-system","#cost-dashboard":"advanced-features.html#cost-dashboard","#cost-guardrails":"advanced-features.html#cost-guardrails","#safety-hooks":"advanced-features.html#safety-hooks","#multi-lang":"advanced-features.html#multi-lang","#profile":"personalization.html#profile","#gamification":"personalization.html#gamification","#xp-leveling":"personalization.html#xp-leveling","#badges-section":"personalization.html#badges-section","#skill-tree":"personalization.html#skill-tree","#streaks":"personalization.html#streaks","#challenges":"personalization.html#challenges","#quizzes":"personalization.html#quizzes","#achievements-dashboard":"personalization.html#achievements-dashboard","#efficiency":"tips.html#efficiency","#system-review":"tips.html#system-review","#troubleshooting":"tips.html#troubleshooting"};
 
 (function() {
   var hash = window.location.hash;

@@ -2,6 +2,7 @@
 # scripts/notify.sh
 # Terminal-adaptive notification system for VibeCrew
 # Fires on: permission_prompt, idle_prompt, PostToolUseFailure
+# Arguments: "test" (sends test notification), "error" (PostToolUseFailure)
 # Silent on: everything else (preserves Deep Work)
 
 set -euo pipefail
@@ -20,23 +21,21 @@ if [[ "$NOTIFICATIONS_ENABLED" == "false" ]]; then
   exit 0
 fi
 
-# Read JSON payload from stdin
-INPUT=$(cat)
-TYPE=$(echo "$INPUT" | jq -r '.notification_type // empty')
-MESSAGE=$(echo "$INPUT" | jq -r '.message // "Attention required."')
-
-# Check if called with "error" argument (PostToolUseFailure)
-IS_ERROR=false
-if [[ "${1:-}" == "error" ]]; then
-  IS_ERROR=true
-fi
-
-# --- Determine notification content ---
-if [[ "$IS_ERROR" == "true" ]]; then
+# Check for special arguments
+if [[ "${1:-}" == "test" ]]; then
+  TITLE="VibeCrew: Test Notification"
+  BODY="Notifications are working! You'll be notified when agents need attention."
+  SOUND="Glass"
+elif [[ "${1:-}" == "error" ]]; then
   TITLE="VibeCrew: Error"
   BODY="A critical tool execution failed. Human intervention required."
   SOUND="Basso"
 else
+  # Read JSON payload from stdin (only when not called with an argument)
+  INPUT=$(cat)
+  TYPE=$(echo "$INPUT" | jq -r '.notification_type // empty')
+  MESSAGE=$(echo "$INPUT" | jq -r '.message // "Attention required."')
+
   case "$TYPE" in
     "permission_prompt")
       TITLE="VibeCrew: Approval Needed"

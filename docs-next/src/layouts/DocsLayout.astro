@@ -9,15 +9,17 @@ interface Props {
   sectionLabel?: string;
   activeSlug: string;
   wide?: boolean;
+  hideBreadcrumbs?: boolean;
+  hideNav?: boolean;
 }
 
-const { title, description, sectionLabel, activeSlug, wide = false } = Astro.props;
+const { title, description, sectionLabel, activeSlug, wide = false, hideBreadcrumbs = false, hideNav = false } = Astro.props;
 ---
 
 <BaseLayout title={`VibeCrew — ${title}`} description={description} activeSlug={activeSlug}>
   <div class="main" data-pagefind-body>
-    <Breadcrumbs title={title} slug={activeSlug} />
+    {!hideBreadcrumbs && <Breadcrumbs title={title} slug={activeSlug} />}
     <slot />
-    <PrevNext slug={activeSlug} />
+    {!hideNav && <PrevNext slug={activeSlug} />}
   </div>
 </BaseLayout>

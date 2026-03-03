@@ -4,8 +4,8 @@ import { url } from '../../data/site';
 
 <div class="ob-wizard" id="ob-wizard">
   <div class="ob-header">
-    <h2 class="ob-title">Get started in minutes</h2>
-    <p class="ob-subtitle">Answer 3 quick questions. Get a personalized setup guide.</p>
+    <h2 class="ob-title">What do you want to build today?</h2>
+    <p class="ob-subtitle">3 questions. Your personal setup guide. Ready in minutes.</p>
   </div>
 
   <div class="ob-progress" id="ob-progress">
@@ -16,7 +16,7 @@ import { url } from '../../data/site';
 
   <!-- Step 1: Project type -->
   <div class="ob-step" data-step="1">
-    <p class="ob-question">What do you want to build today?</p>
+    <p class="ob-question">Are you starting fresh or adding to an existing project?</p>
     <div class="ob-options">
       <button class="ob-btn" data-key="project" data-value="new">
         <span class="ob-btn-icon">&#10010;</span>
@@ -63,29 +63,34 @@ import { url } from '../../data/site';
 
 <style>
   .ob-wizard {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    background: rgba(167, 139, 250, 0.08);
+    border: 1.5px solid rgba(167, 139, 250, 0.3);
     border-radius: var(--radius);
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
     margin-top: 1.5rem;
+  }
+
+  :root[data-theme="light"] .ob-wizard {
+    background: rgba(147, 51, 234, 0.06);
+    border-color: rgba(147, 51, 234, 0.2);
   }
 
   /* ── Header ──────────────────────────────────────────── */
   .ob-header {
     text-align: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
   }
 
   .ob-title {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    color: var(--color-text);
-    margin: 0 0 0.3rem;
+    color: var(--color-accent);
+    margin: 0 0 0.35rem;
   }
 
   .ob-subtitle {
     font-size: 0.9rem;
-    color: var(--color-text-muted);
+    color: var(--color-text-secondary);
     margin: 0;
   }
 
@@ -190,12 +195,7 @@ import { url } from '../../data/site';
   }
 
   /* ── Guide steps ───────────────────────────────────────── */
-  .ob-guide {
-    counter-reset: guide-step;
-  }
-
   .ob-step-card {
-    counter-increment: guide-step;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     padding: 1rem 1.25rem;
@@ -207,12 +207,6 @@ import { url } from '../../data/site';
     font-size: 0.95rem;
     color: var(--color-text);
     margin: 0 0 0.5rem;
-  }
-
-  .ob-step-title::before {
-    content: counter(guide-step) ". ";
-    color: var(--color-blue);
-    font-weight: 800;
   }
 
   .ob-step-desc {
@@ -576,17 +570,15 @@ import { url } from '../../data/site';
 
       // Build guide
       guide.innerHTML = '';
-      var visibleCount = 0;
       allSteps.forEach(function(s) {
         if (!s.show) return;
-        visibleCount++;
         var div = document.createElement('div');
         div.className = 'ob-step-card';
         div.innerHTML = '<div class="ob-step-title">' + s.title + '</div>' + s.desc;
         guide.appendChild(div);
       });
 
-      resultHeader.textContent = 'Your ' + visibleCount + '-step setup guide';
+      resultHeader.textContent = 'Your personalized setup guide';
       obHeader.style.display = 'none';
       result.classList.remove('hidden');
     }

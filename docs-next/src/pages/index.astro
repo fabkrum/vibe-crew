@@ -4,13 +4,13 @@ import OnboardingWizard from '../components/why/OnboardingWizard.astro';
 import { url } from '../data/site';
 ---
 
-<DocsLayout title="VibeCrew">
+<DocsLayout title="VibeCrew" hideBreadcrumbs hideNav>
 
   <!-- ── Hero: title + subtitle + wizard ───────────────────── -->
   <section class="hero-section" id="start">
     <h1 class="hero-title">VibeCrew</h1>
     <p class="hero-subtitle">You describe what you want. VibeCrew builds it right.</p>
-    <p class="hero-desc">The autonomous vibe-coding OS for Claude Code. 14 AI agents handle architecture, design, code, tests, review, and docs &mdash; so you can focus on what to build, not how.</p>
+    <p class="hero-desc">A free, open-source Claude Code plugin that turns your ideas into production-ready apps. Install in minutes, describe what you want, and let AI agents handle architecture, design, code, tests, review, and docs.</p>
     <OnboardingWizard />
   </section>
 
@@ -46,7 +46,7 @@ import { url } from '../data/site';
     <div class="features-grid">
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span>14 specialized AI agents</span>
+        <span>Specialized AI agents</span>
       </div>
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -98,11 +98,11 @@ import { url } from '../data/site';
       </div>
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
-        <span>33 slash commands</span>
+        <span>Slash commands</span>
       </div>
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-        <span>9 MCP servers included</span>
+        <span>MCP servers included</span>
       </div>
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
@@ -199,56 +199,6 @@ import { url } from '../data/site';
     margin: 0;
     font-size: 0.85rem;
     color: var(--color-text-secondary);
-  }
-
-  /* ── Accordion (how it works) ────────────────────────────── */
-  .how-details {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    margin-bottom: 0.5rem;
-    overflow: hidden;
-  }
-
-  .how-details summary {
-    padding: 0.85rem 1.25rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--color-text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background 0.15s;
-    list-style: none;
-  }
-
-  .how-details summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .how-details summary::after {
-    content: '+';
-    font-size: 1.25rem;
-    color: var(--color-text-muted);
-  }
-
-  .how-details[open] summary::after {
-    content: '\2212';
-  }
-
-  .how-details summary:hover {
-    background: var(--color-surface);
-  }
-
-  .how-answer {
-    padding: 0 1.25rem 0.85rem;
-    border-top: 1px solid var(--color-border-subtle);
-  }
-
-  .how-answer p {
-    margin: 0;
-    padding-top: 0.5rem;
-    font-size: 0.9rem;
   }
 
   /* ── Features grid ──────────────────────────────────────── */

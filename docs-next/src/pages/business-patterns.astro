@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
+import BusinessPatternIllustration from '../components/patterns/BusinessPatternIllustration.astro';
 import { businessPatterns, categoryLabels, categoryOrder } from '../data/business-patterns';
 import type { BusinessPattern } from '../data/business-patterns';
 
@@ -43,20 +44,25 @@ const categoryDescriptions: Record<BusinessPattern['category'], string> = {
       <div class="pattern-list">
         {grouped[cat].map((entry) => (
           <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()]/g, '-')}>
-            <h4 class="pattern-name">{entry.name}</h4>
-            <p class="pattern-desc">{entry.description}</p>
-            <div class="pattern-meta">
-              <div class="meta-block">
-                <span class="meta-label">Why it works</span>
-                <p>{entry.whyItWorks}</p>
+            <div class="pattern-card-inner">
+              <BusinessPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Why it works</span>
+                    <p>{entry.whyItWorks}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Example</span>
+                    <p>{entry.example}</p>
+                  </div>
+                  {entry.source && (
+                    <span class="source-badge">{entry.source}</span>
+                  )}
+                </div>
               </div>
-              <div class="meta-block">
-                <span class="meta-label">Example</span>
-                <p>{entry.example}</p>
-              </div>
-              {entry.source && (
-                <span class="source-badge">{entry.source}</span>
-              )}
             </div>
           </div>
         ))}
@@ -137,6 +143,23 @@ const categoryDescriptions: Record<BusinessPattern['category'], string> = {
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
     background: var(--color-surface);
+  }
+
+  .pattern-card-inner {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .pattern-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: 600px) {
+    .pattern-card-inner {
+      flex-direction: column;
+    }
   }
 
   .pattern-name {

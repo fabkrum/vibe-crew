@@ -11,13 +11,6 @@ export interface NavGroup {
 
 export const navigation: NavGroup[] = [
   {
-    label: 'Intro',
-    links: [
-      { title: 'Why VibeCrew', slug: 'why' },
-      { title: 'Comparison', slug: 'comparison' },
-    ],
-  },
-  {
     label: 'Getting Started',
     links: [
       { title: 'Quick Start', slug: 'quick-start' },

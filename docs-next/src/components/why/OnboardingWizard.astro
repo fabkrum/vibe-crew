@@ -1,0 +1,375 @@
+---
+import { url } from '../../data/site';
+---
+
+<div class="ob-wizard" id="ob-wizard">
+  <div class="ob-progress" id="ob-progress">
+    <span class="ob-dot active" data-dot="1"></span>
+    <span class="ob-dot" data-dot="2"></span>
+    <span class="ob-dot" data-dot="3"></span>
+  </div>
+
+  <!-- Step 1: Project type -->
+  <div class="ob-step" data-step="1">
+    <p class="ob-question">What are you building?</p>
+    <div class="ob-options">
+      <button class="ob-btn" data-key="project" data-value="new">
+        <span class="ob-btn-icon">&#10010;</span>
+        New project
+      </button>
+      <button class="ob-btn" data-key="project" data-value="existing">
+        <span class="ob-btn-icon">&#8599;</span>
+        Existing project
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 2: Code host -->
+  <div class="ob-step hidden" data-step="2">
+    <p class="ob-question">Where's your code hosted?</p>
+    <div class="ob-options">
+      <button class="ob-btn" data-key="host" data-value="github">GitHub</button>
+      <button class="ob-btn" data-key="host" data-value="gitlab">GitLab</button>
+      <button class="ob-btn" data-key="host" data-value="other">Other / not yet</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Terminal -->
+  <div class="ob-step hidden" data-step="3">
+    <p class="ob-question">Which terminal do you use?</p>
+    <div class="ob-options">
+      <button class="ob-btn" data-key="terminal" data-value="warp">Warp</button>
+      <button class="ob-btn" data-key="terminal" data-value="other">Other (iTerm2, VS Code, Terminal.app, etc.)</button>
+    </div>
+  </div>
+
+  <!-- Result: Personalized guide -->
+  <div class="ob-result hidden" id="ob-result">
+    <div class="ob-result-header">Your setup guide</div>
+    <div class="ob-result-context" id="ob-result-context"></div>
+    <ol class="ob-guide" id="ob-guide"></ol>
+    <div class="ob-actions">
+      <button class="ob-restart" id="ob-restart">Start over</button>
+      <a class="ob-action-link" href={url('/quick-start.html')}>Full Quick Start &rarr;</a>
+      <a class="ob-action-link" href={url('/setup.html')}>Full Setup Guide &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ob-wizard {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  /* ── Progress dots ─────────────────────────────────────── */
+  .ob-progress {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .ob-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border);
+    transition: background 0.2s;
+  }
+
+  .ob-dot.active {
+    background: var(--color-accent);
+  }
+
+  .ob-dot.done {
+    background: var(--color-green);
+  }
+
+  /* ── Steps ─────────────────────────────────────────────── */
+  .ob-step.hidden,
+  .ob-result.hidden {
+    display: none;
+  }
+
+  .ob-question {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .ob-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .ob-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+  }
+
+  .ob-btn:hover {
+    border-color: var(--color-accent-dim);
+    color: var(--color-text);
+  }
+
+  .ob-btn.selected {
+    background: var(--color-accent-bg);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .ob-btn-icon {
+    font-size: 0.85rem;
+    line-height: 1;
+  }
+
+  /* ── Result panel ──────────────────────────────────────── */
+  .ob-result-header {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-text);
+    margin-bottom: 0.75rem;
+  }
+
+  .ob-result-context {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .ob-pill {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 999px;
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+  }
+
+  .ob-guide {
+    padding-left: 1.5rem;
+    margin: 0 0 1.25rem;
+    list-style: decimal;
+  }
+
+  .ob-guide li {
+    margin-bottom: 0.85rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+  }
+
+  .ob-guide li strong {
+    color: var(--color-text);
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+
+  .ob-guide li code {
+    font-size: 0.82rem;
+    padding: 0.15rem 0.35rem;
+    border-radius: 3px;
+    background: var(--color-code-bg, rgba(167, 139, 250, 0.08));
+    color: var(--color-accent);
+  }
+
+  /* ── Actions footer ────────────────────────────────────── */
+  .ob-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .ob-restart {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s;
+  }
+
+  .ob-restart:hover {
+    border-color: var(--color-accent-dim);
+    color: var(--color-text);
+  }
+
+  .ob-action-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .ob-action-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var answers = {};
+    var wizard = document.getElementById('ob-wizard');
+    var steps = wizard.querySelectorAll('.ob-step');
+    var dots = wizard.querySelectorAll('.ob-dot');
+    var result = document.getElementById('ob-result');
+    var guide = document.getElementById('ob-guide');
+    var context = document.getElementById('ob-result-context');
+
+    wizard.addEventListener('click', function(e) {
+      var btn = e.target.closest('.ob-btn');
+      if (!btn) return;
+
+      var step = btn.closest('.ob-step');
+      var stepNum = parseInt(step.getAttribute('data-step'));
+      var key = btn.getAttribute('data-key');
+
+      // Mark selected
+      step.querySelectorAll('.ob-btn').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      answers[key] = btn.getAttribute('data-value');
+
+      // Update progress dots
+      dots[stepNum - 1].classList.remove('active');
+      dots[stepNum - 1].classList.add('done');
+
+      if (stepNum < 3) {
+        // Show next step
+        var next = wizard.querySelector('[data-step="' + (stepNum + 1) + '"]');
+        if (next) {
+          next.classList.remove('hidden');
+          dots[stepNum].classList.add('active');
+        }
+      } else {
+        // Build result
+        buildGuide();
+      }
+    });
+
+    document.getElementById('ob-restart').addEventListener('click', function() {
+      answers = {};
+      // Reset steps visibility
+      steps.forEach(function(s, i) {
+        if (i === 0) s.classList.remove('hidden');
+        else s.classList.add('hidden');
+        s.querySelectorAll('.ob-btn').forEach(function(b) { b.classList.remove('selected'); });
+      });
+      // Reset dots
+      dots.forEach(function(d, i) {
+        d.classList.remove('done', 'active');
+        if (i === 0) d.classList.add('active');
+      });
+      // Hide result
+      result.classList.add('hidden');
+      guide.innerHTML = '';
+      context.innerHTML = '';
+    });
+
+    function buildGuide() {
+      var allSteps = [
+        {
+          title: 'Prerequisites',
+          desc: 'Install Git 2.30+, Node.js 18+, jq, and <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">Claude Code</a>.',
+          show: true
+        },
+        {
+          title: 'Install VibeCrew',
+          desc: '<code>git clone https://github.com/fabkrum/vibe-crew.git</code> then symlink into your project:<br><code>ln -s /path/to/vibe-crew/claude-plugin-vibe-crew .claude-plugin</code>',
+          show: true
+        },
+        {
+          title: 'Install GitHub CLI',
+          desc: '<code>brew install gh</code> then <code>gh auth login</code> &mdash; enables PR automation, issue sync, and release management.',
+          show: answers.host === 'github'
+        },
+        {
+          title: 'Install GitLab CLI',
+          desc: '<code>brew install glab</code> then <code>glab auth login</code> &mdash; enables MR automation and issue sync.',
+          show: answers.host === 'gitlab'
+        },
+        {
+          title: 'Set up Warp Terminal',
+          desc: 'Configure <a href="https://docs.warp.dev/features/sessions" target="_blank">Launch Configs</a> for multi-tab workflows. VibeCrew auto-detects Warp and enables deep-link notifications via <code>warp://</code> URIs.',
+          show: answers.terminal === 'warp'
+        },
+        {
+          title: 'Run <code>/setup</code>',
+          desc: 'Environment check, dependency validation, and auto-installation of any missing tools.',
+          show: true
+        },
+        {
+          title: 'Run <code>/profile</code>',
+          desc: '2-minute interview or pick a preset (Founder, Builder, Explorer). Personalizes verbosity, autonomy, and review style.',
+          show: true
+        },
+        {
+          title: 'Run <code>/new-project</code>',
+          desc: 'Guided foundation: vision document, design system, tech stack research, and architecture diagrams &mdash; all before any code.',
+          show: answers.project === 'new'
+        },
+        {
+          title: 'Run <code>/onboard</code>',
+          desc: 'Code Auditor analyzes your codebase, extracts conventions, and generates a CLAUDE.md &mdash; so agents understand your project immediately.',
+          show: answers.project === 'existing'
+        },
+        {
+          title: 'Build your first feature',
+          desc: answers.project === 'new'
+            ? 'Run <code>/new-feature "your first feature"</code> &mdash; VibeCrew handles plan, UI design, code, tests, review, and docs.'
+            : 'Run <code>/plan-features</code> to define your backlog, then <code>/new-feature "name"</code> to start the full development cycle.',
+          show: true
+        }
+      ];
+
+      // Build context pills
+      var labels = {
+        project: { new: 'New project', existing: 'Existing project' },
+        host: { github: 'GitHub', gitlab: 'GitLab', other: 'Other host' },
+        terminal: { warp: 'Warp', other: 'Other terminal' }
+      };
+      context.innerHTML = '';
+      ['project', 'host', 'terminal'].forEach(function(key) {
+        var pill = document.createElement('span');
+        pill.className = 'ob-pill';
+        pill.textContent = labels[key][answers[key]];
+        context.appendChild(pill);
+      });
+
+      // Build guide list
+      guide.innerHTML = '';
+      allSteps.forEach(function(s) {
+        if (!s.show) return;
+        var li = document.createElement('li');
+        li.innerHTML = '<strong>' + s.title + '</strong>' + s.desc;
+        guide.appendChild(li);
+      });
+
+      result.classList.remove('hidden');
+    }
+  })();
+</script>

@@ -153,8 +153,8 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
     <h2>The Ideal Window Layout</h2>
     <p>Warp Launch Configurations let you save a complete terminal layout &mdash; windows, tabs, panes, working directories, and startup commands &mdash; as a YAML file. Open it with one click and your entire VibeCrew workspace is ready.</p>
 
-    <h3>One tab per project, three panes each</h3>
-    <p>The recommended layout uses <strong>one Warp tab per project</strong>. Each tab contains three split panes so you can plan, build, and run servers without switching context. If you work on multiple projects, each gets its own tab with the same pane structure.</p>
+    <h3>One launch config per project, three panes each</h3>
+    <p>VibeCrew creates <strong>one launch config per project</strong>. Each config opens a single tab with three split panes so you can plan, build, and run servers without switching context. Launch only the projects you need &mdash; no wasted resources.</p>
 
     <div class="flow">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
 &#9474;                      &#9474;  <span class="highlight">Development</span>  &#9474;
@@ -174,88 +174,97 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
       <li><strong>Right bottom pane</strong> &mdash; Terminal. A raw shell for dev servers (<code>npm run dev</code>), <code>git</code> commands, file browsing, or manual tests. No Claude Code here.</li>
     </ul>
 
-    <h3>Launch configuration</h3>
-    <p>Save this file to <code>~/.warp/launch_configurations/vibecrew.yaml</code>. Each tab represents one project &mdash; duplicate the tab block for additional projects, updating the <code>title</code> and <code>cwd</code> paths.</p>
+    <h3>Automatic setup</h3>
+    <p>When you run <code>/setup</code> inside Warp, VibeCrew <strong>automatically generates a launch configuration</strong> for your project. This works for both new projects (<code>/new-project</code>) and existing ones (<code>/onboard</code>) since both start with <code>/setup</code>.</p>
 
-    <p>Create the directory and file:</p>
-    <pre class="copyable" data-copy="mkdir -p ~/.warp/launch_configurations
-touch ~/.warp/launch_configurations/vibecrew.yaml
-open ~/.warp/launch_configurations/vibecrew.yaml"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>mkdir -p ~/.warp/launch_configurations
-touch ~/.warp/launch_configurations/vibecrew.yaml
-open ~/.warp/launch_configurations/vibecrew.yaml</code></pre>
+    <p>During setup, VibeCrew asks which Claude Code command to use for this project. This is useful when you have multiple Claude Code profiles &mdash; for example, a personal config and a work config:</p>
 
-    <p>Then paste the following YAML:</p>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Command</th><th>Use Case</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>claude</code></td><td>Default &mdash; no profile flag</td></tr>
+          <tr><td><code>claude-p</code></td><td>Personal/private profile</td></tr>
+          <tr><td><code>claude-w</code></td><td>Work profile</td></tr>
+          <tr><td><em>custom</em></td><td>Any alias or wrapper script you use</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
 
-    <pre class="copyable" data-copy="name: VibeCrew
+    <p>The chosen command is stored in <code>.vibecrew/config.json</code> as <code>claude_command</code> and used in the generated launch config. You can change it later from the <strong>Vibe Dashboard</strong> (Settings &rarr; Terminal &rarr; Claude Command) or by editing the config file directly.</p>
+
+    <p>The generated launch config file is saved to:</p>
+    <pre><code><span class="code-label">file location</span>~/.warp/launch_configurations/&lt;project-name&gt;.yaml</code></pre>
+
+    <p>For example, a project in <code>~/projects/my-app</code> creates <code>~/.warp/launch_configurations/my-app.yaml</code>. The project name is derived from the directory name.</p>
+
+    <p>To launch it, open Warp's Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>), type "Launch Configuration", and select your project by name. The three-pane layout opens with Claude Code already running in the Planning and Development panes.</p>
+
+    <Callout type="info" title="Detection &amp; idempotency">
+      <p>VibeCrew only generates the launch config when it detects Warp (via the <code>$WARP_SESSION_ID</code> environment variable). If a config already exists for the project, it is preserved &mdash; your customizations are never overwritten. Running <code>/setup</code> again is always safe.</p>
+    </Callout>
+
+    <h3>Customizing your layout</h3>
+    <p>The generated config is a standard Warp YAML file that you can edit freely. All launch configs live in a single directory:</p>
+    <pre class="copyable" data-copy="open ~/.warp/launch_configurations/"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>open ~/.warp/launch_configurations/</code></pre>
+
+    <p>Here's the default structure that VibeCrew generates. The <code>exec</code> value matches whatever Claude command you chose during setup:</p>
+
+    <pre class="copyable" data-copy="---
+name: my-app
 windows:
   - tabs:
-      - title: Project A
+      - title: my-app
         color: Blue
         layout:
           split_direction: vertical
           panes:
-            - cwd: /path/to/project-a
+            - cwd: /Users/you/projects/my-app
               commands:
-                - exec: claude
+                - exec: claude-w
               is_focused: true
             - split_direction: horizontal
               panes:
-                - cwd: /path/to/project-a
+                - cwd: /Users/you/projects/my-app
                   commands:
-                    - exec: claude
-                - cwd: /path/to/project-a
-      - title: Project B
-        color: Green
-        layout:
-          split_direction: vertical
-          panes:
-            - cwd: /path/to/project-b
-              commands:
-                - exec: claude
-              is_focused: true
-            - split_direction: horizontal
-              panes:
-                - cwd: /path/to/project-b
-                  commands:
-                    - exec: claude
-                - cwd: /path/to/project-b"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/vibecrew.yaml</span>name: VibeCrew
+                    - exec: claude-w
+                - cwd: /Users/you/projects/my-app"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/my-app.yaml</span>---
+name: my-app
 windows:
   - tabs:
-      - title: Project A
+      - title: my-app
         color: Blue
         layout:
           split_direction: vertical
           panes:
-            - cwd: /path/to/project-a
+            - cwd: /Users/you/projects/my-app
               commands:
-                - exec: claude
+                - exec: claude-w
               is_focused: true
             - split_direction: horizontal
               panes:
-                - cwd: /path/to/project-a
+                - cwd: /Users/you/projects/my-app
                   commands:
-                    - exec: claude
-                - cwd: /path/to/project-a
-      - title: Project B
-        color: Green
-        layout:
-          split_direction: vertical
-          panes:
-            - cwd: /path/to/project-b
-              commands:
-                - exec: claude
-              is_focused: true
-            - split_direction: horizontal
-              panes:
-                - cwd: /path/to/project-b
-                  commands:
-                    - exec: claude
-                - cwd: /path/to/project-b</code></pre>
+                    - exec: claude-w
+                - cwd: /Users/you/projects/my-app</code></pre>
 
-    <p>Launch it via Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>) &rarr; "Launch Configuration" &rarr; "VibeCrew". Each tab opens with the Planning and Development panes running Claude Code, and a raw Terminal pane ready for your dev server.</p>
+    <p>Common customizations:</p>
+    <ul>
+      <li><strong>Change the Claude command</strong> &mdash; replace the <code>exec:</code> value (e.g. <code>claude</code>, <code>claude-p</code>, <code>claude-w</code>) to switch profiles</li>
+      <li><strong>Change the tab color</strong> &mdash; set <code>color</code> to <code>Red</code>, <code>Green</code>, <code>Yellow</code>, <code>Blue</code>, <code>Magenta</code>, or <code>Cyan</code></li>
+      <li><strong>Add a startup command</strong> &mdash; add <code>- exec: npm run dev</code> to the bottom-right pane's <code>commands</code> list to auto-start your dev server</li>
+      <li><strong>Remove a Claude pane</strong> &mdash; delete the <code>commands</code> block from any pane to keep it as a raw terminal</li>
+      <li><strong>Change the split direction</strong> &mdash; swap <code>vertical</code> and <code>horizontal</code> to rearrange pane positions</li>
+    </ul>
 
-    <Callout type="tip" title="Color-code your tabs">
-      <p>Warp supports tab colors: <code>Red</code>, <code>Green</code>, <code>Yellow</code>, <code>Blue</code>, <code>Magenta</code>, <code>Cyan</code>. Assign a unique color to each project so you can identify them at a glance. When a notification fires, the tab color tells you which project needs attention.</p>
+    <Callout type="tip" title="Changing the Claude command later">
+      <p>If you need to switch profiles after setup, you have three options: edit the <code>exec:</code> lines in the YAML file directly, update <code>claude_command</code> in <code>.vibecrew/config.json</code>, or change it in the Vibe Dashboard under Settings &rarr; Terminal. Note that changing the config only affects future launch config generation &mdash; to update an existing launch config, edit the YAML file.</p>
+    </Callout>
+
+    <Callout type="tip" title="Color-code your projects">
+      <p>Assign a unique color to each project so you can identify them at a glance when multiple tabs are open. When a notification fires, the tab color tells you which project needs attention.</p>
     </Callout>
 
     <Callout type="info" title="Pane navigation">
@@ -263,7 +272,7 @@ windows:
     </Callout>
 
     <h3>Saving your current layout</h3>
-    <p>Already arranged your windows perfectly? Save it without writing YAML: open the Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>), search for "Save New Launch Configuration", give it a name, and it captures your current tabs, panes, and directories.</p>
+    <p>Rearranged your panes and want to save the result? Open the Command Palette (<kbd>CMD</kbd>+<kbd>P</kbd>), search for "Save New Launch Configuration", give it a name, and Warp captures your current tabs, panes, and directories. This overwrites the auto-generated YAML with your actual layout.</p>
   </section>
 
   <hr>
@@ -394,7 +403,7 @@ windows:
     <p>Create this as a Warp Workflow (via Command Palette &rarr; "Create a New Personal Workflow"):</p>
 
     <pre><code><span class="code-label">warp workflow</span>Name:    VibeCrew: Start Feature
-Command: cd &#123;&#123;project_path&#125;&#125; &amp;&amp; claude -p '/new-feature "&#123;&#123;feature_name&#125;&#125;"'</code></pre>
+Command: cd &#123;&#123;project_path&#125;&#125; &amp;&amp; claude-p '/new-feature "&#123;&#123;feature_name&#125;&#125;"'</code></pre>
 
     <p>Arguments use <code>&#123;&#123;double_curly_braces&#125;&#125;</code> syntax. When you run the workflow via <kbd>CMD</kbd>+<kbd>P</kbd>, Warp prompts you to fill in each argument. Press <kbd>Shift</kbd>+<kbd>Tab</kbd> to cycle between them.</p>
 
@@ -407,22 +416,22 @@ Command: cd &#123;&#123;project_path&#125;&#125; &amp;&amp; claude -p '/new-feat
         <tbody>
           <tr>
             <td><strong>VibeCrew: Start Feature</strong></td>
-            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude -p '/new-feature "&#123;&#123;name&#125;&#125;"'</code></td>
+            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude-p '/new-feature "&#123;&#123;name&#125;&#125;"'</code></td>
             <td>Start a feature session with one command</td>
           </tr>
           <tr>
             <td><strong>VibeCrew: Quick Status</strong></td>
-            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude -p '/status'</code></td>
+            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude-p '/status'</code></td>
             <td>Check project state without entering interactive mode</td>
           </tr>
           <tr>
             <td><strong>VibeCrew: Heal CI</strong></td>
-            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude -p '/heal'</code></td>
+            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude-p '/heal'</code></td>
             <td>Fix CI failures in one shot</td>
           </tr>
           <tr>
             <td><strong>VibeCrew: Run Backlog</strong></td>
-            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude -p '/run-backlog'</code></td>
+            <td><code>cd &#123;&#123;project&#125;&#125; &amp;&amp; claude-p '/run-backlog'</code></td>
             <td>Fire-and-forget batch execution</td>
           </tr>
         </tbody>

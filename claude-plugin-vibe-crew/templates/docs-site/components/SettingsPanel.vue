@@ -122,6 +122,7 @@ function resetToDefaults() {
   const defaultConfig: ConfigData = {
     schema_version: form.schema_version,
     terminal: form.terminal,
+    claude_command: "claude",
     notifications: { enabled: true, sound: "Submarine", on_permission_prompt: true, on_task_complete: true, on_failure: true },
     concurrency: { max_parallel_agents: 3 },
     mcp_servers: { context7: true, chrome_devtools: true, playwright: true, semgrep: false, sentry: false, supabase: false, stripe: false, vercel: false, figma: false },
@@ -217,7 +218,28 @@ const soundOptions = ["Submarine", "Blow", "Bottle", "Frog", "Funk", "Glass", "H
       </div>
     </section>
 
-    <!-- ── 2. Notifications ─────────────────────────────────────────────── -->
+    <!-- ── 2. Terminal ─────────────────────────────────────────────────── -->
+    <section class="section" aria-label="Terminal settings">
+      <h3 class="section-title">Terminal</h3>
+      <p class="section-desc">Configure the Claude Code command used in Warp launch configurations and startup scripts.</p>
+
+      <div class="field-grid">
+        <div class="field-row">
+          <label class="field-label">
+            <span class="label-text">Claude Command</span>
+            <span class="label-desc">The command to launch Claude Code (e.g. <code>claude</code>, <code>claude-p</code>, <code>claude-w</code>)</span>
+          </label>
+          <input
+            type="text"
+            v-model="form.claude_command"
+            placeholder="claude"
+            class="text-input"
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 3. Notifications ─────────────────────────────────────────────── -->
     <section class="section" aria-label="Notification settings">
       <h3 class="section-title">Notifications</h3>
 
@@ -967,6 +989,23 @@ const soundOptions = ["Submarine", "Blow", "Bottle", "Frog", "Funk", "Glass", "H
 
 .number-input-wrap .number-input:focus {
   outline: none;
+}
+
+/* ── Text input ───────────────────────────────────────────────────────────── */
+.text-input {
+  padding: 0.35em 0.6em;
+  border: 1px solid var(--sp-border);
+  border-radius: 6px;
+  background: var(--sp-bg);
+  color: var(--sp-text-1);
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  min-width: 140px;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: var(--sp-accent);
 }
 
 /* ── Select input ──────────────────────────────────────────────────────────── */

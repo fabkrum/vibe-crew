@@ -34,6 +34,7 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
   "schema_version": "1.6.0",
   "created_at": "$TIMESTAMP",
   "terminal": "$TERMINAL",
+  "claude_command": "${CLAUDE_COMMAND:-claude}",
   "notifications": {
     "enabled": true,
     "sound": "Submarine",
@@ -298,6 +299,42 @@ EOF
   echo "Created: .vibecrew/gamification.json"
 elif [[ -f "$VIBECREW_DIR/gamification.json" ]]; then
   echo "Exists:  .vibecrew/gamification.json (preserved)"
+fi
+
+# --- Generate Warp launch configuration (if running in Warp) ---
+if [[ "$TERMINAL" == "warp" ]]; then
+  WARP_LC_DIR="$HOME/.warp/launch_configurations"
+  PROJECT_NAME=$(basename "$PROJECT_ROOT")
+  WARP_LC_FILE="$WARP_LC_DIR/$PROJECT_NAME.yaml"
+  WARP_CLAUDE_CMD="${CLAUDE_COMMAND:-claude}"
+
+  if [[ ! -f "$WARP_LC_FILE" ]]; then
+    mkdir -p "$WARP_LC_DIR"
+    cat > "$WARP_LC_FILE" <<WARPEOF
+---
+name: $PROJECT_NAME
+windows:
+  - tabs:
+      - title: $PROJECT_NAME
+        color: Blue
+        layout:
+          split_direction: vertical
+          panes:
+            - cwd: $PROJECT_ROOT
+              commands:
+                - exec: $WARP_CLAUDE_CMD
+              is_focused: true
+            - split_direction: horizontal
+              panes:
+                - cwd: $PROJECT_ROOT
+                  commands:
+                    - exec: $WARP_CLAUDE_CMD
+                - cwd: $PROJECT_ROOT
+WARPEOF
+    echo "Created: Warp launch config (~/.warp/launch_configurations/$PROJECT_NAME.yaml)"
+  else
+    echo "Exists:  Warp launch config (~/.warp/launch_configurations/$PROJECT_NAME.yaml)"
+  fi
 fi
 
 # --- Add .gitignore entries ---

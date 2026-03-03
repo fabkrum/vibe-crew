@@ -117,7 +117,19 @@ For disabled servers:
 - "Disabled servers are auto-enabled when matching technologies are selected in your TDR."
 - "To manually enable: `bash ${CLAUDE_PLUGIN_ROOT}/scripts/enable-mcp-server.sh <server-name> enable`"
 
-## Step 5: Initialize .vibecrew/ Directory
+## Step 5: Configure Claude Command
+
+Ask the user which Claude Code command to use for this project:
+
+> "Which Claude Code command should be used for this project?"
+> 1. **claude** — Default (no profile flag)
+> 2. **claude-p** — Personal/private profile
+> 3. **claude-w** — Work profile
+> 4. **Custom** — Enter a custom command
+
+Store the answer as the `CLAUDE_COMMAND` environment variable. This value is written to `.vibecrew/config.json` and used in the Warp launch configuration. If the user skips this step or presses Enter, default to `claude`.
+
+## Step 6: Initialize .vibecrew/ Directory
 
 First, check if `.vibecrew/` already exists:
 
@@ -127,18 +139,18 @@ test -d ".vibecrew" && echo "exists" || echo "missing"
 
 - If it **already exists**, ask the user: "A .vibecrew/ directory already exists. Do you want to reinitialize? This will reset all state. (yes/no)"
   - If the user says yes, proceed with initialization.
-  - If the user says no, skip to Step 6 and use the existing configuration.
+  - If the user says no, skip to Step 7 and use the existing configuration.
 - If it does **not exist**, proceed with initialization.
 
-Run the initialization script:
+Run the initialization script, passing the Claude command from Step 5:
 
 ```
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/init-vibecrew-state.sh"
+CLAUDE_COMMAND="<value from step 5>" bash "${CLAUDE_PLUGIN_ROOT}/scripts/init-vibecrew-state.sh"
 ```
 
-This script creates the `.vibecrew/` directory structure with `config.json`, `state.json`, `backlog.json`, and subdirectories for `sessions/`, `scores/`, `signals/`, `locks/`, `architecture/`, `releases/`, `handoffs/`, and `workflows/`.
+This script creates the `.vibecrew/` directory structure with `config.json`, `state.json`, `backlog.json`, and subdirectories for `sessions/`, `scores/`, `signals/`, `locks/`, `architecture/`, `releases/`, `handoffs/`, and `workflows/`. If running in Warp, it also generates a launch configuration at `~/.warp/launch_configurations/<project-name>.yaml` using the configured Claude command.
 
-## Step 6: Verify Initialization
+## Step 7: Verify Initialization
 
 Read the generated configuration to confirm it was written correctly:
 
@@ -153,7 +165,7 @@ Verify the file contains valid JSON with at minimum:
 
 If the file is missing or malformed, report the error and suggest the user check file permissions.
 
-## Step 7: Print Summary
+## Step 8: Print Summary
 
 Print a clear summary of everything that was configured:
 
@@ -171,9 +183,11 @@ Optional:
   terminal-notifier: installed (or "not installed — desktop notifications disabled")
 
 Terminal:           <detected terminal>
+Claude command:    <configured command>
 Notifications:     <enabled/disabled>
 MCP Servers:       <N healthy / M enabled>
 State directory:   .vibecrew/ <created/existing>
+Warp launch config: <created/existing/skipped (not Warp)>
 
 Setup complete! Run /new-project to start building your foundation.
 ```
@@ -186,7 +200,7 @@ Optional features not available:
   - Desktop notifications (install: brew install terminal-notifier)
 ```
 
-## Step 8: Launch Dashboard
+## Step 9: Launch Dashboard
 
 After the summary, check if the docs site has been scaffolded and launch the dashboard:
 
@@ -202,7 +216,7 @@ fi
 
 If the docs site does not exist yet (first setup before `/new-project`), skip this step. The dashboard will be launched after the docs site is scaffolded during project creation.
 
-## Step 9: Prompt for Profile
+## Step 10: Prompt for Profile
 
 After the summary, check if the user has completed the profile interview:
 

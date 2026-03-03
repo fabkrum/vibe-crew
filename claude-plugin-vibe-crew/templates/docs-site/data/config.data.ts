@@ -7,6 +7,7 @@ const __dir = dirname(fileURLToPath(import.meta.url))
 export interface ConfigData {
   schema_version: string
   terminal: string
+  claude_command: string
   notifications: {
     enabled: boolean
     sound: string
@@ -85,6 +86,7 @@ export interface ConfigData {
 const defaultConfig: ConfigData = {
   schema_version: '1.4.0',
   terminal: 'default',
+  claude_command: 'claude',
   notifications: {
     enabled: true,
     sound: 'Submarine',

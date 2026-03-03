@@ -39,15 +39,10 @@ export const navigation: NavGroup[] = [
       { title: 'Slash Commands', slug: 'commands' },
       { title: 'UI Pattern Guide', slug: 'ui-patterns' },
       { title: 'Business Patterns', slug: 'business-patterns' },
+      { title: 'Warp Terminal Guide', slug: 'warp' },
       { title: 'Glossary', slug: 'glossary' },
       { title: 'FAQ', slug: 'faq' },
-    ],
-  },
-  {
-    label: 'Releases',
-    collapsed: true,
-    links: [
-      { title: 'Release Notes', slug: 'releases' },
+      { title: 'Changelog', slug: 'releases' },
     ],
   },
 ];

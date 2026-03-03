@@ -3,79 +3,87 @@ import { url } from '../../data/site';
 ---
 
 <div class="ob-wizard" id="ob-wizard">
-  <div class="ob-header">
-    <h2 class="ob-title">What do you want to build today?</h2>
-    <p class="ob-subtitle">3 questions. Your personal setup guide. Ready in minutes.</p>
-  </div>
+  <!-- ── Wizard (questions) ──────────────────────────────── -->
+  <div id="ob-questions">
+    <div class="ob-header">
+      <h2 class="ob-title">What do you want to build today?</h2>
+      <p class="ob-subtitle">3 questions. Your personal setup guide. Ready in minutes.</p>
+    </div>
 
-  <div class="ob-progress" id="ob-progress">
-    <span class="ob-dot active" data-dot="1"></span>
-    <span class="ob-dot" data-dot="2"></span>
-    <span class="ob-dot" data-dot="3"></span>
-  </div>
+    <div class="ob-progress" id="ob-progress">
+      <span class="ob-dot active" data-dot="1"></span>
+      <span class="ob-dot" data-dot="2"></span>
+      <span class="ob-dot" data-dot="3"></span>
+    </div>
 
-  <!-- Step 1: Project type -->
-  <div class="ob-step" data-step="1">
-    <p class="ob-question">Are you starting fresh or adding to an existing project?</p>
-    <div class="ob-options">
-      <button class="ob-btn" data-key="project" data-value="new">
-        <span class="ob-btn-icon">&#10010;</span>
-        New project
-      </button>
-      <button class="ob-btn" data-key="project" data-value="existing">
-        <span class="ob-btn-icon">&#8599;</span>
-        Existing project
-      </button>
+    <div class="ob-step" data-step="1">
+      <p class="ob-question">Are you starting fresh or adding to an existing project?</p>
+      <div class="ob-options">
+        <button class="ob-btn" data-key="project" data-value="new">
+          <span class="ob-btn-icon">&#10010;</span>
+          New project
+        </button>
+        <button class="ob-btn" data-key="project" data-value="existing">
+          <span class="ob-btn-icon">&#8599;</span>
+          Existing project
+        </button>
+      </div>
+    </div>
+
+    <div class="ob-step hidden" data-step="2">
+      <p class="ob-question">Where's your code hosted?</p>
+      <div class="ob-options">
+        <button class="ob-btn" data-key="host" data-value="github">GitHub</button>
+        <button class="ob-btn" data-key="host" data-value="gitlab">GitLab</button>
+        <button class="ob-btn" data-key="host" data-value="other">Other / not yet</button>
+      </div>
+    </div>
+
+    <div class="ob-step hidden" data-step="3">
+      <p class="ob-question">Which terminal do you use?</p>
+      <div class="ob-options">
+        <button class="ob-btn" data-key="terminal" data-value="warp">Warp</button>
+        <button class="ob-btn" data-key="terminal" data-value="other">Other (iTerm2, VS Code, Terminal.app, etc.)</button>
+      </div>
     </div>
   </div>
 
-  <!-- Step 2: Code host -->
-  <div class="ob-step hidden" data-step="2">
-    <p class="ob-question">Where's your code hosted?</p>
-    <div class="ob-options">
-      <button class="ob-btn" data-key="host" data-value="github">GitHub</button>
-      <button class="ob-btn" data-key="host" data-value="gitlab">GitLab</button>
-      <button class="ob-btn" data-key="host" data-value="other">Other / not yet</button>
+  <!-- ── Guide (replaces wizard, one step at a time) ─────── -->
+  <div id="ob-guide-panel" class="hidden">
+    <div class="ob-guide-nav">
+      <span class="ob-guide-progress" id="ob-guide-progress"></span>
+      <div class="ob-guide-pills" id="ob-guide-pills"></div>
     </div>
-  </div>
-
-  <!-- Step 3: Terminal -->
-  <div class="ob-step hidden" data-step="3">
-    <p class="ob-question">Which terminal do you use?</p>
-    <div class="ob-options">
-      <button class="ob-btn" data-key="terminal" data-value="warp">Warp</button>
-      <button class="ob-btn" data-key="terminal" data-value="other">Other (iTerm2, VS Code, Terminal.app, etc.)</button>
-    </div>
-  </div>
-
-  <!-- Result: Personalized guide -->
-  <div class="ob-result hidden" id="ob-result">
-    <div class="ob-result-header" id="ob-result-header">Your personalized setup guide</div>
-    <div class="ob-result-context" id="ob-result-context"></div>
-    <div class="ob-guide" id="ob-guide"></div>
-    <div class="ob-actions">
-      <button class="ob-restart" id="ob-restart">Start over</button>
-      <a class="ob-action-link" href={url('/workflow.html')}>Core Workflow &rarr;</a>
-      <a class="ob-action-link" href={url('/faq.html')}>FAQ &rarr;</a>
+    <div class="ob-guide-step" id="ob-guide-step"></div>
+    <div class="ob-guide-footer">
+      <button class="ob-prev hidden" id="ob-prev">&larr; Back</button>
+      <button class="ob-next" id="ob-next">Next &rarr;</button>
+      <button class="ob-restart hidden" id="ob-restart">Start over</button>
+      <div class="ob-footer-links">
+        <a class="ob-action-link" href={url('/workflow.html')}>Core Workflow &rarr;</a>
+        <a class="ob-action-link" href={url('/faq.html')}>FAQ &rarr;</a>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
   .ob-wizard {
-    background: rgba(167, 139, 250, 0.08);
-    border: 1.5px solid rgba(167, 139, 250, 0.3);
+    background: rgba(167, 139, 250, 0.15);
+    border: 1.5px solid rgba(167, 139, 250, 0.4);
     border-radius: var(--radius);
     padding: 2rem 1.5rem;
     margin-top: 1.5rem;
   }
 
   :root[data-theme="light"] .ob-wizard {
-    background: rgba(147, 51, 234, 0.06);
-    border-color: rgba(147, 51, 234, 0.2);
+    background: rgba(147, 51, 234, 0.1);
+    border-color: rgba(147, 51, 234, 0.25);
   }
 
-  /* ── Header ──────────────────────────────────────────── */
+  .hidden { display: none !important; }
+
+  /* ── Wizard header ─────────────────────────────────────── */
   .ob-header {
     text-align: center;
     margin-bottom: 1.5rem;
@@ -110,31 +118,23 @@ import { url } from '../../data/site';
     transition: background 0.2s;
   }
 
-  .ob-dot.active {
-    background: var(--color-accent);
-  }
+  .ob-dot.active { background: var(--color-accent); }
+  .ob-dot.done { background: var(--color-green); }
 
-  .ob-dot.done {
-    background: var(--color-green);
-  }
-
-  /* ── Steps ─────────────────────────────────────────────── */
-  .ob-step.hidden,
-  .ob-result.hidden {
-    display: none;
-  }
-
+  /* ── Question steps ────────────────────────────────────── */
   .ob-question {
     font-weight: 600;
     color: var(--color-text);
     margin-bottom: 0.75rem;
     font-size: 1rem;
+    text-align: center;
   }
 
   .ob-options {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    justify-content: center;
   }
 
   .ob-btn {
@@ -168,25 +168,30 @@ import { url } from '../../data/site';
     line-height: 1;
   }
 
-  /* ── Result panel ──────────────────────────────────────── */
-  .ob-result-header {
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--color-text);
-    margin-bottom: 0.75rem;
+  /* ── Guide panel ───────────────────────────────────────── */
+  .ob-guide-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
   }
 
-  .ob-result-context {
+  .ob-guide-progress {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .ob-guide-pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 1.25rem;
+    gap: 0.35rem;
   }
 
   .ob-pill {
     display: inline-block;
-    padding: 0.2rem 0.6rem;
-    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
     font-weight: 600;
     border-radius: 999px;
     background: var(--color-accent-bg);
@@ -194,56 +199,50 @@ import { url } from '../../data/site';
     border: 1px solid rgba(167, 139, 250, 0.2);
   }
 
-  /* ── Guide steps ───────────────────────────────────────── */
-  .ob-step-card {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .ob-step-title {
-    font-weight: 700;
-    font-size: 0.95rem;
+  /* ── Guide step content ────────────────────────────────── */
+  .ob-guide-step-title {
+    font-size: 1.15rem;
+    font-weight: 800;
     color: var(--color-text);
     margin: 0 0 0.5rem;
   }
 
-  .ob-step-desc {
-    font-size: 0.88rem;
+  .ob-guide-step-summary {
+    font-size: 0.9rem;
     color: var(--color-text-secondary);
-    line-height: 1.6;
-    margin: 0;
+    line-height: 1.65;
+    margin: 0 0 0.5rem;
   }
 
-  .ob-step-desc a {
+  .ob-guide-step-summary a {
     color: var(--color-accent);
     text-decoration: none;
   }
 
-  .ob-step-desc a:hover {
+  .ob-guide-step-summary a:hover {
     text-decoration: underline;
   }
 
-  /* ── Code blocks with copy button ──────────────────────── */
+  /* ── Code blocks with inline copy icon ─────────────────── */
   .ob-code-wrap {
     position: relative;
     margin-top: 0.5rem;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
   }
 
   .ob-code {
     display: block;
     font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     line-height: 1.55;
-    padding: 0.65rem 2.75rem 0.65rem 0.85rem;
+    padding: 0.6rem 2.5rem 0.6rem 0.85rem;
     border-radius: var(--radius-xs);
     background: rgba(0, 0, 0, 0.25);
     color: var(--color-text);
     border: 1px solid var(--color-border);
     overflow-x: auto;
     white-space: pre;
+    margin: 0;
   }
 
   :root[data-theme="light"] .ob-code {
@@ -252,45 +251,86 @@ import { url } from '../../data/site';
 
   .ob-copy-btn {
     position: absolute;
-    top: 0.4rem;
-    right: 0.4rem;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--color-border);
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
     border-radius: var(--radius-xs);
-    background: var(--color-surface);
+    background: transparent;
     color: var(--color-text-muted);
-    font-size: 0.7rem;
-    font-family: var(--font-sans);
     cursor: pointer;
     transition: all 0.15s;
   }
 
   .ob-copy-btn:hover {
     color: var(--color-text);
-    border-color: var(--color-accent-dim);
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .ob-copy-btn.copied {
     color: var(--color-green);
-    border-color: var(--color-green);
   }
 
-  .ob-code-label {
-    display: inline-block;
-    font-size: 0.7rem;
+  .ob-copy-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* ── Expandable details ────────────────────────────────── */
+  .ob-details {
+    margin-top: 0.75rem;
+    border: none;
+  }
+
+  .ob-details summary {
+    font-size: 0.82rem;
     font-weight: 600;
-    color: var(--color-text-muted);
-    margin-top: 0.5rem;
-    margin-bottom: 0.15rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    color: var(--color-accent);
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
   }
 
-  /* ── Checklist inside steps ────────────────────────────── */
+  .ob-details summary::-webkit-details-marker { display: none; }
+
+  .ob-details summary::before {
+    content: '▸';
+    font-size: 0.7rem;
+    transition: transform 0.15s;
+  }
+
+  .ob-details[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .ob-details-body {
+    padding-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .ob-details-body p {
+    margin: 0 0 0.35rem;
+  }
+
+  .ob-details-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Checklist ─────────────────────────────────────────── */
   .ob-checklist {
     list-style: none;
     padding: 0;
-    margin: 0.5rem 0 0;
+    margin: 0.35rem 0 0;
   }
 
   .ob-checklist li {
@@ -308,23 +348,53 @@ import { url } from '../../data/site';
     font-weight: 700;
   }
 
-  /* ── Actions footer ────────────────────────────────────── */
-  .ob-actions {
+  /* ── Guide footer ──────────────────────────────────────── */
+  .ob-guide-footer {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
-    padding-top: 1rem;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    margin-top: 1.25rem;
     border-top: 1px solid var(--color-border-subtle);
   }
 
-  .ob-restart {
-    padding: 0.4rem 0.9rem;
+  .ob-prev, .ob-next {
+    padding: 0.45rem 1rem;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xs);
     background: transparent;
     color: var(--color-text-secondary);
-    font-size: 0.82rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s;
+  }
+
+  .ob-prev:hover, .ob-next:hover {
+    border-color: var(--color-accent-dim);
+    color: var(--color-text);
+  }
+
+  .ob-next {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .ob-next:hover {
+    opacity: 0.9;
+    color: #fff;
+  }
+
+  .ob-restart {
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
     cursor: pointer;
     font-family: var(--font-sans);
     transition: all 0.15s;
@@ -333,6 +403,12 @@ import { url } from '../../data/site';
   .ob-restart:hover {
     border-color: var(--color-accent-dim);
     color: var(--color-text);
+  }
+
+  .ob-footer-links {
+    margin-left: auto;
+    display: flex;
+    gap: 1rem;
   }
 
   .ob-action-link {
@@ -351,24 +427,31 @@ import { url } from '../../data/site';
   (function() {
     var answers = {};
     var wizard = document.getElementById('ob-wizard');
+    var questionsPanel = document.getElementById('ob-questions');
+    var guidePanel = document.getElementById('ob-guide-panel');
     var steps = wizard.querySelectorAll('.ob-step');
     var dots = wizard.querySelectorAll('.ob-dot');
-    var result = document.getElementById('ob-result');
-    var guide = document.getElementById('ob-guide');
-    var context = document.getElementById('ob-result-context');
-    var resultHeader = document.getElementById('ob-result-header');
-    var obHeader = wizard.querySelector('.ob-header');
+    var guideStep = document.getElementById('ob-guide-step');
+    var pills = document.getElementById('ob-guide-pills');
+    var progressLabel = document.getElementById('ob-guide-progress');
+    var prevBtn = document.getElementById('ob-prev');
+    var nextBtn = document.getElementById('ob-next');
+    var restartBtn = document.getElementById('ob-restart');
+    var guideSteps = [];
+    var currentGuideStep = 0;
+
+    var copySvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    var checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 
     wizard.addEventListener('click', function(e) {
-      // Handle copy buttons
       var copyBtn = e.target.closest('.ob-copy-btn');
       if (copyBtn) {
         var code = copyBtn.getAttribute('data-copy');
         navigator.clipboard.writeText(code).then(function() {
-          copyBtn.textContent = 'Copied!';
+          copyBtn.innerHTML = checkSvg;
           copyBtn.classList.add('copied');
           setTimeout(function() {
-            copyBtn.textContent = 'Copy';
+            copyBtn.innerHTML = copySvg;
             copyBtn.classList.remove('copied');
           }, 2000);
         });
@@ -382,12 +465,10 @@ import { url } from '../../data/site';
       var stepNum = parseInt(step.getAttribute('data-step'));
       var key = btn.getAttribute('data-key');
 
-      // Mark selected
       step.querySelectorAll('.ob-btn').forEach(function(b) { b.classList.remove('selected'); });
       btn.classList.add('selected');
       answers[key] = btn.getAttribute('data-value');
 
-      // Update progress dots
       dots[stepNum - 1].classList.remove('active');
       dots[stepNum - 1].classList.add('done');
 
@@ -402,8 +483,24 @@ import { url } from '../../data/site';
       }
     });
 
-    document.getElementById('ob-restart').addEventListener('click', function() {
+    prevBtn.addEventListener('click', function() {
+      if (currentGuideStep > 0) {
+        currentGuideStep--;
+        renderGuideStep();
+      }
+    });
+
+    nextBtn.addEventListener('click', function() {
+      if (currentGuideStep < guideSteps.length - 1) {
+        currentGuideStep++;
+        renderGuideStep();
+      }
+    });
+
+    restartBtn.addEventListener('click', function() {
       answers = {};
+      currentGuideStep = 0;
+      guideSteps = [];
       steps.forEach(function(s, i) {
         if (i === 0) s.classList.remove('hidden');
         else s.classList.add('hidden');
@@ -413,174 +510,228 @@ import { url } from '../../data/site';
         d.classList.remove('done', 'active');
         if (i === 0) d.classList.add('active');
       });
-      result.classList.add('hidden');
-      guide.innerHTML = '';
-      context.innerHTML = '';
-      obHeader.style.display = '';
+      guidePanel.classList.add('hidden');
+      questionsPanel.classList.remove('hidden');
     });
 
-    function codeBlock(code, label) {
+    function cmd(code) {
       var escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      var labelHtml = label ? '<span class="ob-code-label">' + label + '</span>' : '';
-      return labelHtml +
-        '<div class="ob-code-wrap">' +
-          '<pre class="ob-code">' + escaped + '</pre>' +
-          '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '">Copy</button>' +
-        '</div>';
+      return '<div class="ob-code-wrap">' +
+        '<pre class="ob-code">' + escaped + '</pre>' +
+        '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '">' + copySvg + '</button>' +
+      '</div>';
+    }
+
+    function details(label, content) {
+      return '<details class="ob-details"><summary>' + label + '</summary>' +
+        '<div class="ob-details-body">' + content + '</div></details>';
     }
 
     function checklist(items) {
       return '<ul class="ob-checklist">' + items.map(function(i) { return '<li>' + i + '</li>'; }).join('') + '</ul>';
     }
 
-    function buildGuide() {
-      var allSteps = [
-        {
-          title: 'Install prerequisites',
-          desc: '<p class="ob-step-desc">You need 4 things installed on your machine before starting. Open your terminal and check each one:</p>' +
-            checklist([
-              '<strong>Git</strong> 2.30+ &mdash; check with <code>git --version</code>',
-              '<strong>Node.js</strong> 18+ &mdash; check with <code>node --version</code>',
-              '<strong>jq</strong> (JSON tool) &mdash; check with <code>jq --version</code>',
-              '<strong>Claude Code</strong> &mdash; install from <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">docs.anthropic.com</a>'
-            ]) +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">Missing something? On macOS, install with Homebrew:</p>' +
-            codeBlock('brew install git node jq', 'terminal'),
-          show: true
-        },
-        {
-          title: 'Download VibeCrew',
-          desc: '<p class="ob-step-desc">Clone VibeCrew to a central location on your computer. You only do this once &mdash; it serves all your projects.</p>' +
-            codeBlock('mkdir -p ~/claude-plugins && cd ~/claude-plugins\ngit clone https://github.com/fabkrum/vibe-crew.git', 'terminal') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">Then run the bootstrap script. It checks everything and installs any missing dependencies automatically:</p>' +
-            codeBlock('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew\n./install.sh', 'terminal'),
-          show: true
-        },
-        {
-          title: 'Connect VibeCrew to your project',
-          desc: '<p class="ob-step-desc">Navigate to your project folder and create a symlink (shortcut) that connects VibeCrew to your project. Then start Claude Code with the plugin:</p>' +
-            codeBlock('cd ~/projects/my-project\nln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew\nclaude --plugin-dir ./claude-plugin-vibe-crew', 'terminal') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">Replace <code>~/projects/my-project</code> with the actual path to your project folder.</p>',
-          show: true
-        },
-        {
-          title: 'Install GitHub CLI',
-          desc: '<p class="ob-step-desc">The GitHub CLI lets VibeCrew automate pull requests, sync issues, and create releases on your behalf. Install it and log in:</p>' +
-            codeBlock('brew install gh\ngh auth login', 'terminal') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">Follow the prompts to authenticate with your GitHub account. Choose "HTTPS" and "Login with a web browser" when asked.</p>',
-          show: answers.host === 'github'
-        },
-        {
-          title: 'Install GitLab CLI',
-          desc: '<p class="ob-step-desc">The GitLab CLI lets VibeCrew automate merge requests and sync issues. Install it and log in:</p>' +
-            codeBlock('brew install glab\nglab auth login', 'terminal') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">Follow the prompts to authenticate with your GitLab account.</p>',
-          show: answers.host === 'gitlab'
-        },
-        {
-          title: 'Set up Warp Terminal',
-          desc: '<p class="ob-step-desc">VibeCrew auto-detects Warp and enables deep-link notifications &mdash; when an agent finishes or needs your attention, clicking the notification takes you directly to the right tab.</p>' +
-            '<p class="ob-step-desc" style="margin-top:0.35rem">For the best experience, set up <a href="https://docs.warp.dev/features/sessions" target="_blank">Launch Configurations</a> so you can open multi-tab layouts with one click. This is optional but makes parallel workflows much smoother.</p>',
-          show: answers.terminal === 'warp'
-        },
-        {
-          title: 'Run environment setup',
-          desc: '<p class="ob-step-desc">Inside Claude Code, type this command. It verifies all dependencies, detects your terminal, creates the <code>.vibecrew/</code> runtime directory, tests notifications, and checks your git configuration:</p>' +
-            codeBlock('/setup', 'type in claude code') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">If anything is missing, the wizard offers to install it for you automatically.</p>',
-          show: true
-        },
-        {
-          title: 'Personalize your experience',
-          desc: '<p class="ob-step-desc">This 2-minute step adapts VibeCrew to how you work. Type this command in Claude Code:</p>' +
-            codeBlock('/profile', 'type in claude code') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">You can answer 8 questions or pick a preset:</p>' +
-            checklist([
-              '<strong>Founder</strong> &mdash; for non-technical users. Detailed explanations, supervised autonomy, educational walkthroughs',
-              '<strong>Builder</strong> &mdash; for developers. Minimal explanations, full autonomy, auto-merge PRs',
-              '<strong>Explorer</strong> &mdash; for learners. Inline explanations, reference docs, collaborative decisions'
-            ]) +
-            '<p class="ob-step-desc" style="margin-top:0.35rem">This controls verbosity, how much VibeCrew asks before acting, PR review style, code comments, and more. You can change it anytime.</p>',
-          show: true
-        },
-        {
-          title: 'Build your project foundation',
-          desc: '<p class="ob-step-desc">This is the most important step. VibeCrew will guide you through a conversation to establish your project\'s architecture <em>before</em> any code is written. Type:</p>' +
-            codeBlock('/new-project', 'type in claude code') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">This takes 15&ndash;30 minutes and creates 6 artifacts:</p>' +
-            checklist([
-              '<strong>VISION.md</strong> &mdash; what you\'re building, who it\'s for, and what success looks like',
-              '<strong>Design system</strong> &mdash; visual identity via a 3-phase design interview (colors, typography, spacing)',
-              '<strong>Tech stack</strong> &mdash; the Stack Scout agent researches and recommends technologies, documented in a TDR',
-              '<strong>Architecture diagrams</strong> &mdash; 5 visual diagrams of your system (database, APIs, components, user flows)',
-              '<strong>Roadmap</strong> &mdash; your planned features in priority order',
-              '<strong>CLAUDE.md</strong> &mdash; project rules that all agents follow in future sessions'
-            ]) +
-            '<p class="ob-step-desc" style="margin-top:0.35rem">This is a one-time investment. After this, every feature session starts instantly because the architecture decisions are already made.</p>',
-          show: answers.project === 'new'
-        },
-        {
-          title: 'Onboard your existing codebase',
-          desc: '<p class="ob-step-desc">VibeCrew will analyze your existing code to understand your project before making any changes. Nothing is modified &mdash; this is read-only. Type:</p>' +
-            codeBlock('/onboard', 'type in claude code') +
-            '<p class="ob-step-desc" style="margin-top:0.5rem">The Code Auditor agent scans your project and:</p>' +
-            checklist([
-              '<strong>Detects your stack</strong> &mdash; language, framework, package manager, build tools',
-              '<strong>Extracts conventions</strong> &mdash; naming patterns, formatters, linters, commit style, import conventions',
-              '<strong>Identifies test gaps</strong> &mdash; compares source files vs test files, estimates coverage',
-              '<strong>Derives your design system</strong> &mdash; extracts existing CSS variables, colors, and spacing',
-              '<strong>Generates CLAUDE.md</strong> &mdash; project-specific rules so agents understand your codebase immediately'
-            ]) +
-            '<p class="ob-step-desc" style="margin-top:0.35rem">After onboarding, the phase gate unlocks and you can start building features right away.</p>',
-          show: answers.project === 'existing'
-        },
-        {
-          title: 'Build your first feature',
-          desc: answers.project === 'new'
-            ? '<p class="ob-step-desc">You\'re ready to build! Type a command like this in Claude Code:</p>' +
-              codeBlock('/new-feature "user authentication"', 'type in claude code') +
-              '<p class="ob-step-desc" style="margin-top:0.5rem">Replace the text in quotes with whatever feature you want to build first. VibeCrew handles the full cycle automatically: planning, UI design, coding, testing, code review, and documentation.</p>' +
-              '<p class="ob-step-desc" style="margin-top:0.35rem">When the feature is done, wrap up the session:</p>' +
-              codeBlock('/wrap', 'type in claude code') +
-              '<p class="ob-step-desc" style="margin-top:0.35rem">This runs the quality gate (tests, linting, build), calculates your Vibe Score, and commits your work.</p>'
-            : '<p class="ob-step-desc">First, define your feature backlog by typing:</p>' +
-              codeBlock('/plan-features', 'type in claude code') +
-              '<p class="ob-step-desc" style="margin-top:0.5rem">This creates structured specifications for each feature. Then start building:</p>' +
-              codeBlock('/new-feature "your feature name"', 'type in claude code') +
-              '<p class="ob-step-desc" style="margin-top:0.35rem">VibeCrew handles the full cycle: planning, UI design, coding, testing, code review, and documentation. When done, wrap up:</p>' +
-              codeBlock('/wrap', 'type in claude code') +
-              '<p class="ob-step-desc" style="margin-top:0.35rem">This runs the quality gate, calculates your Vibe Score, and commits your work.</p>',
-          show: true
-        }
-      ];
+    function renderGuideStep() {
+      var s = guideSteps[currentGuideStep];
+      var html = '<h3 class="ob-guide-step-title">' + s.title + '</h3>';
+      html += '<p class="ob-guide-step-summary">' + s.summary + '</p>';
+      s.commands.forEach(function(c) {
+        html += cmd(c.code);
+      });
+      if (s.more) html += s.more;
+      guideStep.innerHTML = html;
 
-      // Build context pills
+      progressLabel.textContent = 'Step ' + (currentGuideStep + 1) + ' of ' + guideSteps.length;
+
+      // Show/hide nav buttons
+      if (currentGuideStep === 0) {
+        prevBtn.classList.add('hidden');
+      } else {
+        prevBtn.classList.remove('hidden');
+      }
+
+      if (currentGuideStep === guideSteps.length - 1) {
+        nextBtn.classList.add('hidden');
+        restartBtn.classList.remove('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+        restartBtn.classList.add('hidden');
+      }
+    }
+
+    function buildGuide() {
+      var isNew = answers.project === 'new';
+      var isGH = answers.host === 'github';
+      var isGL = answers.host === 'gitlab';
+      var isWarp = answers.terminal === 'warp';
+
+      // --- Host-specific auth note ---
+      var hostAuthNote = '';
+      if (isGH) {
+        hostAuthNote = '<p style="margin-top:0.35rem">The installer includes <strong>GitHub CLI</strong>. After setup, authenticate:</p>' +
+          cmd('gh auth login') +
+          '<p style="margin-top:0.25rem;font-size:0.82rem;color:var(--color-text-muted)">Choose "HTTPS" and "Login with a web browser" when prompted.</p>';
+      } else if (isGL) {
+        hostAuthNote = '<p style="margin-top:0.35rem">The installer includes <strong>GitLab CLI</strong>. After setup, authenticate:</p>' +
+          cmd('glab auth login');
+      }
+
+      // --- Step 1: Install VibeCrew ---
+      var step1 = {
+        title: 'Install VibeCrew',
+        summary: 'One command installs everything: Homebrew (macOS), Git, Node.js, jq, and VibeCrew itself.',
+        commands: [
+          { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash' }
+        ],
+        more: details('What does this install?',
+          checklist([
+            '<strong>Homebrew</strong> &mdash; macOS package manager (also installs Xcode tools &amp; Git)',
+            '<strong>Node.js</strong> &mdash; JavaScript runtime for build tools and MCP servers',
+            '<strong>jq</strong> &mdash; JSON processor used by hook scripts at zero token cost',
+            '<strong>VibeCrew</strong> &mdash; cloned to <code>~/claude-plugins/vibe-crew</code>'
+          ]) +
+          '<p style="margin-top:0.35rem">Safe to re-run anytime. Existing installs are skipped.</p>'
+        ) +
+        details('Prefer to inspect first?',
+          '<p>Review the script, then run it locally:</p>' +
+          cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew') +
+          cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh') +
+          '<p style="margin-top:0.25rem;font-size:0.82rem;color:var(--color-text-muted)">This is exactly what the bootstrap script does.</p>'
+        ) +
+        hostAuthNote,
+        show: true
+      };
+
+      // --- Step 2: Open your project ---
+      var step2Commands, step2Summary;
+      if (isNew) {
+        step2Summary = 'Create your project folder and launch Claude Code with VibeCrew.';
+        step2Commands = [
+          { code: 'mkdir ~/my-project && cd ~/my-project' },
+          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew' }
+        ];
+      } else {
+        step2Summary = 'Navigate to your existing project and launch Claude Code with VibeCrew.';
+        step2Commands = [
+          { code: 'cd ~/my-project' },
+          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew' }
+        ];
+      }
+      var step2 = {
+        title: 'Open your project',
+        summary: step2Summary,
+        commands: step2Commands,
+        more: '<p class="ob-guide-step-summary" style="margin-top:0.5rem;font-size:0.82rem;color:var(--color-text-muted)">Replace <code>~/my-project</code> with your actual project path.' +
+          (isWarp ? ' Warp auto-detects VibeCrew and shows the plugin badge.' : '') +
+          '</p>',
+        show: true
+      };
+
+      // --- Step 3: Set up your environment ---
+      var step3 = {
+        title: 'Set up your environment',
+        summary: 'Inside Claude Code, run two commands to verify your install and personalize your experience.',
+        commands: [
+          { code: '/setup' },
+          { code: '/profile' }
+        ],
+        more: details('What does /setup check?',
+          '<p>Verifies dependencies, detects your terminal, creates the <code>.vibecrew/</code> state directory, tests notifications, and checks Git config. Offers to fix anything missing automatically.</p>'
+        ) +
+        details('What are the /profile presets?',
+          checklist([
+            '<strong>Founder</strong> &mdash; non-technical users. Detailed explanations, supervised autonomy',
+            '<strong>Builder</strong> &mdash; developers. Minimal explanations, full autonomy, auto-merge PRs',
+            '<strong>Explorer</strong> &mdash; learners. Inline explanations, collaborative decisions'
+          ]) +
+          '<p style="margin-top:0.35rem">Controls verbosity, autonomy, PR style, code comments, and more. Change anytime.</p>'
+        ),
+        show: true
+      };
+
+      // --- Conditional Warp step ---
+      var warpStep = {
+        title: 'Get the most out of Warp',
+        summary: 'VibeCrew auto-detects Warp and unlocks click-to-jump notifications, launch configs, and structured output blocks.',
+        commands: [],
+        more: checklist([
+          '<strong>Notification deep-links</strong> &mdash; clicking a notification jumps to the right Warp tab',
+          '<strong>Launch configs</strong> &mdash; <code>/setup</code> auto-generates a multi-tab layout for parallel workflows',
+          '<strong>Blocks</strong> &mdash; every command is a navigable, copyable block for reviewing agent output',
+          '<strong>Keyboard shortcuts</strong> &mdash; <kbd>Cmd+D</kbd> split pane, <kbd>Cmd+T</kbd> new tab, <kbd>Ctrl+Shift+R</kbd> launch config'
+        ]) +
+        '<p style="margin-top:0.75rem">See the full <a href="warp.html">Warp Terminal Guide &rarr;</a> for session restoration, Warp Drive, themes, Wispr Flow, and more.</p>',
+        show: isWarp
+      };
+
+      // --- Step 4: Start building ---
+      var step4Commands, step4Summary, step4More;
+      if (isNew) {
+        step4Summary = 'VibeCrew guides you through architecture decisions, then you build your first feature.';
+        step4Commands = [
+          { code: '/new-project' },
+          { code: '/new-feature "user authentication"' }
+        ];
+        step4More = details('What does /new-project create?',
+          checklist([
+            '<strong>VISION.md</strong> &mdash; what you\'re building and who it\'s for',
+            '<strong>Design system</strong> &mdash; colors, typography, spacing via a design interview',
+            '<strong>Tech stack</strong> &mdash; researched technology recommendations (TDR)',
+            '<strong>Architecture diagrams</strong> &mdash; visual system overview',
+            '<strong>Roadmap</strong> &mdash; features in priority order',
+            '<strong>CLAUDE.md</strong> &mdash; project rules for all future sessions'
+          ]) +
+          '<p style="margin-top:0.35rem">This is a one-time step. Every feature session after this starts instantly.</p>'
+        );
+      } else {
+        step4Summary = 'Let VibeCrew analyze your codebase (read-only), then start building features.';
+        step4Commands = [
+          { code: '/onboard' },
+          { code: '/new-feature "your feature name"' }
+        ];
+        step4More = details('What does /onboard check?',
+          checklist([
+            '<strong>Stack</strong> &mdash; language, framework, build tools',
+            '<strong>Conventions</strong> &mdash; naming, formatters, linters, commit style',
+            '<strong>Test gaps</strong> &mdash; source vs test coverage',
+            '<strong>Design system</strong> &mdash; existing CSS variables, colors, spacing',
+            '<strong>CLAUDE.md</strong> &mdash; auto-generated project rules'
+          ]) +
+          '<p style="margin-top:0.35rem">Nothing is modified. After onboarding, start building features immediately.</p>'
+        );
+      }
+      var step4 = {
+        title: 'Start building',
+        summary: step4Summary,
+        commands: step4Commands,
+        more: step4More +
+          details('What happens during the feature cycle?',
+            '<p>Each feature goes through: Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs. Use <code>/wrap</code> to run the quality gate and commit your work.</p>'
+          ),
+        show: true
+      };
+
+      var allSteps = [step1, step2, step3, warpStep, step4];
+      guideSteps = allSteps.filter(function(s) { return s.show; });
+      currentGuideStep = 0;
+
+      // Build pills
       var labels = {
         project: { new: 'New project', existing: 'Existing project' },
         host: { github: 'GitHub', gitlab: 'GitLab', other: 'Other host' },
         terminal: { warp: 'Warp', other: 'Other terminal' }
       };
-      context.innerHTML = '';
+      pills.innerHTML = '';
       ['project', 'host', 'terminal'].forEach(function(key) {
         var pill = document.createElement('span');
         pill.className = 'ob-pill';
         pill.textContent = labels[key][answers[key]];
-        context.appendChild(pill);
+        pills.appendChild(pill);
       });
 
-      // Build guide
-      guide.innerHTML = '';
-      allSteps.forEach(function(s) {
-        if (!s.show) return;
-        var div = document.createElement('div');
-        div.className = 'ob-step-card';
-        div.innerHTML = '<div class="ob-step-title">' + s.title + '</div>' + s.desc;
-        guide.appendChild(div);
-      });
-
-      resultHeader.textContent = 'Your personalized setup guide';
-      obHeader.style.display = 'none';
-      result.classList.remove('hidden');
+      renderGuideStep();
+      questionsPanel.classList.add('hidden');
+      guidePanel.classList.remove('hidden');
     }
   })();
 </script>

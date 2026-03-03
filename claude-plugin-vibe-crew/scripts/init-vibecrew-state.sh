@@ -311,13 +311,13 @@ if [[ "$TERMINAL" == "warp" ]]; then
   if [[ ! -f "$WARP_LC_FILE" ]]; then
     mkdir -p "$WARP_LC_DIR"
     cat > "$WARP_LC_FILE" <<WARPEOF
+---
 name: $PROJECT_NAME
 windows:
   - tabs:
       - title: $PROJECT_NAME
-        color: Blue
+        color: blue
         layout:
-          cwd: $PROJECT_ROOT
           split_direction: vertical
           panes:
             - cwd: $PROJECT_ROOT

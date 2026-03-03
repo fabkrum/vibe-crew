@@ -212,13 +212,13 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
 
     <p>Here's the default structure that VibeCrew generates. The <code>exec</code> value matches whatever Claude command you chose during setup:</p>
 
-    <pre class="copyable" data-copy="name: my-app
+    <pre class="copyable" data-copy="---
+name: my-app
 windows:
   - tabs:
       - title: my-app
-        color: Blue
+        color: blue
         layout:
-          cwd: /Users/you/projects/my-app
           split_direction: vertical
           panes:
             - cwd: /Users/you/projects/my-app
@@ -230,13 +230,13 @@ windows:
                 - cwd: /Users/you/projects/my-app
                   commands:
                     - exec: claude-w
-                - cwd: /Users/you/projects/my-app"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/my-app.yaml</span>name: my-app
+                - cwd: /Users/you/projects/my-app"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">~/.warp/launch_configurations/my-app.yaml</span>---
+name: my-app
 windows:
   - tabs:
       - title: my-app
-        color: Blue
+        color: blue
         layout:
-          cwd: /Users/you/projects/my-app
           split_direction: vertical
           panes:
             - cwd: /Users/you/projects/my-app
@@ -253,7 +253,7 @@ windows:
     <p>Common customizations:</p>
     <ul>
       <li><strong>Change the Claude command</strong> &mdash; replace the <code>exec:</code> value (e.g. <code>claude</code>, <code>claude-p</code>, <code>claude-w</code>) to switch profiles</li>
-      <li><strong>Change the tab color</strong> &mdash; set <code>color</code> to <code>Red</code>, <code>Green</code>, <code>Yellow</code>, <code>Blue</code>, <code>Magenta</code>, or <code>Cyan</code></li>
+      <li><strong>Change the tab color</strong> &mdash; set <code>color</code> to <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>magenta</code>, or <code>cyan</code> (must be lowercase)</li>
       <li><strong>Add a startup command</strong> &mdash; add <code>- exec: npm run dev</code> to the bottom-right pane's <code>commands</code> list to auto-start your dev server</li>
       <li><strong>Remove a Claude pane</strong> &mdash; delete the <code>commands</code> block from any pane to keep it as a raw terminal</li>
       <li><strong>Change the split direction</strong> &mdash; swap <code>vertical</code> and <code>horizontal</code> to rearrange pane positions</li>

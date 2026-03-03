@@ -502,10 +502,11 @@ import { url } from '../../data/site';
 
     resetBtn.addEventListener('click', doRestart);
 
-    function cmd(code, label) {
+    function cmd(code, label, note) {
       var escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       var html = '';
       if (label) html += '<p class="ob-cmd-label">' + label + '</p>';
+      if (note) html += '<p class="ob-note">' + note + '</p>';
       html += '<div class="ob-code-wrap">' +
         '<pre class="ob-code">' + escaped + '</pre>' +
         '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '" title="Copy to clipboard">' + copySvg + '</button>' +
@@ -522,7 +523,7 @@ import { url } from '../../data/site';
       var html = '<h3 class="ob-guide-step-title">' + s.title + '</h3>';
       html += '<p class="ob-guide-step-summary">' + s.summary + '</p>';
       s.commands.forEach(function(c) {
-        html += cmd(c.code, c.label);
+        html += cmd(c.code, c.label, c.note);
       });
       if (s.more) html += s.more;
       guideStep.innerHTML = html;
@@ -552,8 +553,7 @@ import { url } from '../../data/site';
       // --- Host-specific auth note ---
       var hostAuthNote = '';
       if (isGH) {
-        hostAuthNote = cmd('gh auth login', 'Log in to GitHub so VibeCrew can create pull requests for you:') +
-          '<p class="ob-note">Choose "HTTPS" and "Login with a web browser" when prompted.</p>';
+        hostAuthNote = cmd('gh auth login', 'Log in to GitHub so VibeCrew can create pull requests for you:', 'Choose "HTTPS" and "Login with a web browser" when prompted.');
       } else if (isGL) {
         hostAuthNote = cmd('glab auth login', 'Log in to GitLab so VibeCrew can create merge requests for you:');
       }
@@ -563,10 +563,9 @@ import { url } from '../../data/site';
         title: 'Install VibeCrew',
         summary: 'One command installs everything: Homebrew (macOS), Git, Node.js, jq, and VibeCrew itself.',
         commands: [
-          { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash', label: 'Paste this into your terminal to install everything automatically:' }
+          { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash', label: 'Paste this into your terminal to install everything automatically:', note: 'This installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and downloads VibeCrew. Safe to re-run &mdash; existing installs are skipped.' }
         ],
-        more: '<p class="ob-note">This installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and downloads VibeCrew. Safe to re-run &mdash; existing installs are skipped.</p>' +
-        '<details class="ob-details"><summary>Prefer to install manually?</summary>' +
+        more: '<details class="ob-details"><summary>Prefer to install manually?</summary>' +
         cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew', 'Download the VibeCrew source code:') +
         cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh', 'Run the dependency installer:') +
         hostAuthNote +
@@ -604,11 +603,9 @@ import { url } from '../../data/site';
         title: 'Set up your environment',
         summary: 'Inside Claude Code, run two commands to verify your install and personalize your experience.',
         commands: [
-          { code: '/setup', label: 'Check your installation and configure VibeCrew:' },
-          { code: '/profile', label: 'Choose how VibeCrew communicates with you:' }
+          { code: '/setup', label: 'Check your installation and configure VibeCrew:', note: 'Verifies dependencies, detects your terminal, creates the <code>.vibecrew/</code> state directory, and tests notifications. It offers to fix anything missing.' },
+          { code: '/profile', label: 'Choose how VibeCrew communicates with you:', note: 'Walks you through 8 quick questions (~2 minutes): your role, code literacy, autonomy level, PR review style, verbosity, gamification, learning preference, and risk tolerance. You can skip and use balanced defaults.' }
         ],
-        more: '<p class="ob-note"><code>/setup</code> verifies dependencies, detects your terminal, creates the <code>.vibecrew/</code> state directory, and tests notifications. It offers to fix anything missing.</p>' +
-        '<p class="ob-note"><code>/profile</code> adapts VibeCrew to how you work through 8 quick questions (~2 minutes): your role, code literacy, autonomy level, PR review style, verbosity, gamification, learning preference, and risk tolerance. You can skip and use balanced defaults.</p>',
         show: true
       };
 
@@ -617,9 +614,9 @@ import { url } from '../../data/site';
         title: 'Get the most out of Warp',
         summary: 'VibeCrew auto-detects Warp. Install the notification plugin so clicking a notification jumps to the right tab:',
         commands: [
-          { code: 'brew install terminal-notifier', label: 'Enable click-to-jump desktop notifications:' }
+          { code: 'brew install terminal-notifier', label: 'Enable click-to-jump desktop notifications:', note: '<code>/setup</code> auto-generates a Launch Configuration for a multi-tab layout (planning + development + terminal). Open it with <kbd>Ctrl+Shift+R</kbd>.' }
         ],
-        more: '<p class="ob-note"><code>/setup</code> auto-generates a Launch Configuration for a multi-tab layout (planning + development + terminal). Open it with <kbd>Ctrl+Shift+R</kbd>.</p>' +
+        more: '
           '<p class="ob-note"><strong>Essential shortcuts:</strong> <kbd>Cmd+D</kbd> split pane, <kbd>Cmd+T</kbd> new tab, <kbd>Cmd+K</kbd> command palette, <kbd>Ctrl+`</kbd> toggle blocks.</p>' +
           '<p class="ob-note"><strong>Blocks:</strong> Every command output is a discrete, scrollable, copyable block &mdash; perfect for reviewing long agent output without losing your place.</p>' +
           '<p class="ob-note"><strong>Session restore:</strong> Warp automatically restores your tab layout after a restart. Name your tabs (<kbd>Cmd+Shift+I</kbd>) to keep track of parallel workflows.</p>' +
@@ -633,24 +630,23 @@ import { url } from '../../data/site';
       if (isNew) {
         step4Summary = 'VibeCrew guides you through architecture decisions, then you build your first feature.';
         step4Commands = [
-          { code: '/new-project', label: 'Create your project foundation (vision, design, tech stack):' },
-          { code: '/new-feature "user authentication"', label: 'Build your first feature:' }
+          { code: '/new-project', label: 'Create your project foundation (vision, design, tech stack):', note: 'Creates VISION.md, design system, tech stack (TDR), architecture diagrams, roadmap, and CLAUDE.md. This is a one-time step &mdash; every feature session after starts instantly.' },
+          { code: '/new-feature "user authentication"', label: 'Build your first feature:', note: 'Each feature goes through: Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs. Use <code>/wrap</code> to run the quality gate and commit your work.' }
         ];
-        step4More = '<p class="ob-note"><code>/new-project</code> creates your project foundation: VISION.md, design system, tech stack (TDR), architecture diagrams, roadmap, and CLAUDE.md. This is a one-time step &mdash; every feature session after starts instantly.</p>';
+        step4More = '';
       } else {
         step4Summary = 'Let VibeCrew analyze your codebase (read-only), then start building features.';
         step4Commands = [
-          { code: '/onboard', label: 'Let VibeCrew analyze your existing codebase (read-only):' },
-          { code: '/new-feature "your feature name"', label: 'Build your first feature:' }
+          { code: '/onboard', label: 'Let VibeCrew analyze your existing codebase (read-only):', note: 'Analyzes your stack, conventions, test gaps, and design system (read-only). It generates a CLAUDE.md with project rules. Nothing is modified.' },
+          { code: '/new-feature "your feature name"', label: 'Build your first feature:', note: 'Each feature goes through: Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs. Use <code>/wrap</code> to run the quality gate and commit your work.' }
         ];
-        step4More = '<p class="ob-note"><code>/onboard</code> analyzes your stack, conventions, test gaps, and design system (read-only). It generates a CLAUDE.md with project rules. Nothing is modified.</p>';
+        step4More = '';
       }
       var step4 = {
         title: 'Start building',
         summary: step4Summary,
         commands: step4Commands,
-        more: step4More +
-          '<p class="ob-note">Each feature goes through: Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs. Use <code>/wrap</code> to run the quality gate and commit your work.</p>',
+        more: '',
         show: true
       };
 

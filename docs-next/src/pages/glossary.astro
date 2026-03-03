@@ -1,6 +1,8 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
-import { glossary } from '../data/glossary';
+import Badge from '../components/Badge.astro';
+import GlossaryIllustration from '../components/glossary/GlossaryIllustration.astro';
+import { glossary, glossaryCategoryColors, glossaryCategories } from '../data/glossary';
 
 // Group terms alphabetically
 const grouped = glossary.reduce((acc, term) => {
@@ -30,8 +32,23 @@ const letters = Object.keys(grouped).sort();
       <dl class="glossary-list">
         {grouped[letter].map((entry) => (
           <div class="glossary-entry" id={entry.term.toLowerCase().replace(/[\s\/]/g, '-')}>
-            <dt>{entry.term}</dt>
-            <dd set:html={entry.definition} />
+            <div class="glossary-entry-inner">
+              <div class="glossary-illustration-wrap">
+                <GlossaryIllustration name={entry.term} />
+              </div>
+              <div class="glossary-content">
+                <dt>
+                  {entry.term}
+                  <Badge color={glossaryCategoryColors[entry.category]} text={glossaryCategories[entry.category]} />
+                </dt>
+                <dd set:html={entry.definition} />
+                {entry.learnMoreUrl && (
+                  <a class="learn-more" href={entry.learnMoreUrl} target="_blank" rel="noopener noreferrer">
+                    {entry.learnMoreLabel || 'Learn more'} &rarr;
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         ))}
       </dl>
@@ -94,7 +111,30 @@ const letters = Object.keys(grouped).sort();
     border-bottom: none;
   }
 
+  .glossary-entry-inner {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .glossary-illustration-wrap {
+    flex-shrink: 0;
+    width: 200px;
+    padding: 0.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  .glossary-content {
+    flex: 1;
+    min-width: 0;
+  }
+
   dt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-weight: 700;
     font-size: 1rem;
     color: var(--color-text);
@@ -106,5 +146,29 @@ const letters = Object.keys(grouped).sort();
     font-size: 0.92rem;
     color: var(--color-text-secondary);
     line-height: 1.6;
+  }
+
+  .learn-more {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .learn-more:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .glossary-entry-inner {
+      flex-direction: column;
+    }
+
+    .glossary-illustration-wrap {
+      width: 100%;
+      max-width: 240px;
+    }
   }
 </style>

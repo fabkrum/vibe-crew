@@ -177,6 +177,15 @@ Dispatches via <span class="highlight">terminal-notifier</span> -execute "open '
     <h3>Launch configuration</h3>
     <p>Save this file to <code>~/.warp/launch_configurations/vibecrew.yaml</code>. Each tab represents one project &mdash; duplicate the tab block for additional projects, updating the <code>title</code> and <code>cwd</code> paths.</p>
 
+    <p>Create the directory and file:</p>
+    <pre class="copyable" data-copy="mkdir -p ~/.warp/launch_configurations
+touch ~/.warp/launch_configurations/vibecrew.yaml
+open ~/.warp/launch_configurations/vibecrew.yaml"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>mkdir -p ~/.warp/launch_configurations
+touch ~/.warp/launch_configurations/vibecrew.yaml
+open ~/.warp/launch_configurations/vibecrew.yaml</code></pre>
+
+    <p>Then paste the following YAML:</p>
+
     <pre class="copyable" data-copy="name: VibeCrew
 windows:
   - tabs:

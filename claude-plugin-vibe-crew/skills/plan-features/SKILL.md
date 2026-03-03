@@ -71,16 +71,18 @@ Present what is known about the feature:
 - Any existing spec fields that are already populated
 - Dependencies or relationships noted in the roadmap
 
-### B. Problem Statement
+### B. Problem & User Action
 
-Ask the user: "What problem does this feature solve for the user?"
+Ask the user: "What problem does this feature solve, and what action should the user take?"
 
 Guide the user to articulate:
 - **Who** experiences the problem (which persona from VISION.md)
 - **What** the current pain point or gap is
-- **Why** solving it matters (user impact, business value)
+- **What action** the user should take when using this feature (e.g., "click Subscribe", "complete the setup wizard", "upload their first file")
 
-A good problem statement is 1-2 sentences. Example: "Enterprise admins currently have no way to see which team members are inactive, leading to wasted seats and security risks."
+A good answer is 1-3 sentences. Example: "Enterprise admins can't see which team members are inactive, leading to wasted seats. They should be able to filter the team list by activity status and deactivate stale accounts."
+
+Store the action in `spec.expected_action` alongside the existing `spec.problem_statement`.
 
 ### C. Acceptance Criteria (3-5 items)
 
@@ -137,12 +139,13 @@ For **new features** (from roadmap, not yet in backlog):
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
-  '.features += [{id: $id, name: $name, description: $desc, column: "planned", priority: ($priority | tonumber), labels: $labels, spec: {problem_statement: $problem, acceptance_criteria: $criteria, ui_description: $ui, business_logic: $logic, technical_notes: $tech}, dependencies: $deps, phases_completed: [], created_at: $ts, updated_at: $ts}]' \
+  '.features += [{id: $id, name: $name, description: $desc, column: "planned", priority: ($priority | tonumber), labels: $labels, spec: {problem_statement: $problem, expected_action: $action, acceptance_criteria: $criteria, ui_description: $ui, business_logic: $logic, technical_notes: $tech}, dependencies: $deps, phases_completed: [], created_at: $ts, updated_at: $ts}]' \
   --arg id "feat-NNN" \
   --arg name "<feature name>" \
   --arg desc "<description>" \
   --arg priority "<number>" \
   --arg problem "<problem statement>" \
+  --arg action "<expected user action>" \
   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
   --arg ui "<ui description>" \
   --arg logic "<business logic>" \
@@ -156,10 +159,11 @@ For **existing features** (ideas or incomplete planned features):
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
-  '(.features[] | select(.id == $id)) |= (.column = "planned" | .priority = ($priority | tonumber) | .labels = $labels | .spec.problem_statement = $problem | .spec.acceptance_criteria = $criteria | .spec.ui_description = $ui | .spec.business_logic = $logic | .spec.technical_notes = $tech | .dependencies = $deps | .updated_at = $ts)' \
+  '(.features[] | select(.id == $id)) |= (.column = "planned" | .priority = ($priority | tonumber) | .labels = $labels | .spec.problem_statement = $problem | .spec.expected_action = $action | .spec.acceptance_criteria = $criteria | .spec.ui_description = $ui | .spec.business_logic = $logic | .spec.technical_notes = $tech | .dependencies = $deps | .updated_at = $ts)' \
   --arg id "<feature-id>" \
   --arg priority "<number>" \
   --arg problem "<problem statement>" \
+  --arg action "<expected user action>" \
   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \
   --arg ui "<ui description>" \
   --arg logic "<business logic>" \

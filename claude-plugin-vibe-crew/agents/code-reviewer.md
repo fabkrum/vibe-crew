@@ -176,6 +176,18 @@ Check for common performance issues:
 4. **N+1 queries** — Database or API calls in loops
 5. **Missing pagination** — Unbounded list rendering
 
+### Step 10.5: Business Pattern Compliance
+
+Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:
+
+1. **CTA prominence** — If `spec.expected_action` exists, is the primary action visually dominant? (primary Button variant, sufficient size, above the fold on desktop)
+2. **Empty state quality** — Does every zero-data state explain value and guide the user's first action? Flag blank empty states as `warning`. Blank empty states on primary features are `critical`.
+3. **Form best practices** — Single-column layout, labels above fields, inline validation present, no placeholder-only labels.
+4. **Trust signal placement** — Are trust elements near high-commitment actions (signup, payment, data submission)?
+5. **Success feedback** — Does completing the primary action produce visible feedback (toast, animation, redirect, state change)?
+
+Severity: All business pattern findings are `warning` unless noted above. Category: `"business-patterns"`.
+
 ## Finding Classification
 
 Every finding MUST be classified into exactly one severity:
@@ -206,7 +218,7 @@ mkdir -p .vibecrew/reviews
   "findings": [
     {
       "severity": "critical|warning|info",
-      "category": "correctness|tdr-compliance|architecture-consistency|convention|design-system|visual-compliance|error-handling|test-coverage|security|performance",
+      "category": "correctness|tdr-compliance|architecture-consistency|convention|design-system|visual-compliance|error-handling|test-coverage|security|performance|business-patterns",
       "file": "src/components/Example.tsx",
       "line": 42,
       "title": "Short finding title",

@@ -385,6 +385,7 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `priority` | integer | yes | Priority (1 = highest) |
 | `labels` | string[] | yes | Categorization labels |
 | `spec.problem_statement` | string\|null | yes | What problem this feature solves |
+| `spec.expected_action` | string\|null | no | Expected user action (e.g., "click Subscribe", "complete setup wizard") |
 | `spec.acceptance_criteria` | string[] | yes | List of requirements |
 | `spec.ui_description` | string\|null | yes | UI description |
 | `spec.business_logic` | string[] | yes | Business logic requirements |
@@ -746,6 +747,11 @@ Created by Builder when the code phase finishes. Includes a `changed_files` list
       {"path": "src/auth/login.ts", "type": "added"},
       {"path": "src/auth/oauth.ts", "type": "added"},
       {"path": "src/routes.ts", "type": "modified"}
+    ],
+    "business_patterns_applied": [          // Optional — names of business patterns from business-patterns.md
+      "Inline Validation",
+      "CTA Hierarchy",
+      "Empty State Onboarding"
     ],
     "visual_verification": {               // Optional — included when frontend files changed
       "screenshots": 1,                    // Number of screenshots taken

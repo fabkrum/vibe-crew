@@ -94,6 +94,11 @@
       "type": "integer",
       "description": "Which review-fix cycle this is"
     },
+    "business_patterns_applied": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Names of business patterns applied during design/build (from business-patterns.md)"
+    },
     "visual_verification": {
       "type": "object",
       "description": "Visual verification results from Playwright MCP (builder-complete)",

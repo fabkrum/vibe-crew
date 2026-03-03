@@ -66,7 +66,13 @@ Derive all values from VISION.md's brand direction and `design-brief.md` (if pre
    - Note shadcn install commands for each selected component.
    - **Check interaction/performance patterns**: Evaluate whether any patterns from the "Interaction & Performance Patterns" section apply. For each pattern, check its trigger conditions against the feature spec. Include applicable patterns in the design spec with implementation notes.
    - **Check keyboard/focus requirements**: Note which keyboard patterns each selected component requires (from the component entries and "Keyboard Navigation & Focus Management" section).
-5. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements. Include a "Components" section listing each shadcn component to install, and an "Interaction Patterns" section listing applicable behavioral patterns with implementation approach.
+4.5. Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md` for business success patterns. Cross-reference the feature spec (especially `spec.expected_action` if present) against the pattern trigger conditions. For each applicable pattern:
+   - Include the recommendation in the design spec under a "Business Patterns Applied" section.
+   - Explain WHY the pattern applies to this feature (cite the research rationale from the reference).
+   - Describe the concrete UI implementation using components from `components.md`.
+   - Examples: "This signup form should use inline validation (Baymard: 22% higher completion rates). Place the social proof bar above the form — trust signals near high-commitment actions reduce abandonment." "This empty state needs a guided first action with primary CTA — Fogg Behavior Model: capitalize on motivation at the moment of need."
+   - If `spec.expected_action` exists, ensure the primary CTA in the design spec corresponds to that action and is visually dominant (primary Button variant, sufficient size, above the fold on desktop).
+5. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements. Include a "Components" section listing each shadcn component to install, an "Interaction Patterns" section listing applicable behavioral patterns with implementation approach, and a "Business Patterns Applied" section from step 4.5.
 6. Write the design spec to `docs/features/{feature-name}/design.md`.
 7. Signal completion with `builder-design-complete.signal`.
 

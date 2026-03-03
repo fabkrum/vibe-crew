@@ -71,7 +71,8 @@ Ask the user these questions (wait for answers before proceeding):
 2. "Who are your target users? Describe 1-3 user personas."
 3. "What are the 3-5 core features that make this product valuable?"
 4. "What does success look like? How will you measure it?"
-5. "Are there any technical constraints or preferences? (e.g., must be mobile-first, needs offline support, specific integrations)"
+5. "What is the ONE action a new user must take to experience the core value of your product? (e.g., 'create their first project', 'invite a teammate', 'see their first analytics report')"
+6. "Are there any technical constraints or preferences? (e.g., must be mobile-first, needs offline support, specific integrations)"
 
 After receiving answers, read the VISION.md template:
 

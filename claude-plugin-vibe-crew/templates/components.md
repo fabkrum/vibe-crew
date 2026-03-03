@@ -372,6 +372,22 @@ The Builder and Orchestrator read this file during design and implementation pha
 | Live Regions | "Screen readers announce changes without focus" | Toasts, form errors, loading states, search counts | `aria-live="polite"` (status) or `"assertive"` (errors). `aria-busy` for loading. |
 | Keyboard Shortcuts | "Power users trigger actions without clicking" | Optional — repeated actions | Cmd+K (palette), Cmd+S (save). Never override browser defaults. |
 
+## 9. Conversion & Trust Patterns
+
+Cross-reference with `business-patterns.md` for full rationale. This section
+maps business patterns to specific component implementations.
+
+| Pattern | Components | Implementation |
+|---------|-----------|----------------|
+| CTA Hierarchy | Button (primary/secondary/ghost variants) | One primary per view. Secondary for alternatives. Ghost for low-priority. |
+| Social Proof Bar | Avatar + Badge + custom | Logo row, testimonial cards, or "X users" counter near CTAs. |
+| Trust Placement | Card + Badge + Tooltip | Security/guarantee badges in Card footer adjacent to action buttons. |
+| Empty State Onboarding | Card + Button + illustration | Explain value, show sample, guide first action. Never blank. |
+| Success Celebration | Sonner + custom animation | Toast for minor actions. Full-screen moment for milestones. |
+| Progressive Disclosure | Accordion + Collapsible + Tabs | Simple first, details on demand. Reduce cognitive load per Hick's Law. |
+| Inline Validation | Form + Input + Label | Validate on blur, not on type. Show errors via `aria-describedby`. |
+| Pricing Comparison | Table + Card + Badge + Toggle | 3 tiers, center highlighted (Von Restorff), annual/monthly toggle. |
+
 ## Builder Agent Key Principle
 
 shadcn/ui (Radix UI) handles most keyboard patterns automatically. The agent ensures:

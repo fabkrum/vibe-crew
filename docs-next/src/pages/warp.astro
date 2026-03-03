@@ -86,8 +86,13 @@ import TableWrap from '../components/TableWrap.astro';
         <pre class="copyable" data-copy="brew install terminal-notifier"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>brew install terminal-notifier</code></pre>
       </li>
       <li>
+        <h4>Send a test notification</h4>
+        <p><code>terminal-notifier</code> won't appear in System Settings until it has sent at least one notification. Send a test to register it:</p>
+        <pre class="copyable" data-copy="terminal-notifier -message &quot;VibeCrew test&quot; -title &quot;Test Notification&quot;"><button class="copy-btn" aria-label="Copy to clipboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><code><span class="code-label">bash</span>terminal-notifier -message "VibeCrew test" -title "Test Notification"</code></pre>
+      </li>
+      <li>
         <h4>Enable notifications</h4>
-        <p>Open <strong>System Settings &rarr; Notifications &rarr; terminal-notifier</strong> and set alert style to <strong>Banners</strong> or <strong>Alerts</strong>. Also enable notifications in <strong>Warp Settings &rarr; Features &rarr; Desktop Notifications</strong>.</p>
+        <p>Now open <strong>System Settings &rarr; Notifications &rarr; terminal-notifier</strong> (it appears after the first notification) and set alert style to <strong>Banners</strong> or <strong>Alerts</strong>. Also enable notifications in <strong>Warp Settings &rarr; Features &rarr; Desktop Notifications</strong>.</p>
       </li>
       <li>
         <h4>Verify</h4>

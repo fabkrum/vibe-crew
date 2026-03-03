@@ -1,195 +1,134 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
 import Callout from '../components/Callout.astro';
-import WhyIllustration from '../components/why/WhyIllustration.astro';
 import OnboardingWizard from '../components/why/OnboardingWizard.astro';
 import { url } from '../data/site';
 ---
 
 <DocsLayout title="VibeCrew">
 
-  <!-- ── Section 1: Personal story ─────────────────────────────── -->
-  <section class="section" id="origin">
-    <Callout type="info" title="Why this exists">
-      <div class="origin-content">
-        <div class="origin-text">
-          <p>Born from painful experience. Before building this system, the creator tried vibe-coding without a plan &mdash; wrong tech stack three features deep, context windows filling mid-feature, token bills from re-explaining context, output that looked fine in demos but fell apart in production.</p>
-          <p>VibeCrew encodes every one of those lessons into an automated system, so you don&rsquo;t have to learn them the hard way.</p>
-        </div>
-        <WhyIllustration name="before-vibecrew" size="card" />
-      </div>
-    </Callout>
+  <!-- ── Hero: title + subtitle + wizard ───────────────────── -->
+  <section class="hero-section" id="start">
+    <h1 class="hero-title">VibeCrew</h1>
+    <p class="hero-subtitle">The autonomous vibe-coding operating system for Claude Code</p>
+    <p class="hero-desc">Orchestrates 14 AI agents across the full development lifecycle &mdash; architecture, design, code, tests, review, and docs. You describe what you want. VibeCrew builds it right.</p>
+    <OnboardingWizard />
   </section>
 
-  <!-- ── Section 3: Parallel workflow ──────────────────────────── -->
-  <section class="section" id="parallel">
-    <h3>Work on everything at once</h3>
-    <WhyIllustration name="parallel-workflow" size="hero" />
-    <p>Picture this &mdash; you&rsquo;re planning the next feature for Project A while VibeCrew is coding Project B and running tests on Project C. Three projects, all progressing. When an agent finishes, needs a decision, or hits a problem &mdash; a notification takes you straight to the right tab. The rest of the time? Silence. Your attention goes exactly where it&rsquo;s needed, when it&rsquo;s needed.</p>
-  </section>
-
-  <!-- ── Section 4: The hard parts, handled ────────────────────── -->
+  <!-- ── What VibeCrew handles ───────────────────────────────── -->
   <section class="section" id="hard-parts">
     <h3>The hard parts, handled</h3>
-    <p>VibeCrew takes care of everything that makes AI-generated code unreliable.</p>
-
     <div class="why-cards">
       <div class="card why-card">
-        <WhyIllustration name="foundation" size="card" />
-        <div class="why-card-body">
-          <h4><span class="card-icon green">&#9670;</span> Architecture before code</h4>
-          <p>Vision, design system, tech stack, and architecture are established before any code is written. A phase gate enforces this &mdash; no shortcuts. Solid foundation from day one.</p>
-        </div>
+        <h4><span class="card-icon green">&#9670;</span> Architecture before code</h4>
+        <p>Vision, design system, tech stack, and architecture are locked in before any code is written. A phase gate enforces this &mdash; no shortcuts.</p>
       </div>
 
       <div class="card why-card">
-        <WhyIllustration name="auto-quality" size="card" />
-        <div class="why-card-body">
-          <h4><span class="card-icon blue">&#9670;</span> Quality on autopilot</h4>
-          <p>Tests, linting, type checking, build verification, code review, and security auditing run automatically. You don&rsquo;t need to know what ESLint is &mdash; every feature meets production standards before reaching your main branch.</p>
-        </div>
+        <h4><span class="card-icon blue">&#9670;</span> Quality on autopilot</h4>
+        <p>Tests, linting, type checking, build verification, code review, and security auditing run automatically on every feature.</p>
       </div>
 
       <div class="card why-card">
-        <WhyIllustration name="patterns" size="card" />
-        <div class="why-card-body">
-          <h4><span class="card-icon purple">&#9670;</span> Patterns that convert</h4>
-          <p>Built-in UI and business pattern libraries teach agents what production-quality means. Forms get proper error states. Pricing pages use tiered anchoring. Onboarding follows proven conversion funnels.</p>
-        </div>
+        <h4><span class="card-icon purple">&#9670;</span> Patterns that convert</h4>
+        <p>Built-in UI and business pattern libraries guide agents toward production-quality output &mdash; proper error states, accessible interactions, conversion-optimized layouts.</p>
       </div>
 
       <div class="card why-card">
-        <WhyIllustration name="token-cost" size="card" />
-        <div class="why-card-body">
-          <h4><span class="card-icon amber">&#9670;</span> Tokens spent wisely</h4>
-          <p>Worktree isolation keeps research tokens separate from your main session. MCP servers replace pasting docs. Zero-token hooks enforce rules without spending a single token. Forced compaction between features prevents context rot. Free and open source &mdash; works with Claude Pro, Max, or API.</p>
-        </div>
+        <h4><span class="card-icon amber">&#9670;</span> Tokens spent wisely</h4>
+        <p>Worktree isolation, MCP servers, zero-token hooks, and forced compaction between features keep costs down. Free and open source.</p>
       </div>
     </div>
   </section>
 
-  <!-- ── Section 5: How it works (accordion) ───────────────────── -->
+  <!-- ── How it works ────────────────────────────────────────── -->
   <section class="section" id="how-it-works">
     <h3>How it works</h3>
-    <p>Type slash commands, agents do the work, you get notified when needed. Here&rsquo;s what&rsquo;s under the hood.</p>
+
+    <details class="how-details">
+      <summary>Parallel multi-project workflows</summary>
+      <div class="how-answer">
+        <p>Plan Project A while VibeCrew codes Project B and tests Project C. Notifications fire only when an agent needs a decision, finishes a task, or hits an error &mdash; one click takes you to the right tab.</p>
+      </div>
+    </details>
 
     <details class="how-details">
       <summary>Smart context management</summary>
       <div class="how-answer">
-        <WhyIllustration name="context-mgmt" size="accordion" />
         <p>Worktree isolation keeps research tokens separate. Forced compaction between features prevents context rot. MCP servers replace pasting docs. You never hit the context wall.</p>
       </div>
     </details>
 
     <details class="how-details">
-      <summary>The Performance Coach</summary>
+      <summary>Self-improving Performance Coach</summary>
       <div class="how-answer">
-        <WhyIllustration name="vibe-score" size="accordion" />
-        <p>Every session gets a Vibe Score. The coach identifies waste, proposes a rule to prevent it, and writes it permanently with your approval. Each session more efficient than the last.</p>
-      </div>
-    </details>
-
-    <details class="how-details">
-      <summary>The Interrupt Protocol</summary>
-      <div class="how-answer">
-        <WhyIllustration name="interrupt" size="accordion" />
-        <p>Terminal stays silent during work. OS notifications fire only on: permission needed, task complete, critical error. One-click deep link to the exact tab.</p>
+        <p>Every session gets a Vibe Score. The coach identifies waste, proposes a permanent rule to prevent it, and writes it with your approval. Each session more efficient than the last.</p>
       </div>
     </details>
 
     <details class="how-details">
       <summary>Adapts to you</summary>
       <div class="how-answer">
-        <WhyIllustration name="profiles" size="accordion" />
-        <p>Run <code>/profile</code> &mdash; a 2-minute interview or pick a preset. Personalizes verbosity, autonomy, PR format, code comments, risk tolerance. The system meets you where you are.</p>
+        <p>Run <code>/profile</code> &mdash; a 2-minute interview or pick a preset. Personalizes verbosity, autonomy, PR format, code comments, and risk tolerance.</p>
       </div>
     </details>
   </section>
 
-  <!-- ── Section 6: Getting started (onboarding wizard) ────────── -->
-  <section class="section" id="getting-started">
-    <h3>Get started in minutes</h3>
-    <p>Answer 3 quick questions and get a personalized setup guide &mdash; only the steps that apply to you.</p>
-
-    <OnboardingWizard />
-  </section>
-
-  <!-- ── Section 7: Community ──────────────────────────────────── -->
+  <!-- ── Community ───────────────────────────────────────────── -->
   <section class="section" id="community">
     <h3>Built with the community</h3>
-    <p>VibeCrew is open source and shaped by the people who use it. Your feedback, ideas, and projects make it better for everyone.</p>
-
     <div class="community-grid">
       <div class="card community-card">
-        <div class="card-icon accent">&#128172;</div>
         <h4>Propose a feature</h4>
-        <p>Have an idea that would make VibeCrew better? Open a GitHub issue. The best features come from real workflows.</p>
-        <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement&template=feature_request.md" class="community-link">Open a feature request &rarr;</a>
+        <p>Have an idea? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement&template=feature_request.md" class="community-link">Open a feature request &rarr;</a></p>
       </div>
 
       <div class="card community-card">
-        <div class="card-icon red">&#128027;</div>
         <h4>Report a problem</h4>
-        <p>Found a bug or something that doesn&rsquo;t work right? File an issue and we&rsquo;ll fix it. Include your <code>/status</code> output for faster diagnosis.</p>
-        <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug&template=bug_report.md" class="community-link">Report an issue &rarr;</a>
+        <p>Found a bug? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug&template=bug_report.md" class="community-link">File an issue &rarr;</a></p>
       </div>
 
       <div class="card community-card">
-        <div class="card-icon green">&#127942;</div>
         <h4>Share what you built</h4>
-        <p>Built something with VibeCrew? Show it off! Share your project to inspire others and help us showcase what&rsquo;s possible.</p>
-        <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell" class="community-link">Share your project &rarr;</a>
+        <p>Show it off! <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell" class="community-link">Post in Discussions &rarr;</a></p>
       </div>
-    </div>
-  </section>
-
-  <!-- ── Section 8: CTA ────────────────────────────────────────── -->
-  <section class="section" id="cta">
-    <Callout type="tip" title="What do you want to build next?">
-      <p>A SaaS product? A marketplace? A tool? VibeCrew handles architecture, testing, review, docs, and cost tracking. You bring the vision.</p>
-    </Callout>
-    <div class="why-cta">
-      <a class="hero-btn primary" href={url('/quick-start.html')}>Get Started &rarr;</a>
-      <a class="hero-btn secondary" href={url('/example-session.html')}>See an Example Session</a>
     </div>
   </section>
 
 </DocsLayout>
 
 <style>
-  /* ── Hero SVG centering ──────────────────────────────────── */
-  .section :global(.why-illustration--hero) {
-    margin: 1.5rem auto;
+  /* ── Hero ───────────────────────────────────────────────── */
+  .hero-section {
+    margin-bottom: 2.5rem;
   }
 
-  /* ── Origin callout layout ───────────────────────────────── */
-  .origin-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
+  .hero-title {
+    font-size: 2rem;
+    margin: 0 0 0.25rem;
+    color: var(--color-text);
   }
 
-  .origin-text {
-    flex: 1;
+  .hero-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    margin: 0 0 0.75rem;
   }
 
-  .origin-content :global(.why-illustration--card) {
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 640px) {
-    .origin-content {
-      flex-direction: column;
-      align-items: center;
-    }
+  .hero-desc {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0;
   }
 
   /* ── Card grid for "hard parts" ──────────────────────────── */
   .why-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    gap: 1rem;
+    margin-top: 1rem;
   }
 
   @media (max-width: 768px) {
@@ -199,49 +138,41 @@ import { url } from '../data/site';
   }
 
   .why-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 1.25rem;
+    padding: 1rem 1.25rem;
   }
 
-  .why-card :global(.why-illustration--card) {
-    margin-bottom: 1rem;
-  }
-
-  .why-card-body h4 {
-    margin-bottom: 0.5rem;
-  }
-
-  .why-card-body p {
-    margin: 0;
+  .why-card h4 {
+    margin-bottom: 0.35rem;
     font-size: 0.9rem;
+  }
+
+  .why-card p {
+    margin: 0;
+    font-size: 0.85rem;
     color: var(--color-text-secondary);
   }
 
   .card-icon {
-    font-size: 0.7rem;
-    margin-right: 0.25rem;
+    font-size: 0.65rem;
+    margin-right: 0.2rem;
   }
   .card-icon.green { color: var(--color-green); }
   .card-icon.blue { color: var(--color-blue); }
   .card-icon.purple { color: var(--color-accent); }
   .card-icon.amber { color: var(--color-amber); }
-  .card-icon.accent { color: var(--color-accent); }
-  .card-icon.red { color: var(--color-red); }
 
   /* ── Accordion (how it works) ────────────────────────────── */
   .how-details {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     overflow: hidden;
   }
 
   .how-details summary {
-    padding: 1rem 1.25rem;
+    padding: 0.85rem 1.25rem;
     font-weight: 600;
+    font-size: 0.9rem;
     color: var(--color-text);
     cursor: pointer;
     display: flex;
@@ -259,7 +190,6 @@ import { url } from '../data/site';
     content: '+';
     font-size: 1.25rem;
     color: var(--color-text-muted);
-    transition: transform 0.2s;
   }
 
   .how-details[open] summary::after {
@@ -271,63 +201,46 @@ import { url } from '../data/site';
   }
 
   .how-answer {
-    padding: 0 1.25rem 1rem;
+    padding: 0 1.25rem 0.85rem;
     border-top: 1px solid var(--color-border-subtle);
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-  }
-
-  .how-answer :global(.why-illustration--accordion) {
-    flex-shrink: 0;
   }
 
   .how-answer p {
     margin: 0;
-    flex: 1;
     padding-top: 0.5rem;
-  }
-
-  @media (max-width: 640px) {
-    .how-answer {
-      flex-direction: column;
-      align-items: center;
-    }
-    .how-answer p {
-      padding-top: 0;
-    }
+    font-size: 0.9rem;
   }
 
   /* ── Community grid ──────────────────────────────────────── */
   .community-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .community-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .community-card {
-    padding: 1.25rem;
-  }
-
-  .community-card .card-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    display: block;
+    padding: 1rem 1.25rem;
   }
 
   .community-card h4 {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.9rem;
   }
 
   .community-card p {
     font-size: 0.85rem;
     color: var(--color-text-secondary);
-    margin-bottom: 0.75rem;
+    margin: 0;
   }
 
   .community-link {
-    font-size: 0.85rem;
     font-weight: 600;
     color: var(--color-accent);
     text-decoration: none;
@@ -335,45 +248,5 @@ import { url } from '../data/site';
 
   .community-link:hover {
     text-decoration: underline;
-  }
-
-  /* ── CTA buttons ─────────────────────────────────────────── */
-  .why-cta {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .hero-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-decoration: none;
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  .hero-btn.primary {
-    background: var(--color-accent);
-    color: #fff;
-  }
-
-  .hero-btn.primary:hover {
-    background: var(--color-accent-dim);
-  }
-
-  .hero-btn.secondary {
-    background: var(--color-surface);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-  }
-
-  .hero-btn.secondary:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
   }
 </style>

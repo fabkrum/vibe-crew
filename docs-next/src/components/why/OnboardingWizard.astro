@@ -7,7 +7,7 @@ import { url } from '../../data/site';
   <div id="ob-questions">
     <div class="ob-header">
       <h2 class="ob-title">What do you want to build today?</h2>
-      <p class="ob-subtitle">3 questions. Your personal setup guide. Ready in minutes.</p>
+      <p class="ob-subtitle">Answer 3 questions and get started in minutes with your personal setup guide.</p>
     </div>
 
     <div class="ob-progress" id="ob-progress">
@@ -137,19 +137,21 @@ import { url } from '../../data/site';
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.6rem 1.1rem;
-    border: 1px solid var(--color-border);
+    padding: 0.65rem 1.3rem;
+    border: 1.5px solid var(--color-accent-dim);
     border-radius: var(--radius-xs);
-    background: transparent;
-    color: var(--color-text-secondary);
+    background: rgba(167, 139, 250, 0.08);
+    color: var(--color-text);
     font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.15s;
     font-family: var(--font-sans);
   }
 
   .ob-btn:hover {
-    border-color: var(--color-accent-dim);
+    border-color: var(--color-accent);
+    background: rgba(167, 139, 250, 0.15);
     color: var(--color-text);
   }
 

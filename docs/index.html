@@ -3,7 +3,7 @@
     var t = localStorage.getItem('theme');
     if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
   })();
-</script><link rel="stylesheet" href="/vibe-crew/_astro/index.D1D_u97_.css">
+</script><link rel="stylesheet" href="/vibe-crew/_astro/index.CI4sLnYR.css">
 <link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.tiC8ikNY.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
   document.getElementById('hamburger').addEventListener('click', function() {
     document.body.classList.toggle('sidebar-open');
@@ -39,7 +39,7 @@
 New project
 </button> <button class="ob-btn" data-key="project" data-value="existing" data-astro-cid-mrfcnnuq> <span class="ob-btn-icon" data-astro-cid-mrfcnnuq>&#8599;</span>
 Existing project
-</button> </div> </div> <div class="ob-step hidden" data-step="2" data-astro-cid-mrfcnnuq> <p class="ob-question" data-astro-cid-mrfcnnuq>Where's your code hosted?</p> <div class="ob-options" data-astro-cid-mrfcnnuq> <button class="ob-btn" data-key="host" data-value="github" data-astro-cid-mrfcnnuq>GitHub</button> <button class="ob-btn" data-key="host" data-value="gitlab" data-astro-cid-mrfcnnuq>GitLab</button> <button class="ob-btn" data-key="host" data-value="other" data-astro-cid-mrfcnnuq>Other / not yet</button> </div> </div> <div class="ob-step hidden" data-step="3" data-astro-cid-mrfcnnuq> <p class="ob-question" data-astro-cid-mrfcnnuq>Which terminal do you use?</p> <div class="ob-options" data-astro-cid-mrfcnnuq> <button class="ob-btn" data-key="terminal" data-value="warp" data-astro-cid-mrfcnnuq>Warp</button> <button class="ob-btn" data-key="terminal" data-value="other" data-astro-cid-mrfcnnuq>Other (iTerm2, VS Code, Terminal.app, etc.)</button> </div> </div> </div> <!-- ── Guide (replaces wizard, one step at a time) ─────── --> <div id="ob-guide-panel" class="hidden" data-astro-cid-mrfcnnuq> <div class="ob-guide-nav" data-astro-cid-mrfcnnuq> <span class="ob-guide-progress" id="ob-guide-progress" data-astro-cid-mrfcnnuq></span> <div class="ob-guide-pills" id="ob-guide-pills" data-astro-cid-mrfcnnuq></div> </div> <div class="ob-guide-step" id="ob-guide-step" data-astro-cid-mrfcnnuq></div> <div class="ob-guide-footer" data-astro-cid-mrfcnnuq> <button class="ob-prev hidden" id="ob-prev" data-astro-cid-mrfcnnuq>&larr; Back</button> <button class="ob-next" id="ob-next" data-astro-cid-mrfcnnuq>Next &rarr;</button> <button class="ob-restart hidden" id="ob-restart" data-astro-cid-mrfcnnuq>Start over</button> </div> </div> </div>  <script>
+</button> </div> </div> <div class="ob-step hidden" data-step="2" data-astro-cid-mrfcnnuq> <p class="ob-question" data-astro-cid-mrfcnnuq>Where's your code hosted?</p> <div class="ob-options" data-astro-cid-mrfcnnuq> <button class="ob-btn" data-key="host" data-value="github" data-astro-cid-mrfcnnuq>GitHub</button> <button class="ob-btn" data-key="host" data-value="gitlab" data-astro-cid-mrfcnnuq>GitLab</button> <button class="ob-btn" data-key="host" data-value="other" data-astro-cid-mrfcnnuq>Other / not yet</button> </div> </div> <div class="ob-step hidden" data-step="3" data-astro-cid-mrfcnnuq> <p class="ob-question" data-astro-cid-mrfcnnuq>Which terminal do you use?</p> <div class="ob-options" data-astro-cid-mrfcnnuq> <button class="ob-btn" data-key="terminal" data-value="warp" data-astro-cid-mrfcnnuq>Warp</button> <button class="ob-btn" data-key="terminal" data-value="other" data-astro-cid-mrfcnnuq>Other (iTerm2, VS Code, Terminal.app, etc.)</button> </div> </div> </div> <!-- ── Guide (replaces wizard, one step at a time) ─────── --> <div id="ob-guide-panel" class="hidden" data-astro-cid-mrfcnnuq> <div class="ob-guide-nav" data-astro-cid-mrfcnnuq> <span class="ob-guide-progress" id="ob-guide-progress" data-astro-cid-mrfcnnuq></span> <button class="ob-reset" id="ob-reset" data-astro-cid-mrfcnnuq>Start over</button> </div> <div class="ob-guide-step" id="ob-guide-step" data-astro-cid-mrfcnnuq></div> <div class="ob-guide-footer" data-astro-cid-mrfcnnuq> <button class="ob-prev hidden" id="ob-prev" data-astro-cid-mrfcnnuq>&larr; Back</button> <button class="ob-next" id="ob-next" data-astro-cid-mrfcnnuq>Next &rarr;</button> </div> </div> </div>  <script>
   (function() {
     var answers = {};
     var wizard = document.getElementById('ob-wizard');
@@ -48,11 +48,10 @@ Existing project
     var steps = wizard.querySelectorAll('.ob-step');
     var dots = wizard.querySelectorAll('.ob-dot');
     var guideStep = document.getElementById('ob-guide-step');
-    var pills = document.getElementById('ob-guide-pills');
+    var resetBtn = document.getElementById('ob-reset');
     var progressLabel = document.getElementById('ob-guide-progress');
     var prevBtn = document.getElementById('ob-prev');
     var nextBtn = document.getElementById('ob-next');
-    var restartBtn = document.getElementById('ob-restart');
     var guideSteps = [];
     var currentGuideStep = 0;
 
@@ -113,7 +112,7 @@ Existing project
       }
     });
 
-    restartBtn.addEventListener('click', function() {
+    function doRestart() {
       answers = {};
       currentGuideStep = 0;
       guideSteps = [];
@@ -128,14 +127,19 @@ Existing project
       });
       guidePanel.classList.add('hidden');
       questionsPanel.classList.remove('hidden');
-    });
+    }
 
-    function cmd(code) {
+    resetBtn.addEventListener('click', doRestart);
+
+    function cmd(code, label) {
       var escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return '<div class="ob-code-wrap">' +
+      var html = '';
+      if (label) html += '<p class="ob-cmd-label">' + label + '</p>';
+      html += '<div class="ob-code-wrap">' +
         '<pre class="ob-code">' + escaped + '</pre>' +
-        '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '">' + copySvg + '</button>' +
+        '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '" title="Copy to clipboard">' + copySvg + '</button>' +
       '</div>';
+      return html;
     }
 
     function checklist(items) {
@@ -147,7 +151,7 @@ Existing project
       var html = '<h3 class="ob-guide-step-title">' + s.title + '</h3>';
       html += '<p class="ob-guide-step-summary">' + s.summary + '</p>';
       s.commands.forEach(function(c) {
-        html += cmd(c.code);
+        html += cmd(c.code, c.label);
       });
       if (s.more) html += s.more;
       guideStep.innerHTML = html;
@@ -163,10 +167,8 @@ Existing project
 
       if (currentGuideStep === guideSteps.length - 1) {
         nextBtn.classList.add('hidden');
-        restartBtn.classList.remove('hidden');
       } else {
         nextBtn.classList.remove('hidden');
-        restartBtn.classList.add('hidden');
       }
     }
 
@@ -179,12 +181,10 @@ Existing project
       // --- Host-specific auth note ---
       var hostAuthNote = '';
       if (isGH) {
-        hostAuthNote = '<p style="margin-top:0.35rem">The installer includes <strong>GitHub CLI</strong>. After setup, authenticate:</p>' +
-          cmd('gh auth login') +
-          '<p style="margin-top:0.25rem;font-size:0.82rem;color:var(--color-text-muted)">Choose "HTTPS" and "Login with a web browser" when prompted.</p>';
+        hostAuthNote = cmd('gh auth login', 'Log in to GitHub so VibeCrew can create pull requests for you:') +
+          '<p class="ob-note">Choose "HTTPS" and "Login with a web browser" when prompted.</p>';
       } else if (isGL) {
-        hostAuthNote = '<p style="margin-top:0.35rem">The installer includes <strong>GitLab CLI</strong>. After setup, authenticate:</p>' +
-          cmd('glab auth login');
+        hostAuthNote = cmd('glab auth login', 'Log in to GitLab so VibeCrew can create merge requests for you:');
       }
 
       // --- Step 1: Install VibeCrew ---
@@ -192,12 +192,12 @@ Existing project
         title: 'Install VibeCrew',
         summary: 'One command installs everything: Homebrew (macOS), Git, Node.js, jq, and VibeCrew itself.',
         commands: [
-          { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash' }
+          { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash', label: 'Paste this into your terminal to install everything automatically:' }
         ],
-        more: '<p class="ob-note">Installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and clones VibeCrew to <code>~/claude-plugins/vibe-crew</code>. Safe to re-run &mdash; existing installs are skipped.</p>' +
-        '<p class="ob-note">Prefer to inspect first? Clone the repo and run <code>install.sh</code> manually:</p>' +
-        cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew') +
-        cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh') +
+        more: '<p class="ob-note">This installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and downloads VibeCrew. Safe to re-run &mdash; existing installs are skipped.</p>' +
+        '<p class="ob-note">Prefer to inspect the script first? You can also install manually:</p>' +
+        cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew', 'Download the VibeCrew source code:') +
+        cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh', 'Run the dependency installer:') +
         hostAuthNote,
         show: true
       };
@@ -207,14 +207,14 @@ Existing project
       if (isNew) {
         step2Summary = 'Create your project folder and launch Claude Code with VibeCrew.';
         step2Commands = [
-          { code: 'mkdir ~/my-project && cd ~/my-project' },
-          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew' }
+          { code: 'mkdir ~/my-project && cd ~/my-project', label: 'Create a folder for your project and navigate into it:' },
+          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew', label: 'Start Claude Code with VibeCrew enabled:' }
         ];
       } else {
         step2Summary = 'Navigate to your existing project and launch Claude Code with VibeCrew.';
         step2Commands = [
-          { code: 'cd ~/my-project' },
-          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew' }
+          { code: 'cd ~/my-project', label: 'Go to your project folder:' },
+          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew', label: 'Start Claude Code with VibeCrew enabled:' }
         ];
       }
       var step2 = {
@@ -232,8 +232,8 @@ Existing project
         title: 'Set up your environment',
         summary: 'Inside Claude Code, run two commands to verify your install and personalize your experience.',
         commands: [
-          { code: '/setup' },
-          { code: '/profile' }
+          { code: '/setup', label: 'Check your installation and configure VibeCrew:' },
+          { code: '/profile', label: 'Choose how VibeCrew communicates with you:' }
         ],
         more: '<p class="ob-note"><code>/setup</code> verifies dependencies, detects your terminal, creates the <code>.vibecrew/</code> state directory, and tests notifications. It offers to fix anything missing.</p>' +
         '<p class="ob-note"><code>/profile</code> adapts VibeCrew to how you work. Pick a preset or answer a few questions:</p>' +
@@ -250,7 +250,7 @@ Existing project
         title: 'Get the most out of Warp',
         summary: 'VibeCrew auto-detects Warp. Install the notification plugin so clicking a notification jumps to the right tab:',
         commands: [
-          { code: 'brew install terminal-notifier' }
+          { code: 'brew install terminal-notifier', label: 'Enable click-to-jump desktop notifications:' }
         ],
         more: '<p class="ob-note"><code>/setup</code> auto-generates a Launch Configuration for a multi-tab layout (planning + development + terminal). Open it with <kbd>Ctrl+Shift+R</kbd>.</p>' +
           '<p class="ob-note"><strong>Essential shortcuts:</strong> <kbd>Cmd+D</kbd> split pane, <kbd>Cmd+T</kbd> new tab, <kbd>Cmd+K</kbd> command palette, <kbd>Ctrl+`</kbd> toggle blocks.</p>' +
@@ -266,15 +266,15 @@ Existing project
       if (isNew) {
         step4Summary = 'VibeCrew guides you through architecture decisions, then you build your first feature.';
         step4Commands = [
-          { code: '/new-project' },
-          { code: '/new-feature "user authentication"' }
+          { code: '/new-project', label: 'Create your project foundation (vision, design, tech stack):' },
+          { code: '/new-feature "user authentication"', label: 'Build your first feature:' }
         ];
         step4More = '<p class="ob-note"><code>/new-project</code> creates your project foundation: VISION.md, design system, tech stack (TDR), architecture diagrams, roadmap, and CLAUDE.md. This is a one-time step &mdash; every feature session after starts instantly.</p>';
       } else {
         step4Summary = 'Let VibeCrew analyze your codebase (read-only), then start building features.';
         step4Commands = [
-          { code: '/onboard' },
-          { code: '/new-feature "your feature name"' }
+          { code: '/onboard', label: 'Let VibeCrew analyze your existing codebase (read-only):' },
+          { code: '/new-feature "your feature name"', label: 'Build your first feature:' }
         ];
         step4More = '<p class="ob-note"><code>/onboard</code> analyzes your stack, conventions, test gaps, and design system (read-only). It generates a CLAUDE.md with project rules. Nothing is modified.</p>';
       }
@@ -291,26 +291,12 @@ Existing project
       guideSteps = allSteps.filter(function(s) { return s.show; });
       currentGuideStep = 0;
 
-      // Build pills
-      var labels = {
-        project: { new: 'New project', existing: 'Existing project' },
-        host: { github: 'GitHub', gitlab: 'GitLab', other: 'Other host' },
-        terminal: { warp: 'Warp', other: 'Other terminal' }
-      };
-      pills.innerHTML = '';
-      ['project', 'host', 'terminal'].forEach(function(key) {
-        var pill = document.createElement('span');
-        pill.className = 'ob-pill';
-        pill.textContent = labels[key][answers[key]];
-        pills.appendChild(pill);
-      });
-
       renderGuideStep();
       questionsPanel.classList.add('hidden');
       guidePanel.classList.remove('hidden');
     }
   })();
-</script> </section>  <section class="section" id="hard-parts" data-astro-cid-j7pv25f6> <h3 data-astro-cid-j7pv25f6>Vibe-code without the hard parts</h3> <div class="why-cards" data-astro-cid-j7pv25f6> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Ship faster without cutting corners</h4> <p data-astro-cid-j7pv25f6>Architecture, design system, and tech stack are decided before the first line of code. You skip the rework that usually eats half a project.</p> </div> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Stop reviewing everything yourself</h4> <p data-astro-cid-j7pv25f6>Every feature is automatically tested, linted, type-checked, reviewed, and security-audited. You approve the result, not every step.</p> </div> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Get production-quality output from day one</h4> <p data-astro-cid-j7pv25f6>Your app launches with proper error handling, accessible interactions, and layouts that actually convert &mdash; not a prototype you have to rebuild later.</p> </div> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Free, open source, runs locally</h4> <p data-astro-cid-j7pv25f6>Your code never leaves your machine. No vendor lock-in, no proprietary formats. Stop using it anytime and keep everything.</p> </div> </div> </section>  <section class="section" id="features" data-astro-cid-j7pv25f6> <h3 data-astro-cid-j7pv25f6>Everything included</h3> <div class="features-grid" data-astro-cid-j7pv25f6> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" data-astro-cid-j7pv25f6></path><circle cx="9" cy="7" r="4" data-astro-cid-j7pv25f6></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87" data-astro-cid-j7pv25f6></path><path d="M16 3.13a4 4 0 0 1 0 7.75" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Specialized AI agents</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M12 20h9" data-astro-cid-j7pv25f6></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Design system generation</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M9 11l3 3L22 4" data-astro-cid-j7pv25f6></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Automated testing</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Security auditing</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><polyline points="16 18 22 12 16 6" data-astro-cid-j7pv25f6></polyline><polyline points="8 6 2 12 8 18" data-astro-cid-j7pv25f6></polyline></svg> <span data-astro-cid-j7pv25f6>Code review</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" data-astro-cid-j7pv25f6></path><polyline points="14 2 14 8 20 8" data-astro-cid-j7pv25f6></polyline><line x1="16" y1="13" x2="8" y2="13" data-astro-cid-j7pv25f6></line><line x1="16" y1="17" x2="8" y2="17" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Auto-generated docs</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><rect x="2" y="3" width="20" height="14" rx="2" ry="2" data-astro-cid-j7pv25f6></rect><line x1="8" y1="21" x2="16" y2="21" data-astro-cid-j7pv25f6></line><line x1="12" y1="17" x2="12" y2="21" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Parallel workflows</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><circle cx="12" cy="12" r="3" data-astro-cid-j7pv25f6></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Personalization profiles</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" data-astro-cid-j7pv25f6></polyline></svg> <span data-astro-cid-j7pv25f6>Vibe Score per session</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" data-astro-cid-j7pv25f6></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>UI &amp; business pattern libraries</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M18 20V10" data-astro-cid-j7pv25f6></path><path d="M12 20V4" data-astro-cid-j7pv25f6></path><path d="M6 20v-6" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Cost tracking &amp; guardrails</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" data-astro-cid-j7pv25f6></path><path d="M13.73 21a2 2 0 0 1-3.46 0" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Smart notifications</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><circle cx="12" cy="12" r="10" data-astro-cid-j7pv25f6></circle><polyline points="12 6 12 12 16 14" data-astro-cid-j7pv25f6></polyline></svg> <span data-astro-cid-j7pv25f6>Performance coaching</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><line x1="4" y1="9" x2="20" y2="9" data-astro-cid-j7pv25f6></line><line x1="4" y1="15" x2="20" y2="15" data-astro-cid-j7pv25f6></line><line x1="10" y1="3" x2="8" y2="21" data-astro-cid-j7pv25f6></line><line x1="16" y1="3" x2="14" y2="21" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Slash commands</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>MCP servers included</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" data-astro-cid-j7pv25f6></path><line x1="4" y1="22" x2="4" y2="15" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Phase gate enforcement</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><circle cx="12" cy="12" r="10" data-astro-cid-j7pv25f6></circle><line x1="2" y1="12" x2="22" y2="12" data-astro-cid-j7pv25f6></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>GitHub &amp; GitLab integration</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Architecture diagrams</span> </div> </div> </section>  <section class="section" id="community" data-astro-cid-j7pv25f6> <h3 data-astro-cid-j7pv25f6>Built with the community</h3> <div class="community-grid" data-astro-cid-j7pv25f6> <div class="card community-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Propose a feature</h4> <p data-astro-cid-j7pv25f6>Have an idea? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement&template=feature_request.md" class="community-link" data-astro-cid-j7pv25f6>Open a feature request &rarr;</a></p> </div> <div class="card community-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Report a problem</h4> <p data-astro-cid-j7pv25f6>Found a bug? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug&template=bug_report.md" class="community-link" data-astro-cid-j7pv25f6>File an issue &rarr;</a></p> </div> <div class="card community-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Share what you built</h4> <p data-astro-cid-j7pv25f6>Show it off! <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell" class="community-link" data-astro-cid-j7pv25f6>Post in Discussions &rarr;</a></p> </div> </div> </section>   </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+</script> </section>  <section class="section" id="hard-parts" data-astro-cid-j7pv25f6> <h3 data-astro-cid-j7pv25f6>Vibe-code without the hard parts</h3> <div class="why-cards" data-astro-cid-j7pv25f6> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Ship faster without cutting corners</h4> <p data-astro-cid-j7pv25f6>Architecture, design system, and tech stack are decided before the first line of code. You skip the rework that usually eats half a project.</p> </div> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Stop reviewing everything yourself</h4> <p data-astro-cid-j7pv25f6>Every feature is automatically tested, linted, type-checked, reviewed, and security-audited. You approve the result, not every step.</p> </div> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Get production-quality output from day one</h4> <p data-astro-cid-j7pv25f6>Your app launches with proper error handling, accessible interactions, and layouts that actually convert &mdash; not a prototype you have to rebuild later.</p> </div> <div class="card why-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Free, open source, runs locally</h4> <p data-astro-cid-j7pv25f6>Your code never leaves your machine. No vendor lock-in, no proprietary formats. Stop using it anytime and keep everything.</p> </div> </div> </section>  <section class="section" id="features" data-astro-cid-j7pv25f6> <h3 data-astro-cid-j7pv25f6>Everything included</h3> <div class="features-grid" data-astro-cid-j7pv25f6> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" data-astro-cid-j7pv25f6></path><circle cx="9" cy="7" r="4" data-astro-cid-j7pv25f6></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87" data-astro-cid-j7pv25f6></path><path d="M16 3.13a4 4 0 0 1 0 7.75" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Specialized AI agents</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M12 20h9" data-astro-cid-j7pv25f6></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Design system generation</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M9 11l3 3L22 4" data-astro-cid-j7pv25f6></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Automated testing</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Security auditing</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><polyline points="16 18 22 12 16 6" data-astro-cid-j7pv25f6></polyline><polyline points="8 6 2 12 8 18" data-astro-cid-j7pv25f6></polyline></svg> <span data-astro-cid-j7pv25f6>Code review</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" data-astro-cid-j7pv25f6></path><polyline points="14 2 14 8 20 8" data-astro-cid-j7pv25f6></polyline><line x1="16" y1="13" x2="8" y2="13" data-astro-cid-j7pv25f6></line><line x1="16" y1="17" x2="8" y2="17" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Auto-generated docs</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><rect x="2" y="3" width="20" height="14" rx="2" ry="2" data-astro-cid-j7pv25f6></rect><line x1="8" y1="21" x2="16" y2="21" data-astro-cid-j7pv25f6></line><line x1="12" y1="17" x2="12" y2="21" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Parallel workflows</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><circle cx="12" cy="12" r="3" data-astro-cid-j7pv25f6></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Personalization profiles</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" data-astro-cid-j7pv25f6></polyline></svg> <span data-astro-cid-j7pv25f6>Vibe Score per session</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" data-astro-cid-j7pv25f6></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>UI &amp; business pattern libraries</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M18 20V10" data-astro-cid-j7pv25f6></path><path d="M12 20V4" data-astro-cid-j7pv25f6></path><path d="M6 20v-6" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Cost tracking &amp; guardrails</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" data-astro-cid-j7pv25f6></path><path d="M13.73 21a2 2 0 0 1-3.46 0" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Smart notifications</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><circle cx="12" cy="12" r="10" data-astro-cid-j7pv25f6></circle><polyline points="12 6 12 12 16 14" data-astro-cid-j7pv25f6></polyline></svg> <span data-astro-cid-j7pv25f6>Performance coaching</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><line x1="4" y1="9" x2="20" y2="9" data-astro-cid-j7pv25f6></line><line x1="4" y1="15" x2="20" y2="15" data-astro-cid-j7pv25f6></line><line x1="10" y1="3" x2="8" y2="21" data-astro-cid-j7pv25f6></line><line x1="16" y1="3" x2="14" y2="21" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Slash commands</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>MCP servers included</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" data-astro-cid-j7pv25f6></path><line x1="4" y1="22" x2="4" y2="15" data-astro-cid-j7pv25f6></line></svg> <span data-astro-cid-j7pv25f6>Phase gate enforcement</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><circle cx="12" cy="12" r="10" data-astro-cid-j7pv25f6></circle><line x1="2" y1="12" x2="22" y2="12" data-astro-cid-j7pv25f6></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>GitHub &amp; GitLab integration</span> </div> <div class="feature-item" data-astro-cid-j7pv25f6> <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-j7pv25f6><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" data-astro-cid-j7pv25f6></path></svg> <span data-astro-cid-j7pv25f6>Architecture diagrams</span> </div> </div> </section>  <section class="section" id="community" data-astro-cid-j7pv25f6> <h3 data-astro-cid-j7pv25f6>Get involved</h3> <div class="community-grid" data-astro-cid-j7pv25f6> <div class="card community-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Propose a feature</h4> <p data-astro-cid-j7pv25f6>Have an idea? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement&template=feature_request.md" class="community-link" data-astro-cid-j7pv25f6>Open a feature request &rarr;</a></p> </div> <div class="card community-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Report a problem</h4> <p data-astro-cid-j7pv25f6>Found a bug? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug&template=bug_report.md" class="community-link" data-astro-cid-j7pv25f6>File an issue &rarr;</a></p> </div> <div class="card community-card" data-astro-cid-j7pv25f6> <h4 data-astro-cid-j7pv25f6>Share what you built</h4> <p data-astro-cid-j7pv25f6>Show it off! <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell" class="community-link" data-astro-cid-j7pv25f6>Post in Discussions &rarr;</a></p> </div> </div> </section>   </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {
     var overlay = document.getElementById('search-modal-overlay');
     var container = document.getElementById('search-container');

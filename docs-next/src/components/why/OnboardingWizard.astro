@@ -52,13 +52,12 @@ import { url } from '../../data/site';
   <div id="ob-guide-panel" class="hidden">
     <div class="ob-guide-nav">
       <span class="ob-guide-progress" id="ob-guide-progress"></span>
-      <div class="ob-guide-pills" id="ob-guide-pills"></div>
+      <button class="ob-reset" id="ob-reset">Start over</button>
     </div>
     <div class="ob-guide-step" id="ob-guide-step"></div>
     <div class="ob-guide-footer">
       <button class="ob-prev hidden" id="ob-prev">&larr; Back</button>
       <button class="ob-next" id="ob-next">Next &rarr;</button>
-      <button class="ob-restart hidden" id="ob-restart">Start over</button>
     </div>
   </div>
 </div>
@@ -180,21 +179,23 @@ import { url } from '../../data/site';
     color: var(--color-accent);
   }
 
-  .ob-guide-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
+  .ob-reset {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1.5px solid var(--color-accent-dim);
+    border-radius: var(--radius-xs);
+    background: rgba(167, 139, 250, 0.08);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s;
   }
 
-  .ob-pill {
-    display: inline-block;
-    padding: 0.15rem 0.5rem;
-    font-size: 0.7rem;
-    font-weight: 600;
-    border-radius: 999px;
-    background: var(--color-accent-bg);
-    color: var(--color-accent);
-    border: 1px solid rgba(167, 139, 250, 0.2);
+  .ob-reset:hover {
+    border-color: var(--color-accent);
+    color: var(--color-text);
+    background: rgba(167, 139, 250, 0.15);
   }
 
   /* ── Guide step content ────────────────────────────────── */
@@ -227,6 +228,18 @@ import { url } from '../../data/site';
     text-decoration: underline;
   }
 
+  /* ── Command labels ───────────────────────────────────── */
+  .ob-cmd-label {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    margin: 0.75rem 0 0.15rem;
+    font-weight: 500;
+  }
+
+  .ob-cmd-label:first-child {
+    margin-top: 0;
+  }
+
   /* ── Code blocks with inline copy icon ─────────────────── */
   .ob-code-wrap {
     position: relative;
@@ -239,13 +252,13 @@ import { url } from '../../data/site';
     font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
     font-size: 0.82rem;
     line-height: 1.55;
-    padding: 0.6rem 2.5rem 0.6rem 0.85rem;
+    padding: 0.6rem 2.8rem 0.6rem 0.85rem;
     border-radius: var(--radius-xs);
     background: rgba(0, 0, 0, 0.25);
     color: var(--color-text);
     border: 1px solid var(--color-border);
-    overflow-x: auto;
-    white-space: pre;
+    white-space: pre-wrap;
+    word-break: break-all;
     margin: 0;
   }
 
@@ -256,17 +269,17 @@ import { url } from '../../data/site';
   .ob-copy-btn {
     position: absolute;
     top: 50%;
-    right: 0.5rem;
+    right: 0.6rem;
     transform: translateY(-50%);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     padding: 0;
-    border: none;
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-xs);
-    background: transparent;
+    background: rgba(255, 255, 255, 0.05);
     color: var(--color-text-muted);
     cursor: pointer;
     transition: all 0.15s;
@@ -274,16 +287,19 @@ import { url } from '../../data/site';
 
   .ob-copy-btn:hover {
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--color-accent-dim);
   }
 
   .ob-copy-btn.copied {
     color: var(--color-green);
+    border-color: var(--color-green);
   }
 
   .ob-copy-btn svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
   }
 
   /* ── Inline notes ─────────────────────────────────────── */
@@ -332,7 +348,7 @@ import { url } from '../../data/site';
     border-top: 1px solid var(--color-border-subtle);
   }
 
-  .ob-prev, .ob-next, .ob-restart {
+  .ob-prev, .ob-next {
     padding: 0.45rem 1rem;
     border: 1.5px solid var(--color-accent-dim);
     border-radius: var(--radius-xs);
@@ -345,7 +361,7 @@ import { url } from '../../data/site';
     transition: all 0.15s;
   }
 
-  .ob-prev:hover, .ob-next:hover, .ob-restart:hover {
+  .ob-prev:hover, .ob-next:hover {
     border-color: var(--color-accent);
     background: rgba(167, 139, 250, 0.15);
     color: var(--color-text);
@@ -373,11 +389,10 @@ import { url } from '../../data/site';
     var steps = wizard.querySelectorAll('.ob-step');
     var dots = wizard.querySelectorAll('.ob-dot');
     var guideStep = document.getElementById('ob-guide-step');
-    var pills = document.getElementById('ob-guide-pills');
+    var resetBtn = document.getElementById('ob-reset');
     var progressLabel = document.getElementById('ob-guide-progress');
     var prevBtn = document.getElementById('ob-prev');
     var nextBtn = document.getElementById('ob-next');
-    var restartBtn = document.getElementById('ob-restart');
     var guideSteps = [];
     var currentGuideStep = 0;
 
@@ -438,7 +453,7 @@ import { url } from '../../data/site';
       }
     });
 
-    restartBtn.addEventListener('click', function() {
+    function doRestart() {
       answers = {};
       currentGuideStep = 0;
       guideSteps = [];
@@ -453,14 +468,19 @@ import { url } from '../../data/site';
       });
       guidePanel.classList.add('hidden');
       questionsPanel.classList.remove('hidden');
-    });
+    }
 
-    function cmd(code) {
+    resetBtn.addEventListener('click', doRestart);
+
+    function cmd(code, label) {
       var escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return '<div class="ob-code-wrap">' +
+      var html = '';
+      if (label) html += '<p class="ob-cmd-label">' + label + '</p>';
+      html += '<div class="ob-code-wrap">' +
         '<pre class="ob-code">' + escaped + '</pre>' +
-        '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '">' + copySvg + '</button>' +
+        '<button class="ob-copy-btn" data-copy="' + code.replace(/"/g, '&quot;') + '" title="Copy to clipboard">' + copySvg + '</button>' +
       '</div>';
+      return html;
     }
 
     function checklist(items) {
@@ -472,7 +492,7 @@ import { url } from '../../data/site';
       var html = '<h3 class="ob-guide-step-title">' + s.title + '</h3>';
       html += '<p class="ob-guide-step-summary">' + s.summary + '</p>';
       s.commands.forEach(function(c) {
-        html += cmd(c.code);
+        html += cmd(c.code, c.label);
       });
       if (s.more) html += s.more;
       guideStep.innerHTML = html;
@@ -488,10 +508,8 @@ import { url } from '../../data/site';
 
       if (currentGuideStep === guideSteps.length - 1) {
         nextBtn.classList.add('hidden');
-        restartBtn.classList.remove('hidden');
       } else {
         nextBtn.classList.remove('hidden');
-        restartBtn.classList.add('hidden');
       }
     }
 
@@ -504,12 +522,10 @@ import { url } from '../../data/site';
       // --- Host-specific auth note ---
       var hostAuthNote = '';
       if (isGH) {
-        hostAuthNote = '<p style="margin-top:0.35rem">The installer includes <strong>GitHub CLI</strong>. After setup, authenticate:</p>' +
-          cmd('gh auth login') +
-          '<p style="margin-top:0.25rem;font-size:0.82rem;color:var(--color-text-muted)">Choose "HTTPS" and "Login with a web browser" when prompted.</p>';
+        hostAuthNote = cmd('gh auth login', 'Log in to GitHub so VibeCrew can create pull requests for you:') +
+          '<p class="ob-note">Choose "HTTPS" and "Login with a web browser" when prompted.</p>';
       } else if (isGL) {
-        hostAuthNote = '<p style="margin-top:0.35rem">The installer includes <strong>GitLab CLI</strong>. After setup, authenticate:</p>' +
-          cmd('glab auth login');
+        hostAuthNote = cmd('glab auth login', 'Log in to GitLab so VibeCrew can create merge requests for you:');
       }
 
       // --- Step 1: Install VibeCrew ---
@@ -517,12 +533,12 @@ import { url } from '../../data/site';
         title: 'Install VibeCrew',
         summary: 'One command installs everything: Homebrew (macOS), Git, Node.js, jq, and VibeCrew itself.',
         commands: [
-          { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash' }
+          { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash', label: 'Paste this into your terminal to install everything automatically:' }
         ],
-        more: '<p class="ob-note">Installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and clones VibeCrew to <code>~/claude-plugins/vibe-crew</code>. Safe to re-run &mdash; existing installs are skipped.</p>' +
-        '<p class="ob-note">Prefer to inspect first? Clone the repo and run <code>install.sh</code> manually:</p>' +
-        cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew') +
-        cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh') +
+        more: '<p class="ob-note">This installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and downloads VibeCrew. Safe to re-run &mdash; existing installs are skipped.</p>' +
+        '<p class="ob-note">Prefer to inspect the script first? You can also install manually:</p>' +
+        cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew', 'Download the VibeCrew source code:') +
+        cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh', 'Run the dependency installer:') +
         hostAuthNote,
         show: true
       };
@@ -532,14 +548,14 @@ import { url } from '../../data/site';
       if (isNew) {
         step2Summary = 'Create your project folder and launch Claude Code with VibeCrew.';
         step2Commands = [
-          { code: 'mkdir ~/my-project && cd ~/my-project' },
-          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew' }
+          { code: 'mkdir ~/my-project && cd ~/my-project', label: 'Create a folder for your project and navigate into it:' },
+          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew', label: 'Start Claude Code with VibeCrew enabled:' }
         ];
       } else {
         step2Summary = 'Navigate to your existing project and launch Claude Code with VibeCrew.';
         step2Commands = [
-          { code: 'cd ~/my-project' },
-          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew' }
+          { code: 'cd ~/my-project', label: 'Go to your project folder:' },
+          { code: 'claude --plugin-dir ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew', label: 'Start Claude Code with VibeCrew enabled:' }
         ];
       }
       var step2 = {
@@ -557,8 +573,8 @@ import { url } from '../../data/site';
         title: 'Set up your environment',
         summary: 'Inside Claude Code, run two commands to verify your install and personalize your experience.',
         commands: [
-          { code: '/setup' },
-          { code: '/profile' }
+          { code: '/setup', label: 'Check your installation and configure VibeCrew:' },
+          { code: '/profile', label: 'Choose how VibeCrew communicates with you:' }
         ],
         more: '<p class="ob-note"><code>/setup</code> verifies dependencies, detects your terminal, creates the <code>.vibecrew/</code> state directory, and tests notifications. It offers to fix anything missing.</p>' +
         '<p class="ob-note"><code>/profile</code> adapts VibeCrew to how you work. Pick a preset or answer a few questions:</p>' +
@@ -575,7 +591,7 @@ import { url } from '../../data/site';
         title: 'Get the most out of Warp',
         summary: 'VibeCrew auto-detects Warp. Install the notification plugin so clicking a notification jumps to the right tab:',
         commands: [
-          { code: 'brew install terminal-notifier' }
+          { code: 'brew install terminal-notifier', label: 'Enable click-to-jump desktop notifications:' }
         ],
         more: '<p class="ob-note"><code>/setup</code> auto-generates a Launch Configuration for a multi-tab layout (planning + development + terminal). Open it with <kbd>Ctrl+Shift+R</kbd>.</p>' +
           '<p class="ob-note"><strong>Essential shortcuts:</strong> <kbd>Cmd+D</kbd> split pane, <kbd>Cmd+T</kbd> new tab, <kbd>Cmd+K</kbd> command palette, <kbd>Ctrl+`</kbd> toggle blocks.</p>' +
@@ -591,15 +607,15 @@ import { url } from '../../data/site';
       if (isNew) {
         step4Summary = 'VibeCrew guides you through architecture decisions, then you build your first feature.';
         step4Commands = [
-          { code: '/new-project' },
-          { code: '/new-feature "user authentication"' }
+          { code: '/new-project', label: 'Create your project foundation (vision, design, tech stack):' },
+          { code: '/new-feature "user authentication"', label: 'Build your first feature:' }
         ];
         step4More = '<p class="ob-note"><code>/new-project</code> creates your project foundation: VISION.md, design system, tech stack (TDR), architecture diagrams, roadmap, and CLAUDE.md. This is a one-time step &mdash; every feature session after starts instantly.</p>';
       } else {
         step4Summary = 'Let VibeCrew analyze your codebase (read-only), then start building features.';
         step4Commands = [
-          { code: '/onboard' },
-          { code: '/new-feature "your feature name"' }
+          { code: '/onboard', label: 'Let VibeCrew analyze your existing codebase (read-only):' },
+          { code: '/new-feature "your feature name"', label: 'Build your first feature:' }
         ];
         step4More = '<p class="ob-note"><code>/onboard</code> analyzes your stack, conventions, test gaps, and design system (read-only). It generates a CLAUDE.md with project rules. Nothing is modified.</p>';
       }
@@ -615,20 +631,6 @@ import { url } from '../../data/site';
       var allSteps = [step1, step2, step3, warpStep, step4];
       guideSteps = allSteps.filter(function(s) { return s.show; });
       currentGuideStep = 0;
-
-      // Build pills
-      var labels = {
-        project: { new: 'New project', existing: 'Existing project' },
-        host: { github: 'GitHub', gitlab: 'GitLab', other: 'Other host' },
-        terminal: { warp: 'Warp', other: 'Other terminal' }
-      };
-      pills.innerHTML = '';
-      ['project', 'host', 'terminal'].forEach(function(key) {
-        var pill = document.createElement('span');
-        pill.className = 'ob-pill';
-        pill.textContent = labels[key][answers[key]];
-        pills.appendChild(pill);
-      });
 
       renderGuideStep();
       questionsPanel.classList.add('hidden');

@@ -1,6 +1,8 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
+import PatternIllustration from '../components/patterns/PatternIllustration.astro';
 import { uiPatterns, categoryLabels, categoryOrder } from '../data/ui-patterns';
+import type { UIPattern } from '../data/ui-patterns';
 
 // Group patterns by category
 const grouped = categoryOrder.reduce((acc, cat) => {
@@ -10,6 +12,17 @@ const grouped = categoryOrder.reduce((acc, cat) => {
 }, {} as Record<string, typeof uiPatterns>);
 
 const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<UIPattern['category'], string> = {
+  input: 'Form controls and input components for collecting user data — from simple text fields to complex date pickers and file uploads.',
+  data: 'Components for presenting information — tables, charts, cards, and loading states that make data scannable and understandable.',
+  navigation: 'Wayfinding components that help users move through your application — menus, tabs, sidebars, and breadcrumbs.',
+  feedback: 'Status indicators and notifications that keep users informed about what happened, what went wrong, or what to do next.',
+  overlay: 'Floating layers that appear on top of the page — dialogs, drawers, tooltips, and popovers for focused interactions.',
+  layout: 'Structural components that organize page content — accordions, resizable panels, scroll areas, and content separators.',
+  interaction: 'Performance and UX patterns that make interfaces feel fast and responsive — lazy loading, caching strategies, and optimistic updates.',
+  keyboard: 'Accessibility patterns for keyboard and screen reader users — focus management, key bindings, and live announcements.',
+};
 ---
 
 <DocsLayout title="UI Pattern Guide" sectionLabel="Reference" activeSlug="ui-patterns">
@@ -26,20 +39,24 @@ const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
   {categories.map((cat) => (
     <section class="pattern-section" id={`cat-${cat}`}>
       <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
       <dl class="pattern-list">
         {grouped[cat].map((entry) => (
           <div class="pattern-entry" id={entry.name.toLowerCase().replace(/[\s\/()]/g, '-')}>
-            <dt>
-              {entry.name}
-              {entry.shadcn && <span class="shadcn-badge">{entry.shadcn}</span>}
-            </dt>
-            {entry.aliases.length > 0 && (
-              <p class="aliases">Also called: {entry.aliases.join(', ')}</p>
-            )}
-            <dd>{entry.description}</dd>
-            {entry.docsUrl && (
-              <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
-            )}
+            <PatternIllustration name={entry.name} />
+            <div class="pattern-text">
+              <dt>
+                {entry.name}
+                {entry.shadcn && <span class="shadcn-badge">{entry.shadcn}</span>}
+              </dt>
+              {entry.aliases.length > 0 && (
+                <p class="aliases">Also called: {entry.aliases.join(', ')}</p>
+              )}
+              <dd>{entry.description}</dd>
+              {entry.docsUrl && (
+                <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+              )}
+            </div>
           </div>
         ))}
       </dl>
@@ -122,8 +139,15 @@ const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
     color: var(--color-accent);
     border-bottom: 1px solid var(--color-border);
     padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     margin-top: 2rem;
+  }
+
+  .category-description {
+    margin: 0 0 1.25rem;
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
   }
 
   .pattern-list {
@@ -131,12 +155,27 @@ const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
   }
 
   .pattern-entry {
-    padding: 0.75rem 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1rem 0;
     border-bottom: 1px solid var(--color-border-subtle);
   }
 
   .pattern-entry:last-child {
     border-bottom: none;
+  }
+
+  .pattern-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: 640px) {
+    .pattern-entry {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
   }
 
   dt {

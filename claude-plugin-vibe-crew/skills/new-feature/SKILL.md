@@ -104,8 +104,9 @@ Search the backlog for an existing feature or create a new entry.
 Create a dedicated git branch for this feature.
 
 1. Check if git is initialized in the project root. If not:
-   - Run `git init`
-   - Run `git add -A && git commit -m "chore: initial commit"`
+   - Stop and tell the user:
+     > Git is not initialized. Run `/setup` to initialize your project (including git).
+   - Do NOT proceed.
 2. Sanitize the feature name for use as a branch name:
    - Convert to lowercase.
    - Replace spaces and special characters with hyphens.
@@ -240,6 +241,6 @@ Complete the initialization and hand off to the development workflow.
 - **Always** create a feature branch -- never work on `main`.
 - Feature IDs are sequential: `feat-001`, `feat-002`, `feat-003`, etc.
 - Branch names are sanitized: lowercase, hyphens only, max 50 characters.
-- If git is not initialized, run `git init` and `git add -A && git commit -m "chore: initial commit"` first.
+- If git is not initialized, stop and direct the user to run `/setup`.
 - Use `${CLAUDE_PLUGIN_ROOT}` for all plugin-relative file paths (scripts, agents, etc.).
 - Keep output concise but informative -- no walls of text, but enough context for the user to understand what happened and what to do next.

@@ -145,7 +145,7 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |  artifacts + diagrams         |
  |                       |  Generate CLAUDE.md           |
  |                       |                               |
- |                       |  STEP 7: Git init + commit    |
+ |                       |  STEP 7: Commit foundation    |
  |                       |  git add + commit foundation  |
  |                       |                               |
  |                       |  Update state.json:           |

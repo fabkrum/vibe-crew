@@ -150,7 +150,81 @@ CLAUDE_COMMAND="<value from step 5>" bash "${CLAUDE_PLUGIN_ROOT}/scripts/init-vi
 
 This script creates the `.vibecrew/` directory structure with `config.json`, `state.json`, `backlog.json`, and subdirectories for `sessions/`, `scores/`, `signals/`, `locks/`, `architecture/`, `releases/`, `handoffs/`, and `workflows/`. If running in Warp, it also generates a launch configuration at `~/.warp/launch_configurations/<project-name>.yaml` using the configured Claude command.
 
-## Step 7: Verify Initialization
+## Step 7: Git Repository Setup
+
+Set up git version control and optionally create a remote repository.
+
+### 7.1 Detect existing git state
+
+```bash
+git rev-parse --is-inside-work-tree 2>/dev/null && echo "has_git" || echo "no_git"
+git remote get-url origin 2>/dev/null || echo "no_remote"
+```
+
+### 7.2 Existing repo WITH remote
+
+If the project already has a git remote, auto-detect the provider and store it. No questions needed.
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-git-repo.sh" --provider local
+```
+
+Parse the JSON output. If `action` is `"detected_existing"`, report:
+
+> Git repository detected: **{provider}** ({repo}). Provider stored in config.
+
+Skip to Step 8.
+
+### 7.3 No remote (or no repo)
+
+Ask the user:
+
+> "Where would you like to host your code?"
+> 1. **GitHub** — Create a GitHub repository (requires `gh` CLI)
+> 2. **GitLab** — Create a GitLab repository (requires `glab` CLI)
+> 3. **Local only** — Git version control without a remote
+
+If the user chooses **GitHub** or **GitLab**:
+- Ask visibility: "Should the repository be **private** (recommended) or **public**?"
+- Ask repo name: "Repository name?" (default: current directory name)
+- Run:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-git-repo.sh" --provider <github|gitlab> --visibility <public|private> --repo-name "<name>"
+```
+
+If the user chooses **Local only**:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-git-repo.sh" --provider local
+```
+
+### 7.4 Handle errors
+
+Parse the JSON output. If `status` is `"error"`:
+- If `check` is `"gh_installed"` or `"glab_installed"`: "The CLI is not installed. Would you like to continue with **local only** instead?"
+- If `check` is `"gh_authenticated"` or `"glab_authenticated"`: "The CLI is not authenticated. Run `gh auth login` / `glab auth login` first, or continue with **local only**."
+- If `check` is `"repo_create"`: "Repository creation failed. Would you like to continue with **local only**?"
+
+On fallback to local, run:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/setup-git-repo.sh" --provider local
+```
+
+### 7.5 Report result
+
+Report the git setup result:
+
+```
+Git:               initialized (local)
+  — or —
+Git:               initialized (github: owner/repo)
+  — or —
+Git:               detected (github: owner/repo)
+```
+
+## Step 8: Verify Initialization
 
 Read the generated configuration to confirm it was written correctly:
 
@@ -162,10 +236,11 @@ Verify the file contains valid JSON with at minimum:
 - `terminal` field matching the detected terminal
 - `notifications.enabled` field
 - `created_at` timestamp
+- `git_provider` field (should no longer be `null`)
 
 If the file is missing or malformed, report the error and suggest the user check file permissions.
 
-## Step 8: Print Summary
+## Step 9: Print Summary
 
 Print a clear summary of everything that was configured:
 
@@ -186,6 +261,7 @@ Terminal:           <detected terminal>
 Claude command:    <configured command>
 Notifications:     <enabled/disabled>
 MCP Servers:       <N healthy / M enabled>
+Git:               <initialized (local) / initialized (github: owner/repo) / detected (github: owner/repo)>
 State directory:   .vibecrew/ <created/existing>
 Warp launch config: <created/existing/skipped (not Warp)>
 
@@ -200,7 +276,7 @@ Optional features not available:
   - Desktop notifications (install: brew install terminal-notifier)
 ```
 
-## Step 9: Launch Dashboard
+## Step 10: Launch Dashboard
 
 After the summary, check if the docs site has been scaffolded and launch the dashboard:
 
@@ -216,7 +292,7 @@ fi
 
 If the docs site does not exist yet (first setup before `/new-project`), skip this step. The dashboard will be launched after the docs site is scaffolded during project creation.
 
-## Step 10: Prompt for Profile
+## Step 11: Prompt for Profile
 
 After the summary, check if the user has completed the profile interview:
 

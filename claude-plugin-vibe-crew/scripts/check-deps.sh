@@ -55,7 +55,7 @@ check_dep() {
   fi
 
   local version
-  version=$("$command" $version_flag 2>&1 | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)
+  version=$("$command" $version_flag 2>&1 | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1 || true)
   RESULTS+=("{\"name\":\"$name\",\"command\":\"$command\",\"status\":\"ok\",\"found\":\"${version:-unknown}\",\"required\":\"$min_version\",\"level\":\"$level\"}")
   PASS=$(( PASS + 1 ))
 }
@@ -68,7 +68,7 @@ check_dep "jq"      "jq"   "1.6"    "required" "jq"   "jq"   "--version"
 # Optional dependencies (warn but don't block)
 check_dep "GitHub CLI"        "gh"                  "2.0.0" "optional" "gh"                  "gh"                  "--version"
 check_dep "GitLab CLI"        "glab"                "1.0.0" "optional" "glab"                "glab"                "--version"
-check_dep "terminal-notifier" "terminal-notifier"   "2.0.0" "optional" "terminal-notifier"   "terminal-notifier"   "--version"
+check_dep "terminal-notifier" "terminal-notifier"   "2.0.0" "optional" "terminal-notifier"   "terminal-notifier"   "-version"
 
 # Check gh auth status (informational, never blocks)
 GH_AUTH="not_installed"

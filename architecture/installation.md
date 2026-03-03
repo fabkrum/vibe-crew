@@ -642,9 +642,19 @@ Step 5: Create .vibecrew/ Runtime Directory
   +--> Write backlog.json (empty features array, schema_version: "1.0.0")
   +--> Create sessions/, scores/, signals/, locks/ directories
   |
-Step 6: Report Readiness
+Step 6: Git Repository Setup
   |
-  +--> Print summary table (required, optional, MCP, terminal)
+  +--> Existing repo with remote? --> Auto-detect provider, store in config.json
+  +--> Existing repo, no remote? --> Ask: GitHub / GitLab / Local only
+  +--> No git repo? --> git init, then ask: GitHub / GitLab / Local only
+  |    +--> GitHub: gh repo create + push
+  |    +--> GitLab: glab repo create + push
+  |    +--> Local: no remote
+  +--> Initial commit (state.json, backlog.json, .gitignore)
+  |
+Step 7: Report Readiness
+  |
+  +--> Print summary table (required, optional, MCP, terminal, git)
   +--> List disabled features (if optional deps missing)
   +--> Instruct: "Run /new-project to begin"
 ```
@@ -672,11 +682,13 @@ MCP Server Health:
   playwright        ok
 
 Terminal Detection: Warp (deep-link notifications enabled)
+
+Git Repository:   initialized (github: testuser/my-project)
 ```
 
 ### 7.4 Runtime Directory Creation
 
-The wizard creates the `.vibecrew/` directory. All JSON files are initialized with `schema_version: "1.0.0"` and follow the canonical schemas defined in [schemas.md](schemas.md).
+The wizard creates the `.vibecrew/` directory. All JSON files are initialized with `schema_version: "1.0.0"` and follow the canonical schemas defined in [schemas.md](schemas.md). Tracked files (`state.json`, `backlog.json`, `.gitignore`) are committed during the git setup step.
 
 **Files created:**
 
@@ -706,6 +718,7 @@ VibeCrew Setup Complete
   Optional:         2/2 passed (GitHub CLI, terminal-notifier)
   MCP Servers:      3/3 healthy
   Terminal:         Warp (deep-links enabled)
+  Git:              initialized (github: testuser/my-project)
   State files:      config.json, state.json, backlog.json (schema v1.0.0)
   Foundation:       INCOMPLETE
 

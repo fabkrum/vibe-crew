@@ -6,6 +6,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/lib/lock.sh"
+
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 
@@ -45,8 +48,10 @@ echo ""
 echo "New pricing:"
 echo "$NEW_PRICING" | jq .
 
-# Update config
-jq --argjson pricing "$NEW_PRICING" '.pricing = $pricing' "$CONFIG_FILE" > "$CONFIG_FILE.tmp" && mv "$CONFIG_FILE.tmp" "$CONFIG_FILE"
+# Update config under lock
+acquire_named_lock "config" "refresh-pricing"
+jq --argjson pricing "$NEW_PRICING" '.pricing = $pricing' "$CONFIG_FILE" > "$CONFIG_FILE.tmp.$$" && mv "$CONFIG_FILE.tmp.$$" "$CONFIG_FILE"
+release_named_lock "config"
 
 echo ""
 echo "Pricing updated in config.json"

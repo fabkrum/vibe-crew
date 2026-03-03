@@ -17,6 +17,8 @@ else
   PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 fi
 
+source "$PLUGIN_ROOT/scripts/lib/lock.sh"
+
 MCP_FILE="$PLUGIN_ROOT/.mcp.json"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
@@ -110,10 +112,11 @@ if [[ -f "$CONFIG_FILE" ]]; then
   ENABLED_VALUE="true"
   [[ "$ACTION" == "disable" ]] && ENABLED_VALUE="false"
 
+  acquire_named_lock "config" "enable-mcp-server"
   UPDATED_CONFIG=$(jq --arg key "$CONFIG_KEY" --argjson val "$ENABLED_VALUE" \
     '.mcp_servers[$key] = $val' "$CONFIG_FILE")
 
-  TMP_CONFIG="${CONFIG_FILE}.tmp"
+  TMP_CONFIG="${CONFIG_FILE}.tmp.$$"
   echo "$UPDATED_CONFIG" > "$TMP_CONFIG"
 
   if ! jq empty "$TMP_CONFIG" 2>/dev/null; then
@@ -122,6 +125,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
   else
     mv "$TMP_CONFIG" "$CONFIG_FILE"
   fi
+  release_named_lock "config"
 fi
 
 echo "Server '$SERVER_NAME' ${ACTION}d successfully."

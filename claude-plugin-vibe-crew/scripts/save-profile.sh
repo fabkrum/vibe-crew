@@ -7,6 +7,9 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/lib/lock.sh"
+
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -65,29 +68,27 @@ PROFILE=$(jq -n \
     updated_at: $updated_at
   }')
 
-# --- Write profile to config.json ---
-TMP="${CONFIG_FILE}.tmp.$$"
-jq --argjson profile "$PROFILE" '.user_profile = $profile' "$CONFIG_FILE" > "$TMP" && mv "$TMP" "$CONFIG_FILE"
-
-# --- Sync gamification config based on preference ---
+# --- Build gamification sync filter based on preference ---
 case "$GAMIFICATION" in
   disabled)
-    jq '.gamification.enabled = false | .gamification.show_xp_in_status = false | .gamification.streak_reminders = false' \
-      "$CONFIG_FILE" > "$TMP" && mv "$TMP" "$CONFIG_FILE"
+    GAMIFICATION_FILTER='.gamification.enabled = false | .gamification.show_xp_in_status = false | .gamification.streak_reminders = false'
     ;;
   score_only)
-    jq '.gamification.enabled = true | .gamification.show_xp_in_status = false | .gamification.streak_reminders = false' \
-      "$CONFIG_FILE" > "$TMP" && mv "$TMP" "$CONFIG_FILE"
+    GAMIFICATION_FILTER='.gamification.enabled = true | .gamification.show_xp_in_status = false | .gamification.streak_reminders = false'
     ;;
   light)
-    jq '.gamification.enabled = true | .gamification.show_xp_in_status = true | .gamification.streak_reminders = false' \
-      "$CONFIG_FILE" > "$TMP" && mv "$TMP" "$CONFIG_FILE"
+    GAMIFICATION_FILTER='.gamification.enabled = true | .gamification.show_xp_in_status = true | .gamification.streak_reminders = false'
     ;;
   full|"")
-    jq '.gamification.enabled = true | .gamification.show_xp_in_status = true | .gamification.streak_reminders = true' \
-      "$CONFIG_FILE" > "$TMP" && mv "$TMP" "$CONFIG_FILE"
+    GAMIFICATION_FILTER='.gamification.enabled = true | .gamification.show_xp_in_status = true | .gamification.streak_reminders = true'
     ;;
 esac
+
+# --- Single atomic write: profile + gamification sync under config lock ---
+acquire_named_lock "config" "save-profile"
+TMP="${CONFIG_FILE}.tmp.$$"
+jq --argjson profile "$PROFILE" ".user_profile = \$profile | $GAMIFICATION_FILTER" "$CONFIG_FILE" > "$TMP" && mv "$TMP" "$CONFIG_FILE"
+release_named_lock "config"
 
 echo "Profile saved to $CONFIG_FILE"
 echo "  Role:              ${ROLE:-not set}"

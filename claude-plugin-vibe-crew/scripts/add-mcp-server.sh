@@ -18,6 +18,8 @@ else
   PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 fi
 
+source "$PLUGIN_ROOT/scripts/lib/lock.sh"
+
 REGISTRY_FILE="$PLUGIN_ROOT/templates/mcp-registry.json"
 MCP_FILE="$PLUGIN_ROOT/.mcp.json"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
@@ -149,11 +151,12 @@ add_server() {
       enabled_val="false"
     fi
 
+    acquire_named_lock "config" "add-mcp-server"
     local updated_config
     updated_config=$(jq --arg key "$config_key" --argjson val "$enabled_val" \
       '.mcp_servers[$key] = $val' "$CONFIG_FILE")
 
-    local tmp_config="${CONFIG_FILE}.tmp"
+    local tmp_config="${CONFIG_FILE}.tmp.$$"
     echo "$updated_config" > "$tmp_config"
 
     if ! jq empty "$tmp_config" 2>/dev/null; then
@@ -162,6 +165,7 @@ add_server() {
     else
       mv "$tmp_config" "$CONFIG_FILE"
     fi
+    release_named_lock "config"
   fi
 
   # Determine auth requirement

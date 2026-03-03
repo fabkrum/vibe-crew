@@ -6,6 +6,9 @@
 # Claude Code local settings
 .claude/
 
+# VibeCrew per-project runtime state
+.vibecrew/
+
 # Node (if running docs-site locally)
 node_modules/
 dist/

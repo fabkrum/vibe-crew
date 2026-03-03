@@ -1,6 +1,5 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
-import { faqSvgs } from '../components/faq/faq-svgs';
 import { url } from '../data/site';
 ---
 
@@ -15,41 +14,29 @@ import { url } from '../data/site';
 
     <details class="faq-item" open>
       <summary>Will I lose control of my codebase?</summary>
-      <div class="faq-answer faq-answer--illustrated">
-        <div class="faq-illustration" set:html={faqSvgs['your-control']} />
-        <div class="faq-text">
-          <p>No. Everything runs in your terminal, in your Git repo. You see every change, approve every commit, stop any agent at any time. Run <code>/profile</code> to set your autonomy level &mdash; from fully supervised to fully autonomous.</p>
-        </div>
+      <div class="faq-answer">
+        <p>No. Everything runs in your terminal, in your Git repo. You see every change, approve every commit, stop any agent at any time. Run <code>/profile</code> to set your autonomy level &mdash; from fully supervised to fully autonomous.</p>
       </div>
     </details>
 
     <details class="faq-item">
       <summary>Is my code private?</summary>
-      <div class="faq-answer faq-answer--illustrated">
-        <div class="faq-illustration" set:html={faqSvgs['privacy']} />
-        <div class="faq-text">
-          <p>Yes. VibeCrew runs entirely locally. Your code goes to the Claude API (same as vanilla Claude Code) and nowhere else. No external servers, no telemetry, no data collection. Open source &mdash; verify for yourself.</p>
-        </div>
+      <div class="faq-answer">
+        <p>Yes. VibeCrew runs entirely locally. Your code goes to the Claude API (same as vanilla Claude Code) and nowhere else. No external servers, no telemetry, no data collection. Open source &mdash; verify for yourself.</p>
       </div>
     </details>
 
     <details class="faq-item">
       <summary>What if VibeCrew makes a mistake?</summary>
-      <div class="faq-answer faq-answer--illustrated">
-        <div class="faq-illustration" set:html={faqSvgs['safety-net']} />
-        <div class="faq-text">
-          <p>Every change goes through Git. The quality gate catches type errors, lint issues, and build failures after every task. Review diffs before committing, revert commits with <code>git revert</code>, or use <code>/undo</code> to roll back an entire feature.</p>
-        </div>
+      <div class="faq-answer">
+        <p>Every change goes through Git. The quality gate catches type errors, lint issues, and build failures after every task. Review diffs before committing, revert commits with <code>git revert</code>, or use <code>/undo</code> to roll back an entire feature.</p>
       </div>
     </details>
 
     <details class="faq-item">
       <summary>Can I stop using VibeCrew and keep my code?</summary>
-      <div class="faq-answer faq-answer--illustrated">
-        <div class="faq-illustration" set:html={faqSvgs['no-lockin']} />
-        <div class="faq-text">
-          <p>Yes. Your project is standard code in your chosen framework. Remove the plugin symlink, delete the <code>.vibecrew/</code> folder, and you have a normal codebase. No lock-in, no proprietary formats, no generated code that depends on VibeCrew to run.</p>
-        </div>
+      <div class="faq-answer">
+        <p>Yes. Your project is standard code in your chosen framework. Remove the plugin symlink, delete the <code>.vibecrew/</code> folder, and you have a normal codebase. No lock-in, no proprietary formats, no generated code that depends on VibeCrew to run.</p>
       </div>
     </details>
   </section>
@@ -267,38 +254,4 @@ import { url } from '../data/site';
     margin-bottom: 0;
   }
 
-  /* ── Illustrated trust answers ───────────────────────────── */
-  .faq-answer--illustrated {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
-  }
-
-  .faq-illustration {
-    flex-shrink: 0;
-    width: 120px;
-    height: 60px;
-    margin-top: 0.75rem;
-  }
-
-  .faq-illustration :global(svg) {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  .faq-text {
-    flex: 1;
-  }
-
-  @media (max-width: 640px) {
-    .faq-answer--illustrated {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .faq-illustration {
-      margin-top: 0.5rem;
-    }
-  }
 </style>

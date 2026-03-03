@@ -67,8 +67,10 @@ import { url } from '../../data/site';
     background: rgba(167, 139, 250, 0.15);
     border: 1.5px solid rgba(167, 139, 250, 0.4);
     border-radius: var(--radius);
-    padding: 2rem 1.5rem;
+    padding: 2rem 2rem;
     margin-top: 1.5rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
   }
 
   :root[data-theme="light"] .ob-wizard {
@@ -120,6 +122,7 @@ import { url } from '../../data/site';
   .ob-question {
     font-weight: 600;
     color: var(--color-text);
+    margin-top: 1.25rem;
     margin-bottom: 0.75rem;
     font-size: 1rem;
     text-align: center;
@@ -198,8 +201,11 @@ import { url } from '../../data/site';
     background: rgba(167, 139, 250, 0.15);
   }
 
-  /* ── Guide step content ────────────────────────────────── */
-  .ob-guide-step-title {
+  /* ── Dynamic content (injected via JS innerHTML) ──────── */
+  /* These use :global() because Astro scoping attributes
+     are NOT added to dynamically-generated elements. */
+
+  .ob-wizard :global(.ob-guide-step-title) {
     font-size: 1.15rem;
     font-weight: 800;
     color: var(--color-text);
@@ -207,7 +213,7 @@ import { url } from '../../data/site';
     text-align: center;
   }
 
-  .ob-guide-step-summary {
+  .ob-wizard :global(.ob-guide-step-summary) {
     font-size: 0.9rem;
     color: var(--color-text-secondary);
     line-height: 1.65;
@@ -215,39 +221,38 @@ import { url } from '../../data/site';
     text-align: center;
   }
 
-  .ob-guide-step {
-    text-align: left;
-  }
-
-  .ob-guide-step-summary a {
+  .ob-wizard :global(.ob-guide-step-summary a) {
     color: var(--color-accent);
     text-decoration: none;
   }
 
-  .ob-guide-step-summary a:hover {
+  .ob-wizard :global(.ob-guide-step-summary a:hover) {
     text-decoration: underline;
   }
 
-  /* ── Command labels ───────────────────────────────────── */
-  .ob-cmd-label {
+  .ob-guide-step {
+    text-align: left;
+  }
+
+  .ob-wizard :global(.ob-cmd-label) {
     font-size: 0.82rem;
     color: var(--color-text-secondary);
     margin: 0.75rem 0 0.15rem;
     font-weight: 500;
   }
 
-  .ob-cmd-label:first-child {
+  .ob-wizard :global(.ob-cmd-label:first-child) {
     margin-top: 0;
   }
 
   /* ── Code blocks with inline copy icon ─────────────────── */
-  .ob-code-wrap {
+  .ob-wizard :global(.ob-code-wrap) {
     position: relative;
     margin-top: 0.5rem;
     margin-bottom: 0.25rem;
   }
 
-  .ob-code {
+  .ob-wizard :global(.ob-code) {
     display: block;
     font-family: var(--font-mono, 'SF Mono', 'Fira Code', monospace);
     font-size: 0.82rem;
@@ -262,73 +267,70 @@ import { url } from '../../data/site';
     margin: 0;
   }
 
-  :root[data-theme="light"] .ob-code {
+  :root[data-theme="light"] .ob-wizard :global(.ob-code) {
     background: rgba(0, 0, 0, 0.04);
   }
 
-  .ob-copy-btn {
+  .ob-wizard :global(.ob-copy-btn) {
     position: absolute;
-    top: 50%;
-    right: 0.6rem;
-    transform: translateY(-50%);
+    top: 0.5rem;
+    right: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     padding: 0;
-    border: 1px solid var(--color-border);
+    border: none;
     border-radius: var(--radius-xs);
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
     color: var(--color-text-muted);
     cursor: pointer;
     transition: all 0.15s;
   }
 
-  .ob-copy-btn:hover {
+  .ob-wizard :global(.ob-copy-btn:hover) {
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.12);
-    border-color: var(--color-accent-dim);
+    background: rgba(255, 255, 255, 0.1);
   }
 
-  .ob-copy-btn.copied {
+  .ob-wizard :global(.ob-copy-btn.copied) {
     color: var(--color-green);
-    border-color: var(--color-green);
   }
 
-  .ob-copy-btn svg {
+  .ob-wizard :global(.ob-copy-btn svg) {
     width: 14px;
     height: 14px;
     flex-shrink: 0;
   }
 
   /* ── Inline notes ─────────────────────────────────────── */
-  .ob-note {
+  .ob-wizard :global(.ob-note) {
     font-size: 0.85rem;
     color: var(--color-text-secondary);
     line-height: 1.6;
     margin: 0.5rem 0 0.35rem;
   }
 
-  .ob-note code {
+  .ob-wizard :global(.ob-note code) {
     font-size: 0.82em;
   }
 
   /* ── Checklist ─────────────────────────────────────────── */
-  .ob-checklist {
+  .ob-wizard :global(.ob-checklist) {
     list-style: none;
     padding: 0;
     margin: 0.35rem 0 0;
   }
 
-  .ob-checklist li {
+  .ob-wizard :global(.ob-checklist li) {
     font-size: 0.85rem;
     color: var(--color-text-secondary);
     padding: 0.15rem 0 0.15rem 1.25rem;
     position: relative;
   }
 
-  .ob-checklist li::before {
+  .ob-wizard :global(.ob-checklist li::before) {
     content: '\2713';
     position: absolute;
     left: 0;

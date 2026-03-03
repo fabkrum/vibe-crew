@@ -3,7 +3,7 @@
     var t = localStorage.getItem('theme');
     if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
   })();
-</script><link rel="stylesheet" href="/vibe-crew/_astro/index.DQfKlJfP.css">
+</script><link rel="stylesheet" href="/vibe-crew/_astro/index.pnnnEkWQ.css">
 <link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.tiC8ikNY.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
   document.getElementById('hamburger').addEventListener('click', function() {
     document.body.classList.toggle('sidebar-open');
@@ -195,10 +195,11 @@ Existing project
           { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash', label: 'Paste this into your terminal to install everything automatically:' }
         ],
         more: '<p class="ob-note">This installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and downloads VibeCrew. Safe to re-run &mdash; existing installs are skipped.</p>' +
-        '<p class="ob-note">Prefer to inspect the script first? You can also install manually:</p>' +
+        '<details class="ob-details"><summary>Prefer to install manually?</summary>' +
         cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew', 'Download the VibeCrew source code:') +
         cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh', 'Run the dependency installer:') +
-        hostAuthNote,
+        hostAuthNote +
+        '</details>',
         show: true
       };
 

@@ -314,6 +314,36 @@ import { url } from '../../data/site';
     font-size: 0.82em;
   }
 
+  /* ── Collapsible details ──────────────────────────────── */
+  .ob-wizard :global(.ob-details) {
+    margin-top: 0.75rem;
+  }
+
+  .ob-wizard :global(.ob-details summary) {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ob-wizard :global(.ob-details summary::-webkit-details-marker) {
+    display: none;
+  }
+
+  .ob-wizard :global(.ob-details summary::before) {
+    content: '\25B8  ';
+    color: var(--color-text-muted);
+  }
+
+  .ob-wizard :global(.ob-details[open] summary::before) {
+    content: '\25BE  ';
+  }
+
+  .ob-wizard :global(.ob-details[open] summary) {
+    margin-bottom: 0.25rem;
+  }
+
   /* ── Checklist ─────────────────────────────────────────── */
   .ob-wizard :global(.ob-checklist) {
     list-style: none;
@@ -536,10 +566,11 @@ import { url } from '../../data/site';
           { code: 'curl -fsSL https://raw.githubusercontent.com/fabkrum/vibe-crew/main/bootstrap.sh | bash', label: 'Paste this into your terminal to install everything automatically:' }
         ],
         more: '<p class="ob-note">This installs Homebrew (+ Xcode tools &amp; Git), Node.js, jq, and downloads VibeCrew. Safe to re-run &mdash; existing installs are skipped.</p>' +
-        '<p class="ob-note">Prefer to inspect the script first? You can also install manually:</p>' +
+        '<details class="ob-details"><summary>Prefer to install manually?</summary>' +
         cmd('git clone https://github.com/fabkrum/vibe-crew.git ~/claude-plugins/vibe-crew', 'Download the VibeCrew source code:') +
         cmd('cd ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew && ./install.sh', 'Run the dependency installer:') +
-        hostAuthNote,
+        hostAuthNote +
+        '</details>',
         show: true
       };
 

@@ -219,13 +219,13 @@ windows:
       - title: my-app
         color: blue
         layout:
-          split_direction: vertical
+          split_direction: horizontal
           panes:
             - cwd: /Users/you/projects/my-app
               commands:
                 - exec: claude-w
               is_focused: true
-            - split_direction: horizontal
+            - split_direction: vertical
               panes:
                 - cwd: /Users/you/projects/my-app
                   commands:
@@ -237,13 +237,13 @@ windows:
       - title: my-app
         color: blue
         layout:
-          split_direction: vertical
+          split_direction: horizontal
           panes:
             - cwd: /Users/you/projects/my-app
               commands:
                 - exec: claude-w
               is_focused: true
-            - split_direction: horizontal
+            - split_direction: vertical
               panes:
                 - cwd: /Users/you/projects/my-app
                   commands:
@@ -269,6 +269,10 @@ windows:
 
     <Callout type="info" title="Pane navigation">
       <p>Use <kbd>Opt</kbd>+<kbd>CMD</kbd>+<kbd>Arrow</kbd> to move between panes by direction. Press <kbd>Shift</kbd>+<kbd>CMD</kbd>+<kbd>Enter</kbd> to temporarily maximize a pane for focused reading, then press it again to restore the layout.</p>
+    </Callout>
+
+    <Callout type="tip" title="Open configs as tabs, not windows">
+      <p>By default, launching a configuration opens a new window. To open it as a <strong>tab in your current window</strong> instead, use <kbd>CMD</kbd>+<kbd>Enter</kbd> when selecting the config from the Command Palette or the <strong>+</strong> menu. This keeps all your projects in one window for easier tab switching.</p>
     </Callout>
 
     <h3>Saving your current layout</h3>

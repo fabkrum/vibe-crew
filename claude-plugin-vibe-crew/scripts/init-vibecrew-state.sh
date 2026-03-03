@@ -318,13 +318,13 @@ windows:
       - title: $PROJECT_NAME
         color: blue
         layout:
-          split_direction: vertical
+          split_direction: horizontal
           panes:
             - cwd: $PROJECT_ROOT
               commands:
                 - exec: $WARP_CLAUDE_CMD
               is_focused: true
-            - split_direction: horizontal
+            - split_direction: vertical
               panes:
                 - cwd: $PROJECT_ROOT
                   commands:

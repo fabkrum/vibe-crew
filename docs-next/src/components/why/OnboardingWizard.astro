@@ -158,9 +158,9 @@ import { url } from '../../data/site';
   }
 
   .ob-btn.selected {
-    background: var(--color-accent-bg);
+    background: var(--color-accent);
     border-color: var(--color-accent);
-    color: var(--color-accent);
+    color: #fff;
   }
 
   .ob-btn-icon {
@@ -305,7 +305,7 @@ import { url } from '../../data/site';
   /* ── Inline notes ─────────────────────────────────────── */
   .ob-wizard :global(.ob-note) {
     font-size: 0.88rem;
-    color: var(--color-text-secondary);
+    color: var(--color-text);
     line-height: 1.6;
     margin: 0.75rem 0 0.35rem;
   }
@@ -577,12 +577,7 @@ import { url } from '../../data/site';
           { code: '/profile', label: 'Choose how VibeCrew communicates with you:' }
         ],
         more: '<p class="ob-note"><code>/setup</code> verifies dependencies, detects your terminal, creates the <code>.vibecrew/</code> state directory, and tests notifications. It offers to fix anything missing.</p>' +
-        '<p class="ob-note"><code>/profile</code> adapts VibeCrew to how you work. Pick a preset or answer a few questions:</p>' +
-        checklist([
-          '<strong>Founder</strong> &mdash; detailed explanations, supervised autonomy',
-          '<strong>Builder</strong> &mdash; minimal explanations, full autonomy, auto-merge PRs',
-          '<strong>Explorer</strong> &mdash; inline explanations, collaborative decisions'
-        ]),
+        '<p class="ob-note"><code>/profile</code> adapts VibeCrew to how you work through 8 quick questions (~2 minutes): your role, code literacy, autonomy level, PR review style, verbosity, gamification, learning preference, and risk tolerance. You can skip and use balanced defaults.</p>',
         show: true
       };
 

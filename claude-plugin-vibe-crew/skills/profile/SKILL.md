@@ -50,64 +50,15 @@ Ask: "Update your profile? (yes / no)"
 
 ## Quick Start
 
-Present the user with three options:
+Present the user with two options:
 
 ```
 Before we personalize VibeCrew, would you like to:
   1. Answer 8 quick questions (~2 minutes)
-  2. Pick a preset:
-     a) Builder — Developer, full auto, minimal output, no gamification
-     b) Explorer — Learner, collaborative, detailed explanations, full gamification
-     c) Founder — Non-technical, checkpoints, standard output, light gamification
-  3. Skip for now (balanced defaults, run /profile anytime to change)
+  2. Skip for now (balanced defaults, run /profile anytime to change)
 ```
 
 Wait for the user's response.
-
-### If preset selected
-
-Apply the preset values and skip the interview:
-
-**Builder preset:**
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/save-profile.sh" \
-  --role developer \
-  --code-literacy fluent \
-  --autonomy full_auto \
-  --pr-review auto_merge \
-  --verbosity minimal \
-  --gamification disabled \
-  --learning none \
-  --risk-tolerance progressive
-```
-
-**Explorer preset:**
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/save-profile.sh" \
-  --role learner \
-  --code-literacy basic \
-  --autonomy collaborative \
-  --pr-review walkthrough \
-  --verbosity educational \
-  --gamification full \
-  --learning teach \
-  --risk-tolerance balanced
-```
-
-**Founder preset:**
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/save-profile.sh" \
-  --role non_technical \
-  --code-literacy none \
-  --autonomy checkpoints \
-  --pr-review summary \
-  --verbosity standard \
-  --gamification light \
-  --learning reference_docs \
-  --risk-tolerance conservative
-```
-
-After applying the preset, skip to the Summary section.
 
 ### If skip selected
 
@@ -115,7 +66,7 @@ Do nothing. Print:
 "Using balanced defaults. Run /profile anytime to personalize."
 Stop.
 
-### If full interview selected
+### If interview selected
 
 Proceed through all 8 questions below.
 
@@ -289,7 +240,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/save-profile.sh" \
 
 ## Summary
 
-After saving (whether from the full interview or a preset), display the profile summary:
+After saving, display the profile summary:
 
 ```
 Profile Saved

@@ -3,7 +3,7 @@
     var t = localStorage.getItem('theme');
     if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
   })();
-</script><link rel="stylesheet" href="/vibe-crew/_astro/index.BaIiXEy5.css">
+</script><link rel="stylesheet" href="/vibe-crew/_astro/index.DQfKlJfP.css">
 <link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.tiC8ikNY.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
   document.getElementById('hamburger').addEventListener('click', function() {
     document.body.classList.toggle('sidebar-open');
@@ -236,12 +236,7 @@ Existing project
           { code: '/profile', label: 'Choose how VibeCrew communicates with you:' }
         ],
         more: '<p class="ob-note"><code>/setup</code> verifies dependencies, detects your terminal, creates the <code>.vibecrew/</code> state directory, and tests notifications. It offers to fix anything missing.</p>' +
-        '<p class="ob-note"><code>/profile</code> adapts VibeCrew to how you work. Pick a preset or answer a few questions:</p>' +
-        checklist([
-          '<strong>Founder</strong> &mdash; detailed explanations, supervised autonomy',
-          '<strong>Builder</strong> &mdash; minimal explanations, full autonomy, auto-merge PRs',
-          '<strong>Explorer</strong> &mdash; inline explanations, collaborative decisions'
-        ]),
+        '<p class="ob-note"><code>/profile</code> adapts VibeCrew to how you work through 8 quick questions (~2 minutes): your role, code literacy, autonomy level, PR review style, verbosity, gamification, learning preference, and risk tolerance. You can skip and use balanced defaults.</p>',
         show: true
       };
 

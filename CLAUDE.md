@@ -117,7 +117,7 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### User Profile System
 
-The `/profile` command runs an 8-question interview (or offers presets) that stores user preferences in `.vibecrew/config.json` under the `user_profile` key. Every agent reads the profile via `scripts/read-profile.sh` and adapts behavior accordingly.
+The `/profile` command runs an 8-question interview that stores user preferences in `.vibecrew/config.json` under the `user_profile` key. Every agent reads the profile via `scripts/read-profile.sh` and adapts behavior accordingly.
 
 **8 Dimensions:**
 - `role` — developer, technical_pm, designer, non_technical, learner
@@ -128,8 +128,6 @@ The `/profile` command runs an 8-question interview (or offers presets) that sto
 - `gamification_preference` — full, light, score_only, disabled
 - `learning` — none, reference_docs, inline, teach
 - `risk_tolerance` — conservative, balanced, progressive, experimental
-
-**Presets:** Builder (developer defaults), Explorer (learner defaults), Founder (non-technical defaults).
 
 **Agent Adaptations:**
 - Session Startup: greeting depth from `verbosity`

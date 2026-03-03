@@ -61,15 +61,25 @@ Derive all values from VISION.md's brand direction and `design-brief.md` (if pre
 1. Read the feature spec from `.vibecrew/backlog.json`.
 2. Read acceptance criteria.
 3. Read `design-brief.md` (if present) for navigation style, data display pattern, and interaction density preferences. Use these to inform component layout and structure decisions.
-4. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements.
-5. Write the design spec to `docs/features/{feature-name}/design.md`.
-6. Signal completion with `builder-design-complete.signal`.
+4. Read `${CLAUDE_PLUGIN_ROOT}/templates/components.md` for component vocabulary. Use it to:
+   - Select the most appropriate component for each UI need (use the "When to use" criteria).
+   - Note shadcn install commands for each selected component.
+   - **Check interaction/performance patterns**: Evaluate whether any patterns from the "Interaction & Performance Patterns" section apply. For each pattern, check its trigger conditions against the feature spec. Include applicable patterns in the design spec with implementation notes.
+   - **Check keyboard/focus requirements**: Note which keyboard patterns each selected component requires (from the component entries and "Keyboard Navigation & Focus Management" section).
+5. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements. Include a "Components" section listing each shadcn component to install, and an "Interaction Patterns" section listing applicable behavioral patterns with implementation approach.
+6. Write the design spec to `docs/features/{feature-name}/design.md`.
+7. Signal completion with `builder-design-complete.signal`.
 
 ### Code Phase
 
 1. Read the approved design spec and the TDR.
 2. Reference the architecture diagrams already in context (pre-loaded by the Orchestrator via `inject-architecture.sh`) — especially `component-tree.mmd` to know where new components belong in the hierarchy. If diagrams are not in context (e.g., direct invocation outside orchestration), read them from `.vibecrew/architecture/`.
-3. Implement the feature using technologies approved in the TDR.
+2.5. **Install shadcn components**: If the project uses shadcn/ui (detect via `components.json` in project root), install all components listed in the design spec:
+   ```bash
+   npx shadcn@latest add <component-name> -y
+   ```
+   Only install components the design spec requires. Batch multiple components in one command: `npx shadcn@latest add button card dialog -y`. If `components.json` does not exist, skip this step.
+3. Implement the feature using technologies approved in the TDR. Apply interaction patterns noted in the design spec (e.g., wrap mutations in optimistic update logic, add skeleton states for data fetches, lazy-load heavy components via dynamic imports, add debounce to search inputs).
 4. Use CSS custom properties from `design-system.css` for all visual styling. Reference `design-brief.md` for layout decisions (navigation style, data display, density).
 5. After adding new components, update `component-tree.mmd` to reflect each new component's position, parent, and data flow direction (props down, events up).
 6. Make atomic commits as you complete logical units of work. If the implementation deviates from any diagram (e.g., schema changes not yet in `schema.mmd`), add a `Diagram-Drift:` trailer to the commit message noting which diagram(s) need updating.
@@ -83,6 +93,24 @@ Derive all values from VISION.md's brand direction and `design-brief.md` (if pre
    - **Max 2 visual-fix iterations.** After 2 rounds, commit remaining issues as `warning` findings in the signal payload and move on.
    - Record results in the `visual_verification` field of the signal payload (see below).
    - **Fallback:** If Playwright MCP tools are unavailable or the dev server cannot start, log a warning in the signal payload (`"visual_verification": { "skipped": true, "reason": "..." }`) and continue. Never hard-fail.
+7.5. **Keyboard & Focus Verification** (frontend changes only):
+   - For every new overlay (Dialog, Drawer, Sheet, Popover): confirm focus traps inside and restores on close. shadcn/ui handles this via Radix — verify custom overlays manually.
+   - For every new list/menu/tabs: confirm arrow key navigation works.
+   - For custom interactive elements (not using shadcn primitives): confirm Enter/Space activation.
+   - Check that no interactive element has `outline: none` without a visible replacement focus style. Run: `grep -rn 'outline:\s*none\|outline:\s*0' src/ --include='*.css' --include='*.scss' --include='*.tsx' --include='*.jsx'` and verify each match has a `:focus-visible` replacement.
+   - If Playwright is available: use `browser_evaluate` to tab through the new UI and verify focus order matches visual order.
+   - Record results in the signal payload under `keyboard_verification`:
+     ```json
+     "keyboard_verification": {
+       "overlays_checked": 2,
+       "focus_trap_issues": 0,
+       "focus_restore_issues": 0,
+       "outline_none_violations": 0,
+       "custom_components_verified": 1,
+       "skipped": false
+     }
+     ```
+   - **Fallback:** If Playwright is unavailable, perform static analysis only (grep for outline:none, review overlay implementations). Log `"skipped_dynamic": true`.
 8. Signal completion with `builder-complete.signal`.
 
 ### TDD Integration
@@ -128,6 +156,11 @@ When a review feedback file exists at `.vibecrew/signals/builder-review-feedback
 ## Mandatory Rules
 
 - **ALWAYS use Context7** for library documentation. Run `mcp__context7__resolve-library-id` to find the library, then `mcp__context7__get-library-docs` to retrieve docs. NEVER paste documentation into context manually.
+- **ALWAYS reference `${CLAUDE_PLUGIN_ROOT}/templates/components.md`** for component selection during the Design Phase. Use precise component names (Combobox, Data Table, Sheet) in design specs; use plain language when communicating with users.
+- **ALWAYS use `npx shadcn@latest add <name> -y`** to install shadcn components. NEVER copy-paste component source code manually.
+- **ALWAYS evaluate interaction/performance patterns** during the Design Phase. Check trigger conditions for Optimistic UI, Skeleton Loading, Import on Visibility, Debounced Search, and other patterns against the feature spec.
+- **NEVER ship a custom interactive component without verifying keyboard navigation.** Check the W3C APG keyboard interaction spec for that component type in `components.md`.
+- **Every overlay MUST trap focus and restore it on close.** This is non-negotiable, even for simple popovers. shadcn/ui handles this via Radix — verify it works for any custom overlays.
 - **ALWAYS use CSS custom properties** from `design-system.css`. NEVER hardcode colors (`#hex`, `rgb()`, `hsl()` literals not wrapped in `var()`), spacing (pixel values not from the scale), or font sizes.
 - **ALWAYS work on feature branches**. Branch naming: `feat/{feature-name}` for features, `fix/{issue}` for fixes. NEVER commit directly to `main`.
 - **ALWAYS use conventional commits**. Format: `type(scope): description`. Types: `feat`, `fix`, `style`, `refactor`, `test`, `docs`, `chore`. Scope: the feature or component name.

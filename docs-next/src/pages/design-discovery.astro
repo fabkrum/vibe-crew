@@ -157,6 +157,9 @@ const cssExample = `/* Usage in components */
 
     <p>The three directions are presented as a compact comparison, and you choose: <strong>A</strong>, <strong>B</strong>, <strong>C</strong>, or describe your own direction in free text. If you describe a custom direction, VibeCrew generates the full specification and confirms before proceeding.</p>
 
+    <h3>tweakcn Theme Presets (optional)</h3>
+    <p>After you pick a direction, VibeCrew offers matching <strong>tweakcn</strong> theme presets as optional starting points for design token values. Based on your chosen direction's color temperature, density, and shadow style, it suggests 2 relevant presets &mdash; or you can start from scratch or skip entirely.</p>
+
     <Callout type="tip" title="Example Directions">
       For &ldquo;SaaS dashboard + trustworthy &amp; professional&rdquo;, you might see:<br>
       <strong>A: Bloomberg Modern</strong> &mdash; Dense, data-first, monospace headings, cool neutrals<br>
@@ -173,27 +176,34 @@ const cssExample = `/* Usage in components */
     <p>The final phase asks 2-3 questions about component patterns, <strong>filtered by your Phase 1 answers</strong>. A dashboard gets different navigation options than a content platform.</p>
 
     <h4>Q7: Navigation Style (always asked)</h4>
-    <p>Options vary by product category:</p>
+    <p>Options use precise component names internally while showing plain language to you:</p>
     <ul>
-      <li><strong>Dashboards</strong>: Sidebar / top bar / combined</li>
-      <li><strong>Content &amp; marketplace</strong>: Top nav / hamburger / tab bar</li>
-      <li><strong>Mobile-first</strong>: Bottom tab bar / hamburger slide-out / gesture-based</li>
+      <li><strong>Dashboards</strong>: Sidebar with collapsible sections (Sidebar) / top navigation bar (Navigation Menu) / combined</li>
+      <li><strong>Content &amp; marketplace</strong>: Top navigation bar (Navigation Menu) / hamburger slide-out (Sheet) / bottom tab bar (Tabs)</li>
+      <li><strong>Mobile-first</strong>: Bottom tab bar (Tabs) / hamburger slide-out (Sheet) / gesture-based</li>
     </ul>
 
     <h4>Q8: Data Display (conditional)</h4>
     <p>Only asked if your primary action involves data, workflows, or transactions:</p>
     <ul>
-      <li>Dense tables / card grid / list view / mixed layout</li>
+      <li>Dense sortable tables with filters (Data Table) / card grid with previews (Card grid) / compact list with expandable details (Accordion) / mixed: summary cards + detailed table below</li>
     </ul>
 
     <h4>Q9: Interaction Density (always asked)</h4>
     <ul>
       <li><strong>Minimal</strong> &mdash; Lots of whitespace, one action per view</li>
       <li><strong>Moderate</strong> &mdash; Balanced density, grouped actions</li>
-      <li><strong>Dense</strong> &mdash; Information-rich, multiple actions visible</li>
+      <li><strong>Dense</strong> &mdash; Information-rich, multiple actions visible (Data Table, Sidebar, Tabs)</li>
     </ul>
 
-    <p>These preferences directly inform the <strong>Builder agent</strong> during Tier 2 feature development. When creating components, the Builder reads the design brief to know whether to use sidebar navigation, card grids vs tables, and how dense to make the interface.</p>
+    <h4>Q10: Feedback Style (always asked)</h4>
+    <ul>
+      <li><strong>Subtle</strong> &mdash; Small toasts for confirmations, inline validation (Sonner + inline errors)</li>
+      <li><strong>Conversational</strong> &mdash; Confirmation dialogs for important actions (Alert Dialog + Sonner)</li>
+      <li><strong>Minimal</strong> &mdash; No confirmations, undo-based (Optimistic UI + undo Sonner)</li>
+    </ul>
+
+    <p>These preferences directly inform the <strong>Builder agent</strong> during Tier 2 feature development. When creating components, the Builder reads both the design brief and the <a href="/ui-patterns">component reference</a> to select the right component for each UI need, apply interaction patterns (like Optimistic UI or Skeleton Loading), and verify keyboard accessibility.</p>
   </section>
 
   <hr>
@@ -205,7 +215,7 @@ const cssExample = `/* Usage in components */
     <h3>design-system.css</h3>
     <p>A complete set of CSS custom properties on <code>:root</code>. Token categories:</p>
     <ul>
-      <li><strong>Colors</strong> &mdash; HSL-based primary, secondary, neutral, and semantic colors with dark mode overrides</li>
+      <li><strong>Colors</strong> &mdash; HSL-based primary, secondary, neutral, and semantic colors with dark mode overrides. When shadcn/ui is the expected component library (default), all 46 shadcn CSS tokens are generated using OKLCH color space for seamless component installation</li>
       <li><strong>Typography</strong> &mdash; Modular scale (1.25 ratio), font families, weights, line heights</li>
       <li><strong>Spacing</strong> &mdash; 4px base unit, <code>--spacing-1</code> through <code>--spacing-24</code></li>
       <li><strong>Border radius</strong> &mdash; Scale from <code>--radius-sm</code> to <code>--radius-full</code></li>
@@ -250,12 +260,14 @@ const cssExample = `/* Usage in components */
 
   <section class="section" id="agent-context">
     <Callout type="info" title="Design Brief as Agent Context">
-      The <code>design-brief.md</code> file gives the Builder agent <strong>product awareness</strong> beyond raw design tokens. When creating a new component, the Builder reads the design brief to understand:<br><br>
-      &bull; <strong>Navigation style</strong> &mdash; Should this page use a sidebar or top nav?<br>
-      &bull; <strong>Data display</strong> &mdash; Should data render as tables, cards, or lists?<br>
+      The <code>design-brief.md</code> file gives the Builder agent <strong>product awareness</strong> beyond raw design tokens. When creating a new component, the Builder reads both the design brief and the <strong>component reference</strong> to understand:<br><br>
+      &bull; <strong>Navigation style</strong> &mdash; Should this page use a Sidebar or Navigation Menu?<br>
+      &bull; <strong>Data display</strong> &mdash; Should data render as Data Tables, Card grids, or Accordions?<br>
       &bull; <strong>Interaction density</strong> &mdash; How much whitespace between elements?<br>
-      &bull; <strong>Audience context</strong> &mdash; Are users technical or non-technical? Quick glances or deep sessions?<br><br>
-      This transforms the Builder from &ldquo;apply these tokens&rdquo; to &ldquo;design for this audience with these tokens.&rdquo;
+      &bull; <strong>Audience context</strong> &mdash; Are users technical or non-technical? Quick glances or deep sessions?<br>
+      &bull; <strong>Interaction patterns</strong> &mdash; Should mutations use Optimistic UI? Should data-fetching sections show Skeleton Loading?<br>
+      &bull; <strong>Keyboard &amp; focus</strong> &mdash; Does every overlay trap focus? Does every interactive element have a visible focus ring?<br><br>
+      This transforms the Builder from &ldquo;apply these tokens&rdquo; to &ldquo;design for this audience with precise components, smart interaction patterns, and full keyboard accessibility.&rdquo;
     </Callout>
   </section>
 

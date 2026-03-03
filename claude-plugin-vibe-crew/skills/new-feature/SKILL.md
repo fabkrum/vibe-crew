@@ -177,9 +177,33 @@ Display existing acceptance criteria or prompt the user to define them.
    - **If yes:**
      - Guide the user through defining:
        - **3-5 acceptance criteria** (clear, testable statements of what "done" looks like)
-       - **Brief UI description** (key screens, components, layout notes)
+       - **Brief UI description** (key screens, components, layout notes) — enhanced with pattern suggestions (see below)
        - **Business logic notes** (rules, edge cases, data flow)
-     - Save the spec to `backlog.json` via `${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh`.
+     - **Pattern-aware UI suggestions**: When the user provides a feature name or UI description, infer likely UI needs and suggest components in plain language. Read `${CLAUDE_PLUGIN_ROOT}/templates/components.md` internally for vocabulary. Present suggestions conversationally:
+       > "Based on this feature, here's what I'd suggest:
+       > - For selecting a country: a type-ahead search box (Combobox)
+       > - For the results: a card grid with preview info (Card)
+       > - The like button will update instantly — if something goes wrong, it quietly retries (Optimistic UI)"
+     - Use this keyword → component and interaction pattern inference table:
+
+       | Keywords | Components | Interaction Patterns |
+       |---|---|---|
+       | settings, preferences | Form, Switch, Select, Tabs | Progressive Disclosure for complex settings |
+       | dashboard, analytics | Card grid, Chart, Data Table | Skeleton Loading, SWR, Import on Visibility (charts) |
+       | search, filter, browse | Combobox, Input, Badge (filters) | Debounced Search, Skeleton results |
+       | list, manage, CRUD | Data Table, Dialog, Alert Dialog | Optimistic UI (delete/toggle), List Virtualization (100+ rows) |
+       | profile, account | Avatar, Form, Card, Tabs | Optimistic UI for settings saves |
+       | notifications | Sonner, Badge, Dropdown Menu | — |
+       | upload, import | File Upload, Progress, Dialog | Import on Interaction (file picker) |
+       | add to cart, like, favorite, bookmark | Button, Sonner | Optimistic UI (update immediately, rollback on failure) |
+       | feed, timeline, activity | Card list, Scroll Area, Avatar | Infinite Scroll or Pagination, SWR, Skeleton Loading |
+       | multi-page, navigation | Navigation Menu, Sidebar | Prefetch on Hover, Route-Based Splitting |
+       | onboarding, wizard, stepper | Stepper (custom), Form, Dialog | Progressive Disclosure, Page Transitions |
+
+     - Present interaction patterns as plain-language descriptions:
+       > "I'll make the dashboard charts load only when they scroll into view — the page will feel fast even with lots of data."
+       > "The settings will save instantly when you toggle them — no need for a save button."
+     - Save the spec (including suggested components) to `backlog.json` via `${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh`.
      - Confirm:
        > Spec saved for **{name}**.
    - **If no:**

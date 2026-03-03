@@ -1,0 +1,252 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import { uiPatterns, categoryLabels, categoryOrder } from '../data/ui-patterns';
+
+// Group patterns by category
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = uiPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof uiPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+---
+
+<DocsLayout title="UI Pattern Guide" sectionLabel="Reference" activeSlug="ui-patterns">
+
+  <h2>UI Pattern Guide</h2>
+  <p>A plain-language reference for every UI component and pattern VibeCrew uses. Click a category to jump to that section.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <dl class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-entry" id={entry.name.toLowerCase().replace(/[\s\/()]/g, '-')}>
+            <dt>
+              {entry.name}
+              {entry.shadcn && <span class="shadcn-badge">{entry.shadcn}</span>}
+            </dt>
+            {entry.aliases.length > 0 && (
+              <p class="aliases">Also called: {entry.aliases.join(', ')}</p>
+            )}
+            <dd>{entry.description}</dd>
+            {entry.docsUrl && (
+              <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+            )}
+          </div>
+        ))}
+      </dl>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Agents Build</h3>
+    <p>VibeCrew agents translate plain language into precise component vocabulary. Here are common examples:</p>
+    <table class="tips-table">
+      <thead>
+        <tr>
+          <th>What you say</th>
+          <th>What gets built</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>"A dropdown for picking a country"</td><td>Combobox (type-ahead search with 200+ items)</td></tr>
+        <tr><td>"A popup to confirm deleting"</td><td>Alert Dialog (traps focus, requires explicit choice)</td></tr>
+        <tr><td>"A sidebar with links"</td><td>Sidebar + Navigation Menu (keyboard navigable, collapsible)</td></tr>
+        <tr><td>"A table with sorting"</td><td>Data Table (sortable headers, pagination, filterable)</td></tr>
+        <tr><td>"A toast message"</td><td>Sonner (auto-dismissing, accessible live region)</td></tr>
+        <tr><td>"A settings page"</td><td>Tabs + Form + Switch (progressive disclosure, instant toggles)</td></tr>
+        <tr><td>"A like button"</td><td>Button + Optimistic UI (instant update, silent retry on failure)</td></tr>
+        <tr><td>"A dashboard"</td><td>Card grid + Chart + Skeleton Loading + SWR (fast perceived load)</td></tr>
+        <tr><td>"A search bar"</td><td>Combobox + Debounced Search (waits until you stop typing)</td></tr>
+        <tr><td>"A list of 500 items"</td><td>Data Table + List Virtualization (only renders visible rows)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://component.gallery/" target="_blank" rel="noopener noreferrer">Component Gallery</a> &mdash; Visual catalog of UI components across design systems</li>
+      <li><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer">W3C ARIA Authoring Practices Guide</a> &mdash; Keyboard patterns and accessibility for every component type</li>
+      <li><a href="https://www.patterns.dev/" target="_blank" rel="noopener noreferrer">Patterns.dev</a> &mdash; Performance and rendering patterns for modern web apps</li>
+      <li><a href="https://simonhearne.com/2021/optimistic-ui-patterns/" target="_blank" rel="noopener noreferrer">Optimistic UI Patterns</a> &mdash; Simon Hearne's guide to instant-feeling interfaces</li>
+      <li><a href="https://every-layout.dev/" target="_blank" rel="noopener noreferrer">Every Layout</a> &mdash; Intrinsic CSS layout patterns</li>
+      <li><a href="https://www.uidesign.tips/" target="_blank" rel="noopener noreferrer">UI Design Tips</a> &mdash; Practical UI design advice</li>
+      <li><a href="https://inclusive-components.design/" target="_blank" rel="noopener noreferrer">Inclusive Components</a> &mdash; Heydon Pickering's guide to accessible component patterns</li>
+      <li><a href="https://www.a11yproject.com/" target="_blank" rel="noopener noreferrer">The A11Y Project</a> &mdash; Community-driven accessibility resources</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .category-nav a {
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .category-nav a:hover {
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .category-heading {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+  }
+
+  .pattern-list {
+    margin: 0 0 2rem;
+  }
+
+  .pattern-entry {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .pattern-entry:last-child {
+    border-bottom: none;
+  }
+
+  dt {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-text);
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .shadcn-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    border-radius: var(--radius-xs);
+    letter-spacing: 0.02em;
+  }
+
+  .aliases {
+    margin: 0 0 0.25rem;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .docs-link {
+    display: inline-block;
+    margin-top: 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .docs-link:hover {
+    text-decoration: underline;
+  }
+
+  .tips-section {
+    margin-top: 3rem;
+  }
+
+  .tips-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.92rem;
+  }
+
+  .tips-table th {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    background: var(--color-surface);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .tips-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+  }
+
+  .tips-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .further-reading {
+    margin-top: 3rem;
+  }
+
+  .further-reading ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+  }
+
+  .further-reading li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .further-reading li:last-child {
+    border-bottom: none;
+  }
+
+  .further-reading a {
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .further-reading a:hover {
+    text-decoration: underline;
+  }
+</style>

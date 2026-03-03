@@ -56,6 +56,7 @@ export const navigation: NavGroup[] = [
     collapsed: true,
     links: [
       { title: 'Slash Commands', slug: 'commands' },
+      { title: 'UI Pattern Guide', slug: 'ui-patterns' },
       { title: 'Glossary', slug: 'glossary' },
       { title: 'FAQ', slug: 'faq' },
     ],

@@ -219,6 +219,18 @@ Present as a compact comparison table. Then ask:
 
 If the user describes their own direction, generate the full specification for their custom direction (same format as A/B/C) and confirm before proceeding.
 
+#### tweakcn Theme Presets (optional)
+
+After the user picks a direction (A/B/C/custom), offer matching tweakcn theme presets as optional starting points for design-system token values. Map the chosen direction's characteristics (color temperature, density, shadows) to 2 relevant presets:
+
+> "There are some ready-made theme presets that match this direction. Want to start from one of these?
+> 1. **{preset-name-1}** — {1-line description matching chosen direction}
+> 2. **{preset-name-2}** — {1-line description matching chosen direction}
+> 3. **Start from scratch** — I'll generate custom tokens from the direction above
+> 4. **Skip** — Move on to component preferences"
+
+If the user picks a preset, use it as the starting point for `design-system.css` token values, then customize based on the direction spec. If "Start from scratch" or "Skip", generate tokens purely from the direction spec as before.
+
 ---
 
 ### Phase 3 — Component Preferences
@@ -226,23 +238,31 @@ If the user describes their own direction, generate the full specification for t
 Ask 2-3 contextual questions filtered by Phase 1 answers. All questions include *"or describe your preference"* as a free-text option.
 
 **Q7: Navigation style** (always asked, options vary by product category):
-- Dashboards → sidebar / top bar / combined / or describe
-- Content/marketplace → top nav / hamburger / tab bar / or describe
-- Mobile-first → bottom tab bar / hamburger slide-out / gesture-based / or describe
-- Other → sidebar / top nav / combined / or describe
+- Dashboards → "1. Sidebar with collapsible sections (Sidebar) 2. Top navigation bar (Navigation Menu) 3. Combined: sidebar + top bar 4. Or describe your preference"
+- Content/marketplace → "1. Top navigation bar (Navigation Menu) 2. Hamburger slide-out (Sheet) 3. Bottom tab bar (mobile Tabs) 4. Or describe your preference"
+- Mobile-first → "1. Bottom tab bar (Tabs) 2. Hamburger slide-out (Sheet) 3. Gesture-based navigation 4. Or describe your preference"
+- Other → "1. Sidebar (Sidebar) 2. Top navigation bar (Navigation Menu) 3. Combined: sidebar + top bar 4. Or describe your preference"
 
 **Q8: Data display** (only ask if Q6 key action involves data, workflows, or transactions):
-1. Dense tables
-2. Card grid
-3. List view
-4. Mixed layout
+1. Dense sortable tables with filters (Data Table)
+2. Card grid with previews (Card grid)
+3. Compact list with expandable details (Accordion)
+4. Mixed: summary cards + detailed table below
 Or describe your preference.
 
 **Q9: Interaction density** (always asked):
 1. Minimal — lots of whitespace, one action per view
 2. Moderate — balanced density, grouped actions
-3. Dense — information-rich, multiple actions visible
+3. Dense — information-rich, multiple actions visible (Data Table, Sidebar, Tabs)
 Or describe your preference.
+
+**Q10: Feedback style** (always asked):
+1. Subtle — small toasts for confirmations, inline validation (Sonner + inline errors)
+2. Conversational — confirmation dialogs for important actions (Alert Dialog + Sonner)
+3. Minimal — no confirmations, undo-based (Optimistic UI + undo Sonner)
+Or describe your preference.
+
+**Internal note:** Use precise component names from `${CLAUDE_PLUGIN_ROOT}/templates/components.md` in parentheses when presenting options. Users see the plain language; agents use the component vocabulary for design specs and implementation.
 
 ---
 
@@ -264,6 +284,7 @@ cat "${CLAUDE_PLUGIN_ROOT}/templates/design-brief.md.template"
    - Transition tokens
    - Layout context tokens (density factor, content width, nav width from Phase 3 answers)
    - Breakpoint references as comments
+   - **shadcn/ui compatibility** (default when shadcn/ui is expected): Generate all 46 shadcn CSS tokens using OKLCH color space. Include `--background`, `--foreground`, `--card`, `--popover`, `--primary`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--border`, `--input`, `--ring`, `--chart-*`, and `--sidebar-*` tokens mapped from the chosen direction's palette. This ensures `npx shadcn@latest init` and component installations work without manual theming. If a tweakcn preset was selected in Phase 2, use its token values as the base and customize from there.
 
 2. **Generate `design-brief.md`**: Populate the template with all Phase 1-3 answers, the chosen direction's rationale, design token summary, component preferences, and 3 derived design principles.
 

@@ -64,6 +64,14 @@ import { url } from '../data/site';
           <p>Built-in UI and business pattern libraries teach agents what production-quality means. Forms get proper error states. Pricing pages use tiered anchoring. Onboarding follows proven conversion funnels.</p>
         </div>
       </div>
+
+      <div class="card why-card">
+        <WhyIllustration name="token-cost" size="card" />
+        <div class="why-card-body">
+          <h4><span class="card-icon amber">&#9670;</span> Tokens spent wisely</h4>
+          <p>Worktree isolation keeps research tokens separate from your main session. MCP servers replace pasting docs. Zero-token hooks enforce rules without spending a single token. Forced compaction between features prevents context rot. Free and open source &mdash; works with Claude Pro, Max, or API.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -216,9 +224,15 @@ import { url } from '../data/site';
   /* ── Card grid for "hard parts" ──────────────────────────── */
   .why-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     margin-top: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .why-cards {
+      grid-template-columns: 1fr;
+    }
   }
 
   .why-card {
@@ -250,6 +264,7 @@ import { url } from '../data/site';
   .card-icon.green { color: var(--color-green); }
   .card-icon.blue { color: var(--color-blue); }
   .card-icon.purple { color: var(--color-accent); }
+  .card-icon.amber { color: var(--color-amber); }
   .card-icon.accent { color: var(--color-accent); }
   .card-icon.red { color: var(--color-red); }
 

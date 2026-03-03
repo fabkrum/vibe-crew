@@ -335,4 +335,33 @@ export const whySvgs: Record<string, string> = {
   <text x="100" y="76" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">2-minute interview or pick a preset</text>
 </svg>`,
 
+/* ── Card 4: Token efficiency & cost ──────────────────────────── */
+'token-cost': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Token savings bar chart -->
+  <rect x="16" y="8" width="120" height="104" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <line x1="30" y1="96" x2="126" y2="96" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <line x1="30" y1="96" x2="30" y2="16" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+
+  <!-- Bar: Without (tall, red) -->
+  <rect x="42" y="24" width="24" height="72" rx="3" style="fill: var(--color-red); opacity: 0.5"/>
+  <text x="54" y="20" text-anchor="middle" style="fill: var(--color-red); font-size: 8px; font-weight: 700; font-family: var(--font-mono)">$48</text>
+  <text x="54" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Without</text>
+
+  <!-- Bar: With (short, green) -->
+  <rect x="84" y="62" width="24" height="34" rx="3" style="fill: var(--color-green); opacity: 0.7"/>
+  <text x="96" y="58" text-anchor="middle" style="fill: var(--color-green); font-size: 8px; font-weight: 700; font-family: var(--font-mono)">$12</text>
+  <text x="96" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">With</text>
+
+  <!-- Savings callout -->
+  <rect x="144" y="20" width="48" height="40" rx="8" style="fill: var(--color-green-dim); stroke: var(--color-green)" stroke-width="1.5"/>
+  <text x="168" y="38" text-anchor="middle" style="fill: var(--color-green); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Save</text>
+  <text x="168" y="52" text-anchor="middle" style="fill: var(--color-green); font-size: 12px; font-weight: 700; font-family: var(--font-sans)">75%</text>
+
+  <!-- Techniques list -->
+  <text x="148" y="76" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Worktrees</text>
+  <text x="148" y="86" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">MCP servers</text>
+  <text x="148" y="96" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Compaction</text>
+  <text x="148" y="106" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Zero-token hooks</text>
+</svg>`,
+
 };

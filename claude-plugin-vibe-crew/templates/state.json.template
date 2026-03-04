@@ -13,6 +13,7 @@
         "status": "pending",
         "file": null,
         "brief_file": null,
+        "import_source": null,
         "approved_at": null
       },
       "tdr": {

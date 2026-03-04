@@ -465,7 +465,7 @@ If the research exceeds `maxTurns` or the context budget, the agent returns a pa
 
 The Builder is the combined **design and implementation** agent in VibeCrew v1.0. It merges the responsibilities of the former UI Designer and Feature Developer agents into a single agent that handles the full creative pipeline:
 
-- **Tier 1 (Foundation):** Creates the project's `design-system.css` with HSL color palettes, typography scales, spacing systems, and component tokens.
+- **Tier 1 (Foundation):** Creates the project's `design-system.css` with HSL color palettes, typography scales, spacing systems, and component tokens. Alternatively, validates and extends an imported design system provided via the BYODS (Bring Your Own Design System) import flow.
 - **Tier 2 (Feature Development):** Reads architecture diagrams from `.vibecrew/architecture/` for implementation context, designs component specifications, implements features within TDR boundaries, creates feature branches, writes application code, updates `component-tree.mmd` as new components are added, and makes conventional commits with `Co-Authored-By` trailers.
 
 The Builder uses Context7 to look up documentation for CSS frameworks, component libraries (such as shadcn/ui), design system conventions, and application framework APIs. It works in an **isolated git worktree** (`isolation: worktree`), enabling parallel feature development across multiple terminal tabs without filesystem conflicts.
@@ -506,7 +506,7 @@ isolation: worktree
 
 | Condition | Details |
 |-----------|---------|
-| **Tier 1 trigger** | Delegated by Orchestrator during Step 2 of `/new-project` (design system creation) |
+| **Tier 1 trigger** | Delegated by Orchestrator during Step 2 of `/new-project` (design system creation via Design Discovery interview or BYODS import) |
 | **Tier 2 design trigger** | Delegated when a feature enters the `design` phase |
 | **Tier 2 code trigger** | Delegated when a feature enters the `code` phase, or continues from design into code |
 | **`/new-feature` trigger** | Launched via the `/new-feature "name"` skill, which creates a branch and loads the feature spec |

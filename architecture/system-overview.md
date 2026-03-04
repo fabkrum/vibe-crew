@@ -279,7 +279,7 @@ The topology expands the original 9-agent design to 14 agents, consolidating som
 
 ### 2.3 Agent Merging Rationale
 
-**Builder = UI Designer + Feature Developer.** The original design separated design from code, but in practice the design phase produces CSS custom properties and component specs that flow directly into implementation. Running both in one agent eliminates the handoff cost (reading design output, re-establishing context) and reduces the number of worktrees. The Builder handles both `design-system.css` creation during Tier 1 and component implementation during Tier 2.
+**Builder = UI Designer + Feature Developer.** The original design separated design from code, but in practice the design phase produces CSS custom properties and component specs that flow directly into implementation. Running both in one agent eliminates the handoff cost (reading design output, re-establishing context) and reduces the number of worktrees. The Builder handles `design-system.css` creation (or validation of imported tokens via the BYODS import flow) during Tier 1 and component implementation during Tier 2.
 
 **Verifier = Test Writer + Quality Check.** The original design had Test Writer (Sonnet) authoring tests and Quality Check (Haiku) running them. Separating authoring from running created unnecessary coordination: the runner needed to report failures back to the author. Merging them into a single Verifier agent means test authoring, execution, lint, and build happen in one context with full access to failure details. The Verifier uses Haiku because test execution and lint/build runs are mechanical tasks that do not require deep reasoning -- they follow deterministic patterns of running commands and reporting pass/fail results.
 
@@ -452,7 +452,7 @@ Tier 1 is a sequential, one-time process that creates the six foundation artifac
 | Step | Artifact | Agent | Purpose |
 |------|----------|-------|---------|
 | 1 | `VISION.md` | Workflow Orchestrator | Project identity, goals, audience, success metrics |
-| 2 | `design-system.css` | Builder | CSS custom properties for colors, typography, spacing |
+| 2 | `design-system.css` | Builder (Design Discovery or BYODS Import) | CSS custom properties for colors, typography, spacing |
 | 3 | TDR (Technology Decision Record) | Stack Scout | Chosen tech stack with competitive analysis |
 | 4 | `docs/roadmap.md` | Workflow Orchestrator | Prioritized feature list with dependencies |
 | 5 | Architecture Diagrams (5 `.mmd` files) | Workflow Orchestrator | Mermaid diagrams: system topology, DB schema, state flows, API sequences, component tree |
@@ -1160,7 +1160,7 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 
 **`/setup`** -- First-run installation wizard. Verifies prerequisites (Git 2.30+, GitHub CLI or GitLab CLI, Node.js 18+, jq, terminal-notifier). Creates the `.vibecrew/` directory with initial `config.json`, `state.json`, and `backlog.json` (see [schemas.md](schemas.md) for initial file structures). Configures MCP servers. Runs in a forked context to avoid polluting the main session.
 
-**`/new-project`** -- Triggers the Tier 1 foundation workflow. Sequentially produces VISION.md, design-system.css, TDR, roadmap, architecture diagrams (5 Mermaid `.mmd` files), and CLAUDE.md. Sets `foundation.complete` to `true` in `state.json` when all six artifacts are created and approved. This is the command that unlocks Tier 2.
+**`/new-project`** -- Triggers the Tier 1 foundation workflow. Sequentially produces VISION.md, design-system.css (via Design Discovery interview or BYODS import of existing tokens), TDR, roadmap, architecture diagrams (5 Mermaid `.mmd` files), and CLAUDE.md. Sets `foundation.complete` to `true` in `state.json` when all six artifacts are created and approved. This is the command that unlocks Tier 2.
 
 **`/plan-features`** -- Interactive planning session. Reads the roadmap, asks clarifying questions about each feature, and populates `backlog.json` with feature specs including acceptance criteria, priorities, and dependency relationships. Features move from `idea` to `planning` when planning begins, and advance to `planned` when specs are complete and dependencies are met.
 

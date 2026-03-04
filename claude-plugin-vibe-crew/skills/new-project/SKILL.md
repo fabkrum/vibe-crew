@@ -124,6 +124,119 @@ If `full_auto` autonomy is set, skip the interactive interview. Use VISION.md to
 
 ---
 
+### Pre-Design Gate: Bring Your Own Design System
+
+Before starting the Design Discovery interview, ask:
+
+> "Do you have an existing design system or style guide you'd like to import? (Yes / No)"
+
+**Profile adaptations for the gate:**
+- `full_auto`: Skip gate question. Auto-detect design system files in project root (`tailwind.config.*`, `tokens.json`, `globals.css`, `variables.css`, or any `.css` file with custom properties in `:root`). If found, auto-import. If not found, proceed to interview with Direction A.
+- `supervised`/`collaborative`: Show gate question with explanation: "If you have a CSS file, Tailwind config, or design tokens JSON from an existing brand, VibeCrew can import it instead of running the 10-question interview. Both paths produce the same output files."
+- All others: Show gate question normally.
+
+**If the user answers "No"** (or no files auto-detected in `full_auto`): Proceed to Phase 1 below.
+
+**If the user answers "Yes"**: Run the **Import Flow (Section 2.1)** below, then skip to Phase 3 (Component Preferences, Q7-Q10).
+
+---
+
+### Section 2.1 — Import Flow (BYODS)
+
+Run this flow when the user wants to import an existing design system instead of running the Phase 1/Phase 2 interview.
+
+#### Step A — Accept Input
+
+Ask the user which format their design system is in:
+
+> "What format is your design system in?
+> 1. **CSS file** — a `.css` file with custom properties (e.g., `globals.css`, `variables.css`)
+> 2. **Tailwind config** — `tailwind.config.js` or `tailwind.config.ts` with theme tokens
+> 3. **Tokens JSON** — a JSON tokens file (W3C Design Token format or flat key-value)
+> 4. **URL** — a reference website to extract tokens from (uses Chrome DevTools)
+> 5. **Figma link** — a Figma file URL (requires Figma MCP)
+> 6. **Brand PDF** — a brand guidelines document (AI-interpreted)
+> Or provide a file path directly."
+
+For `full_auto` autonomy: auto-detect files in the project root. Check in order: `tailwind.config.*`, `tokens.json`, `design-tokens.json`, `globals.css`, `variables.css`. Use the first match.
+
+#### Step B — Extract Tokens
+
+Run the appropriate extraction based on format:
+
+- **CSS file**: Run `import-design-tokens.sh --format css --input <file-path>` (add `--shadcn` if `components.json` exists in project root).
+- **Tailwind config**: Run `import-design-tokens.sh --format tailwind --input <file-path>`.
+- **Tokens JSON**: Run `import-design-tokens.sh --format json --input <file-path>`.
+- **URL**: First run `extract-design-system.sh <url>` to extract tokens via Chrome DevTools, then run `import-design-tokens.sh --format css --input <extracted-css>`.
+- **Figma link**: Enable the Figma MCP server, use `mcp__figma__get-file` to retrieve design tokens, write them to a temp JSON file, then run `import-design-tokens.sh --format json --input <temp-file>`.
+- **Brand PDF**: Read the PDF, use AI interpretation to extract colors (hex/rgb), fonts, and spacing values. Write extracted tokens to a temp CSS file, then run `import-design-tokens.sh --format css --input <temp-file>`.
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/import-design-tokens.sh" --format <format> --input <file-path>
+```
+
+Parse the JSON output. Store `mapped`, `token_overrides`, `defaults_used`, `unmapped`, `confidence`, and `warnings`.
+
+#### Step C — Review & Gap Analysis
+
+Present an import summary table to the user:
+
+```
+Import Summary
+══════════════
+Source: <filename> (<format>)
+Confidence: <high|medium|low>
+
+Mapped Tokens (from your file):
+  PRIMARY_HUE:       <value>
+  FONT_FAMILY:       <value>
+  BORDER_RADIUS:     <value>
+  DENSITY_FACTOR:    <value>
+  CONTENT_WIDTH_MAX: <value>
+  NAV_WIDTH:         <value>
+
+Defaults Applied: <count> of 6
+  <list any that used defaults>
+
+Unmapped Tokens: <count>
+  <list first 5 unmapped tokens — these exist in source but don't map to VibeCrew placeholders>
+
+Token Overrides: <count>
+  <list any CSS custom property overrides that will be applied>
+```
+
+If there are unmapped tokens, use AI interpretation to suggest additional mappings. Present suggestions for user approval.
+
+Ask: "Does this import look correct? (approve / edit / re-import)"
+
+- **approve**: Proceed to Step D.
+- **edit**: Let the user adjust specific mapped values.
+- **re-import**: Return to Step A to try a different file or format.
+
+#### Step D — Component Preferences
+
+Even with an imported design system, layout and UX preferences aren't covered by style tokens. Ask the Phase 3 questions (Q7-Q10 below): navigation style, data display, interaction density, and feedback style.
+
+Skip this step if `full_auto` autonomy is set — use sensible defaults based on the imported tokens and VISION.md.
+
+#### Step E — Generate Output
+
+Proceed to the **Output Generation** section below. When populating templates:
+
+- Use the `mapped` values from the import for template placeholders (`PRIMARY_HUE`, `FONT_FAMILY`, `BORDER_RADIUS`, `DENSITY_FACTOR`, `CONTENT_WIDTH_MAX`, `NAV_WIDTH`).
+- Apply `token_overrides` as additional CSS custom property values in `design-system.css`.
+- For `design-brief.md`: set the direction name to "Imported from {source filename}", set the rationale to "Brand consistency — tokens imported from existing design system", and fill component preferences from Step D answers.
+
+After generating both files, update state with the import source:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.foundation.artifacts.design_system.status = "complete" | .foundation.artifacts.design_system.file = "design-system.css" | .foundation.artifacts.design_system.brief_file = "design-brief.md" | .foundation.artifacts.design_system.import_source = "<format>" | .foundation.artifacts.design_system.approved_at = (now | todate)'
+```
+
+Then skip ahead to **Step 3: Technology Decision Record**.
+
+---
+
 ### Phase 1 — Product & Audience Context
 
 Ask 6 questions. For every question, present the numbered options, then add: *"Or describe in your own words."* If the user provides free text, interpret it into the closest design parameters and confirm your interpretation before proceeding.

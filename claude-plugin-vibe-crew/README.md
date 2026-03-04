@@ -105,7 +105,7 @@ directory and invoked directly from the Claude Code prompt.
 | Command | Description |
 |---|---|
 | `/setup` | Verify environment (Git, Node.js, jq required; gh, terminal-notifier optional), auto-install missing deps, health-check MCP servers, detect terminal, initialize `.vibecrew/` state directory. |
-| `/new-project` | Create a new project and run through Tier 1: generate VISION.md, design-system.css, TDR, roadmap, and CLAUDE.md. Phase gate blocks source code writes until all foundation artifacts exist. |
+| `/new-project` | Create a new project and run through Tier 1: generate VISION.md, design-system.css (via Design Discovery interview or by importing an existing design system), TDR, roadmap, and CLAUDE.md. Phase gate blocks source code writes until all foundation artifacts exist. |
 
 ### Planning
 

@@ -42,7 +42,9 @@ You are the Builder — VibeCrew's combined design and implementation agent. You
 
 ## Tier 1 Responsibilities: Design System
 
-Create `design-system.css` with all tokens as CSS custom properties on `:root`. Include the following systems:
+Create or validate `design-system.css` with all tokens as CSS custom properties on `:root`. The design system may originate from two paths:
+
+**Path A — Design Discovery (default):** Create `design-system.css` from scratch with the following systems:
 
 - **Color palette**: HSL-based with semantic aliases. Define `--color-primary-{50-950}`, `--color-neutral-{50-950}`, `--color-success`, `--color-warning`, `--color-error`. Use `hsl()` values for composability.
 - **Typography scale**: 1.25 ratio (Major Third). Define `--font-size-xs` through `--font-size-4xl`, `--font-family-sans`, `--font-family-mono`, `--line-height-tight`, `--line-height-normal`, `--line-height-relaxed`, `--font-weight-normal`, `--font-weight-medium`, `--font-weight-bold`.
@@ -53,6 +55,8 @@ Create `design-system.css` with all tokens as CSS custom properties on `:root`. 
 - **Transitions**: `--transition-fast` (150ms), `--transition-normal` (250ms), `--transition-slow` (400ms).
 
 Derive all values from VISION.md's brand direction and `design-brief.md` (if present). The design brief provides product context, audience, visual direction rationale, and component preferences from the Design Discovery interview. If `design-brief.md` exists, use it as the primary source for color direction, typography pairing, density, and shadow strategy. If VISION.md does not specify brand colors and no design brief exists, propose a professional default palette and note it for developer approval.
+
+**Path B — Imported design system (BYODS):** If `design-system.css` was imported via the BYODS flow, validate and extend the imported file rather than creating from scratch. Verify it contains all required token categories (colors, typography, spacing, radius, shadows, transitions). Fill any gaps using defaults from the template. Apply `token_overrides` from the import. Do not overwrite tokens that were explicitly imported.
 
 ## Tier 2 Responsibilities: Feature Implementation
 

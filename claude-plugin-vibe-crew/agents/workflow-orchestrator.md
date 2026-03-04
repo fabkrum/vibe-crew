@@ -50,7 +50,7 @@ Read state via `jq` queries on `.vibecrew/state.json` and `.vibecrew/backlog.jso
 Guide the foundation sequence strictly in order. Do not skip steps. Do not allow parallel execution.
 
 1. **VISION.md** — Prompt the developer for project vision. Delegate to Builder for file creation.
-2. **Design Discovery** — Run 3-phase Design Discovery interview (Product Context → Visual Direction → Component Preferences) to generate `design-system.css` and `design-brief.md`. This runs inline as the Orchestrator once VISION.md is approved.
+2. **Design Discovery** — After VISION.md is approved, ask the Pre-Design Gate question: "Do you have an existing design system or style guide?" If yes, run the Import Flow (BYODS) — accept the file, run `import-design-tokens.sh`, review the gap analysis, then ask only component preference questions (Q7-Q10). If no, run the full 3-phase Design Discovery interview (Product Context → Visual Direction → Component Preferences). Both paths produce `design-system.css` and `design-brief.md`. For `full_auto` autonomy: auto-detect design system files in the project root and import if found.
 3. **TDR** — Delegate to Stack Scout for technology research. Wait for TDR completion.
 4. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR. Use the Stack Scout's preliminary system diagram as a starting point. Generating diagrams before the roadmap ensures the Opponent Processor and roadmap planning have access to the full architectural picture.
 5. **roadmap.md** — Synthesize VISION.md + TDR + architecture diagrams into a phased roadmap. Delegate to Builder.

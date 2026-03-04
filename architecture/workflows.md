@@ -105,8 +105,8 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |                Builder works   |
  |  <-- brand questions  |                in worktree    |
  |  answers ------------>|                               |
- |                       |  Builder generates            |
- |                       |  design-system.css            |
+ |                       |  Builder generates or imports |
+ |                       |  design-system.css (BYODS)   |
  |                       |  [worktree: .claude/worktrees/|
  |                       |   builder-foundation/]        |
  |                       |  Builder commits in worktree  |
@@ -252,12 +252,17 @@ Orchestrator
     +--- STEP 1: Vision (Orchestrator does this inline, no delegation)
     |
     +--- STEP 2: TaskCreate(assignee: builder,
-    |         task: "Create design-system.css per VISION.md brand direction")
+    |         task: "Generate or import design-system.css")
+    |         |
+    |         +--- Pre-Design Gate: "Do you have an existing design system?"
+    |         |    YES → Import Flow (BYODS): accept file, run import-design-tokens.sh,
+    |         |          review gap analysis, ask component prefs (Q7-Q10)
+    |         |    NO  → Design Discovery: 3-phase interview (Product Context →
+    |         |          Visual Direction → Component Preferences)
     |         |
     |         +--- Builder works in worktree
     |         |    .claude/worktrees/builder-foundation/
-    |         |    - Asks user brand preference questions
-    |         |    - Generates design-system.css with HSL tokens
+    |         |    - Generates design-system.css with HSL tokens (or validates import)
     |         |    - Runs verification loop (WCAG AA contrast)
     |         |    - Commits in worktree
     |         |    - Signals completion via SendMessage
@@ -1454,7 +1459,7 @@ Feature branches are named after features, not agents. The worktree path identif
     |                                                          |
     |    Worktree: .claude/worktrees/builder-foundation/        |
     |    Branch:   main (Tier 1 foundation work)               |
-    |    Purpose:  Builder creating design-system.css          |
+    |    Purpose:  Builder creating/importing design-system.css |
     |                                                          |
     |  RULE: One branch per feature. Multiple agents may work  |
     |  on the same branch sequentially (Builder codes, then    |

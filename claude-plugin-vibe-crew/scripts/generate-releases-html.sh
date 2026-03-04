@@ -315,37 +315,40 @@ cat << 'HEADER_EOF'
   </div>
   <nav class="sidebar-nav">
     <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Intro</div>
-      <a href="why.html" class="sidebar-link">Why VibeCrew</a>
-    </div>
-    <div class="sidebar-group">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Getting Started</div>
-      <a href="setup.html" class="sidebar-link">Setup</a>
-      <a href="new-project.html" class="sidebar-link">New Project</a>
-      <a href="existing-project.html" class="sidebar-link">Existing Project</a>
-      <a href="warp.html" class="sidebar-link">Warp</a>
-    </div>
-    <div class="sidebar-group collapsed">
       <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Workflows</div>
       <a href="workflow.html" class="sidebar-link">Core Workflow</a>
       <a href="advanced-features.html" class="sidebar-link">Advanced Features</a>
       <a href="personalization.html" class="sidebar-link">Personalization</a>
+      <a href="gamification.html" class="sidebar-link">Gamification</a>
+      <a href="warp.html" class="sidebar-link">Warp Tips &amp; Tricks</a>
       <a href="tips.html" class="sidebar-link">Tips &amp; Troubleshooting</a>
       <a href="example-session.html" class="sidebar-link">Example Session</a>
     </div>
     <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Architecture</div>
+      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">How It Works</div>
       <a href="architecture.html" class="sidebar-link">Overview</a>
-      <a href="arch-system.html" class="sidebar-link">System Deep Dive</a>
-      <a href="arch-runtime.html" class="sidebar-link">Runtime Systems</a>
-      <a href="arch-reference.html" class="sidebar-link">Commands &amp; State</a>
-      <a href="arch-design.html" class="sidebar-link">Design &amp; Operations</a>
+      <a href="plugin.html" class="sidebar-link">Plugin Structure</a>
+      <a href="agents.html" class="sidebar-link">Sub-Agents</a>
+      <a href="hooks.html" class="sidebar-link">Hooks</a>
+      <a href="mcp-servers.html" class="sidebar-link">MCP Servers</a>
+      <a href="command-flow.html" class="sidebar-link">Slash Commands</a>
+      <a href="skills.html" class="sidebar-link">Skills Reference</a>
+      <a href="scripts.html" class="sidebar-link">Bash Scripts</a>
+      <a href="templates.html" class="sidebar-link">Templates</a>
+      <a href="runtime.html" class="sidebar-link">Runtime State</a>
+      <a href="safety.html" class="sidebar-link">Permissions &amp; Safety</a>
+      <a href="self-improving.html" class="sidebar-link">Self-Improving System</a>
       <a href="dashboard.html" class="sidebar-link">Vibe Dashboard</a>
     </div>
     <div class="sidebar-group collapsed">
-      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Releases</div>
-      <a href="releases.html" class="sidebar-link active">Release Notes</a>
+      <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">Reference</div>
+      <a href="commands.html" class="sidebar-link">Slash Commands</a>
+      <a href="ui-patterns.html" class="sidebar-link">UI Pattern Guide</a>
+      <a href="business-patterns.html" class="sidebar-link">Business Patterns</a>
+      <a href="glossary.html" class="sidebar-link">Glossary</a>
+      <a href="faq.html" class="sidebar-link">FAQ</a>
     </div>
+    <a href="releases.html" class="sidebar-link active">Changelog</a>
   </nav>
 </aside>
 

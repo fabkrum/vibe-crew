@@ -7,7 +7,7 @@ import { url } from '../data/site';
 
   <section class="section">
     <h2>How VibeCrew Works</h2>
-    <p>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, per-project runtime state, and a live status line that surfaces it all at a glance. Each piece solves a specific problem that emerges when AI builds software autonomously.</p>
+    <p>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, and per-project runtime state. Each piece solves a specific problem that emerges when AI builds software autonomously.</p>
   </section>
 
   <!-- ── Problems Solved (tabs) ── -->
@@ -140,36 +140,19 @@ import { url } from '../data/site';
 
   <hr>
 
-  <!-- ── Status Line ── -->
-  <section class="section">
-    <h3>The Status Line</h3>
-    <p>While VibeCrew runs, a persistent status line at the bottom of your Claude Code terminal shows real-time session state &mdash; model, context usage, cost, active feature and phase, Vibe Score, and compaction count. It updates after every assistant message at zero token cost.</p>
-
-    <pre class="status-line-mock"><code>Opus 4.6 <span class="sl-ctx-green">▓▓▓▓░░░░░░ 38%</span> | <span class="sl-cost">$0.42</span> | <span class="sl-feat">auth-flow · Code</span> | <span class="sl-score">↑85+</span> | <span class="sl-dur">12m</span> | <span class="sl-compact">⟳0</span></code></pre>
-
-    <p><a href={url('/status-line.html')}>View full status line documentation &rarr;</a></p>
-  </section>
-
-  <hr>
-
   <!-- ── Page Grid ── -->
   <section class="section">
     <h3>Explore the System</h3>
     <div class="page-grid">
-      <a class="page-card" href={url('/status-line.html')}>
-        <h3>Status Line</h3>
-        <p>The persistent status bar: model, context usage, cost, feature, Vibe Score, and compaction count.</p>
-        <span class="card-arrow">View status line &rarr;</span>
+      <a class="page-card" href={url('/scripts.html')}>
+        <h3>Bash Scripts</h3>
+        <p>Deterministic scripts that handle state mutations, scoring, git operations, and formatting.</p>
+        <span class="card-arrow">View script catalog &rarr;</span>
       </a>
-      <a class="page-card" href={url('/plugin.html')}>
-        <h3>Plugin Structure</h3>
-        <p>The manifest, MCP servers, permissions, hooks, scripts, agents, and skills that make up the plugin.</p>
-        <span class="card-arrow">View plugin anatomy &rarr;</span>
-      </a>
-      <a class="page-card" href={url('/agents.html')}>
-        <h3>Sub-Agents</h3>
-        <p>Specialized AI agents with scoped tool access, model selection, and worktree isolation.</p>
-        <span class="card-arrow">View agent topology &rarr;</span>
+      <a class="page-card" href={url('/gamification.html')}>
+        <h3>Gamification &amp; Vibe Score</h3>
+        <p>Vibe Score quality metrics, XP, leveling, badges, skill tree, streaks, challenges, and quizzes that reward good development habits.</p>
+        <span class="card-arrow">View gamification &rarr;</span>
       </a>
       <a class="page-card" href={url('/hooks.html')}>
         <h3>Hooks</h3>
@@ -181,50 +164,55 @@ import { url } from '../data/site';
         <p>Bundled + registry servers activated on demand once the project architecture is clear.</p>
         <span class="card-arrow">View MCP integration &rarr;</span>
       </a>
-      <a class="page-card" href={url('/command-flow.html')}>
-        <h3>Slash Commands</h3>
-        <p>Commands across setup, planning, development, quality, safety, and session management.</p>
-        <span class="card-arrow">View command reference &rarr;</span>
-      </a>
-      <a class="page-card" href={url('/skills.html')}>
-        <h3>Skills Reference</h3>
-        <p>Every SKILL.md file with category filters &mdash; from zero-cost scripts to multi-agent orchestrations.</p>
-        <span class="card-arrow">Browse all skills &rarr;</span>
-      </a>
-      <a class="page-card" href={url('/scripts.html')}>
-        <h3>Bash Scripts</h3>
-        <p>Deterministic scripts that handle state mutations, scoring, git operations, and formatting.</p>
-        <span class="card-arrow">View script catalog &rarr;</span>
-      </a>
-      <a class="page-card" href={url('/templates.html')}>
-        <h3>Templates</h3>
-        <p>Scaffolding blueprints for foundation docs, state files, test configs, CI/CD, and reporting.</p>
-        <span class="card-arrow">View template catalog &rarr;</span>
-      </a>
-      <a class="page-card" href={url('/runtime.html')}>
-        <h3>Runtime State</h3>
-        <p>The <code>.vibecrew/</code> directory: JSON state files, session logs, scores, signals, and handoffs.</p>
-        <span class="card-arrow">View state structure &rarr;</span>
-      </a>
       <a class="page-card" href={url('/safety.html')}>
         <h3>Permissions &amp; Safety</h3>
         <p>Three-layer defense: permission rules, hook guards, and quality gates.</p>
         <span class="card-arrow">View safety model &rarr;</span>
-      </a>
-      <a class="page-card" href={url('/self-improving.html')}>
-        <h3>Self-Improving System</h3>
-        <p>Performance Coach, CLAUDE.md mutations, Vibe Score, and cross-project telemetry.</p>
-        <span class="card-arrow">View feedback loop &rarr;</span>
       </a>
       <a class="page-card" href={url('/personalization.html')}>
         <h3>Personalization</h3>
         <p>User profiles with adaptive agent behavior &mdash; every agent adjusts to your experience level, working style, and preferences.</p>
         <span class="card-arrow">View personalization &rarr;</span>
       </a>
-      <a class="page-card" href={url('/gamification.html')}>
-        <h3>Gamification &amp; Vibe Score</h3>
-        <p>Vibe Score quality metrics, XP, leveling, badges, skill tree, streaks, challenges, and quizzes that reward good development habits.</p>
-        <span class="card-arrow">View gamification &rarr;</span>
+      <a class="page-card" href={url('/plugin.html')}>
+        <h3>Plugin Structure</h3>
+        <p>The manifest, MCP servers, permissions, hooks, scripts, agents, and skills that make up the plugin.</p>
+        <span class="card-arrow">View plugin anatomy &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/runtime.html')}>
+        <h3>Runtime State</h3>
+        <p>The <code>.vibecrew/</code> directory: JSON state files, session logs, scores, signals, and handoffs.</p>
+        <span class="card-arrow">View state structure &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/self-improving.html')}>
+        <h3>Self-Improving System</h3>
+        <p>Performance Coach, CLAUDE.md mutations, Vibe Score, and cross-project telemetry.</p>
+        <span class="card-arrow">View feedback loop &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/skills.html')}>
+        <h3>Skills Reference</h3>
+        <p>Every SKILL.md file with category filters &mdash; from zero-cost scripts to multi-agent orchestrations.</p>
+        <span class="card-arrow">Browse all skills &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/command-flow.html')}>
+        <h3>Slash Commands</h3>
+        <p>Commands across setup, planning, development, quality, safety, and session management.</p>
+        <span class="card-arrow">View command reference &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/status-line.html')}>
+        <h3>Status Line</h3>
+        <p>The persistent status bar: model, context usage, cost, feature, Vibe Score, and compaction count.</p>
+        <span class="card-arrow">View status line &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/agents.html')}>
+        <h3>Sub-Agents</h3>
+        <p>Specialized AI agents with scoped tool access, model selection, and worktree isolation.</p>
+        <span class="card-arrow">View agent topology &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/templates.html')}>
+        <h3>Templates</h3>
+        <p>Scaffolding blueprints for foundation docs, state files, test configs, CI/CD, and reporting.</p>
+        <span class="card-arrow">View template catalog &rarr;</span>
       </a>
       <a class="page-card" href={url('/dashboard.html')}>
         <h3>Vibe Dashboard</h3>
@@ -278,69 +266,4 @@ import { url } from '../data/site';
 </script>
 
 <style>
-  .status-line-mock {
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: .85rem 1.25rem;
-    margin-bottom: 1.5rem;
-    overflow-x: auto;
-    position: relative;
-  }
-  .status-line-mock::before {
-    content: 'STATUS LINE';
-    position: absolute;
-    top: .45rem;
-    right: .75rem;
-    font-size: .6rem;
-    font-weight: 600;
-    letter-spacing: .08em;
-    color: var(--color-text-muted);
-    font-family: var(--font-sans);
-  }
-  .status-line-mock code {
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: .9rem;
-    font-family: var(--font-mono);
-    color: var(--color-text);
-    white-space: nowrap;
-    line-height: 2;
-  }
-  .sl-ctx-green { color: var(--color-green); }
-  .sl-ctx-yellow { color: var(--color-amber); }
-  .sl-ctx-red { color: var(--color-red); }
-  .sl-cost { color: var(--color-text-secondary); }
-  .sl-feat { color: var(--color-accent); }
-  .sl-score { color: var(--color-green); }
-  .sl-dur { color: var(--color-text-secondary); }
-  .sl-compact { color: var(--color-text-muted); }
-  .status-line-table th {
-    font-size: .78rem;
-    text-transform: uppercase;
-    letter-spacing: .03em;
-    padding: .6rem .75rem;
-  }
-  .status-line-table td {
-    font-size: .84rem;
-    line-height: 1.6;
-    padding: .6rem .75rem;
-  }
-  .status-line-table td:first-child {
-    white-space: nowrap;
-    font-weight: 600;
-    color: var(--color-text);
-    width: 130px;
-  }
-  .status-line-table td:nth-child(2) {
-    white-space: nowrap;
-    font-family: var(--font-mono);
-    font-size: .82rem;
-    color: var(--color-text-muted);
-    width: 160px;
-  }
-  .status-line-table td:nth-child(2) code {
-    font-size: .82rem;
-  }
 </style>

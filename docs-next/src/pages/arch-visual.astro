@@ -57,8 +57,6 @@ import { commands, categories } from '../data/commands';
       </div>
     </div>
 
-    <MermaidDiagram chart={systemDiagram} caption="Plugin components and how Claude Code loads them" />
-
     <h4 class="agent-table-heading">Plugin Components</h4>
     <div class="agent-table-wrap">
       <table class="agent-table">
@@ -112,6 +110,8 @@ import { commands, categories } from '../data/commands';
         </tbody>
       </table>
     </div>
+
+    <MermaidDiagram chart={systemDiagram} caption="Plugin components and how Claude Code loads them" />
   </div>
 
   <!-- ═══════ Sub-Agents ═══════ -->
@@ -137,15 +137,12 @@ import { commands, categories } from '../data/commands';
       </div>
     </div>
 
+    <h4 class="agent-table-heading">Agent Reference</h4>
     <div class="agent-legend">
       <span class="legend-item"><span class="legend-dot" style="background:var(--color-accent)"></span> Opus (complex reasoning)</span>
       <span class="legend-item"><span class="legend-dot" style="background:var(--color-amber)"></span> Haiku (fast tasks)</span>
       <span class="legend-item"><span class="legend-dot" style="background:var(--color-blue)"></span> Sonnet (documentation)</span>
     </div>
-
-    <MermaidDiagram chart={agentInteractionDiagram} caption="Agent topology: how agents hand off work to each other" />
-
-    <h4 class="agent-table-heading">Agent Reference</h4>
     <div class="agent-table-wrap">
       <table class="agent-table">
         <thead>
@@ -253,6 +250,8 @@ import { commands, categories } from '../data/commands';
         </tbody>
       </table>
     </div>
+
+    <MermaidDiagram chart={agentInteractionDiagram} caption="Agent topology: how agents hand off work to each other" />
   </div>
 
   <!-- ═══════ Hooks ═══════ -->
@@ -277,8 +276,6 @@ import { commands, categories } from '../data/commands';
         </div>
       </div>
     </div>
-
-    <MermaidDiagram chart={hooksDiagram} caption="Hook events mapped to their enforcement scripts" />
 
     <h4 class="agent-table-heading">Session Init Hooks</h4>
     <p class="cmd-group-desc">Run automatically when a new Claude Code session starts.</p>
@@ -394,6 +391,8 @@ import { commands, categories } from '../data/commands';
         </tbody>
       </table>
     </div>
+
+    <MermaidDiagram chart={hooksDiagram} caption="Hook events mapped to their enforcement scripts" />
   </div>
 
   <!-- ═══════ Slash Commands ═══════ -->
@@ -418,8 +417,6 @@ import { commands, categories } from '../data/commands';
         </div>
       </div>
     </div>
-
-    <MermaidDiagram chart={commandsDiagram} caption="How a slash command flows from user input to results" />
 
     <h4 class="agent-table-heading">Setup &amp; Onboarding</h4>
     <p class="cmd-group-desc">Run these once when starting a new project or joining an existing one.</p>
@@ -665,6 +662,8 @@ import { commands, categories } from '../data/commands';
         </tbody>
       </table>
     </div>
+
+    <MermaidDiagram chart={commandsDiagram} caption="How a slash command flows from user input to results" />
   </div>
 
   <!-- ═══════ Skills Reference ═══════ -->
@@ -746,8 +745,6 @@ import { commands, categories } from '../data/commands';
       </div>
     </div>
 
-    <MermaidDiagram chart={scriptsDiagram} caption="Script categories and who calls them" />
-
     <h4 class="agent-table-heading">Core Lifecycle</h4>
     <p class="cmd-group-desc">Scripts that run during session startup and completion.</p>
     <div class="agent-table-wrap">
@@ -817,6 +814,8 @@ import { commands, categories } from '../data/commands';
         </tbody>
       </table>
     </div>
+
+    <MermaidDiagram chart={scriptsDiagram} caption="Script categories and who calls them" />
   </div>
 
   <!-- ═══════ Runtime State ═══════ -->
@@ -841,8 +840,6 @@ import { commands, categories } from '../data/commands';
         </div>
       </div>
     </div>
-
-    <MermaidDiagram chart={runtimeStateDiagram} caption="Runtime state files and who reads/writes them" />
 
     <h4 class="agent-table-heading">Core State Files</h4>
     <p class="cmd-group-desc">JSON files that store project configuration and progress.</p>
@@ -913,6 +910,8 @@ import { commands, categories } from '../data/commands';
         </tbody>
       </table>
     </div>
+
+    <MermaidDiagram chart={runtimeStateDiagram} caption="Runtime state files and who reads/writes them" />
   </div>
 
   <!-- ═══════ Permissions & Safety ═══════ -->
@@ -989,8 +988,6 @@ import { commands, categories } from '../data/commands';
       </div>
     </div>
 
-    <MermaidDiagram chart={dashboardDiagram} caption="Data flow from .vibecrew/ JSON files through VitePress to dashboard tabs" />
-
     <h4 class="agent-table-heading">Dashboard Tabs</h4>
     <div class="dashboard-grid">
       <div class="dash-card">
@@ -1059,6 +1056,8 @@ import { commands, categories } from '../data/commands';
         </tbody>
       </table>
     </div>
+
+    <MermaidDiagram chart={dashboardDiagram} caption="Data flow from .vibecrew/ JSON files through VitePress to dashboard tabs" />
   </div>
 
   <!-- Tab prev/next navigation -->

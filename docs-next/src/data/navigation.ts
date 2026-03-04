@@ -11,6 +11,16 @@ export interface NavGroup {
 
 export const navigation: NavGroup[] = [
   {
+    label: 'Get Started',
+    links: [
+      { title: 'Home', slug: 'index' },
+      { title: 'Setup in Detail', slug: 'setup-detail' },
+      { title: 'Project Planning', slug: 'project-planning' },
+      { title: 'Warp Integration', slug: 'warp' },
+      { title: 'User Profiles', slug: 'profile-system' },
+    ],
+  },
+  {
     label: 'Workflows',
     links: [
       { title: 'Core Workflow', slug: 'workflow' },
@@ -26,8 +36,6 @@ export const navigation: NavGroup[] = [
     collapsed: true,
     links: [
       { title: 'Overview', slug: 'architecture' },
-      { title: 'Setup in Detail', slug: 'setup-detail' },
-      { title: 'Project Planning', slug: 'project-planning' },
       { title: 'Plugin Structure', slug: 'plugin' },
       { title: 'Sub-Agents', slug: 'agents' },
       { title: 'Hooks', slug: 'hooks' },
@@ -39,8 +47,6 @@ export const navigation: NavGroup[] = [
       { title: 'Runtime State', slug: 'runtime' },
       { title: 'Permissions & Safety', slug: 'safety' },
       { title: 'Self-Improving System', slug: 'self-improving' },
-      { title: 'User Profiles', slug: 'profile-system' },
-      { title: 'Warp Integration', slug: 'warp' },
       { title: 'Vibe Dashboard', slug: 'dashboard' },
     ],
   },

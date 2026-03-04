@@ -742,19 +742,6 @@ pre:hover .copy-btn,
   padding-right: 1rem;
   font-weight: 600;
   color: var(--color-text);
-  position: relative;
-  padding-left: 1rem;
-}
-
-.solution-table td:first-child::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.65rem;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-accent-dim);
 }
 
 .solution-table td:last-child {

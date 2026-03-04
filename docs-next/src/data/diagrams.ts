@@ -334,3 +334,41 @@ export const safetyDiagram = `flowchart TD
   style Done fill:#18181b,stroke:#4ade80,color:#4ade80
   style Fix fill:#18181b,stroke:#fbbf24,color:#fbbf24
 `;
+
+export const dashboardDiagram = `flowchart LR
+  subgraph Source[".vibecrew/ JSON Files"]
+    direction TB
+    BL["backlog.json<br/>Feature specs"]
+    SE["sessions/*.json<br/>Session logs"]
+    SC["scores/*.json<br/>Vibe Scores"]
+    GM["gamification.json<br/>XP, badges, streaks"]
+    CF["config.json<br/>User preferences"]
+  end
+
+  subgraph Pipeline["VitePress Pipeline"]
+    direction TB
+    DL["Data Loaders<br/>(.data.ts files)"]
+    VUE["Vue Components<br/>Charts, tables, forms"]
+    WS["WebSocket<br/>Real-time updates"]
+  end
+
+  subgraph Tabs["7 Dashboard Tabs"]
+    direction TB
+    T1["Guide"]
+    T2["Kanban Board"]
+    T3["Session Stats"]
+    T4["Trends"]
+    T5["Coverage"]
+    T6["Achievements"]
+    T7["Settings"]
+  end
+
+  Source --> DL
+  DL --> VUE
+  VUE --> Tabs
+  WS -.->|hot-reload| VUE
+
+  style Source fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Pipeline fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Tabs fill:#18181b,stroke:#fbbf24,color:#fafafa
+`;

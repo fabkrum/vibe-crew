@@ -9,6 +9,7 @@ import {
   scriptsDiagram,
   runtimeStateDiagram,
   safetyDiagram,
+  dashboardDiagram,
 } from '../data/diagrams';
 import { commands, categories } from '../data/commands';
 ---
@@ -30,6 +31,7 @@ import { commands, categories } from '../data/commands';
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-scripts" data-tab="scripts">Bash Scripts</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-runtime" data-tab="runtime">Runtime State</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-safety" data-tab="safety">Permissions &amp; Safety</button>
+    <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-dashboard" data-tab="dashboard">Vibe Dashboard</button>
   </div>
 
   <!-- ═══════ Plugin Structure ═══════ -->
@@ -394,6 +396,101 @@ import { commands, categories } from '../data/commands';
     <MermaidDiagram chart={safetyDiagram} caption="Three-layer defense: permissions → hooks → quality gates" />
   </div>
 
+  <!-- ═══════ Vibe Dashboard ═══════ -->
+  <div class="arch-panel" id="panel-dashboard" role="tabpanel" hidden>
+    <div class="panel-intro">
+      <h3>Vibe Dashboard</h3>
+      <p>Every VibeCrew project gets a <strong>browser-based dashboard</strong> scaffolded into its <code>docs/</code> folder during <code>/setup</code>. It's a VitePress-powered site that reads live data from <code>.vibecrew/</code> &mdash; the same JSON files that power the CLI &mdash; and renders it as interactive charts, Kanban boards, and settings editors. No database, no backend, just local JSON files.</p>
+      <div class="key-points">
+        <div class="key-point">
+          <span class="key-icon purple">&#9632;</span>
+          <div>
+            <strong>What it is</strong>
+            <p>A 7-tab VitePress site (Guide, Kanban Board, Session Stats, Trends, Coverage, Achievements, Settings) with VitePress data loaders that read <code>.vibecrew/*.json</code> files and render them as Vue components. Hot-reloads in dev mode when data changes.</p>
+          </div>
+        </div>
+        <div class="key-point">
+          <span class="key-icon green">&#10003;</span>
+          <div>
+            <strong>What problem it solves</strong>
+            <p>Terminal output is ephemeral &mdash; once you scroll past it, the data is gone. The dashboard gives you a persistent, visual interface to browse your backlog, track quality trends over time, review session history, and edit project settings without memorizing CLI commands.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <MermaidDiagram chart={dashboardDiagram} caption="Data flow from .vibecrew/ JSON files through VitePress to dashboard tabs" />
+
+    <h4 class="agent-table-heading">Dashboard Tabs</h4>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <span class="dash-icon">&#128218;</span>
+        <div>
+          <strong>Guide</strong>
+          <p>Getting-started docs, command reference, and workflow overview. The default landing tab.</p>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">&#128203;</span>
+        <div>
+          <strong>Kanban Board</strong>
+          <p>7-column interactive board (Ideas &rarr; Done). Add ideas, drag cards between columns, launch Warp sessions. Reads <code>backlog.json</code>.</p>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">&#128200;</span>
+        <div>
+          <strong>Session Stats</strong>
+          <p>Total sessions, average Vibe Score, token usage, and estimated costs. Reads <code>sessions/*.json</code>.</p>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">&#128201;</span>
+        <div>
+          <strong>Trends</strong>
+          <p>Vibe Score trajectory, token breakdown, and agent activity over time. Reads <code>scores/*.json</code>.</p>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">&#9989;</span>
+        <div>
+          <strong>Coverage</strong>
+          <p>Test coverage gauge and feature delivery progress (completed vs. total backlog).</p>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">&#127942;</span>
+        <div>
+          <strong>Achievements</strong>
+          <p>Level, XP, badges, skill radar chart, and streak calendar. Reads <code>gamification.json</code>.</p>
+        </div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">&#9881;</span>
+        <div>
+          <strong>Settings</strong>
+          <p>Browser-based editor for user profile, notifications, cost limits, MCP servers, and gamification toggles. Writes to <code>config.json</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="agent-table-heading">CLI Equivalents</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead>
+          <tr><th>Dashboard Tab</th><th>CLI Command</th><th>What It Shows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Kanban / Stats</td><td><code>/status</code></td><td>Feature backlog overview, session count, current feature</td></tr>
+          <tr><td>Stats / Trends</td><td><code>/cost</code></td><td>Token usage, API costs, per-session breakdown</td></tr>
+          <tr><td>Achievements</td><td><code>/achievements</code></td><td>Level, XP, badges, streaks, challenges</td></tr>
+          <tr><td>Settings (profile)</td><td><code>/profile</code></td><td>Edit user profile dimensions interactively</td></tr>
+          <tr><td>Coverage</td><td><code>/check</code></td><td>Run tests, lint, type-check, and see coverage</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </DocsLayout>
 
 <style>
@@ -719,6 +816,50 @@ import { commands, categories } from '../data/commands';
 
   .safety-card.blocked h4 {
     color: var(--color-red);
+  }
+
+  /* ──── Dashboard grid ──── */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .dash-card {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .dash-icon {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .dash-card strong {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+    color: var(--color-text);
+  }
+
+  .dash-card p {
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .dash-card code {
+    font-size: 0.72rem;
+    padding: 0.1em 0.3em;
+    background: var(--color-surface-2);
+    border-radius: 3px;
   }
 
   /* ──── Responsive ──── */

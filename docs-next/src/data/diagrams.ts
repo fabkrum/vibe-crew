@@ -3,21 +3,21 @@
 export const systemDiagram = `flowchart TD
   subgraph Plugin["claude-plugin-vibe-crew"]
     Manifest[".claude-plugin/plugin.json"]
-    MCP[".mcp.json<br/>10 MCP Servers"]
-    Settings["settings.json<br/>Permissions"]
-    Hooks["hooks/hooks.json<br/>Event Bindings"]
-    Scripts["scripts/<br/>~80 Bash Scripts"]
-    Agents["agents/<br/>Agent Prompts"]
-    Skills["skills/<br/>31 Slash Commands"]
+    MCP[".mcp.json"]
+    Settings["settings.json"]
+    Hooks["hooks/hooks.json"]
+    Scripts["scripts/"]
+    Agents["agents/"]
+    Skills["skills/"]
   end
 
-  subgraph Runtime[".vibecrew/ (Per-Project)"]
+  subgraph Runtime[".vibecrew/ Per-Project"]
     Config["config.json"]
     State["state.json"]
     Backlog["backlog.json"]
     Sessions["sessions/"]
     Scores["scores/"]
-    Architecture["architecture/<br/>5 .mmd files"]
+    Architecture["architecture/"]
   end
 
   CC["Claude Code"] --> Manifest
@@ -35,30 +35,30 @@ export const systemDiagram = `flowchart TD
 `;
 
 export const agentInteractionDiagram = `flowchart TD
-  User((User)) --> SS[Session Startup<br/>Haiku]
-  SS --> WO[Workflow Orchestrator<br/>Opus]
+  User((User)) --> SS["Session Startup"]
+  SS --> WO["Workflow Orchestrator"]
 
-  WO -->|Tier 1| SSC[Stack Scout<br/>Opus]
-  WO -->|Tier 1| OP[Opponent Processor<br/>Opus]
-  WO -->|Tier 2| BLD[Builder<br/>Opus]
+  WO -->|Tier 1| SSC["Stack Scout"]
+  WO -->|Tier 1| OP["Opponent Processor"]
+  WO -->|Tier 2| BLD["Builder"]
 
   SSC -->|TDR| WO
   OP -->|Risk Assessment| WO
 
-  BLD --> VER[Verifier<br/>Haiku]
-  BLD --> CR[Code Reviewer<br/>Opus]
+  BLD --> VER["Verifier"]
+  BLD --> CR["Code Reviewer"]
 
   VER -->|Results| BLD
   CR -->|Findings| BLD
 
-  BLD -->|/wrap| PC[Performance Coach<br/>Opus]
-  PC -->|Score + Coaching| DG[Doc Generator<br/>Sonnet]
+  BLD -->|/wrap| PC["Performance Coach"]
+  PC -->|Score + Coaching| DG["Doc Generator"]
 
-  WO -->|/audit| SA[Security Auditor<br/>Opus]
-  WO -->|/simplify| CS[Code Simplifier<br/>Opus]
-  WO -->|/heal| CH[CI Healer<br/>Opus]
-  WO -->|/onboard| CA[Code Auditor<br/>Opus]
-  WO -->|/system-review| SR[System Reviewer<br/>Opus]
+  WO -->|/audit| SA["Security Auditor"]
+  WO -->|/simplify| CS["Code Simplifier"]
+  WO -->|/heal| CH["CI Healer"]
+  WO -->|/onboard| CA["Code Auditor"]
+  WO -->|/system-review| SR["System Reviewer"]
 
   style User fill:#7c3aed,stroke:#a78bfa,color:#fafafa
   style SS fill:#18181b,stroke:#fbbf24,color:#fafafa
@@ -82,7 +82,7 @@ export const tierFlowDiagram = `flowchart LR
     direction TB
     V["VISION.md"] --> DS["Design System"]
     DS --> TDR["TDR"]
-    TDR --> ARCH["Architecture<br/>Diagrams"]
+    TDR --> ARCH["Architecture Diagrams"]
     ARCH --> RM["Roadmap"]
     RM --> CMD["CLAUDE.md"]
   end
@@ -104,40 +104,40 @@ export const tierFlowDiagram = `flowchart LR
 `;
 
 export const hooksDiagram = `flowchart TD
-  subgraph Events["Claude Code Lifecycle Events"]
+  subgraph Events["Lifecycle Events"]
     E1["SessionStart"]
-    E2["PreToolUse<br/>(Write/Edit)"]
-    E3["PreToolUse<br/>(Bash)"]
-    E4["PostToolUse<br/>(Write/Edit)"]
+    E2["PreToolUse Write/Edit"]
+    E3["PreToolUse Bash"]
+    E4["PostToolUse Write/Edit"]
     E5["Notification"]
     E6["Stop"]
   end
 
-  subgraph Guards["Pre-Action Guards (block or allow)"]
-    PG["phase-gate.sh<br/>Block code before foundation"]
-    RP["restrict-paths.sh<br/>Block writes outside project"]
-    PD["protect-data.sh<br/>Block destructive commands"]
-    VPT["validate-phase-transition.sh<br/>Enforce phase ordering"]
-    VS["validate-signal.sh<br/>Validate signal schema"]
+  subgraph Guards["Pre-Action Guards"]
+    PG["phase-gate.sh"]
+    RP["restrict-paths.sh"]
+    PD["protect-data.sh"]
+    VPT["validate-phase-transition.sh"]
+    VS["validate-signal.sh"]
   end
 
   subgraph Post["Post-Action Processors"]
-    FC["format-code.sh<br/>Auto-format on save"]
-    NT["notify.sh<br/>OS notifications"]
+    FC["format-code.sh"]
+    NT["notify.sh"]
   end
 
   subgraph Stop["Session End Checks"]
-    CC["check-context.sh<br/>60%/80% warnings"]
-    CG["cost-guardrails.sh<br/>Cost thresholds"]
-    CL["claude-md-lint.sh<br/>CLAUDE.md validation"]
-    QG["quality-gate.sh<br/>Typecheck/lint/build"]
+    CC["check-context.sh"]
+    CG["cost-guardrails.sh"]
+    CL["claude-md-lint.sh"]
+    QG["quality-gate.sh"]
   end
 
   subgraph Init["Session Init"]
-    SS["session-startup.sh<br/>Environment check"]
-    SY["sync-state.sh<br/>State reconciliation"]
-    ER["error-recovery.sh<br/>Clear stale locks"]
-    CR["compact-reinject.sh<br/>Re-inject after compact"]
+    SS["session-startup.sh"]
+    SY["sync-state.sh"]
+    ER["error-recovery.sh"]
+    CR["compact-reinject.sh"]
   end
 
   E1 --> Init
@@ -161,14 +161,14 @@ export const commandsDiagram = `flowchart LR
   end
 
   subgraph Skill["Skill Layer"]
-    SM["SKILL.md<br/>YAML frontmatter<br/>+ workflow body"]
+    SM["SKILL.md"]
   end
 
   subgraph Routing["Agent Routing"]
     direction TB
-    SO["Script-Only<br/>(zero tokens)"]
+    SO["Script-Only"]
     SA["Single Agent"]
-    MA["Multi-Agent<br/>Orchestration"]
+    MA["Multi-Agent"]
   end
 
   subgraph Agents["Agent Execution"]
@@ -181,9 +181,9 @@ export const commandsDiagram = `flowchart LR
   end
 
   subgraph Output["Results"]
-    ST["State Updates<br/>.vibecrew/*.json"]
-    GIT["Git Operations<br/>branch/commit/PR"]
-    FILES["Source Code<br/>& Documentation"]
+    ST["State Updates"]
+    GIT["Git Operations"]
+    FILES["Source Code"]
   end
 
   CMD --> SM
@@ -202,9 +202,9 @@ export const commandsDiagram = `flowchart LR
 
 export const scriptsDiagram = `flowchart TD
   subgraph Callers["Who Calls Scripts"]
-    HK["Hooks<br/>(lifecycle events)"]
-    AG["Agents<br/>(via Bash tool)"]
-    SK["Skills<br/>(workflow steps)"]
+    HK["Hooks"]
+    AG["Agents"]
+    SK["Skills"]
   end
 
   subgraph Core["Core Lifecycle"]
@@ -258,27 +258,27 @@ export const scriptsDiagram = `flowchart TD
 `;
 
 export const runtimeStateDiagram = `flowchart TD
-  subgraph VibeCrew[".vibecrew/ (Per-Project Runtime)"]
-    Config["config.json<br/>Terminal prefs, notifications,<br/>user profile"]
-    State["state.json<br/>Foundation status,<br/>active feature + phase"]
-    Backlog["backlog.json<br/>Feature specs with<br/>Kanban columns"]
-    Gamification["gamification.json<br/>XP, level, badges,<br/>skill tree, streaks"]
+  subgraph VibeCrew[".vibecrew/ Runtime"]
+    Config["config.json"]
+    State["state.json"]
+    Backlog["backlog.json"]
+    Gamification["gamification.json"]
   end
 
   subgraph Dirs["Runtime Directories"]
-    Arch["architecture/<br/>5 Mermaid .mmd files"]
-    Sessions["sessions/<br/>Session logs (JSON)"]
-    Scores["scores/<br/>Vibe Score breakdowns"]
-    Signals["signals/<br/>Inter-agent communication"]
-    Locks["locks/<br/>Advisory locks"]
-    Handoffs["handoffs/<br/>Cross-session context"]
+    Arch["architecture/"]
+    Sessions["sessions/"]
+    Scores["scores/"]
+    Signals["signals/"]
+    Locks["locks/"]
+    Handoffs["handoffs/"]
   end
 
   subgraph Consumers["Who Reads/Writes"]
-    Agents["Agents<br/>(via scripts only)"]
-    Hooks["Hooks<br/>(read for validation)"]
-    Scripts["Scripts<br/>(all state mutations)"]
-    StatusBar["Status Bar<br/>(read-only display)"]
+    Agents["Agents"]
+    Hooks["Hooks"]
+    Scripts["Scripts"]
+    StatusBar["Status Bar"]
   end
 
   Agents --> Scripts
@@ -295,24 +295,24 @@ export const runtimeStateDiagram = `flowchart TD
 `;
 
 export const safetyDiagram = `flowchart TD
-  subgraph Layer1["Layer 1: Permission Rules (settings.json)"]
+  subgraph Layer1["Layer 1: Permissions"]
     direction TB
-    Allow["66 Allowed Rules<br/>File ops, npm scripts, git,<br/>shell utilities, security audits"]
-    Deny["22 Denied Rules<br/>sudo, force push, rm -rf,<br/>global installs, kill, crontab"]
+    Allow["Allowed Rules"]
+    Deny["Denied Rules"]
   end
 
-  subgraph Layer2["Layer 2: Hook Guards (bash scripts)"]
-    PG["phase-gate.sh<br/>No source code before<br/>foundation is complete"]
-    PD["protect-data.sh<br/>Block DROP TABLE,<br/>destructive patterns"]
-    RP["restrict-paths.sh<br/>Block writes outside<br/>project root"]
-    VS["validate-signal.sh<br/>Validate inter-agent<br/>signal schemas"]
-    VPT["validate-phase-transition.sh<br/>Enforce phase ordering"]
+  subgraph Layer2["Layer 2: Hook Guards"]
+    PG["phase-gate.sh"]
+    PD["protect-data.sh"]
+    RP["restrict-paths.sh"]
+    VS["validate-signal.sh"]
+    VPT["validate-phase-transition.sh"]
   end
 
-  subgraph Layer3["Layer 3: Quality Gate (Stop hook)"]
-    QG["quality-gate.sh<br/>Typecheck + lint + build<br/>on every task completion"]
-    CL["claude-md-lint.sh<br/>CLAUDE.md size &<br/>structure validation"]
-    CG["cost-guardrails.sh<br/>Session & daily<br/>cost thresholds"]
+  subgraph Layer3["Layer 3: Quality Gate"]
+    QG["quality-gate.sh"]
+    CL["claude-md-lint.sh"]
+    CG["cost-guardrails.sh"]
   end
 
   Action["Agent attempts action"] --> Layer1
@@ -338,21 +338,21 @@ export const safetyDiagram = `flowchart TD
 export const dashboardDiagram = `flowchart LR
   subgraph Source[".vibecrew/ JSON Files"]
     direction TB
-    BL["backlog.json<br/>Feature specs"]
-    SE["sessions/*.json<br/>Session logs"]
-    SC["scores/*.json<br/>Vibe Scores"]
-    GM["gamification.json<br/>XP, badges, streaks"]
-    CF["config.json<br/>User preferences"]
+    BL["backlog.json"]
+    SE["sessions/*.json"]
+    SC["scores/*.json"]
+    GM["gamification.json"]
+    CF["config.json"]
   end
 
   subgraph Pipeline["VitePress Pipeline"]
     direction TB
-    DL["Data Loaders<br/>(.data.ts files)"]
-    VUE["Vue Components<br/>Charts, tables, forms"]
-    WS["WebSocket<br/>Real-time updates"]
+    DL["Data Loaders"]
+    VUE["Vue Components"]
+    WS["WebSocket"]
   end
 
-  subgraph Tabs["7 Dashboard Tabs"]
+  subgraph Tabs["Dashboard Tabs"]
     direction TB
     T1["Guide"]
     T2["Kanban Board"]

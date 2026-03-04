@@ -58,6 +58,60 @@ import { commands, categories } from '../data/commands';
     </div>
 
     <MermaidDiagram chart={systemDiagram} caption="Plugin components and how Claude Code loads them" />
+
+    <h4 class="agent-table-heading">Plugin Components</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Component</th><th>File / Directory</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Plugin Manifest</strong></td>
+            <td><code>.claude-plugin/plugin.json</code></td>
+            <td>Entry point that Claude Code reads on startup. Registers every agent, skill, hook binding, and MCP server so they load automatically.</td>
+          </tr>
+          <tr>
+            <td><strong>MCP Servers</strong></td>
+            <td><code>.mcp.json</code></td>
+            <td>Configures external tool servers (Context7, Chrome DevTools, Playwright, and conditionally Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) that give agents web search, browser control, and service integrations.</td>
+          </tr>
+          <tr>
+            <td><strong>Permissions</strong></td>
+            <td><code>settings.json</code></td>
+            <td>Allow/deny rules that control what agents can do without prompting. Allows file ops, npm scripts, and git; blocks sudo, force push, and destructive commands.</td>
+          </tr>
+          <tr>
+            <td><strong>Hooks</strong></td>
+            <td><code>hooks/hooks.json</code></td>
+            <td>Event bindings that map Claude Code lifecycle events (session start, tool use, stop) to bash scripts that enforce rules at zero token cost.</td>
+          </tr>
+          <tr>
+            <td><strong>Scripts</strong></td>
+            <td><code>scripts/</code></td>
+            <td>~80 bash programs that handle mechanical work: state mutations, scoring, git operations, notifications, formatting, and project analysis.</td>
+          </tr>
+          <tr>
+            <td><strong>Agents</strong></td>
+            <td><code>agents/</code></td>
+            <td>System prompt files that define each specialized AI agent's role, tools, constraints, and output format.</td>
+          </tr>
+          <tr>
+            <td><strong>Skills</strong></td>
+            <td><code>skills/</code></td>
+            <td>Slash command definitions as <code>SKILL.md</code> files. Each contains YAML metadata and a workflow body that routes to the right agent(s).</td>
+          </tr>
+          <tr>
+            <td><strong>Templates</strong></td>
+            <td><code>templates/</code></td>
+            <td>Project scaffolding templates, doc-site scaffold, and an MCP registry of additional servers that can be auto-discovered from TDR technology choices.</td>
+          </tr>
+          <tr>
+            <td><strong>Tests</strong></td>
+            <td><code>tests/</code></td>
+            <td>BATS test suite that validates hook scripts, state management, and core plugin behavior.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ═══════ Sub-Agents ═══════ -->
@@ -225,6 +279,121 @@ import { commands, categories } from '../data/commands';
     </div>
 
     <MermaidDiagram chart={hooksDiagram} caption="Hook events mapped to their enforcement scripts" />
+
+    <h4 class="agent-table-heading">Session Init Hooks</h4>
+    <p class="cmd-group-desc">Run automatically when a new Claude Code session starts.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>session-startup.sh</code></td>
+            <td>SessionStart</td>
+            <td>Checks environment (Git, Node, jq), detects terminal type, loads state, and routes to the right workflow.</td>
+          </tr>
+          <tr>
+            <td><code>sync-state.sh</code></td>
+            <td>SessionStart</td>
+            <td>Reconciles state files on startup &mdash; ensures <code>.vibecrew/</code> JSON is consistent after crashes or manual edits.</td>
+          </tr>
+          <tr>
+            <td><code>error-recovery.sh</code></td>
+            <td>SessionStart</td>
+            <td>Clears stale lock files and repairs corrupted state from previous interrupted sessions.</td>
+          </tr>
+          <tr>
+            <td><code>compact-reinject.sh</code></td>
+            <td>SessionStart (compact)</td>
+            <td>Re-injects essential context (active feature, phase, conventions) after Claude Code's <code>/compact</code> clears the context window.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Pre-Action Guards</h4>
+    <p class="cmd-group-desc">Intercept actions before they execute. Return exit code 2 to block.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>phase-gate.sh</code></td>
+            <td>PreToolUse (Write/Edit)</td>
+            <td>Blocks source code writes until the Tier 1 foundation (VISION, TDR, architecture, CLAUDE.md) is complete. Prevents coding before decisions are made.</td>
+          </tr>
+          <tr>
+            <td><code>restrict-paths.sh</code></td>
+            <td>PreToolUse (Write/Edit)</td>
+            <td>Blocks file writes outside the project root directory. Prevents agents from modifying system files or other projects.</td>
+          </tr>
+          <tr>
+            <td><code>protect-data.sh</code></td>
+            <td>PreToolUse (Bash)</td>
+            <td>Blocks destructive shell commands: <code>rm -rf</code>, <code>DROP TABLE</code>, <code>DELETE FROM</code> without WHERE, force push, and privilege escalation.</td>
+          </tr>
+          <tr>
+            <td><code>validate-phase-transition.sh</code></td>
+            <td>PreToolUse (Bash)</td>
+            <td>Enforces phase ordering &mdash; ensures foundation steps run in sequence and artifacts are complete before advancing.</td>
+          </tr>
+          <tr>
+            <td><code>validate-signal.sh</code></td>
+            <td>PreToolUse (Write/Edit)</td>
+            <td>Validates inter-agent signal file schemas, enum values, and feature ID cross-references before they're written.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Post-Action Processors</h4>
+    <p class="cmd-group-desc">Run after an action completes successfully.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>format-code.sh</code></td>
+            <td>PostToolUse (Write/Edit)</td>
+            <td>Auto-formats files after every write using the project's configured formatter (Prettier, ESLint, etc.).</td>
+          </tr>
+          <tr>
+            <td><code>notify.sh</code></td>
+            <td>Notification / PostToolUseFailure</td>
+            <td>Sends native OS notifications for permission stalls, task completions, and errors. Includes Warp Terminal deep-links when available.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Session End Checks</h4>
+    <p class="cmd-group-desc">Run when a session stops to catch issues before they persist.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>quality-gate.sh</code></td>
+            <td>Stop</td>
+            <td>Runs typecheck, lint, and build on modified source files. Blocks task completion if any check fails &mdash; the agent must fix errors before finishing.</td>
+          </tr>
+          <tr>
+            <td><code>claude-md-lint.sh</code></td>
+            <td>Stop</td>
+            <td>Validates CLAUDE.md file size and structure. Keeps it under the recommended line limit to avoid context bloat.</td>
+          </tr>
+          <tr>
+            <td><code>cost-guardrails.sh</code></td>
+            <td>Stop</td>
+            <td>Tracks session and daily API costs against configured thresholds. Warns or blocks when spending exceeds limits.</td>
+          </tr>
+          <tr>
+            <td><code>check-context.sh</code></td>
+            <td>Stop</td>
+            <td>Monitors context window usage and warns at 60% and 80%. Helps prevent sessions from running out of context mid-task.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ═══════ Slash Commands ═══════ -->
@@ -578,6 +747,76 @@ import { commands, categories } from '../data/commands';
     </div>
 
     <MermaidDiagram chart={scriptsDiagram} caption="Script categories and who calls them" />
+
+    <h4 class="agent-table-heading">Core Lifecycle</h4>
+    <p class="cmd-group-desc">Scripts that run during session startup and completion.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>session-startup.sh</code></td><td>Hook</td><td>Environment check, terminal detection, state loading, and workflow routing on every session start.</td></tr>
+          <tr><td><code>quality-gate.sh</code></td><td>Hook</td><td>Runs typecheck, lint, and build on modified files at task completion. Blocks on failure.</td></tr>
+          <tr><td><code>statusline.sh</code></td><td>Hook</td><td>Updates the terminal status bar with current feature, phase, and Vibe Score.</td></tr>
+          <tr><td><code>notify.sh</code></td><td>Hook</td><td>Sends native OS notifications for permission stalls, completions, and errors.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Feature Management</h4>
+    <p class="cmd-group-desc">Scripts that manage the feature lifecycle and backlog.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>update-backlog.sh</code></td><td>Agent / Skill</td><td>Adds, updates, or moves features in <code>backlog.json</code>. Manages Kanban column transitions.</td></tr>
+          <tr><td><code>complete-phase.sh</code></td><td>Agent / Skill</td><td>Marks a development phase as done and advances to the next phase in the 6-phase cycle.</td></tr>
+          <tr><td><code>git-branch-create.sh</code></td><td>Agent</td><td>Creates a feature branch with consistent naming: <code>feat/&lt;feature-name&gt;</code>.</td></tr>
+          <tr><td><code>create-checkpoint.sh</code></td><td>Agent</td><td>Creates a git tag checkpoint before risky operations so you can roll back with <code>/undo</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Quality &amp; Scoring</h4>
+    <p class="cmd-group-desc">Scripts that calculate Vibe Scores and analyze quality.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>calculate-vibe-score.sh</code></td><td>Agent</td><td>Computes the session's Vibe Score (0&ndash;130) based on deductions and bonuses across quality dimensions.</td></tr>
+          <tr><td><code>aggregate-scores.sh</code></td><td>Agent</td><td>Aggregates Vibe Scores across sessions for trend analysis and Performance Coach input.</td></tr>
+          <tr><td><code>analyze-test-gaps.sh</code></td><td>Agent</td><td>Compares modified source files against test coverage to identify untested code paths.</td></tr>
+          <tr><td><code>apply-mutation.sh</code></td><td>Agent</td><td>Applies Performance Coach CLAUDE.md mutation proposals after user approval.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Project Analysis</h4>
+    <p class="cmd-group-desc">Scripts that analyze the codebase and extract patterns.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>detect-conventions.sh</code></td><td>Agent</td><td>Scans the codebase for naming conventions, file patterns, and code style to populate CLAUDE.md.</td></tr>
+          <tr><td><code>extract-design-system.sh</code></td><td>Agent</td><td>Extracts CSS tokens, color palette, typography, and spacing from existing stylesheets.</td></tr>
+          <tr><td><code>detect-secrets.sh</code></td><td>Agent</td><td>Scans for accidentally committed secrets, API keys, and credentials.</td></tr>
+          <tr><td><code>scan-dependencies.sh</code></td><td>Agent</td><td>Audits dependencies for known vulnerabilities and license compliance issues.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">State &amp; Config</h4>
+    <p class="cmd-group-desc">Scripts that manage the <code>.vibecrew/</code> runtime state.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+        <tbody>
+          <tr><td><code>init-vibecrew-state.sh</code></td><td>Skill</td><td>Creates the initial <code>.vibecrew/</code> directory structure and default JSON files during <code>/setup</code>.</td></tr>
+          <tr><td><code>migrate-state.sh</code></td><td>Skill</td><td>Migrates state files between VibeCrew versions when schemas change.</td></tr>
+          <tr><td><code>generate-handoff.sh</code></td><td>Skill</td><td>Creates a structured context transfer document for cross-session continuity.</td></tr>
+          <tr><td><code>detect-terminal.sh</code></td><td>Skill</td><td>Detects terminal type (Warp, iTerm2, VS Code, etc.) and configures notification and deep-link support.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ═══════ Runtime State ═══════ -->
@@ -604,6 +843,76 @@ import { commands, categories } from '../data/commands';
     </div>
 
     <MermaidDiagram chart={runtimeStateDiagram} caption="Runtime state files and who reads/writes them" />
+
+    <h4 class="agent-table-heading">Core State Files</h4>
+    <p class="cmd-group-desc">JSON files that store project configuration and progress.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>File</th><th>Read By</th><th>What It Stores</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>config.json</code></td>
+            <td>All agents, hooks, status bar</td>
+            <td>Terminal preferences, notification settings, user profile (role, verbosity, autonomy, etc.), cost thresholds, and MCP server toggles.</td>
+          </tr>
+          <tr>
+            <td><code>state.json</code></td>
+            <td>All agents, hooks, status bar</td>
+            <td>Foundation completion status, active feature name and current phase, feature history, and last session timestamp.</td>
+          </tr>
+          <tr>
+            <td><code>backlog.json</code></td>
+            <td>Orchestrator, Builder, dashboard</td>
+            <td>Feature specifications with Kanban columns (Ideas &rarr; Planned &rarr; In Progress &rarr; Testing &rarr; Review &rarr; Done), priority, complexity, and acceptance criteria.</td>
+          </tr>
+          <tr>
+            <td><code>gamification.json</code></td>
+            <td>Performance Coach, dashboard</td>
+            <td>XP, level, earned badges, skill tree progress, active streaks, and challenge completions. Opt-in via <code>/profile</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Runtime Directories</h4>
+    <p class="cmd-group-desc">Sub-directories that store session data and inter-agent communication.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Directory</th><th>What It Stores</th><th>Who Uses It</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>architecture/</code></td>
+            <td>5 Mermaid <code>.mmd</code> files: system topology, ER schema, state flows, API sequences, and component tree.</td>
+            <td>Builder (reads for context), Doc Generator (freshness check), injected once per session.</td>
+          </tr>
+          <tr>
+            <td><code>sessions/</code></td>
+            <td>JSON logs for each session: start/end time, features worked on, Vibe Score, token usage, cost.</td>
+            <td>Performance Coach (trend analysis), dashboard (stats/trends tabs).</td>
+          </tr>
+          <tr>
+            <td><code>scores/</code></td>
+            <td>Detailed Vibe Score breakdowns: each deduction and bonus with reasons.</td>
+            <td>Performance Coach, dashboard (trends tab), status bar (current score).</td>
+          </tr>
+          <tr>
+            <td><code>signals/</code></td>
+            <td>Inter-agent signal files for communication between worktree agents and the main session.</td>
+            <td>Agents (write signals), hooks (validate schema before write).</td>
+          </tr>
+          <tr>
+            <td><code>locks/</code></td>
+            <td>Advisory lock files that prevent concurrent modifications to shared state.</td>
+            <td>Scripts (acquire/release), error recovery (clear stale locks).</td>
+          </tr>
+          <tr>
+            <td><code>handoffs/</code></td>
+            <td>Structured context transfer documents created by <code>/handoff</code> for cross-session continuity.</td>
+            <td>Session Startup (detects and loads), agents (reads for context).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ═══════ Permissions & Safety ═══════ -->

@@ -287,12 +287,10 @@ const backlogJson = `{
     <h3>When to use <code>/run-backlog</code> vs <code>/new-feature</code></h3>
     <div class="card-grid">
       <div class="card">
-        <div class="card-icon green">&#9654;</div>
         <h4><code>/run-backlog</code></h4>
         <p>Features are well-specced with clear acceptance criteria. You trust VibeCrew to make implementation decisions. You want to batch-build multiple features while you do other work.</p>
       </div>
       <div class="card">
-        <div class="card-icon blue">&#9998;</div>
         <h4><code>/new-feature</code></h4>
         <p>The feature needs creative direction or nuanced decisions. You want to guide each phase. You're learning the workflow and want to see each step.</p>
       </div>
@@ -356,17 +354,14 @@ const backlogJson = `{
 
     <div class="card-grid">
       <div class="card">
-        <div class="card-icon blue">&#9664;</div>
         <h4>Left: Planning</h4>
         <p>Your primary focus. <code>/plan-features</code> to refine upcoming specs, <code>/idea</code> to capture thoughts, <code>/status</code> to check progress, <code>/check</code> to run quality gates.</p>
       </div>
       <div class="card">
-        <div class="card-icon green">&#9650;</div>
         <h4>Right top: Development</h4>
         <p>The one in-progress feature moves through the 6 phases here. Guide decisions, review output, run <code>/wrap</code> when done.</p>
       </div>
       <div class="card">
-        <div class="card-icon amber">&#9660;</div>
         <h4>Right bottom: Terminal</h4>
         <p>A raw shell for <code>npm run dev</code>, <code>git</code> commands, manual tests, or quick file browsing. Not a Claude Code session.</p>
       </div>
@@ -475,27 +470,22 @@ const backlogJson = `{
 
     <div class="card-grid">
       <div class="card">
-        <div class="card-icon purple">Mo</div>
         <h4>Monday: Foundation</h4>
         <p><strong>1 tab, 1 session.</strong> Run <code>/new-project</code>. Complete all 6 foundation steps. Run <code>/plan-features</code> to spec out your first 5 features. End with <code>/wrap</code>. Total: ~45 min.</p>
       </div>
       <div class="card">
-        <div class="card-icon blue">Tu</div>
         <h4>Tuesday: First features</h4>
         <p><strong>1 tab, 2 sessions.</strong> Build user-auth in session 1. Build trip-creation in session 2. <code>/wrap</code> after each. Capture 3 ideas with <code>/idea</code> along the way. Total: ~2 hours.</p>
       </div>
       <div class="card">
-        <div class="card-icon green">We</div>
         <h4>Wednesday: Full 3-pane workflow</h4>
         <p><strong>3 panes.</strong> Build itinerary-builder in Development while planning group-invites in Planning. Dev server running in Terminal. Once itinerary-builder wraps, start group-invites immediately &mdash; spec is already polished. Total: ~2 hours, 2 features.</p>
       </div>
       <div class="card">
-        <div class="card-icon amber">Th</div>
         <h4>Thursday: Final feature + cleanup</h4>
         <p><strong>3 panes.</strong> Development: Build expense-splitting. Planning: Run <code>/simplify</code> on earlier features. Run <code>/heal</code> if CI has issues. Total: ~1.5 hours.</p>
       </div>
       <div class="card">
-        <div class="card-icon red">Fr</div>
         <h4>Friday: Polish + review</h4>
         <p><strong>1 tab.</strong> Run <code>/status</code>. Review Vibe Score trends. Plan next week from captured ideas. Review and merge PRs. <code>/wrap</code> to close the week. Total: ~1 hour.</p>
       </div>

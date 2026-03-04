@@ -896,32 +896,26 @@ Open full dashboard: http://localhost:5173/achievements</code></pre>
 
     <div class="dashboard-cards">
       <div class="card">
-        <div class="card-icon purple">&#127942;</div>
         <h4>Profile Header</h4>
         <p>Level badge (color-coded by tier), title, XP progress bar, streak counter, total sessions and features shipped.</p>
       </div>
       <div class="card">
-        <div class="card-icon amber">&#11088;</div>
         <h4>Badge Gallery</h4>
         <p>3-column grid with category tabs (Milestones, Skills, Special). Earned badges full-color, locked badges faded with progress.</p>
       </div>
       <div class="card">
-        <div class="card-icon blue">&#9672;</div>
         <h4>Skill Radar Chart</h4>
         <p>SVG 5-axis spider chart showing skill levels. Your development profile shape at a glance.</p>
       </div>
       <div class="card">
-        <div class="card-icon green">&#9632;</div>
         <h4>Streak Calendar</h4>
         <p>GitHub-style 12-week heatmap. Color intensity = Vibe Score. Grace days marked with a frost icon.</p>
       </div>
       <div class="card">
-        <div class="card-icon red">&#9889;</div>
         <h4>Active Challenges</h4>
         <p>Cards for each challenge with progress bar, time remaining, and type badge.</p>
       </div>
       <div class="card">
-        <div class="card-icon purple">&#128200;</div>
         <h4>Score Sparkline</h4>
         <p>Last 30 sessions as a mini SVG line chart with trend arrow and average.</p>
       </div>
@@ -1026,11 +1020,4 @@ Open full dashboard: http://localhost:5173/achievements</code></pre>
 /* Dashboard cards */
 .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
 
-/* Card icon colors (reuse from components.css if available) */
-.card-icon { width: 36px; height: 36px; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-bottom: 0.75rem; }
-.card-icon.purple { background: var(--color-accent-bg); color: var(--color-accent); }
-.card-icon.amber { background: var(--color-amber-dim); color: var(--color-amber); }
-.card-icon.blue { background: var(--color-blue-dim); color: var(--color-blue); }
-.card-icon.green { background: var(--color-green-dim); color: var(--color-green); }
-.card-icon.red { background: var(--color-red-dim); color: var(--color-red); }
 </style>

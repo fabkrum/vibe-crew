@@ -146,12 +146,10 @@ const configSnippet = `{
 
     <div class="card-grid">
       <div class="card">
-        <div class="card-icon purple">&#128194;</div>
         <h4>New Project</h4>
         <p>Create an empty directory, <code>cd</code> into it, and launch with <code>--plugin-dir</code>. The Session Startup agent detects there's no <code>.vibecrew/</code> folder and prompts you to run <code>/setup</code>.</p>
       </div>
       <div class="card">
-        <div class="card-icon green">&#128193;</div>
         <h4>Existing Project</h4>
         <p><code>cd</code> into your project and launch with <code>--plugin-dir</code>. If <code>.vibecrew/</code> exists, Session Startup loads your state and shows a status summary. If not, it prompts for <code>/setup</code>.</p>
       </div>
@@ -452,20 +450,12 @@ const configSnippet = `{
 
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
 .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; }
-.card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
-.card-icon.purple { color: var(--color-accent); }
-.card-icon.green { color: var(--color-green); }
 .card h4 { margin-top: 0; margin-bottom: 0.5rem; }
 .card p { color: var(--color-text-secondary); font-size: 0.9rem; margin: 0; }
 
 .page-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
 .page-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; text-decoration: none; color: inherit; transition: border-color 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; }
 .page-card:hover { border-color: var(--color-accent); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.page-card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-.page-card-icon.purple { color: var(--color-accent); }
-.page-card-icon.green { color: var(--color-green); }
-.page-card-icon.blue { color: var(--color-blue); }
-.page-card-icon.amber { color: var(--color-amber); }
 .page-card h4 { margin: 0 0 0.5rem; font-size: 1rem; }
 .page-card p { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 0 auto; }
 .card-arrow { color: var(--color-accent); font-size: 0.85rem; margin-top: 1rem; font-weight: 500; }

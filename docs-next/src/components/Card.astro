@@ -1,17 +1,14 @@
 ---
 interface Props {
   href?: string;
-  icon?: string;
-  iconColor?: 'purple' | 'green' | 'amber' | 'blue' | 'red';
   title: string;
 }
 
-const { href, icon, iconColor = 'purple', title } = Astro.props;
+const { href, title } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
 
 <Tag href={href} class={`card${href ? '' : ''}`}>
-  {icon && <div class={`card-icon ${iconColor}`}><Fragment set:html={icon} /></div>}
   <h4>{title}</h4>
   <p><slot /></p>
   {href && <div class="card-arrow">Read more &rarr;</div>}

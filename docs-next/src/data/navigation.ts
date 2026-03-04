@@ -26,7 +26,6 @@ export const navigation: NavGroup[] = [
     links: [
       { title: 'Daily Workflow', slug: 'workflow' },
       { title: 'Advanced Features', slug: 'advanced-features' },
-      { title: 'Personalization', slug: 'personalization' },
     ],
   },
   {
@@ -45,6 +44,7 @@ export const navigation: NavGroup[] = [
       { title: 'Runtime State', slug: 'runtime' },
       { title: 'Permissions & Safety', slug: 'safety' },
       { title: 'Self-Improving System', slug: 'self-improving' },
+      { title: 'Personalization', slug: 'personalization' },
       { title: 'Gamification', slug: 'gamification' },
       { title: 'Vibe Dashboard', slug: 'dashboard' },
     ],

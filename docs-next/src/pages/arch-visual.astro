@@ -10,6 +10,7 @@ import {
   runtimeStateDiagram,
   safetyDiagram,
 } from '../data/diagrams';
+import { commands, categories } from '../data/commands';
 ---
 
 <DocsLayout title="How It Works" sectionLabel="Architecture" activeSlug="arch-visual">
@@ -25,6 +26,7 @@ import {
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-agents" data-tab="agents">Sub-Agents</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-hooks" data-tab="hooks">Hooks</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-commands" data-tab="commands">Slash Commands</button>
+    <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-skills" data-tab="skills">Skills Reference</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-scripts" data-tab="scripts">Bash Scripts</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-runtime" data-tab="runtime">Runtime State</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-safety" data-tab="safety">Permissions &amp; Safety</button>
@@ -247,6 +249,46 @@ import {
     </div>
 
     <MermaidDiagram chart={commandsDiagram} caption="How a slash command flows from user input to results" />
+  </div>
+
+  <!-- ═══════ Skills Reference ═══════ -->
+  <div class="arch-panel" id="panel-skills" role="tabpanel" hidden>
+    <div class="panel-intro">
+      <h3>Skills Reference</h3>
+      <p>Every slash command maps to a <strong>skill</strong> &mdash; a <code>SKILL.md</code> file in the <code>skills/</code> directory. Skills range from zero-cost script-only operations (like <code>/idea</code> and <code>/status</code>) to complex multi-agent orchestrations (like <code>/new-project</code> and <code>/wrap</code>). Use the category filters to browse all {commands.length} skills.</p>
+    </div>
+
+    <div class="skills-filters" id="skills-filters">
+      <button class="filter-pill active" data-cat="all">All</button>
+      {categories.map((cat) => (
+        <button class="filter-pill" data-cat={cat}>{cat}</button>
+      ))}
+    </div>
+
+    <div class="skills-table-wrap">
+      <table class="agent-table" id="skills-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Category</th>
+            <th>Agent(s)</th>
+            <th>Tier</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          {commands.map((cmd) => (
+            <tr data-cat={cmd.category}>
+              <td><code>{cmd.name}{cmd.args ? ` ${cmd.args}` : ''}</code></td>
+              <td><span class="cat-badge">{cmd.category}</span></td>
+              <td>{cmd.agent}</td>
+              <td>{cmd.tier}</td>
+              <td>{cmd.purpose}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ═══════ Bash Scripts ═══════ -->
@@ -574,6 +616,53 @@ import {
     color: var(--color-blue);
   }
 
+  /* ──── Skills filters ──── */
+  .skills-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-pill {
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+  }
+
+  .filter-pill:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent-dim);
+  }
+
+  .filter-pill.active {
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    border-color: rgba(167, 139, 250, 0.2);
+  }
+
+  .skills-table-wrap {
+    overflow-x: auto;
+  }
+
+  .cat-badge {
+    display: inline-block;
+    padding: 0.15em 0.5em;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
   /* ──── Safety columns ──── */
   .safety-columns {
     display: grid;
@@ -706,6 +795,21 @@ import {
     tabs.forEach(function(tab) {
       tab.addEventListener('click', function() {
         switchTab(tab.getAttribute('data-tab'));
+      });
+    });
+
+    // Skills category filter
+    var pills = document.querySelectorAll('.filter-pill');
+    var skillRows = document.querySelectorAll('#skills-table tbody tr');
+    pills.forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        pills.forEach(function(p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        var cat = pill.getAttribute('data-cat');
+        skillRows.forEach(function(row) {
+          var match = cat === 'all' || row.getAttribute('data-cat') === cat;
+          row.style.display = match ? '' : 'none';
+        });
       });
     });
   })();

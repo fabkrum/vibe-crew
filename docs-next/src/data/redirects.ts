@@ -32,7 +32,7 @@ export const workflowRedirects: Record<string, string> = {
   '#challenges': 'personalization.html#challenges',
   '#quizzes': 'personalization.html#quizzes',
   '#achievements-dashboard': 'personalization.html#achievements-dashboard',
-  '#efficiency': 'tips.html#efficiency',
-  '#system-review': 'tips.html#system-review',
-  '#troubleshooting': 'tips.html#troubleshooting',
+  '#efficiency': 'faq-tips.html#efficiency',
+  '#system-review': 'faq-tips.html#system-review',
+  '#troubleshooting': 'faq-tips.html#troubleshooting',
 };

@@ -18,6 +18,7 @@ export const navigation: NavGroup[] = [
       { title: 'Project Planning', slug: 'project-planning' },
       { title: 'Warp Integration', slug: 'warp' },
       { title: 'User Profiles', slug: 'profile-system' },
+      { title: 'FAQ, Tips & Troubleshooting', slug: 'faq-tips' },
     ],
   },
   {
@@ -27,7 +28,6 @@ export const navigation: NavGroup[] = [
       { title: 'Advanced Features', slug: 'advanced-features' },
       { title: 'Personalization', slug: 'personalization' },
       { title: 'Gamification', slug: 'gamification' },
-      { title: 'Tips & Troubleshooting', slug: 'tips' },
       { title: 'Example Session', slug: 'example-session' },
     ],
   },
@@ -58,7 +58,6 @@ export const navigation: NavGroup[] = [
       { title: 'UI Pattern Guide', slug: 'ui-patterns' },
       { title: 'Business Patterns', slug: 'business-patterns' },
       { title: 'Glossary', slug: 'glossary' },
-      { title: 'FAQ', slug: 'faq' },
     ],
   },
   {

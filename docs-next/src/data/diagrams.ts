@@ -7,7 +7,7 @@ export const systemDiagram = `flowchart TD
     Settings["settings.json<br/>Permissions"]
     Hooks["hooks/hooks.json<br/>Event Bindings"]
     Scripts["scripts/<br/>~80 Bash Scripts"]
-    Agents["agents/<br/>14 Agent Prompts"]
+    Agents["agents/<br/>Agent Prompts"]
     Skills["skills/<br/>31 Slash Commands"]
   end
 

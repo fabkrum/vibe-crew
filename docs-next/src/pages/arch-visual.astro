@@ -44,7 +44,7 @@ import { commands, categories } from '../data/commands';
           <span class="key-icon purple">&#9632;</span>
           <div>
             <strong>What it is</strong>
-            <p>A self-contained folder with a <code>plugin.json</code> manifest that registers 14 agents, 33 slash commands, 16 hooks, ~80 scripts, and 9 MCP servers.</p>
+            <p>A self-contained folder with a <code>plugin.json</code> manifest that registers agents, slash commands, hooks, scripts, and MCP servers &mdash; everything the system needs in one install.</p>
           </div>
         </div>
         <div class="key-point">
@@ -64,13 +64,13 @@ import { commands, categories } from '../data/commands';
   <div class="arch-panel" id="panel-agents" role="tabpanel" hidden>
     <div class="panel-intro">
       <h3>Sub-Agents</h3>
-      <p>Instead of one AI doing everything, VibeCrew splits work across <strong>14 specialized agents</strong> &mdash; like a real development team with planners, builders, testers, and reviewers. Each agent runs a specific model (Opus for complex decisions, Haiku for fast mechanical tasks, Sonnet for documentation) and operates either inline or in an isolated worktree.</p>
+      <p>Instead of one AI doing everything, VibeCrew splits work across <strong>specialized agents</strong> &mdash; like a real development team with planners, builders, testers, and reviewers. Most agents run on Opus, the most powerful model available. This is intentional: while Opus costs more per task and takes longer, the higher quality output means significantly less rework. Getting it right the first time saves more time and money than running a cheaper model that needs multiple correction rounds. Fast, mechanical tasks (routing, running shell commands) use Haiku, and template-driven output like documentation uses Sonnet.</p>
       <div class="key-points">
         <div class="key-point">
           <span class="key-icon purple">&#9632;</span>
           <div>
             <strong>What they are</strong>
-            <p>AI "specialists" with scoped tool access, model selection, and turn budgets. The Workflow Orchestrator routes work; the Builder writes code; the Verifier runs tests; the Performance Coach scores sessions.</p>
+            <p>AI specialists with scoped tool access, model selection, and turn budgets. Most run on Opus (the most capable model) because planning, coding, security, and analysis are tasks where mistakes are expensive to fix later. Haiku handles fast mechanical work, and Sonnet handles documentation.</p>
           </div>
         </div>
         <div class="key-point">
@@ -91,7 +91,7 @@ import { commands, categories } from '../data/commands';
 
     <MermaidDiagram chart={agentInteractionDiagram} caption="Agent topology: how agents hand off work to each other" />
 
-    <h4 class="agent-table-heading">All 14 Agents</h4>
+    <h4 class="agent-table-heading">Agent Reference</h4>
     <div class="agent-table-wrap">
       <table class="agent-table">
         <thead>
@@ -237,7 +237,7 @@ import { commands, categories } from '../data/commands';
           <span class="key-icon purple">&#9632;</span>
           <div>
             <strong>What they are</strong>
-            <p>33 commands across 7 categories: setup, planning, development, quality, safety, session management, and gamification. Some are script-only (zero token cost), others orchestrate multiple agents.</p>
+            <p>Commands across several categories: setup, planning, development, quality, safety, session management, and gamification. Some are script-only (zero token cost), others orchestrate multiple agents.</p>
           </div>
         </div>
         <div class="key-point">
@@ -355,7 +355,7 @@ import { commands, categories } from '../data/commands';
           <span class="key-icon purple">&#9632;</span>
           <div>
             <strong>What it is</strong>
-            <p>Three concentric safety layers: <code>settings.json</code> (66 allow rules, 22 deny rules), PreToolUse hook scripts (phase gate, path restrictions, destructive command blocking), and Stop hook quality gates (typecheck, lint, build, cost limits).</p>
+            <p>Three concentric safety layers: <code>settings.json</code> (allow and deny rules), PreToolUse hook scripts (phase gate, path restrictions, destructive command blocking), and Stop hook quality gates (typecheck, lint, build, cost limits).</p>
           </div>
         </div>
         <div class="key-point">

@@ -1,0 +1,507 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+
+const visionExample = `# VISION.md — Mealwise
+
+## Problem Statement
+Home cooks waste an average of 30% of groceries because they shop without
+a plan and forget what's already in their fridge. Existing meal-planning
+apps assume users want to follow rigid recipes, ignoring the reality that
+most people cook with what they have on hand.
+
+## Target Users
+
+### Persona 1 — Busy Parent (Primary)
+- **Role:** Works full-time, cooks dinner most weeknights
+- **Pain:** Spends 20 minutes every evening staring at the fridge
+- **Goal:** "Tell me what I can make with what I already have"
+
+### Persona 2 — Budget-Conscious Student
+- **Role:** Limited kitchen, tight grocery budget
+- **Pain:** Buys ingredients for one recipe, the rest goes to waste
+- **Goal:** "Use everything I buy before it expires"
+
+## Core Features
+1. **Pantry Scanner** — Photograph your fridge/pantry, AI identifies ingredients
+2. **Smart Suggestions** — Recipes ranked by how many ingredients you already own
+3. **Grocery Optimizer** — Shopping list that fills gaps across multiple meals
+4. **Expiry Alerts** — Push notifications before food expires
+
+## Success Metrics
+- 50% reduction in reported food waste (user survey, month 3)
+- 70% weekly retention after first meal planned
+- Average 3 meals planned per week by active users
+
+## First Value Action
+Scan their pantry and see the first 3 meal suggestions within 60 seconds.
+
+## Constraints
+- Mobile-first (iOS + Android via React Native or PWA)
+- Must work offline for pantry scanning (on-device model)
+- No subscription required for core features (freemium)`;
+
+const badVisionExamples = `# Bad examples — too vague for VibeCrew to act on
+
+## ❌ "I want to build an app for food"
+  → What about food? Ordering? Cooking? Reviews? Delivery?
+
+## ❌ "Target users: everyone"
+  → No one builds for everyone. Who has the sharpest pain?
+
+## ❌ "Features: social features, AI, analytics"
+  → These are categories, not features. What does the user DO?
+
+## ❌ "Success: lots of users"
+  → How many? Doing what? By when?`;
+---
+
+<DocsLayout title="Project Planning" sectionLabel="How It Works" activeSlug="project-planning">
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#overview">What Happens in Tier 1</a></li>
+      <li><a href="#vision">Writing a Great Vision</a></li>
+      <li><a href="#example">Concrete Example: Mealwise</a></li>
+      <li><a href="#design-system">Dealing with an Existing Style Guide</a></li>
+      <li><a href="#tdr">Technology Decisions</a></li>
+      <li><a href="#roadmap">Prioritizing Your Roadmap</a></li>
+      <li><a href="#common-mistakes">Common Mistakes</a></li>
+      <li><a href="#related">Related Pages</a></li>
+    </ol>
+  </div>
+
+  <div class="panel-intro">
+    <h2>Project Planning</h2>
+    <p>Before VibeCrew writes a single line of source code, it builds a foundation: a shared understanding of what you're building, who it's for, how it should look, and which technologies to use. This page explains how to make the most of that process.</p>
+  </div>
+
+  <hr>
+
+  <!-- ── Overview ── -->
+  <section class="section" id="overview">
+    <h3>What Happens in Tier 1</h3>
+    <p>When you run <code>/new-project</code>, VibeCrew walks you through creating 6 artifacts in order. Each one builds on the previous. No source code writes are allowed until all 6 are complete &mdash; this is enforced by the <a href="hooks.html">phase-gate hook</a>, not by suggestion.</p>
+
+    <div class="artifact-flow">
+      <div class="artifact-step">
+        <div class="artifact-number">1</div>
+        <div class="artifact-content">
+          <h4>VISION.md</h4>
+          <p>Problem, personas, core features, success metrics, constraints. <strong>This is the single most important artifact</strong> &mdash; every other decision flows from it.</p>
+        </div>
+      </div>
+      <div class="artifact-step">
+        <div class="artifact-number">2</div>
+        <div class="artifact-content">
+          <h4>Design System + Brief</h4>
+          <p>Visual tokens (<code>design-system.css</code>) and design rationale (<code>design-brief.md</code>). Created via a design interview or by importing your existing style guide.</p>
+        </div>
+      </div>
+      <div class="artifact-step">
+        <div class="artifact-number">3</div>
+        <div class="artifact-content">
+          <h4>Technology Decision Record</h4>
+          <p>Framework, database, auth, hosting &mdash; every choice documented with trade-offs. The <a href="agents.html">Stack Scout</a> agent researches options; the <a href="agents.html">Opponent Processor</a> stress-tests them.</p>
+        </div>
+      </div>
+      <div class="artifact-step">
+        <div class="artifact-number">4</div>
+        <div class="artifact-content">
+          <h4>Architecture Diagrams</h4>
+          <p>5 Mermaid diagrams: system topology, entity-relationship, user flows, API sequences, component tree. Generated from your vision and tech stack.</p>
+        </div>
+      </div>
+      <div class="artifact-step">
+        <div class="artifact-number">5</div>
+        <div class="artifact-content">
+          <h4>Roadmap</h4>
+          <p>Features from your vision, prioritized into MVP (Tier 1), Growth (Tier 2), and Future (Tier 3). Dependencies mapped between features.</p>
+        </div>
+      </div>
+      <div class="artifact-step">
+        <div class="artifact-number">6</div>
+        <div class="artifact-content">
+          <h4>CLAUDE.md</h4>
+          <p>Project conventions synthesized from all prior artifacts. Under 200 lines &mdash; every line earns its token cost.</p>
+        </div>
+      </div>
+    </div>
+
+    <Callout type="info" title="You can skip artifacts">
+      <p>Each artifact can be marked "skipped" if you want to move fast. But the more you skip, the less context VibeCrew's agents have when building features later. The vision and design system have the highest impact.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ── Writing a Great Vision ── -->
+  <section class="section" id="vision">
+    <h3>Writing a Great Vision</h3>
+    <p>VibeCrew asks you 6 questions to generate <code>VISION.md</code>. The quality of your answers directly determines how well every subsequent step works. Here's how to make them count.</p>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon green">&#9679;</div>
+        <h4>Be Specific About the Problem</h4>
+        <p><strong>Weak:</strong> "People have trouble managing their time."</p>
+        <p><strong>Strong:</strong> "Freelance designers lose 5+ hours per week switching between invoicing, time-tracking, and project management tools that don't talk to each other."</p>
+        <p class="tip-why">Specific problems lead to specific features. Vague problems lead to feature creep.</p>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon green">&#9679;</div>
+        <h4>Define Real Personas, Not Demographics</h4>
+        <p><strong>Weak:</strong> "Target: 25-40 year old professionals."</p>
+        <p><strong>Strong:</strong> "Freelance designer who juggles 3-5 clients. Pain: enters the same time data into 3 different apps. Goal: one place for time, invoices, and project status."</p>
+        <p class="tip-why">A persona with a pain point and a goal gives agents enough context to make UI and feature decisions on your behalf.</p>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon green">&#9679;</div>
+        <h4>Name Features as User Actions</h4>
+        <p><strong>Weak:</strong> "AI features, analytics dashboard, social integration."</p>
+        <p><strong>Strong:</strong> "Auto-generate invoice from tracked hours. Show weekly earnings trend. Share project status link with client."</p>
+        <p class="tip-why">Action-oriented features become acceptance criteria. Abstract categories don't.</p>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon green">&#9679;</div>
+        <h4>Make Success Measurable</h4>
+        <p><strong>Weak:</strong> "Get lots of users and good retention."</p>
+        <p><strong>Strong:</strong> "70% of users who complete onboarding create their first invoice within 24 hours. 60% weekly retention at month 2."</p>
+        <p class="tip-why">Measurable goals help the roadmap prioritize: features that move the metrics get built first.</p>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon green">&#9679;</div>
+        <h4>Nail the First Value Action</h4>
+        <p><strong>Weak:</strong> "Users sign up and explore the dashboard."</p>
+        <p><strong>Strong:</strong> "Start a timer on their first project and see it reflected on the dashboard within 30 seconds."</p>
+        <p class="tip-why">This single sentence defines your onboarding flow and what VibeCrew builds first.</p>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-icon green">&#9679;</div>
+        <h4>State Constraints Up Front</h4>
+        <p><strong>Examples:</strong> Mobile-first. Must integrate with Stripe. Offline support required. No vendor lock-in. Budget under $50/month for infrastructure.</p>
+        <p class="tip-why">Constraints guide the TDR. Without them, the Stack Scout has to guess &mdash; and might guess wrong.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Concrete Example ── -->
+  <section class="section" id="example">
+    <h3>Concrete Example: Mealwise</h3>
+    <p>Here's what a well-written <code>VISION.md</code> looks like for a fictional meal-planning app. Notice how every section gives VibeCrew enough detail to make decisions autonomously.</p>
+
+    <CodeBlock code={visionExample} lang="markdown" label="VISION.md — Mealwise (example)" />
+
+    <h4 class="agent-table-heading">Why This Works</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Section</th><th>What VibeCrew Does With It</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Problem Statement</strong></td><td>Frames the entire product. Agents reference this when evaluating feature priorities and UI decisions.</td></tr>
+          <tr><td><strong>Persona 1 — Busy Parent</strong></td><td>Drives the "quick daily check" usage pattern → mobile-first design, fast load times, minimal taps to core action.</td></tr>
+          <tr><td><strong>Persona 2 — Student</strong></td><td>Drives the "budget" angle → grocery optimizer becomes high-priority, premium upsell opportunities identified.</td></tr>
+          <tr><td><strong>Core Features (4 items)</strong></td><td>Becomes the initial backlog. Each feature gets a spec during <code>/plan-features</code>. Numbered order hints at priority.</td></tr>
+          <tr><td><strong>Success Metrics</strong></td><td>Defines what "done" looks like. The roadmap prioritizes features that move these numbers.</td></tr>
+          <tr><td><strong>First Value Action</strong></td><td>Defines the onboarding flow. The Builder agent builds this first. The E2E test validates it.</td></tr>
+          <tr><td><strong>Constraints</strong></td><td>The Stack Scout uses these as hard requirements when evaluating technology options in the TDR.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading" style="margin-top: 2rem;">What <em>Not</em> to Write</h4>
+    <p class="cmd-group-desc">Vague inputs produce vague outputs. Here's what to avoid.</p>
+    <CodeBlock code={badVisionExamples} lang="markdown" label="Common anti-patterns" />
+  </section>
+
+  <hr>
+
+  <!-- ── Design System ── -->
+  <section class="section" id="design-system">
+    <h3>Dealing with an Existing Style Guide</h3>
+    <p>Step 2 of the foundation creates your design tokens (<code>design-system.css</code>) and design rationale (<code>design-brief.md</code>). If you already have a style guide, brand kit, or component library, you don't need to go through the full 10-question design interview &mdash; VibeCrew can import your existing tokens directly.</p>
+
+    <h4>The Pre-Design Gate</h4>
+    <p>Before the design interview starts, VibeCrew asks one question: <em>"Do you have an existing design system or style guide you'd like to import?"</em></p>
+
+    <div class="path-cards">
+      <div class="path-card">
+        <div class="path-header no-system">
+          <span class="path-label">No existing system</span>
+        </div>
+        <div class="path-body">
+          <p>You go through the full 3-phase interview:</p>
+          <ol>
+            <li><strong>Product &amp; Audience Context</strong> (6 questions) &mdash; what you're building, who uses it, how it should feel</li>
+            <li><strong>Visual Direction</strong> &mdash; choose 1 of 3 generated palettes (Safe, Modern, Signature)</li>
+            <li><strong>Component Preferences</strong> (2-3 questions) &mdash; navigation style, data display, interaction density</li>
+          </ol>
+          <p>Takes about 5 minutes. Output: complete <code>design-system.css</code> + <code>design-brief.md</code>.</p>
+        </div>
+      </div>
+
+      <div class="path-card">
+        <div class="path-header has-system">
+          <span class="path-label">Importing existing tokens</span>
+        </div>
+        <div class="path-body">
+          <p>Point VibeCrew at your source material. Supported formats:</p>
+          <div class="agent-table-wrap" style="margin-bottom: 1rem;">
+            <table class="agent-table">
+              <thead><tr><th>Format</th><th>What Gets Extracted</th></tr></thead>
+              <tbody>
+                <tr><td><strong>CSS file</strong></td><td>Custom properties (colors, spacing, typography, radii, shadows)</td></tr>
+                <tr><td><strong>Tailwind config</strong></td><td>Theme values: colors, fonts, spacing scale, border-radius</td></tr>
+                <tr><td><strong>JSON tokens</strong></td><td>Design token files (Style Dictionary, Figma Tokens, custom)</td></tr>
+                <tr><td><strong>URL</strong></td><td>Fetches the page, extracts computed styles and token patterns</td></tr>
+                <tr><td><strong>Figma file</strong></td><td>Styles and variables via Figma MCP server (if connected)</td></tr>
+                <tr><td><strong>Brand PDF</strong></td><td>Colors, typography, and spacing from brand guidelines</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>After extraction, VibeCrew shows a <strong>gap analysis</strong> &mdash; which tokens were found and which need defaults. You then answer only the <strong>component preference questions</strong> (Phase 3: navigation style, data display, interaction density), since those are UX choices your style guide doesn't cover.</p>
+        </div>
+      </div>
+    </div>
+
+    <Callout type="tip" title="Partial style guides are fine">
+      <p>If your brand kit only has colors and a logo, that's enough. VibeCrew imports what it can and fills in the gaps (typography scale, spacing, shadows, etc.) with sensible defaults that match your color palette. The gap analysis shows exactly what was imported vs. generated.</p>
+    </Callout>
+
+    <h4 style="margin-top: 2rem;">Tips for Importing</h4>
+    <div class="tips-list">
+      <div class="tip-item">
+        <strong>CSS files work best.</strong> If you have design tokens as CSS custom properties, that's the most direct path. VibeCrew maps them 1:1 without guessing.
+      </div>
+      <div class="tip-item">
+        <strong>Tailwind configs are fully supported.</strong> Your <code>tailwind.config.js</code> theme section maps directly to VibeCrew's token structure. Color aliases, custom spacing, and font families are all extracted.
+      </div>
+      <div class="tip-item">
+        <strong>Brand PDFs need clear structure.</strong> A well-organized brand guide with labeled color swatches and type specimens works great. A 50-page brand book with mostly photography and marketing copy will produce sparse results &mdash; supplement with a CSS file if possible.
+      </div>
+      <div class="tip-item">
+        <strong>URLs extract computed styles.</strong> Pointing at a live site works if the site uses consistent CSS custom properties or a recognizable framework. Static marketing pages with inline styles produce mixed results.
+      </div>
+      <div class="tip-item">
+        <strong>Both paths produce identical outputs.</strong> Whether you import or go through the interview, you get the same two files: <code>design-system.css</code> (tokens) and <code>design-brief.md</code> (rationale). The Builder agent doesn't know or care which path you took.
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── TDR ── -->
+  <section class="section" id="tdr">
+    <h3>Technology Decisions</h3>
+    <p>Step 3 creates the Technology Decision Record (TDR). The <a href="agents.html">Stack Scout</a> agent researches technology options based on your vision and constraints, then documents every choice with trade-offs.</p>
+
+    <h4>What Gets Decided</h4>
+    <p>The TDR covers every major technical choice: frontend framework, database, ORM, authentication, hosting, styling approach, and testing strategy. For each decision, the document includes at least 2 options considered, pros and cons, and a justified recommendation.</p>
+
+    <h4 style="margin-top: 1.5rem;">The Opponent Processor</h4>
+    <p>After the TDR is generated, VibeCrew offers to run the <a href="agents.html">Opponent Processor</a> &mdash; a devil's advocate agent that stress-tests every decision. It produces a counter-analysis with a 6-criteria debate matrix and alternative recommendations.</p>
+    <p>This step is optional but recommended, especially for projects where technology choices have long-term consequences (e.g., database selection, auth provider lock-in).</p>
+
+    <Callout type="tip" title="Don't over-engineer the stack">
+      <p>For MVPs, boring technology is good technology. If your constraints don't demand something specific, the Stack Scout will default to well-documented, widely-adopted tools with strong Context7 coverage. That means fewer surprises during feature development.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ── Roadmap ── -->
+  <section class="section" id="roadmap">
+    <h3>Prioritizing Your Roadmap</h3>
+    <p>Step 5 takes the features from your vision and asks you to sort them into three tiers.</p>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Tier</th><th>Purpose</th><th>Guideline</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge green">MVP</span></td>
+            <td>What users need on day one</td>
+            <td>If a user can't get value without it, it's MVP. Keep this list short &mdash; 3-5 features is ideal.</td>
+          </tr>
+          <tr>
+            <td><span class="badge amber">Growth</span></td>
+            <td>What makes users stay and recommend</td>
+            <td>Features that improve retention, enable sharing, or add polish. Build these after launch.</td>
+          </tr>
+          <tr>
+            <td><span class="badge purple">Future</span></td>
+            <td>Nice-to-have ideas</td>
+            <td>Capture them so they're not forgotten, but don't let them slow down MVP delivery.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin-top: 1.5rem;">Mapping Dependencies</h4>
+    <p>VibeCrew also asks about dependencies between features. If "Grocery Optimizer" needs data from "Pantry Scanner," that dependency is recorded in the roadmap so <code>/run-backlog</code> builds them in the right order.</p>
+
+    <Callout type="warn" title="Resist the urge to put everything in MVP">
+      <p>The most common planning mistake is an overloaded MVP. If your Tier 1 list has more than 5 features, ask yourself: "Could a user get value without this?" If yes, move it to Growth.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ── Common Mistakes ── -->
+  <section class="section" id="common-mistakes">
+    <h3>Common Mistakes</h3>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Mistake</th><th>What Happens</th><th>How to Avoid It</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Vague vision</strong></td>
+            <td>Agents make assumptions. Features miss the mark. You spend more time course-correcting than building.</td>
+            <td>Spend 10 extra minutes on specific personas and measurable goals. Re-read your vision and ask: "Could someone who isn't me build this from this document?"</td>
+          </tr>
+          <tr>
+            <td><strong>Skipping the design system</strong></td>
+            <td>Every feature gets a different visual treatment. Consistency issues compound across sessions.</td>
+            <td>Even 5 minutes in the design interview produces a coherent token set. If you have existing brand colors, import them.</td>
+          </tr>
+          <tr>
+            <td><strong>Overloaded MVP</strong></td>
+            <td><code>/run-backlog</code> takes many sessions. Context quality degrades. Motivation drops.</td>
+            <td>3-5 MVP features. Everything else goes to Growth or Future. You can always promote later.</td>
+          </tr>
+          <tr>
+            <td><strong>Skipping the Opponent Processor</strong></td>
+            <td>Assumptions in the TDR go unchallenged. You discover issues during implementation when they're expensive to fix.</td>
+            <td>Take 2 minutes to review the counter-analysis. You don't have to change anything &mdash; just being aware of trade-offs helps.</td>
+          </tr>
+          <tr>
+            <td><strong>500-line CLAUDE.md</strong></td>
+            <td>Research shows oversized context files increase agent cost 20%+ without improving success rates. Agents waste tokens parsing rules they don't need.</td>
+            <td>Let VibeCrew generate the CLAUDE.md. It targets under 200 lines. Only add conventions, not documentation.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Related Pages ── -->
+  <section class="section" id="related">
+    <h3>Related Pages</h3>
+    <div class="page-grid">
+      <a class="page-card" href="workflow.html">
+        <div class="page-card-icon purple">&#9881;</div>
+        <h4>Core Workflow</h4>
+        <p>The full Tier 1 + Tier 2 lifecycle, from <code>/new-project</code> through <code>/run-backlog</code>.</p>
+        <span class="card-arrow">View workflow &rarr;</span>
+      </a>
+      <a class="page-card" href="setup-detail.html">
+        <div class="page-card-icon green">&#128295;</div>
+        <h4>Setup in Detail</h4>
+        <p>The 11-step <code>/setup</code> wizard that runs before project planning begins.</p>
+        <span class="card-arrow">View details &rarr;</span>
+      </a>
+      <a class="page-card" href="agents.html">
+        <div class="page-card-icon blue">&#129302;</div>
+        <h4>Sub-Agents</h4>
+        <p>The 14 specialized agents, including Stack Scout and Opponent Processor.</p>
+        <span class="card-arrow">View agents &rarr;</span>
+      </a>
+      <a class="page-card" href="hooks.html">
+        <div class="page-card-icon amber">&#128274;</div>
+        <h4>Hooks</h4>
+        <p>How the phase-gate hook enforces the "no code before foundation" rule.</p>
+        <span class="card-arrow">View hooks &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+</DocsLayout>
+
+<style>
+.toc { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem; }
+.toc h3 { margin-top: 0; margin-bottom: 1rem; font-size: 1rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.toc ol { padding-left: 1.25rem; margin-bottom: 0; }
+.toc li { margin-bottom: 0.35rem; }
+.toc a { color: var(--color-text-secondary); font-size: 0.92rem; transition: color 0.15s; }
+.toc a:hover { color: var(--color-accent); text-decoration: none; }
+
+.artifact-flow { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1.5rem; }
+.artifact-step { display: flex; gap: 1.25rem; }
+.artifact-number {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 0.1rem;
+}
+.artifact-content { flex: 1; min-width: 0; }
+.artifact-content h4 { margin: 0 0 0.35rem; font-size: 1.05rem; }
+.artifact-content p { font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.7; margin: 0; }
+
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.tip-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; }
+.tip-icon { font-size: 0.75rem; margin-bottom: 0.5rem; display: block; }
+.tip-icon.green { color: var(--color-green); }
+.tip-card h4 { margin: 0 0 0.75rem; font-size: 0.95rem; }
+.tip-card p { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.65; margin: 0 0 0.5rem; }
+.tip-card p:last-child { margin-bottom: 0; }
+.tip-why { font-style: italic; color: var(--color-text-muted) !important; font-size: 0.82rem !important; border-top: 1px solid var(--color-border); padding-top: 0.5rem; margin-top: 0.75rem !important; }
+
+.path-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.path-card { border: 1px solid var(--color-border); border-radius: var(--radius-sm); overflow: hidden; }
+.path-header { padding: 0.75rem 1.25rem; font-weight: 600; font-size: 0.9rem; }
+.path-header.no-system { background: var(--color-accent-bg); color: var(--color-accent); }
+.path-header.has-system { background: rgba(74, 222, 128, 0.1); color: var(--color-green); }
+.path-label { font-size: 0.9rem; }
+.path-body { padding: 1.25rem; }
+.path-body p { font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.65; margin: 0 0 0.75rem; }
+.path-body p:last-child { margin-bottom: 0; }
+.path-body ol { font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.65; padding-left: 1.25rem; margin: 0 0 0.75rem; }
+.path-body ol li { margin-bottom: 0.35rem; }
+
+.tips-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem; }
+.tip-item { font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.7; padding: 0.75rem 1rem; background: var(--color-surface); border-radius: var(--radius-xs); border: 1px solid var(--color-border); }
+.tip-item strong { color: var(--color-text); }
+
+.badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: var(--radius-xs); font-size: 0.78rem; font-weight: 600; }
+.badge.green { background: rgba(74, 222, 128, 0.15); color: var(--color-green); }
+.badge.amber { background: rgba(251, 191, 36, 0.15); color: var(--color-amber); }
+.badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
+
+.page-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.page-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; text-decoration: none; color: inherit; transition: border-color 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; }
+.page-card:hover { border-color: var(--color-accent); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.page-card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+.page-card-icon.purple { color: var(--color-accent); }
+.page-card-icon.green { color: var(--color-green); }
+.page-card-icon.blue { color: var(--color-blue); }
+.page-card-icon.amber { color: var(--color-amber); }
+.page-card h4 { margin: 0 0 0.5rem; font-size: 1rem; }
+.page-card p { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 0 auto; }
+.card-arrow { color: var(--color-accent); font-size: 0.85rem; margin-top: 1rem; font-weight: 500; }
+
+@media (max-width: 600px) {
+  .artifact-step { flex-direction: column; gap: 0.75rem; }
+  .tips-grid { grid-template-columns: 1fr; }
+  .path-cards { grid-template-columns: 1fr; }
+  .page-grid { grid-template-columns: 1fr; }
+}
+</style>

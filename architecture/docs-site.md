@@ -1,8 +1,8 @@
 # Architecture: Documentation Site Design
 
-> **Phase 2 Architecture** | Document 2.5 | February 2026
+> **Phase 2 Architecture** | Document 2.5 | March 2026
 >
-> This document defines the architecture of VibeCrew's documentation website for v1.0. The scope is intentionally minimal: a Kanban board visualization and a basic stats page, both powered by VitePress data loaders reading `.vibecrew/` JSON files.
+> This document defines the architecture of VibeCrew's documentation website. The dashboard includes 12 pages: a project overview (About), getting-started guide, product features, Kanban board, session statistics, trend charts, session logbook, test coverage, achievements, release timeline, architecture diagrams, and a settings editor — all powered by VitePress data loaders reading `.vibecrew/` JSON files and project root artifacts.
 
 ---
 
@@ -13,8 +13,11 @@
 3. [VitePress Configuration](#3-vitepress-configuration)
 4. [Kanban Board](#4-kanban-board)
 5. [Basic Stats Page](#5-basic-stats-page)
-6. [Data Loader Reference](#6-data-loader-reference)
-7. [v1.1 Roadmap](#7-v11-roadmap)
+6. [About Page](#6-about-page)
+7. [Releases Timeline](#7-releases-timeline)
+8. [Session Logbook](#8-session-logbook)
+9. [Data Loader Reference](#9-data-loader-reference)
+10. [Key Design Decisions](#10-key-design-decisions)
 
 ---
 
@@ -28,7 +31,7 @@ VitePress is the documentation framework for the VibeCrew docs site. The decisio
 |---|---|
 | **Fast rebuilds** | 3-8 second cold build for 200 pages; 1-3 second incremental rebuilds |
 | **Vue components** | Interactive components embed directly in Markdown via `<script setup>` blocks |
-| **Data loaders** | `.data.js` files execute at build time, support HMR file watching, and inject `.vibecrew/` JSON into pages |
+| **Data loaders** | `.data.ts` files execute at build time, support HMR file watching, and inject `.vibecrew/` JSON into pages |
 
 ### 1.2 Dependencies
 
@@ -36,12 +39,13 @@ VitePress is the documentation framework for the VibeCrew docs site. The decisio
 {
   "devDependencies": {
     "vitepress": "^1.6.0",
-    "vue": "^3.5.0"
+    "vue": "^3.5.0",
+    "@vue/test-utils": "^2.4.0",
+    "vitest": "^3.0.0",
+    "jsdom": "^26.0.0"
   }
 }
 ```
-
-No charting libraries are included in v1.0. Vue is a required peer dependency for VitePress.
 
 ### 1.3 Fallback Option
 
@@ -56,112 +60,137 @@ The docs site lives inside the project's `docs/` directory. VitePress configurat
 ```
 docs/
   .vitepress/
-    config.js                          # VitePress configuration
+    config.ts                            # VitePress configuration (nav, sidebar, API plugins, file watcher)
     theme/
-      index.js                         # Custom theme registration
-      components/
-        KanbanBoard.vue                # Kanban board visualization
-        StatsPage.vue                  # Basic session statistics
-      styles/
-        kanban.css                     # Kanban board styles
-        stats.css                      # Stats page styles
-    dist/                              # Build output (gitignored)
+      index.js                           # Custom theme registration (16 components)
+    dist/                                # Build output (gitignored)
 
   # Data loaders (run at build time, support HMR watching)
-  kanban.data.js                       # Reads .vibecrew/backlog.json
-  stats.data.js                        # Reads .vibecrew/sessions/*.json
+  data/
+    backlog.data.ts                      # Reads .vibecrew/backlog.json
+    sessions.data.ts                     # Reads .vibecrew/sessions/*.json
+    scores.data.ts                       # Reads .vibecrew/scores/*.json
+    config.data.ts                       # Reads .vibecrew/config.json
+    feature-docs.data.ts                 # Reads docs/features/*.md
+    gamification.data.ts                 # Reads .vibecrew/gamification.json
+    architecture.data.ts                 # Reads .vibecrew/architecture/*.mmd
+    releases.data.ts                     # Reads .vibecrew/releases/*.json
+    about.data.ts                        # Reads VISION.md, TDR.md, package.json
+
+  # Vue components
+  components/
+    KanbanBoard.vue                      # Interactive 7-column Kanban board
+    FeatureProgress.vue                  # Feature delivery progress bars
+    CoverageGauge.vue                    # Test coverage gauge
+    ScoreTrend.vue                       # Vibe Score line chart (SVG)
+    AgentActivityPanel.vue               # Agent invocation bars + timeline
+    StatsPage.vue                        # Four summary metric cards
+    TokenBreakdown.vue                   # Stacked token bars per session
+    AchievementsBoard.vue                # Level, badges, skill radar, streaks
+    SettingsPanel.vue                    # Config.json browser editor
+    LiveSessionPanel.vue                 # Real-time session status bar
+    ArchitectureOverview.vue             # Mermaid diagram tabs
+    ProductFeatures.vue                  # Completed features grid by label
+    AboutPage.vue                        # Project overview (vision, tech stack, features, dev server)
+    ReleasesTimeline.vue                 # Vertical release timeline with changelog sections
+    SessionLogbook.vue                   # Session list with expandable accordion
+    SessionLogbookEntry.vue              # Single session expanded detail panel
 
   # Pages
-  index.md                             # Docs site landing page
-  kanban.md                            # Kanban board page
-  stats.md                             # Basic statistics page
-  settings.md                          # Settings panel (config.json editor)
+  index.md                               # Home page with feature cards
+  about.md                               # About page (VISION.md / TDR.md overview)
+  features.md                            # Product features page
+  kanban.md                              # Kanban board page
+  stats.md                               # Session statistics page
+  trends.md                              # Trends page (score, tokens, agents)
+  logbook.md                             # Session logbook page
+  coverage.md                            # Coverage page
+  achievements.md                        # Achievements page
+  releases.md                            # Releases timeline page
+  architecture.md                        # Architecture diagrams page
+  settings.md                            # Settings editor page
 
-  # System documentation (how VibeCrew works)
-  guide/
-    index.md                           # Introduction to VibeCrew
-    installation.md                    # Installation guide
-    commands.md                        # Slash command reference
-    agents.md                          # Agent reference (9 agents)
-    workflows.md                       # Tier 1 + Tier 2 workflow explanations
-    hooks.md                           # Hook system reference
-    configuration.md                   # .vibecrew/config.json options
-    troubleshooting.md                 # Common issues and solutions
+  # System documentation
+  system/
+    getting-started.md                   # Getting started guide
+    commands.md                          # Slash command reference
+
+  # Feature documentation (auto-generated by Doc Generator)
+  features/
+    *.md                                 # Per-feature documentation
+
+  # Tests
+  __tests__/
+    SessionLogbook.test.ts               # Logbook component tests
+    StatsPage.test.ts                    # Stats component tests
+    ProductFeatures.test.ts              # Features component tests
+    AchievementsBoard.test.ts            # Achievements component tests
+    SettingsPanel.test.ts                # Settings component tests
+    CoverageGauge.test.ts                # Coverage component tests
+    TokenBreakdown.test.ts               # Token breakdown component tests
+    AddIdeaModal.test.ts                 # Add idea modal tests
+    FeatureProgress.test.ts              # Feature progress tests
+    useBacklogApi.test.ts                # Backlog API composable tests
+    backlog.data.test.ts                 # Backlog data loader tests
+    feature-docs.data.test.ts            # Feature docs data loader tests
 ```
 
 ---
 
 ## 3. VitePress Configuration
 
-### 3.1 Main Configuration File
+### 3.1 Navigation
 
-```javascript
-// docs/.vitepress/config.js
-import { defineConfig } from 'vitepress'
+The config defines 12 nav entries:
 
-export default defineConfig({
-  title: 'Project Docs',
-  description: 'Auto-generated documentation powered by VibeCrew',
-  lastUpdated: true,
-
-  themeConfig: {
-    nav: [
-      { text: 'Guide', link: '/guide/' },
-      { text: 'Kanban', link: '/kanban' },
-      { text: 'Stats', link: '/stats' },
-      { text: 'Settings', link: '/settings' }
-    ],
-
-    sidebar: {
-      '/guide/': [
-        {
-          text: 'VibeCrew Guide',
-          items: [
-            { text: 'Introduction', link: '/guide/' },
-            { text: 'Installation', link: '/guide/installation' },
-            { text: 'Commands', link: '/guide/commands' },
-            { text: 'Agents', link: '/guide/agents' },
-            { text: 'Workflows', link: '/guide/workflows' },
-            { text: 'Hooks', link: '/guide/hooks' },
-            { text: 'Configuration', link: '/guide/configuration' },
-            { text: 'Troubleshooting', link: '/guide/troubleshooting' }
-          ]
-        }
-      ]
-    },
-
-    search: { provider: 'local' },
-
-    footer: {
-      message: 'Built with VibeCrew',
-      copyright: 'Auto-generated documentation'
-    }
-  },
-
-  markdown: {
-    lineNumbers: true
-  }
-})
+```typescript
+nav: [
+  { text: "About", link: "/about" },
+  { text: "Guide", link: "/system/getting-started" },
+  { text: "Features", link: "/features" },
+  { text: "Kanban", link: "/kanban" },
+  { text: "Stats", link: "/stats" },
+  { text: "Trends", link: "/trends" },
+  { text: "Logbook", link: "/logbook" },
+  { text: "Coverage", link: "/coverage" },
+  { text: "Achievements", link: "/achievements" },
+  { text: "Releases", link: "/releases" },
+  { text: "Architecture", link: "/architecture" },
+  { text: "Settings", link: "/settings" },
+],
 ```
 
-### 3.2 Custom Theme Registration
+### 3.2 Theme Registration
+
+The theme registers 16 Vue components globally:
 
 ```javascript
-// docs/.vitepress/theme/index.js
-import DefaultTheme from 'vitepress/theme'
-import KanbanBoard from './components/KanbanBoard.vue'
-import StatsPage from './components/StatsPage.vue'
-import './styles/kanban.css'
-import './styles/stats.css'
-
-export default {
-  extends: DefaultTheme,
-  enhanceApp({ app }) {
-    app.component('KanbanBoard', KanbanBoard)
-    app.component('StatsPage', StatsPage)
-  }
-}
+// KanbanBoard, FeatureProgress, CoverageGauge, ScoreTrend,
+// AgentActivityPanel, StatsPage, TokenBreakdown, AchievementsBoard,
+// SettingsPanel, LiveSessionPanel, ArchitectureOverview, ProductFeatures,
+// AboutPage, ReleasesTimeline, SessionLogbook, SessionLogbookEntry
 ```
+
+### 3.3 API Plugins
+
+The config includes 5 Vite plugins:
+- **Settings API** — `POST /api/save-config` for writing config.json
+- **Backlog API** — `GET /api/backlog`, `POST /api/backlog/add-idea`, `POST /api/backlog/move`, `POST /api/backlog/update`
+- **Launch API** — `POST /api/launch-warp` for Warp terminal integration
+- **Live Session API** — `GET /api/live-session` for real-time session status
+- **File Watcher** — Watches `.vibecrew/` directory and broadcasts WebSocket events for real-time updates
+
+### 3.4 File Watcher Events
+
+| File Pattern | Event Type |
+|---|---|
+| `backlog.json` | `backlog_changed` |
+| `live-session.json` | `live_session_changed` |
+| `config.json` | `config_changed` |
+| `session-*` | `session_changed` |
+| `score-*` | `score_changed` |
+| `release-*` | `release_changed` |
+| Other files | `state_changed` |
 
 ---
 
@@ -186,198 +215,19 @@ The board renders 7 columns matching the feature column flow defined in `archite
 ### 4.2 Card Display
 
 Each card shows:
-
 - **Feature name** (bolded)
 - **Priority** (numeric, lower = higher priority; styled with colored left border: priority 1 = red, 2 = orange, 3+ = green)
 - **Labels** (tag badges)
 
 ### 4.3 Data Source
 
-The board reads from `.vibecrew/backlog.json` via `kanban.data.js`. The `backlog.json` schema is defined in `architecture/schemas.md` Section 4. Key fields used:
-
-- `columns[]` -- Column definitions with `id`, `title`, `wip_limit`
-- `features[]` -- Feature objects with `name`, `column`, `priority`, `labels`
-
-### 4.4 Vue Component
-
-```vue
-<!-- docs/.vitepress/theme/components/KanbanBoard.vue -->
-<script setup>
-import { computed } from 'vue'
-
-const props = defineProps({
-  data: { type: Object, required: true }
-})
-
-const boardColumns = computed(() => {
-  if (!props.data?.columns) return []
-  return props.data.columns.map(col => ({
-    ...col,
-    features: (props.data.features || [])
-      .filter(f => f.column === col.id)
-      .sort((a, b) => (a.priority || 99) - (b.priority || 99))
-  }))
-})
-
-function priorityClass(priority) {
-  if (priority === 1) return 'priority-high'
-  if (priority === 2) return 'priority-medium'
-  return 'priority-low'
-}
-</script>
-
-<template>
-  <div class="kanban-board">
-    <div v-for="column in boardColumns" :key="column.id" class="kanban-column">
-      <div class="column-header">
-        <h3>{{ column.title }}</h3>
-        <span class="card-count">
-          {{ column.features.length }}
-          <span v-if="column.wip_limit" class="wip-limit">/ {{ column.wip_limit }}</span>
-        </span>
-      </div>
-      <div class="column-body">
-        <div
-          v-for="feature in column.features"
-          :key="feature.id"
-          class="kanban-card"
-          :class="priorityClass(feature.priority)"
-        >
-          <div class="card-title">{{ feature.name }}</div>
-          <div v-if="feature.labels?.length" class="card-labels">
-            <span v-for="label in feature.labels" :key="label" class="label">
-              {{ label }}
-            </span>
-          </div>
-        </div>
-        <div v-if="column.features.length === 0" class="empty-column">
-          No items
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-```
-
-### 4.5 Kanban Styles
-
-```css
-/* docs/.vitepress/theme/styles/kanban.css */
-
-.kanban-board {
-  display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  padding: 1rem 0;
-}
-
-.kanban-column {
-  min-width: 180px;
-  flex: 1;
-  background: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  padding: 0.75rem;
-}
-
-.column-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.column-header h3 {
-  margin: 0;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.card-count {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-2);
-}
-
-.wip-limit {
-  color: var(--vp-c-text-3);
-}
-
-.kanban-card {
-  background: var(--vp-c-bg);
-  border-radius: 6px;
-  padding: 0.75rem;
-  margin-bottom: 0.5rem;
-  border-left: 3px solid var(--vp-c-divider);
-}
-
-.kanban-card.priority-high { border-left-color: #ef4444; }
-.kanban-card.priority-medium { border-left-color: #f97316; }
-.kanban-card.priority-low { border-left-color: #10b981; }
-
-.card-title {
-  font-weight: 600;
-  font-size: 0.875rem;
-  margin-bottom: 0.35rem;
-}
-
-.card-labels {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.card-labels .label {
-  font-size: 0.65rem;
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-2);
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
-}
-
-.empty-column {
-  color: var(--vp-c-text-3);
-  font-size: 0.8rem;
-  text-align: center;
-  padding: 1rem 0;
-}
-
-/* Responsive: stack columns vertically on narrow screens */
-@media (max-width: 768px) {
-  .kanban-board {
-    flex-direction: column;
-  }
-  .kanban-column {
-    min-width: auto;
-  }
-}
-```
-
-### 4.6 Kanban Page
-
-```markdown
----
-layout: page
-title: Kanban Board
----
-
-<script setup>
-import { data } from './kanban.data.js'
-import KanbanBoard from './.vitepress/theme/components/KanbanBoard.vue'
-</script>
-
-# Project Kanban Board
-
-<KanbanBoard :data="data" />
-```
+Reads from `.vibecrew/backlog.json` via `backlog.data.ts`.
 
 ---
 
 ## 5. Basic Stats Page
 
-The stats page shows four summary metrics derived from session log files. No charts are included in v1.0 -- the values are displayed in a simple card layout.
+The stats page shows four summary metrics derived from session log files displayed in a card layout.
 
 ### 5.1 Metrics Displayed
 
@@ -390,300 +240,159 @@ The stats page shows four summary metrics derived from session log files. No cha
 
 ### 5.2 Data Source
 
-The stats page reads all session log files from `.vibecrew/sessions/*.json` via `stats.data.js`. The session log schema is defined in `architecture/schemas.md` Section 5. Key fields used:
-
-- `session_id` -- Session identifier
-- `vibe_score` -- Integer 0-100 or null
-- `tokens.input`, `tokens.cache_creation`, `tokens.cache_read`, `tokens.output` -- Token counts
-- `tokens.estimated_cost_usd` -- Per-session cost estimate
-
-### 5.3 Vue Component
-
-```vue
-<!-- docs/.vitepress/theme/components/StatsPage.vue -->
-<script setup>
-import { computed } from 'vue'
-
-const props = defineProps({
-  sessions: { type: Array, required: true }
-})
-
-const stats = computed(() => {
-  const sessions = props.sessions || []
-  const totalSessions = sessions.length
-
-  const scores = sessions
-    .map(s => s.vibe_score)
-    .filter(v => v != null)
-  const averageVibeScore = scores.length > 0
-    ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
-    : 0
-
-  let totalTokens = 0
-  let totalCost = 0
-  for (const s of sessions) {
-    if (s.tokens) {
-      totalTokens += (s.tokens.input || 0)
-        + (s.tokens.cache_creation || 0)
-        + (s.tokens.cache_read || 0)
-        + (s.tokens.output || 0)
-      totalCost += (s.tokens.estimated_cost_usd || 0)
-    }
-  }
-
-  return { totalSessions, averageVibeScore, totalTokens, totalCost }
-})
-
-function formatTokens(n) {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
-  if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K'
-  return String(n)
-}
-
-function formatCost(n) {
-  return '$' + n.toFixed(2)
-}
-</script>
-
-<template>
-  <div class="stats-page">
-    <div class="stats-cards">
-      <div class="stat-card">
-        <div class="stat-label">Total Sessions</div>
-        <div class="stat-value">{{ stats.totalSessions }}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Average Vibe Score</div>
-        <div class="stat-value">{{ stats.averageVibeScore }}<span class="stat-unit">/100</span></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Total Tokens Used</div>
-        <div class="stat-value">{{ formatTokens(stats.totalTokens) }}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Estimated Total Cost</div>
-        <div class="stat-value">{{ formatCost(stats.totalCost) }}</div>
-      </div>
-    </div>
-    <p v-if="stats.totalSessions === 0" class="stats-empty">
-      No sessions recorded yet. Run <code>/wrap</code> to save session data.
-    </p>
-  </div>
-</template>
-```
-
-### 5.4 Stats Styles
-
-```css
-/* docs/.vitepress/theme/styles/stats.css */
-
-.stats-page {
-  padding: 1rem 0;
-}
-
-.stats-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-}
-
-.stat-card {
-  background: var(--vp-c-bg-soft);
-  border-radius: 8px;
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  color: var(--vp-c-text-2);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.stat-value {
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.stat-unit {
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--vp-c-text-2);
-}
-
-.stats-empty {
-  color: var(--vp-c-text-3);
-  text-align: center;
-  margin-top: 2rem;
-}
-```
-
-### 5.5 Stats Page
-
-```markdown
----
-layout: page
-title: Session Statistics
----
-
-<script setup>
-import { data } from './stats.data.js'
-import StatsPage from './.vitepress/theme/components/StatsPage.vue'
-</script>
-
-# Session Statistics
-
-<StatsPage :sessions="data" />
-```
+Reads `.vibecrew/sessions/*.json` via `sessions.data.ts`.
 
 ---
 
-## 6. Data Loader Reference
+## 6. About Page
 
-VitePress data loaders are `.data.js` files that execute at build time (or on watched file changes during dev). They bridge `.vibecrew/` JSON state and Vue components.
+The About page provides a user-facing project overview by aggregating data from multiple sources created during the Tier 1 foundation.
 
-### 6.1 Kanban Data Loader
+### 6.1 Data Sources
 
-```javascript
-// docs/kanban.data.js
-// Reads backlog.json for the Kanban board component.
-// Schema: architecture/schemas.md Section 4
+| Source | Content |
+|---|---|
+| `VISION.md` | Project name, tagline, description, target audience, problems solved |
+| `TDR.md` | Technology stack summary |
+| `package.json` | npm scripts for the dev server section |
+| `backlog.json` | Completed features for the feature showcase |
+| `docs/features/*.md` | Feature doc slugs for linking |
 
-import { readFileSync, existsSync } from 'fs'
-import { resolve, dirname } from 'path'
-import { fileURLToPath } from 'url'
+### 6.2 Component Structure (`AboutPage.vue`)
 
-const __dir = dirname(fileURLToPath(import.meta.url))
+6 card sections:
+1. **Hero** — Project name, tagline, description (from VISION.md H1 + first paragraph)
+2. **Target Audience** — Extracted from `## Target Audience` section
+3. **Problems Solved** — Extracted from `## Problems Solved` section
+4. **Feature Showcase** — Grid of done features (name + description), linking to feature docs when available
+5. **Tech Stack** — Rendered from TDR's technology stack section
+6. **Dev Server** — Table of `package.json` scripts with dashboard scripts highlighted, plus auto-update explanation
 
-export default {
-  watch: ['../.vibecrew/backlog.json'],
-  load() {
-    const backlogPath = resolve(__dir, '..', '.vibecrew', 'backlog.json')
+### 6.3 Data Loader (`about.data.ts`)
 
-    if (!existsSync(backlogPath)) {
-      return {
-        schema_version: '1.0.0',
-        columns: [
-          { id: 'idea', title: 'Ideas', wip_limit: null },
-          { id: 'planned', title: 'Planned', wip_limit: 5 },
-          { id: 'planning', title: 'Planning', wip_limit: 2 },
-          { id: 'in-progress', title: 'In Development', wip_limit: 1 },
-          { id: 'testing', title: 'Testing', wip_limit: 1 },
-          { id: 'review', title: 'Review', wip_limit: 2 },
-          { id: 'done', title: 'Done', wip_limit: null }
-        ],
-        features: []
-      }
-    }
-
-    return JSON.parse(readFileSync(backlogPath, 'utf-8'))
-  }
-}
-```
-
-### 6.2 Stats Data Loader
-
-```javascript
-// docs/stats.data.js
-// Reads session log files for the stats page.
-// Schema: architecture/schemas.md Section 5
-
-import { readFileSync, readdirSync, existsSync } from 'fs'
-import { resolve, join, dirname } from 'path'
-import { fileURLToPath } from 'url'
-
-const __dir = dirname(fileURLToPath(import.meta.url))
-
-export default {
-  watch: ['../.vibecrew/sessions/*.json'],
-  load() {
-    const sessionsDir = resolve(__dir, '..', '.vibecrew', 'sessions')
-
-    if (!existsSync(sessionsDir)) {
-      return []
-    }
-
-    const files = readdirSync(sessionsDir)
-      .filter(f => f.startsWith('session-') && f.endsWith('.json'))
-      .sort()
-
-    return files.map(f => {
-      try {
-        return JSON.parse(readFileSync(join(sessionsDir, f), 'utf-8'))
-      } catch {
-        return null
-      }
-    }).filter(Boolean)
-  }
-}
-```
-
-### 6.3 Config Data Loader
-
-```javascript
-// docs/data/config.data.ts
-// Reads config.json for the Settings panel component.
-// Schema: templates/config.json.template
-
-import { readFileSync, existsSync } from 'node:fs'
-import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const __dir = dirname(fileURLToPath(import.meta.url))
-
-export default {
-  watch: ['../../.vibecrew/config.json'],
-  load() {
-    const projectRoot = resolve(__dir, '../..')
-    const configPath = resolve(projectRoot, '.vibecrew/config.json')
-
-    if (!existsSync(configPath)) {
-      return defaultConfig // Full default from config.json.template
-    }
-
-    const raw = readFileSync(configPath, 'utf-8')
-    return deepMerge(defaultConfig, JSON.parse(raw))
-  }
-}
-```
-
-The config loader deep-merges parsed JSON with template defaults so that missing keys (from older schema versions) always have fallback values. The `watch` path triggers HMR when the config is changed externally (e.g., via `/profile` in the CLI). The component writes back through a Vite dev server middleware endpoint (`/api/save-config`), which performs atomic writes (temp file + rename) to prevent partial reads.
-
-### 6.4 Notes on Data Loaders
-
-- Both loaders use `import.meta.url` to resolve paths, which is the correct approach for ES modules. The `__dirname` global is not available in ES module scope.
-- Each loader declares a single `watch` array for HMR. During `vitepress dev`, changes to the watched files trigger the loader to re-execute and push updated data to the browser.
-- Both loaders return safe defaults (empty arrays or stub objects) when the `.vibecrew/` files do not yet exist. This prevents build failures on first run.
+Parses markdown by extracting `## Heading` boundaries. Watches `VISION.md`, `TDR.md`, and `package.json`. Returns graceful fallbacks when files don't exist (foundation not complete).
 
 ---
 
-## 7. v1.1 Roadmap
+## 7. Releases Timeline
 
-The following features are planned for v1.1 but are explicitly **out of scope** for v1.0:
+The Releases page displays a vertical timeline of all project releases generated by `/wrap` and `/release`.
 
-- **Statistics dashboard with charts** -- Token usage, cost trends, Vibe Score history, test coverage, and feature velocity visualizations using a charting library.
-- **Release notes auto-generation** -- Generating Markdown release notes from conventional commit history and linking them in the docs site navigation.
-- **Product documentation section** -- Auto-generated docs for the user's SaaS application (API endpoints, component catalog, database schema, deployment guide).
-- **Advanced Vue components** -- Dedicated chart components, active agent session panels, and summary cards with trend indicators.
-- **Auto-rebuild on PR merge** -- PostToolUse hook triggering selective documentation regeneration via `rebuild-docs.sh`.
-- **Sidebar auto-generation** -- File-system-based sidebar generator for product documentation pages.
+### 7.1 Data Source
+
+Reads `.vibecrew/releases/release-*.json` via `releases.data.ts`. Files are sorted newest-first.
+
+### 7.2 Release JSON Schema
+
+```typescript
+interface ReleaseEntry {
+  version: string;          // e.g., "1.2.0"
+  date: string;             // ISO 8601
+  sections: {
+    features: string[];     // Feature descriptions
+    fixes: string[];        // Bug fix descriptions
+    refactors: string[];    // Refactoring descriptions
+    docs: string[];         // Documentation changes
+    other: string[];        // Uncategorized changes
+  };
+  stats: {
+    total_commits: number;
+    files_changed: number;
+    insertions: number;
+    deletions: number;
+  };
+}
+```
+
+### 7.3 Component Structure (`ReleasesTimeline.vue`)
+
+- Summary bar with total releases and latest version badge
+- Vertical CSS timeline (line + dots, no external library)
+- Each release: version pill, date, change sections (only non-empty sections shown), stats row
 
 ---
 
-## Key Design Decisions
+## 8. Session Logbook
 
-1. **Minimal v1.0 scope**: The original design specified 7 Vue dashboard components, Chart.js charts, release notes auto-generation, and a dedicated dev server on port 3002. This was cut to 2 components (Kanban board + stats page) following a best-practices review. Ship the core value first; add charts and automation in v1.1.
+The Session Logbook provides per-session drill-down as a complement to the Stats and Trends aggregate views.
 
-2. **VitePress over Starlight**: VitePress wins on rebuild speed (3-8s vs. 5-10s) and simplicity. Since VibeCrew uses Vue components for interactive pages, the Vue ecosystem alignment is natural.
+### 8.1 Data Sources
 
-3. **Data loaders over API endpoints**: VitePress data loaders execute at build time and inject data directly into Vue components. This eliminates the need for a runtime API server, keeps the docs site fully static, and supports HMR during development via file watching.
+- **Sessions**: `.vibecrew/sessions/*.json` via `sessions.data.ts`
+- **Scores**: `.vibecrew/scores/*.json` via `scores.data.ts`
 
-4. **`import.meta.url` over `__dirname`**: VitePress config and data loaders use ES modules. The `__dirname` global does not exist in ES module scope. All path resolution uses `dirname(fileURLToPath(import.meta.url))`.
+Sessions and scores are joined by `session_id` using a `Map<string, ScoreEntry>` lookup.
 
-5. **Interactive Kanban board**: The web Kanban board supports drag-and-drop column transitions, an add-idea form, inline card editing, and Warp terminal launch actions when running in dev mode. In static builds (no dev server), the board falls back to a read-only display. All mutations go through the Vite dev server middleware (`/api/save-backlog`), which performs atomic writes to `backlog.json`. This keeps the docs site as a safe mutation surface that cannot conflict with agent operations because the middleware acquires the same advisory locks used by CLI scripts.
+### 8.2 Component Structure
 
-6. **One-command dashboard launch**: The `scripts/start-dashboard.sh` script provides one-command launch with smart port detection. It finds an available port starting from 5173, starts VitePress dev, opens the browser, and prints the URL. Users no longer need to remember the VitePress CLI invocation.
+**`SessionLogbook.vue`** — Parent component:
+- Summary bar (total sessions, date range)
+- Filter/sort controls (newest/oldest toggle, feature filter dropdown)
+- Expandable accordion list (50 visible, "Load more" button)
+- Collapsed row: date/time, feature ID, duration, vibe score badge (color-coded)
 
-7. **Schema references over inline definitions**: All JSON schemas are defined in `architecture/schemas.md` and referenced from this document. This eliminates duplicate schema definitions that can drift out of sync.
+**`SessionLogbookEntry.vue`** — Expanded detail (child):
+- Task Summary — session description
+- Vibe Score Breakdown — score + rating, deductions (red pills) and bonuses (green pills)
+- Token Usage — input, cache_creation, cache_read, output, cost, cache hit rate
+- Context Window — peak %, compactions
+- Agents Used — colored chips matching `AgentActivityPanel` color scheme
+- Test Results — total/passed/failed, coverage %
+- Files Modified — collapsible list with +/- line counts
+- Commits — hash (7-char monospace) + message
+- Coaching — suggestions from score data
+
+### 8.3 Score Color Coding
+
+| Score Range | Color | Hex |
+|---|---|---|
+| >= 90 | Green | `#22c55e` |
+| 70-89 | Blue | `#3b82f6` |
+| 50-69 | Yellow | `#eab308` |
+| < 50 | Red | `#ef4444` |
+
+---
+
+## 9. Data Loader Reference
+
+VitePress data loaders are `.data.ts` files that execute at build time (or on watched file changes during dev). They bridge `.vibecrew/` JSON state and Vue components.
+
+| Loader | Watch Path | Returns | Key Behavior |
+|---|---|---|---|
+| `backlog.data.ts` | `../../.vibecrew/backlog.json` | Backlog object | Falls back to default columns if missing |
+| `sessions.data.ts` | `../../.vibecrew/sessions/*.json` | `SessionData[]` | Filters `session-*.json`, sorts chronologically |
+| `scores.data.ts` | `../../.vibecrew/scores/*.json` | `ScoresData` | Last 20 scores, trend calculation, deduction aggregation |
+| `config.data.ts` | `../../.vibecrew/config.json` | Config object | Deep-merges with template defaults |
+| `feature-docs.data.ts` | `../../docs/features/*.md` | `string[]` | Returns basenames of feature doc files |
+| `gamification.data.ts` | `../../.vibecrew/gamification.json` | Gamification object | Level, XP, badges, streaks |
+| `architecture.data.ts` | `../../.vibecrew/architecture/*.mmd` | Mermaid diagram strings | Reads 5 architecture diagram files |
+| `releases.data.ts` | `../../.vibecrew/releases/*.json` | `ReleaseEntry[]` | Filters `release-*.json`, sorted newest-first |
+| `about.data.ts` | `../../VISION.md`, `../../TDR.md`, `../../package.json` | `AboutData` | Markdown section extraction, graceful fallbacks |
+
+### 9.1 Notes on Data Loaders
+
+- All loaders use `import.meta.url` or `process.cwd()` to resolve paths (ES module scope — no `__dirname`).
+- Each loader declares a `watch` array for HMR. During `vitepress dev`, changes to watched files trigger re-execution and push updated data to the browser.
+- All loaders return safe defaults (empty arrays or stub objects) when `.vibecrew/` files do not yet exist.
+
+---
+
+## 10. Key Design Decisions
+
+1. **VitePress over Starlight**: VitePress wins on rebuild speed (3-8s vs. 5-10s) and simplicity. Since VibeCrew uses Vue components for interactive pages, the Vue ecosystem alignment is natural.
+
+2. **Data loaders over API endpoints**: VitePress data loaders execute at build time and inject data directly into Vue components. This eliminates the need for a runtime API server, keeps the docs site fully static, and supports HMR during development via file watching.
+
+3. **`import.meta.url` over `__dirname`**: VitePress config and data loaders use ES modules. The `__dirname` global does not exist in ES module scope. All path resolution uses `dirname(fileURLToPath(import.meta.url))`.
+
+4. **Interactive Kanban board**: The web Kanban board supports drag-and-drop column transitions, an add-idea form, inline card editing, and Warp terminal launch actions when running in dev mode. In static builds (no dev server), the board falls back to a read-only display. All mutations go through the Vite dev server middleware, which performs atomic writes to `backlog.json`.
+
+5. **One-command dashboard launch**: The `scripts/start-dashboard.sh` script provides one-command launch with smart port detection.
+
+6. **Schema references over inline definitions**: All JSON schemas are defined in `architecture/schemas.md` and referenced from this document.
+
+7. **Session-score join via Map**: The Logbook joins sessions with scores by `session_id` using a `Map` for O(1) lookups, avoiding N*M traversal.
+
+8. **Logbook complements, not replaces, Stats/Trends**: Stats shows aggregates, Trends shows time-series charts, Logbook shows per-session drill-down. Different granularity for different questions.
+
+9. **About page vs ProductFeatures**: About is external-facing (what is this app?), ProductFeatures is internal-tracking (labels, dates, developer metadata). Different audience.

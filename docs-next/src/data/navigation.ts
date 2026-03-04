@@ -27,6 +27,7 @@ export const navigation: NavGroup[] = [
     links: [
       { title: 'Overview', slug: 'architecture' },
       { title: 'Setup in Detail', slug: 'setup-detail' },
+      { title: 'Project Planning', slug: 'project-planning' },
       { title: 'Plugin Structure', slug: 'plugin' },
       { title: 'Sub-Agents', slug: 'agents' },
       { title: 'Hooks', slug: 'hooks' },

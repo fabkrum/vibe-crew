@@ -11,6 +11,10 @@ import SettingsPanel from "../../components/SettingsPanel.vue";
 import LiveSessionPanel from "../../components/LiveSessionPanel.vue";
 import ArchitectureOverview from "../../components/ArchitectureOverview.vue";
 import ProductFeatures from "../../components/ProductFeatures.vue";
+import AboutPage from "../../components/AboutPage.vue";
+import ReleasesTimeline from "../../components/ReleasesTimeline.vue";
+import SessionLogbook from "../../components/SessionLogbook.vue";
+import SessionLogbookEntry from "../../components/SessionLogbookEntry.vue";
 
 export default {
   extends: DefaultTheme,
@@ -27,5 +31,9 @@ export default {
     app.component("LiveSessionPanel", LiveSessionPanel);
     app.component("ArchitectureOverview", ArchitectureOverview);
     app.component("ProductFeatures", ProductFeatures);
+    app.component("AboutPage", AboutPage);
+    app.component("ReleasesTimeline", ReleasesTimeline);
+    app.component("SessionLogbook", SessionLogbook);
+    app.component("SessionLogbookEntry", SessionLogbookEntry);
   },
 };

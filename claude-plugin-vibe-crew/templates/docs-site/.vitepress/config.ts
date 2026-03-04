@@ -74,13 +74,16 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
+      { text: "About", link: "/about" },
       { text: "Guide", link: "/system/getting-started" },
       { text: "Features", link: "/features" },
       { text: "Kanban", link: "/kanban" },
       { text: "Stats", link: "/stats" },
       { text: "Trends", link: "/trends" },
+      { text: "Logbook", link: "/logbook" },
       { text: "Coverage", link: "/coverage" },
       { text: "Achievements", link: "/achievements" },
+      { text: "Releases", link: "/releases" },
       { text: "Architecture", link: "/architecture" },
       { text: "Settings", link: "/settings" },
     ],
@@ -572,6 +575,8 @@ export default defineConfig({
                   updateType = "session_changed";
                 } else if (fname.startsWith("score-")) {
                   updateType = "score_changed";
+                } else if (fname.startsWith("release-")) {
+                  updateType = "release_changed";
                 }
 
                 server.ws.send({

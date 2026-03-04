@@ -19,13 +19,14 @@ import TableWrap from '../components/TableWrap.astro';
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ol>
   </div>
+  <!-- Tab sub-sections: About, Guide, Kanban, Stats, Trends, Logbook, Coverage, Achievements, Releases, Settings -->
 
   <!-- ============ WHAT IS THE VIBE DASHBOARD ============ -->
   <section class="section" id="what">
     <span class="section-label">Overview</span>
     <h2>What is the Vibe Dashboard</h2>
     <p>The Vibe Dashboard is a <strong>VitePress-powered documentation site</strong> scaffolded into every VibeCrew project during <code>/setup</code>. It lives in your project's <code>docs/</code> folder and provides a browser-based interface for browsing development metrics, managing your feature backlog, and editing project settings.</p>
-    <p>The dashboard reads live data from <code>.vibecrew/</code> &mdash; the same JSON files that power the CLI commands. It includes 7 tabs: a getting-started guide, a Kanban board, session statistics, Vibe Score trends, test coverage, achievements, and a settings editor.</p>
+    <p>The dashboard reads live data from <code>.vibecrew/</code> &mdash; the same JSON files that power the CLI commands. It includes 10 tabs: a project overview (About), a getting-started guide, a Kanban board, session statistics, Vibe Score trends, a session logbook, test coverage, achievements, a release timeline, and a settings editor.</p>
 
     <Callout type="info" title="Not the companion docs you're reading now">
       <p>This page documents the <strong>per-project Vibe Dashboard</strong> that gets scaffolded into your project. It's separate from the VibeCrew companion documentation site (the one you're reading right now).</p>
@@ -55,7 +56,19 @@ import TableWrap from '../components/TableWrap.astro';
   <section class="section" id="tabs">
     <span class="section-label">Features</span>
     <h2>Dashboard Tabs</h2>
-    <p>The dashboard ships with 7 tabs. Each tab reads from specific <code>.vibecrew/</code> JSON files via VitePress data loaders.</p>
+    <p>The dashboard ships with 10 tabs. Each tab reads from specific <code>.vibecrew/</code> JSON files via VitePress data loaders.</p>
+
+    <h3 id="tab-about">About</h3>
+    <p>A project overview page sourced from your foundation artifacts:</p>
+    <ul>
+      <li><strong>Hero</strong> &mdash; Project name, tagline, and description from VISION.md</li>
+      <li><strong>Target Audience</strong> &mdash; Who the project is for</li>
+      <li><strong>Problems Solved</strong> &mdash; What problems it addresses</li>
+      <li><strong>Feature Showcase</strong> &mdash; Grid of completed features with links to feature docs</li>
+      <li><strong>Tech Stack</strong> &mdash; Technology stack summary from TDR.md</li>
+      <li><strong>Dev Server</strong> &mdash; Table of npm scripts with auto-update explanation</li>
+    </ul>
+    <p>Data source: <code>VISION.md</code>, <code>TDR.md</code>, <code>package.json</code>, <code>.vibecrew/backlog.json</code></p>
 
     <h3>Guide</h3>
     <p>The default landing tab. Contains the same getting-started documentation that's scaffolded into <code>docs/system/getting-started.md</code> &mdash; a quick reference for setup, commands, and workflow.</p>
@@ -93,6 +106,22 @@ import TableWrap from '../components/TableWrap.astro';
     </ul>
     <p>Data source: <code>.vibecrew/scores/*.json</code></p>
 
+    <h3 id="tab-logbook">Session Logbook</h3>
+    <p>A per-session drill-down that complements the aggregate Stats and Trends views. Each session expands into a detail panel showing:</p>
+    <ul>
+      <li><strong>Task Summary</strong> &mdash; What was accomplished in the session</li>
+      <li><strong>Vibe Score Breakdown</strong> &mdash; Score with deductions (red) and bonuses (green) as pills</li>
+      <li><strong>Token Usage</strong> &mdash; Input, cache creation, cache read, output, cost, and cache hit rate</li>
+      <li><strong>Context Window</strong> &mdash; Peak usage percentage and compaction count</li>
+      <li><strong>Agents Used</strong> &mdash; Color-coded chips for each agent invoked</li>
+      <li><strong>Test Results</strong> &mdash; Total, passed, failed, and coverage percentage</li>
+      <li><strong>Files Modified</strong> &mdash; Collapsible list with insertions/deletions per file</li>
+      <li><strong>Commits</strong> &mdash; Hash and message for each commit</li>
+      <li><strong>Coaching</strong> &mdash; Suggestions from the Vibe Score analysis</li>
+    </ul>
+    <p>Sessions can be filtered by feature and sorted by date. Scores are joined by <code>session_id</code>.</p>
+    <p>Data source: <code>.vibecrew/sessions/*.json</code>, <code>.vibecrew/scores/*.json</code></p>
+
     <h3 id="tab-coverage">Coverage</h3>
     <p>Quality metrics at a glance:</p>
     <ul>
@@ -109,6 +138,15 @@ import TableWrap from '../components/TableWrap.astro';
       <li><strong>Streak calendar</strong> &mdash; Daily activity streak tracking</li>
     </ul>
     <p>Data source: <code>.vibecrew/gamification.json</code></p>
+
+    <h3 id="tab-releases">Releases</h3>
+    <p>A vertical timeline of all project releases created by <code>/wrap</code> and <code>/release</code>:</p>
+    <ul>
+      <li><strong>Version badge</strong> &mdash; Version number and release date</li>
+      <li><strong>Change sections</strong> &mdash; Grouped by type: Features, Fixes, Refactors, Docs, Other (only non-empty sections shown)</li>
+      <li><strong>Commit stats</strong> &mdash; Total commits, files changed, insertions, and deletions</li>
+    </ul>
+    <p>Data source: <code>.vibecrew/releases/*.json</code></p>
 
     <h3 id="tab-settings">Settings</h3>
     <p>A browser-based editor for <code>.vibecrew/config.json</code>. You can modify:</p>
@@ -145,6 +183,9 @@ import TableWrap from '../components/TableWrap.astro';
           <tr><td><strong>Achievements</strong></td><td><code>/achievements</code></td><td>Level, XP, badges, streaks, challenges</td></tr>
           <tr><td><strong>Settings (profile)</strong></td><td><code>/profile</code></td><td>Edit user profile dimensions interactively</td></tr>
           <tr><td><strong>Coverage</strong></td><td><code>/check</code></td><td>Run tests, lint, type-check, and see coverage</td></tr>
+          <tr><td><strong>Logbook</strong></td><td><code>/status</code> + <code>/cost</code></td><td>Session history and per-session cost breakdown</td></tr>
+          <tr><td><strong>Releases</strong></td><td><code>/release</code></td><td>Create releases and view release notes</td></tr>
+          <tr><td><strong>About</strong></td><td><code>/status</code></td><td>Project overview and foundation status</td></tr>
         </tbody>
       </table>
     </TableWrap>

@@ -77,14 +77,23 @@ npm run docs:dev
 
 Visit `http://localhost:5173` to see:
 
+- **About** — Project overview sourced from VISION.md, tech stack, feature showcase
 - **Kanban** — Feature backlog across 7 workflow stages
 - **Stats** — Total sessions, average Vibe Score, token usage, estimated cost
 - **Trends** — Vibe Score history, token breakdown, agent activity over time
+- **Logbook** — Per-session drill-down with score breakdowns, token usage, agents, test results, and coaching
 - **Coverage** — Test coverage gauge and feature delivery progress
 - **Achievements** — Level, badges, skill trees, streaks, and challenges
+- **Releases** — Version timeline with changelogs, commit stats, and diff summaries
 - **Settings** — Edit your VibeCrew configuration (profile, notifications, cost limits, MCP servers)
 
-Data updates automatically each time you run `/wrap` to close a session.
+Data updates automatically in dev mode via the file watcher. Each time you run `/wrap`, sessions, scores, and releases refresh in real time.
+
+For a static preview without hot-reload:
+
+```bash
+npm run docs:build && npm run docs:preview
+```
 
 ## Quick Reference
 

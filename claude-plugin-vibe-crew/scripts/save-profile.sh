@@ -15,7 +15,6 @@ CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # --- Parse flags ---
-ROLE=""
 CODE_LITERACY=""
 AUTONOMY=""
 PR_REVIEW=""
@@ -26,7 +25,6 @@ RISK_TOLERANCE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --role) ROLE="$2"; shift 2 ;;
     --code-literacy) CODE_LITERACY="$2"; shift 2 ;;
     --autonomy) AUTONOMY="$2"; shift 2 ;;
     --pr-review) PR_REVIEW="$2"; shift 2 ;;
@@ -46,7 +44,6 @@ fi
 
 # --- Build profile JSON ---
 PROFILE=$(jq -n \
-  --arg role "$ROLE" \
   --arg code_literacy "$CODE_LITERACY" \
   --arg autonomy "$AUTONOMY" \
   --arg pr_review "$PR_REVIEW" \
@@ -57,7 +54,6 @@ PROFILE=$(jq -n \
   --arg updated_at "$TIMESTAMP" \
   '{
     interview_completed: true,
-    role: (if $role == "" then null else $role end),
     code_literacy: (if $code_literacy == "" then "conversational" else $code_literacy end),
     autonomy: (if $autonomy == "" then "checkpoints" else $autonomy end),
     pr_review: (if $pr_review == "" then "review" else $pr_review end),
@@ -91,7 +87,6 @@ jq --argjson profile "$PROFILE" ".user_profile = \$profile | $GAMIFICATION_FILTE
 release_named_lock "config"
 
 echo "Profile saved to $CONFIG_FILE"
-echo "  Role:              ${ROLE:-not set}"
 echo "  Code literacy:     ${CODE_LITERACY:-conversational}"
 echo "  Autonomy:          ${AUTONOMY:-checkpoints}"
 echo "  PR review:         ${PR_REVIEW:-review}"

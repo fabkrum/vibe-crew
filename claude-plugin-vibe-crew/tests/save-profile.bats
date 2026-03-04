@@ -11,10 +11,9 @@ teardown() {
   teardown_vibecrew_dir
 }
 
-@test "saves all 8 profile dimensions" {
+@test "saves all 7 profile dimensions" {
   cd "$TEST_PROJECT_DIR"
   run bash "$SCRIPTS_DIR/save-profile.sh" \
-    --role developer \
     --code-literacy fluent \
     --autonomy full_auto \
     --pr-review auto_merge \
@@ -26,8 +25,6 @@ teardown() {
   assert_output --partial "Profile saved"
 
   # Verify each dimension
-  run jq -r '.user_profile.role' "$VIBECREW_DIR/config.json"
-  assert_output "developer"
   run jq -r '.user_profile.code_literacy' "$VIBECREW_DIR/config.json"
   assert_output "fluent"
   run jq -r '.user_profile.autonomy' "$VIBECREW_DIR/config.json"
@@ -46,18 +43,18 @@ teardown() {
 
 @test "applies defaults for unfilled fields" {
   cd "$TEST_PROJECT_DIR"
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role designer
+  run bash "$SCRIPTS_DIR/save-profile.sh" --autonomy full_auto
   assert_success
 
-  # Role should be set
-  run jq -r '.user_profile.role' "$VIBECREW_DIR/config.json"
-  assert_output "designer"
+  # Autonomy should be set
+  run jq -r '.user_profile.autonomy' "$VIBECREW_DIR/config.json"
+  assert_output "full_auto"
 
   # Unfilled fields should get defaults
   run jq -r '.user_profile.code_literacy' "$VIBECREW_DIR/config.json"
   assert_output "conversational"
-  run jq -r '.user_profile.autonomy' "$VIBECREW_DIR/config.json"
-  assert_output "checkpoints"
+  run jq -r '.user_profile.verbosity' "$VIBECREW_DIR/config.json"
+  assert_output "standard"
 }
 
 @test "gamification sync: disabled turns off all gamification" {
@@ -89,7 +86,7 @@ teardown() {
 @test "fails when config.json is missing" {
   cd "$TEST_PROJECT_DIR"
   rm "$VIBECREW_DIR/config.json"
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role developer
+  run bash "$SCRIPTS_DIR/save-profile.sh" --autonomy full_auto
   assert_failure
   assert_output --partial "not found"
 }
@@ -103,7 +100,7 @@ teardown() {
 
 @test "uses PID-suffixed temp file (no bare .tmp leftover)" {
   cd "$TEST_PROJECT_DIR"
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role developer
+  run bash "$SCRIPTS_DIR/save-profile.sh" --autonomy full_auto
   assert_success
   # No bare .tmp file should remain (PID-suffixed gets renamed atomically)
   run bash -c "ls '$VIBECREW_DIR'/config.json.tmp 2>/dev/null | wc -l | tr -d ' '"
@@ -112,7 +109,7 @@ teardown() {
 
 @test "interview_completed is set to true" {
   cd "$TEST_PROJECT_DIR"
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role learner
+  run bash "$SCRIPTS_DIR/save-profile.sh" --verbosity educational
   assert_success
   run jq -r '.user_profile.interview_completed' "$VIBECREW_DIR/config.json"
   assert_output "true"

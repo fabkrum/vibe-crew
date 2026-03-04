@@ -7,7 +7,6 @@ import CodeBlock from '../components/CodeBlock.astro';
 const profileJson = `{
   "user_profile": {
     "interview_completed": true,
-    "role": "non_technical",
     "code_literacy": "basic",
     "autonomy": "collaborative",
     "pr_review": "walkthrough",
@@ -26,7 +25,7 @@ const profileJson = `{
     <h3>On This Page</h3>
     <ol>
       <li><a href="#overview">How the Profile System Works</a></li>
-      <li><a href="#dimensions">The 8 Dimensions</a></li>
+      <li><a href="#dimensions">The 7 Dimensions</a></li>
       <li><a href="#interview">The Profile Interview</a></li>
       <li><a href="#agent-adaptation">How Agents Adapt</a></li>
       <li><a href="#storage">Storage &amp; Scripts</a></li>
@@ -44,7 +43,7 @@ const profileJson = `{
           <span class="key-icon purple">&#9632;</span>
           <div>
             <strong>What it is</strong>
-            <p>An 8-dimension preference system that controls how every agent communicates, how much autonomy the system takes, how technical the language is, and how adventurous technology choices are.</p>
+            <p>A 7-dimension preference system that controls how every agent communicates, how much autonomy the system takes, how technical the language is, and how adventurous technology choices are.</p>
           </div>
         </div>
         <div class="key-point">
@@ -67,27 +66,12 @@ const profileJson = `{
 
   <hr>
 
-  <!-- ── The 8 Dimensions ── -->
+  <!-- ── The 7 Dimensions ── -->
   <section class="section" id="dimensions">
-    <h3>The 8 Dimensions</h3>
+    <h3>The 7 Dimensions</h3>
     <p>Each dimension controls a different axis of the system's behavior. Together they create a unique experience tailored to your needs.</p>
 
     <div class="dimension-cards">
-      <div class="dimension-card">
-        <div class="dimension-header">
-          <span class="dimension-icon">&#128100;</span>
-          <h4>Role</h4>
-        </div>
-        <p class="dimension-desc">Sets smart defaults for other dimensions based on who you are.</p>
-        <div class="dimension-options">
-          <span class="option"><strong>Developer</strong> &mdash; writes code daily, auto-sets code literacy to fluent</span>
-          <span class="option"><strong>Technical PM</strong> &mdash; can read code but rarely writes it</span>
-          <span class="option"><strong>Designer</strong> &mdash; understands UI/UX but not backend code</span>
-          <span class="option"><strong>Non-technical Founder</strong> &mdash; has the vision, not the code skills</span>
-          <span class="option"><strong>Learner</strong> &mdash; here to learn how software gets built</span>
-        </div>
-      </div>
-
       <div class="dimension-card">
         <div class="dimension-header">
           <span class="dimension-icon">&#128214;</span>
@@ -193,21 +177,20 @@ const profileJson = `{
   <!-- ── The Interview ── -->
   <section class="section" id="interview">
     <h3>The Profile Interview</h3>
-    <p>Running <code>/profile</code> starts an interactive interview &mdash; 8 quick questions that take about 2 minutes. The interview is conversational: you can answer with a number (1&ndash;5) or describe what you want in plain text.</p>
+    <p>Running <code>/profile</code> starts an interactive interview &mdash; 7 quick questions that take about 2 minutes. The interview is conversational: you can answer with a number (1&ndash;4) or describe what you want in plain text.</p>
 
     <h4 class="agent-table-heading">Interview Flow</h4>
     <div class="agent-table-wrap">
       <table class="agent-table">
         <thead><tr><th>Step</th><th>Question</th><th>Smart Behavior</th></tr></thead>
         <tbody>
-          <tr><td><strong>1</strong></td><td>What best describes your role?</td><td>If you pick "Developer", question 2 is auto-skipped and code literacy is set to fluent.</td></tr>
-          <tr><td><strong>2</strong></td><td>How comfortable are you reading code?</td><td>Skipped for developers. For other roles, calibrates how technical the system's language will be.</td></tr>
-          <tr><td><strong>3</strong></td><td>How much should VibeCrew do on its own?</td><td>Controls approval gates across the entire workflow.</td></tr>
-          <tr><td><strong>4</strong></td><td>How should code changes be merged?</td><td>Determines PR detail level &mdash; from auto-merge to line-by-line walkthroughs.</td></tr>
-          <tr><td><strong>5</strong></td><td>How much detail do you want in messages?</td><td>Affects every agent's output length and explanation depth.</td></tr>
-          <tr><td><strong>6</strong></td><td>Do you enjoy gamification?</td><td>Automatically syncs the gamification config (XP display, streak reminders, badges).</td></tr>
-          <tr><td><strong>7</strong></td><td>How do you want to learn about your codebase?</td><td>Controls documentation depth and whether code gets explanatory comments.</td></tr>
-          <tr><td><strong>8</strong></td><td>What's your approach to technology choices?</td><td>Steers the Stack Scout toward stable or cutting-edge technologies.</td></tr>
+          <tr><td><strong>1</strong></td><td>How comfortable are you reading code?</td><td>Calibrates how technical the system's language will be.</td></tr>
+          <tr><td><strong>2</strong></td><td>How much should VibeCrew do on its own?</td><td>Controls approval gates across the entire workflow.</td></tr>
+          <tr><td><strong>3</strong></td><td>How should code changes be merged?</td><td>Determines PR detail level &mdash; from auto-merge to line-by-line walkthroughs.</td></tr>
+          <tr><td><strong>4</strong></td><td>How much detail do you want in messages?</td><td>Affects every agent's output length and explanation depth.</td></tr>
+          <tr><td><strong>5</strong></td><td>Do you enjoy gamification?</td><td>Automatically syncs the gamification config (XP display, streak reminders, badges).</td></tr>
+          <tr><td><strong>6</strong></td><td>How do you want to learn about your codebase?</td><td>Controls documentation depth and whether code gets explanatory comments.</td></tr>
+          <tr><td><strong>7</strong></td><td>What's your approach to technology choices?</td><td>Steers the Stack Scout toward stable or cutting-edge technologies.</td></tr>
         </tbody>
       </table>
     </div>
@@ -393,7 +376,7 @@ const profileJson = `{
         <tbody>
           <tr>
             <td><strong>Week 1</strong></td>
-            <td>Role: non_technical, Autonomy: supervised, Verbosity: educational, PR: walkthrough</td>
+            <td>Autonomy: supervised, Verbosity: educational, PR: walkthrough</td>
             <td>Learning how everything works. Wants full explanations and control.</td>
           </tr>
           <tr>

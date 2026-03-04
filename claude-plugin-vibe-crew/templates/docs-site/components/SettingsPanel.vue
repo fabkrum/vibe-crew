@@ -80,7 +80,7 @@ async function save() {
 
   // Mark profile as completed if any dimension is set
   const p = form.user_profile;
-  if (p.role || p.code_literacy || p.autonomy || p.pr_review || p.verbosity || p.gamification_preference || p.learning || p.risk_tolerance) {
+  if (p.code_literacy || p.autonomy || p.pr_review || p.verbosity || p.gamification_preference || p.learning || p.risk_tolerance) {
     form.user_profile.interview_completed = true;
     form.user_profile.updated_at = new Date().toISOString();
   }
@@ -137,7 +137,7 @@ function resetToDefaults() {
     opponent_processor: { enabled: true, auto_invoke_after_tdr: true },
     ci_healing: { enabled: true, max_attempts: 3, auto_checkpoint: true },
     gamification: { enabled: true, streak_reminders: false, quiz_frequency: "weekly", show_xp_in_status: true },
-    user_profile: { interview_completed: false, role: null, code_literacy: null, autonomy: null, pr_review: null, verbosity: null, gamification_preference: null, learning: null, risk_tolerance: null, updated_at: null },
+    user_profile: { interview_completed: false, code_literacy: null, autonomy: null, pr_review: null, verbosity: null, gamification_preference: null, learning: null, risk_tolerance: null, updated_at: null },
   };
   Object.assign(form, structuredClone(defaultConfig));
 }
@@ -153,7 +153,6 @@ function copyToClipboard() {
 // ── Profile dimension metadata ───────────────────────────────────────────────
 
 const profileDimensions = [
-  { key: "role", label: "Role", description: "Your primary role — determines explanation depth and jargon level.", options: ["developer", "technical_pm", "designer", "non_technical", "learner"] },
   { key: "code_literacy", label: "Code Literacy", description: "How comfortable you are reading and writing code.", options: ["fluent", "conversational", "basic", "none"] },
   { key: "autonomy", label: "Autonomy", description: "How much VibeCrew should do without asking you.", options: ["full_auto", "checkpoints", "collaborative", "supervised"] },
   { key: "pr_review", label: "PR Review", description: "How pull requests should be handled.", options: ["auto_merge", "summary", "review", "walkthrough"] },

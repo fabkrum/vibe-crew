@@ -150,7 +150,6 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
   },
   "user_profile": {
     "interview_completed": false,
-    "role": null,
     "code_literacy": null,
     "autonomy": null,
     "pr_review": null,

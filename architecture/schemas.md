@@ -179,7 +179,6 @@ User preferences. Created by `/setup` or `/new-project`. Editable by user.
 | `issues.auto_pr` | boolean | yes | `true` | Auto-create PR/MR after fix |
 | `issues.sync_limit` | integer | yes | `10` | Max issues to import per sync |
 | `user_profile.interview_completed` | boolean | yes | `false` | Profile interview done |
-| `user_profile.role` | enum\|null | yes | `null` | `developer\|technical_pm\|designer\|non_technical\|learner` |
 | `user_profile.code_literacy` | enum | yes | `"conversational"` | `fluent\|conversational\|basic\|none` |
 | `user_profile.autonomy` | enum | yes | `"checkpoints"` | `full_auto\|checkpoints\|collaborative\|supervised` |
 | `user_profile.pr_review` | enum | yes | `"review"` | `auto_merge\|summary\|review\|walkthrough` |

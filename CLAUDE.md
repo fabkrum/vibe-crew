@@ -117,10 +117,9 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### User Profile System
 
-The `/profile` command runs an 8-question interview that stores user preferences in `.vibecrew/config.json` under the `user_profile` key. Every agent reads the profile via `scripts/read-profile.sh` and adapts behavior accordingly.
+The `/profile` command runs a 7-question interview that stores user preferences in `.vibecrew/config.json` under the `user_profile` key. Every agent reads the profile via `scripts/read-profile.sh` and adapts behavior accordingly.
 
-**8 Dimensions:**
-- `role` — developer, technical_pm, designer, non_technical, learner
+**7 Dimensions:**
 - `code_literacy` — fluent, conversational, basic, none
 - `autonomy` — full_auto, checkpoints, collaborative, supervised
 - `pr_review` — auto_merge, summary, review, walkthrough

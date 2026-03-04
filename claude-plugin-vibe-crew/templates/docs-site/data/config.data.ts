@@ -71,7 +71,6 @@ export interface ConfigData {
   }
   user_profile: {
     interview_completed: boolean
-    role: string | null
     code_literacy: string | null
     autonomy: string | null
     pr_review: string | null
@@ -160,7 +159,6 @@ const defaultConfig: ConfigData = {
   },
   user_profile: {
     interview_completed: false,
-    role: null,
     code_literacy: null,
     autonomy: null,
     pr_review: null,

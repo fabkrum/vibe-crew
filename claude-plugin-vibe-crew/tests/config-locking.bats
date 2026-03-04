@@ -82,12 +82,12 @@ teardown() {
   jq '.marker_key = "should_survive"' "$VIBECREW_DIR/config.json" > "$VIBECREW_DIR/config.json.tmp" \
     && mv "$VIBECREW_DIR/config.json.tmp" "$VIBECREW_DIR/config.json"
 
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role developer --gamification full
+  run bash "$SCRIPTS_DIR/save-profile.sh" --autonomy full_auto --gamification full
   assert_success
 
   # Both profile and gamification should be present
-  run jq -r '.user_profile.role' "$VIBECREW_DIR/config.json"
-  assert_output "developer"
+  run jq -r '.user_profile.autonomy' "$VIBECREW_DIR/config.json"
+  assert_output "full_auto"
   run jq -r '.gamification.enabled' "$VIBECREW_DIR/config.json"
   assert_output "true"
   run jq -r '.gamification.streak_reminders' "$VIBECREW_DIR/config.json"
@@ -99,11 +99,11 @@ teardown() {
 }
 
 @test "save-profile: gamification=disabled sets all flags in single write" {
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role learner --gamification disabled
+  run bash "$SCRIPTS_DIR/save-profile.sh" --verbosity educational --gamification disabled
   assert_success
 
-  run jq -r '.user_profile.role' "$VIBECREW_DIR/config.json"
-  assert_output "learner"
+  run jq -r '.user_profile.verbosity' "$VIBECREW_DIR/config.json"
+  assert_output "educational"
   run jq -r '.gamification.enabled' "$VIBECREW_DIR/config.json"
   assert_output "false"
   run jq -r '.gamification.show_xp_in_status' "$VIBECREW_DIR/config.json"
@@ -141,7 +141,7 @@ teardown() {
 # =============================================================================
 
 @test "save-profile: no config lock remains after successful run" {
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role developer
+  run bash "$SCRIPTS_DIR/save-profile.sh" --autonomy full_auto
   assert_success
 
   # Lock dir should be cleaned up by EXIT trap
@@ -217,7 +217,7 @@ EOF
   jq '.locks.wait_timeout_secs = 1' "$VIBECREW_DIR/config.json" > "$VIBECREW_DIR/config.json.setup" \
     && mv "$VIBECREW_DIR/config.json.setup" "$VIBECREW_DIR/config.json"
 
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role developer
+  run bash "$SCRIPTS_DIR/save-profile.sh" --autonomy full_auto
   assert_failure
   assert_output --partial "Could not acquire"
 
@@ -264,7 +264,7 @@ EOF
 }
 EOF
 
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role developer
+  run bash "$SCRIPTS_DIR/save-profile.sh" --autonomy full_auto
   assert_success
   assert_output --partial "Profile saved"
 }
@@ -279,12 +279,12 @@ EOF
     "$VIBECREW_DIR/config.json" > "$VIBECREW_DIR/config.json.tmp" \
     && mv "$VIBECREW_DIR/config.json.tmp" "$VIBECREW_DIR/config.json"
 
-  run bash "$SCRIPTS_DIR/save-profile.sh" --role designer --gamification light
+  run bash "$SCRIPTS_DIR/save-profile.sh" --code-literacy conversational --gamification light
   assert_success
 
   # Profile and gamification should be set
-  run jq -r '.user_profile.role' "$VIBECREW_DIR/config.json"
-  assert_output "designer"
+  run jq -r '.user_profile.code_literacy' "$VIBECREW_DIR/config.json"
+  assert_output "conversational"
   run jq -r '.gamification.show_xp_in_status' "$VIBECREW_DIR/config.json"
   assert_output "true"
 

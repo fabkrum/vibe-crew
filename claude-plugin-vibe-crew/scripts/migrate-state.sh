@@ -166,7 +166,6 @@ migrate_1_3_to_1_4() {
       updated=$(jq '. + {
         user_profile: (.user_profile // {
           interview_completed: false,
-          role: null,
           code_literacy: null,
           autonomy: null,
           pr_review: null,

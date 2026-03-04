@@ -12,7 +12,6 @@ CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 
 DEFAULTS='{
   "interview_completed": false,
-  "role": null,
   "code_literacy": "conversational",
   "autonomy": "checkpoints",
   "pr_review": "review",

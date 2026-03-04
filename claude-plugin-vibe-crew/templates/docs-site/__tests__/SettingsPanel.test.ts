@@ -24,7 +24,7 @@ function makeConfig(overrides: Partial<ConfigData> = {}): ConfigData {
     opponent_processor: { enabled: true, auto_invoke_after_tdr: true },
     ci_healing: { enabled: true, max_attempts: 3, auto_checkpoint: true },
     gamification: { enabled: true, streak_reminders: false, quiz_frequency: 'weekly', show_xp_in_status: true },
-    user_profile: { interview_completed: false, role: null, code_literacy: null, autonomy: null, pr_review: null, verbosity: null, gamification_preference: null, learning: null, risk_tolerance: null, updated_at: null },
+    user_profile: { interview_completed: false, code_literacy: null, autonomy: null, pr_review: null, verbosity: null, gamification_preference: null, learning: null, risk_tolerance: null, updated_at: null },
     ...overrides,
   }))
 }

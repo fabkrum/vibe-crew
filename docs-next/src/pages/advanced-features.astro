@@ -36,17 +36,17 @@ import TableWrap from '../components/TableWrap.astro';
       <h4>Three modes</h4>
       <div class="card-grid">
         <div class="card">
-          <div class="card-icon purple">&#9776;</div>
+
           <h4>List templates</h4>
           <p>Run <code>/replay</code> with no arguments to list all saved workflow templates with their names, descriptions, and quality thresholds.</p>
         </div>
         <div class="card">
-          <div class="card-icon green">+</div>
+
           <h4>Create a template</h4>
           <p>Run <code>/replay --create &lt;name&gt;</code> to extract a template from the most recent high-scoring session. Captures phase order, branch conventions, test strategy, and quality thresholds.</p>
         </div>
         <div class="card">
-          <div class="card-icon blue">&#9654;</div>
+
           <h4>Apply a template</h4>
           <p>Run <code>/replay &lt;name&gt;</code> to load a template and have it guide your current feature development with the proven workflow.</p>
         </div>
@@ -124,17 +124,17 @@ Presents suggestions one at a time for your approval
 
       <div class="card-grid">
         <div class="card">
-          <div class="card-icon blue">&#128295;</div>
+
           <h4><code>/fix-issue &lt;number&gt;</code></h4>
           <p>Interactive single-issue fix. Fetches the issue from GitHub or GitLab, imports it into the backlog, creates a branch, implements the fix with the Builder agent, runs quality checks, and opens a PR/MR with <code>Fixes #N</code> (or <code>Closes #N</code> on GitLab) for auto-close.</p>
         </div>
         <div class="card">
-          <div class="card-icon green">&#128259;</div>
+
           <h4><code>/sync-issues</code></h4>
           <p>Batch-import open issues by label (default: <code>autofix</code>) from GitHub or GitLab into the backlog. Zero token cost &mdash; pure bash. Then run <code>/run-backlog</code> to process them automatically.</p>
         </div>
         <div class="card">
-          <div class="card-icon amber">&#9889;</div>
+
           <h4>CI Automation</h4>
           <p>Fully automated CI-triggered fixes. On GitHub, the <code>github-actions-autofix.yml</code> template triggers on <code>issues.labeled</code> events. On GitLab, the <code>gitlab-ci-autofix.yml.template</code> provides equivalent pipeline-triggered fixes. Both run Claude Code CLI headless and comment results back on the issue.</p>
         </div>
@@ -154,17 +154,17 @@ Presents suggestions one at a time for your approval
       <h4>What it produces</h4>
       <div class="card-grid">
         <div class="card">
-          <div class="card-icon red">&#10007;</div>
+
           <h4>Counter-arguments</h4>
           <p>For each technology decision, the opponent generates 2&ndash;3 reasons why the choice might be wrong, citing real-world failure modes and edge cases.</p>
         </div>
         <div class="card">
-          <div class="card-icon amber">&#9878;</div>
+
           <h4>Debate matrix</h4>
           <p>A structured comparison table scoring each option across 6 criteria: performance, DX, ecosystem, scalability, learning curve, and lock-in risk.</p>
         </div>
         <div class="card">
-          <div class="card-icon blue">&#9888;</div>
+
           <h4>Risk assessment</h4>
           <p>Identifies the highest-risk decisions and recommends which ones deserve extra scrutiny or prototyping before committing.</p>
         </div>
@@ -200,22 +200,21 @@ Presents suggestions one at a time for your approval
 
       <div class="card-grid">
         <div class="card">
-          <div class="card-icon green">$</div>
+
           <h4>Current Session</h4>
           <p>Live cost, turn count, model name, and last-updated timestamp. Read from <code>.vibecrew/session-cost.json</code> which is updated after every assistant turn.</p>
         </div>
         <div class="card">
-          <div class="card-icon blue">&#9650;</div>
+
           <h4>Aggregates</h4>
           <p>Daily, weekly, monthly, and all-time totals calculated by <code>aggregate-costs.sh</code> from session log files in <code>.vibecrew/sessions/</code>.</p>
         </div>
         <div class="card">
-          <div class="card-icon amber">&#9632;</div>
           <h4>Threshold Status</h4>
           <p>Visual progress bars showing proximity to session warning, session max, and daily warning limits. Configurable in <code>.vibecrew/config.json</code>.</p>
         </div>
         <div class="card">
-          <div class="card-icon purple">&#9881;</div>
+
           <h4>Pricing Reference</h4>
           <p>Per-model pricing table for Opus, Sonnet, and Haiku showing input, cache write, cache read, and output costs per million tokens.</p>
         </div>
@@ -275,17 +274,14 @@ Presents suggestions one at a time for your approval
 
       <div class="card-grid">
         <div class="card">
-          <div class="card-icon red">&#9632;</div>
           <h4>protect-data.sh</h4>
           <p>Blocks destructive bash commands: <code>rm -rf</code>, <code>git push --force</code>, <code>DROP TABLE</code>, <code>sudo</code>, <code>kill -9</code>, <code>chmod 777</code>, and more. 18 denied tool patterns in <code>settings.json</code>.</p>
         </div>
         <div class="card">
-          <div class="card-icon amber">&#9632;</div>
           <h4>phase-gate.sh</h4>
           <p>Blocks source code writes (<code>src/</code>, <code>app/</code>, <code>lib/</code>, <code>components/</code>) until all Tier 1 foundation artifacts exist. Allows config and docs writes always.</p>
         </div>
         <div class="card">
-          <div class="card-icon blue">&#9632;</div>
           <h4>restrict-paths.sh</h4>
           <p>Validates that write targets are within the project directory and match allowed path patterns. Prevents accidental writes to system files or other projects.</p>
         </div>

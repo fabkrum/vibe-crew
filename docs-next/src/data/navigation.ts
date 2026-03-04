@@ -54,7 +54,6 @@ export const navigation: NavGroup[] = [
     label: 'Reference',
     collapsed: true,
     links: [
-      { title: 'Slash Commands', slug: 'commands' },
       { title: 'UI Pattern Guide', slug: 'ui-patterns' },
       { title: 'Business Patterns', slug: 'business-patterns' },
       { title: 'Glossary', slug: 'glossary' },

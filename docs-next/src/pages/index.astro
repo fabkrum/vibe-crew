@@ -40,6 +40,33 @@ import { url } from '../data/site';
     </div>
   </section>
 
+  <!-- ── Good for / Not for ────────────────────────────────── -->
+  <section class="section" id="fit">
+    <h3>Is VibeCrew right for you?</h3>
+    <div class="fit-grid">
+      <div class="card fit-card fit-good">
+        <h4>Great for</h4>
+        <ul class="fit-list">
+          <li>Building new web apps and SaaS products from scratch</li>
+          <li>Non-technical founders turning ideas into working software</li>
+          <li>Solo developers who want architecture, tests, and docs without the overhead</li>
+          <li>Full-stack projects that need a design system, API layer, and frontend</li>
+          <li>Teams that want repeatable, structured AI-assisted development</li>
+        </ul>
+      </div>
+      <div class="card fit-card fit-not">
+        <h4>Not designed for</h4>
+        <ul class="fit-list">
+          <li>Quick one-off scripts or throwaway prototypes</li>
+          <li>Small bug fixes or minor changes to existing codebases</li>
+          <li>Native mobile apps (iOS/Android), embedded systems, or game engines</li>
+          <li>Data science notebooks, ML model training, or data pipelines</li>
+          <li>Projects where you just need a single Claude Code session</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Features ───────────────────────────────────────────── -->
   <section class="section" id="features">
     <h3>Everything included</h3>
@@ -216,6 +243,63 @@ import { url } from '../data/site';
     margin: 0;
     font-size: 0.85rem;
     color: var(--color-text-secondary);
+  }
+
+  /* ── Fit section ──────────────────────────────────────── */
+  .fit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .fit-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .fit-card {
+    padding: 1rem 1.25rem;
+  }
+
+  .fit-card h4 {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .fit-good h4 { color: var(--color-green); }
+  .fit-not h4 { color: var(--color-red); }
+
+  .fit-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .fit-list li {
+    position: relative;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 0.35rem;
+  }
+
+  .fit-list li::before {
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+  }
+
+  .fit-good .fit-list li::before {
+    content: '\2713';
+    color: var(--color-green);
+  }
+
+  .fit-not .fit-list li::before {
+    content: '\2717';
+    color: var(--color-red);
   }
 
   /* ── Features grid ──────────────────────────────────────── */

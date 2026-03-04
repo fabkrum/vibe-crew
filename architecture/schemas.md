@@ -609,7 +609,7 @@ final_score = clamp(base_score + sum(deductions) + sum(bonuses), 0, 100)
 | `prompt-churn` | -5 per sequence | 3+ consecutive similar prompts without meaningful progress |
 | `tool-loop` | -10 per loop | Same tool called 3+ times with identical arguments |
 | `low-cache` | -15 | Cache hit rate below 30% |
-| `context-violation` | -20 | Context usage exceeded 80% |
+| `context-violation` | -20 | Context usage exceeded 60% |
 | `no-tests` | -10 | No tests ran during session |
 | `no-spec` | -5 | Feature started without acceptance criteria |
 | `missing-phase` | -3 per phase | Any Tier 2 phase skipped |

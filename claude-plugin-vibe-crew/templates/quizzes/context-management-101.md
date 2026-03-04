@@ -28,12 +28,12 @@ At what context usage percentage does VibeCrew first warn you to consider wrappi
 
 - A) 40%
 - B) 50%
-- C) 60%
+- C) 45%
 - D) 75%
 
 **Answer:** C
 
-**Explanation:** The `check-context.sh` hook fires warnings at both 60% and 80% context usage. The 60% warning is your first signal that it may be time to plan a clean handoff. VibeCrew targets keeping active context below 50% as its ideal operating condition, so 60% is the early alert threshold.
+**Explanation:** The `check-context.sh` hook fires warnings at both 45% and 60% context usage. The 45% warning is your first signal that it may be time to plan a clean handoff. VibeCrew targets keeping active context below 50% as its ideal operating condition, so 45% is the early alert threshold.
 
 ---
 
@@ -69,13 +69,13 @@ Which Vibe Score deduction applies when your session has low cache utilization?
 
 ## Q5
 
-A developer has been working in the same Claude Code session for several hours and is deep into implementing a complex feature. The context window is at 78%. What is the VibeCrew-recommended action?
+A developer has been working in the same Claude Code session for several hours and is deep into implementing a complex feature. The context window is at 58%. What is the VibeCrew-recommended action?
 
-- A) Continue working since 78% is below the 80% hard stop threshold
+- A) Continue working since 58% is below the 60% critical threshold
 - B) Immediately run /check to validate work before the context fills completely
 - C) Begin wrapping up with /wrap to create a handoff log and start a fresh session
 - D) Delete session logs from .vibecrew/sessions/ to free up context space
 
 **Answer:** C
 
-**Explanation:** At 78%, VibeCrew has already fired the 60% warning and is approaching the 80% warning. The correct action is to use /wrap to create a structured handoff log that captures current state, completed work, and next steps — then start a fresh session. Deleting session logs does nothing to the context window, and continuing past 80% risks running out of context mid-operation.
+**Explanation:** At 58%, VibeCrew has already fired the 45% warning and is approaching the 60% critical warning. The correct action is to use /wrap to create a structured handoff log that captures current state, completed work, and next steps — then start a fresh session. Deleting session logs does nothing to the context window, and continuing past 60% risks running out of context mid-operation.

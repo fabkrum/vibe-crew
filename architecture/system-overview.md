@@ -82,7 +82,7 @@ claude-plugin-vibe-crew/                      # Plugin root
     restrict-paths.sh                       #   PreToolUse(Write|Edit): sandbox path validation
     format-code.sh                          #   PostToolUse(Write|Edit): auto-format
     notify.sh                               #   Notification + PostToolUseFailure: OS alerts
-    check-context.sh                        #   Stop: context usage warnings (60%/80%/90%)
+    check-context.sh                        #   Stop: context usage warnings (45%/60%/80%)
     cost-guardrails.sh                      #   Stop: session/daily cost tracking
     claude-md-lint.sh                       #   Stop: CLAUDE.md size and quality validation
     quality-gate.sh                         #   Stop: typecheck/lint/build on modified source files
@@ -867,7 +867,7 @@ These bypass vectors are unlikely in model-generated commands but are documented
 
 ### 5.1 Target: Below 50% Usage
 
-Every VibeCrew agent session targets less than 50% context window utilization. This is a safety requirement, not merely a performance optimization. When context usage exceeds 60%, the model begins to lose track of earlier instructions -- including safety constraints, project conventions from CLAUDE.md, and architectural decisions from the TDR. For a non-technical user who cannot recognize degraded output quality, context exhaustion is a silent failure mode.
+Every VibeCrew agent session targets less than 50% context window utilization. This is a safety requirement, not merely a performance optimization. When context usage exceeds 45%, the model begins to lose track of earlier instructions -- including safety constraints, project conventions from CLAUDE.md, and architectural decisions from the TDR. For a non-technical user who cannot recognize degraded output quality, context exhaustion is a silent failure mode.
 
 ### 5.2 Strategy Overview
 
@@ -911,7 +911,7 @@ Every VibeCrew agent session targets less than 50% context window utilization. T
 |                                               architecture       |
 |                                                                  |
 |  Stop hook for warnings       Prevents        check-context.sh  |
-|  (60%/80%/90% thresholds)     exhaustion      fires after each  |
+|  (45%/60%/80% thresholds)     exhaustion      fires after each  |
 |                                               assistant turn     |
 |                                                                  |
 |  CLAUDE.md under 200 lines    Hundreds of     Re-read on every  |
@@ -986,11 +986,10 @@ The `check-context.sh` script reads context usage from the hook payload:
 
 | Threshold | Level | Response |
 |-----------|-------|----------|
-| 0-50% | Normal | No intervention |
-| 50-60% | Info | Agent should start wrapping up |
-| 60-80% | Warning | Notification fires, agent should commit and prepare handoff |
-| 80-90% | Critical | Session must terminate, force WIP commit |
-| 90%+ | Danger | Agent quality severely degraded, immediate `/wrap` required |
+| 0-45% | Normal | No intervention |
+| 45-60% | Warning | Notification fires, agent should commit and prepare handoff |
+| 60-80% | Critical | Session must terminate, force WIP commit |
+| 80%+ | Danger | Agent quality severely degraded, immediate `/wrap` required |
 
 The hook also checks `stop_hook_active` to prevent infinite loops (a Stop hook that forces continuation triggers another Stop event).
 

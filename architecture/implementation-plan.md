@@ -83,7 +83,7 @@ Build the plugin skeleton, safety layer, session startup hook, and runtime state
 | 7 | `scripts/phase-gate.sh` | PreToolUse (Write/Edit): blocks source code writes until `foundation.complete == true` in state.json |
 | 8 | `scripts/format-code.sh` | PostToolUse (Write/Edit): auto-detects file type, runs appropriate formatter. Silent skip if none found. |
 | 9 | `scripts/notify.sh` | Notification + PostToolUseFailure: OS notifications with Warp deep-linking via WARP_SESSION_ID |
-| 10 | `scripts/check-context.sh` | Stop hook: monitors context window usage, warns at 60%/80%/90% thresholds |
+| 10 | `scripts/check-context.sh` | Stop hook: monitors context window usage, warns at 45%/60%/80% thresholds |
 | 11 | `settings.json` | Declarative deny rules: 40+ blocked command patterns (defense in depth alongside hook scripts) |
 | 12 | `.mcp.json` | MCP server configuration (9 servers: Context7, Chrome DevTools, Playwright enabled; Semgrep, Sentry, Supabase, Stripe, Vercel, Figma disabled) |
 | 13 | `scripts/init-vibecrew-state.sh` | Creates `.vibecrew/` directory with initial config.json, state.json, backlog.json (schemas per `architecture/schemas.md`) |

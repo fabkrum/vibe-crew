@@ -28,25 +28,25 @@ run_context() {
   refute_output --partial "DANGER"
 }
 
-@test "outputs WARNING at 65% (default warn threshold 60%)" {
-  run_context 65
+@test "outputs WARNING at 50% (default warn threshold 45%)" {
+  run_context 50
   assert_success
   assert_output --partial "WARNING"
+  assert_output --partial "50%"
+}
+
+@test "outputs CRITICAL at 65% (default critical threshold 60%)" {
+  run_context 65
+  assert_success
+  assert_output --partial "CRITICAL"
   assert_output --partial "65%"
 }
 
-@test "outputs CRITICAL at 85% (default critical threshold 80%)" {
+@test "outputs DANGER at 85%" {
   run_context 85
   assert_success
-  assert_output --partial "CRITICAL"
-  assert_output --partial "85%"
-}
-
-@test "outputs DANGER at 92%" {
-  run_context 92
-  assert_success
   assert_output --partial "DANGER"
-  assert_output --partial "92%"
+  assert_output --partial "85%"
 }
 
 @test "custom thresholds from config" {

@@ -14,12 +14,12 @@ CONFIG_FILE="$PROJECT_ROOT/.vibecrew/config.json"
 SIGNALS_DIR="$PROJECT_ROOT/.vibecrew/signals"
 
 # --- Read thresholds from config ---
-WARN_AT=60
-CRITICAL_AT=80
+WARN_AT=45
+CRITICAL_AT=60
 
 if [[ -f "$CONFIG_FILE" ]]; then
-  WARN_AT=$(jq -r '.context_warnings.warn_at_percent // 60' "$CONFIG_FILE" 2>/dev/null || echo "60")
-  CRITICAL_AT=$(jq -r '.context_warnings.critical_at_percent // 80' "$CONFIG_FILE" 2>/dev/null || echo "80")
+  WARN_AT=$(jq -r '.context_warnings.warn_at_percent // 45' "$CONFIG_FILE" 2>/dev/null || echo "45")
+  CRITICAL_AT=$(jq -r '.context_warnings.critical_at_percent // 60' "$CONFIG_FILE" 2>/dev/null || echo "60")
 fi
 
 # --- Read context usage from hook payload ---
@@ -30,7 +30,7 @@ CONTEXT_USED=$(echo "$INPUT" | jq -r '.context_window_percent // empty' 2>/dev/n
 if [[ -n "$CONTEXT_USED" && "$CONTEXT_USED" != "null" ]]; then
   USAGE_INT=${CONTEXT_USED%.*}  # Truncate to integer
 
-  if [[ "$USAGE_INT" -ge 90 ]]; then
+  if [[ "$USAGE_INT" -ge 80 ]]; then
     echo "DANGER: Context window at ${USAGE_INT}%. Agent quality severely degraded."
     echo "  IMMEDIATELY run /wrap to end this session."
     echo "  Do not attempt complex operations."

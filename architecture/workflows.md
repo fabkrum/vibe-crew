@@ -907,8 +907,8 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     |               to START                                 |
     |                                                        |
     |  CONTEXT CHECK: After each feature, check context %.   |
-    |  If > 60%: warn user, suggest wrapping.                |
-    |  If > 80%: force wrap, new session for remaining tasks.|
+    |  If > 45%: warn user, suggest wrapping.                |
+    |  If > 60%: force wrap, new session for remaining tasks.|
     |                                                        |
     +----------------------------------------------------------+
 ```
@@ -1025,8 +1025,8 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |       |     claude-md-lint.sh  -> CLAUDE.md validation    |
     |       |     quality-gate.sh    -> typecheck/lint/build    |
     |       |       (blocks on failure; agent fixes errors)     |
-    |       |     60%: "Consider wrapping up."                 |
-    |       |     80%: "Wrap now." + OS notification           |
+    |       |     45%: "Consider wrapping up."                 |
+    |       |     60%: "Wrap now." + OS notification           |
     |       |                                                  |
     |       +-- Agent commits work atomically:                 |
     |             feat(auth): add login form component         |
@@ -1034,7 +1034,7 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |                                                          |
     |  ========= PHASE 3: SHUTDOWN =========                  |
     |                                                          |
-    |  Triggered by: /wrap, context >= 80%, or Ctrl+D         |
+    |  Triggered by: /wrap, context >= 60%, or Ctrl+D         |
     |       |                                                  |
     |       v                                                  |
     |  STEP 1: Completeness check                              |
@@ -1168,7 +1168,7 @@ When Claude Code compacts the context window (automatic or manual), the session 
   |   blocked    |<--- waiting for permission (notification sent)
   |   idle       |<--- task complete, waiting for input
   +------+-------+
-         | /wrap or context >= 80% or Ctrl+D
+         | /wrap or context >= 60% or Ctrl+D
          v
   +--------------+
   |  WRAPPING    |  (quality check, Vibe Score, commit)
@@ -1252,7 +1252,7 @@ The Verifier calculates the Vibe Score during `/wrap`. See `architecture/scoring
     |  Prompt churn (3+ consecutive corrections)    -5 each    |
     |  Tool loops (same call 3+ times)              -10 each   |
     |  Low cache utilization (<30% read tokens)     -15        |
-    |  Context violation (work after 80% warning)   -20        |
+    |  Context violation (work after 60% warning)   -20        |
     |  No tests written for feature with code       -10        |
     |  No feature spec before coding                -5         |
     |  Missing phase (any Tier 2 phase skipped)     -3 each    |
@@ -1833,7 +1833,7 @@ All telemetry data uses anonymous project aliases. The registry maps real paths 
 | **Feature** | Tests fail at quality gate | Verifier reports failure | Stop backlog execution; developer intervenes |
 | **Feature** | Merge conflict when merging worktree | Rebase/merge fails | Notification to developer; manual resolution |
 | **Feature** | Dependency not yet complete | Dependency check fails | Skip feature, try next planned task |
-| **Session** | Context hits 80% | check-context.sh hook | Force wrap; new session picks up from committed state |
+| **Session** | Context hits 60% | check-context.sh hook | Force wrap; new session picks up from committed state |
 | **Session** | Agent crashes without `/wrap` | Stale session detection | Clean up session entry; worktree has committed work |
 | **Session** | Context compacted | Claude Code compaction | Agent re-reads state.json, backlog.json, and git log to recover context |
 | **Feature** | Context rot across `/run-backlog` features | Inter-feature compaction (Step 3f) | Forced `/compact` between features; `compact-reinject.sh` re-injects state + architecture diagrams |

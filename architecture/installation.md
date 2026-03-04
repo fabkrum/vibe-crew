@@ -513,7 +513,7 @@ The `hooks/hooks.json` file wires Claude Code lifecycle events to VibeCrew autom
 | Notification | `permission_prompt` | `notify.sh` | macOS notification with Warp deep-link when agent is blocked | No |
 | Notification | `idle_prompt` | `notify.sh` | macOS notification when task completes | No |
 | PostToolUseFailure | (all) | `notify.sh` | macOS notification on critical tool failures | No |
-| Stop | (all) | `check-context.sh` | Warn at 60% and 80% context usage | No |
+| Stop | (all) | `check-context.sh` | Warn at 45% and 60% context usage | No |
 | Stop | (all) | `cost-guardrails.sh` | Session and daily cost tracking against thresholds | No |
 | Stop | (all) | `claude-md-lint.sh` | CLAUDE.md size and quality validation | No |
 | Stop | (all) | `quality-gate.sh` | Typecheck/lint/build on modified source files | Yes (exit 1) |

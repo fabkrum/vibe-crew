@@ -148,7 +148,7 @@ Calculate the session Vibe Score using this formula:
 | Prompt churn (repeated similar prompts) | -5 per sequence | Count consecutive user messages addressing same issue |
 | Tool loops (same tool, same args, 3+ times) | -10 per loop | Scan transcript for repeated tool calls |
 | Low cache utilization (<50% cache hit) | -15 | Read cache stats from session metadata |
-| Context violation (>60% context used) | -20 | Check context usage metric |
+| Context violation (>45% context used) | -20 | Check context usage metric |
 | No tests written | -10 | Check for new/modified test files |
 | No feature spec | -5 | Check for feature spec in backlog |
 | Missing phase artifact | -3 each | Check for expected artifacts per phase |

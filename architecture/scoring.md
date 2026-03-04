@@ -92,7 +92,7 @@ Each deduction category has a per-category cap. Deductions are applied at most t
 | `prompt-churn` | -5 per sequence | -15 (3 sequences) | 3+ consecutive user messages that rephrase the same request without meaningful progress between them. See [Section 3.2](#32-prompt-churn-detection). | Indicates vague initial instructions. Each correction wastes ~300-500 tokens re-reading context. |
 | `tool-loop` | -10 per loop | -30 (3 loops) | Same tool called 3+ times with identical or near-identical arguments. See [Section 3.3](#33-tool-loop-detection). | Agent stuck in a retry loop without adapting. Each loop wastes ~1,000 tokens and wall-clock time. |
 | `low-cache` | -15 | -15 | Cache hit rate below 30%. See [Section 3.1](#31-token-and-context-metrics). | Context is churning -- new content is pushing cached content out. Likely caused by doc pasting, excessive corrections, or rapidly changing instructions. |
-| `context-violation` | -20 | -20 | Context usage exceeded 80%. See [Section 3.1](#31-token-and-context-metrics). | Session pushed into the danger zone for context exhaustion. Risk of forced compaction and lost state. |
+| `context-violation` | -20 | -20 | Context usage exceeded 60%. See [Section 3.1](#31-token-and-context-metrics). | Session pushed into the danger zone for context exhaustion. Risk of forced compaction and lost state. |
 | `no-tests` | -10 | -10 | No test files created or modified during the session. See [Section 3.4](#34-test-and-quality-metrics). | Feature shipped without test coverage. Higher defect risk and harder to refactor. |
 | `no-spec` | -5 | -5 | Feature work started without acceptance criteria in `backlog.json`. See [Section 3.5](#35-phase-completion-metrics). | Implementation began without a deliberate plan. Increases rework probability. |
 | `missing-phase` | -3 per phase | -18 (6 phases) | Any Tier 2 phase skipped (no artifacts recorded in `state.json`). See [Section 3.5](#35-phase-completion-metrics). | Skipping phases reduces the quality feedback loop. |
@@ -144,9 +144,9 @@ The Verifier agent gathers metrics from four sources during `/wrap`. No external
 | Metric | Calculation | Used For |
 |--------|-------------|----------|
 | `cache_ratio` | `total_cache_read / total_input` (0 if `total_input` is 0) | `low-cache` deduction (<0.30), `high-cache` bonus (>0.70) |
-| `peak_usage_percent` | Highest context utilization observed during the session, as a percentage of the model's context window | `context-violation` deduction (>80%) |
+| `peak_usage_percent` | Highest context utilization observed during the session, as a percentage of the model's context window | `context-violation` deduction (>60%) |
 
-**Implementation note:** The Verifier should read the context usage percentage from the `check-context.sh` hook output stored in `state.json`, which tracks whether the 60% or 80% warning thresholds were triggered during the session. If the hook data is not available, the Verifier estimates peak usage from the token counts available in the session.
+**Implementation note:** The Verifier should read the context usage percentage from the `check-context.sh` hook output stored in `state.json`, which tracks whether the 45% or 60% warning thresholds were triggered during the session. If the hook data is not available, the Verifier estimates peak usage from the token counts available in the session.
 
 ### 3.2 Prompt Churn Detection
 
@@ -391,7 +391,7 @@ The good news: all tests are passing and the build is clean.
 Suggestions:
 - For complex features like payments, start with a detailed spec in the
   Plan phase. This reduces mid-session corrections.
-- When context exceeds 60%, consider wrapping the session and starting
+- When context exceeds 45%, consider wrapping the session and starting
   fresh. CLAUDE.md carries all learnings into the new session.
 - Delegate third-party API research to the Stack Scout so it does not
   consume main session context.

@@ -45,9 +45,9 @@ if [[ -n "$CONTEXT_PCT" && "$CONTEXT_PCT" != "null" ]]; then
   if [[ "$CTX_INT" -gt 100 ]] 2>/dev/null; then CTX_INT=100; fi
 
   # Color based on thresholds
-  if [[ "$CTX_INT" -le 45 ]]; then
+  if [[ "$CTX_INT" -lt 45 ]]; then
     CTX_COLOR="$C_GREEN"
-  elif [[ "$CTX_INT" -le 55 ]]; then
+  elif [[ "$CTX_INT" -lt 60 ]]; then
     CTX_COLOR="$C_YELLOW"
   else
     CTX_COLOR="$C_RED"

@@ -137,7 +137,7 @@ If data exists, analyze:
 - **Agent usage patterns:** Which agents are never invoked? Are they accessible enough?
 - **Deduction patterns:** What are the most common Vibe Score deductions? These indicate systemic friction in the workflow.
 - **Cost analysis:** Average cost per session, cost outliers. Are expensive agents being used efficiently?
-- **Context budget violations:** How often do projects hit 60% or 80% context warnings?
+- **Context budget violations:** How often do projects hit 45% or 60% context warnings?
 - **MCP adoption:** Which servers are configured but never enabled? Which are enabled but potentially unused?
 - **Mutation patterns:** Which CLAUDE.md rules keep getting proposed? Recurring proposals = systemic issues that should be fixed in the plugin itself.
 - **Test health:** Average test pass rates and coverage across projects.

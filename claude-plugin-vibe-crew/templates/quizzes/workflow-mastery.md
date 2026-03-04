@@ -33,7 +33,7 @@ What does the /wrap command do, and when should you use it?
 
 **Answer:** C
 
-**Explanation:** /wrap is the session completion command. It first runs the same quality checks as /check (tests, build, lint), then the Doc Generator agent creates a session log capturing what was completed, key decisions made, and what comes next. This handoff log becomes the starting context for the next session, enabling clean state transfer without relying on the developer's memory. Use /wrap whenever a session is winding down or context is approaching 60-80%.
+**Explanation:** /wrap is the session completion command. It first runs the same quality checks as /check (tests, build, lint), then the Doc Generator agent creates a session log capturing what was completed, key decisions made, and what comes next. This handoff log becomes the starting context for the next session, enabling clean state transfer without relying on the developer's memory. Use /wrap whenever a session is winding down or context is approaching 45-60%.
 
 ---
 

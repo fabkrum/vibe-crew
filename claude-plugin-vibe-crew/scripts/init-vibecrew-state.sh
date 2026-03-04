@@ -69,8 +69,8 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "formatter": "prettier"
   },
   "context_warnings": {
-    "warn_at_percent": 60,
-    "critical_at_percent": 80
+    "warn_at_percent": 45,
+    "critical_at_percent": 60
   },
   "cost_limits": {
     "session_warn_usd": 2.00,

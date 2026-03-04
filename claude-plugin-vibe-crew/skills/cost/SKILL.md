@@ -103,7 +103,7 @@ For each threshold bar:
 3. If current cost exceeds the warning threshold, prefix the bar with `WARNING:` instead of two spaces.
 4. If current cost exceeds the hard max (session only), prefix the bar with `OVER LIMIT:` instead of two spaces.
 
-Example at 60% of session warning ($1.20 / $2.00 warn):
+Example at 45% of session warning ($1.20 / $2.00 warn):
 ```
   Session:  [===========>--------]  $1.20 / $2.00 warn | $5.00 max
 ```

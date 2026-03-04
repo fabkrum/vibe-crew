@@ -1390,9 +1390,9 @@ For non-technical VibeCrew users, this is especially dangerous because the outpu
 
 | Threshold | Level | Response |
 |-----------|-------|----------|
-| 60% | Soft warning | Log warning to `.vibecrew/state.json`. Feedback message to model. |
-| 80% | Hard warning | Native OS notification to user via `notify.sh`. Recommend `/wrap`. |
-| 90% | Force stop | Agent should gracefully terminate. Create WIP commit. Start new session. |
+| 45% | Soft warning | Log warning to `.vibecrew/state.json`. Feedback message to model. |
+| 60% | Hard warning | Native OS notification to user via `notify.sh`. Recommend `/wrap`. |
+| 80% | Force stop | Agent should gracefully terminate. Create WIP commit. Start new session. |
 
 ### 8.3 Implementation via Stop Hook Pipeline
 
@@ -1966,7 +1966,7 @@ echo "Failed: $FAIL"
 | Symlink creation followed by write through symlink | Low | `sandbox.sh` resolves symlink chain |
 | Model ignoring CLAUDE.md security rules under context pressure | Medium | Static analysis catches on post-write |
 | Stale locks blocking agents indefinitely | Medium | 30-minute timeout + PID-based detection |
-| Context exhaustion causing safety rule amnesia | Medium | 60%/80%/90% threshold system with forced stop |
+| Context exhaustion causing safety rule amnesia | Medium | 45%/60%/80% threshold system with forced stop |
 | Uncontrolled API cost during `/run-backlog` | Medium | Three-tier cost guardrails with hard stop at session limit |
 | CLAUDE.md bloat degrading agent performance | Medium | 200/400 line limits, 15-rule Session Learnings cap, redundancy detection, auto-pruning |
 | Worktree accumulation consuming disk space | Low | Session Startup cleans up orphaned worktrees; `cleanup-worktree.sh` script |
@@ -2103,7 +2103,7 @@ Layer 7: Cost Monitoring             (cost-guardrails.sh)
          v                          $2/$5/$20 thresholds with hard stop
 Layer 6: Context Monitoring          (check-context.sh)
          |                          Prevents degraded-reasoning safety violations
-         v                          at 60%/80%/90% thresholds
+         v                          at 45%/60%/80% thresholds
 Layer 5: Worktree Isolation          (git worktree, cleanup-worktree.sh)
          |                          Filesystem-level containment for Builder and Scout
          v                          Atomic rollback via worktree removal

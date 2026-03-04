@@ -565,7 +565,7 @@ Plugin scaffold and core infrastructure.
 - `scripts/protect-data.sh` -- blocks dangerous bash commands (rm -rf, force push, DROP TABLE, sudo)
 - `scripts/format-code.sh` -- auto-formats files after Write/Edit via Prettier
 - `scripts/notify.sh` -- native OS notifications via terminal-notifier with Warp deep-linking
-- `scripts/check-context.sh` -- context usage warnings at 60% and 80% thresholds
+- `scripts/check-context.sh` -- context usage warnings at 45% and 60% thresholds
 - `scripts/sandbox.sh` -- sandboxed command execution wrapper
 - `scripts/check-deps.sh` -- dependency verification (Git, Node, gh, jq, terminal-notifier)
 - `scripts/init-vibecrew-state.sh` -- initializes `.vibecrew/` state directory with config, state, and backlog

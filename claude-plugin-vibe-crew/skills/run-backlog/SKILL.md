@@ -675,7 +675,7 @@ If `active_feature` is not null after the previous feature was cleared, somethin
 
 **If this is the last feature:** Skip compaction. Proceed directly to Step 4 (Completion Summary).
 
-**Why this matters:** Without inter-feature compaction, a 5-feature backlog run accumulates the full conversation history from all prior features. By feature 4-5, context usage is typically above 60%, triggering warnings and degrading agent quality. Compacting between features keeps each feature's working context lean.
+**Why this matters:** Without inter-feature compaction, a 5-feature backlog run accumulates the full conversation history from all prior features. By feature 4-5, context usage is typically above 45%, triggering warnings and degrading agent quality. Compacting between features keeps each feature's working context lean.
 
 ---
 
@@ -694,7 +694,7 @@ Additionally, track feature count as a cost heuristic:
 - Each feature processes ~6 phases with substantial model usage
 - After processing N features, estimate cost as approximately N * estimated_cost_per_feature
 
-**If approaching `session_warn_usd`** (or context usage exceeds 60%):
+**If approaching `session_warn_usd`** (or context usage exceeds 45%):
 
 ```
 Session cost/context approaching limit.
@@ -707,7 +707,7 @@ Continue processing? (yes/no)
 - If `yes`: continue to the next feature.
 - If `no`: jump to Step 4 (Completion Summary) with remaining features shown as "not processed".
 
-**If exceeding `session_max_usd`** (or context usage exceeds 80%):
+**If exceeding `session_max_usd`** (or context usage exceeds 60%):
 
 ```
 Session cost/context limit reached.

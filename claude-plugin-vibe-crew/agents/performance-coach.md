@@ -109,7 +109,7 @@ Select from these 5 anti-pattern templates:
 > "Use Context7 MCP (`mcp__context7__resolve-library-id` then `mcp__context7__get-library-docs`) for all third-party library documentation. Never paste documentation into the conversation."
 
 **4. Context Violations**
-> "Wrap the session with `/wrap` when context usage approaches 60%. Start a new session for remaining work. Use `/handoff` to transfer context between sessions."
+> "Wrap the session with `/wrap` when context usage approaches 45%. Start a new session for remaining work. Use `/handoff` to transfer context between sessions."
 
 **5. Missing Phase Artifacts**
 > "Complete all 5 Tier 2 phases (plan, design, code, test, docs) for every feature. Do not skip the test or docs phases even for small features."

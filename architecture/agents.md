@@ -769,7 +769,7 @@ Overall: PASS
 | Prompt churn | User corrects/rephrases instructions 3+ times in sequence | -5 per sequence (max -20) |
 | Tool loops | Same tool fails and retries 3+ times with identical arguments | -10 per loop (max -30) |
 | Low cache utilization | `cache_read_input_tokens` < 30% of `input_tokens` | -15 |
-| Context violation | Agent exceeded 80% context | -20 |
+| Context violation | Agent exceeded 60% context | -20 |
 | No tests | Feature completed without test files | -10 |
 | No feature spec | Development started without acceptance criteria | -5 |
 | Missing phase | Any Tier 2 phase skipped | -3 per phase |

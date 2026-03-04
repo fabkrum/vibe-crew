@@ -174,7 +174,7 @@ Check if context warnings were triggered during the session by reading state or 
 jq -r '.context_warnings_triggered // empty' .vibecrew/state.json 2>/dev/null
 ```
 
-- **`peak_context_pct`**: Highest context window utilization percentage observed. If the 80% warning was triggered, set to 85. If the 60% warning was triggered, set to 65. If neither, default to 40 (noted as estimated).
+- **`peak_context_pct`**: Highest context window utilization percentage observed. If the 60% warning was triggered, set to 65. If the 45% warning was triggered, set to 50. If neither, default to 40 (noted as estimated).
 
 ### 3.2 Prompt churn detection
 
@@ -820,7 +820,7 @@ The good news: all tests are passing and the build is clean.
 Suggestions:
 - For complex features like payments, start with a detailed spec in the
   Plan phase. This reduces mid-session corrections.
-- When context exceeds 60%, consider wrapping the session and starting
+- When context exceeds 45%, consider wrapping the session and starting
   fresh. CLAUDE.md carries all learnings into the new session.
 - Delegate third-party API research to the Stack Scout so it does not
   consume main session context.

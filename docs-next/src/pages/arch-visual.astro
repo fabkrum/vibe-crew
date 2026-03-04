@@ -509,11 +509,28 @@ import { commands, categories } from '../data/commands';
   /* ──── Tab navigation ──── */
   .arch-tabs {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     gap: 0.25rem;
     border-bottom: 1px solid var(--color-border);
     margin-bottom: 2rem;
     padding-bottom: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .arch-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .arch-tabs::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .arch-tabs::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 2px;
   }
 
   .arch-tab {
@@ -874,6 +891,54 @@ import { commands, categories } from '../data/commands';
     border-radius: 3px;
   }
 
+  /* ──── Tab prev/next navigation ──── */
+  .tab-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .tab-nav-btn {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+  }
+
+  .tab-nav-btn:hover:not(:disabled) {
+    border-color: var(--color-accent-dim);
+  }
+
+  .tab-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .tab-nav-btn.next {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  .tab-nav-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .tab-nav-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
   /* ──── Responsive ──── */
   @media (max-width: 600px) {
     .arch-tabs {
@@ -892,6 +957,15 @@ import { commands, categories } from '../data/commands';
     .safety-columns {
       grid-template-columns: 1fr;
     }
+
+    .tab-nav {
+      grid-template-columns: 1fr;
+    }
+
+    .tab-nav-btn.next {
+      text-align: left;
+      grid-column: 1;
+    }
   }
 </style>
 
@@ -900,6 +974,42 @@ import { commands, categories } from '../data/commands';
     var tabs = document.querySelectorAll('.arch-tab');
     var panels = document.querySelectorAll('.arch-panel');
     var rendered = {};
+
+    // Build ordered tab list for prev/next navigation
+    var tabOrder = [];
+    var tabLabels = {};
+    tabs.forEach(function(t) {
+      var key = t.getAttribute('data-tab');
+      tabOrder.push(key);
+      tabLabels[key] = t.textContent.trim();
+    });
+
+    var prevBtn = document.getElementById('tab-prev');
+    var nextBtn = document.getElementById('tab-next');
+    var prevTitle = document.getElementById('tab-prev-title');
+    var nextTitle = document.getElementById('tab-next-title');
+
+    function updateNavButtons(target) {
+      var idx = tabOrder.indexOf(target);
+      if (prevBtn && nextBtn) {
+        // Previous button
+        if (idx <= 0) {
+          prevBtn.disabled = true;
+          prevTitle.textContent = '';
+        } else {
+          prevBtn.disabled = false;
+          prevTitle.textContent = tabLabels[tabOrder[idx - 1]];
+        }
+        // Next button
+        if (idx >= tabOrder.length - 1) {
+          nextBtn.disabled = true;
+          nextTitle.textContent = '';
+        } else {
+          nextBtn.disabled = false;
+          nextTitle.textContent = tabLabels[tabOrder[idx + 1]];
+        }
+      }
+    }
 
     function switchTab(target) {
       // Update tabs
@@ -911,6 +1021,8 @@ import { commands, categories } from '../data/commands';
       if (activeTab) {
         activeTab.classList.add('active');
         activeTab.setAttribute('aria-selected', 'true');
+        // Scroll the active tab into view in the scrollable tab bar
+        activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       }
 
       // Update panels
@@ -934,6 +1046,9 @@ import { commands, categories } from '../data/commands';
           }
         }
       }
+
+      // Update prev/next buttons
+      updateNavButtons(target);
     }
 
     tabs.forEach(function(tab) {
@@ -941,6 +1056,27 @@ import { commands, categories } from '../data/commands';
         switchTab(tab.getAttribute('data-tab'));
       });
     });
+
+    // Prev/next button click handlers
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function() {
+        var current = document.querySelector('.arch-tab.active');
+        if (!current) return;
+        var idx = tabOrder.indexOf(current.getAttribute('data-tab'));
+        if (idx > 0) switchTab(tabOrder[idx - 1]);
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function() {
+        var current = document.querySelector('.arch-tab.active');
+        if (!current) return;
+        var idx = tabOrder.indexOf(current.getAttribute('data-tab'));
+        if (idx < tabOrder.length - 1) switchTab(tabOrder[idx + 1]);
+      });
+    }
+
+    // Initialize nav buttons for the first tab
+    updateNavButtons(tabOrder[0]);
 
     // Skills category filter
     var pills = document.querySelectorAll('.filter-pill');

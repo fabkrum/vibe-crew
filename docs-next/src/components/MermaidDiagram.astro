@@ -18,12 +18,20 @@ const { chart, caption } = Astro.props;
 <style>
   .mermaid-container {
     margin-bottom: 2rem;
+    overflow-x: auto;
   }
   pre.mermaid {
     background: transparent;
     border: none;
     padding: 0;
     text-align: center;
+    min-width: min-content;
+  }
+  /* Ensure rendered SVGs scale up to fill width */
+  .mermaid-container :global(svg) {
+    max-width: 100%;
+    height: auto;
+    min-height: 300px;
   }
   .mermaid-caption {
     text-align: center;
@@ -43,6 +51,13 @@ const { chart, caption } = Astro.props;
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -57,6 +72,7 @@ const { chart, caption } = Astro.props;
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand

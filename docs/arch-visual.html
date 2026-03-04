@@ -3,7 +3,7 @@
     var t = localStorage.getItem('theme');
     if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
   })();
-</script><link rel="stylesheet" href="/vibe-crew/_astro/arch-visual.CdoYXLXT.css">
+</script><link rel="stylesheet" href="/vibe-crew/_astro/arch-visual.B6K8gfEJ.css">
 <link rel="stylesheet" href="/vibe-crew/_astro/advanced-features._tR_LaEZ.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
   document.getElementById('hamburger').addEventListener('click', function() {
     document.body.classList.toggle('sidebar-open');
@@ -109,6 +109,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -123,6 +130,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand
@@ -232,6 +240,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -246,6 +261,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand
@@ -373,6 +389,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -387,6 +410,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand
@@ -404,7 +428,7 @@
       document.head.appendChild(s);
     }
   })();
-</script> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Session Init Hooks</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Run automatically when a new Claude Code session starts.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>session-startup.sh</code></td> <td data-astro-cid-gomkox45>SessionStart</td> <td data-astro-cid-gomkox45>Checks environment (Git, Node, jq), detects terminal type, loads state, and routes to the right workflow.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>sync-state.sh</code></td> <td data-astro-cid-gomkox45>SessionStart</td> <td data-astro-cid-gomkox45>Reconciles state files on startup &mdash; ensures <code data-astro-cid-gomkox45>.vibecrew/</code> JSON is consistent after crashes or manual edits.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>error-recovery.sh</code></td> <td data-astro-cid-gomkox45>SessionStart</td> <td data-astro-cid-gomkox45>Clears stale lock files and repairs corrupted state from previous interrupted sessions.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>compact-reinject.sh</code></td> <td data-astro-cid-gomkox45>SessionStart (compact)</td> <td data-astro-cid-gomkox45>Re-injects essential context (active feature, phase, conventions) after Claude Code's <code data-astro-cid-gomkox45>/compact</code> clears the context window.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Pre-Action Guards</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Intercept actions before they execute. Return exit code 2 to block.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>phase-gate.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Blocks source code writes until the Tier 1 foundation (VISION, TDR, architecture, CLAUDE.md) is complete. Prevents coding before decisions are made.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>restrict-paths.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Blocks file writes outside the project root directory. Prevents agents from modifying system files or other projects.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>protect-data.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Bash)</td> <td data-astro-cid-gomkox45>Blocks destructive shell commands: <code data-astro-cid-gomkox45>rm -rf</code>, <code data-astro-cid-gomkox45>DROP TABLE</code>, <code data-astro-cid-gomkox45>DELETE FROM</code> without WHERE, force push, and privilege escalation.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>validate-phase-transition.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Bash)</td> <td data-astro-cid-gomkox45>Enforces phase ordering &mdash; ensures foundation steps run in sequence and artifacts are complete before advancing.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>validate-signal.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Validates inter-agent signal file schemas, enum values, and feature ID cross-references before they're written.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Post-Action Processors</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Run after an action completes successfully.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>format-code.sh</code></td> <td data-astro-cid-gomkox45>PostToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Auto-formats files after every write using the project's configured formatter (Prettier, ESLint, etc.).</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>notify.sh</code></td> <td data-astro-cid-gomkox45>Notification / PostToolUseFailure</td> <td data-astro-cid-gomkox45>Sends native OS notifications for permission stalls, task completions, and errors. Includes Warp Terminal deep-links when available.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Session End Checks</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Run when a session stops to catch issues before they persist.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>quality-gate.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Runs typecheck, lint, and build on modified source files. Blocks task completion if any check fails &mdash; the agent must fix errors before finishing.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>claude-md-lint.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Validates CLAUDE.md file size and structure. Keeps it under the recommended line limit to avoid context bloat.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>cost-guardrails.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Tracks session and daily API costs against configured thresholds. Warns or blocks when spending exceeds limits.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>check-context.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Monitors context window usage and warns at 60% and 80%. Helps prevent sessions from running out of context mid-task.</td> </tr> </tbody> </table> </div> </div>  <div class="arch-panel" id="panel-commands" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Slash Commands</h3> <p data-astro-cid-gomkox45>Slash commands are the <strong data-astro-cid-gomkox45>primary user interface</strong> to VibeCrew. You type a command starting with <code data-astro-cid-gomkox45>/</code> and the system handles the rest. Each command is defined as a <code data-astro-cid-gomkox45>SKILL.md</code> file with YAML frontmatter (name, description, arguments) and a markdown body containing the full workflow: preconditions, steps, error handling, and agent handoffs.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>Commands across several categories: setup, planning, development, quality, safety, session management, and gamification. Some are script-only (zero token cost), others orchestrate multiple agents.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>Without slash commands, you'd need to manually prompt the AI with detailed instructions for every workflow step. Commands encode expert workflows into one-word triggers &mdash; <code data-astro-cid-gomkox45>/wrap</code> runs quality checks, scores your session, generates docs, and commits, all automatically.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart LR
+</script> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Session Init Hooks</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Run automatically when a new Claude Code session starts.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>session-startup.sh</code></td> <td data-astro-cid-gomkox45>SessionStart</td> <td data-astro-cid-gomkox45>Checks environment (Git, Node, jq), detects terminal type, loads state, and routes to the right workflow.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>sync-state.sh</code></td> <td data-astro-cid-gomkox45>SessionStart</td> <td data-astro-cid-gomkox45>Reconciles state files on startup &mdash; ensures <code data-astro-cid-gomkox45>.vibecrew/</code> JSON is consistent after crashes or manual edits.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>error-recovery.sh</code></td> <td data-astro-cid-gomkox45>SessionStart</td> <td data-astro-cid-gomkox45>Clears stale lock files and repairs corrupted state from previous interrupted sessions.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>compact-reinject.sh</code></td> <td data-astro-cid-gomkox45>SessionStart (compact)</td> <td data-astro-cid-gomkox45>Re-injects essential context (active feature, phase, conventions) after Claude Code's <code data-astro-cid-gomkox45>/compact</code> clears the context window.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Pre-Action Guards</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Intercept actions before they execute. Return exit code 2 to block.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>phase-gate.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Blocks source code writes until the Tier 1 foundation (VISION, TDR, architecture, CLAUDE.md) is complete. Prevents coding before decisions are made.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>restrict-paths.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Blocks file writes outside the project root directory. Prevents agents from modifying system files or other projects.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>protect-data.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Bash)</td> <td data-astro-cid-gomkox45>Blocks destructive shell commands: <code data-astro-cid-gomkox45>rm -rf</code>, <code data-astro-cid-gomkox45>DROP TABLE</code>, <code data-astro-cid-gomkox45>DELETE FROM</code> without WHERE, force push, and privilege escalation.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>validate-phase-transition.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Bash)</td> <td data-astro-cid-gomkox45>Enforces phase ordering &mdash; ensures foundation steps run in sequence and artifacts are complete before advancing.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>validate-signal.sh</code></td> <td data-astro-cid-gomkox45>PreToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Validates inter-agent signal file schemas, enum values, and feature ID cross-references before they're written.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Post-Action Processors</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Run after an action completes successfully.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>format-code.sh</code></td> <td data-astro-cid-gomkox45>PostToolUse (Write/Edit)</td> <td data-astro-cid-gomkox45>Auto-formats files after every write using the project's configured formatter (Prettier, ESLint, etc.).</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>notify.sh</code></td> <td data-astro-cid-gomkox45>Notification / PostToolUseFailure</td> <td data-astro-cid-gomkox45>Sends native OS notifications for permission stalls, task completions, and errors. Includes Warp Terminal deep-links when available.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading" data-astro-cid-gomkox45>Session End Checks</h4> <p class="cmd-group-desc" data-astro-cid-gomkox45>Run when a session stops to catch issues before they persist.</p> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45><tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Script</th><th data-astro-cid-gomkox45>Event</th><th data-astro-cid-gomkox45>What It Does</th></tr></thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>quality-gate.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Runs typecheck, lint, and build on modified source files. Blocks task completion if any check fails &mdash; the agent must fix errors before finishing.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>claude-md-lint.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Validates CLAUDE.md file size and structure. Keeps it under the recommended line limit to avoid context bloat.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>cost-guardrails.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Tracks session and daily API costs against configured thresholds. Warns or blocks when spending exceeds limits.</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>check-context.sh</code></td> <td data-astro-cid-gomkox45>Stop</td> <td data-astro-cid-gomkox45>Monitors context window usage and warns at 60% and 80%. Helps prevent sessions from running out of context mid-task.</td> </tr> </tbody> </table> </div> </div>  <div class="arch-panel" id="panel-commands" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Slash Commands</h3> <p data-astro-cid-gomkox45>Slash commands are the <strong data-astro-cid-gomkox45>primary user interface</strong> to VibeCrew. You type a command starting with <code data-astro-cid-gomkox45>/</code> and the system handles the rest. Each command is defined as a <code data-astro-cid-gomkox45>SKILL.md</code> file with YAML frontmatter (name, description, arguments) and a markdown body containing the full workflow: preconditions, steps, error handling, and agent handoffs.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>Commands across several categories: setup, planning, development, quality, safety, session management, and gamification. Some are script-only (zero token cost), others orchestrate multiple agents.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>Without slash commands, you'd need to manually prompt the AI with detailed instructions for every workflow step. Commands encode expert workflows into one-word triggers &mdash; <code data-astro-cid-gomkox45>/wrap</code> runs quality checks, scores your session, generates docs, and commits, all automatically.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
   subgraph User["User Input"]
     CMD["/slash-command"]
   end
@@ -414,14 +438,12 @@
   end
 
   subgraph Routing["Agent Routing"]
-    direction TB
     SO["Script-Only"]
     SA["Single Agent"]
     MA["Multi-Agent"]
   end
 
   subgraph Agents["Agent Execution"]
-    direction TB
     WO["Orchestrator"]
     BLD["Builder"]
     VER["Verifier"]
@@ -447,7 +469,7 @@
   style Routing fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Agents fill:#18181b,stroke:#60a5fa,color:#fafafa
   style Output fill:#18181b,stroke:#4ade80,color:#fafafa
-</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>How a slash command flows from user input to results</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart LR
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>How a slash command flows from user input to results</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
   subgraph User[&quot;User Input&quot;]
     CMD[&quot;/slash-command&quot;]
   end
@@ -457,14 +479,12 @@
   end
 
   subgraph Routing[&quot;Agent Routing&quot;]
-    direction TB
     SO[&quot;Script-Only&quot;]
     SA[&quot;Single Agent&quot;]
     MA[&quot;Multi-Agent&quot;]
   end
 
   subgraph Agents[&quot;Agent Execution&quot;]
-    direction TB
     WO[&quot;Orchestrator&quot;]
     BLD[&quot;Builder&quot;]
     VER[&quot;Verifier&quot;]
@@ -500,6 +520,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -514,6 +541,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand
@@ -651,6 +679,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -665,6 +700,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand
@@ -762,6 +798,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -776,6 +819,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand
@@ -881,6 +925,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -895,6 +946,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand
@@ -912,9 +964,8 @@
       document.head.appendChild(s);
     }
   })();
-</script> </div>  <div class="arch-panel" id="panel-dashboard" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Vibe Dashboard</h3> <p data-astro-cid-gomkox45>Every VibeCrew project gets a <strong data-astro-cid-gomkox45>browser-based dashboard</strong> scaffolded into its <code data-astro-cid-gomkox45>docs/</code> folder during <code data-astro-cid-gomkox45>/setup</code>. It's a VitePress-powered site that reads live data from <code data-astro-cid-gomkox45>.vibecrew/</code> &mdash; the same JSON files that power the CLI &mdash; and renders it as interactive charts, Kanban boards, and settings editors. No database, no backend, just local JSON files.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A 7-tab VitePress site (Guide, Kanban Board, Session Stats, Trends, Coverage, Achievements, Settings) with VitePress data loaders that read <code data-astro-cid-gomkox45>.vibecrew/*.json</code> files and render them as Vue components. Hot-reloads in dev mode when data changes.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>Terminal output is ephemeral &mdash; once you scroll past it, the data is gone. The dashboard gives you a persistent, visual interface to browse your backlog, track quality trends over time, review session history, and edit project settings without memorizing CLI commands.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart LR
+</script> </div>  <div class="arch-panel" id="panel-dashboard" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Vibe Dashboard</h3> <p data-astro-cid-gomkox45>Every VibeCrew project gets a <strong data-astro-cid-gomkox45>browser-based dashboard</strong> scaffolded into its <code data-astro-cid-gomkox45>docs/</code> folder during <code data-astro-cid-gomkox45>/setup</code>. It's a VitePress-powered site that reads live data from <code data-astro-cid-gomkox45>.vibecrew/</code> &mdash; the same JSON files that power the CLI &mdash; and renders it as interactive charts, Kanban boards, and settings editors. No database, no backend, just local JSON files.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A 7-tab VitePress site (Guide, Kanban Board, Session Stats, Trends, Coverage, Achievements, Settings) with VitePress data loaders that read <code data-astro-cid-gomkox45>.vibecrew/*.json</code> files and render them as Vue components. Hot-reloads in dev mode when data changes.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>Terminal output is ephemeral &mdash; once you scroll past it, the data is gone. The dashboard gives you a persistent, visual interface to browse your backlog, track quality trends over time, review session history, and edit project settings without memorizing CLI commands.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
   subgraph Source[".vibecrew/ JSON Files"]
-    direction TB
     BL["backlog.json"]
     SE["sessions/*.json"]
     SC["scores/*.json"]
@@ -923,14 +974,12 @@
   end
 
   subgraph Pipeline["VitePress Pipeline"]
-    direction TB
     DL["Data Loaders"]
     VUE["Vue Components"]
     WS["WebSocket"]
   end
 
   subgraph Tabs["Dashboard Tabs"]
-    direction TB
     T1["Guide"]
     T2["Kanban Board"]
     T3["Session Stats"]
@@ -948,9 +997,8 @@
   style Source fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Pipeline fill:#18181b,stroke:#4ade80,color:#fafafa
   style Tabs fill:#18181b,stroke:#fbbf24,color:#fafafa
-</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Data flow from .vibecrew/ JSON files through VitePress to dashboard tabs</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart LR
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Data flow from .vibecrew/ JSON files through VitePress to dashboard tabs</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
   subgraph Source[&quot;.vibecrew/ JSON Files&quot;]
-    direction TB
     BL[&quot;backlog.json&quot;]
     SE[&quot;sessions/*.json&quot;]
     SC[&quot;scores/*.json&quot;]
@@ -959,14 +1007,12 @@
   end
 
   subgraph Pipeline[&quot;VitePress Pipeline&quot;]
-    direction TB
     DL[&quot;Data Loaders&quot;]
     VUE[&quot;Vue Components&quot;]
     WS[&quot;WebSocket&quot;]
   end
 
   subgraph Tabs[&quot;Dashboard Tabs&quot;]
-    direction TB
     T1[&quot;Guide&quot;]
     T2[&quot;Kanban Board&quot;]
     T3[&quot;Session Stats&quot;]
@@ -994,6 +1040,13 @@
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 20,
+            nodeSpacing: 30,
+            rankSpacing: 40,
+            useMaxWidth: true,
+          },
           themeVariables: {
             primaryColor: '#7c3aed',
             primaryTextColor: '#fafafa',
@@ -1008,6 +1061,7 @@
             clusterBorder: '#27272a',
             titleColor: '#fafafa',
             edgeLabelBackground: '#18181b',
+            fontSize: '16px',
           },
         });
         // Only render visible diagrams; hidden ones are rendered on demand

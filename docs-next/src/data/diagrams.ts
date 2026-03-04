@@ -155,7 +155,7 @@ export const hooksDiagram = `flowchart TD
   style Init fill:#18181b,stroke:#60a5fa,color:#fafafa
 `;
 
-export const commandsDiagram = `flowchart LR
+export const commandsDiagram = `flowchart TD
   subgraph User["User Input"]
     CMD["/slash-command"]
   end
@@ -165,14 +165,12 @@ export const commandsDiagram = `flowchart LR
   end
 
   subgraph Routing["Agent Routing"]
-    direction TB
     SO["Script-Only"]
     SA["Single Agent"]
     MA["Multi-Agent"]
   end
 
   subgraph Agents["Agent Execution"]
-    direction TB
     WO["Orchestrator"]
     BLD["Builder"]
     VER["Verifier"]
@@ -335,9 +333,8 @@ export const safetyDiagram = `flowchart TD
   style Fix fill:#18181b,stroke:#fbbf24,color:#fbbf24
 `;
 
-export const dashboardDiagram = `flowchart LR
+export const dashboardDiagram = `flowchart TD
   subgraph Source[".vibecrew/ JSON Files"]
-    direction TB
     BL["backlog.json"]
     SE["sessions/*.json"]
     SC["scores/*.json"]
@@ -346,14 +343,12 @@ export const dashboardDiagram = `flowchart LR
   end
 
   subgraph Pipeline["VitePress Pipeline"]
-    direction TB
     DL["Data Loaders"]
     VUE["Vue Components"]
     WS["WebSocket"]
   end
 
   subgraph Tabs["Dashboard Tabs"]
-    direction TB
     T1["Guide"]
     T2["Kanban Board"]
     T3["Session Stats"]

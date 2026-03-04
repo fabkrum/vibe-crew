@@ -1,0 +1,102 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import MermaidDiagram from '../components/MermaidDiagram.astro';
+import { scriptsDiagram } from '../data/diagrams';
+---
+
+<DocsLayout title="Bash Scripts" sectionLabel="How It Works" activeSlug="scripts">
+
+  <div class="panel-intro">
+    <h2>Bash Scripts</h2>
+    <p>Scripts are the <strong>worker bees</strong> of VibeCrew &mdash; ~80 small bash programs that do the actual mechanical work. While agents think and make decisions, scripts create files, update project state, calculate scores, and send notifications. They run in milliseconds and always produce the same result for the same input.</p>
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>What they are</strong>
+          <p>Deterministic bash scripts organized by function: core lifecycle, feature management, quality scoring, project analysis, documentation, gamification, and state management. Agents never write state files directly &mdash; all mutations go through scripts.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon green">&#10003;</span>
+        <div>
+          <strong>What problem they solve</strong>
+          <p>AI token cost scales with complexity. By offloading mechanical tasks (JSON manipulation, git operations, file formatting) to scripts, VibeCrew keeps AI focused on decisions while scripts handle bookkeeping at zero token cost. Scripts also guarantee consistency &mdash; state mutations are atomic and predictable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="agent-table-heading">Core Lifecycle</h4>
+  <p class="cmd-group-desc">Scripts that run during session startup and completion.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>session-startup.sh</code></td><td>Hook</td><td>Environment check, terminal detection, state loading, and workflow routing on every session start.</td></tr>
+        <tr><td><code>quality-gate.sh</code></td><td>Hook</td><td>Runs typecheck, lint, and build on modified files at task completion. Blocks on failure.</td></tr>
+        <tr><td><code>statusline.sh</code></td><td>Hook</td><td>Updates the terminal status bar with current feature, phase, and Vibe Score.</td></tr>
+        <tr><td><code>notify.sh</code></td><td>Hook</td><td>Sends native OS notifications for permission stalls, completions, and errors.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Feature Management</h4>
+  <p class="cmd-group-desc">Scripts that manage the feature lifecycle and backlog.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>update-backlog.sh</code></td><td>Agent / Skill</td><td>Adds, updates, or moves features in <code>backlog.json</code>. Manages Kanban column transitions.</td></tr>
+        <tr><td><code>complete-phase.sh</code></td><td>Agent / Skill</td><td>Marks a development phase as done and advances to the next phase in the 6-phase cycle.</td></tr>
+        <tr><td><code>git-branch-create.sh</code></td><td>Agent</td><td>Creates a feature branch with consistent naming: <code>feat/&lt;feature-name&gt;</code>.</td></tr>
+        <tr><td><code>create-checkpoint.sh</code></td><td>Agent</td><td>Creates a git tag checkpoint before risky operations so you can roll back with <code>/undo</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Quality &amp; Scoring</h4>
+  <p class="cmd-group-desc">Scripts that calculate Vibe Scores and analyze quality.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>calculate-vibe-score.sh</code></td><td>Agent</td><td>Computes the session's Vibe Score (0&ndash;130) based on deductions and bonuses across quality dimensions.</td></tr>
+        <tr><td><code>aggregate-scores.sh</code></td><td>Agent</td><td>Aggregates Vibe Scores across sessions for trend analysis and Performance Coach input.</td></tr>
+        <tr><td><code>analyze-test-gaps.sh</code></td><td>Agent</td><td>Compares modified source files against test coverage to identify untested code paths.</td></tr>
+        <tr><td><code>apply-mutation.sh</code></td><td>Agent</td><td>Applies Performance Coach CLAUDE.md mutation proposals after user approval.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Project Analysis</h4>
+  <p class="cmd-group-desc">Scripts that analyze the codebase and extract patterns.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>detect-conventions.sh</code></td><td>Agent</td><td>Scans the codebase for naming conventions, file patterns, and code style to populate CLAUDE.md.</td></tr>
+        <tr><td><code>extract-design-system.sh</code></td><td>Agent</td><td>Extracts CSS tokens, color palette, typography, and spacing from existing stylesheets.</td></tr>
+        <tr><td><code>detect-secrets.sh</code></td><td>Agent</td><td>Scans for accidentally committed secrets, API keys, and credentials.</td></tr>
+        <tr><td><code>scan-dependencies.sh</code></td><td>Agent</td><td>Audits dependencies for known vulnerabilities and license compliance issues.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">State &amp; Config</h4>
+  <p class="cmd-group-desc">Scripts that manage the <code>.vibecrew/</code> runtime state.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>init-vibecrew-state.sh</code></td><td>Skill</td><td>Creates the initial <code>.vibecrew/</code> directory structure and default JSON files during <code>/setup</code>.</td></tr>
+        <tr><td><code>migrate-state.sh</code></td><td>Skill</td><td>Migrates state files between VibeCrew versions when schemas change.</td></tr>
+        <tr><td><code>generate-handoff.sh</code></td><td>Skill</td><td>Creates a structured context transfer document for cross-session continuity.</td></tr>
+        <tr><td><code>detect-terminal.sh</code></td><td>Skill</td><td>Detects terminal type (Warp, iTerm2, VS Code, etc.) and configures notification and deep-link support.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <MermaidDiagram chart={scriptsDiagram} caption="Script categories and who calls them" />
+
+</DocsLayout>

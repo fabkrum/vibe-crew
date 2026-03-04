@@ -333,6 +333,116 @@ export const safetyDiagram = `flowchart TD
   style Fix fill:#18181b,stroke:#fbbf24,color:#fbbf24
 `;
 
+export const mcpServersDiagram = `flowchart TD
+  TDR["TDR Finalized"] --> Sync["sync-mcp-from-tdr.sh"]
+
+  subgraph Registry["MCP Registry (25 servers)"]
+    Bundled["9 Bundled"]
+    Extended["15 Extended"]
+  end
+
+  Sync --> Registry
+  Sync --> Match{"Pattern Match"}
+
+  Match -->|Bundled server| Enable["Auto-Enable\nenable-mcp-server.sh"]
+  Match -->|Extended server| Recommend["Recommend\n+ Setup Instructions"]
+  Match -->|No match| Skip["Skip"]
+
+  subgraph Active["Active MCP Servers"]
+    Default["Context7\nChrome DevTools\nPlaywright"]
+    Conditional["Supabase\nStripe\nVercel\n..."]
+  end
+
+  Enable --> Conditional
+  Default --> Agents["Agents Use Tools"]
+  Conditional --> Agents
+
+  style TDR fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Sync fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Registry fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Match fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Enable fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Recommend fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Skip fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Active fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Agents fill:#18181b,stroke:#a78bfa,color:#fafafa
+`;
+
+export const templatesDiagram = `flowchart TD
+  subgraph T1["Tier 1: /new-project"]
+    VIS["VISION.md.template"]
+    DS["design-system.css.template"]
+    DB["design-brief.md.template"]
+    TDR["tdr.md.template"]
+    RM["roadmap.md.template"]
+    CMD["CLAUDE.md.template"]
+  end
+
+  subgraph Setup["/setup"]
+    CFG["config.json.template"]
+    ST["state.json.template"]
+    BL["backlog.json.template"]
+    GM["gamification.json.template"]
+  end
+
+  subgraph T2["Tier 2: Feature Cycle"]
+    FS["feature-spec.md.template"]
+    TC["vitest/playwright/axe/k6 configs"]
+    SL["session-log.json.template"]
+    SC["score-breakdown.json.template"]
+    HO["handoff.md.template"]
+  end
+
+  subgraph Ref["Reference Data"]
+    MCP["mcp-registry.json"]
+    BDG["badge-catalog.json"]
+    SIG["signal-schema.json"]
+    ARCH["architecture-diagrams/"]
+  end
+
+  T1 -->|Foundation artifacts| Project["Your Project"]
+  Setup -->|.vibecrew/ state| Project
+  T2 -->|Per-feature artifacts| Project
+  Ref -->|Read by agents & scripts| Project
+
+  style T1 fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Setup fill:#18181b,stroke:#4ade80,color:#fafafa
+  style T2 fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Ref fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Project fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+`;
+
+export const selfImprovingDiagram = `flowchart TD
+  Session["Development Session"] --> Wrap["/wrap"]
+  Wrap --> Score["Vibe Score Calculation"]
+  Score --> Coach["Performance Coach Analysis"]
+  Coach --> Patterns{"Anti-pattern\ndetected 3+ times?"}
+
+  Patterns -->|Yes| Propose["Propose CLAUDE.md Mutation"]
+  Patterns -->|No| Log["Log Session Data"]
+
+  Propose --> Approve{"User Approves?"}
+  Approve -->|Yes| Mutate["apply-mutation.sh\nUpdates CLAUDE.md"]
+  Approve -->|No| Log
+
+  Mutate --> Log
+  Log --> Telemetry["Cross-Project Telemetry"]
+  Telemetry --> NextSession["Next Session\nBenefits from new rules"]
+  NextSession --> Session
+
+  style Session fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Wrap fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Score fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Coach fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Patterns fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Propose fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Approve fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Mutate fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Log fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Telemetry fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style NextSession fill:#18181b,stroke:#4ade80,color:#fafafa
+`;
+
 export const dashboardDiagram = `flowchart TD
   subgraph Source[".vibecrew/ JSON Files"]
     BL["backlog.json"]

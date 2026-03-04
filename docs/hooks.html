@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Hooks</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.mermaid-container[data-astro-cid-6vqylkyd]{margin-bottom:2rem;margin-left:-8vw;margin-right:-8vw;padding:1.5rem 2rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm);overflow-x:auto}pre[data-astro-cid-6vqylkyd].mermaid{background:transparent;border:none;padding:0;text-align:center;min-width:min-content}.mermaid-container[data-astro-cid-6vqylkyd] svg{max-width:100%;height:auto;min-height:300px}.mermaid-caption[data-astro-cid-6vqylkyd]{text-align:center;font-size:.85rem;color:var(--color-text-muted);margin-top:.75rem}@media(max-width:768px){.mermaid-container[data-astro-cid-6vqylkyd]{margin-left:-1rem;margin-right:-1rem;padding:1rem;border-radius:0}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.Cswx1oqr.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Tips &amp; Tricks </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/hooks.html" class="sidebar-link active"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a><a href="/vibe-crew/releases.html" class="sidebar-link"> Changelog </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>How It Works</span>  <span class="separator">/</span> <span>Hooks</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"How It Works"},{"@type":"ListItem","position":3,"name":"Hooks"}]}</script>  <div class="panel-intro"> <h2>Hooks</h2> <p>Hooks are <strong>automatic safety checks</strong> that run behind the scenes at zero token cost. When an agent tries to write a file or run a command, hooks intercept the action and validate it before it executes. Think of them as security guards at every door &mdash; they check permissions instantly using small bash scripts, not AI processing.</p> <div class="key-points"> <div class="key-point"> <span class="key-icon purple">&#9632;</span> <div> <strong>What they are</strong> <p>Bash scripts triggered by Claude Code lifecycle events (session start, before/after tool use, session end). They read a JSON payload from stdin and return exit code 0 (allow) or 2 (block).</p> </div> </div> <div class="key-point"> <span class="key-icon green">&#10003;</span> <div> <strong>What problem they solve</strong> <p>AI models can forget rules mid-session. Hooks enforce constraints deterministically &mdash; the phase gate blocks source code writes before the foundation is complete, the quality gate catches build errors, and the data protector blocks destructive commands. No token cost, no forgetting.</p> </div> </div> </div> </div> <h4 class="agent-table-heading">Session Init Hooks</h4> <p class="cmd-group-desc">Run automatically when a new Claude Code session starts.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead> <tbody> <tr> <td><code>session-startup.sh</code></td> <td>SessionStart</td> <td>Checks environment (Git, Node, jq), detects terminal type, loads state, and routes to the right workflow.</td> </tr> <tr> <td><code>sync-state.sh</code></td> <td>SessionStart</td> <td>Reconciles state files on startup &mdash; ensures <code>.vibecrew/</code> JSON is consistent after crashes or manual edits.</td> </tr> <tr> <td><code>error-recovery.sh</code></td> <td>SessionStart</td> <td>Clears stale lock files and repairs corrupted state from previous interrupted sessions.</td> </tr> <tr> <td><code>compact-reinject.sh</code></td> <td>SessionStart (compact)</td> <td>Re-injects essential context (active feature, phase, conventions) after Claude Code's <code>/compact</code> clears the context window.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading">Pre-Action Guards</h4> <p class="cmd-group-desc">Intercept actions before they execute. Return exit code 2 to block.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead> <tbody> <tr> <td><code>phase-gate.sh</code></td> <td>PreToolUse (Write/Edit)</td> <td>Blocks source code writes until the Tier 1 foundation (VISION, TDR, architecture, CLAUDE.md) is complete. Prevents coding before decisions are made.</td> </tr> <tr> <td><code>restrict-paths.sh</code></td> <td>PreToolUse (Write/Edit)</td> <td>Blocks file writes outside the project root directory. Prevents agents from modifying system files or other projects.</td> </tr> <tr> <td><code>protect-data.sh</code></td> <td>PreToolUse (Bash)</td> <td>Blocks destructive shell commands: <code>rm -rf</code>, <code>DROP TABLE</code>, <code>DELETE FROM</code> without WHERE, force push, and privilege escalation.</td> </tr> <tr> <td><code>validate-phase-transition.sh</code></td> <td>PreToolUse (Bash)</td> <td>Enforces phase ordering &mdash; ensures foundation steps run in sequence and artifacts are complete before advancing.</td> </tr> <tr> <td><code>validate-signal.sh</code></td> <td>PreToolUse (Write/Edit)</td> <td>Validates inter-agent signal file schemas, enum values, and feature ID cross-references before they're written.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading">Post-Action Processors</h4> <p class="cmd-group-desc">Run after an action completes successfully.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead> <tbody> <tr> <td><code>format-code.sh</code></td> <td>PostToolUse (Write/Edit)</td> <td>Auto-formats files after every write using the project's configured formatter (Prettier, ESLint, etc.).</td> </tr> <tr> <td><code>notify.sh</code></td> <td>Notification / PostToolUseFailure</td> <td>Sends native OS notifications for permission stalls, task completions, and errors. Includes Warp Terminal deep-links when available.</td> </tr> </tbody> </table> </div> <h4 class="agent-table-heading">Session End Checks</h4> <p class="cmd-group-desc">Run when a session stops to catch issues before they persist.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Event</th><th>What It Does</th></tr></thead> <tbody> <tr> <td><code>quality-gate.sh</code></td> <td>Stop</td> <td>Runs typecheck, lint, and build on modified source files. Blocks task completion if any check fails &mdash; the agent must fix errors before finishing.</td> </tr> <tr> <td><code>claude-md-lint.sh</code></td> <td>Stop</td> <td>Validates CLAUDE.md file size and structure. Keeps it under the recommended line limit to avoid context bloat.</td> </tr> <tr> <td><code>cost-guardrails.sh</code></td> <td>Stop</td> <td>Tracks session and daily API costs against configured thresholds. Warns or blocks when spending exceeds limits.</td> </tr> <tr> <td><code>check-context.sh</code></td> <td>Stop</td> <td>Monitors context window usage and warns at 60% and 80%. Helps prevent sessions from running out of context mid-task.</td> </tr> </tbody> </table> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Events["Lifecycle Events"]
+    E1["SessionStart"]
+    E2["PreToolUse Write/Edit"]
+    E3["PreToolUse Bash"]
+    E4["PostToolUse Write/Edit"]
+    E5["Notification"]
+    E6["Stop"]
+  end
+
+  subgraph Guards["Pre-Action Guards"]
+    PG["phase-gate.sh"]
+    RP["restrict-paths.sh"]
+    PD["protect-data.sh"]
+    VPT["validate-phase-transition.sh"]
+    VS["validate-signal.sh"]
+  end
+
+  subgraph Post["Post-Action Processors"]
+    FC["format-code.sh"]
+    NT["notify.sh"]
+  end
+
+  subgraph Stop["Session End Checks"]
+    CC["check-context.sh"]
+    CG["cost-guardrails.sh"]
+    CL["claude-md-lint.sh"]
+    QG["quality-gate.sh"]
+  end
+
+  subgraph Init["Session Init"]
+    SS["session-startup.sh"]
+    SY["sync-state.sh"]
+    ER["error-recovery.sh"]
+    CR["compact-reinject.sh"]
+  end
+
+  E1 --> Init
+  E2 --> Guards
+  E3 --> PD
+  E2 --> VS
+  E4 --> FC
+  E5 --> NT
+  E6 --> Stop
+
+  style Events fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Guards fill:#18181b,stroke:#f87171,color:#fafafa
+  style Post fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Stop fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Init fill:#18181b,stroke:#60a5fa,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Hook events mapped to their enforcement scripts</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Events[&quot;Lifecycle Events&quot;]
+    E1[&quot;SessionStart&quot;]
+    E2[&quot;PreToolUse Write/Edit&quot;]
+    E3[&quot;PreToolUse Bash&quot;]
+    E4[&quot;PostToolUse Write/Edit&quot;]
+    E5[&quot;Notification&quot;]
+    E6[&quot;Stop&quot;]
+  end
+
+  subgraph Guards[&quot;Pre-Action Guards&quot;]
+    PG[&quot;phase-gate.sh&quot;]
+    RP[&quot;restrict-paths.sh&quot;]
+    PD[&quot;protect-data.sh&quot;]
+    VPT[&quot;validate-phase-transition.sh&quot;]
+    VS[&quot;validate-signal.sh&quot;]
+  end
+
+  subgraph Post[&quot;Post-Action Processors&quot;]
+    FC[&quot;format-code.sh&quot;]
+    NT[&quot;notify.sh&quot;]
+  end
+
+  subgraph Stop[&quot;Session End Checks&quot;]
+    CC[&quot;check-context.sh&quot;]
+    CG[&quot;cost-guardrails.sh&quot;]
+    CL[&quot;claude-md-lint.sh&quot;]
+    QG[&quot;quality-gate.sh&quot;]
+  end
+
+  subgraph Init[&quot;Session Init&quot;]
+    SS[&quot;session-startup.sh&quot;]
+    SY[&quot;sync-state.sh&quot;]
+    ER[&quot;error-recovery.sh&quot;]
+    CR[&quot;compact-reinject.sh&quot;]
+  end
+
+  E1 --&gt; Init
+  E2 --&gt; Guards
+  E3 --&gt; PD
+  E2 --&gt; VS
+  E4 --&gt; FC
+  E5 --&gt; NT
+  E6 --&gt; Stop
+
+  style Events fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Guards fill:#18181b,stroke:#f87171,color:#fafafa
+  style Post fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Stop fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Init fill:#18181b,stroke:#60a5fa,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
+            useMaxWidth: true,
+          },
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+            fontSize: '16px',
+          },
+        });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/agents.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Sub-Agents</span></a><a href="/vibe-crew/mcp-servers.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">MCP Servers</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html>

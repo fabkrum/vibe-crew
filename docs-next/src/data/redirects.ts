@@ -1,28 +1,14 @@
-/** Hash redirects from the old monolithic architecture.html page */
+/** Legacy hash redirects — old tab-based architecture page split into sub-pages */
 export const architectureRedirects: Record<string, string> = {
-  '#system': 'arch-system.html#system',
-  '#plugin-manifest': 'arch-system.html#plugin-manifest',
-  '#agents': 'arch-system.html#agents',
-  '#skills': 'arch-system.html#skills',
-  '#hooks': 'arch-system.html#hooks',
-  '#scripts': 'arch-system.html#scripts',
-  '#settings': 'arch-system.html#settings',
-  '#mcp-servers': 'arch-system.html#mcp-servers',
-  '#runtime': 'arch-runtime.html#runtime',
-  '#status-bar': 'arch-runtime.html#status-bar',
-  '#interrupt': 'arch-runtime.html#interrupt',
-  '#phase-gate': 'arch-runtime.html#phase-gate',
-  '#vibe-score': 'arch-runtime.html#vibe-score',
-  '#compaction': 'arch-runtime.html#compaction',
-  '#handoff': 'arch-runtime.html#handoff',
-  '#error-recovery': 'arch-runtime.html#error-recovery',
-  '#cost-guardrails': 'arch-runtime.html#cost-guardrails',
-  '#commands': 'arch-reference.html#commands',
-  '#state': 'arch-reference.html#state',
-  '#design-principles': 'arch-design.html#design-principles',
-  '#dashboard': 'arch-design.html#dashboard',
-  '#telemetry': 'arch-design.html#telemetry',
-  '#troubleshooting': 'arch-design.html#troubleshooting',
+  '#plugin': 'plugin.html',
+  '#agents': 'agents.html',
+  '#hooks': 'hooks.html',
+  '#commands': 'command-flow.html',
+  '#skills': 'skills.html',
+  '#scripts': 'scripts.html',
+  '#runtime': 'runtime.html',
+  '#safety': 'safety.html',
+  '#dashboard': 'dashboard.html',
 };
 
 /** Hash redirects from the old workflow.html page (sections split to sub-pages) */

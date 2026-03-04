@@ -1,0 +1,116 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import { commands, categories } from '../data/commands';
+---
+
+<DocsLayout title="Skills Reference" sectionLabel="How It Works" activeSlug="skills">
+
+  <div class="panel-intro">
+    <h2>Skills Reference</h2>
+    <p>Every slash command maps to a <strong>skill</strong> &mdash; a <code>SKILL.md</code> file in the <code>skills/</code> directory. Skills range from zero-cost script-only operations (like <code>/idea</code> and <code>/status</code>) to complex multi-agent orchestrations (like <code>/new-project</code> and <code>/wrap</code>). Use the category filters to browse all {commands.length} skills.</p>
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>What they are</strong>
+          <p><code>SKILL.md</code> files with YAML frontmatter (name, description, arguments) and a markdown body defining the full workflow: preconditions, steps, error handling, and agent routing. Some skills are script-only (zero tokens), others spin up single or multiple agents.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon green">&#10003;</span>
+        <div>
+          <strong>What problem they solve</strong>
+          <p>Skills turn complex multi-step workflows into single commands. Instead of writing a detailed prompt for "run tests, calculate score, generate docs, commit, and log session," you type <code>/wrap</code> and the skill definition handles every step, error path, and agent handoff.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="skills-filters" id="skills-filters">
+    <button class="filter-pill active" data-cat="all">All</button>
+    {categories.map((cat) => (
+      <button class="filter-pill" data-cat={cat}>{cat}</button>
+    ))}
+  </div>
+
+  <div class="skills-table-wrap">
+    <table class="agent-table" id="skills-table">
+      <thead>
+        <tr>
+          <th>Command</th>
+          <th>Category</th>
+          <th>Agent(s)</th>
+          <th>Tier</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        {commands.map((cmd) => (
+          <tr data-cat={cmd.category}>
+            <td><code>{cmd.name}{cmd.args ? ` ${cmd.args}` : ''}</code></td>
+            <td><span class="cat-badge">{cmd.category}</span></td>
+            <td>{cmd.agent}</td>
+            <td>{cmd.tier}</td>
+            <td>{cmd.purpose}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+</DocsLayout>
+
+<style>
+  .skills-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-pill {
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-sans);
+  }
+
+  .filter-pill:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent-dim);
+  }
+
+  .filter-pill.active {
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    border-color: rgba(167, 139, 250, 0.2);
+  }
+
+  .skills-table-wrap {
+    overflow-x: auto;
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var pills = document.querySelectorAll('.filter-pill');
+    var skillRows = document.querySelectorAll('#skills-table tbody tr');
+    pills.forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        pills.forEach(function(p) { p.classList.remove('active'); });
+        pill.classList.add('active');
+        var cat = pill.getAttribute('data-cat');
+        skillRows.forEach(function(row) {
+          var match = cat === 'all' || row.getAttribute('data-cat') === cat;
+          row.style.display = match ? '' : 'none';
+        });
+      });
+    });
+  })();
+</script>

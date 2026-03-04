@@ -1,0 +1,277 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Self-Improving System</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.mermaid-container[data-astro-cid-6vqylkyd]{margin-bottom:2rem;margin-left:-8vw;margin-right:-8vw;padding:1.5rem 2rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm);overflow-x:auto}pre[data-astro-cid-6vqylkyd].mermaid{background:transparent;border:none;padding:0;text-align:center;min-width:min-content}.mermaid-container[data-astro-cid-6vqylkyd] svg{max-width:100%;height:auto;min-height:300px}.mermaid-caption[data-astro-cid-6vqylkyd]{text-align:center;font-size:.85rem;color:var(--color-text-muted);margin-top:.75rem}@media(max-width:768px){.mermaid-container[data-astro-cid-6vqylkyd]{margin-left:-1rem;margin-right:-1rem;padding:1rem;border-radius:0}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.Cswx1oqr.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Tips &amp; Tricks </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/self-improving.html" class="sidebar-link active"> Self-Improving System </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a><a href="/vibe-crew/releases.html" class="sidebar-link"> Changelog </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>How It Works</span>  <span class="separator">/</span> <span>Self-Improving System</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"How It Works"},{"@type":"ListItem","position":3,"name":"Self-Improving System"}]}</script>  <div class="panel-intro"> <h2>Self-Improving System</h2> <p>VibeCrew doesn't just build software &mdash; it <strong>learns from every session</strong>. The Performance Coach analyzes each session's patterns, proposes permanent rule changes to CLAUDE.md, and aggregates anonymized metrics across all your projects. Each session makes the next one better.</p> <div class="key-points"> <div class="key-point"> <span class="key-icon purple">&#9632;</span> <div> <strong>What it is</strong> <p>A feedback loop: the Performance Coach scores each session, detects anti-patterns, and proposes CLAUDE.md mutations. Cross-project telemetry tracks trends across all your VibeCrew projects. The <code>/system-review</code> command analyzes the plugin's own performance.</p> </div> </div> <div class="key-point"> <span class="key-icon green">&#10003;</span> <div> <strong>What problem it solves</strong> <p>AI agents make the same mistakes across sessions because they start fresh each time. The self-improving loop captures what went wrong (and right), encodes fixes as permanent CLAUDE.md rules, and tracks whether those fixes actually work over time.</p> </div> </div> </div> </div>  <section class="section"> <h3>Performance Coach</h3> <p>The Performance Coach is an <strong>Opus agent</strong> that runs during <code>/wrap</code> at the end of every session. It analyzes what happened during the session and produces actionable coaching.</p> <h4 class="agent-table-heading">What It Analyzes</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Dimension</th><th>What It Checks</th><th>Example Finding</th></tr></thead> <tbody> <tr> <td><strong>Prompt Efficiency</strong></td> <td>Prompt churn (repeated similar prompts), tool loops (same tool called 3+ times)</td> <td>"You re-prompted the Builder 4 times for the same component &mdash; next time, include acceptance criteria in the spec."</td> </tr> <tr> <td><strong>Cache Utilization</strong></td> <td>Cache hit ratio across the session</td> <td>"Cache utilization was 23% &mdash; consider keeping CLAUDE.md stable to improve prompt caching."</td> </tr> <tr> <td><strong>Phase Completeness</strong></td> <td>Missing artifacts (tests, docs, review) for each phase</td> <td>"Feature shipped without E2E tests &mdash; consider adding /e2e to your workflow."</td> </tr> <tr> <td><strong>Context Discipline</strong></td> <td>Context window usage at session end, number of compactions</td> <td>"Session hit 82% context usage &mdash; offload research to Stack Scout earlier."</td> </tr> <tr> <td><strong>Anti-patterns</strong></td> <td>Recurring mistakes across 3+ sessions</td> <td>"This is the 3rd session with skipped code review &mdash; proposing a CLAUDE.md rule to make review mandatory."</td> </tr> </tbody> </table> </div> </section> <hr>  <section class="section"> <h3>Vibe Score</h3> <p>Every session receives a <strong>quality score from 0 to 130</strong>. The score starts at 100 and applies deductions for problems and bonuses for excellence. The Performance Coach uses score trends to identify coaching opportunities.</p> <h4 class="agent-table-heading">Deductions</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Issue</th><th>Penalty</th><th>What Triggers It</th></tr></thead> <tbody> <tr><td>Prompt churn</td><td>-5 per sequence</td><td>3+ similar prompts to the same agent without meaningful change</td></tr> <tr><td>Tool loops</td><td>-10 per loop</td><td>Same tool called repeatedly without progress</td></tr> <tr><td>Low cache utilization</td><td>-15</td><td>Cache hit ratio below 30%</td></tr> <tr><td>Context violations</td><td>-20</td><td>Session exceeded 80% context usage</td></tr> <tr><td>No tests</td><td>-10</td><td>Feature completed without any test files</td></tr> <tr><td>No feature spec</td><td>-5</td><td>Feature started without a spec in backlog.json</td></tr> <tr><td>Skipped code review</td><td>-5</td><td>Feature wrapped without running /review</td></tr> <tr><td>Documentation drift</td><td>-3 per stale doc</td><td>Source code changed but matching docs not updated</td></tr> <tr><td>Console errors</td><td>-5</td><td>Browser console errors on affected pages</td></tr> <tr><td>Visual token violations</td><td>-3 per violation (max -9)</td><td>Design system tokens used incorrectly</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Bonuses</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Achievement</th><th>Bonus</th><th>What Triggers It</th></tr></thead> <tbody> <tr><td>Complete phase artifacts</td><td>+5</td><td>All 6 phases have their required artifacts</td></tr> <tr><td>High cache utilization</td><td>+5</td><td>Cache hit ratio above 60%</td></tr> <tr><td>Full test coverage</td><td>+5</td><td>All modified files have corresponding tests</td></tr> <tr><td>Clean session</td><td>+5</td><td>No tool loops, no prompt churn, no context violations</td></tr> <tr><td>TDD discipline</td><td>+3</td><td>Tests written before implementation code</td></tr> <tr><td>E2E tests passing</td><td>+3</td><td>Playwright E2E tests run and pass</td></tr> <tr><td>Accessibility clean</td><td>+2</td><td>No axe-core violations found</td></tr> <tr><td>Code review complete</td><td>+2</td><td>/review ran with all findings addressed</td></tr> <tr><td>Performance baselines</td><td>+2</td><td>k6 performance tests run with baselines set</td></tr> <tr><td>Visual compliance clean</td><td>+3</td><td>No design system token violations</td></tr> </tbody> </table> </div> </section> <hr>  <section class="section"> <h3>Session Learnings &amp; CLAUDE.md Mutations</h3> <p>When the Performance Coach detects a recurring anti-pattern (appears in 3+ sessions), it proposes a <strong>permanent rule change</strong> to the project's CLAUDE.md file. These mutations are the mechanism by which VibeCrew gets smarter over time.</p> <h4 class="agent-table-heading">How Mutations Work</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Step</th><th>What Happens</th></tr></thead> <tbody> <tr><td><strong>1. Detection</strong></td><td>Performance Coach identifies a pattern appearing in 3+ sessions (e.g., "tests always written after code" or "docs consistently skipped").</td></tr> <tr><td><strong>2. Proposal</strong></td><td>Coach drafts a concrete CLAUDE.md rule using a standard template. Example: "Always run /tdd before implementing &mdash; write the test first."</td></tr> <tr><td><strong>3. Approval</strong></td><td>The proposal is shown to the user for approval. Mutations never auto-apply &mdash; the user always has final say.</td></tr> <tr><td><strong>4. Application</strong></td><td><code>apply-mutation.sh</code> appends the rule to the Session Learnings section of CLAUDE.md.</td></tr> <tr><td><strong>5. Pruning</strong></td><td>Session Learnings are capped at 15 entries. When a new rule is added past the limit, the oldest entry is removed to keep CLAUDE.md lean.</td></tr> </tbody> </table> </div> <div class="key-points"> <div class="key-point"> <span class="key-icon amber">&#9888;</span> <div> <strong>Why 15 learnings max?</strong> <p>Research shows oversized CLAUDE.md files increase agent cost 20%+ without improving success rates. The cap ensures the file stays under 200 lines. Old learnings that haven't prevented their anti-pattern get pruned first.</p> </div> </div> </div> </section> <hr>  <section class="section"> <h3>Cross-Project Telemetry</h3> <p>VibeCrew tracks anonymized performance data across all your projects. This isn't sent anywhere &mdash; it lives locally in the plugin directory and powers the <code>/system-review</code> command.</p> <h4 class="agent-table-heading">How It Works</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Step</th><th>What Happens</th></tr></thead> <tbody> <tr><td><strong>Auto-registration</strong></td><td>During <code>/setup</code>, the project registers itself in the central plugin's <code>project-registry.json</code>. Project paths are replaced with anonymous aliases (project-001, project-002).</td></tr> <tr><td><strong>Data collection</strong></td><td>After each <code>/wrap</code>, anonymized metrics (Vibe Score, agent usage, token counts, cost) are appended to <code>telemetry/aggregate.json</code> in the plugin directory.</td></tr> <tr><td><strong>Aggregation</strong></td><td><code>/system-review</code> reads all registered projects' telemetry to compute cross-project trends: average scores, most-used agents, cost patterns, MCP adoption rates.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">What /system-review Shows</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Section</th><th>What It Contains</th></tr></thead> <tbody> <tr><td><strong>Score Trends</strong></td><td>Average Vibe Score trajectory across all projects &mdash; are you getting better over time?</td></tr> <tr><td><strong>Agent Usage</strong></td><td>Which agents are used most, which are underutilized, and cost breakdown by agent.</td></tr> <tr><td><strong>Cost Analysis</strong></td><td>Per-project and aggregate cost metrics. Identifies expensive patterns and cost-saving opportunities.</td></tr> <tr><td><strong>MCP Adoption</strong></td><td>Which MCP servers are active across projects and their impact on session efficiency.</td></tr> <tr><td><strong>Ecosystem Research</strong></td><td>The System Reviewer agent checks for VibeCrew updates, new MCP servers, and community best practices.</td></tr> </tbody> </table> </div> </section> <hr>  <section class="section"> <h3>The Self-Improvement Loop</h3> <p>Every session feeds back into the system, making the next session more efficient. The loop runs automatically during <code>/wrap</code> &mdash; no manual intervention required.</p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  Session["Development Session"] --> Wrap["/wrap"]
+  Wrap --> Score["Vibe Score Calculation"]
+  Score --> Coach["Performance Coach Analysis"]
+  Coach --> Patterns{"Anti-pattern
+detected 3+ times?"}
+
+  Patterns -->|Yes| Propose["Propose CLAUDE.md Mutation"]
+  Patterns -->|No| Log["Log Session Data"]
+
+  Propose --> Approve{"User Approves?"}
+  Approve -->|Yes| Mutate["apply-mutation.sh
+Updates CLAUDE.md"]
+  Approve -->|No| Log
+
+  Mutate --> Log
+  Log --> Telemetry["Cross-Project Telemetry"]
+  Telemetry --> NextSession["Next Session
+Benefits from new rules"]
+  NextSession --> Session
+
+  style Session fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Wrap fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Score fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Coach fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Patterns fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Propose fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Approve fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Mutate fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Log fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Telemetry fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style NextSession fill:#18181b,stroke:#4ade80,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>How each session improves the next: score → coach → mutation → better sessions</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  Session[&quot;Development Session&quot;] --&gt; Wrap[&quot;/wrap&quot;]
+  Wrap --&gt; Score[&quot;Vibe Score Calculation&quot;]
+  Score --&gt; Coach[&quot;Performance Coach Analysis&quot;]
+  Coach --&gt; Patterns{&quot;Anti-pattern
+detected 3+ times?&quot;}
+
+  Patterns --&gt;|Yes| Propose[&quot;Propose CLAUDE.md Mutation&quot;]
+  Patterns --&gt;|No| Log[&quot;Log Session Data&quot;]
+
+  Propose --&gt; Approve{&quot;User Approves?&quot;}
+  Approve --&gt;|Yes| Mutate[&quot;apply-mutation.sh
+Updates CLAUDE.md&quot;]
+  Approve --&gt;|No| Log
+
+  Mutate --&gt; Log
+  Log --&gt; Telemetry[&quot;Cross-Project Telemetry&quot;]
+  Telemetry --&gt; NextSession[&quot;Next Session
+Benefits from new rules&quot;]
+  NextSession --&gt; Session
+
+  style Session fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Wrap fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Score fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Coach fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Patterns fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Propose fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Approve fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Mutate fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Log fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Telemetry fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style NextSession fill:#18181b,stroke:#4ade80,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
+            useMaxWidth: true,
+          },
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+            fontSize: '16px',
+          },
+        });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/safety.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Permissions &amp; Safety</span></a><a href="/vibe-crew/dashboard.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Vibe Dashboard</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html>

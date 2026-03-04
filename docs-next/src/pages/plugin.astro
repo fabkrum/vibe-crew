@@ -1,0 +1,86 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import MermaidDiagram from '../components/MermaidDiagram.astro';
+import { systemDiagram } from '../data/diagrams';
+---
+
+<DocsLayout title="Plugin Structure" sectionLabel="How It Works" activeSlug="plugin">
+
+  <div class="panel-intro">
+    <h2>Plugin Structure</h2>
+    <p>VibeCrew is a <strong>Claude Code plugin</strong> &mdash; an add-on that gives Claude Code new abilities. When you open a project with VibeCrew installed, Claude Code reads a manifest file and automatically loads agents, skills, hooks, scripts, MCP servers, and permissions. Everything lives inside the <code>claude-plugin-vibe-crew/</code> directory.</p>
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>What it is</strong>
+          <p>A self-contained folder with a <code>plugin.json</code> manifest that registers agents, slash commands, hooks, scripts, and MCP servers &mdash; everything the system needs in one install.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon green">&#10003;</span>
+        <div>
+          <strong>What problem it solves</strong>
+          <p>Without a plugin, you'd manually configure each agent, permission rule, and automation script for every project. The plugin bundles everything into a single install.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="agent-table-heading">Plugin Components</h4>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Component</th><th>File / Directory</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Plugin Manifest</strong></td>
+          <td><code>.claude-plugin/plugin.json</code></td>
+          <td>Entry point that Claude Code reads on startup. Registers every agent, skill, hook binding, and MCP server so they load automatically.</td>
+        </tr>
+        <tr>
+          <td><strong>MCP Servers</strong></td>
+          <td><code>.mcp.json</code></td>
+          <td>Configures external tool servers (Context7, Chrome DevTools, Playwright, and conditionally Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) that give agents web search, browser control, and service integrations.</td>
+        </tr>
+        <tr>
+          <td><strong>Permissions</strong></td>
+          <td><code>settings.json</code></td>
+          <td>Allow/deny rules that control what agents can do without prompting. Allows file ops, npm scripts, and git; blocks sudo, force push, and destructive commands.</td>
+        </tr>
+        <tr>
+          <td><strong>Hooks</strong></td>
+          <td><code>hooks/hooks.json</code></td>
+          <td>Event bindings that map Claude Code lifecycle events (session start, tool use, stop) to bash scripts that enforce rules at zero token cost.</td>
+        </tr>
+        <tr>
+          <td><strong>Scripts</strong></td>
+          <td><code>scripts/</code></td>
+          <td>~80 bash programs that handle mechanical work: state mutations, scoring, git operations, notifications, formatting, and project analysis.</td>
+        </tr>
+        <tr>
+          <td><strong>Agents</strong></td>
+          <td><code>agents/</code></td>
+          <td>System prompt files that define each specialized AI agent's role, tools, constraints, and output format.</td>
+        </tr>
+        <tr>
+          <td><strong>Skills</strong></td>
+          <td><code>skills/</code></td>
+          <td>Slash command definitions as <code>SKILL.md</code> files. Each contains YAML metadata and a workflow body that routes to the right agent(s).</td>
+        </tr>
+        <tr>
+          <td><strong>Templates</strong></td>
+          <td><code>templates/</code></td>
+          <td>Project scaffolding templates, doc-site scaffold, and an MCP registry of additional servers that can be auto-discovered from TDR technology choices.</td>
+        </tr>
+        <tr>
+          <td><strong>Tests</strong></td>
+          <td><code>tests/</code></td>
+          <td>BATS test suite that validates hook scripts, state management, and core plugin behavior.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <MermaidDiagram chart={systemDiagram} caption="Plugin components and how Claude Code loads them" />
+
+</DocsLayout>

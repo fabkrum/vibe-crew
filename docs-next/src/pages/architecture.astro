@@ -1,59 +1,150 @@
 ---
 import DocsLayout from '../layouts/DocsLayout.astro';
-import Callout from '../components/Callout.astro';
-import Card from '../components/Card.astro';
-import CardGrid from '../components/CardGrid.astro';
-import { architectureRedirects } from '../data/redirects';
 import { url } from '../data/site';
 ---
 
-<DocsLayout title="Architecture Overview" sectionLabel="Architecture" activeSlug="architecture">
-  <section class="section">
-    <h2>Architecture Overview</h2>
-    <p>VibeCrew is a system of specialized agents, deterministic hooks, and bash scripts that work together to enforce quality, manage attention, and continuously improve your workflow. This section explains <em>how VibeCrew works under the hood</em>.</p>
+<DocsLayout title="How It Works" sectionLabel="How It Works" activeSlug="architecture">
 
-    <Callout type="info" title="New to coding?">
-      <p>You don't need to understand all of this to use VibeCrew &mdash; just type the slash commands and the system handles the rest. But if you're curious about what's happening behind the scenes, or want to troubleshoot an issue, these pages have the answers. Each section starts with a plain-English explanation before diving into technical details.</p>
-    </Callout>
+  <section class="section">
+    <h2>How VibeCrew Works</h2>
+    <p>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, and per-project runtime state. Each piece solves a specific problem that emerges when AI builds software autonomously.</p>
+  </section>
+
+  <!-- ── 4 Problems Solved ── -->
+  <section class="section">
+    <h3>Four Problems VibeCrew Solves</h3>
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon red">&#9632;</span>
+        <div>
+          <strong>AI forgets rules mid-session</strong>
+          <p><a href={url('/hooks.html')}>Hooks</a> enforce constraints with bash scripts at zero token cost. The phase gate blocks code writes before architecture is decided. The quality gate catches build errors. No tokens spent, no rules forgotten.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>Context windows fill up fast</strong>
+          <p><a href={url('/agents.html')}>Worktree agents</a> isolate expensive research into separate contexts. Only the distilled output enters your main session &mdash; saving thousands of tokens and keeping the main context clean.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon green">&#10003;</span>
+        <div>
+          <strong>No persistent memory across sessions</strong>
+          <p>The <a href={url('/runtime.html')}><code>.vibecrew/</code> state directory</a> persists everything: which features are done, what phase you're in, quality trends, architecture diagrams, and cross-session handoffs.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon blue">&#9654;</span>
+        <div>
+          <strong>Manual workflows are error-prone</strong>
+          <p><a href={url('/command-flow.html')}>Slash commands</a> encode expert workflows into single triggers. <code>/wrap</code> runs quality checks, scores your session, generates docs, and commits &mdash; all automatically, every time.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <hr>
 
+  <!-- ── Page Grid ── -->
   <section class="section">
-    <span class="section-label">Deep Dives</span>
-    <h2>Explore Architecture</h2>
-    <p>The architecture documentation is organized into focused pages:</p>
-
-    <CardGrid>
-      <Card href={url('/arch-visual.html')} icon="&#9881;" iconColor="accent" title="How It Works">
-        Interactive visual guide with Mermaid diagrams for every system part: plugin structure, agents, hooks, commands, scripts, and runtime state.
-      </Card>
-
-      <Card href={url('/arch-system.html')} icon="&#9632;" iconColor="purple" title="System Deep Dive">
-        Plugin manifest, 14-agent architecture, skills system, hook enforcement, scripts reference, settings &amp; permissions, MCP server integration.
-      </Card>
-
-      <Card href={url('/arch-runtime.html')} icon="&#9881;" iconColor="green" title="Runtime Systems">
-        Status bar, interrupt protocol, phase gate, Vibe Score &amp; Performance Coach, context compaction, handoff system, error recovery, cost guardrails.
-      </Card>
-
-      <Card href={url('/arch-reference.html')} icon="&#9776;" iconColor="blue" title="Commands &amp; State">
-        Full slash commands reference tables, <code>.vibecrew/</code> state management, git strategy, and schema migration.
-      </Card>
-
-      <Card href={url('/arch-design.html')} icon="&#9650;" iconColor="amber" title="Design &amp; Operations">
-        Design principles, VitePress documentation dashboard, cross-project telemetry, and troubleshooting.
-      </Card>
-    </CardGrid>
+    <h3>Explore the System</h3>
+    <div class="page-grid">
+      <a class="page-card" href={url('/plugin.html')}>
+        <div class="page-card-icon purple">&#9881;</div>
+        <h3>Plugin Structure</h3>
+        <p>The manifest, MCP servers, permissions, hooks, scripts, agents, and skills that make up the plugin.</p>
+        <span class="card-arrow">View plugin anatomy &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/agents.html')}>
+        <div class="page-card-icon purple">&#9733;</div>
+        <h3>Sub-Agents</h3>
+        <p>14 specialized AI agents with scoped tool access, model selection, and worktree isolation.</p>
+        <span class="card-arrow">View agent topology &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/hooks.html')}>
+        <div class="page-card-icon red">&#9632;</div>
+        <h3>Hooks</h3>
+        <p>Lifecycle hooks that enforce safety, quality, and workflow rules at zero token cost.</p>
+        <span class="card-arrow">View hook system &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/mcp-servers.html')}>
+        <div class="page-card-icon blue">&#9679;</div>
+        <h3>MCP Servers</h3>
+        <p>9 bundled + 15 registry servers activated on demand once the project architecture is clear.</p>
+        <span class="card-arrow">View MCP integration &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/command-flow.html')}>
+        <div class="page-card-icon blue">&#9654;</div>
+        <h3>Slash Commands</h3>
+        <p>33 commands across setup, planning, development, quality, safety, and session management.</p>
+        <span class="card-arrow">View command reference &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/skills.html')}>
+        <div class="page-card-icon purple">&#9776;</div>
+        <h3>Skills Reference</h3>
+        <p>Every SKILL.md file with category filters &mdash; from zero-cost scripts to multi-agent orchestrations.</p>
+        <span class="card-arrow">Browse all skills &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/scripts.html')}>
+        <div class="page-card-icon amber">&#9874;</div>
+        <h3>Bash Scripts</h3>
+        <p>~80 deterministic scripts that handle state mutations, scoring, git operations, and formatting.</p>
+        <span class="card-arrow">View script catalog &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/templates.html')}>
+        <div class="page-card-icon green">&#9874;</div>
+        <h3>Templates</h3>
+        <p>50+ scaffolding blueprints for foundation docs, state files, test configs, CI/CD, and reporting.</p>
+        <span class="card-arrow">View template catalog &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/runtime.html')}>
+        <div class="page-card-icon green">&#9679;</div>
+        <h3>Runtime State</h3>
+        <p>The <code>.vibecrew/</code> directory: JSON state files, session logs, scores, signals, and handoffs.</p>
+        <span class="card-arrow">View state structure &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/safety.html')}>
+        <div class="page-card-icon red">&#9632;</div>
+        <h3>Permissions &amp; Safety</h3>
+        <p>Three-layer defense: permission rules, hook guards, and quality gates.</p>
+        <span class="card-arrow">View safety model &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/self-improving.html')}>
+        <div class="page-card-icon amber">&#9733;</div>
+        <h3>Self-Improving System</h3>
+        <p>Performance Coach, CLAUDE.md mutations, Vibe Score, and cross-project telemetry.</p>
+        <span class="card-arrow">View feedback loop &rarr;</span>
+      </a>
+      <a class="page-card" href={url('/dashboard.html')}>
+        <div class="page-card-icon blue">&#9635;</div>
+        <h3>Vibe Dashboard</h3>
+        <p>Browser-based VitePress dashboard with Kanban board, trends, achievements, and settings.</p>
+        <span class="card-arrow">View dashboard guide &rarr;</span>
+      </a>
+    </div>
   </section>
+
 </DocsLayout>
 
-<!-- Hash redirects from the old monolithic page -->
-<script define:vars={{ redirects: architectureRedirects }}>
+<script is:inline>
+  // Backward-compat: redirect old hash-based tab URLs to new pages
   (function() {
+    var map = {
+      '#plugin': 'plugin.html',
+      '#agents': 'agents.html',
+      '#hooks': 'hooks.html',
+      '#commands': 'command-flow.html',
+      '#skills': 'skills.html',
+      '#scripts': 'scripts.html',
+      '#runtime': 'runtime.html',
+      '#safety': 'safety.html',
+      '#dashboard': 'dashboard.html',
+    };
     var hash = window.location.hash;
-    if (hash && redirects[hash]) {
-      window.location.replace(redirects[hash]);
+    if (hash && map[hash]) {
+      window.location.replace(map[hash]);
     }
   })();
 </script>

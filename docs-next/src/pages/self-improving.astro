@@ -82,7 +82,7 @@ import { selfImprovingDiagram } from '../data/diagrams';
           <tr><td>Prompt churn</td><td>-5 per sequence</td><td>3+ similar prompts to the same agent without meaningful change</td></tr>
           <tr><td>Tool loops</td><td>-10 per loop</td><td>Same tool called repeatedly without progress</td></tr>
           <tr><td>Low cache utilization</td><td>-15</td><td>Cache hit ratio below 30%</td></tr>
-          <tr><td>Context violations</td><td>-20</td><td>Session exceeded 80% context usage</td></tr>
+          <tr><td>Context violations</td><td>-20</td><td>Session exceeded 60% context usage</td></tr>
           <tr><td>No tests</td><td>-10</td><td>Feature completed without any test files</td></tr>
           <tr><td>No feature spec</td><td>-5</td><td>Feature started without a spec in backlog.json</td></tr>
           <tr><td>Skipped code review</td><td>-5</td><td>Feature wrapped without running /review</td></tr>

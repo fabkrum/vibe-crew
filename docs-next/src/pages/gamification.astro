@@ -160,7 +160,7 @@ const profileGamification = `"user_profile": {
           <tr><td>Prompt churn</td><td>&minus;5 per sequence</td><td>Rephrasing the same instruction multiple times without progress</td></tr>
           <tr><td>Tool loops</td><td>&minus;10 per loop</td><td>Retrying the same failed command with the same approach</td></tr>
           <tr><td>Low cache utilization</td><td>&minus;15</td><td>Cache ratio below 50% (inefficient token usage)</td></tr>
-          <tr><td>Context violations</td><td>&minus;20</td><td>Peak context usage exceeded 80% of the window</td></tr>
+          <tr><td>Context violations</td><td>&minus;20</td><td>Peak context usage exceeded 60% of the window</td></tr>
           <tr><td>No tests</td><td>&minus;10</td><td>Test files exist but zero tests pass</td></tr>
           <tr><td>No feature spec</td><td>&minus;5</td><td>Active feature missing acceptance criteria</td></tr>
           <tr><td>Skipped code review</td><td>&minus;5</td><td>Review phase not completed for the feature</td></tr>

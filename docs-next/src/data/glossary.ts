@@ -63,7 +63,7 @@ export const glossary: GlossaryTerm[] = [
   {
     term: 'Context Window',
     category: 'tool',
-    definition: 'The amount of information the AI can &ldquo;hold in its head&rdquo; during a single conversation. Just like a person can only think about so many things at once, the AI has a limit on how much text it can process. VibeCrew carefully manages this &mdash; targeting less than 50% usage and showing warnings at 60% and 80% to prevent slowdowns.',
+    definition: 'The amount of information the AI can &ldquo;hold in its head&rdquo; during a single conversation. Just like a person can only think about so many things at once, the AI has a limit on how much text it can process. VibeCrew carefully manages this &mdash; targeting less than 50% usage and showing warnings at 45% and 60% to prevent slowdowns.',
     learnMoreUrl: 'https://docs.anthropic.com/en/docs/build-with-claude/context-windows',
     learnMoreLabel: 'Anthropic: Context windows',
   },

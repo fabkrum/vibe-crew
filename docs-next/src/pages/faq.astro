@@ -81,6 +81,26 @@ import { url } from '../data/site';
         </div>
       </details>
 
+      <details class="faq-item">
+        <summary>How do I update VibeCrew?</summary>
+        <div class="faq-answer">
+          <p>Pull the latest changes and re-run the install script:</p>
+          <ol>
+            <li><code>cd</code> into your VibeCrew clone directory</li>
+            <li><code>git pull</code></li>
+            <li><code>bash install.sh</code></li>
+          </ol>
+          <p>Your per-project <code>.vibecrew/</code> state is preserved &mdash; only the plugin files are updated.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I uninstall VibeCrew?</summary>
+        <div class="faq-answer">
+          <p>Run <code>bash uninstall.sh</code> from the plugin directory. This removes the plugin symlink and global settings. Your project code and <code>.vibecrew/</code> state files are left untouched &mdash; delete them manually if you no longer need them.</p>
+        </div>
+      </details>
+
       <!-- ── Workflow ──────────────────────────────────────────────── -->
       <h3>Workflow</h3>
 

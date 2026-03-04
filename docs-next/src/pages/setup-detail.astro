@@ -83,7 +83,7 @@ const configSnippet = `{
         <tbody>
           <tr><td><strong>Git</strong></td><td>2.30+</td><td>Version control, branch management, worktree isolation for sub-agents.</td></tr>
           <tr><td><strong>Node.js</strong></td><td>18+</td><td>Runs MCP servers, dashboard dev server, and build tooling.</td></tr>
-          <tr><td><strong>jq</strong></td><td>1.6+</td><td>JSON parsing in all hook and automation scripts. Used hundreds of times across ~80 scripts.</td></tr>
+          <tr><td><strong>jq</strong></td><td>1.6+</td><td>JSON parsing in all hook and automation scripts. Used hundreds of times across all scripts.</td></tr>
         </tbody>
       </table>
     </div>
@@ -197,7 +197,7 @@ const configSnippet = `{
         <div class="step-number">4</div>
         <div class="step-content">
           <h4>Check MCP Server Health</h4>
-          <p>Runs <code>check-mcp-health.sh</code> with a 5-second timeout per server. Displays a status table of all 9 bundled MCP servers. Three are enabled by default: <strong>Context7</strong>, <strong>Chrome DevTools</strong>, and <strong>Playwright</strong>. The remaining 6 (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) are conditionally enabled later based on your TDR technology choices.</p>
+          <p>Runs <code>check-mcp-health.sh</code> with a 5-second timeout per server. Displays a status table of all bundled MCP servers. Three are enabled by default: <strong>Context7</strong>, <strong>Chrome DevTools</strong>, and <strong>Playwright</strong>. The remaining 6 (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) are conditionally enabled later based on your TDR technology choices.</p>
           <p>Server failures are warnings, not blockers. The system works fine with reduced MCP capabilities.</p>
         </div>
       </div>
@@ -325,7 +325,7 @@ const configSnippet = `{
   <!-- ── /profile Interview ── -->
   <section class="section" id="profile">
     <h3>The /profile Interview</h3>
-    <p>After setup, VibeCrew prompts you to run <code>/profile</code> &mdash; a 7-question interview (~2 minutes) that personalizes how every agent communicates and behaves. It's completely optional; all agents use sensible defaults without it.</p>
+    <p>After setup, VibeCrew prompts you to run <code>/profile</code> &mdash; a short interview (~2 minutes) that personalizes how every agent communicates and behaves. It's completely optional; all agents use sensible defaults without it.</p>
 
     <div class="agent-table-wrap">
       <table class="agent-table">
@@ -342,7 +342,7 @@ const configSnippet = `{
       </table>
     </div>
 
-    <p>See the <a href="profile-system.html">User Profiles</a> page for full details on each dimension, how agents adapt, and how to change your profile later.</p>
+    <p>See the <a href="personalization.html">User Profiles</a> page for full details on each dimension, how agents adapt, and how to change your profile later.</p>
   </section>
 
   <hr>
@@ -397,14 +397,14 @@ const configSnippet = `{
         <p>How the plugin manifest loads agents, skills, hooks, scripts, and MCP servers.</p>
         <span class="card-arrow">View details &rarr;</span>
       </a>
-      <a class="page-card" href="profile-system.html">
+      <a class="page-card" href="personalization.html">
         <h4>User Profiles</h4>
-        <p>Full details on the 7 profile dimensions and how every agent adapts to your preferences.</p>
+        <p>Full details on the profile dimensions and how every agent adapts to your preferences.</p>
         <span class="card-arrow">View details &rarr;</span>
       </a>
       <a class="page-card" href="mcp-servers.html">
         <h4>MCP Servers</h4>
-        <p>The 9 bundled MCP servers, plus 15 additional servers auto-discovered from your TDR.</p>
+        <p>The bundled MCP servers, plus additional servers auto-discovered from your TDR.</p>
         <span class="card-arrow">View details &rarr;</span>
       </a>
       <a class="page-card" href="runtime.html">

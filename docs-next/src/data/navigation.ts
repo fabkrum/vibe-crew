@@ -17,7 +17,6 @@ export const navigation: NavGroup[] = [
       { title: 'Setup in Detail', slug: 'setup-detail' },
       { title: 'Project Planning', slug: 'project-planning' },
       { title: 'Warp Integration', slug: 'warp' },
-      { title: 'User Profiles', slug: 'profile-system' },
       { title: 'FAQ', slug: 'faq' },
     ],
   },
@@ -33,6 +32,7 @@ export const navigation: NavGroup[] = [
     collapsed: true,
     links: [
       { title: 'Overview', slug: 'architecture' },
+      { title: 'Status Line', slug: 'status-line' },
       { title: 'Plugin Structure', slug: 'plugin' },
       { title: 'Sub-Agents', slug: 'agents' },
       { title: 'Hooks', slug: 'hooks' },

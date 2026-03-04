@@ -20,6 +20,8 @@ import TableWrap from '../components/TableWrap.astro';
           </ol>
         </li>
         <li><a href="#cost-system">Cost Tracking &amp; Safety</a></li>
+        <li><a href="#security-audit">Security Audit (/audit)</a></li>
+        <li><a href="#more-commands">More Commands</a></li>
         <li><a href="#multi-lang">Multi-Language Support</a></li>
       </ol>
     </div>
@@ -270,29 +272,61 @@ Presents suggestions one at a time for your approval
 
       <!-- SAFETY HOOKS -->
       <h3 id="safety-hooks">Safety Hooks</h3>
-      <p>Three layers of protection run as PreToolUse hooks, blocking operations before they execute:</p>
-
-      <div class="card-grid">
-        <div class="card">
-          <h4>protect-data.sh</h4>
-          <p>Blocks destructive bash commands: <code>rm -rf</code>, <code>git push --force</code>, <code>DROP TABLE</code>, <code>sudo</code>, <code>kill -9</code>, <code>chmod 777</code>, and more. 18 denied tool patterns in <code>settings.json</code>.</p>
-        </div>
-        <div class="card">
-          <h4>phase-gate.sh</h4>
-          <p>Blocks source code writes (<code>src/</code>, <code>app/</code>, <code>lib/</code>, <code>components/</code>) until all Tier 1 foundation artifacts exist. Allows config and docs writes always.</p>
-        </div>
-        <div class="card">
-          <h4>restrict-paths.sh</h4>
-          <p>Validates that write targets are within the project directory and match allowed path patterns. Prevents accidental writes to system files or other projects.</p>
-        </div>
-      </div>
-
-      <h4>Permission rules</h4>
-      <p><code>settings.json</code> defines 71+ permission rules: 53 allowed tool patterns (npm, git, gh, glab, jq, standard dev tools) and 18 denied patterns (sudo, force push, hard reset, kill -9, mkfs, dd). These are enforced at the Claude Code level before any hook runs.</p>
+      <p>VibeCrew enforces safety through PreToolUse hooks (<code>protect-data.sh</code>, <code>phase-gate.sh</code>, <code>restrict-paths.sh</code>) and permission rules in <code>settings.json</code>. These block destructive commands, enforce foundation-before-code ordering, and restrict file writes to the project directory &mdash; all at zero token cost.</p>
+      <p>See the <a href="safety.html">Permissions &amp; Safety</a> page for the full breakdown of hooks, permission rules, and enforcement layers.</p>
 
       <Callout type="warn" title="Checkpoint safety net">
         Both <code>/heal</code> and <code>/new-feature</code> create a git checkpoint (<code>vibecrew-checkpoint-&lt;timestamp&gt;</code>) before making changes. If anything goes wrong, <code>/undo</code> can roll back to any checkpoint. Checkpoints are lightweight git tags that don&rsquo;t add repository overhead.
       </Callout>
+
+      <!-- SECURITY AUDIT -->
+      <h3 id="security-audit">Security Audit (<code>/audit</code>)</h3>
+      <p>Run <code>/audit</code> to perform an OWASP Top 10 security analysis of your project. The Security Auditor agent operates in a <strong>read-only worktree</strong> &mdash; it analyzes your code but never modifies it.</p>
+
+      <h4>What it checks</h4>
+      <ul>
+        <li><strong>Injection vulnerabilities</strong> &mdash; SQL injection, command injection, XSS</li>
+        <li><strong>Authentication &amp; authorization</strong> &mdash; missing auth checks, insecure session handling</li>
+        <li><strong>Secrets exposure</strong> &mdash; hardcoded API keys, tokens, credentials in source</li>
+        <li><strong>Dependency vulnerabilities</strong> &mdash; runs language-specific audit tools (<code>npm audit</code>, <code>pip audit</code>, etc.)</li>
+        <li><strong>Security headers &amp; configuration</strong> &mdash; missing CORS, CSP, HSTS headers</li>
+      </ul>
+      <p>Findings are categorized by severity (critical, high, medium, low) and saved to <code>.vibecrew/</code>. The audit adapts to your project's language &mdash; see <a href="#multi-lang">Multi-Language Support</a> for details.</p>
+
+      <!-- MORE COMMANDS -->
+      <h3 id="more-commands">More Commands</h3>
+      <p>These commands cover specialized workflows. Each is a single slash command that orchestrates the right agent(s) and scripts.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4><code>/handoff</code></h4>
+          <p>Generates a structured context transfer document capturing in-progress work, decisions made, and next steps. Use when context is running low or you need to continue in a new session.</p>
+        </div>
+        <div class="card">
+          <h4><code>/release</code></h4>
+          <p>Automates version bumps, changelog generation from conventional commits, and release notes creation. The Doc Generator compiles a release summary from git history and session logs.</p>
+        </div>
+        <div class="card">
+          <h4><code>/tdd</code></h4>
+          <p>Test-driven development workflow: write a failing test first, then implement until it passes, then refactor. The Verifier agent guides the red-green-refactor cycle.</p>
+        </div>
+        <div class="card">
+          <h4><code>/debug</code></h4>
+          <p>Structured debugging with hypothesis testing. The Builder agent systematically isolates the issue, forms hypotheses, tests each one, and applies the fix.</p>
+        </div>
+        <div class="card">
+          <h4><code>/e2e</code></h4>
+          <p>Generates Playwright end-to-end tests using the Page Object Model pattern. Tests cover user flows defined in the feature spec and run in real browsers.</p>
+        </div>
+        <div class="card">
+          <h4><code>/perf-test</code></h4>
+          <p>Generates k6 performance test suites covering load, stress, spike, and soak scenarios. Establishes baselines for response times and throughput.</p>
+        </div>
+        <div class="card">
+          <h4><code>/a11y</code></h4>
+          <p>Runs WCAG 2.1 AA accessibility scanning via axe-core. Reports violations by severity with fix suggestions. Contributes +2 to Vibe Score when clean.</p>
+        </div>
+      </div>
     </section>
 
     <hr>

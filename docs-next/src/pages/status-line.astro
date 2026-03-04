@@ -1,0 +1,222 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import { url } from '../data/site';
+
+const settingsSnippet = `{
+  "statusLine": {
+    "type": "command",
+    "command": "\${CLAUDE_PLUGIN_ROOT}/scripts/statusline.sh"
+  }
+}`;
+
+const stdinJson = `{
+  "model": { "id": "claude-opus-4-6", "display_name": "Opus 4.6" },
+  "context_window": {
+    "used_percentage": 38,
+    "context_window_size": 200000,
+    "current_usage": {
+      "input_tokens": 1,
+      "output_tokens": 9,
+      "cache_creation_input_tokens": 653,
+      "cache_read_input_tokens": 34682
+    }
+  },
+  "cost": {
+    "total_cost_usd": 0.42,
+    "total_duration_ms": 720000
+  }
+}`;
+---
+
+<DocsLayout title="Status Line" sectionLabel="How It Works" activeSlug="status-line">
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#overview">What It Is</a></li>
+      <li><a href="#segments">Segment Breakdown</a></li>
+      <li><a href="#how-it-works">How It Works Under the Hood</a></li>
+      <li><a href="#data-sources">On-Disk Data Sources</a></li>
+      <li><a href="#degradation">Graceful Degradation</a></li>
+      <li><a href="#dashboard-sidecar">Dashboard Sidecar</a></li>
+      <li><a href="#customization">Customization</a></li>
+    </ol>
+  </div>
+
+  <!-- ── Overview ── -->
+  <section class="section" id="overview">
+    <div class="panel-intro">
+      <h2>Status Line</h2>
+      <p>While VibeCrew runs, a persistent status line at the bottom of your Claude Code terminal shows real-time session state. It updates after every assistant message at zero token cost &mdash; it's powered by a bash script, not the model.</p>
+      <div class="key-points">
+        <div class="key-point">
+          <span class="key-icon purple">&#9632;</span>
+          <div>
+            <strong>What it is</strong>
+            <p>A single ANSI-colored line rendered by <code>statusline.sh</code>. Claude Code pipes session JSON to the script's stdin on every assistant turn, and the script combines that with on-disk state files to produce a compact, color-coded status readout.</p>
+          </div>
+        </div>
+        <div class="key-point">
+          <span class="key-icon green">&#10003;</span>
+          <div>
+            <strong>What problem it solves</strong>
+            <p>Without the status line, you'd have to run <code>/status</code> repeatedly to check context usage, cost, and active feature. The status line gives you continuous visibility without spending tokens or interrupting your workflow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <pre class="status-line-mock"><code>Opus 4.6 <span class="sl-ctx-green">▓▓▓▓░░░░░░ 38%</span> | <span class="sl-cost">$0.42</span> | <span class="sl-feat">auth-flow · Code</span> | <span class="sl-score">↑85+</span> | <span class="sl-dur">12m</span> | <span class="sl-compact">⟳0</span></code></pre>
+  </section>
+
+  <hr>
+
+  <!-- ── Segments ── -->
+  <section class="section" id="segments">
+    <h3>Segment Breakdown</h3>
+    <p>Seven segments, left to right:</p>
+
+    <table class="solution-table status-line-table">
+      <thead><tr><th>Segment</th><th>Example</th><th>What It Shows</th></tr></thead>
+      <tr><td><strong>Model</strong></td><td><code>Opus 4.6</code></td><td>The Claude model powering the current session. Parsed from the session JSON that Claude Code pipes to the script on every turn.</td></tr>
+      <tr><td><strong>Context Bar</strong></td><td><code>▓▓▓▓░░░░░░ 38%</code></td><td>A 10-character progress bar visualizing context window usage. Each <code>▓</code> block represents 10% of the 200k-token window. Color-coded: <span style="color:var(--color-green);">green</span> at &le;45%, <span style="color:var(--color-amber);">yellow</span> at 46&ndash;55%, and <span style="color:var(--color-red);">red</span> above 55%. This is the most critical indicator &mdash; when it turns red, consider running <code>/compact</code> or <code>/handoff</code> to free space before the model starts losing earlier context.</td></tr>
+      <tr><td><strong>Session Cost</strong></td><td><code>$0.42</code></td><td>Cumulative API cost in USD for the current session. Helps you track spend in real time rather than waiting for a billing dashboard. The cost guardrail hook fires warnings at configurable thresholds independently, but the status line gives you a continuous readout.</td></tr>
+      <tr><td><strong>Feature &middot; Phase</strong></td><td><code>auth-flow · Code</code></td><td>The active feature name (truncated to 16 characters) and its current phase in the Tier 2 cycle: Plan, Design, Code, Test, Review, or Docs. During Tier 1, this shows <code>foundation · Tier-1</code>. If no project is initialized, it displays <code>no project</code>. Read from <code>.vibecrew/state.json</code> on disk.</td></tr>
+      <tr><td><strong>Vibe Score</strong></td><td><code>↑85+</code></td><td>The session's quality score (0&ndash;150) with a trend suffix: <code>+</code> means the score is improving across sessions, <code>-</code> means declining. Read from the latest score file in <code>.vibecrew/scores/</code>. When no score exists yet, displays <code>↑--</code>.</td></tr>
+      <tr><td><strong>Duration</strong></td><td><code>12m</code></td><td>Total elapsed session time in minutes. Shows <code>&lt;1m</code> for sessions under 60 seconds. Useful for gauging how long an autonomous run has been going.</td></tr>
+      <tr><td><strong>Compactions</strong></td><td><code>⟳0</code></td><td>Number of <code>/compact</code> operations in the current session. Each compaction compresses the conversation to reclaim context window space. A rising number signals a long or context-heavy session. Read from <code>.vibecrew/sessions/</code>.</td></tr>
+    </table>
+  </section>
+
+  <hr>
+
+  <!-- ── How It Works ── -->
+  <section class="section" id="how-it-works">
+    <h3>How It Works Under the Hood</h3>
+    <p>Claude Code supports a <code>statusLine</code> setting in <code>settings.json</code> that points to a bash script. On every assistant turn, Claude Code pipes a JSON object to the script's stdin containing the current model, context window stats, cost, and timing data. The script parses this with <code>jq</code>, reads project state files from <code>.vibecrew/</code>, and outputs a single ANSI-colored line.</p>
+
+    <h4>Configuration</h4>
+    <p>The plugin's <code>settings.json</code> includes this entry, which Claude Code reads automatically:</p>
+    <CodeBlock code={settingsSnippet} lang="json" label="settings.json" />
+
+    <h4>stdin JSON Schema</h4>
+    <p>This is the JSON object that Claude Code pipes to <code>statusline.sh</code> on every turn:</p>
+    <CodeBlock code={stdinJson} lang="json" label="stdin payload" />
+  </section>
+
+  <hr>
+
+  <!-- ── Data Sources ── -->
+  <section class="section" id="data-sources">
+    <h3>On-Disk Data Sources</h3>
+    <p>The script combines piped data with on-disk reads:</p>
+    <table class="solution-table">
+      <thead><tr><th>Data Source</th><th>What It Provides</th></tr></thead>
+      <tr><td>stdin JSON</td><td>Model name, context percentage, session cost, elapsed time</td></tr>
+      <tr><td><code>.vibecrew/state.json</code></td><td>Active feature name and current phase</td></tr>
+      <tr><td><code>.vibecrew/scores/score-*.json</code></td><td>Latest Vibe Score and trend direction</td></tr>
+      <tr><td><code>.vibecrew/sessions/session-*.json</code></td><td>Compaction count for the current session</td></tr>
+    </table>
+  </section>
+
+  <hr>
+
+  <!-- ── Graceful Degradation ── -->
+  <section class="section" id="degradation">
+    <h3>Graceful Degradation</h3>
+    <p>The status line never breaks your terminal. If <code>jq</code> is missing, it displays just <code>VibeCrew</code>. If <code>.vibecrew/</code> doesn't exist, project-specific fields show placeholder values (<code>no project</code>, <code>↑--</code>, <code>⟳0</code>). The script always exits with code 0, regardless of parse errors.</p>
+  </section>
+
+  <hr>
+
+  <!-- ── Dashboard Sidecar ── -->
+  <section class="section" id="dashboard-sidecar">
+    <h3>Dashboard Sidecar</h3>
+    <p>As a side effect, the status line script writes the raw session JSON to <code>.vibecrew/live-session.json</code> using an atomic move operation. The <a href={url('/dashboard.html')}>Vibe Dashboard</a> reads this file to display real-time session metrics in the browser without any additional polling or API calls.</p>
+  </section>
+
+  <hr>
+
+  <!-- ── Customization ── -->
+  <section class="section" id="customization">
+    <h3>Customization</h3>
+    <p>The status line script is fully customizable. You can modify <code>statusline.sh</code> directly to change colors, add segments, or remove fields you don't need. Alternatively, point the <code>statusLine.command</code> setting to your own script &mdash; as long as it reads JSON from stdin and outputs a single line to stdout, Claude Code will display it.</p>
+  </section>
+
+</DocsLayout>
+
+<style>
+.toc { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem; }
+.toc h3 { margin-top: 0; margin-bottom: 1rem; font-size: 1rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.toc ol { padding-left: 1.25rem; margin-bottom: 0; }
+.toc li { margin-bottom: 0.35rem; }
+.toc a { color: var(--color-text-secondary); font-size: 0.92rem; transition: color 0.15s; }
+.toc a:hover { color: var(--color-accent); text-decoration: none; }
+
+.status-line-mock {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: .85rem 1.25rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  position: relative;
+}
+.status-line-mock::before {
+  content: 'STATUS LINE';
+  position: absolute;
+  top: .45rem;
+  right: .75rem;
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+}
+.status-line-mock code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: .9rem;
+  font-family: var(--font-mono);
+  color: var(--color-text);
+  white-space: nowrap;
+  line-height: 2;
+}
+.sl-ctx-green { color: var(--color-green); }
+.sl-ctx-yellow { color: var(--color-amber); }
+.sl-ctx-red { color: var(--color-red); }
+.sl-cost { color: var(--color-text-secondary); }
+.sl-feat { color: var(--color-accent); }
+.sl-score { color: var(--color-green); }
+.sl-dur { color: var(--color-text-secondary); }
+.sl-compact { color: var(--color-text-muted); }
+.status-line-table th {
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: .6rem .75rem;
+}
+.status-line-table td {
+  font-size: .84rem;
+  line-height: 1.6;
+  padding: .6rem .75rem;
+}
+.status-line-table td:first-child {
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--color-text);
+  width: 130px;
+}
+.status-line-table td:nth-child(2) {
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  color: var(--color-text-muted);
+  width: 160px;
+}
+.status-line-table td:nth-child(2) code {
+  font-size: .82rem;
+}
+</style>

@@ -1,0 +1,912 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — How It Works</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.mermaid-container[data-astro-cid-6vqylkyd]{margin-bottom:2rem}pre[data-astro-cid-6vqylkyd].mermaid{background:transparent;border:none;padding:0;text-align:center}.mermaid-caption[data-astro-cid-6vqylkyd]{text-align:center;font-size:.85rem;color:var(--color-text-muted);margin-top:.5rem}.arch-tabs[data-astro-cid-gomkox45]{display:flex;flex-wrap:wrap;gap:.25rem;border-bottom:1px solid var(--color-border);margin-bottom:2rem;padding-bottom:0}.arch-tab[data-astro-cid-gomkox45]{padding:.6rem 1rem;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--color-text-secondary);font-size:.85rem;font-weight:500;font-family:var(--font-sans);cursor:pointer;transition:color .15s,border-color .15s;white-space:nowrap;margin-bottom:-1px}.arch-tab[data-astro-cid-gomkox45]:hover{color:var(--color-text)}.arch-tab[data-astro-cid-gomkox45].active{color:var(--color-accent);border-bottom-color:var(--color-accent)}.arch-panel[data-astro-cid-gomkox45]{display:none;animation:panelFadeIn .2s ease}.arch-panel[data-astro-cid-gomkox45].active{display:block}@keyframes panelFadeIn{0%{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}.panel-intro[data-astro-cid-gomkox45]{margin-bottom:2rem}.panel-intro[data-astro-cid-gomkox45] h3[data-astro-cid-gomkox45]{margin-bottom:.5rem}.panel-intro[data-astro-cid-gomkox45]>p[data-astro-cid-gomkox45]{color:var(--color-text-secondary);line-height:1.7;margin-bottom:1.25rem}.key-points[data-astro-cid-gomkox45]{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1rem}.key-point[data-astro-cid-gomkox45]{display:flex;gap:.75rem;padding:1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm)}.key-point[data-astro-cid-gomkox45] strong[data-astro-cid-gomkox45]{display:block;margin-bottom:.25rem;font-size:.85rem;color:var(--color-text)}.key-point[data-astro-cid-gomkox45] p[data-astro-cid-gomkox45]{font-size:.82rem;color:var(--color-text-secondary);line-height:1.6;margin:0}.key-icon[data-astro-cid-gomkox45]{flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-xs);font-size:.85rem;line-height:1}.key-icon[data-astro-cid-gomkox45].purple{background:var(--color-accent-bg);color:var(--color-accent)}.key-icon[data-astro-cid-gomkox45].green{background:var(--color-green-dim);color:var(--color-green)}.agent-legend[data-astro-cid-gomkox45]{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;padding:.6rem 1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xs);font-size:.8rem;color:var(--color-text-secondary)}.legend-item[data-astro-cid-gomkox45]{display:flex;align-items:center;gap:.4rem}.legend-dot[data-astro-cid-gomkox45]{width:8px;height:8px;border-radius:50%;flex-shrink:0}@media(max-width:600px){.arch-tabs[data-astro-cid-gomkox45]{gap:0}.arch-tab[data-astro-cid-gomkox45]{padding:.5rem .65rem;font-size:.78rem}.key-points[data-astro-cid-gomkox45]{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features._tR_LaEZ.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Tips &amp; Tricks </a><a href="/vibe-crew/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/vibe-crew/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/arch-visual.html" class="sidebar-link active"> How It Works </a><a href="/vibe-crew/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/vibe-crew/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/vibe-crew/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/vibe-crew/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/commands.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a><a href="/vibe-crew/releases.html" class="sidebar-link"> Changelog </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Architecture</span>  <span class="separator">/</span> <span>How It Works</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Architecture"},{"@type":"ListItem","position":3,"name":"How It Works"}]}</script>  <section class="section" data-astro-cid-gomkox45> <h2 data-astro-cid-gomkox45>How VibeCrew Works</h2> <p data-astro-cid-gomkox45>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, and per-project runtime state. Select a tab to see how each part fits together.</p> </section>  <div class="arch-tabs" role="tablist" aria-label="Architecture sections" data-astro-cid-gomkox45> <button class="arch-tab active" role="tab" aria-selected="true" aria-controls="panel-plugin" data-tab="plugin" data-astro-cid-gomkox45>Plugin Structure</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-agents" data-tab="agents" data-astro-cid-gomkox45>Sub-Agents</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-hooks" data-tab="hooks" data-astro-cid-gomkox45>Hooks</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-commands" data-tab="commands" data-astro-cid-gomkox45>Slash Commands</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-scripts" data-tab="scripts" data-astro-cid-gomkox45>Bash Scripts</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-runtime" data-tab="runtime" data-astro-cid-gomkox45>Runtime State</button> </div>  <div class="arch-panel active" id="panel-plugin" role="tabpanel" data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Plugin Structure</h3> <p data-astro-cid-gomkox45>VibeCrew is a <strong data-astro-cid-gomkox45>Claude Code plugin</strong> &mdash; an add-on that gives Claude Code new abilities. When you open a project with VibeCrew installed, Claude Code reads a manifest file and automatically loads agents, skills, hooks, scripts, MCP servers, and permissions. Everything lives inside the <code data-astro-cid-gomkox45>claude-plugin-vibe-crew/</code> directory.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A self-contained folder with a <code data-astro-cid-gomkox45>plugin.json</code> manifest that registers 14 agents, 33 slash commands, 16 hooks, ~80 scripts, and 9 MCP servers.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>Without a plugin, you'd manually configure each agent, permission rule, and automation script for every project. The plugin bundles everything into a single install.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Plugin[&quot;claude-plugin-vibe-crew&quot;]
+    Manifest[&quot;.claude-plugin/plugin.json&quot;]
+    MCP[&quot;.mcp.json&lt;br/&gt;10 MCP Servers&quot;]
+    Settings[&quot;settings.json&lt;br/&gt;Permissions&quot;]
+    Hooks[&quot;hooks/hooks.json&lt;br/&gt;Event Bindings&quot;]
+    Scripts[&quot;scripts/&lt;br/&gt;~80 Bash Scripts&quot;]
+    Agents[&quot;agents/&lt;br/&gt;14 Agent Prompts&quot;]
+    Skills[&quot;skills/&lt;br/&gt;31 Slash Commands&quot;]
+  end
+
+  subgraph Runtime[&quot;.vibecrew/ (Per-Project)&quot;]
+    Config[&quot;config.json&quot;]
+    State[&quot;state.json&quot;]
+    Backlog[&quot;backlog.json&quot;]
+    Sessions[&quot;sessions/&quot;]
+    Scores[&quot;scores/&quot;]
+    Architecture[&quot;architecture/&lt;br/&gt;5 .mmd files&quot;]
+  end
+
+  CC[&quot;Claude Code&quot;] --&gt; Manifest
+  CC --&gt; MCP
+  CC --&gt; Settings
+  CC --&gt; Hooks
+  Hooks --&gt; Scripts
+  CC --&gt; Skills
+  Skills --&gt; Agents
+  Agents --&gt; Runtime
+
+  style Plugin fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Runtime fill:#18181b,stroke:#4ade80,color:#fafafa
+  style CC fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Plugin components and how Claude Code loads them</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Plugin[&quot;claude-plugin-vibe-crew&quot;]
+    Manifest[&quot;.claude-plugin/plugin.json&quot;]
+    MCP[&quot;.mcp.json&lt;br/&gt;10 MCP Servers&quot;]
+    Settings[&quot;settings.json&lt;br/&gt;Permissions&quot;]
+    Hooks[&quot;hooks/hooks.json&lt;br/&gt;Event Bindings&quot;]
+    Scripts[&quot;scripts/&lt;br/&gt;~80 Bash Scripts&quot;]
+    Agents[&quot;agents/&lt;br/&gt;14 Agent Prompts&quot;]
+    Skills[&quot;skills/&lt;br/&gt;31 Slash Commands&quot;]
+  end
+
+  subgraph Runtime[&quot;.vibecrew/ (Per-Project)&quot;]
+    Config[&quot;config.json&quot;]
+    State[&quot;state.json&quot;]
+    Backlog[&quot;backlog.json&quot;]
+    Sessions[&quot;sessions/&quot;]
+    Scores[&quot;scores/&quot;]
+    Architecture[&quot;architecture/&lt;br/&gt;5 .mmd files&quot;]
+  end
+
+  CC[&quot;Claude Code&quot;] --&gt; Manifest
+  CC --&gt; MCP
+  CC --&gt; Settings
+  CC --&gt; Hooks
+  Hooks --&gt; Scripts
+  CC --&gt; Skills
+  Skills --&gt; Agents
+  Agents --&gt; Runtime
+
+  style Plugin fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Runtime fill:#18181b,stroke:#4ade80,color:#fafafa
+  style CC fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'dark',
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+          },
+        });
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </div>  <div class="arch-panel" id="panel-agents" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Sub-Agents</h3> <p data-astro-cid-gomkox45>Instead of one AI doing everything, VibeCrew splits work across <strong data-astro-cid-gomkox45>14 specialized agents</strong> &mdash; like a real development team with planners, builders, testers, and reviewers. Each agent runs a specific model (Opus for complex decisions, Haiku for fast mechanical tasks, Sonnet for documentation) and operates either inline or in an isolated worktree.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>AI "specialists" with scoped tool access, model selection, and turn budgets. The Workflow Orchestrator routes work; the Builder writes code; the Verifier runs tests; the Performance Coach scores sessions.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>A single AI context window fills up fast when researching, coding, and testing in one session. Worktree agents offload expensive research into isolated contexts &mdash; only the distilled output enters your main session, saving thousands of tokens.</p> </div> </div> </div> </div> <div class="agent-legend" data-astro-cid-gomkox45> <span class="legend-item" data-astro-cid-gomkox45><span class="legend-dot" style="background:var(--color-accent)" data-astro-cid-gomkox45></span> Opus (complex reasoning)</span> <span class="legend-item" data-astro-cid-gomkox45><span class="legend-dot" style="background:var(--color-amber)" data-astro-cid-gomkox45></span> Haiku (fast tasks)</span> <span class="legend-item" data-astro-cid-gomkox45><span class="legend-dot" style="background:var(--color-blue)" data-astro-cid-gomkox45></span> Sonnet (documentation)</span> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  User((User)) --&gt; SS[Session Startup&lt;br/&gt;Haiku]
+  SS --&gt; WO[Workflow Orchestrator&lt;br/&gt;Opus]
+
+  WO --&gt;|Tier 1| SSC[Stack Scout&lt;br/&gt;Opus]
+  WO --&gt;|Tier 1| OP[Opponent Processor&lt;br/&gt;Opus]
+  WO --&gt;|Tier 2| BLD[Builder&lt;br/&gt;Opus]
+
+  SSC --&gt;|TDR| WO
+  OP --&gt;|Risk Assessment| WO
+
+  BLD --&gt; VER[Verifier&lt;br/&gt;Haiku]
+  BLD --&gt; CR[Code Reviewer&lt;br/&gt;Opus]
+
+  VER --&gt;|Results| BLD
+  CR --&gt;|Findings| BLD
+
+  BLD --&gt;|/wrap| PC[Performance Coach&lt;br/&gt;Opus]
+  PC --&gt;|Score + Coaching| DG[Doc Generator&lt;br/&gt;Sonnet]
+
+  WO --&gt;|/audit| SA[Security Auditor&lt;br/&gt;Opus]
+  WO --&gt;|/simplify| CS[Code Simplifier&lt;br/&gt;Opus]
+  WO --&gt;|/heal| CH[CI Healer&lt;br/&gt;Opus]
+  WO --&gt;|/onboard| CA[Code Auditor&lt;br/&gt;Opus]
+  WO --&gt;|/system-review| SR[System Reviewer&lt;br/&gt;Opus]
+
+  style User fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style SS fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style WO fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style SSC fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style OP fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style BLD fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style VER fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style CR fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style PC fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style DG fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style SA fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style CS fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style CH fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style CA fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style SR fill:#18181b,stroke:#a78bfa,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Agent topology: how agents hand off work to each other</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  User((User)) --&gt; SS[Session Startup&lt;br/&gt;Haiku]
+  SS --&gt; WO[Workflow Orchestrator&lt;br/&gt;Opus]
+
+  WO --&gt;|Tier 1| SSC[Stack Scout&lt;br/&gt;Opus]
+  WO --&gt;|Tier 1| OP[Opponent Processor&lt;br/&gt;Opus]
+  WO --&gt;|Tier 2| BLD[Builder&lt;br/&gt;Opus]
+
+  SSC --&gt;|TDR| WO
+  OP --&gt;|Risk Assessment| WO
+
+  BLD --&gt; VER[Verifier&lt;br/&gt;Haiku]
+  BLD --&gt; CR[Code Reviewer&lt;br/&gt;Opus]
+
+  VER --&gt;|Results| BLD
+  CR --&gt;|Findings| BLD
+
+  BLD --&gt;|/wrap| PC[Performance Coach&lt;br/&gt;Opus]
+  PC --&gt;|Score + Coaching| DG[Doc Generator&lt;br/&gt;Sonnet]
+
+  WO --&gt;|/audit| SA[Security Auditor&lt;br/&gt;Opus]
+  WO --&gt;|/simplify| CS[Code Simplifier&lt;br/&gt;Opus]
+  WO --&gt;|/heal| CH[CI Healer&lt;br/&gt;Opus]
+  WO --&gt;|/onboard| CA[Code Auditor&lt;br/&gt;Opus]
+  WO --&gt;|/system-review| SR[System Reviewer&lt;br/&gt;Opus]
+
+  style User fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style SS fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style WO fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style SSC fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style OP fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style BLD fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style VER fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style CR fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style PC fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style DG fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style SA fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style CS fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style CH fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style CA fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style SR fill:#18181b,stroke:#a78bfa,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'dark',
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+          },
+        });
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </div>  <div class="arch-panel" id="panel-hooks" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Hooks</h3> <p data-astro-cid-gomkox45>Hooks are <strong data-astro-cid-gomkox45>automatic safety checks</strong> that run behind the scenes at zero token cost. When an agent tries to write a file or run a command, hooks intercept the action and validate it before it executes. Think of them as security guards at every door &mdash; they check permissions instantly using small bash scripts, not AI processing.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>Bash scripts triggered by Claude Code lifecycle events (session start, before/after tool use, session end). They read a JSON payload from stdin and return exit code 0 (allow) or 2 (block).</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>AI models can forget rules mid-session. Hooks enforce constraints deterministically &mdash; the phase gate blocks source code writes before the foundation is complete, the quality gate catches build errors, and the data protector blocks destructive commands. No token cost, no forgetting.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Events[&quot;Claude Code Lifecycle Events&quot;]
+    E1[&quot;SessionStart&quot;]
+    E2[&quot;PreToolUse&lt;br/&gt;(Write/Edit)&quot;]
+    E3[&quot;PreToolUse&lt;br/&gt;(Bash)&quot;]
+    E4[&quot;PostToolUse&lt;br/&gt;(Write/Edit)&quot;]
+    E5[&quot;Notification&quot;]
+    E6[&quot;Stop&quot;]
+  end
+
+  subgraph Guards[&quot;Pre-Action Guards (block or allow)&quot;]
+    PG[&quot;phase-gate.sh&lt;br/&gt;Block code before foundation&quot;]
+    RP[&quot;restrict-paths.sh&lt;br/&gt;Block writes outside project&quot;]
+    PD[&quot;protect-data.sh&lt;br/&gt;Block destructive commands&quot;]
+    VPT[&quot;validate-phase-transition.sh&lt;br/&gt;Enforce phase ordering&quot;]
+    VS[&quot;validate-signal.sh&lt;br/&gt;Validate signal schema&quot;]
+  end
+
+  subgraph Post[&quot;Post-Action Processors&quot;]
+    FC[&quot;format-code.sh&lt;br/&gt;Auto-format on save&quot;]
+    NT[&quot;notify.sh&lt;br/&gt;OS notifications&quot;]
+  end
+
+  subgraph Stop[&quot;Session End Checks&quot;]
+    CC[&quot;check-context.sh&lt;br/&gt;60%/80% warnings&quot;]
+    CG[&quot;cost-guardrails.sh&lt;br/&gt;Cost thresholds&quot;]
+    CL[&quot;claude-md-lint.sh&lt;br/&gt;CLAUDE.md validation&quot;]
+    QG[&quot;quality-gate.sh&lt;br/&gt;Typecheck/lint/build&quot;]
+  end
+
+  subgraph Init[&quot;Session Init&quot;]
+    SS[&quot;session-startup.sh&lt;br/&gt;Environment check&quot;]
+    SY[&quot;sync-state.sh&lt;br/&gt;State reconciliation&quot;]
+    ER[&quot;error-recovery.sh&lt;br/&gt;Clear stale locks&quot;]
+    CR[&quot;compact-reinject.sh&lt;br/&gt;Re-inject after compact&quot;]
+  end
+
+  E1 --&gt; Init
+  E2 --&gt; Guards
+  E3 --&gt; PD
+  E2 --&gt; VS
+  E4 --&gt; FC
+  E5 --&gt; NT
+  E6 --&gt; Stop
+
+  style Events fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Guards fill:#18181b,stroke:#f87171,color:#fafafa
+  style Post fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Stop fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Init fill:#18181b,stroke:#60a5fa,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Hook events mapped to their enforcement scripts</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Events[&quot;Claude Code Lifecycle Events&quot;]
+    E1[&quot;SessionStart&quot;]
+    E2[&quot;PreToolUse&lt;br/&gt;(Write/Edit)&quot;]
+    E3[&quot;PreToolUse&lt;br/&gt;(Bash)&quot;]
+    E4[&quot;PostToolUse&lt;br/&gt;(Write/Edit)&quot;]
+    E5[&quot;Notification&quot;]
+    E6[&quot;Stop&quot;]
+  end
+
+  subgraph Guards[&quot;Pre-Action Guards (block or allow)&quot;]
+    PG[&quot;phase-gate.sh&lt;br/&gt;Block code before foundation&quot;]
+    RP[&quot;restrict-paths.sh&lt;br/&gt;Block writes outside project&quot;]
+    PD[&quot;protect-data.sh&lt;br/&gt;Block destructive commands&quot;]
+    VPT[&quot;validate-phase-transition.sh&lt;br/&gt;Enforce phase ordering&quot;]
+    VS[&quot;validate-signal.sh&lt;br/&gt;Validate signal schema&quot;]
+  end
+
+  subgraph Post[&quot;Post-Action Processors&quot;]
+    FC[&quot;format-code.sh&lt;br/&gt;Auto-format on save&quot;]
+    NT[&quot;notify.sh&lt;br/&gt;OS notifications&quot;]
+  end
+
+  subgraph Stop[&quot;Session End Checks&quot;]
+    CC[&quot;check-context.sh&lt;br/&gt;60%/80% warnings&quot;]
+    CG[&quot;cost-guardrails.sh&lt;br/&gt;Cost thresholds&quot;]
+    CL[&quot;claude-md-lint.sh&lt;br/&gt;CLAUDE.md validation&quot;]
+    QG[&quot;quality-gate.sh&lt;br/&gt;Typecheck/lint/build&quot;]
+  end
+
+  subgraph Init[&quot;Session Init&quot;]
+    SS[&quot;session-startup.sh&lt;br/&gt;Environment check&quot;]
+    SY[&quot;sync-state.sh&lt;br/&gt;State reconciliation&quot;]
+    ER[&quot;error-recovery.sh&lt;br/&gt;Clear stale locks&quot;]
+    CR[&quot;compact-reinject.sh&lt;br/&gt;Re-inject after compact&quot;]
+  end
+
+  E1 --&gt; Init
+  E2 --&gt; Guards
+  E3 --&gt; PD
+  E2 --&gt; VS
+  E4 --&gt; FC
+  E5 --&gt; NT
+  E6 --&gt; Stop
+
+  style Events fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Guards fill:#18181b,stroke:#f87171,color:#fafafa
+  style Post fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Stop fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Init fill:#18181b,stroke:#60a5fa,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'dark',
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+          },
+        });
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </div>  <div class="arch-panel" id="panel-commands" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Slash Commands</h3> <p data-astro-cid-gomkox45>Slash commands are the <strong data-astro-cid-gomkox45>primary user interface</strong> to VibeCrew. You type a command starting with <code data-astro-cid-gomkox45>/</code> and the system handles the rest. Each command is defined as a <code data-astro-cid-gomkox45>SKILL.md</code> file with YAML frontmatter (name, description, arguments) and a markdown body containing the full workflow: preconditions, steps, error handling, and agent handoffs.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>33 commands across 7 categories: setup, planning, development, quality, safety, session management, and gamification. Some are script-only (zero token cost), others orchestrate multiple agents.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>Without slash commands, you'd need to manually prompt the AI with detailed instructions for every workflow step. Commands encode expert workflows into one-word triggers &mdash; <code data-astro-cid-gomkox45>/wrap</code> runs quality checks, scores your session, generates docs, and commits, all automatically.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart LR
+  subgraph User[&quot;User Input&quot;]
+    CMD[&quot;/slash-command&quot;]
+  end
+
+  subgraph Skill[&quot;Skill Layer&quot;]
+    SM[&quot;SKILL.md&lt;br/&gt;YAML frontmatter&lt;br/&gt;+ workflow body&quot;]
+  end
+
+  subgraph Routing[&quot;Agent Routing&quot;]
+    direction TB
+    SO[&quot;Script-Only&lt;br/&gt;(zero tokens)&quot;]
+    SA[&quot;Single Agent&quot;]
+    MA[&quot;Multi-Agent&lt;br/&gt;Orchestration&quot;]
+  end
+
+  subgraph Agents[&quot;Agent Execution&quot;]
+    direction TB
+    WO[&quot;Orchestrator&quot;]
+    BLD[&quot;Builder&quot;]
+    VER[&quot;Verifier&quot;]
+    PC[&quot;Perf Coach&quot;]
+    DG[&quot;Doc Generator&quot;]
+  end
+
+  subgraph Output[&quot;Results&quot;]
+    ST[&quot;State Updates&lt;br/&gt;.vibecrew/*.json&quot;]
+    GIT[&quot;Git Operations&lt;br/&gt;branch/commit/PR&quot;]
+    FILES[&quot;Source Code&lt;br/&gt;&amp; Documentation&quot;]
+  end
+
+  CMD --&gt; SM
+  SM --&gt; Routing
+  SO --&gt; ST
+  SA --&gt; Agents
+  MA --&gt; Agents
+  Agents --&gt; Output
+
+  style User fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Skill fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Routing fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Agents fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Output fill:#18181b,stroke:#4ade80,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>How a slash command flows from user input to results</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart LR
+  subgraph User[&quot;User Input&quot;]
+    CMD[&quot;/slash-command&quot;]
+  end
+
+  subgraph Skill[&quot;Skill Layer&quot;]
+    SM[&quot;SKILL.md&lt;br/&gt;YAML frontmatter&lt;br/&gt;+ workflow body&quot;]
+  end
+
+  subgraph Routing[&quot;Agent Routing&quot;]
+    direction TB
+    SO[&quot;Script-Only&lt;br/&gt;(zero tokens)&quot;]
+    SA[&quot;Single Agent&quot;]
+    MA[&quot;Multi-Agent&lt;br/&gt;Orchestration&quot;]
+  end
+
+  subgraph Agents[&quot;Agent Execution&quot;]
+    direction TB
+    WO[&quot;Orchestrator&quot;]
+    BLD[&quot;Builder&quot;]
+    VER[&quot;Verifier&quot;]
+    PC[&quot;Perf Coach&quot;]
+    DG[&quot;Doc Generator&quot;]
+  end
+
+  subgraph Output[&quot;Results&quot;]
+    ST[&quot;State Updates&lt;br/&gt;.vibecrew/*.json&quot;]
+    GIT[&quot;Git Operations&lt;br/&gt;branch/commit/PR&quot;]
+    FILES[&quot;Source Code&lt;br/&gt;&amp; Documentation&quot;]
+  end
+
+  CMD --&gt; SM
+  SM --&gt; Routing
+  SO --&gt; ST
+  SA --&gt; Agents
+  MA --&gt; Agents
+  Agents --&gt; Output
+
+  style User fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Skill fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Routing fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Agents fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Output fill:#18181b,stroke:#4ade80,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'dark',
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+          },
+        });
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </div>  <div class="arch-panel" id="panel-scripts" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Bash Scripts</h3> <p data-astro-cid-gomkox45>Scripts are the <strong data-astro-cid-gomkox45>worker bees</strong> of VibeCrew &mdash; ~80 small bash programs that do the actual mechanical work. While agents think and make decisions, scripts create files, update project state, calculate scores, and send notifications. They run in milliseconds and always produce the same result for the same input.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>Deterministic bash scripts organized by function: core lifecycle, feature management, quality scoring, project analysis, documentation, gamification, and state management. Agents never write state files directly &mdash; all mutations go through scripts.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>AI token cost scales with complexity. By offloading mechanical tasks (JSON manipulation, git operations, file formatting) to scripts, VibeCrew keeps AI focused on decisions while scripts handle bookkeeping at zero token cost. Scripts also guarantee consistency &mdash; state mutations are atomic and predictable.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Callers[&quot;Who Calls Scripts&quot;]
+    HK[&quot;Hooks&lt;br/&gt;(lifecycle events)&quot;]
+    AG[&quot;Agents&lt;br/&gt;(via Bash tool)&quot;]
+    SK[&quot;Skills&lt;br/&gt;(workflow steps)&quot;]
+  end
+
+  subgraph Core[&quot;Core Lifecycle&quot;]
+    SS[&quot;session-startup.sh&quot;]
+    QG[&quot;quality-gate.sh&quot;]
+    SL[&quot;statusline.sh&quot;]
+    NT[&quot;notify.sh&quot;]
+  end
+
+  subgraph Feature[&quot;Feature Management&quot;]
+    UB[&quot;update-backlog.sh&quot;]
+    CP[&quot;complete-phase.sh&quot;]
+    GBC[&quot;git-branch-create.sh&quot;]
+    CKP[&quot;create-checkpoint.sh&quot;]
+  end
+
+  subgraph Quality[&quot;Quality &amp; Scoring&quot;]
+    CVS[&quot;calculate-vibe-score.sh&quot;]
+    AGS[&quot;aggregate-scores.sh&quot;]
+    ATG[&quot;analyze-test-gaps.sh&quot;]
+    AM[&quot;apply-mutation.sh&quot;]
+  end
+
+  subgraph Analysis[&quot;Project Analysis&quot;]
+    DC[&quot;detect-conventions.sh&quot;]
+    EDS[&quot;extract-design-system.sh&quot;]
+    DS[&quot;detect-secrets.sh&quot;]
+    SD[&quot;scan-dependencies.sh&quot;]
+  end
+
+  subgraph State[&quot;State &amp; Config&quot;]
+    IV[&quot;init-vibecrew-state.sh&quot;]
+    MS[&quot;migrate-state.sh&quot;]
+    GH[&quot;generate-handoff.sh&quot;]
+    DT[&quot;detect-terminal.sh&quot;]
+  end
+
+  HK --&gt; Core
+  AG --&gt; Feature
+  AG --&gt; Quality
+  AG --&gt; Analysis
+  SK --&gt; Feature
+  SK --&gt; State
+
+  style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Feature fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Quality fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Analysis fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style State fill:#18181b,stroke:#f87171,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Script categories and who calls them</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Callers[&quot;Who Calls Scripts&quot;]
+    HK[&quot;Hooks&lt;br/&gt;(lifecycle events)&quot;]
+    AG[&quot;Agents&lt;br/&gt;(via Bash tool)&quot;]
+    SK[&quot;Skills&lt;br/&gt;(workflow steps)&quot;]
+  end
+
+  subgraph Core[&quot;Core Lifecycle&quot;]
+    SS[&quot;session-startup.sh&quot;]
+    QG[&quot;quality-gate.sh&quot;]
+    SL[&quot;statusline.sh&quot;]
+    NT[&quot;notify.sh&quot;]
+  end
+
+  subgraph Feature[&quot;Feature Management&quot;]
+    UB[&quot;update-backlog.sh&quot;]
+    CP[&quot;complete-phase.sh&quot;]
+    GBC[&quot;git-branch-create.sh&quot;]
+    CKP[&quot;create-checkpoint.sh&quot;]
+  end
+
+  subgraph Quality[&quot;Quality &amp; Scoring&quot;]
+    CVS[&quot;calculate-vibe-score.sh&quot;]
+    AGS[&quot;aggregate-scores.sh&quot;]
+    ATG[&quot;analyze-test-gaps.sh&quot;]
+    AM[&quot;apply-mutation.sh&quot;]
+  end
+
+  subgraph Analysis[&quot;Project Analysis&quot;]
+    DC[&quot;detect-conventions.sh&quot;]
+    EDS[&quot;extract-design-system.sh&quot;]
+    DS[&quot;detect-secrets.sh&quot;]
+    SD[&quot;scan-dependencies.sh&quot;]
+  end
+
+  subgraph State[&quot;State &amp; Config&quot;]
+    IV[&quot;init-vibecrew-state.sh&quot;]
+    MS[&quot;migrate-state.sh&quot;]
+    GH[&quot;generate-handoff.sh&quot;]
+    DT[&quot;detect-terminal.sh&quot;]
+  end
+
+  HK --&gt; Core
+  AG --&gt; Feature
+  AG --&gt; Quality
+  AG --&gt; Analysis
+  SK --&gt; Feature
+  SK --&gt; State
+
+  style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Feature fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Quality fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Analysis fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style State fill:#18181b,stroke:#f87171,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'dark',
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+          },
+        });
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </div>  <div class="arch-panel" id="panel-runtime" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Runtime State</h3> <p data-astro-cid-gomkox45>Every project using VibeCrew gets a <code data-astro-cid-gomkox45>.vibecrew/</code> folder that stores all runtime state: project configuration, foundation progress, feature backlog, session logs, Vibe Scores, architecture diagrams, and cross-session handoffs. This folder is the system's memory &mdash; it persists between sessions and lets agents pick up exactly where the last one left off.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A directory of JSON files and sub-folders created by <code data-astro-cid-gomkox45>/setup</code>. Core files: <code data-astro-cid-gomkox45>config.json</code> (preferences), <code data-astro-cid-gomkox45>state.json</code> (current phase), <code data-astro-cid-gomkox45>backlog.json</code> (feature specs), <code data-astro-cid-gomkox45>gamification.json</code> (progression). Sub-directories hold sessions, scores, signals, locks, and architecture diagrams.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>AI sessions are stateless &mdash; each new conversation starts from scratch. The <code data-astro-cid-gomkox45>.vibecrew/</code> folder gives the system persistent memory: which features are done, what phase you're in, your quality trends, and even architectural diagrams that agents reference instead of re-deriving structure from code.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph VibeCrew[&quot;.vibecrew/ (Per-Project Runtime)&quot;]
+    Config[&quot;config.json&lt;br/&gt;Terminal prefs, notifications,&lt;br/&gt;user profile&quot;]
+    State[&quot;state.json&lt;br/&gt;Foundation status,&lt;br/&gt;active feature + phase&quot;]
+    Backlog[&quot;backlog.json&lt;br/&gt;Feature specs with&lt;br/&gt;Kanban columns&quot;]
+    Gamification[&quot;gamification.json&lt;br/&gt;XP, level, badges,&lt;br/&gt;skill tree, streaks&quot;]
+  end
+
+  subgraph Dirs[&quot;Runtime Directories&quot;]
+    Arch[&quot;architecture/&lt;br/&gt;5 Mermaid .mmd files&quot;]
+    Sessions[&quot;sessions/&lt;br/&gt;Session logs (JSON)&quot;]
+    Scores[&quot;scores/&lt;br/&gt;Vibe Score breakdowns&quot;]
+    Signals[&quot;signals/&lt;br/&gt;Inter-agent communication&quot;]
+    Locks[&quot;locks/&lt;br/&gt;Advisory locks&quot;]
+    Handoffs[&quot;handoffs/&lt;br/&gt;Cross-session context&quot;]
+  end
+
+  subgraph Consumers[&quot;Who Reads/Writes&quot;]
+    Agents[&quot;Agents&lt;br/&gt;(via scripts only)&quot;]
+    Hooks[&quot;Hooks&lt;br/&gt;(read for validation)&quot;]
+    Scripts[&quot;Scripts&lt;br/&gt;(all state mutations)&quot;]
+    StatusBar[&quot;Status Bar&lt;br/&gt;(read-only display)&quot;]
+  end
+
+  Agents --&gt; Scripts
+  Scripts --&gt; VibeCrew
+  Scripts --&gt; Dirs
+  Hooks --&gt;|read| State
+  Hooks --&gt;|read| Config
+  StatusBar --&gt;|read| State
+  StatusBar --&gt;|read| Scores
+
+  style VibeCrew fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Dirs fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Consumers fill:#18181b,stroke:#fbbf24,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Runtime state files and who reads/writes them</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  subgraph VibeCrew[&quot;.vibecrew/ (Per-Project Runtime)&quot;]
+    Config[&quot;config.json&lt;br/&gt;Terminal prefs, notifications,&lt;br/&gt;user profile&quot;]
+    State[&quot;state.json&lt;br/&gt;Foundation status,&lt;br/&gt;active feature + phase&quot;]
+    Backlog[&quot;backlog.json&lt;br/&gt;Feature specs with&lt;br/&gt;Kanban columns&quot;]
+    Gamification[&quot;gamification.json&lt;br/&gt;XP, level, badges,&lt;br/&gt;skill tree, streaks&quot;]
+  end
+
+  subgraph Dirs[&quot;Runtime Directories&quot;]
+    Arch[&quot;architecture/&lt;br/&gt;5 Mermaid .mmd files&quot;]
+    Sessions[&quot;sessions/&lt;br/&gt;Session logs (JSON)&quot;]
+    Scores[&quot;scores/&lt;br/&gt;Vibe Score breakdowns&quot;]
+    Signals[&quot;signals/&lt;br/&gt;Inter-agent communication&quot;]
+    Locks[&quot;locks/&lt;br/&gt;Advisory locks&quot;]
+    Handoffs[&quot;handoffs/&lt;br/&gt;Cross-session context&quot;]
+  end
+
+  subgraph Consumers[&quot;Who Reads/Writes&quot;]
+    Agents[&quot;Agents&lt;br/&gt;(via scripts only)&quot;]
+    Hooks[&quot;Hooks&lt;br/&gt;(read for validation)&quot;]
+    Scripts[&quot;Scripts&lt;br/&gt;(all state mutations)&quot;]
+    StatusBar[&quot;Status Bar&lt;br/&gt;(read-only display)&quot;]
+  end
+
+  Agents --&gt; Scripts
+  Scripts --&gt; VibeCrew
+  Scripts --&gt; Dirs
+  Hooks --&gt;|read| State
+  Hooks --&gt;|read| Config
+  StatusBar --&gt;|read| State
+  StatusBar --&gt;|read| Scores
+
+  style VibeCrew fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Dirs fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Consumers fill:#18181b,stroke:#fbbf24,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'dark',
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+          },
+        });
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </div>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/architecture.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Overview</span></a><a href="/vibe-crew/arch-system.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">System Deep Dive</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html>  <script>
+  (function() {
+    var tabs = document.querySelectorAll('.arch-tab');
+    var panels = document.querySelectorAll('.arch-panel');
+    // Track which panels have had mermaid rendered
+    var rendered = { plugin: true }; // first panel renders on load
+
+    function switchTab(target) {
+      // Update tabs
+      tabs.forEach(function(t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      var activeTab = document.querySelector('[data-tab="' + target + '"]');
+      if (activeTab) {
+        activeTab.classList.add('active');
+        activeTab.setAttribute('aria-selected', 'true');
+      }
+
+      // Update panels
+      panels.forEach(function(p) {
+        p.classList.remove('active');
+        p.hidden = true;
+      });
+      var panel = document.getElementById('panel-' + target);
+      if (panel) {
+        panel.classList.add('active');
+        panel.hidden = false;
+
+        // Render mermaid diagrams on first show (hidden elements have 0 width)
+        if (!rendered[target] && window.mermaid) {
+          rendered[target] = true;
+          // Small delay to let the browser paint the visible panel
+          requestAnimationFrame(function() {
+            var nodes = panel.querySelectorAll('.mermaid[data-processed]');
+            if (nodes.length > 0) {
+              // Already processed but at 0 width — re-render
+              nodes.forEach(function(n) { n.removeAttribute('data-processed'); });
+              mermaid.run({ nodes: nodes });
+            } else {
+              var pres = panel.querySelectorAll('pre.mermaid');
+              if (pres.length > 0) {
+                mermaid.run({ nodes: pres });
+              }
+            }
+          });
+        }
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        switchTab(tab.getAttribute('data-tab'));
+      });
+    });
+  })();
+</script>

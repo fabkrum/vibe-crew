@@ -26,6 +26,7 @@ export const navigation: NavGroup[] = [
     collapsed: true,
     links: [
       { title: 'Overview', slug: 'architecture' },
+      { title: 'How It Works', slug: 'arch-visual' },
       { title: 'System Deep Dive', slug: 'arch-system' },
       { title: 'Runtime Systems', slug: 'arch-runtime' },
       { title: 'Commands & State', slug: 'arch-reference' },

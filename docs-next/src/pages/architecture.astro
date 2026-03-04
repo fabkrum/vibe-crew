@@ -25,6 +25,10 @@ import { url } from '../data/site';
     <p>The architecture documentation is organized into focused pages:</p>
 
     <CardGrid>
+      <Card href={url('/arch-visual.html')} icon="&#9881;" iconColor="accent" title="How It Works">
+        Interactive visual guide with Mermaid diagrams for every system part: plugin structure, agents, hooks, commands, scripts, and runtime state.
+      </Card>
+
       <Card href={url('/arch-system.html')} icon="&#9632;" iconColor="purple" title="System Deep Dive">
         Plugin manifest, 14-agent architecture, skills system, hook enforcement, scripts reference, settings &amp; permissions, MCP server integration.
       </Card>

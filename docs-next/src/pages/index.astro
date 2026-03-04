@@ -174,7 +174,15 @@ import { url } from '../data/site';
 
   /* ── Section headings ──────────────────────────────────── */
   .section h3 {
-    text-align: left;
+    text-align: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Extra space after hero/wizard before first section ── */
+  #hard-parts {
+    margin-top: 2rem;
   }
 
   /* ── Card grid for "hard parts" ──────────────────────────── */
@@ -275,6 +283,7 @@ import { url } from '../data/site';
     font-weight: 600;
     color: var(--color-accent);
     text-decoration: none;
+    white-space: nowrap;
   }
 
   .community-link:hover {

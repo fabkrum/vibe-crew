@@ -64,18 +64,18 @@ import { url } from '../../data/site';
 
 <style>
   .ob-wizard {
-    background: rgba(167, 139, 250, 0.15);
-    border: 1.5px solid rgba(167, 139, 250, 0.4);
+    background: rgba(236, 72, 153, 0.10);
+    border: 1.5px solid rgba(236, 72, 153, 0.45);
     border-radius: var(--radius);
     padding: 2rem 2rem;
-    margin-top: 1.5rem;
+    margin-top: 2.5rem;
     margin-left: -2rem;
     margin-right: -2rem;
   }
 
   :root[data-theme="light"] .ob-wizard {
-    background: rgba(147, 51, 234, 0.1);
-    border-color: rgba(147, 51, 234, 0.25);
+    background: rgba(236, 72, 153, 0.08);
+    border-color: rgba(236, 72, 153, 0.3);
   }
 
   .hidden { display: none !important; }
@@ -89,7 +89,7 @@ import { url } from '../../data/site';
   .ob-title {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--color-accent);
+    color: #f472b6;
     margin: 0 0 0.35rem;
   }
 
@@ -111,12 +111,12 @@ import { url } from '../../data/site';
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--color-border);
+    background: transparent;
     transition: background 0.2s;
   }
 
-  .ob-dot.active { background: var(--color-accent); }
-  .ob-dot.done { background: var(--color-green); }
+  .ob-dot.active { background: transparent; }
+  .ob-dot.done { background: transparent; }
 
   /* ── Question steps ────────────────────────────────────── */
   .ob-question {
@@ -140,9 +140,9 @@ import { url } from '../../data/site';
     align-items: center;
     gap: 0.4rem;
     padding: 0.65rem 1.3rem;
-    border: 1.5px solid var(--color-accent-dim);
+    border: 1.5px solid rgba(236, 72, 153, 0.35);
     border-radius: var(--radius-xs);
-    background: rgba(167, 139, 250, 0.08);
+    background: rgba(236, 72, 153, 0.08);
     color: var(--color-text);
     font-size: 0.9rem;
     font-weight: 600;
@@ -152,14 +152,14 @@ import { url } from '../../data/site';
   }
 
   .ob-btn:hover {
-    border-color: var(--color-accent);
-    background: rgba(167, 139, 250, 0.15);
+    border-color: #ec4899;
+    background: rgba(236, 72, 153, 0.15);
     color: var(--color-text);
   }
 
   .ob-btn.selected {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: #ec4899;
+    border-color: #ec4899;
     color: #fff;
   }
 
@@ -179,16 +179,16 @@ import { url } from '../../data/site';
   .ob-guide-progress {
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--color-accent);
+    color: #f472b6;
   }
 
   .ob-reset {
     padding: 0.25rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 600;
-    border: 1.5px solid var(--color-accent-dim);
+    border: 1.5px solid rgba(236, 72, 153, 0.35);
     border-radius: var(--radius-xs);
-    background: rgba(167, 139, 250, 0.08);
+    background: rgba(236, 72, 153, 0.08);
     color: var(--color-text-secondary);
     cursor: pointer;
     font-family: var(--font-sans);
@@ -196,9 +196,9 @@ import { url } from '../../data/site';
   }
 
   .ob-reset:hover {
-    border-color: var(--color-accent);
+    border-color: #ec4899;
     color: var(--color-text);
-    background: rgba(167, 139, 250, 0.15);
+    background: rgba(236, 72, 153, 0.15);
   }
 
   /* ── Dynamic content (injected via JS innerHTML) ──────── */
@@ -220,7 +220,7 @@ import { url } from '../../data/site';
   }
 
   .ob-wizard :global(.ob-guide-step-summary a) {
-    color: var(--color-accent);
+    color: #f472b6;
     text-decoration: none;
   }
 
@@ -380,9 +380,9 @@ import { url } from '../../data/site';
 
   .ob-prev, .ob-next {
     padding: 0.45rem 1rem;
-    border: 1.5px solid var(--color-accent-dim);
+    border: 1.5px solid rgba(236, 72, 153, 0.35);
     border-radius: var(--radius-xs);
-    background: rgba(167, 139, 250, 0.08);
+    background: rgba(236, 72, 153, 0.08);
     color: var(--color-text);
     font-size: 0.85rem;
     font-weight: 600;
@@ -392,14 +392,14 @@ import { url } from '../../data/site';
   }
 
   .ob-prev:hover, .ob-next:hover {
-    border-color: var(--color-accent);
-    background: rgba(167, 139, 250, 0.15);
+    border-color: #ec4899;
+    background: rgba(236, 72, 153, 0.15);
     color: var(--color-text);
   }
 
   .ob-next {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: #ec4899;
+    border-color: #ec4899;
     color: #fff;
   }
 

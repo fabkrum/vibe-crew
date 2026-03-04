@@ -8,7 +8,7 @@ const { chart, caption } = Astro.props;
 ---
 
 <div class="mermaid-container">
-  <pre class="mermaid">{chart}</pre>
+  <pre class="mermaid" set:html={chart}></pre>
   {caption && <p class="mermaid-caption">{caption}</p>}
   <noscript>
     <pre><code>{chart}</code></pre>

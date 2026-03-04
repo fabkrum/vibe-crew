@@ -86,6 +86,115 @@ import {
     </div>
 
     <MermaidDiagram chart={agentInteractionDiagram} caption="Agent topology: how agents hand off work to each other" />
+
+    <h4 class="agent-table-heading">All 14 Agents</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead>
+          <tr><th>Agent</th><th>Model</th><th>Isolation</th><th>What It Does</th><th>Triggered By</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Session Startup</strong></td>
+            <td><span class="badge amber">Haiku</span></td>
+            <td>Inline</td>
+            <td>Environment check, state detection, handoff detection, routing</td>
+            <td>Every session start</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow Orchestrator</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Inline</td>
+            <td>Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog</td>
+            <td>Command routing</td>
+          </tr>
+          <tr>
+            <td><strong>Stack Scout</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>Read-only research via WebSearch, Context7, Chrome DevTools. Produces TDR</td>
+            <td>Tier 1 architecture step</td>
+          </tr>
+          <tr>
+            <td><strong>Builder</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>Implements features: component selection, code generation, accessibility checks</td>
+            <td>Tier 2 design + code phases</td>
+          </tr>
+          <tr>
+            <td><strong>Verifier</strong></td>
+            <td><span class="badge amber">Haiku</span></td>
+            <td>Inline</td>
+            <td>Runs tests, lint, build, and type-check. Reports pass/fail results</td>
+            <td><code>/check</code>, <code>/wrap</code>, <code>/run-backlog</code></td>
+          </tr>
+          <tr>
+            <td><strong>Performance Coach</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Inline</td>
+            <td>Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals</td>
+            <td><code>/wrap</code> session end</td>
+          </tr>
+          <tr>
+            <td><strong>Code Auditor</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>Read-only codebase analysis for existing project onboarding</td>
+            <td><code>/onboard</code></td>
+          </tr>
+          <tr>
+            <td><strong>Security Auditor</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>OWASP Top 10 security analysis: injection, auth, XSS, secrets</td>
+            <td><code>/audit</code></td>
+          </tr>
+          <tr>
+            <td><strong>Doc Generator</strong></td>
+            <td><span class="badge sonnet">Sonnet</span></td>
+            <td>Inline</td>
+            <td>Feature docs, CHANGELOG, release notes, VitePress sidebar regeneration</td>
+            <td><code>/wrap</code>, Tier 2 docs phase</td>
+          </tr>
+          <tr>
+            <td><strong>Code Simplifier</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>Dead code detection, abstraction flattening, API surface reduction</td>
+            <td><code>/simplify</code></td>
+          </tr>
+          <tr>
+            <td><strong>CI Healer</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Inline</td>
+            <td>CI failure diagnosis and repair. Categorizes failures, max 3 fix attempts</td>
+            <td><code>/heal</code></td>
+          </tr>
+          <tr>
+            <td><strong>Opponent Processor</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>Devil's advocate for TDR decisions: counter-arguments, debate matrices, risks</td>
+            <td>Tier 1 after TDR</td>
+          </tr>
+          <tr>
+            <td><strong>Code Reviewer</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>Read-only code review against feature spec, TDR compliance, conventions</td>
+            <td><code>/review</code>, <code>/run-backlog</code></td>
+          </tr>
+          <tr>
+            <td><strong>System Reviewer</strong></td>
+            <td><span class="badge opus">Opus</span></td>
+            <td>Worktree</td>
+            <td>Plugin meta-analysis, cross-project telemetry, ecosystem research</td>
+            <td><code>/system-review</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ═══════ Hooks ═══════ -->
@@ -388,6 +497,81 @@ import {
     height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
+  }
+
+  /* ──── Agent table ──── */
+  .agent-table-heading {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .agent-table-wrap {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+
+  .agent-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  .agent-table th {
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    background: var(--color-surface-2);
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .agent-table td {
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+  }
+
+  .agent-table td:first-child {
+    white-space: nowrap;
+  }
+
+  .agent-table td strong {
+    color: var(--color-text);
+  }
+
+  .agent-table code {
+    font-size: 0.78rem;
+    padding: 0.1em 0.35em;
+    background: var(--color-surface-2);
+    border-radius: 3px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.15em 0.55em;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .badge.opus {
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+  }
+
+  .badge.amber {
+    background: var(--color-amber-dim);
+    color: var(--color-amber);
+  }
+
+  .badge.sonnet {
+    background: var(--color-blue-dim);
+    color: var(--color-blue);
   }
 
   /* ──── Safety columns ──── */

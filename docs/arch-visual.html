@@ -3,7 +3,7 @@
     var t = localStorage.getItem('theme');
     if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
   })();
-</script><link rel="stylesheet" href="/vibe-crew/_astro/arch-visual.B5gtQGBG.css">
+</script><link rel="stylesheet" href="/vibe-crew/_astro/arch-visual.8ak3n4EK.css">
 <link rel="stylesheet" href="/vibe-crew/_astro/advanced-features._tR_LaEZ.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
   document.getElementById('hamburger').addEventListener('click', function() {
     document.body.classList.toggle('sidebar-open');
@@ -36,33 +36,33 @@
     update();
   })();
 </script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Architecture</span>  <span class="separator">/</span> <span>How It Works</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Architecture"},{"@type":"ListItem","position":3,"name":"How It Works"}]}</script>  <section class="section" data-astro-cid-gomkox45> <h2 data-astro-cid-gomkox45>How VibeCrew Works</h2> <p data-astro-cid-gomkox45>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, and per-project runtime state. Select a tab to see how each part fits together.</p> </section>  <div class="arch-tabs" role="tablist" aria-label="Architecture sections" data-astro-cid-gomkox45> <button class="arch-tab active" role="tab" aria-selected="true" aria-controls="panel-plugin" data-tab="plugin" data-astro-cid-gomkox45>Plugin Structure</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-agents" data-tab="agents" data-astro-cid-gomkox45>Sub-Agents</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-hooks" data-tab="hooks" data-astro-cid-gomkox45>Hooks</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-commands" data-tab="commands" data-astro-cid-gomkox45>Slash Commands</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-scripts" data-tab="scripts" data-astro-cid-gomkox45>Bash Scripts</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-runtime" data-tab="runtime" data-astro-cid-gomkox45>Runtime State</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-safety" data-tab="safety" data-astro-cid-gomkox45>Permissions &amp; Safety</button> </div>  <div class="arch-panel active" id="panel-plugin" role="tabpanel" data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Plugin Structure</h3> <p data-astro-cid-gomkox45>VibeCrew is a <strong data-astro-cid-gomkox45>Claude Code plugin</strong> &mdash; an add-on that gives Claude Code new abilities. When you open a project with VibeCrew installed, Claude Code reads a manifest file and automatically loads agents, skills, hooks, scripts, MCP servers, and permissions. Everything lives inside the <code data-astro-cid-gomkox45>claude-plugin-vibe-crew/</code> directory.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A self-contained folder with a <code data-astro-cid-gomkox45>plugin.json</code> manifest that registers 14 agents, 33 slash commands, 16 hooks, ~80 scripts, and 9 MCP servers.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>Without a plugin, you'd manually configure each agent, permission rule, and automation script for every project. The plugin bundles everything into a single install.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
-  subgraph Plugin[&quot;claude-plugin-vibe-crew&quot;]
-    Manifest[&quot;.claude-plugin/plugin.json&quot;]
-    MCP[&quot;.mcp.json&lt;br/&gt;10 MCP Servers&quot;]
-    Settings[&quot;settings.json&lt;br/&gt;Permissions&quot;]
-    Hooks[&quot;hooks/hooks.json&lt;br/&gt;Event Bindings&quot;]
-    Scripts[&quot;scripts/&lt;br/&gt;~80 Bash Scripts&quot;]
-    Agents[&quot;agents/&lt;br/&gt;14 Agent Prompts&quot;]
-    Skills[&quot;skills/&lt;br/&gt;31 Slash Commands&quot;]
+  subgraph Plugin["claude-plugin-vibe-crew"]
+    Manifest[".claude-plugin/plugin.json"]
+    MCP[".mcp.json<br/>10 MCP Servers"]
+    Settings["settings.json<br/>Permissions"]
+    Hooks["hooks/hooks.json<br/>Event Bindings"]
+    Scripts["scripts/<br/>~80 Bash Scripts"]
+    Agents["agents/<br/>14 Agent Prompts"]
+    Skills["skills/<br/>31 Slash Commands"]
   end
 
-  subgraph Runtime[&quot;.vibecrew/ (Per-Project)&quot;]
-    Config[&quot;config.json&quot;]
-    State[&quot;state.json&quot;]
-    Backlog[&quot;backlog.json&quot;]
-    Sessions[&quot;sessions/&quot;]
-    Scores[&quot;scores/&quot;]
-    Architecture[&quot;architecture/&lt;br/&gt;5 .mmd files&quot;]
+  subgraph Runtime[".vibecrew/ (Per-Project)"]
+    Config["config.json"]
+    State["state.json"]
+    Backlog["backlog.json"]
+    Sessions["sessions/"]
+    Scores["scores/"]
+    Architecture["architecture/<br/>5 .mmd files"]
   end
 
-  CC[&quot;Claude Code&quot;] --&gt; Manifest
-  CC --&gt; MCP
-  CC --&gt; Settings
-  CC --&gt; Hooks
-  Hooks --&gt; Scripts
-  CC --&gt; Skills
-  Skills --&gt; Agents
-  Agents --&gt; Runtime
+  CC["Claude Code"] --> Manifest
+  CC --> MCP
+  CC --> Settings
+  CC --> Hooks
+  Hooks --> Scripts
+  CC --> Skills
+  Skills --> Agents
+  Agents --> Runtime
 
   style Plugin fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Runtime fill:#18181b,stroke:#4ade80,color:#fafafa
@@ -130,30 +130,30 @@
     }
   })();
 </script> </div>  <div class="arch-panel" id="panel-agents" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Sub-Agents</h3> <p data-astro-cid-gomkox45>Instead of one AI doing everything, VibeCrew splits work across <strong data-astro-cid-gomkox45>14 specialized agents</strong> &mdash; like a real development team with planners, builders, testers, and reviewers. Each agent runs a specific model (Opus for complex decisions, Haiku for fast mechanical tasks, Sonnet for documentation) and operates either inline or in an isolated worktree.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>AI "specialists" with scoped tool access, model selection, and turn budgets. The Workflow Orchestrator routes work; the Builder writes code; the Verifier runs tests; the Performance Coach scores sessions.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>A single AI context window fills up fast when researching, coding, and testing in one session. Worktree agents offload expensive research into isolated contexts &mdash; only the distilled output enters your main session, saving thousands of tokens.</p> </div> </div> </div> </div> <div class="agent-legend" data-astro-cid-gomkox45> <span class="legend-item" data-astro-cid-gomkox45><span class="legend-dot" style="background:var(--color-accent)" data-astro-cid-gomkox45></span> Opus (complex reasoning)</span> <span class="legend-item" data-astro-cid-gomkox45><span class="legend-dot" style="background:var(--color-amber)" data-astro-cid-gomkox45></span> Haiku (fast tasks)</span> <span class="legend-item" data-astro-cid-gomkox45><span class="legend-dot" style="background:var(--color-blue)" data-astro-cid-gomkox45></span> Sonnet (documentation)</span> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
-  User((User)) --&gt; SS[Session Startup&lt;br/&gt;Haiku]
-  SS --&gt; WO[Workflow Orchestrator&lt;br/&gt;Opus]
+  User((User)) --> SS[Session Startup<br/>Haiku]
+  SS --> WO[Workflow Orchestrator<br/>Opus]
 
-  WO --&gt;|Tier 1| SSC[Stack Scout&lt;br/&gt;Opus]
-  WO --&gt;|Tier 1| OP[Opponent Processor&lt;br/&gt;Opus]
-  WO --&gt;|Tier 2| BLD[Builder&lt;br/&gt;Opus]
+  WO -->|Tier 1| SSC[Stack Scout<br/>Opus]
+  WO -->|Tier 1| OP[Opponent Processor<br/>Opus]
+  WO -->|Tier 2| BLD[Builder<br/>Opus]
 
-  SSC --&gt;|TDR| WO
-  OP --&gt;|Risk Assessment| WO
+  SSC -->|TDR| WO
+  OP -->|Risk Assessment| WO
 
-  BLD --&gt; VER[Verifier&lt;br/&gt;Haiku]
-  BLD --&gt; CR[Code Reviewer&lt;br/&gt;Opus]
+  BLD --> VER[Verifier<br/>Haiku]
+  BLD --> CR[Code Reviewer<br/>Opus]
 
-  VER --&gt;|Results| BLD
-  CR --&gt;|Findings| BLD
+  VER -->|Results| BLD
+  CR -->|Findings| BLD
 
-  BLD --&gt;|/wrap| PC[Performance Coach&lt;br/&gt;Opus]
-  PC --&gt;|Score + Coaching| DG[Doc Generator&lt;br/&gt;Sonnet]
+  BLD -->|/wrap| PC[Performance Coach<br/>Opus]
+  PC -->|Score + Coaching| DG[Doc Generator<br/>Sonnet]
 
-  WO --&gt;|/audit| SA[Security Auditor&lt;br/&gt;Opus]
-  WO --&gt;|/simplify| CS[Code Simplifier&lt;br/&gt;Opus]
-  WO --&gt;|/heal| CH[CI Healer&lt;br/&gt;Opus]
-  WO --&gt;|/onboard| CA[Code Auditor&lt;br/&gt;Opus]
-  WO --&gt;|/system-review| SR[System Reviewer&lt;br/&gt;Opus]
+  WO -->|/audit| SA[Security Auditor<br/>Opus]
+  WO -->|/simplify| CS[Code Simplifier<br/>Opus]
+  WO -->|/heal| CH[CI Healer<br/>Opus]
+  WO -->|/onboard| CA[Code Auditor<br/>Opus]
+  WO -->|/system-review| SR[System Reviewer<br/>Opus]
 
   style User fill:#7c3aed,stroke:#a78bfa,color:#fafafa
   style SS fill:#18181b,stroke:#fbbf24,color:#fafafa
@@ -241,50 +241,50 @@
       document.head.appendChild(s);
     }
   })();
-</script> </div>  <div class="arch-panel" id="panel-hooks" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Hooks</h3> <p data-astro-cid-gomkox45>Hooks are <strong data-astro-cid-gomkox45>automatic safety checks</strong> that run behind the scenes at zero token cost. When an agent tries to write a file or run a command, hooks intercept the action and validate it before it executes. Think of them as security guards at every door &mdash; they check permissions instantly using small bash scripts, not AI processing.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>Bash scripts triggered by Claude Code lifecycle events (session start, before/after tool use, session end). They read a JSON payload from stdin and return exit code 0 (allow) or 2 (block).</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>AI models can forget rules mid-session. Hooks enforce constraints deterministically &mdash; the phase gate blocks source code writes before the foundation is complete, the quality gate catches build errors, and the data protector blocks destructive commands. No token cost, no forgetting.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
-  subgraph Events[&quot;Claude Code Lifecycle Events&quot;]
-    E1[&quot;SessionStart&quot;]
-    E2[&quot;PreToolUse&lt;br/&gt;(Write/Edit)&quot;]
-    E3[&quot;PreToolUse&lt;br/&gt;(Bash)&quot;]
-    E4[&quot;PostToolUse&lt;br/&gt;(Write/Edit)&quot;]
-    E5[&quot;Notification&quot;]
-    E6[&quot;Stop&quot;]
+</script> <h4 class="agent-table-heading" data-astro-cid-gomkox45>All 14 Agents</h4> <div class="agent-table-wrap" data-astro-cid-gomkox45> <table class="agent-table" data-astro-cid-gomkox45> <thead data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45><th data-astro-cid-gomkox45>Agent</th><th data-astro-cid-gomkox45>Model</th><th data-astro-cid-gomkox45>Isolation</th><th data-astro-cid-gomkox45>What It Does</th><th data-astro-cid-gomkox45>Triggered By</th></tr> </thead> <tbody data-astro-cid-gomkox45> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Session Startup</strong></td> <td data-astro-cid-gomkox45><span class="badge amber" data-astro-cid-gomkox45>Haiku</span></td> <td data-astro-cid-gomkox45>Inline</td> <td data-astro-cid-gomkox45>Environment check, state detection, handoff detection, routing</td> <td data-astro-cid-gomkox45>Every session start</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Workflow Orchestrator</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Inline</td> <td data-astro-cid-gomkox45>Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog</td> <td data-astro-cid-gomkox45>Command routing</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Stack Scout</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>Read-only research via WebSearch, Context7, Chrome DevTools. Produces TDR</td> <td data-astro-cid-gomkox45>Tier 1 architecture step</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Builder</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>Implements features: component selection, code generation, accessibility checks</td> <td data-astro-cid-gomkox45>Tier 2 design + code phases</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Verifier</strong></td> <td data-astro-cid-gomkox45><span class="badge amber" data-astro-cid-gomkox45>Haiku</span></td> <td data-astro-cid-gomkox45>Inline</td> <td data-astro-cid-gomkox45>Runs tests, lint, build, and type-check. Reports pass/fail results</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/check</code>, <code data-astro-cid-gomkox45>/wrap</code>, <code data-astro-cid-gomkox45>/run-backlog</code></td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Performance Coach</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Inline</td> <td data-astro-cid-gomkox45>Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/wrap</code> session end</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Code Auditor</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>Read-only codebase analysis for existing project onboarding</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/onboard</code></td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Security Auditor</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>OWASP Top 10 security analysis: injection, auth, XSS, secrets</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/audit</code></td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Doc Generator</strong></td> <td data-astro-cid-gomkox45><span class="badge sonnet" data-astro-cid-gomkox45>Sonnet</span></td> <td data-astro-cid-gomkox45>Inline</td> <td data-astro-cid-gomkox45>Feature docs, CHANGELOG, release notes, VitePress sidebar regeneration</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/wrap</code>, Tier 2 docs phase</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Code Simplifier</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>Dead code detection, abstraction flattening, API surface reduction</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/simplify</code></td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>CI Healer</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Inline</td> <td data-astro-cid-gomkox45>CI failure diagnosis and repair. Categorizes failures, max 3 fix attempts</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/heal</code></td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Opponent Processor</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>Devil's advocate for TDR decisions: counter-arguments, debate matrices, risks</td> <td data-astro-cid-gomkox45>Tier 1 after TDR</td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Code Reviewer</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>Read-only code review against feature spec, TDR compliance, conventions</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/review</code>, <code data-astro-cid-gomkox45>/run-backlog</code></td> </tr> <tr data-astro-cid-gomkox45> <td data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>System Reviewer</strong></td> <td data-astro-cid-gomkox45><span class="badge opus" data-astro-cid-gomkox45>Opus</span></td> <td data-astro-cid-gomkox45>Worktree</td> <td data-astro-cid-gomkox45>Plugin meta-analysis, cross-project telemetry, ecosystem research</td> <td data-astro-cid-gomkox45><code data-astro-cid-gomkox45>/system-review</code></td> </tr> </tbody> </table> </div> </div>  <div class="arch-panel" id="panel-hooks" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Hooks</h3> <p data-astro-cid-gomkox45>Hooks are <strong data-astro-cid-gomkox45>automatic safety checks</strong> that run behind the scenes at zero token cost. When an agent tries to write a file or run a command, hooks intercept the action and validate it before it executes. Think of them as security guards at every door &mdash; they check permissions instantly using small bash scripts, not AI processing.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>Bash scripts triggered by Claude Code lifecycle events (session start, before/after tool use, session end). They read a JSON payload from stdin and return exit code 0 (allow) or 2 (block).</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>AI models can forget rules mid-session. Hooks enforce constraints deterministically &mdash; the phase gate blocks source code writes before the foundation is complete, the quality gate catches build errors, and the data protector blocks destructive commands. No token cost, no forgetting.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Events["Claude Code Lifecycle Events"]
+    E1["SessionStart"]
+    E2["PreToolUse<br/>(Write/Edit)"]
+    E3["PreToolUse<br/>(Bash)"]
+    E4["PostToolUse<br/>(Write/Edit)"]
+    E5["Notification"]
+    E6["Stop"]
   end
 
-  subgraph Guards[&quot;Pre-Action Guards (block or allow)&quot;]
-    PG[&quot;phase-gate.sh&lt;br/&gt;Block code before foundation&quot;]
-    RP[&quot;restrict-paths.sh&lt;br/&gt;Block writes outside project&quot;]
-    PD[&quot;protect-data.sh&lt;br/&gt;Block destructive commands&quot;]
-    VPT[&quot;validate-phase-transition.sh&lt;br/&gt;Enforce phase ordering&quot;]
-    VS[&quot;validate-signal.sh&lt;br/&gt;Validate signal schema&quot;]
+  subgraph Guards["Pre-Action Guards (block or allow)"]
+    PG["phase-gate.sh<br/>Block code before foundation"]
+    RP["restrict-paths.sh<br/>Block writes outside project"]
+    PD["protect-data.sh<br/>Block destructive commands"]
+    VPT["validate-phase-transition.sh<br/>Enforce phase ordering"]
+    VS["validate-signal.sh<br/>Validate signal schema"]
   end
 
-  subgraph Post[&quot;Post-Action Processors&quot;]
-    FC[&quot;format-code.sh&lt;br/&gt;Auto-format on save&quot;]
-    NT[&quot;notify.sh&lt;br/&gt;OS notifications&quot;]
+  subgraph Post["Post-Action Processors"]
+    FC["format-code.sh<br/>Auto-format on save"]
+    NT["notify.sh<br/>OS notifications"]
   end
 
-  subgraph Stop[&quot;Session End Checks&quot;]
-    CC[&quot;check-context.sh&lt;br/&gt;60%/80% warnings&quot;]
-    CG[&quot;cost-guardrails.sh&lt;br/&gt;Cost thresholds&quot;]
-    CL[&quot;claude-md-lint.sh&lt;br/&gt;CLAUDE.md validation&quot;]
-    QG[&quot;quality-gate.sh&lt;br/&gt;Typecheck/lint/build&quot;]
+  subgraph Stop["Session End Checks"]
+    CC["check-context.sh<br/>60%/80% warnings"]
+    CG["cost-guardrails.sh<br/>Cost thresholds"]
+    CL["claude-md-lint.sh<br/>CLAUDE.md validation"]
+    QG["quality-gate.sh<br/>Typecheck/lint/build"]
   end
 
-  subgraph Init[&quot;Session Init&quot;]
-    SS[&quot;session-startup.sh&lt;br/&gt;Environment check&quot;]
-    SY[&quot;sync-state.sh&lt;br/&gt;State reconciliation&quot;]
-    ER[&quot;error-recovery.sh&lt;br/&gt;Clear stale locks&quot;]
-    CR[&quot;compact-reinject.sh&lt;br/&gt;Re-inject after compact&quot;]
+  subgraph Init["Session Init"]
+    SS["session-startup.sh<br/>Environment check"]
+    SY["sync-state.sh<br/>State reconciliation"]
+    ER["error-recovery.sh<br/>Clear stale locks"]
+    CR["compact-reinject.sh<br/>Re-inject after compact"]
   end
 
-  E1 --&gt; Init
-  E2 --&gt; Guards
-  E3 --&gt; PD
-  E2 --&gt; VS
-  E4 --&gt; FC
-  E5 --&gt; NT
-  E6 --&gt; Stop
+  E1 --> Init
+  E2 --> Guards
+  E3 --> PD
+  E2 --> VS
+  E4 --> FC
+  E5 --> NT
+  E6 --> Stop
 
   style Events fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Guards fill:#18181b,stroke:#f87171,color:#fafafa
@@ -372,42 +372,42 @@
     }
   })();
 </script> </div>  <div class="arch-panel" id="panel-commands" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Slash Commands</h3> <p data-astro-cid-gomkox45>Slash commands are the <strong data-astro-cid-gomkox45>primary user interface</strong> to VibeCrew. You type a command starting with <code data-astro-cid-gomkox45>/</code> and the system handles the rest. Each command is defined as a <code data-astro-cid-gomkox45>SKILL.md</code> file with YAML frontmatter (name, description, arguments) and a markdown body containing the full workflow: preconditions, steps, error handling, and agent handoffs.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>33 commands across 7 categories: setup, planning, development, quality, safety, session management, and gamification. Some are script-only (zero token cost), others orchestrate multiple agents.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>Without slash commands, you'd need to manually prompt the AI with detailed instructions for every workflow step. Commands encode expert workflows into one-word triggers &mdash; <code data-astro-cid-gomkox45>/wrap</code> runs quality checks, scores your session, generates docs, and commits, all automatically.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart LR
-  subgraph User[&quot;User Input&quot;]
-    CMD[&quot;/slash-command&quot;]
+  subgraph User["User Input"]
+    CMD["/slash-command"]
   end
 
-  subgraph Skill[&quot;Skill Layer&quot;]
-    SM[&quot;SKILL.md&lt;br/&gt;YAML frontmatter&lt;br/&gt;+ workflow body&quot;]
+  subgraph Skill["Skill Layer"]
+    SM["SKILL.md<br/>YAML frontmatter<br/>+ workflow body"]
   end
 
-  subgraph Routing[&quot;Agent Routing&quot;]
+  subgraph Routing["Agent Routing"]
     direction TB
-    SO[&quot;Script-Only&lt;br/&gt;(zero tokens)&quot;]
-    SA[&quot;Single Agent&quot;]
-    MA[&quot;Multi-Agent&lt;br/&gt;Orchestration&quot;]
+    SO["Script-Only<br/>(zero tokens)"]
+    SA["Single Agent"]
+    MA["Multi-Agent<br/>Orchestration"]
   end
 
-  subgraph Agents[&quot;Agent Execution&quot;]
+  subgraph Agents["Agent Execution"]
     direction TB
-    WO[&quot;Orchestrator&quot;]
-    BLD[&quot;Builder&quot;]
-    VER[&quot;Verifier&quot;]
-    PC[&quot;Perf Coach&quot;]
-    DG[&quot;Doc Generator&quot;]
+    WO["Orchestrator"]
+    BLD["Builder"]
+    VER["Verifier"]
+    PC["Perf Coach"]
+    DG["Doc Generator"]
   end
 
-  subgraph Output[&quot;Results&quot;]
-    ST[&quot;State Updates&lt;br/&gt;.vibecrew/*.json&quot;]
-    GIT[&quot;Git Operations&lt;br/&gt;branch/commit/PR&quot;]
-    FILES[&quot;Source Code&lt;br/&gt;&amp; Documentation&quot;]
+  subgraph Output["Results"]
+    ST["State Updates<br/>.vibecrew/*.json"]
+    GIT["Git Operations<br/>branch/commit/PR"]
+    FILES["Source Code<br/>& Documentation"]
   end
 
-  CMD --&gt; SM
-  SM --&gt; Routing
-  SO --&gt; ST
-  SA --&gt; Agents
-  MA --&gt; Agents
-  Agents --&gt; Output
+  CMD --> SM
+  SM --> Routing
+  SO --> ST
+  SA --> Agents
+  MA --> Agents
+  Agents --> Output
 
   style User fill:#7c3aed,stroke:#a78bfa,color:#fafafa
   style Skill fill:#18181b,stroke:#a78bfa,color:#fafafa
@@ -488,53 +488,53 @@
     }
   })();
 </script> </div>  <div class="arch-panel" id="panel-scripts" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Bash Scripts</h3> <p data-astro-cid-gomkox45>Scripts are the <strong data-astro-cid-gomkox45>worker bees</strong> of VibeCrew &mdash; ~80 small bash programs that do the actual mechanical work. While agents think and make decisions, scripts create files, update project state, calculate scores, and send notifications. They run in milliseconds and always produce the same result for the same input.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What they are</strong> <p data-astro-cid-gomkox45>Deterministic bash scripts organized by function: core lifecycle, feature management, quality scoring, project analysis, documentation, gamification, and state management. Agents never write state files directly &mdash; all mutations go through scripts.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem they solve</strong> <p data-astro-cid-gomkox45>AI token cost scales with complexity. By offloading mechanical tasks (JSON manipulation, git operations, file formatting) to scripts, VibeCrew keeps AI focused on decisions while scripts handle bookkeeping at zero token cost. Scripts also guarantee consistency &mdash; state mutations are atomic and predictable.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
-  subgraph Callers[&quot;Who Calls Scripts&quot;]
-    HK[&quot;Hooks&lt;br/&gt;(lifecycle events)&quot;]
-    AG[&quot;Agents&lt;br/&gt;(via Bash tool)&quot;]
-    SK[&quot;Skills&lt;br/&gt;(workflow steps)&quot;]
+  subgraph Callers["Who Calls Scripts"]
+    HK["Hooks<br/>(lifecycle events)"]
+    AG["Agents<br/>(via Bash tool)"]
+    SK["Skills<br/>(workflow steps)"]
   end
 
-  subgraph Core[&quot;Core Lifecycle&quot;]
-    SS[&quot;session-startup.sh&quot;]
-    QG[&quot;quality-gate.sh&quot;]
-    SL[&quot;statusline.sh&quot;]
-    NT[&quot;notify.sh&quot;]
+  subgraph Core["Core Lifecycle"]
+    SS["session-startup.sh"]
+    QG["quality-gate.sh"]
+    SL["statusline.sh"]
+    NT["notify.sh"]
   end
 
-  subgraph Feature[&quot;Feature Management&quot;]
-    UB[&quot;update-backlog.sh&quot;]
-    CP[&quot;complete-phase.sh&quot;]
-    GBC[&quot;git-branch-create.sh&quot;]
-    CKP[&quot;create-checkpoint.sh&quot;]
+  subgraph Feature["Feature Management"]
+    UB["update-backlog.sh"]
+    CP["complete-phase.sh"]
+    GBC["git-branch-create.sh"]
+    CKP["create-checkpoint.sh"]
   end
 
-  subgraph Quality[&quot;Quality &amp; Scoring&quot;]
-    CVS[&quot;calculate-vibe-score.sh&quot;]
-    AGS[&quot;aggregate-scores.sh&quot;]
-    ATG[&quot;analyze-test-gaps.sh&quot;]
-    AM[&quot;apply-mutation.sh&quot;]
+  subgraph Quality["Quality & Scoring"]
+    CVS["calculate-vibe-score.sh"]
+    AGS["aggregate-scores.sh"]
+    ATG["analyze-test-gaps.sh"]
+    AM["apply-mutation.sh"]
   end
 
-  subgraph Analysis[&quot;Project Analysis&quot;]
-    DC[&quot;detect-conventions.sh&quot;]
-    EDS[&quot;extract-design-system.sh&quot;]
-    DS[&quot;detect-secrets.sh&quot;]
-    SD[&quot;scan-dependencies.sh&quot;]
+  subgraph Analysis["Project Analysis"]
+    DC["detect-conventions.sh"]
+    EDS["extract-design-system.sh"]
+    DS["detect-secrets.sh"]
+    SD["scan-dependencies.sh"]
   end
 
-  subgraph State[&quot;State &amp; Config&quot;]
-    IV[&quot;init-vibecrew-state.sh&quot;]
-    MS[&quot;migrate-state.sh&quot;]
-    GH[&quot;generate-handoff.sh&quot;]
-    DT[&quot;detect-terminal.sh&quot;]
+  subgraph State["State & Config"]
+    IV["init-vibecrew-state.sh"]
+    MS["migrate-state.sh"]
+    GH["generate-handoff.sh"]
+    DT["detect-terminal.sh"]
   end
 
-  HK --&gt; Core
-  AG --&gt; Feature
-  AG --&gt; Quality
-  AG --&gt; Analysis
-  SK --&gt; Feature
-  SK --&gt; State
+  HK --> Core
+  AG --> Feature
+  AG --> Quality
+  AG --> Analysis
+  SK --> Feature
+  SK --> State
 
   style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
   style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
@@ -628,36 +628,36 @@
     }
   })();
 </script> </div>  <div class="arch-panel" id="panel-runtime" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Runtime State</h3> <p data-astro-cid-gomkox45>Every project using VibeCrew gets a <code data-astro-cid-gomkox45>.vibecrew/</code> folder that stores all runtime state: project configuration, foundation progress, feature backlog, session logs, Vibe Scores, architecture diagrams, and cross-session handoffs. This folder is the system's memory &mdash; it persists between sessions and lets agents pick up exactly where the last one left off.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A directory of JSON files and sub-folders created by <code data-astro-cid-gomkox45>/setup</code>. Core files: <code data-astro-cid-gomkox45>config.json</code> (preferences), <code data-astro-cid-gomkox45>state.json</code> (current phase), <code data-astro-cid-gomkox45>backlog.json</code> (feature specs), <code data-astro-cid-gomkox45>gamification.json</code> (progression). Sub-directories hold sessions, scores, signals, locks, and architecture diagrams.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>AI sessions are stateless &mdash; each new conversation starts from scratch. The <code data-astro-cid-gomkox45>.vibecrew/</code> folder gives the system persistent memory: which features are done, what phase you're in, your quality trends, and even architectural diagrams that agents reference instead of re-deriving structure from code.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
-  subgraph VibeCrew[&quot;.vibecrew/ (Per-Project Runtime)&quot;]
-    Config[&quot;config.json&lt;br/&gt;Terminal prefs, notifications,&lt;br/&gt;user profile&quot;]
-    State[&quot;state.json&lt;br/&gt;Foundation status,&lt;br/&gt;active feature + phase&quot;]
-    Backlog[&quot;backlog.json&lt;br/&gt;Feature specs with&lt;br/&gt;Kanban columns&quot;]
-    Gamification[&quot;gamification.json&lt;br/&gt;XP, level, badges,&lt;br/&gt;skill tree, streaks&quot;]
+  subgraph VibeCrew[".vibecrew/ (Per-Project Runtime)"]
+    Config["config.json<br/>Terminal prefs, notifications,<br/>user profile"]
+    State["state.json<br/>Foundation status,<br/>active feature + phase"]
+    Backlog["backlog.json<br/>Feature specs with<br/>Kanban columns"]
+    Gamification["gamification.json<br/>XP, level, badges,<br/>skill tree, streaks"]
   end
 
-  subgraph Dirs[&quot;Runtime Directories&quot;]
-    Arch[&quot;architecture/&lt;br/&gt;5 Mermaid .mmd files&quot;]
-    Sessions[&quot;sessions/&lt;br/&gt;Session logs (JSON)&quot;]
-    Scores[&quot;scores/&lt;br/&gt;Vibe Score breakdowns&quot;]
-    Signals[&quot;signals/&lt;br/&gt;Inter-agent communication&quot;]
-    Locks[&quot;locks/&lt;br/&gt;Advisory locks&quot;]
-    Handoffs[&quot;handoffs/&lt;br/&gt;Cross-session context&quot;]
+  subgraph Dirs["Runtime Directories"]
+    Arch["architecture/<br/>5 Mermaid .mmd files"]
+    Sessions["sessions/<br/>Session logs (JSON)"]
+    Scores["scores/<br/>Vibe Score breakdowns"]
+    Signals["signals/<br/>Inter-agent communication"]
+    Locks["locks/<br/>Advisory locks"]
+    Handoffs["handoffs/<br/>Cross-session context"]
   end
 
-  subgraph Consumers[&quot;Who Reads/Writes&quot;]
-    Agents[&quot;Agents&lt;br/&gt;(via scripts only)&quot;]
-    Hooks[&quot;Hooks&lt;br/&gt;(read for validation)&quot;]
-    Scripts[&quot;Scripts&lt;br/&gt;(all state mutations)&quot;]
-    StatusBar[&quot;Status Bar&lt;br/&gt;(read-only display)&quot;]
+  subgraph Consumers["Who Reads/Writes"]
+    Agents["Agents<br/>(via scripts only)"]
+    Hooks["Hooks<br/>(read for validation)"]
+    Scripts["Scripts<br/>(all state mutations)"]
+    StatusBar["Status Bar<br/>(read-only display)"]
   end
 
-  Agents --&gt; Scripts
-  Scripts --&gt; VibeCrew
-  Scripts --&gt; Dirs
-  Hooks --&gt;|read| State
-  Hooks --&gt;|read| Config
-  StatusBar --&gt;|read| State
-  StatusBar --&gt;|read| Scores
+  Agents --> Scripts
+  Scripts --> VibeCrew
+  Scripts --> Dirs
+  Hooks -->|read| State
+  Hooks -->|read| Config
+  StatusBar -->|read| State
+  StatusBar -->|read| Scores
 
   style VibeCrew fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Dirs fill:#18181b,stroke:#4ade80,color:#fafafa
@@ -728,34 +728,34 @@
     }
   })();
 </script> </div>  <div class="arch-panel" id="panel-safety" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Permissions &amp; Safety</h3> <p data-astro-cid-gomkox45>VibeCrew uses a <strong data-astro-cid-gomkox45>defense-in-depth</strong> model with three layers of protection. Before any agent action reaches your filesystem, it passes through permission rules, hook guards, and quality gates. This means the AI can work productively without asking for permission every 5 seconds, while being physically unable to do anything destructive.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>Three concentric safety layers: <code data-astro-cid-gomkox45>settings.json</code> (66 allow rules, 22 deny rules), PreToolUse hook scripts (phase gate, path restrictions, destructive command blocking), and Stop hook quality gates (typecheck, lint, build, cost limits).</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>AI agents can attempt risky actions &mdash; force-pushing, deleting files, running as root, or writing code before architecture is decided. VibeCrew blocks these deterministically with bash scripts, not by hoping the model remembers the rules.</p> </div> </div> </div> </div> <div class="safety-columns" data-astro-cid-gomkox45> <div class="safety-card allowed" data-astro-cid-gomkox45> <h4 data-astro-cid-gomkox45>Allowed without prompts</h4> <ul data-astro-cid-gomkox45> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>File operations</strong> &mdash; Read, Write, Edit, Glob, Grep</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>npm scripts</strong> &mdash; test, lint, build, format, type-check</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Git</strong> &mdash; status, log, diff, add, commit, checkout, branch, worktree, revert, tags</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>GitHub/GitLab CLI</strong> &mdash; PR create/list/view, pipeline view</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Shell utilities</strong> &mdash; jq, cat, ls, wc, sort, head, tail, mkdir, cp, mv</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Security audits</strong> &mdash; npm audit, pip audit, cargo audit, govulncheck</li> </ul> </div> <div class="safety-card blocked" data-astro-cid-gomkox45> <h4 data-astro-cid-gomkox45>Always blocked</h4> <ul data-astro-cid-gomkox45> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Privilege escalation</strong> &mdash; <code data-astro-cid-gomkox45>sudo</code>, <code data-astro-cid-gomkox45>su</code>, <code data-astro-cid-gomkox45>doas</code>, <code data-astro-cid-gomkox45>pkexec</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Force operations</strong> &mdash; <code data-astro-cid-gomkox45>git push --force</code>, <code data-astro-cid-gomkox45>git reset --hard</code>, <code data-astro-cid-gomkox45>git clean -f</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Destructive commands</strong> &mdash; <code data-astro-cid-gomkox45>rm -rf /</code>, <code data-astro-cid-gomkox45>rm -rf ~</code>, <code data-astro-cid-gomkox45>chmod 777</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>System modifications</strong> &mdash; <code data-astro-cid-gomkox45>npm install -g</code>, <code data-astro-cid-gomkox45>kill -9</code>, <code data-astro-cid-gomkox45>systemctl</code>, <code data-astro-cid-gomkox45>crontab</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Data destruction</strong> &mdash; <code data-astro-cid-gomkox45>DROP TABLE</code>, <code data-astro-cid-gomkox45>DELETE FROM</code> without WHERE (hook layer)</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Path violations</strong> &mdash; writes outside project root, source code before foundation</li> </ul> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
-  subgraph Layer1[&quot;Layer 1: Permission Rules (settings.json)&quot;]
+  subgraph Layer1["Layer 1: Permission Rules (settings.json)"]
     direction TB
-    Allow[&quot;66 Allowed Rules&lt;br/&gt;File ops, npm scripts, git,&lt;br/&gt;shell utilities, security audits&quot;]
-    Deny[&quot;22 Denied Rules&lt;br/&gt;sudo, force push, rm -rf,&lt;br/&gt;global installs, kill, crontab&quot;]
+    Allow["66 Allowed Rules<br/>File ops, npm scripts, git,<br/>shell utilities, security audits"]
+    Deny["22 Denied Rules<br/>sudo, force push, rm -rf,<br/>global installs, kill, crontab"]
   end
 
-  subgraph Layer2[&quot;Layer 2: Hook Guards (bash scripts)&quot;]
-    PG[&quot;phase-gate.sh&lt;br/&gt;No source code before&lt;br/&gt;foundation is complete&quot;]
-    PD[&quot;protect-data.sh&lt;br/&gt;Block DROP TABLE,&lt;br/&gt;destructive patterns&quot;]
-    RP[&quot;restrict-paths.sh&lt;br/&gt;Block writes outside&lt;br/&gt;project root&quot;]
-    VS[&quot;validate-signal.sh&lt;br/&gt;Validate inter-agent&lt;br/&gt;signal schemas&quot;]
-    VPT[&quot;validate-phase-transition.sh&lt;br/&gt;Enforce phase ordering&quot;]
+  subgraph Layer2["Layer 2: Hook Guards (bash scripts)"]
+    PG["phase-gate.sh<br/>No source code before<br/>foundation is complete"]
+    PD["protect-data.sh<br/>Block DROP TABLE,<br/>destructive patterns"]
+    RP["restrict-paths.sh<br/>Block writes outside<br/>project root"]
+    VS["validate-signal.sh<br/>Validate inter-agent<br/>signal schemas"]
+    VPT["validate-phase-transition.sh<br/>Enforce phase ordering"]
   end
 
-  subgraph Layer3[&quot;Layer 3: Quality Gate (Stop hook)&quot;]
-    QG[&quot;quality-gate.sh&lt;br/&gt;Typecheck + lint + build&lt;br/&gt;on every task completion&quot;]
-    CL[&quot;claude-md-lint.sh&lt;br/&gt;CLAUDE.md size &amp;&lt;br/&gt;structure validation&quot;]
-    CG[&quot;cost-guardrails.sh&lt;br/&gt;Session &amp; daily&lt;br/&gt;cost thresholds&quot;]
+  subgraph Layer3["Layer 3: Quality Gate (Stop hook)"]
+    QG["quality-gate.sh<br/>Typecheck + lint + build<br/>on every task completion"]
+    CL["claude-md-lint.sh<br/>CLAUDE.md size &<br/>structure validation"]
+    CG["cost-guardrails.sh<br/>Session & daily<br/>cost thresholds"]
   end
 
-  Action[&quot;Agent attempts action&quot;] --&gt; Layer1
-  Layer1 --&gt;|Allowed| Layer2
-  Layer1 --&gt;|Denied| Block1[&quot;Blocked immediately&quot;]
-  Layer2 --&gt;|Passed| Execute[&quot;Action executes&quot;]
-  Layer2 --&gt;|Blocked| Block2[&quot;Blocked with message&quot;]
-  Execute --&gt; Layer3
-  Layer3 --&gt;|Pass| Done[&quot;Task complete&quot;]
-  Layer3 --&gt;|Fail| Fix[&quot;Agent must fix errors&quot;]
+  Action["Agent attempts action"] --> Layer1
+  Layer1 -->|Allowed| Layer2
+  Layer1 -->|Denied| Block1["Blocked immediately"]
+  Layer2 -->|Passed| Execute["Action executes"]
+  Layer2 -->|Blocked| Block2["Blocked with message"]
+  Execute --> Layer3
+  Layer3 -->|Pass| Done["Task complete"]
+  Layer3 -->|Fail| Fix["Agent must fix errors"]
 
   style Layer1 fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Layer2 fill:#18181b,stroke:#f87171,color:#fafafa

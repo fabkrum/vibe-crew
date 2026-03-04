@@ -517,6 +517,12 @@ After all 6 artifacts are complete (or skipped):
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" foundation
 ```
 
+2. Launch the dashboard (opens browser on first project creation):
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/ensure-dashboard.sh" --open
+```
+
 3. Print a summary:
 
 ```

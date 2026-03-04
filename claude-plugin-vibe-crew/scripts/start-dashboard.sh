@@ -52,7 +52,7 @@ done
 cleanup() {
   rm -f "$VIBECREW_DIR/dashboard.pid" 2>/dev/null || true
 }
-trap cleanup EXIT
+trap cleanup TERM INT
 
 if [[ -d "$VIBECREW_DIR" ]]; then
   mkdir -p "$VIBECREW_DIR"
@@ -66,4 +66,5 @@ if [[ "${1:-}" != "--no-open" ]]; then
 fi
 
 echo "Starting Vibe Dashboard at http://localhost:$PORT"
-cd "$DOCS_DIR" && npx vitepress dev --port "$PORT"
+cd "$DOCS_DIR"
+exec npx vitepress dev --port "$PORT"

@@ -278,19 +278,11 @@ Optional features not available:
 
 ## Step 10: Launch Dashboard
 
-After the summary, check if the docs site has been scaffolded and launch the dashboard:
+After the summary, launch the dashboard using the shared liveness script. It handles all checks internally (no docs yet → silent exit, already running → report URL, dead → relaunch):
 
 ```bash
-if [[ -f "$PROJECT_ROOT/docs/package.json" ]]; then
-  echo "Launching Vibe Dashboard..."
-  nohup bash "${CLAUDE_PLUGIN_ROOT}/scripts/start-dashboard.sh" --no-open &>/dev/null &
-  sleep 2
-  DASH_PORT=$(jq -r '.port // 5173' "$PROJECT_ROOT/.vibecrew/dashboard.pid" 2>/dev/null || echo "5173")
-  echo "Dashboard: http://localhost:$DASH_PORT"
-fi
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/ensure-dashboard.sh"
 ```
-
-If the docs site does not exist yet (first setup before `/new-project`), skip this step. The dashboard will be launched after the docs site is scaffolded during project creation.
 
 ## Step 11: Prompt for Profile
 

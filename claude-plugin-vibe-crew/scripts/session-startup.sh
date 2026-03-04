@@ -132,6 +132,14 @@ if [[ -x "$SCRIPT_DIR/check-mcp-health.sh" ]]; then
   fi
 fi
 
+# --- Ensure dashboard is running ---
+if [[ -x "$SCRIPT_DIR/ensure-dashboard.sh" ]]; then
+  DASHBOARD_OUTPUT=$(bash "$SCRIPT_DIR/ensure-dashboard.sh" 2>/dev/null || true)
+  if [[ -n "$DASHBOARD_OUTPUT" ]]; then
+    echo "  $DASHBOARD_OUTPUT"
+  fi
+fi
+
 # --- Show handoff summary if available ---
 if [[ -n "$HANDOFF_FILE" && -f "$HANDOFF_FILE" ]]; then
   echo "---"

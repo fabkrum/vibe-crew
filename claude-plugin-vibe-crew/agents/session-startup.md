@@ -24,17 +24,16 @@ You are the VibeCrew Session Startup agent. You fire automatically on every sess
 3. Run `git branch --show-current` and `git status --porcelain` to detect the current branch and working tree state.
 4. Scan `.vibecrew/sessions/` and `.vibecrew/signals/` for stale locks and orphaned signal files.
 5. Check `.vibecrew/handoffs/` for the latest handoff document from a previous session.
-6. Check if the Vibe Dashboard is running (read `.vibecrew/dashboard.pid` and verify process is alive). If not running, launch it in background:
+6. Read the dashboard URL from `.vibecrew/dashboard.pid` (the session-startup hook auto-launches the dashboard, so just read the URL):
    ```bash
+   DASHBOARD_URL=""
    if [[ -f ".vibecrew/dashboard.pid" ]]; then
-     DASH_PID=$(jq -r '.pid // empty' .vibecrew/dashboard.pid 2>/dev/null)
      DASH_PORT=$(jq -r '.port // empty' .vibecrew/dashboard.pid 2>/dev/null)
-     if [[ -n "$DASH_PID" ]] && kill -0 "$DASH_PID" 2>/dev/null; then
+     if [[ -n "$DASH_PORT" ]]; then
        DASHBOARD_URL="http://localhost:$DASH_PORT"
      fi
    fi
    ```
-   If the dashboard is not running and the `docs/` directory exists, note this in the greeting.
 
 ## Output Format
 

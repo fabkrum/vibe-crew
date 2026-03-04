@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/session-startup.sh",
-            "timeout": 10,
+            "timeout": 15,
             "statusMessage": "Initializing VibeCrew session..."
           },
           {

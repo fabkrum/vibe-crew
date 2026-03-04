@@ -7,7 +7,7 @@ import { url } from '../data/site';
 
   <section class="section">
     <h2>How VibeCrew Works</h2>
-    <p>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, and per-project runtime state. Each piece solves a specific problem that emerges when AI builds software autonomously.</p>
+    <p>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, per-project runtime state, and a live status line that surfaces it all at a glance. Each piece solves a specific problem that emerges when AI builds software autonomously.</p>
   </section>
 
   <!-- ── Problems Solved (tabs) ── -->
@@ -136,6 +136,65 @@ import { url } from '../data/site';
         </div>
       </div>
     </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Status Line ── -->
+  <section class="section">
+    <h3>The Status Line</h3>
+    <p>While VibeCrew runs, a persistent status line at the bottom of your Claude Code terminal shows real-time session state. It updates after every assistant message at zero token cost &mdash; it's powered by a bash script, not the model.</p>
+
+    <pre class="status-line-mock"><code>Opus 4.6 <span class="sl-ctx-green">▓▓▓▓░░░░░░ 38%</span> | <span class="sl-cost">$0.42</span> | <span class="sl-feat">auth-flow · Code</span> | <span class="sl-score">↑85+</span> | <span class="sl-dur">12m</span> | <span class="sl-compact">⟳0</span></code></pre>
+
+    <p>Seven segments, left to right:</p>
+
+    <table class="solution-table status-line-table">
+      <thead><tr><th>Segment</th><th>Example</th><th>What It Shows</th></tr></thead>
+      <tr><td><strong>Model</strong></td><td><code>Opus 4.6</code></td><td>The Claude model powering the current session. Parsed from the session JSON that Claude Code pipes to the script on every turn.</td></tr>
+      <tr><td><strong>Context Bar</strong></td><td><code>▓▓▓▓░░░░░░ 38%</code></td><td>A 10-character progress bar visualizing context window usage. Each <code>▓</code> block represents 10% of the 200k-token window. Color-coded: <span style="color:var(--color-green);">green</span> at &le;45%, <span style="color:var(--color-amber);">yellow</span> at 46&ndash;55%, and <span style="color:var(--color-red);">red</span> above 55%. This is the most critical indicator &mdash; when it turns red, consider running <code>/compact</code> or <code>/handoff</code> to free space before the model starts losing earlier context.</td></tr>
+      <tr><td><strong>Session Cost</strong></td><td><code>$0.42</code></td><td>Cumulative API cost in USD for the current session. Helps you track spend in real time rather than waiting for a billing dashboard. The cost guardrail hook fires warnings at configurable thresholds independently, but the status line gives you a continuous readout.</td></tr>
+      <tr><td><strong>Feature &middot; Phase</strong></td><td><code>auth-flow · Code</code></td><td>The active feature name (truncated to 16 characters) and its current phase in the Tier 2 cycle: Plan, Design, Code, Test, Review, or Docs. During Tier 1, this shows <code>foundation · Tier-1</code>. If no project is initialized, it displays <code>no project</code>. Read from <code>.vibecrew/state.json</code> on disk.</td></tr>
+      <tr><td><strong>Vibe Score</strong></td><td><code>↑85+</code></td><td>The session's quality score (0&ndash;150) with a trend suffix: <code>+</code> means the score is improving across sessions, <code>-</code> means declining. Read from the latest score file in <code>.vibecrew/scores/</code>. When no score exists yet, displays <code>↑--</code>.</td></tr>
+      <tr><td><strong>Duration</strong></td><td><code>12m</code></td><td>Total elapsed session time in minutes. Shows <code>&lt;1m</code> for sessions under 60 seconds. Useful for gauging how long an autonomous run has been going.</td></tr>
+      <tr><td><strong>Compactions</strong></td><td><code>⟳0</code></td><td>Number of <code>/compact</code> operations in the current session. Each compaction compresses the conversation to reclaim context window space. A rising number signals a long or context-heavy session. Read from <code>.vibecrew/sessions/</code>.</td></tr>
+    </table>
+
+    <h4>How It Works Under the Hood</h4>
+    <p>Claude Code supports a <code>statusLine</code> setting in <code>~/.claude/settings.json</code> that points to a bash script. On every assistant turn, Claude Code pipes a JSON object to the script's stdin containing the current model, context window stats, cost, and timing data. The script parses this with <code>jq</code>, reads project state files from <code>.vibecrew/</code>, and outputs a single ANSI-colored line.</p>
+
+    <pre><code>{`{
+  "model": { "id": "claude-opus-4-6", "display_name": "Opus 4.6" },
+  "context_window": {
+    "used_percentage": 38,
+    "context_window_size": 200000,
+    "current_usage": {
+      "input_tokens": 1,
+      "output_tokens": 9,
+      "cache_creation_input_tokens": 653,
+      "cache_read_input_tokens": 34682
+    }
+  },
+  "cost": {
+    "total_cost_usd": 0.42,
+    "total_duration_ms": 720000
+  }
+}`}</code></pre>
+
+    <p>The script combines this piped data with on-disk reads:</p>
+    <table class="solution-table">
+      <thead><tr><th>Data Source</th><th>What It Provides</th></tr></thead>
+      <tr><td>stdin JSON</td><td>Model name, context percentage, session cost, elapsed time</td></tr>
+      <tr><td><code>.vibecrew/state.json</code></td><td>Active feature name and current phase</td></tr>
+      <tr><td><code>.vibecrew/scores/score-*.json</code></td><td>Latest Vibe Score and trend direction</td></tr>
+      <tr><td><code>.vibecrew/sessions/session-*.json</code></td><td>Compaction count for the current session</td></tr>
+    </table>
+
+    <h4>Graceful Degradation</h4>
+    <p>The status line never breaks your terminal. If <code>jq</code> is missing, it displays just <code>VibeCrew</code>. If <code>.vibecrew/</code> doesn't exist, project-specific fields show placeholder values (<code>no project</code>, <code>↑--</code>, <code>⟳0</code>). The script always exits with code 0, regardless of parse errors.</p>
+
+    <h4>Dashboard Sidecar</h4>
+    <p>As a side effect, the status line script writes the raw session JSON to <code>.vibecrew/live-session.json</code> using an atomic move operation. The <a href={url('/dashboard.html')}>Vibe Dashboard</a> reads this file to display real-time session metrics in the browser without any additional polling or API calls.</p>
   </section>
 
   <hr>
@@ -269,3 +328,71 @@ import { url } from '../data/site';
     }
   })();
 </script>
+
+<style>
+  .status-line-mock {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: .85rem 1.25rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    position: relative;
+  }
+  .status-line-mock::before {
+    content: 'STATUS LINE';
+    position: absolute;
+    top: .45rem;
+    right: .75rem;
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+  }
+  .status-line-mock code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: .9rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+    white-space: nowrap;
+    line-height: 2;
+  }
+  .sl-ctx-green { color: var(--color-green); }
+  .sl-ctx-yellow { color: var(--color-amber); }
+  .sl-ctx-red { color: var(--color-red); }
+  .sl-cost { color: var(--color-text-secondary); }
+  .sl-feat { color: var(--color-accent); }
+  .sl-score { color: var(--color-green); }
+  .sl-dur { color: var(--color-text-secondary); }
+  .sl-compact { color: var(--color-text-muted); }
+  .status-line-table th {
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    padding: .6rem .75rem;
+  }
+  .status-line-table td {
+    font-size: .84rem;
+    line-height: 1.6;
+    padding: .6rem .75rem;
+  }
+  .status-line-table td:first-child {
+    white-space: nowrap;
+    font-weight: 600;
+    color: var(--color-text);
+    width: 130px;
+  }
+  .status-line-table td:nth-child(2) {
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    color: var(--color-text-muted);
+    width: 160px;
+  }
+  .status-line-table td:nth-child(2) code {
+    font-size: .82rem;
+  }
+</style>

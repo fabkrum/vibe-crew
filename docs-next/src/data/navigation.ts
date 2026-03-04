@@ -24,11 +24,9 @@ export const navigation: NavGroup[] = [
   {
     label: 'Workflows',
     links: [
-      { title: 'Core Workflow', slug: 'workflow' },
+      { title: 'Daily Workflow', slug: 'workflow' },
       { title: 'Advanced Features', slug: 'advanced-features' },
       { title: 'Personalization', slug: 'personalization' },
-      { title: 'Gamification', slug: 'gamification' },
-      { title: 'Example Session', slug: 'example-session' },
     ],
   },
   {
@@ -47,6 +45,7 @@ export const navigation: NavGroup[] = [
       { title: 'Runtime State', slug: 'runtime' },
       { title: 'Permissions & Safety', slug: 'safety' },
       { title: 'Self-Improving System', slug: 'self-improving' },
+      { title: 'Gamification', slug: 'gamification' },
       { title: 'Vibe Dashboard', slug: 'dashboard' },
     ],
   },

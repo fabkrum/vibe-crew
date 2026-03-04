@@ -19,7 +19,7 @@
   transition: border-color 0.2s;
 }
 
-.card:hover {
+a.card:hover {
   border-color: var(--color-accent-dim);
 }
 

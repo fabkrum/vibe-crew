@@ -125,17 +125,20 @@ import { url } from '../data/site';
     <div class="community-grid">
       <div class="card community-card">
         <h4>Propose a feature</h4>
-        <p>Have an idea? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement&template=feature_request.md" class="community-link">Open a feature request &rarr;</a></p>
+        <p>Have an idea?</p>
+        <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=enhancement&template=feature_request.md" class="community-link">Open a feature request &rarr;</a>
       </div>
 
       <div class="card community-card">
         <h4>Report a problem</h4>
-        <p>Found a bug? <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug&template=bug_report.md" class="community-link">File an issue &rarr;</a></p>
+        <p>Found a bug?</p>
+        <a href="https://github.com/fabkrum/vibe-crew/issues/new?labels=bug&template=bug_report.md" class="community-link">File an issue &rarr;</a>
       </div>
 
       <div class="card community-card">
         <h4>Share what you built</h4>
-        <p>Show it off! <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell" class="community-link">Post in Discussions &rarr;</a></p>
+        <p>Show it off!</p>
+        <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell" class="community-link">Post in Discussions &rarr;</a>
       </div>
     </div>
   </section>
@@ -278,6 +281,11 @@ import { url } from '../data/site';
     font-size: 0.85rem;
     color: var(--color-text-secondary);
     margin: 0;
+  }
+
+  .community-card > .community-link {
+    display: block;
+    margin-top: 0.35rem;
   }
 
   .community-link {

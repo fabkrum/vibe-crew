@@ -293,3 +293,44 @@ export const runtimeStateDiagram = `flowchart TD
   style Dirs fill:#18181b,stroke:#4ade80,color:#fafafa
   style Consumers fill:#18181b,stroke:#fbbf24,color:#fafafa
 `;
+
+export const safetyDiagram = `flowchart TD
+  subgraph Layer1["Layer 1: Permission Rules (settings.json)"]
+    direction TB
+    Allow["66 Allowed Rules<br/>File ops, npm scripts, git,<br/>shell utilities, security audits"]
+    Deny["22 Denied Rules<br/>sudo, force push, rm -rf,<br/>global installs, kill, crontab"]
+  end
+
+  subgraph Layer2["Layer 2: Hook Guards (bash scripts)"]
+    PG["phase-gate.sh<br/>No source code before<br/>foundation is complete"]
+    PD["protect-data.sh<br/>Block DROP TABLE,<br/>destructive patterns"]
+    RP["restrict-paths.sh<br/>Block writes outside<br/>project root"]
+    VS["validate-signal.sh<br/>Validate inter-agent<br/>signal schemas"]
+    VPT["validate-phase-transition.sh<br/>Enforce phase ordering"]
+  end
+
+  subgraph Layer3["Layer 3: Quality Gate (Stop hook)"]
+    QG["quality-gate.sh<br/>Typecheck + lint + build<br/>on every task completion"]
+    CL["claude-md-lint.sh<br/>CLAUDE.md size &<br/>structure validation"]
+    CG["cost-guardrails.sh<br/>Session & daily<br/>cost thresholds"]
+  end
+
+  Action["Agent attempts action"] --> Layer1
+  Layer1 -->|Allowed| Layer2
+  Layer1 -->|Denied| Block1["Blocked immediately"]
+  Layer2 -->|Passed| Execute["Action executes"]
+  Layer2 -->|Blocked| Block2["Blocked with message"]
+  Execute --> Layer3
+  Layer3 -->|Pass| Done["Task complete"]
+  Layer3 -->|Fail| Fix["Agent must fix errors"]
+
+  style Layer1 fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Layer2 fill:#18181b,stroke:#f87171,color:#fafafa
+  style Layer3 fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Action fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Block1 fill:#18181b,stroke:#f87171,color:#f87171
+  style Block2 fill:#18181b,stroke:#f87171,color:#f87171
+  style Execute fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Done fill:#18181b,stroke:#4ade80,color:#4ade80
+  style Fix fill:#18181b,stroke:#fbbf24,color:#fbbf24
+`;

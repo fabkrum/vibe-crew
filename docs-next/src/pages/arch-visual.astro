@@ -8,6 +8,7 @@ import {
   commandsDiagram,
   scriptsDiagram,
   runtimeStateDiagram,
+  safetyDiagram,
 } from '../data/diagrams';
 ---
 
@@ -26,6 +27,7 @@ import {
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-commands" data-tab="commands">Slash Commands</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-scripts" data-tab="scripts">Bash Scripts</button>
     <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-runtime" data-tab="runtime">Runtime State</button>
+    <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-safety" data-tab="safety">Permissions &amp; Safety</button>
   </div>
 
   <!-- ═══════ Plugin Structure ═══════ -->
@@ -190,6 +192,57 @@ import {
     <MermaidDiagram chart={runtimeStateDiagram} caption="Runtime state files and who reads/writes them" />
   </div>
 
+  <!-- ═══════ Permissions & Safety ═══════ -->
+  <div class="arch-panel" id="panel-safety" role="tabpanel" hidden>
+    <div class="panel-intro">
+      <h3>Permissions &amp; Safety</h3>
+      <p>VibeCrew uses a <strong>defense-in-depth</strong> model with three layers of protection. Before any agent action reaches your filesystem, it passes through permission rules, hook guards, and quality gates. This means the AI can work productively without asking for permission every 5 seconds, while being physically unable to do anything destructive.</p>
+      <div class="key-points">
+        <div class="key-point">
+          <span class="key-icon purple">&#9632;</span>
+          <div>
+            <strong>What it is</strong>
+            <p>Three concentric safety layers: <code>settings.json</code> (66 allow rules, 22 deny rules), PreToolUse hook scripts (phase gate, path restrictions, destructive command blocking), and Stop hook quality gates (typecheck, lint, build, cost limits).</p>
+          </div>
+        </div>
+        <div class="key-point">
+          <span class="key-icon green">&#10003;</span>
+          <div>
+            <strong>What problem it solves</strong>
+            <p>AI agents can attempt risky actions &mdash; force-pushing, deleting files, running as root, or writing code before architecture is decided. VibeCrew blocks these deterministically with bash scripts, not by hoping the model remembers the rules.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="safety-columns">
+      <div class="safety-card allowed">
+        <h4>Allowed without prompts</h4>
+        <ul>
+          <li><strong>File operations</strong> &mdash; Read, Write, Edit, Glob, Grep</li>
+          <li><strong>npm scripts</strong> &mdash; test, lint, build, format, type-check</li>
+          <li><strong>Git</strong> &mdash; status, log, diff, add, commit, checkout, branch, worktree, revert, tags</li>
+          <li><strong>GitHub/GitLab CLI</strong> &mdash; PR create/list/view, pipeline view</li>
+          <li><strong>Shell utilities</strong> &mdash; jq, cat, ls, wc, sort, head, tail, mkdir, cp, mv</li>
+          <li><strong>Security audits</strong> &mdash; npm audit, pip audit, cargo audit, govulncheck</li>
+        </ul>
+      </div>
+      <div class="safety-card blocked">
+        <h4>Always blocked</h4>
+        <ul>
+          <li><strong>Privilege escalation</strong> &mdash; <code>sudo</code>, <code>su</code>, <code>doas</code>, <code>pkexec</code></li>
+          <li><strong>Force operations</strong> &mdash; <code>git push --force</code>, <code>git reset --hard</code>, <code>git clean -f</code></li>
+          <li><strong>Destructive commands</strong> &mdash; <code>rm -rf /</code>, <code>rm -rf ~</code>, <code>chmod 777</code></li>
+          <li><strong>System modifications</strong> &mdash; <code>npm install -g</code>, <code>kill -9</code>, <code>systemctl</code>, <code>crontab</code></li>
+          <li><strong>Data destruction</strong> &mdash; <code>DROP TABLE</code>, <code>DELETE FROM</code> without WHERE (hook layer)</li>
+          <li><strong>Path violations</strong> &mdash; writes outside project root, source code before foundation</li>
+        </ul>
+      </div>
+    </div>
+
+    <MermaidDiagram chart={safetyDiagram} caption="Three-layer defense: permissions → hooks → quality gates" />
+  </div>
+
 </DocsLayout>
 
 <style>
@@ -337,6 +390,64 @@ import {
     flex-shrink: 0;
   }
 
+  /* ──── Safety columns ──── */
+  .safety-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .safety-card {
+    padding: 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .safety-card h4 {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .safety-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .safety-card li {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  .safety-card li code {
+    font-size: 0.78rem;
+    padding: 0.1em 0.35em;
+    background: var(--color-surface-2);
+    border-radius: 3px;
+  }
+
+  .safety-card.allowed {
+    border-color: rgba(74, 222, 128, 0.2);
+  }
+
+  .safety-card.allowed h4 {
+    color: var(--color-green);
+  }
+
+  .safety-card.blocked {
+    border-color: rgba(248, 113, 113, 0.2);
+  }
+
+  .safety-card.blocked h4 {
+    color: var(--color-red);
+  }
+
   /* ──── Responsive ──── */
   @media (max-width: 600px) {
     .arch-tabs {
@@ -349,6 +460,10 @@ import {
     }
 
     .key-points {
+      grid-template-columns: 1fr;
+    }
+
+    .safety-columns {
       grid-template-columns: 1fr;
     }
   }

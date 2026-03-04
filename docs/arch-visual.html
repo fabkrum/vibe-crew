@@ -3,8 +3,7 @@
     var t = localStorage.getItem('theme');
     if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
   })();
-</script><style>.mermaid-container[data-astro-cid-6vqylkyd]{margin-bottom:2rem}pre[data-astro-cid-6vqylkyd].mermaid{background:transparent;border:none;padding:0;text-align:center}.mermaid-caption[data-astro-cid-6vqylkyd]{text-align:center;font-size:.85rem;color:var(--color-text-muted);margin-top:.5rem}.arch-tabs[data-astro-cid-gomkox45]{display:flex;flex-wrap:wrap;gap:.25rem;border-bottom:1px solid var(--color-border);margin-bottom:2rem;padding-bottom:0}.arch-tab[data-astro-cid-gomkox45]{padding:.6rem 1rem;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--color-text-secondary);font-size:.85rem;font-weight:500;font-family:var(--font-sans);cursor:pointer;transition:color .15s,border-color .15s;white-space:nowrap;margin-bottom:-1px}.arch-tab[data-astro-cid-gomkox45]:hover{color:var(--color-text)}.arch-tab[data-astro-cid-gomkox45].active{color:var(--color-accent);border-bottom-color:var(--color-accent)}.arch-panel[data-astro-cid-gomkox45]{display:none;animation:panelFadeIn .2s ease}.arch-panel[data-astro-cid-gomkox45].active{display:block}@keyframes panelFadeIn{0%{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}.panel-intro[data-astro-cid-gomkox45]{margin-bottom:2rem}.panel-intro[data-astro-cid-gomkox45] h3[data-astro-cid-gomkox45]{margin-bottom:.5rem}.panel-intro[data-astro-cid-gomkox45]>p[data-astro-cid-gomkox45]{color:var(--color-text-secondary);line-height:1.7;margin-bottom:1.25rem}.key-points[data-astro-cid-gomkox45]{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1rem}.key-point[data-astro-cid-gomkox45]{display:flex;gap:.75rem;padding:1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm)}.key-point[data-astro-cid-gomkox45] strong[data-astro-cid-gomkox45]{display:block;margin-bottom:.25rem;font-size:.85rem;color:var(--color-text)}.key-point[data-astro-cid-gomkox45] p[data-astro-cid-gomkox45]{font-size:.82rem;color:var(--color-text-secondary);line-height:1.6;margin:0}.key-icon[data-astro-cid-gomkox45]{flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-xs);font-size:.85rem;line-height:1}.key-icon[data-astro-cid-gomkox45].purple{background:var(--color-accent-bg);color:var(--color-accent)}.key-icon[data-astro-cid-gomkox45].green{background:var(--color-green-dim);color:var(--color-green)}.agent-legend[data-astro-cid-gomkox45]{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;padding:.6rem 1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xs);font-size:.8rem;color:var(--color-text-secondary)}.legend-item[data-astro-cid-gomkox45]{display:flex;align-items:center;gap:.4rem}.legend-dot[data-astro-cid-gomkox45]{width:8px;height:8px;border-radius:50%;flex-shrink:0}@media(max-width:600px){.arch-tabs[data-astro-cid-gomkox45]{gap:0}.arch-tab[data-astro-cid-gomkox45]{padding:.5rem .65rem;font-size:.78rem}.key-points[data-astro-cid-gomkox45]{grid-template-columns:1fr}}
-</style>
+</script><link rel="stylesheet" href="/vibe-crew/_astro/arch-visual.B5gtQGBG.css">
 <link rel="stylesheet" href="/vibe-crew/_astro/advanced-features._tR_LaEZ.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
   document.getElementById('hamburger').addEventListener('click', function() {
     document.body.classList.toggle('sidebar-open');
@@ -36,7 +35,7 @@
     window.addEventListener('scroll', update, { passive: true });
     update();
   })();
-</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Architecture</span>  <span class="separator">/</span> <span>How It Works</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Architecture"},{"@type":"ListItem","position":3,"name":"How It Works"}]}</script>  <section class="section" data-astro-cid-gomkox45> <h2 data-astro-cid-gomkox45>How VibeCrew Works</h2> <p data-astro-cid-gomkox45>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, and per-project runtime state. Select a tab to see how each part fits together.</p> </section>  <div class="arch-tabs" role="tablist" aria-label="Architecture sections" data-astro-cid-gomkox45> <button class="arch-tab active" role="tab" aria-selected="true" aria-controls="panel-plugin" data-tab="plugin" data-astro-cid-gomkox45>Plugin Structure</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-agents" data-tab="agents" data-astro-cid-gomkox45>Sub-Agents</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-hooks" data-tab="hooks" data-astro-cid-gomkox45>Hooks</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-commands" data-tab="commands" data-astro-cid-gomkox45>Slash Commands</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-scripts" data-tab="scripts" data-astro-cid-gomkox45>Bash Scripts</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-runtime" data-tab="runtime" data-astro-cid-gomkox45>Runtime State</button> </div>  <div class="arch-panel active" id="panel-plugin" role="tabpanel" data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Plugin Structure</h3> <p data-astro-cid-gomkox45>VibeCrew is a <strong data-astro-cid-gomkox45>Claude Code plugin</strong> &mdash; an add-on that gives Claude Code new abilities. When you open a project with VibeCrew installed, Claude Code reads a manifest file and automatically loads agents, skills, hooks, scripts, MCP servers, and permissions. Everything lives inside the <code data-astro-cid-gomkox45>claude-plugin-vibe-crew/</code> directory.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A self-contained folder with a <code data-astro-cid-gomkox45>plugin.json</code> manifest that registers 14 agents, 33 slash commands, 16 hooks, ~80 scripts, and 9 MCP servers.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>Without a plugin, you'd manually configure each agent, permission rule, and automation script for every project. The plugin bundles everything into a single install.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Architecture</span>  <span class="separator">/</span> <span>How It Works</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Architecture"},{"@type":"ListItem","position":3,"name":"How It Works"}]}</script>  <section class="section" data-astro-cid-gomkox45> <h2 data-astro-cid-gomkox45>How VibeCrew Works</h2> <p data-astro-cid-gomkox45>VibeCrew is a system of interlocking parts: a plugin shell, specialized agents, lifecycle hooks, slash commands, bash scripts, and per-project runtime state. Select a tab to see how each part fits together.</p> </section>  <div class="arch-tabs" role="tablist" aria-label="Architecture sections" data-astro-cid-gomkox45> <button class="arch-tab active" role="tab" aria-selected="true" aria-controls="panel-plugin" data-tab="plugin" data-astro-cid-gomkox45>Plugin Structure</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-agents" data-tab="agents" data-astro-cid-gomkox45>Sub-Agents</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-hooks" data-tab="hooks" data-astro-cid-gomkox45>Hooks</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-commands" data-tab="commands" data-astro-cid-gomkox45>Slash Commands</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-scripts" data-tab="scripts" data-astro-cid-gomkox45>Bash Scripts</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-runtime" data-tab="runtime" data-astro-cid-gomkox45>Runtime State</button> <button class="arch-tab" role="tab" aria-selected="false" aria-controls="panel-safety" data-tab="safety" data-astro-cid-gomkox45>Permissions &amp; Safety</button> </div>  <div class="arch-panel active" id="panel-plugin" role="tabpanel" data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Plugin Structure</h3> <p data-astro-cid-gomkox45>VibeCrew is a <strong data-astro-cid-gomkox45>Claude Code plugin</strong> &mdash; an add-on that gives Claude Code new abilities. When you open a project with VibeCrew installed, Claude Code reads a manifest file and automatically loads agents, skills, hooks, scripts, MCP servers, and permissions. Everything lives inside the <code data-astro-cid-gomkox45>claude-plugin-vibe-crew/</code> directory.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>A self-contained folder with a <code data-astro-cid-gomkox45>plugin.json</code> manifest that registers 14 agents, 33 slash commands, 16 hooks, ~80 scripts, and 9 MCP servers.</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>Without a plugin, you'd manually configure each agent, permission rule, and automation script for every project. The plugin bundles everything into a single install.</p> </div> </div> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
   subgraph Plugin[&quot;claude-plugin-vibe-crew&quot;]
     Manifest[&quot;.claude-plugin/plugin.json&quot;]
     MCP[&quot;.mcp.json&lt;br/&gt;10 MCP Servers&quot;]
@@ -698,6 +697,114 @@
   style VibeCrew fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Dirs fill:#18181b,stroke:#4ade80,color:#fafafa
   style Consumers fill:#18181b,stroke:#fbbf24,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'dark',
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+          },
+        });
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> </div>  <div class="arch-panel" id="panel-safety" role="tabpanel" hidden data-astro-cid-gomkox45> <div class="panel-intro" data-astro-cid-gomkox45> <h3 data-astro-cid-gomkox45>Permissions &amp; Safety</h3> <p data-astro-cid-gomkox45>VibeCrew uses a <strong data-astro-cid-gomkox45>defense-in-depth</strong> model with three layers of protection. Before any agent action reaches your filesystem, it passes through permission rules, hook guards, and quality gates. This means the AI can work productively without asking for permission every 5 seconds, while being physically unable to do anything destructive.</p> <div class="key-points" data-astro-cid-gomkox45> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon purple" data-astro-cid-gomkox45>&#9632;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What it is</strong> <p data-astro-cid-gomkox45>Three concentric safety layers: <code data-astro-cid-gomkox45>settings.json</code> (66 allow rules, 22 deny rules), PreToolUse hook scripts (phase gate, path restrictions, destructive command blocking), and Stop hook quality gates (typecheck, lint, build, cost limits).</p> </div> </div> <div class="key-point" data-astro-cid-gomkox45> <span class="key-icon green" data-astro-cid-gomkox45>&#10003;</span> <div data-astro-cid-gomkox45> <strong data-astro-cid-gomkox45>What problem it solves</strong> <p data-astro-cid-gomkox45>AI agents can attempt risky actions &mdash; force-pushing, deleting files, running as root, or writing code before architecture is decided. VibeCrew blocks these deterministically with bash scripts, not by hoping the model remembers the rules.</p> </div> </div> </div> </div> <div class="safety-columns" data-astro-cid-gomkox45> <div class="safety-card allowed" data-astro-cid-gomkox45> <h4 data-astro-cid-gomkox45>Allowed without prompts</h4> <ul data-astro-cid-gomkox45> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>File operations</strong> &mdash; Read, Write, Edit, Glob, Grep</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>npm scripts</strong> &mdash; test, lint, build, format, type-check</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Git</strong> &mdash; status, log, diff, add, commit, checkout, branch, worktree, revert, tags</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>GitHub/GitLab CLI</strong> &mdash; PR create/list/view, pipeline view</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Shell utilities</strong> &mdash; jq, cat, ls, wc, sort, head, tail, mkdir, cp, mv</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Security audits</strong> &mdash; npm audit, pip audit, cargo audit, govulncheck</li> </ul> </div> <div class="safety-card blocked" data-astro-cid-gomkox45> <h4 data-astro-cid-gomkox45>Always blocked</h4> <ul data-astro-cid-gomkox45> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Privilege escalation</strong> &mdash; <code data-astro-cid-gomkox45>sudo</code>, <code data-astro-cid-gomkox45>su</code>, <code data-astro-cid-gomkox45>doas</code>, <code data-astro-cid-gomkox45>pkexec</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Force operations</strong> &mdash; <code data-astro-cid-gomkox45>git push --force</code>, <code data-astro-cid-gomkox45>git reset --hard</code>, <code data-astro-cid-gomkox45>git clean -f</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Destructive commands</strong> &mdash; <code data-astro-cid-gomkox45>rm -rf /</code>, <code data-astro-cid-gomkox45>rm -rf ~</code>, <code data-astro-cid-gomkox45>chmod 777</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>System modifications</strong> &mdash; <code data-astro-cid-gomkox45>npm install -g</code>, <code data-astro-cid-gomkox45>kill -9</code>, <code data-astro-cid-gomkox45>systemctl</code>, <code data-astro-cid-gomkox45>crontab</code></li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Data destruction</strong> &mdash; <code data-astro-cid-gomkox45>DROP TABLE</code>, <code data-astro-cid-gomkox45>DELETE FROM</code> without WHERE (hook layer)</li> <li data-astro-cid-gomkox45><strong data-astro-cid-gomkox45>Path violations</strong> &mdash; writes outside project root, source code before foundation</li> </ul> </div> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Layer1[&quot;Layer 1: Permission Rules (settings.json)&quot;]
+    direction TB
+    Allow[&quot;66 Allowed Rules&lt;br/&gt;File ops, npm scripts, git,&lt;br/&gt;shell utilities, security audits&quot;]
+    Deny[&quot;22 Denied Rules&lt;br/&gt;sudo, force push, rm -rf,&lt;br/&gt;global installs, kill, crontab&quot;]
+  end
+
+  subgraph Layer2[&quot;Layer 2: Hook Guards (bash scripts)&quot;]
+    PG[&quot;phase-gate.sh&lt;br/&gt;No source code before&lt;br/&gt;foundation is complete&quot;]
+    PD[&quot;protect-data.sh&lt;br/&gt;Block DROP TABLE,&lt;br/&gt;destructive patterns&quot;]
+    RP[&quot;restrict-paths.sh&lt;br/&gt;Block writes outside&lt;br/&gt;project root&quot;]
+    VS[&quot;validate-signal.sh&lt;br/&gt;Validate inter-agent&lt;br/&gt;signal schemas&quot;]
+    VPT[&quot;validate-phase-transition.sh&lt;br/&gt;Enforce phase ordering&quot;]
+  end
+
+  subgraph Layer3[&quot;Layer 3: Quality Gate (Stop hook)&quot;]
+    QG[&quot;quality-gate.sh&lt;br/&gt;Typecheck + lint + build&lt;br/&gt;on every task completion&quot;]
+    CL[&quot;claude-md-lint.sh&lt;br/&gt;CLAUDE.md size &amp;&lt;br/&gt;structure validation&quot;]
+    CG[&quot;cost-guardrails.sh&lt;br/&gt;Session &amp; daily&lt;br/&gt;cost thresholds&quot;]
+  end
+
+  Action[&quot;Agent attempts action&quot;] --&gt; Layer1
+  Layer1 --&gt;|Allowed| Layer2
+  Layer1 --&gt;|Denied| Block1[&quot;Blocked immediately&quot;]
+  Layer2 --&gt;|Passed| Execute[&quot;Action executes&quot;]
+  Layer2 --&gt;|Blocked| Block2[&quot;Blocked with message&quot;]
+  Execute --&gt; Layer3
+  Layer3 --&gt;|Pass| Done[&quot;Task complete&quot;]
+  Layer3 --&gt;|Fail| Fix[&quot;Agent must fix errors&quot;]
+
+  style Layer1 fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Layer2 fill:#18181b,stroke:#f87171,color:#fafafa
+  style Layer3 fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Action fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Block1 fill:#18181b,stroke:#f87171,color:#f87171
+  style Block2 fill:#18181b,stroke:#f87171,color:#f87171
+  style Execute fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Done fill:#18181b,stroke:#4ade80,color:#4ade80
+  style Fix fill:#18181b,stroke:#fbbf24,color:#fbbf24
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Three-layer defense: permissions → hooks → quality gates</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Layer1[&quot;Layer 1: Permission Rules (settings.json)&quot;]
+    direction TB
+    Allow[&quot;66 Allowed Rules&lt;br/&gt;File ops, npm scripts, git,&lt;br/&gt;shell utilities, security audits&quot;]
+    Deny[&quot;22 Denied Rules&lt;br/&gt;sudo, force push, rm -rf,&lt;br/&gt;global installs, kill, crontab&quot;]
+  end
+
+  subgraph Layer2[&quot;Layer 2: Hook Guards (bash scripts)&quot;]
+    PG[&quot;phase-gate.sh&lt;br/&gt;No source code before&lt;br/&gt;foundation is complete&quot;]
+    PD[&quot;protect-data.sh&lt;br/&gt;Block DROP TABLE,&lt;br/&gt;destructive patterns&quot;]
+    RP[&quot;restrict-paths.sh&lt;br/&gt;Block writes outside&lt;br/&gt;project root&quot;]
+    VS[&quot;validate-signal.sh&lt;br/&gt;Validate inter-agent&lt;br/&gt;signal schemas&quot;]
+    VPT[&quot;validate-phase-transition.sh&lt;br/&gt;Enforce phase ordering&quot;]
+  end
+
+  subgraph Layer3[&quot;Layer 3: Quality Gate (Stop hook)&quot;]
+    QG[&quot;quality-gate.sh&lt;br/&gt;Typecheck + lint + build&lt;br/&gt;on every task completion&quot;]
+    CL[&quot;claude-md-lint.sh&lt;br/&gt;CLAUDE.md size &amp;&lt;br/&gt;structure validation&quot;]
+    CG[&quot;cost-guardrails.sh&lt;br/&gt;Session &amp; daily&lt;br/&gt;cost thresholds&quot;]
+  end
+
+  Action[&quot;Agent attempts action&quot;] --&gt; Layer1
+  Layer1 --&gt;|Allowed| Layer2
+  Layer1 --&gt;|Denied| Block1[&quot;Blocked immediately&quot;]
+  Layer2 --&gt;|Passed| Execute[&quot;Action executes&quot;]
+  Layer2 --&gt;|Blocked| Block2[&quot;Blocked with message&quot;]
+  Execute --&gt; Layer3
+  Layer3 --&gt;|Pass| Done[&quot;Task complete&quot;]
+  Layer3 --&gt;|Fail| Fix[&quot;Agent must fix errors&quot;]
+
+  style Layer1 fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Layer2 fill:#18181b,stroke:#f87171,color:#fafafa
+  style Layer3 fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Action fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Block1 fill:#18181b,stroke:#f87171,color:#f87171
+  style Block2 fill:#18181b,stroke:#f87171,color:#f87171
+  style Execute fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Done fill:#18181b,stroke:#4ade80,color:#4ade80
+  style Fix fill:#18181b,stroke:#fbbf24,color:#fbbf24
 </code></pre> </noscript> </div>  <script>
   (function() {
     if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {

@@ -41,7 +41,7 @@ import { url } from '../data/site';
       </div>
 
       <div class="problem-tab-panel" data-panel="context-bloat">
-        <span class="problem-label purple">Problem</span>
+        <span class="problem-label red">Problem</span>
         <h4 class="problem-headline">Context windows fill up fast</h4>
         <p class="problem-desc">Research tasks &mdash; reading documentation, evaluating libraries, analyzing codebases &mdash; consume thousands of tokens. Once the context window fills, the model loses earlier instructions and code, forcing expensive restarts.</p>
         <div class="solution-box">
@@ -57,7 +57,7 @@ import { url } from '../data/site';
       </div>
 
       <div class="problem-tab-panel" data-panel="session-amnesia">
-        <span class="problem-label green">Problem</span>
+        <span class="problem-label red">Problem</span>
         <h4 class="problem-headline">No persistent memory across sessions</h4>
         <p class="problem-desc">Each Claude Code session starts with a blank slate. Without external state, the AI can't know which features are done, what phase you're in, what decisions were made, or what quality trends look like over time.</p>
         <div class="solution-box">
@@ -73,7 +73,7 @@ import { url } from '../data/site';
       </div>
 
       <div class="problem-tab-panel" data-panel="workflow-errors">
-        <span class="problem-label blue">Problem</span>
+        <span class="problem-label red">Problem</span>
         <h4 class="problem-headline">Manual workflows are error-prone</h4>
         <p class="problem-desc">Remembering to run tests, update docs, check accessibility, format code, and write a changelog entry after every feature is tedious. Steps get skipped, especially during long sessions or when working under pressure.</p>
         <div class="solution-box">
@@ -89,7 +89,7 @@ import { url } from '../data/site';
       </div>
 
       <div class="problem-tab-panel" data-panel="quality-decay">
-        <span class="problem-label amber">Problem</span>
+        <span class="problem-label red">Problem</span>
         <h4 class="problem-headline">Quality degrades without oversight</h4>
         <p class="problem-desc">AI-generated code tends to accumulate dead code, unnecessary abstractions, and subtle regressions over time. Without continuous feedback, each session makes the codebase slightly worse &mdash; and nobody notices until it's a mess.</p>
         <div class="solution-box">
@@ -105,7 +105,7 @@ import { url } from '../data/site';
       </div>
 
       <div class="problem-tab-panel" data-panel="ad-hoc-decisions">
-        <span class="problem-label purple">Problem</span>
+        <span class="problem-label red">Problem</span>
         <h4 class="problem-headline">Architecture decisions are ad-hoc</h4>
         <p class="problem-desc">Without a structured research phase, AI picks whatever framework or pattern it saw most in training data. Technology choices are made implicitly during coding rather than explicitly during planning &mdash; leading to inconsistent stacks and regretted decisions.</p>
         <div class="solution-box">
@@ -121,7 +121,7 @@ import { url } from '../data/site';
       </div>
 
       <div class="problem-tab-panel" data-panel="split-attention">
-        <span class="problem-label blue">Problem</span>
+        <span class="problem-label red">Problem</span>
         <h4 class="problem-headline">You have to babysit every session</h4>
         <p class="problem-desc">Without automation, you're glued to the terminal &mdash; reading every output, deciding when to intervene, and context-switching constantly. Running multiple projects in parallel is impossible because each session demands your continuous attention.</p>
         <div class="solution-box">

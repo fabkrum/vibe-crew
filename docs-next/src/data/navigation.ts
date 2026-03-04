@@ -26,6 +26,7 @@ export const navigation: NavGroup[] = [
     collapsed: true,
     links: [
       { title: 'Overview', slug: 'architecture' },
+      { title: 'Setup in Detail', slug: 'setup-detail' },
       { title: 'Plugin Structure', slug: 'plugin' },
       { title: 'Sub-Agents', slug: 'agents' },
       { title: 'Hooks', slug: 'hooks' },

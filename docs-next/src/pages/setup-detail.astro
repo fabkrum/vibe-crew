@@ -1,0 +1,482 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+
+const bootstrapCmd = `curl -fsSL https://raw.githubusercontent.com/anthropics/vibe-crew/main/bootstrap.sh | bash`;
+
+const manualInstall = `git clone https://github.com/anthropics/vibe-crew.git
+cd vibe-crew/claude-plugin-vibe-crew
+bash install.sh`;
+
+const launchCmd = `claude --plugin-dir /path/to/claude-plugin-vibe-crew`;
+
+const checkDepsOutput = `{
+  "dependencies": [
+    { "name": "Git",  "status": "ok", "found": "2.43.0", "required": "2.30.0", "level": "required" },
+    { "name": "Node", "status": "ok", "found": "20.11.0", "required": "18.0.0", "level": "required" },
+    { "name": "jq",   "status": "ok", "found": "1.7.1", "required": "1.6",   "level": "required" }
+  ],
+  "summary": { "passed": 3, "required_failed": 0, "optional_missing": 1, "ready": true }
+}`;
+
+const configSnippet = `{
+  "schema_version": "1.6.0",
+  "terminal": "warp",
+  "claude_command": "claude",
+  "notifications": {
+    "enabled": true,
+    "sound": "Submarine",
+    "on_permission_prompt": true,
+    "on_task_complete": true,
+    "on_failure": true
+  },
+  "mcp_servers": {
+    "context7": true,
+    "chrome_devtools": true,
+    "playwright": true
+  },
+  "cost_limits": {
+    "session_warn": 2,
+    "session_max": 5,
+    "daily_warn": 20
+  },
+  "user_profile": {
+    "interview_completed": false
+  }
+}`;
+---
+
+<DocsLayout title="Setup in Detail" sectionLabel="How It Works" activeSlug="setup-detail">
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#prerequisites">Prerequisites</a></li>
+      <li><a href="#bootstrap">Bootstrap Script</a></li>
+      <li><a href="#launching">Launching Claude Code</a></li>
+      <li><a href="#setup-wizard">The /setup Wizard (11 Steps)</a></li>
+      <li><a href="#whats-created">What Gets Created</a></li>
+      <li><a href="#profile">The /profile Interview</a></li>
+      <li><a href="#session-startup">Session Startup</a></li>
+      <li><a href="#related">Related Pages</a></li>
+    </ol>
+  </div>
+
+  <div class="panel-intro">
+    <h2>Setup in Detail</h2>
+    <p>This page is the deep-dive companion to the quick-start guide on the <a href="index.html">homepage</a>. It explains what every setup step does, what gets created, what each script validates, and what the configuration options mean.</p>
+  </div>
+
+  <hr>
+
+  <!-- ── Prerequisites ── -->
+  <section class="section" id="prerequisites">
+    <h3>Prerequisites</h3>
+    <p>VibeCrew needs a few tools on your machine before it can run. The <code>install.sh</code> script auto-detects your OS and package manager (Homebrew on macOS, apt/dnf/yum on Linux) and offers to install anything missing.</p>
+
+    <h4 class="agent-table-heading">Required</h4>
+    <p class="cmd-group-desc">Setup will not proceed without these.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Tool</th><th>Minimum Version</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Git</strong></td><td>2.30+</td><td>Version control, branch management, worktree isolation for sub-agents.</td></tr>
+          <tr><td><strong>Node.js</strong></td><td>18+</td><td>Runs MCP servers, dashboard dev server, and build tooling.</td></tr>
+          <tr><td><strong>jq</strong></td><td>1.6+</td><td>JSON parsing in all hook and automation scripts. Used hundreds of times across ~80 scripts.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Optional</h4>
+    <p class="cmd-group-desc">Missing optional tools trigger warnings, never blockers.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Tool</th><th>Purpose</th><th>What Happens Without It</th></tr></thead>
+        <tbody>
+          <tr><td><strong>GitHub CLI</strong> (<code>gh</code>)</td><td>Create repos, open PRs/issues, sync labels.</td><td>Git setup falls back to local-only. PRs created manually.</td></tr>
+          <tr><td><strong>GitLab CLI</strong> (<code>glab</code>)</td><td>Same as GitHub CLI for GitLab-hosted projects.</td><td>Same fallback to local-only.</td></tr>
+          <tr><td><strong>terminal-notifier</strong></td><td>Native macOS desktop notifications with sound.</td><td>Falls back to terminal bell. No desktop alerts.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Callout type="tip" title="Auto-install">
+      <p>Run <code>bash install.sh --yes</code> to skip confirmation prompts and install everything in one shot. The script consolidates multiple brew install commands into a single call.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ── Bootstrap Script ── -->
+  <section class="section" id="bootstrap">
+    <h3>Bootstrap Script</h3>
+    <p>The one-liner bootstrap command does three things:</p>
+    <ol class="steps">
+      <li>
+        <strong>Installs Homebrew</strong> (macOS only, if missing) &mdash; the package manager used to install Git, Node.js, jq, and optional tools.
+      </li>
+      <li>
+        <strong>Clones the VibeCrew repository</strong> to your machine.
+      </li>
+      <li>
+        <strong>Runs <code>install.sh --yes</code></strong> to install all dependencies non-interactively.
+      </li>
+    </ol>
+
+    <CodeBlock code={bootstrapCmd} lang="bash" label="One-liner bootstrap" />
+
+    <p>If you prefer to inspect the code before running it, use the manual alternative:</p>
+
+    <CodeBlock code={manualInstall} lang="bash" label="Manual install" />
+
+    <Callout type="info" title="No sudo required">
+      <p>The install script uses Homebrew (macOS) or user-level package managers. It never runs <code>sudo</code> unless your Linux package manager requires it (apt/dnf).</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ── Launching Claude Code ── -->
+  <section class="section" id="launching">
+    <h3>Launching Claude Code</h3>
+    <p>Once installed, you launch Claude Code with the <code>--plugin-dir</code> flag pointing to the plugin folder. This tells Claude Code to read the <code>plugin.json</code> manifest and load all agents, skills, hooks, scripts, MCP servers, and permissions.</p>
+
+    <CodeBlock code={launchCmd} lang="bash" label="Launch with plugin" />
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon purple">&#128194;</div>
+        <h4>New Project</h4>
+        <p>Create an empty directory, <code>cd</code> into it, and launch with <code>--plugin-dir</code>. The Session Startup agent detects there's no <code>.vibecrew/</code> folder and prompts you to run <code>/setup</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#128193;</div>
+        <h4>Existing Project</h4>
+        <p><code>cd</code> into your project and launch with <code>--plugin-dir</code>. If <code>.vibecrew/</code> exists, Session Startup loads your state and shows a status summary. If not, it prompts for <code>/setup</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── /setup Wizard ── -->
+  <section class="section" id="setup-wizard">
+    <h3>The /setup Wizard</h3>
+    <p>Running <code>/setup</code> walks through 11 sequential steps. Each step has clear pass/fail conditions &mdash; required steps block progress, optional steps warn and continue.</p>
+
+    <div class="setup-steps">
+
+      <div class="setup-step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Check Prerequisites</h4>
+          <p>Runs <code>check-deps.sh</code> which outputs a JSON report of every dependency's status, version, and whether it's required or optional.</p>
+          <CodeBlock code={checkDepsOutput} lang="json" label="check-deps.sh output" />
+          <p>If required dependencies are missing, you're offered two choices: <strong>Install now</strong> (runs the install commands automatically) or <strong>Show commands</strong> (prints what to run manually). Optional dependencies generate warnings but never block.</p>
+          <p>If GitHub CLI (<code>gh</code>) is installed, the script also checks <code>gh auth status</code> to verify authentication.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Detect Terminal</h4>
+          <p>Checks environment variables (<code>WARP_SESSION_ID</code>, <code>TERM_PROGRAM</code>) to identify your terminal: Warp, iTerm, VS Code, macOS Terminal, WezTerm, Alacritty, kitty, or tmux. Stores the result in <code>config.json</code>.</p>
+          <p>If Warp is detected, deep-link notifications are enabled via <code>warp://session/&lt;id&gt;</code> URIs &mdash; clicking a notification takes you directly to the correct terminal tab.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Test Notifications</h4>
+          <p>Fires <code>notify.sh test</code> to send a test notification via your terminal's best available method (Warp deep-link, iTerm OSC 9, terminal-notifier, or bell fallback). Success confirms the notification pipeline works; failure warns but doesn't block.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Check MCP Server Health</h4>
+          <p>Runs <code>check-mcp-health.sh</code> with a 5-second timeout per server. Displays a status table of all 9 bundled MCP servers. Three are enabled by default: <strong>Context7</strong>, <strong>Chrome DevTools</strong>, and <strong>Playwright</strong>. The remaining 6 (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) are conditionally enabled later based on your TDR technology choices.</p>
+          <p>Server failures are warnings, not blockers. The system works fine with reduced MCP capabilities.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h4>Configure Claude Command</h4>
+          <p>Asks which Claude Code command you use: <code>claude</code>, <code>claude-p</code>, <code>claude-w</code>, or a custom path. This is stored in <code>config.json</code> and used for Warp launch configurations and multi-tab orchestration.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">6</div>
+        <div class="step-content">
+          <h4>Initialize State Directory</h4>
+          <p>Runs <code>init-vibecrew-state.sh</code> which creates the <code>.vibecrew/</code> directory with all state files and sub-directories. If the directory already exists, you're asked whether to reinitialize. See <a href="#whats-created">What Gets Created</a> for the full breakdown.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">7</div>
+        <div class="step-content">
+          <h4>Git Repository Setup</h4>
+          <p>Detects your current git state and offers the appropriate path:</p>
+          <ul>
+            <li><strong>Existing remote detected</strong> &mdash; auto-detects the provider (GitHub/GitLab) from the remote URL and stores it.</li>
+            <li><strong>No remote</strong> &mdash; asks your preference: GitHub, GitLab, or local-only. For GitHub/GitLab, asks visibility (public/private) and repo name, then creates the remote via CLI.</li>
+            <li><strong>CLI missing or auth failed</strong> &mdash; gracefully falls back to local-only git.</li>
+          </ul>
+          <p>Updates <code>config.json</code> with the git provider and <code>state.json</code> with <code>git.initialized: true</code>.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">8</div>
+        <div class="step-content">
+          <h4>Verify Initialization</h4>
+          <p>Reads <code>.vibecrew/config.json</code> and validates that required fields exist: <code>terminal</code>, <code>notifications.enabled</code>, <code>created_at</code>, and <code>git_provider</code>. Reports any malformed JSON or missing files.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">9</div>
+        <div class="step-content">
+          <h4>Print Summary</h4>
+          <p>Displays a complete summary: dependency versions, terminal type, Claude command, notification status, MCP server health (N healthy / M total), git provider, state directory status, and Warp launch config. If optional tools are missing, shows install hints.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">10</div>
+        <div class="step-content">
+          <h4>Launch Dashboard</h4>
+          <p>Runs <code>ensure-dashboard.sh</code> which checks if the Vibe Dashboard is already running, relaunches it if the process died, or starts it fresh. Reports the dashboard URL. Silent exit if no docs site exists yet.</p>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="step-number">11</div>
+        <div class="step-content">
+          <h4>Prompt for Profile</h4>
+          <p>Checks whether <code>user_profile.interview_completed</code> is true in <code>config.json</code>. If not, prints a reminder to run <code>/profile</code> to personalize the experience. If the profile already exists, this step is silently skipped.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── What Gets Created ── -->
+  <section class="section" id="whats-created">
+    <h3>What Gets Created</h3>
+    <p>Step 6 creates the <code>.vibecrew/</code> directory &mdash; the project's runtime state. Here's what's inside.</p>
+
+    <div class="flow"><span class="highlight">.vibecrew/</span>
+├── <span class="highlight">config.json</span>          <span class="muted"># Terminal prefs, notifications, MCP, cost limits, user profile</span>
+├── <span class="highlight">state.json</span>           <span class="muted"># Foundation progress, active feature, current phase</span>
+├── <span class="highlight">backlog.json</span>         <span class="muted"># Feature backlog with Kanban columns and WIP limits</span>
+├── <span class="highlight">gamification.json</span>    <span class="muted"># XP, level, badges, streaks, challenges (opt-in)</span>
+├── <span class="highlight">architecture/</span>        <span class="muted"># 5 Mermaid .mmd diagrams (generated during Tier 1)</span>
+├── <span class="highlight">sessions/</span>            <span class="muted"># Session logs: timing, features, scores, cost</span>
+├── <span class="highlight">scores/</span>              <span class="muted"># Detailed Vibe Score breakdowns per session</span>
+├── <span class="highlight">signals/</span>             <span class="muted"># Inter-agent signal files for coordination</span>
+├── <span class="highlight">locks/</span>               <span class="muted"># Advisory locks for concurrent access safety</span>
+├── <span class="highlight">releases/</span>            <span class="muted"># Release notes data (JSON)</span>
+├── <span class="highlight">handoffs/</span>            <span class="muted"># Cross-session handoff documents</span>
+├── <span class="highlight">workflows/</span>           <span class="muted"># Reusable workflow templates (/replay)</span>
+└── <span class="highlight">.backup/</span>             <span class="muted"># Backup copies of state files</span></div>
+
+    <h4 class="agent-table-heading">Initial config.json</h4>
+    <p class="cmd-group-desc">Created with sensible defaults. Everything is editable later via <code>/profile</code> or the dashboard Settings tab.</p>
+    <CodeBlock code={configSnippet} lang="json" label=".vibecrew/config.json" />
+
+    <h4 class="agent-table-heading">.gitignore Entries</h4>
+    <p>The init script automatically adds entries to your project's <code>.gitignore</code> to keep transient runtime data out of version control while preserving shareable state:</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Ignored</th><th>Tracked</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>
+              <code>sessions/</code>, <code>signals/</code>, <code>locks/</code>, <code>scores/</code>,
+              <code>.backup/</code>, <code>config.json</code>, <code>gamification.json</code>
+            </td>
+            <td>
+              <code>state.json</code>, <code>backlog.json</code>, <code>architecture/</code>,
+              <code>handoffs/</code>, <code>releases/</code>, <code>workflows/</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Warp Launch Config</h4>
+    <p>If Warp terminal is detected, a launch configuration is created at <code>~/.warp/launch_configurations/&lt;project-name&gt;.yaml</code> with pre-configured tabs and panes for your Claude command.</p>
+
+    <h4 class="agent-table-heading">Telemetry Registration</h4>
+    <p>The project is registered in the central plugin's <code>project-registry.json</code> with an anonymous alias (<code>project-001</code>, <code>project-002</code>, etc.). This powers the <code>/system-review</code> command's cross-project analytics. No project names or paths are stored in telemetry data.</p>
+  </section>
+
+  <hr>
+
+  <!-- ── /profile Interview ── -->
+  <section class="section" id="profile">
+    <h3>The /profile Interview</h3>
+    <p>After setup, VibeCrew prompts you to run <code>/profile</code> &mdash; a 7-question interview (~2 minutes) that personalizes how every agent communicates and behaves. It's completely optional; all agents use sensible defaults without it.</p>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Dimension</th><th>What It Controls</th><th>Options</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Code Literacy</strong></td><td>How technical the system's language is in reviews, errors, and docs.</td><td>Fluent, Conversational, Basic, None</td></tr>
+          <tr><td><strong>Autonomy</strong></td><td>How much VibeCrew does before asking for approval.</td><td>Full Auto, Checkpoints, Collaborative, Supervised</td></tr>
+          <tr><td><strong>PR Review</strong></td><td>How code changes are packaged and merged.</td><td>Auto-merge, Summary, Review, Walkthrough</td></tr>
+          <tr><td><strong>Verbosity</strong></td><td>How much detail you get in messages and summaries.</td><td>Minimal, Standard, Detailed, Educational</td></tr>
+          <tr><td><strong>Gamification</strong></td><td>How much of the progression system is visible.</td><td>All In, Light Touch, Score Only, Disabled</td></tr>
+          <tr><td><strong>Learning Style</strong></td><td>How the system helps you understand your codebase.</td><td>Don't Explain, Reference Docs, Inline, Teach Me</td></tr>
+          <tr><td><strong>Risk Tolerance</strong></td><td>How adventurous technology choices are during research.</td><td>Conservative, Balanced, Progressive, Experimental</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>See the <a href="profile-system.html">User Profiles</a> page for full details on each dimension, how agents adapt, and how to change your profile later.</p>
+  </section>
+
+  <hr>
+
+  <!-- ── Session Startup ── -->
+  <section class="section" id="session-startup">
+    <h3>Session Startup</h3>
+    <p>Every time you open a new Claude Code session, the <code>session-startup.sh</code> hook runs automatically. It performs environment validation in the background and outputs a compact 3-line status summary.</p>
+
+    <h4 class="agent-table-heading">What It Checks</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Check</th><th>Action on Failure</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Required tools</strong> (git, jq, node)</td><td>Warns but never blocks session start.</td></tr>
+          <tr><td><strong>Optional tools</strong> (gh)</td><td>Warns, continues silently.</td></tr>
+          <tr><td><strong>.vibecrew/ exists</strong></td><td>Prompts to run <code>/setup</code>.</td></tr>
+          <tr><td><strong>State file validation</strong></td><td>Runs state migration if needed.</td></tr>
+          <tr><td><strong>MCP server health</strong></td><td>Bounded by 15-second timeout. Never blocks.</td></tr>
+          <tr><td><strong>Dashboard liveness</strong></td><td>Relaunches if process died. Silent if no docs site.</td></tr>
+          <tr><td><strong>Handoff files</strong></td><td>Detects and displays handoff from previous session.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Status Output</h4>
+    <p class="cmd-group-desc">Always under 200 words. Three lines max.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Line</th><th>Content</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1</strong></td><td>Foundation status, active feature + phase, or completion status.</td></tr>
+          <tr><td><strong>2</strong></td><td>Backlog summary: total features, ready count, done count &mdash; or next steps.</td></tr>
+          <tr><td><strong>3</strong></td><td>Gamification line (level, streak, challenge) &mdash; only if enabled in profile.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Callout type="info" title="Always non-blocking">
+      <p>Session startup always exits with code 0. Every check has timeouts and graceful fallbacks. A broken MCP server or missing optional tool will never prevent you from starting work.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ── Related Pages ── -->
+  <section class="section" id="related">
+    <h3>Related Pages</h3>
+    <div class="page-grid">
+      <a class="page-card" href="plugin.html">
+        <div class="page-card-icon purple">&#128268;</div>
+        <h4>Plugin Structure</h4>
+        <p>How the plugin manifest loads agents, skills, hooks, scripts, and MCP servers.</p>
+        <span class="card-arrow">View details &rarr;</span>
+      </a>
+      <a class="page-card" href="profile-system.html">
+        <div class="page-card-icon green">&#128100;</div>
+        <h4>User Profiles</h4>
+        <p>Full details on the 7 profile dimensions and how every agent adapts to your preferences.</p>
+        <span class="card-arrow">View details &rarr;</span>
+      </a>
+      <a class="page-card" href="mcp-servers.html">
+        <div class="page-card-icon blue">&#128640;</div>
+        <h4>MCP Servers</h4>
+        <p>The 9 bundled MCP servers, plus 15 additional servers auto-discovered from your TDR.</p>
+        <span class="card-arrow">View details &rarr;</span>
+      </a>
+      <a class="page-card" href="runtime.html">
+        <div class="page-card-icon amber">&#128451;</div>
+        <h4>Runtime State</h4>
+        <p>Deep dive into every file and directory inside <code>.vibecrew/</code>.</p>
+        <span class="card-arrow">View details &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+</DocsLayout>
+
+<style>
+.toc { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem; }
+.toc h3 { margin-top: 0; margin-bottom: 1rem; font-size: 1rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.toc ol { padding-left: 1.25rem; margin-bottom: 0; }
+.toc li { margin-bottom: 0.35rem; }
+.toc a { color: var(--color-text-secondary); font-size: 0.92rem; transition: color 0.15s; }
+.toc a:hover { color: var(--color-accent); text-decoration: none; }
+
+.setup-steps { display: flex; flex-direction: column; gap: 2rem; margin-top: 1.5rem; }
+.setup-step { display: flex; gap: 1.25rem; }
+.step-number {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 0.1rem;
+}
+.step-content { flex: 1; min-width: 0; }
+.step-content h4 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+.step-content p { font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 0.75rem; }
+.step-content p:last-child { margin-bottom: 0; }
+.step-content ul { font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.7; padding-left: 1.25rem; margin-bottom: 0.75rem; }
+.step-content ul li { margin-bottom: 0.35rem; }
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; }
+.card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+.card-icon.purple { color: var(--color-accent); }
+.card-icon.green { color: var(--color-green); }
+.card h4 { margin-top: 0; margin-bottom: 0.5rem; }
+.card p { color: var(--color-text-secondary); font-size: 0.9rem; margin: 0; }
+
+.page-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.page-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; text-decoration: none; color: inherit; transition: border-color 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; }
+.page-card:hover { border-color: var(--color-accent); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.page-card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+.page-card-icon.purple { color: var(--color-accent); }
+.page-card-icon.green { color: var(--color-green); }
+.page-card-icon.blue { color: var(--color-blue); }
+.page-card-icon.amber { color: var(--color-amber); }
+.page-card h4 { margin: 0 0 0.5rem; font-size: 1rem; }
+.page-card p { color: var(--color-text-secondary); font-size: 0.85rem; margin: 0 0 auto; }
+.card-arrow { color: var(--color-accent); font-size: 0.85rem; margin-top: 1rem; font-weight: 500; }
+
+@media (max-width: 600px) {
+  .setup-step { flex-direction: column; gap: 0.75rem; }
+  .page-grid { grid-template-columns: 1fr; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+</style>

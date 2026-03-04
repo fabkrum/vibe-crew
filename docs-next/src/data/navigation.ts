@@ -18,7 +18,7 @@ export const navigation: NavGroup[] = [
       { title: 'Project Planning', slug: 'project-planning' },
       { title: 'Warp Integration', slug: 'warp' },
       { title: 'User Profiles', slug: 'profile-system' },
-      { title: 'Help', slug: 'faq-tips' },
+      { title: 'FAQ', slug: 'faq' },
     ],
   },
   {

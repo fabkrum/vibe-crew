@@ -3,13 +3,12 @@ import DocsLayout from '../layouts/DocsLayout.astro';
 import { url } from '../data/site';
 ---
 
-<DocsLayout title="FAQ & Troubleshooting" sectionLabel="Get Started" activeSlug="faq-tips">
+<DocsLayout title="FAQ" sectionLabel="Get Started" activeSlug="faq">
 
     <div class="toc">
       <h3>On This Page</h3>
       <ol>
         <li><a href="#faq">Frequently Asked Questions</a></li>
-        <li><a href="#troubleshooting">Troubleshooting</a></li>
       </ol>
     </div>
 
@@ -173,87 +172,121 @@ import { url } from '../data/site';
           <p>Check the <a href="https://github.com/fabkrum/vibe-crew/discussions/categories/show-and-tell">Show &amp; Tell</a> section in GitHub Discussions. Users share their projects, screenshots, and lessons learned. It&rsquo;s also a great place to find inspiration for your next build.</p>
         </div>
       </details>
-    </section>
+      <!-- ── Troubleshooting ──────────────────────────────────────── -->
+      <h3>Troubleshooting</h3>
 
-    <hr>
+      <details class="faq-item">
+        <summary>The phase gate is blocking my writes</summary>
+        <div class="faq-answer">
+          <p>This means the Tier 1 foundation isn't complete yet. Run <code>/status</code> to see which foundation steps are missing, then run <code>/new-project</code> (or <code>/onboard</code> for existing projects) to complete them. The phase gate only blocks source code writes &mdash; config files, documentation, and <code>.vibecrew/</code> state files are always writable.</p>
+        </div>
+      </details>
 
-    <!-- ══════════════════════════════════════════════════════════════ -->
-    <!--  Troubleshooting                                              -->
-    <!-- ══════════════════════════════════════════════════════════════ -->
+      <details class="faq-item">
+        <summary>My session state is corrupted</summary>
+        <div class="faq-answer">
+          <p>Run <code>/recover-state</code> to clear lock files and repair corrupted JSON. If that doesn't work, you can manually delete the <code>.vibecrew/locks/</code> directory. Your backlog, session logs, and scores are never deleted during recovery.</p>
+        </div>
+      </details>
 
-    <section class="section" id="troubleshooting">
-      <span class="section-label">Help</span>
-      <h2>Troubleshooting</h2>
-      <p>Common issues and solutions, from setup problems to advanced workflow questions.</p>
+      <details class="faq-item">
+        <summary>Notifications aren't working</summary>
+        <div class="faq-answer">
+          <ol>
+            <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li>
+            <li>Check macOS: System Settings &rarr; Notifications &rarr; terminal-notifier</li>
+            <li>Verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code></li>
+          </ol>
+        </div>
+      </details>
 
-      <h3>The phase gate is blocking my writes</h3>
-      <p>This means the Tier 1 foundation isn't complete yet. Run <code>/status</code> to see which foundation steps are missing, then run <code>/new-project</code> (or <code>/onboard</code> for existing projects) to complete them. The phase gate only blocks source code writes &mdash; config files, documentation, and <code>.vibecrew/</code> state files are always writable.</p>
+      <details class="faq-item">
+        <summary>An MCP server isn't connecting</summary>
+        <div class="faq-answer">
+          <p>Default servers (Context7, Chrome DevTools, Playwright) work via <code>npx</code> &mdash; try restarting Claude Code. For conditional servers (Supabase, Stripe, etc.), ensure the required environment variables are set. Run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code> to activate. All MCP servers are optional &mdash; agents gracefully fall back to built-in tools.</p>
+        </div>
+      </details>
 
-      <h3>My session state is corrupted</h3>
-      <p>Run <code>/recover-state</code> to clear lock files and repair corrupted JSON. If that doesn't work, you can manually delete the <code>.vibecrew/locks/</code> directory. Your backlog, session logs, and scores are never deleted during recovery.</p>
+      <details class="faq-item">
+        <summary>Vibe Score seems inaccurate</summary>
+        <div class="faq-answer">
+          <ul>
+            <li><strong>New projects:</strong> Scores are less meaningful in the first few sessions as the system establishes baselines</li>
+            <li><strong>Complex features:</strong> Large features naturally have more tool calls and corrections &mdash; the score accounts for this but may seem low</li>
+            <li><strong>Override deductions:</strong> If the coach flags something unavoidable, say so during the coaching dialogue &mdash; it factors into the next proposal</li>
+          </ul>
+        </div>
+      </details>
 
-      <h3>Notifications aren't working</h3>
-      <ol>
-        <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li>
-        <li>Check macOS: System Settings &rarr; Notifications &rarr; terminal-notifier</li>
-        <li>Verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code></li>
-      </ol>
+      <details class="faq-item">
+        <summary>/heal can't fetch CI logs</summary>
+        <div class="faq-answer">
+          <ol>
+            <li>Verify the CLI is authenticated: <code>gh auth status</code> (GitHub) or <code>glab auth status</code> (GitLab)</li>
+            <li>Ensure the repo has a remote: <code>git remote -v</code></li>
+            <li>Check that a recent CI run exists: <code>gh run list --limit 5</code> (GitHub) or <code>glab ci list</code> (GitLab)</li>
+            <li>If the failure is on a different branch, switch to it first</li>
+          </ol>
+        </div>
+      </details>
 
-      <h3>An MCP server isn't connecting</h3>
-      <p>Default servers (Context7, Chrome DevTools, Playwright) work via <code>npx</code> &mdash; try restarting Claude Code. For conditional servers (Supabase, Stripe, etc.), ensure the required environment variables are set. Run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code> to activate. All MCP servers are optional &mdash; agents gracefully fall back to built-in tools.</p>
+      <details class="faq-item">
+        <summary>/simplify shows no suggestions</summary>
+        <div class="faq-answer">
+          <ul>
+            <li>The agent only analyzes files changed on the current feature branch vs. the default branch</li>
+            <li>Verify you're on a feature branch (not main/master): <code>git branch --show-current</code></li>
+            <li>Check that source files were changed (config and docs are excluded)</li>
+            <li>The minimum files threshold is configurable in <code>.vibecrew/config.json</code> under <code>simplify.min_files_for_analysis</code></li>
+          </ul>
+        </div>
+      </details>
 
-      <h3>Vibe Score seems inaccurate</h3>
-      <ul>
-        <li><strong>New projects:</strong> Scores are less meaningful in the first few sessions as the system establishes baselines</li>
-        <li><strong>Complex features:</strong> Large features naturally have more tool calls and corrections &mdash; the score accounts for this but may seem low</li>
-        <li><strong>Override deductions:</strong> If the coach flags something unavoidable, say so during the coaching dialogue &mdash; it factors into the next proposal</li>
-      </ul>
+      <details class="faq-item">
+        <summary>/replay can't find eligible sessions</summary>
+        <div class="faq-answer">
+          <ul>
+            <li>Only sessions with a Vibe Score &ge; 70 are eligible for template extraction</li>
+            <li>Verify session logs exist in <code>.vibecrew/sessions/</code> and score files in <code>.vibecrew/scores/</code></li>
+            <li>Run <code>/wrap</code> at the end of sessions to generate the required data</li>
+          </ul>
+        </div>
+      </details>
 
-      <h3>/heal can't fetch CI logs</h3>
-      <ol>
-        <li>Verify the CLI is authenticated: <code>gh auth status</code> (GitHub) or <code>glab auth status</code> (GitLab)</li>
-        <li>Ensure the repo has a remote: <code>git remote -v</code></li>
-        <li>Check that a recent CI run exists: <code>gh run list --limit 5</code> (GitHub) or <code>glab ci list</code> (GitLab)</li>
-        <li>If the failure is on a different branch, switch to it first</li>
-      </ol>
+      <details class="faq-item">
+        <summary>Gamification not showing after /wrap</summary>
+        <div class="faq-answer">
+          <ol>
+            <li>Check that gamification is enabled: <code>jq '.gamification.enabled' .vibecrew/config.json</code> should return <code>true</code></li>
+            <li>Verify <code>.vibecrew/gamification.json</code> exists. If not, run <code>/setup</code> to create it</li>
+            <li>Check that the gamification scripts are executable: <code>ls -la scripts/award-xp.sh</code></li>
+            <li>Run a script manually to debug: <code>bash scripts/award-xp.sh</code> &mdash; it outputs JSON with the XP breakdown</li>
+          </ol>
+        </div>
+      </details>
 
-      <h3>/simplify shows no suggestions</h3>
-      <ul>
-        <li>The agent only analyzes files changed on the current feature branch vs. the default branch</li>
-        <li>Verify you're on a feature branch (not main/master): <code>git branch --show-current</code></li>
-        <li>Check that source files were changed (config and docs are excluded)</li>
-        <li>The minimum files threshold is configurable in <code>.vibecrew/config.json</code> under <code>simplify.min_files_for_analysis</code></li>
-      </ul>
+      <details class="faq-item">
+        <summary>/quiz shows "Unlocks at Level 3"</summary>
+        <div class="faq-answer">
+          <ul>
+            <li>The <code>/quiz</code> command requires Level 3 (approximately 3&ndash;4 completed sessions)</li>
+            <li>Check your level: <code>jq '.level' .vibecrew/gamification.json</code></li>
+            <li>Keep running <code>/wrap</code> at the end of sessions to earn XP and level up</li>
+          </ul>
+        </div>
+      </details>
 
-      <h3>/replay can't find eligible sessions</h3>
-      <ul>
-        <li>Only sessions with a Vibe Score &ge; 70 are eligible for template extraction</li>
-        <li>Verify session logs exist in <code>.vibecrew/sessions/</code> and score files in <code>.vibecrew/scores/</code></li>
-        <li>Run <code>/wrap</code> at the end of sessions to generate the required data</li>
-      </ul>
-
-      <h3>Gamification not showing after /wrap</h3>
-      <ol>
-        <li>Check that gamification is enabled: <code>jq '.gamification.enabled' .vibecrew/config.json</code> should return <code>true</code></li>
-        <li>Verify <code>.vibecrew/gamification.json</code> exists. If not, run <code>/setup</code> to create it</li>
-        <li>Check that the gamification scripts are executable: <code>ls -la scripts/award-xp.sh</code></li>
-        <li>Run a script manually to debug: <code>bash scripts/award-xp.sh</code> &mdash; it outputs JSON with the XP breakdown</li>
-      </ol>
-
-      <h3>/quiz shows "Unlocks at Level 3"</h3>
-      <ul>
-        <li>The <code>/quiz</code> command requires Level 3 (approximately 3&ndash;4 completed sessions)</li>
-        <li>Check your level: <code>jq '.level' .vibecrew/gamification.json</code></li>
-        <li>Keep running <code>/wrap</code> at the end of sessions to earn XP and level up</li>
-      </ul>
-
-      <h3>Streak broke unexpectedly</h3>
-      <ul>
-        <li>Streaks increment on calendar days where <code>/wrap</code> runs. If you didn&rsquo;t wrap, the day doesn&rsquo;t count</li>
-        <li>Weekends never break streaks. Check if you missed a <strong>weekday</strong></li>
-        <li>Grace days reset on the 1st of each month: <code>jq '.streak.grace_days_remaining' .vibecrew/gamification.json</code></li>
-        <li>If the streak counter seems wrong, check <code>.streak.last_session_date</code> in gamification.json</li>
-      </ul>
+      <details class="faq-item">
+        <summary>Streak broke unexpectedly</summary>
+        <div class="faq-answer">
+          <ul>
+            <li>Streaks increment on calendar days where <code>/wrap</code> runs. If you didn&rsquo;t wrap, the day doesn&rsquo;t count</li>
+            <li>Weekends never break streaks. Check if you missed a <strong>weekday</strong></li>
+            <li>Grace days reset on the 1st of each month: <code>jq '.streak.grace_days_remaining' .vibecrew/gamification.json</code></li>
+            <li>If the streak counter seems wrong, check <code>.streak.last_session_date</code> in gamification.json</li>
+          </ul>
+        </div>
+      </details>
     </section>
 
 </DocsLayout>

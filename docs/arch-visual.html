@@ -107,7 +107,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -125,6 +125,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -219,7 +230,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -237,6 +248,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -349,7 +371,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -367,6 +389,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -465,7 +498,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -483,6 +516,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -605,7 +649,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -623,6 +667,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -705,7 +760,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -723,6 +778,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -813,7 +879,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -831,6 +897,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -915,7 +992,7 @@
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -933,6 +1010,17 @@
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }
@@ -1066,8 +1154,7 @@
   (function() {
     var tabs = document.querySelectorAll('.arch-tab');
     var panels = document.querySelectorAll('.arch-panel');
-    // Track which panels have had mermaid rendered
-    var rendered = { plugin: true }; // first panel renders on load
+    var rendered = {};
 
     function switchTab(target) {
       // Update tabs
@@ -1091,23 +1178,15 @@
         panel.classList.add('active');
         panel.hidden = false;
 
-        // Render mermaid diagrams on first show (hidden elements have 0 width)
+        // Render mermaid diagrams on first show (startOnLoad is false)
         if (!rendered[target] && window.mermaid) {
           rendered[target] = true;
-          // Small delay to let the browser paint the visible panel
-          requestAnimationFrame(function() {
-            var nodes = panel.querySelectorAll('.mermaid[data-processed]');
-            if (nodes.length > 0) {
-              // Already processed but at 0 width — re-render
-              nodes.forEach(function(n) { n.removeAttribute('data-processed'); });
-              mermaid.run({ nodes: nodes });
-            } else {
-              var pres = panel.querySelectorAll('pre.mermaid');
-              if (pres.length > 0) {
-                mermaid.run({ nodes: pres });
-              }
-            }
-          });
+          var pres = panel.querySelectorAll('pre.mermaid');
+          if (pres.length > 0) {
+            requestAnimationFrame(function() {
+              mermaid.run({ nodes: pres });
+            });
+          }
         }
       }
     }

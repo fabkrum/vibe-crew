@@ -41,7 +41,7 @@ const { chart, caption } = Astro.props;
       s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
       s.onload = function() {
         mermaid.initialize({
-          startOnLoad: true,
+          startOnLoad: false,
           theme: 'dark',
           themeVariables: {
             primaryColor: '#7c3aed',
@@ -59,6 +59,17 @@ const { chart, caption } = Astro.props;
             edgeLabelBackground: '#18181b',
           },
         });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
       };
       document.head.appendChild(s);
     }

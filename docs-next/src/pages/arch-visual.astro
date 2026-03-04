@@ -251,6 +251,251 @@ import { commands, categories } from '../data/commands';
     </div>
 
     <MermaidDiagram chart={commandsDiagram} caption="How a slash command flows from user input to results" />
+
+    <h4 class="agent-table-heading">Setup &amp; Onboarding</h4>
+    <p class="cmd-group-desc">Run these once when starting a new project or joining an existing one.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/setup</code></td>
+            <td>Verifies dependencies (Git, Node, jq), detects your terminal, and creates the <code>.vibecrew/</code> folder.</td>
+            <td>First thing you run in any project. Tells you if anything is missing.</td>
+          </tr>
+          <tr>
+            <td><code>/new-project</code></td>
+            <td>Runs the full 7-step foundation: VISION.md, design system, TDR, architecture diagrams, roadmap, and CLAUDE.md.</td>
+            <td>Starting a brand-new project from scratch. This is the Tier 1 workflow.</td>
+          </tr>
+          <tr>
+            <td><code>/onboard</code></td>
+            <td>Analyzes an existing codebase &mdash; extracts conventions, tech stack, and generates a CLAUDE.md.</td>
+            <td>Adding VibeCrew to a project that already has code.</td>
+          </tr>
+          <tr>
+            <td><code>/profile</code></td>
+            <td>8-question interview (or preset selection) that configures how agents communicate and work with you.</td>
+            <td>After setup, to personalize agent behavior for your experience level and preferences.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Planning</h4>
+    <p class="cmd-group-desc">Define what to build and track progress.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/plan-features</code></td>
+            <td>Interactive session to define backlog specs: problem statement, acceptance criteria, priority, complexity, dependencies.</td>
+            <td>After foundation is complete, to define what features you want to build.</td>
+          </tr>
+          <tr>
+            <td><code>/idea "text"</code></td>
+            <td>Captures a one-line idea to <code>backlog.json</code> with status "unplanned". Zero AI cost.</td>
+            <td>Anytime you have a feature idea &mdash; quick capture without breaking your flow.</td>
+          </tr>
+          <tr>
+            <td><code>/status</code></td>
+            <td>Full project dashboard: foundation progress, backlog overview, active feature, recent Vibe Scores.</td>
+            <td>To see where your project stands at a glance. Script-only, no token cost.</td>
+          </tr>
+          <tr>
+            <td><code>/sync-issues</code></td>
+            <td>Imports open GitHub/GitLab issues by label into the VibeCrew backlog.</td>
+            <td>To pull external issue tracker items into VibeCrew for execution.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Development</h4>
+    <p class="cmd-group-desc">Build features and fix bugs.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/new-feature "name"</code></td>
+            <td>Creates a branch, checkpoint, and starts the 6-phase development cycle (Plan &rarr; UI Design &rarr; Code &rarr; Test &rarr; Review &rarr; Docs).</td>
+            <td>To start building a planned feature. One feature at a time (WIP limit enforced).</td>
+          </tr>
+          <tr>
+            <td><code>/run-backlog</code></td>
+            <td>Automatically executes features from the backlog by priority. Stops on failure for human review.</td>
+            <td>When you want VibeCrew to work through multiple features autonomously.</td>
+          </tr>
+          <tr>
+            <td><code>/check</code></td>
+            <td>Runs tests, build, lint, and type-check without modifying any code.</td>
+            <td>Quick health check at any time during development.</td>
+          </tr>
+          <tr>
+            <td><code>/debug</code></td>
+            <td>Structured debugging with hypothesis testing, variable inspection, and root cause analysis.</td>
+            <td>When something is broken and you need a methodical investigation.</td>
+          </tr>
+          <tr>
+            <td><code>/fix-issue &lt;number&gt;</code></td>
+            <td>Fetches a GitHub/GitLab issue, diagnoses the problem, implements a fix, tests it, and creates a PR/MR.</td>
+            <td>To fix a specific issue end-to-end from your issue tracker.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Testing &amp; Review</h4>
+    <p class="cmd-group-desc">Validate quality, security, and accessibility.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/review</code></td>
+            <td>Code review against feature spec, TDR compliance, and conventions. Findings grouped by severity.</td>
+            <td>After coding is done, before wrapping up a feature.</td>
+          </tr>
+          <tr>
+            <td><code>/tdd</code></td>
+            <td>Test-driven development cycle: write a failing test first, then implement until it passes.</td>
+            <td>When you want to develop using the red-green-refactor pattern.</td>
+          </tr>
+          <tr>
+            <td><code>/e2e</code></td>
+            <td>Generates Playwright end-to-end tests with Page Object Model patterns.</td>
+            <td>To add browser-level integration tests for user flows.</td>
+          </tr>
+          <tr>
+            <td><code>/perf-test</code></td>
+            <td>Generates k6 load, stress, spike, and soak test suites.</td>
+            <td>To benchmark API performance and find bottlenecks under load.</td>
+          </tr>
+          <tr>
+            <td><code>/a11y</code></td>
+            <td>WCAG 2.1 AA accessibility audit via axe-core.</td>
+            <td>To check your UI for accessibility issues before shipping.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Quality &amp; Analysis</h4>
+    <p class="cmd-group-desc">Improve code quality and challenge decisions.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/simplify</code></td>
+            <td>Read-only analysis: finds dead code, over-abstractions, and API surface bloat. You approve each change.</td>
+            <td>When code feels complex or after a big feature to reduce technical debt.</td>
+          </tr>
+          <tr>
+            <td><code>/apply-simplifications</code></td>
+            <td>Applies the changes you approved from the <code>/simplify</code> analysis.</td>
+            <td>After reviewing <code>/simplify</code> results and selecting what to apply.</td>
+          </tr>
+          <tr>
+            <td><code>/reconsider</code></td>
+            <td>Devil's advocate analysis of TDR decisions with debate matrices and risk assessments.</td>
+            <td>When you want a second opinion on architectural or technology choices.</td>
+          </tr>
+          <tr>
+            <td><code>/replay</code></td>
+            <td>Create, list, or apply workflow templates from high-scoring sessions.</td>
+            <td>To reuse a proven workflow pattern from a previous successful session.</td>
+          </tr>
+          <tr>
+            <td><code>/system-review</code></td>
+            <td>Plugin meta-analysis, cross-project telemetry, and ecosystem research.</td>
+            <td>To analyze VibeCrew's own performance across all your projects.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Safety</h4>
+    <p class="cmd-group-desc">Monitor costs, audit security, and fix CI.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/audit</code></td>
+            <td>OWASP Top 10 security scan: injection, auth, XSS, secrets, dependency vulnerabilities.</td>
+            <td>Before shipping to production, or periodically to catch security issues.</td>
+          </tr>
+          <tr>
+            <td><code>/heal</code></td>
+            <td>Fetches CI logs, diagnoses the failure, and applies a fix (max 3 attempts).</td>
+            <td>When your CI pipeline is failing and you need automated diagnosis.</td>
+          </tr>
+          <tr>
+            <td><code>/cost</code></td>
+            <td>Real-time cost dashboard: session, daily, weekly, and monthly aggregates with pricing table.</td>
+            <td>To check how much you've spent on AI tokens. Script-only, no token cost.</td>
+          </tr>
+          <tr>
+            <td><code>/undo</code></td>
+            <td>Lists checkpoints and recent commits, lets you safely revert or reset.</td>
+            <td>When something went wrong and you need to roll back changes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Session Management</h4>
+    <p class="cmd-group-desc">Wrap up work and transfer context between sessions.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/wrap</code></td>
+            <td>Quality gate, Vibe Score calculation, performance coaching, commit, session log, and gamification pipeline.</td>
+            <td>At the end of every session. This is how VibeCrew scores and records your work.</td>
+          </tr>
+          <tr>
+            <td><code>/handoff</code></td>
+            <td>Generates a structured context transfer document for the next session.</td>
+            <td>When you're stopping mid-feature and need the next session to pick up exactly where you left off.</td>
+          </tr>
+          <tr>
+            <td><code>/release</code></td>
+            <td>Generates release notes from git history and session logs.</td>
+            <td>When you're ready to publish a new version of your project.</td>
+          </tr>
+          <tr>
+            <td><code>/recover-state</code></td>
+            <td>Clears lock files and repairs corrupted JSON state.</td>
+            <td>When VibeCrew is stuck or state files are broken after a crash.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Gamification</h4>
+    <p class="cmd-group-desc">Track progress, earn rewards, and test your knowledge.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/achievements</code></td>
+            <td>Shows your level, badges, skill tree, streaks, and active challenges.</td>
+            <td>Anytime you want to see your progress. Links to the visual dashboard.</td>
+          </tr>
+          <tr>
+            <td><code>/quiz</code></td>
+            <td>Interactive knowledge checks with educational explanations. Unlocks at Level 3.</td>
+            <td>To test and improve your understanding of your project's codebase and tools.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- ═══════ Skills Reference ═══════ -->
@@ -258,6 +503,22 @@ import { commands, categories } from '../data/commands';
     <div class="panel-intro">
       <h3>Skills Reference</h3>
       <p>Every slash command maps to a <strong>skill</strong> &mdash; a <code>SKILL.md</code> file in the <code>skills/</code> directory. Skills range from zero-cost script-only operations (like <code>/idea</code> and <code>/status</code>) to complex multi-agent orchestrations (like <code>/new-project</code> and <code>/wrap</code>). Use the category filters to browse all {commands.length} skills.</p>
+      <div class="key-points">
+        <div class="key-point">
+          <span class="key-icon purple">&#9632;</span>
+          <div>
+            <strong>What they are</strong>
+            <p><code>SKILL.md</code> files with YAML frontmatter (name, description, arguments) and a markdown body defining the full workflow: preconditions, steps, error handling, and agent routing. Some skills are script-only (zero tokens), others spin up single or multiple agents.</p>
+          </div>
+        </div>
+        <div class="key-point">
+          <span class="key-icon green">&#10003;</span>
+          <div>
+            <strong>What problem they solve</strong>
+            <p>Skills turn complex multi-step workflows into single commands. Instead of writing a detailed prompt for "run tests, calculate score, generate docs, commit, and log session," you type <code>/wrap</code> and the skill definition handles every step, error path, and agent handoff.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="skills-filters" id="skills-filters">
@@ -740,6 +1001,14 @@ import { commands, categories } from '../data/commands';
   .badge.sonnet {
     background: var(--color-blue-dim);
     color: var(--color-blue);
+  }
+
+  /* ──── Command group descriptions ──── */
+  .cmd-group-desc {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
   }
 
   /* ──── Skills filters ──── */

@@ -18,6 +18,13 @@ const { chart, caption } = Astro.props;
 <style>
   .mermaid-container {
     margin-bottom: 2rem;
+    /* Break out of the narrow content column for more diagram space */
+    margin-left: -8vw;
+    margin-right: -8vw;
+    padding: 1.5rem 2rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     overflow-x: auto;
   }
   pre.mermaid {
@@ -37,7 +44,15 @@ const { chart, caption } = Astro.props;
     text-align: center;
     font-size: 0.85rem;
     color: var(--color-text-muted);
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
+  }
+  @media (max-width: 768px) {
+    .mermaid-container {
+      margin-left: -1rem;
+      margin-right: -1rem;
+      padding: 1rem;
+      border-radius: 0;
+    }
   }
 </style>
 
@@ -53,9 +68,9 @@ const { chart, caption } = Astro.props;
           theme: 'dark',
           fontSize: 16,
           flowchart: {
-            padding: 20,
-            nodeSpacing: 30,
-            rankSpacing: 40,
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
             useMaxWidth: true,
           },
           themeVariables: {

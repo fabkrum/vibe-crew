@@ -23,7 +23,15 @@ const { activeSlug } = Astro.props;
     {navigation.map((group) => {
       const isActive = group.links.some((l) => l.slug === activeSlug);
       const collapsed = group.collapsed && !isActive;
-      return (
+      const isSingleLink = group.links.length === 1;
+      return isSingleLink ? (
+        <a
+          href={url(`/${group.links[0].slug}.html`)}
+          class={`sidebar-standalone${group.links[0].slug === activeSlug ? ' active' : ''}`}
+        >
+          {group.label}
+        </a>
+      ) : (
         <div class={`sidebar-group${collapsed ? ' collapsed' : ''}`}>
           <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')">
             {group.label}

@@ -51,6 +51,11 @@ export const navigation: NavGroup[] = [
       { title: 'Business Patterns', slug: 'business-patterns' },
       { title: 'Glossary', slug: 'glossary' },
       { title: 'FAQ', slug: 'faq' },
+    ],
+  },
+  {
+    label: 'Changelog',
+    links: [
       { title: 'Changelog', slug: 'releases' },
     ],
   },

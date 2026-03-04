@@ -117,6 +117,27 @@
   border-left-color: var(--color-accent);
 }
 
+.sidebar-standalone {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 1rem 1.5rem 0.4rem;
+  transition: color 0.15s;
+}
+
+.sidebar-standalone:hover {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+.sidebar-standalone.active {
+  color: var(--color-accent);
+}
+
 /* ---- Mobile bar ---- */
 .mobile-bar {
   display: none;

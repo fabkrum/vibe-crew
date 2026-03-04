@@ -14,28 +14,28 @@ import { url } from '../data/site';
     <OnboardingWizard />
   </section>
 
-  <!-- ── What VibeCrew handles ───────────────────────────────── -->
+  <!-- ── Four problems solved ───────────────────────────────── -->
   <section class="section" id="hard-parts">
-    <h3>Vibe-code without the hard parts</h3>
+    <h3>Four major vibecoding problems solved</h3>
     <div class="why-cards">
       <div class="card why-card">
-        <h4>Ship faster without cutting corners</h4>
-        <p>Architecture, design system, and tech stack are decided before the first line of code. You skip the rework that usually eats half a project.</p>
+        <h4>Context that stays under control</h4>
+        <p>Sub-agents isolate expensive research into separate context windows. MCP servers inject documentation on demand instead of pasting it. Your main session stays lean.</p>
       </div>
 
       <div class="card why-card">
-        <h4>Stop reviewing everything yourself</h4>
-        <p>Every feature is automatically tested, linted, type-checked, reviewed, and security-audited. You approve the result, not every step.</p>
+        <h4>Tokens spent wisely</h4>
+        <p>Bash hooks enforce rules at zero token cost. Slash commands replace repetitive prompts. Cost guardrails cap spend per session and per day, and the Performance Coach finds waste automatically.</p>
       </div>
 
       <div class="card why-card">
-        <h4>Get production-quality output from day one</h4>
-        <p>Your app launches with proper error handling, accessible interactions, and layouts that actually convert &mdash; not a prototype you have to rebuild later.</p>
+        <h4>Your attention, not the bottleneck</h4>
+        <p>Sessions run autonomously across parallel terminals. You get notified only when something is blocked, finished, or broken &mdash; never in between.</p>
       </div>
 
       <div class="card why-card">
-        <h4>Free, open source, runs locally</h4>
-        <p>Your code never leaves your machine. No vendor lock-in, no proprietary formats. Stop using it anytime and keep everything.</p>
+        <h4>Plan before code</h4>
+        <p>Architecture, design system, and tech stack are locked in before a single line of source code is written. A phase gate enforces the order so you get reliable, production-ready results.</p>
       </div>
     </div>
   </section>
@@ -146,7 +146,7 @@ import { url } from '../data/site';
   /* ── Hero ───────────────────────────────────────────────── */
   .hero-section {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 0;
   }
 
   .hero-title {
@@ -180,9 +180,10 @@ import { url } from '../data/site';
     margin-bottom: 1.5rem;
   }
 
-  /* ── Extra space after hero/wizard before first section ── */
-  #hard-parts {
-    margin-top: 2rem;
+  /* ── Uniform section spacing ──────────────────────────── */
+  .section {
+    margin-top: 4rem;
+    margin-bottom: 0;
   }
 
   /* ── Card grid for "hard parts" ──────────────────────────── */

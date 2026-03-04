@@ -330,6 +330,8 @@ import { url } from '../data/site';
   .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(8, auto);
+    grid-auto-flow: column;
     gap: 0.35rem 1.5rem;
     margin-top: 1rem;
   }
@@ -337,12 +339,15 @@ import { url } from '../data/site';
   @media (max-width: 768px) {
     .features-grid {
       grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(12, auto);
     }
   }
 
   @media (max-width: 480px) {
     .features-grid {
       grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      grid-auto-flow: row;
     }
   }
 

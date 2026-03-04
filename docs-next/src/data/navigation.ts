@@ -16,6 +16,7 @@ export const navigation: NavGroup[] = [
       { title: 'Core Workflow', slug: 'workflow' },
       { title: 'Advanced Features', slug: 'advanced-features' },
       { title: 'Personalization', slug: 'personalization' },
+      { title: 'Gamification', slug: 'gamification' },
       { title: 'Warp Tips & Tricks', slug: 'warp' },
       { title: 'Tips & Troubleshooting', slug: 'tips' },
       { title: 'Example Session', slug: 'example-session' },

@@ -1,0 +1,1036 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import Callout from '../components/Callout.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import TableWrap from '../components/TableWrap.astro';
+import Card from '../components/Card.astro';
+import CardGrid from '../components/CardGrid.astro';
+
+const configFull = `"gamification": {
+  "enabled": true,
+  "streak_reminders": true,
+  "quiz_frequency": "weekly",
+  "show_xp_in_status": true
+}`;
+
+const configDisabled = `"gamification": {
+  "enabled": false,
+  "streak_reminders": false,
+  "quiz_frequency": "weekly",
+  "show_xp_in_status": false
+}`;
+
+const profileGamification = `"user_profile": {
+  "gamification_preference": "full"
+  // Options: "full" | "light" | "score_only" | "disabled"
+}`;
+---
+
+<DocsLayout title="Gamification" sectionLabel="Progression & Rewards" activeSlug="gamification">
+
+  <div class="toc">
+    <h3>On This Page</h3>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#enable-disable">Enabling &amp; Disabling</a></li>
+      <li><a href="#vibe-score">Vibe Score</a></li>
+      <li><a href="#xp-leveling">XP &amp; Leveling</a></li>
+      <li><a href="#badges">Badges</a></li>
+      <li><a href="#skill-tree">Skill Tree</a></li>
+      <li><a href="#streaks">Streaks</a></li>
+      <li><a href="#challenges">Challenges</a></li>
+      <li><a href="#quizzes">Quizzes</a></li>
+      <li><a href="#performance-coach">Performance Coach</a></li>
+      <li><a href="#achievements-dashboard">Achievements Dashboard</a></li>
+      <li><a href="#data-files">Data Files &amp; Storage</a></li>
+    </ol>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="section" id="overview">
+    <span class="section-label">Progression &amp; Rewards</span>
+    <h2>Gamification System</h2>
+    <p>VibeCrew includes a persistent progression layer that motivates across sessions and teaches vibe-coding skills over time. It tracks your growth from your first <code>/setup</code> through hundreds of shipped features.</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-icon">&#9878;</div>
+        <div>
+          <strong>Artifacts over actions</strong>
+          <p>Rewards map to real outputs &mdash; shipped features, passing tests, clean sessions &mdash; not arbitrary clicks.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">&#9733;</div>
+        <div>
+          <strong>Teaching over tracking</strong>
+          <p>Every mechanic helps you improve. Challenges target your weakest skills. Quizzes explain the answer.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <div class="principle-icon">&#9829;</div>
+        <div>
+          <strong>Sustainable over addictive</strong>
+          <p>Grace periods for streaks, opt-in challenges, no toxic leaderboards. Taking time off is never punished.</p>
+        </div>
+      </div>
+    </div>
+
+    <Callout type="info" title="How it runs">
+      <p>The gamification pipeline runs automatically at the end of every <code>/wrap</code>. Six scripts execute sequentially: award XP, check level-up, update streak, distribute skill XP, check badges, and update challenges. You never need to run anything manually.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- ENABLE / DISABLE -->
+  <section class="section" id="enable-disable">
+    <span class="section-label">Configuration</span>
+    <h2>Enabling &amp; Disabling</h2>
+    <p>There are two ways to control gamification, and they stay in sync automatically.</p>
+
+    <h3>Option 1: User Profile (recommended)</h3>
+    <p>Run <code>/profile</code> and answer the gamification question. This sets the <code>gamification_preference</code> dimension, and VibeCrew automatically syncs the corresponding config flags.</p>
+
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Profile Setting</th><th>What You See</th><th>Config Flags</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge green">All In</span> (<code>full</code>)</td>
+            <td>XP, badges, streaks, challenges, level-ups, streak reminders, quizzes &mdash; everything</td>
+            <td><code>enabled: true</code>, <code>show_xp: true</code>, <code>streak_reminders: true</code></td>
+          </tr>
+          <tr>
+            <td><span class="badge blue">Light Touch</span> (<code>light</code>)</td>
+            <td>XP and badges display, but no streak reminders &mdash; low-key progression</td>
+            <td><code>enabled: true</code>, <code>show_xp: true</code>, <code>streak_reminders: false</code></td>
+          </tr>
+          <tr>
+            <td><span class="badge amber">Score Only</span> (<code>score_only</code>)</td>
+            <td>Vibe Score only. No XP, no badges, no streaks display. Progression still tracked silently</td>
+            <td><code>enabled: true</code>, <code>show_xp: false</code>, <code>streak_reminders: false</code></td>
+          </tr>
+          <tr>
+            <td><span class="badge muted">Disabled</span> (<code>disabled</code>)</td>
+            <td>All gamification output suppressed. Vibe Score and Performance Coach still operate independently</td>
+            <td><code>enabled: false</code>, <code>show_xp: false</code>, <code>streak_reminders: false</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <h3>Option 2: Direct config edit</h3>
+    <p>Edit <code>.vibecrew/config.json</code> directly. The gamification block controls everything:</p>
+
+    <h4>Full gamification (all features on)</h4>
+    <CodeBlock code={configFull} lang="json" />
+
+    <h4>Gamification disabled</h4>
+    <CodeBlock code={configDisabled} lang="json" />
+
+    <Callout type="tip" title="What happens when disabled?">
+      <p>All gamification scripts check <code>config.json</code> on entry. When <code>enabled</code> is <code>false</code>, every script exits immediately with no output and no file modifications. Your <code>gamification.json</code> data is preserved &mdash; nothing is deleted. Re-enable at any time and pick up where you left off.</p>
+    </Callout>
+
+    <Callout type="warn" title="Vibe Score is independent">
+      <p>Disabling gamification does <strong>not</strong> disable the Vibe Score. The score measures session quality and feeds the Performance Coach &mdash; it operates as a core system, not a gamification feature. You always get your score at <code>/wrap</code>.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- VIBE SCORE -->
+  <section class="section" id="vibe-score">
+    <span class="section-label">Session Quality</span>
+    <h2>Vibe Score</h2>
+    <p>Every session ends with a quality score (0&ndash;130+). It starts at 100 and adjusts based on real work artifacts. The score is the single data source for XP, badges, challenges, and Performance Coach analysis.</p>
+
+    <h3>Deductions</h3>
+    <p>Points are removed for anti-patterns detected during the session:</p>
+
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Anti-Pattern</th><th>Deduction</th><th>What It Means</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Prompt churn</td><td>&minus;5 per sequence</td><td>Rephrasing the same instruction multiple times without progress</td></tr>
+          <tr><td>Tool loops</td><td>&minus;10 per loop</td><td>Retrying the same failed command with the same approach</td></tr>
+          <tr><td>Low cache utilization</td><td>&minus;15</td><td>Cache ratio below 50% (inefficient token usage)</td></tr>
+          <tr><td>Context violations</td><td>&minus;20</td><td>Peak context usage exceeded 80% of the window</td></tr>
+          <tr><td>No tests</td><td>&minus;10</td><td>Test files exist but zero tests pass</td></tr>
+          <tr><td>No feature spec</td><td>&minus;5</td><td>Active feature missing acceptance criteria</td></tr>
+          <tr><td>Skipped code review</td><td>&minus;5</td><td>Review phase not completed for the feature</td></tr>
+          <tr><td>Documentation drift</td><td>&minus;3 per stale doc</td><td>Source code changed but matching feature docs not updated</td></tr>
+          <tr><td>Console errors</td><td>&minus;5</td><td>Console errors detected on affected pages</td></tr>
+          <tr><td>Visual token violations</td><td>&minus;3 each (max &minus;9)</td><td>Design system token violations (hardcoded colors, wrong spacing, etc.)</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <h3>Bonuses</h3>
+    <p>Points are awarded for best practices:</p>
+
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Best Practice</th><th>Bonus</th><th>Condition</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Complete phase artifacts</td><td>+30 max</td><td>All Tier 2 phases (Plan, UI, Code, Test, Review, Docs) completed</td></tr>
+          <tr><td>High cache utilization</td><td>+10</td><td>Cache ratio above 70%</td></tr>
+          <tr><td>Full test coverage</td><td>+15</td><td>Coverage above 80%</td></tr>
+          <tr><td>Clean session</td><td>+5</td><td>Zero deductions</td></tr>
+          <tr><td>TDD discipline</td><td>+3</td><td>Tests written before implementation code</td></tr>
+          <tr><td>E2E tests passing</td><td>+3</td><td>Playwright/E2E suite passes</td></tr>
+          <tr><td>Accessibility clean</td><td>+2</td><td>No critical or serious a11y issues</td></tr>
+          <tr><td>Code review complete</td><td>+2</td><td>Review phase completed for the feature</td></tr>
+          <tr><td>Performance baselines</td><td>+2</td><td>Performance metrics tracked</td></tr>
+          <tr><td>Visual compliance clean</td><td>+3</td><td>Design system tokens used correctly throughout</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <Callout type="tip" title="A perfect session">
+      <p>A session with zero deductions and all bonuses can score 130+. This is rare but achievable &mdash; it means you planned thoroughly, wrote tests first, hit high cache, shipped with docs, and kept the context window lean.</p>
+    </Callout>
+  </section>
+
+  <hr>
+
+  <!-- XP & LEVELING -->
+  <section class="section" id="xp-leveling">
+    <span class="section-label">Progression</span>
+    <h2>XP &amp; Leveling</h2>
+    <p>XP is earned through real development work. Every source maps to existing tracked data &mdash; there are no gamification-only actions to grind.</p>
+
+    <h3>XP sources</h3>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Action</th><th>XP</th><th>Data Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Complete a session (<code>/wrap</code>)</td><td>+10 base</td><td>Session log</td></tr>
+          <tr><td>Vibe Score bonus</td><td>+(score &minus; 50) if &gt;50</td><td>Score file</td></tr>
+          <tr><td>Clean session (0 deductions)</td><td>+25</td><td>Score file</td></tr>
+          <tr><td>Complete a Tier 2 phase</td><td>+5 per phase</td><td>Phase tracking</td></tr>
+          <tr><td>Ship a feature (all 6 phases)</td><td>+50</td><td>Backlog column</td></tr>
+          <tr><td>Complete Tier 1 foundation</td><td>+100 (one-time)</td><td>state.json</td></tr>
+          <tr><td>Tests pass on first run</td><td>+15</td><td>Test results</td></tr>
+          <tr><td>Quiz correct answer</td><td>+5 per answer</td><td>Quiz event</td></tr>
+          <tr><td>Challenge completion</td><td>20&ndash;100 (varies)</td><td>Challenge definition</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <h3>Leveling curve</h3>
+    <p>XP per level follows an exponential curve: <code>floor(100 &times; 1.15<sup>(level&minus;1)</sup>)</code>. Early levels come quickly to build momentum. Later levels require sustained consistent work.</p>
+
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Level</th><th>Title</th><th>XP to Next</th><th>Approximate Sessions</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><span class="badge muted">Newcomer</span></td><td>100</td><td>2&ndash;3</td></tr>
+          <tr><td>2&ndash;3</td><td><span class="badge muted">Apprentice</span></td><td>115&ndash;132</td><td>4&ndash;6</td></tr>
+          <tr><td>4&ndash;5</td><td><span class="badge blue">Focused Builder</span></td><td>152&ndash;175</td><td>8&ndash;10</td></tr>
+          <tr><td>6&ndash;8</td><td><span class="badge blue">Efficient Coder</span></td><td>201&ndash;266</td><td>12&ndash;18</td></tr>
+          <tr><td>9&ndash;12</td><td><span class="badge purple">Seasoned Viber</span></td><td>306&ndash;404</td><td>20&ndash;30</td></tr>
+          <tr><td>13&ndash;18</td><td><span class="badge purple">Workflow Master</span></td><td>465&ndash;808</td><td>35&ndash;55</td></tr>
+          <tr><td>19&ndash;25</td><td><span class="badge amber">Context Architect</span></td><td>929&ndash;2,113</td><td>60&ndash;100</td></tr>
+          <tr><td>26&ndash;35</td><td><span class="badge amber">Vibe Sensei</span></td><td>2,430&ndash;6,621</td><td>110&ndash;200</td></tr>
+          <tr><td>36&ndash;45</td><td><span class="badge red">Grand Master</span></td><td>7,614&ndash;17,531</td><td>220&ndash;400</td></tr>
+          <tr><td>46&ndash;50</td><td><span class="badge red">Vibe Legend</span></td><td>20,161&ndash;28,832</td><td>450+</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <h3>Feature unlocks</h3>
+    <p>Features are gated by level to prevent overwhelming new users. Core functionality is <strong>never</strong> gated &mdash; only supplemental gamification features.</p>
+
+    <div class="unlock-timeline">
+      <div class="unlock-item">
+        <div class="unlock-level">1</div>
+        <div class="unlock-content">
+          <strong>Base VibeCrew</strong>
+          <p>All core workflow, Vibe Score, Performance Coach</p>
+        </div>
+      </div>
+      <div class="unlock-item">
+        <div class="unlock-level">2</div>
+        <div class="unlock-content">
+          <strong>Daily Challenges</strong>
+          <p>Time-limited daily goals refresh each morning</p>
+        </div>
+      </div>
+      <div class="unlock-item">
+        <div class="unlock-level">3</div>
+        <div class="unlock-content">
+          <strong><code>/quiz</code> Command</strong>
+          <p>Knowledge check quizzes with educational explanations</p>
+        </div>
+      </div>
+      <div class="unlock-item">
+        <div class="unlock-level">5</div>
+        <div class="unlock-content">
+          <strong>Weekly Challenges &amp; Skill Tree</strong>
+          <p>Longer-term challenges and the 5-domain skill tree display</p>
+        </div>
+      </div>
+      <div class="unlock-item">
+        <div class="unlock-level">8</div>
+        <div class="unlock-content">
+          <strong>One-Time Challenges</strong>
+          <p>Permanent achievement-style challenges with high XP rewards</p>
+        </div>
+      </div>
+      <div class="unlock-item">
+        <div class="unlock-level">10</div>
+        <div class="unlock-content">
+          <strong>Custom Title</strong>
+          <p>Set a custom title in your status line</p>
+        </div>
+      </div>
+      <div class="unlock-item">
+        <div class="unlock-level">15</div>
+        <div class="unlock-content">
+          <strong>Advanced Quizzes</strong>
+          <p>Deeper knowledge checks on context management and testing</p>
+        </div>
+      </div>
+      <div class="unlock-item">
+        <div class="unlock-level">20</div>
+        <div class="unlock-content">
+          <strong>Detailed Analytics</strong>
+          <p>Extended session analytics in <code>/status</code> output</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>What <code>/wrap</code> shows</h3>
+    <p>After the Vibe Score coaching output, <code>/wrap</code> appends a progression summary:</p>
+
+    <pre><code>--- Progression ---
+Level 7 | 340/420 XP to Level 8
++10 (session) +38 (score bonus) +5 (test phase) = +53 XP
+Skill: testing +15 XP (Level 2 -> Level 3)
+
+--- New Badges ---
+[BADGE] Shipper -- First feature shipped! (+50 XP)
+
+*** LEVEL UP! Level 6 -> Level 7 "Focused Builder" ***
+Unlocked: Weekly challenges, Skill tree in /achievements</code></pre>
+  </section>
+
+  <hr>
+
+  <!-- BADGES -->
+  <section class="section" id="badges">
+    <span class="section-label">Achievements</span>
+    <h2>Badges</h2>
+    <p>Contextual badges tied to meaningful milestones. Each badge awards bonus XP when earned. Locked badges show progress toward completion (e.g., &ldquo;3/5 features&rdquo;) so you always know what&rsquo;s next.</p>
+
+    <h3>Milestone badges (one-time, 10&ndash;100 XP)</h3>
+    <p>Earned by reaching key project milestones:</p>
+    <div class="badge-grid">
+      <div class="badge-card">
+        <div class="badge-emoji">&#128640;</div>
+        <div>
+          <div class="badge-name">Hello, World</div>
+          <div class="badge-desc">Run <code>/setup</code> for the first time</div>
+          <div class="badge-xp">+10 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#127959;</div>
+        <div>
+          <div class="badge-name">Architect</div>
+          <div class="badge-desc">Complete the Tier 1 foundation</div>
+          <div class="badge-xp">+25 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#128230;</div>
+        <div>
+          <div class="badge-name">Shipper</div>
+          <div class="badge-desc">Ship your first feature (all 6 phases)</div>
+          <div class="badge-xp">+50 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#9889;</div>
+        <div>
+          <div class="badge-name">Momentum</div>
+          <div class="badge-desc">Ship 5 features</div>
+          <div class="badge-xp">+100 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#128269;</div>
+        <div>
+          <div class="badge-name">Researcher</div>
+          <div class="badge-desc">Produce your first TDR</div>
+          <div class="badge-xp">+15 XP</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Skill badges (demonstrating proficiency, 25&ndash;150 XP)</h3>
+    <p>Earned by demonstrating consistent mastery of specific skills:</p>
+    <div class="badge-grid">
+      <div class="badge-card">
+        <div class="badge-emoji">&#10024;</div>
+        <div>
+          <div class="badge-name">Smooth Operator</div>
+          <div class="badge-desc">Score 90+ with 0 deductions</div>
+          <div class="badge-xp">+25 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#128293;</div>
+        <div>
+          <div class="badge-name">On Fire</div>
+          <div class="badge-desc">3 consecutive 90+ sessions</div>
+          <div class="badge-xp">+50 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#128737;</div>
+        <div>
+          <div class="badge-name">Untouchable</div>
+          <div class="badge-desc">10 consecutive 90+ sessions</div>
+          <div class="badge-xp">+150 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#128451;</div>
+        <div>
+          <div class="badge-name">Cache Master</div>
+          <div class="badge-desc">5 sessions with cache &gt;70%</div>
+          <div class="badge-xp">+50 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#128172;</div>
+        <div>
+          <div class="badge-name">Clear Communicator</div>
+          <div class="badge-desc">10 sessions with 0 prompt churn</div>
+          <div class="badge-xp">+75 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#9989;</div>
+        <div>
+          <div class="badge-name">Test First</div>
+          <div class="badge-desc">5 features with tests before implementation</div>
+          <div class="badge-xp">+75 XP</div>
+        </div>
+      </div>
+      <div class="badge-card">
+        <div class="badge-emoji">&#127919;</div>
+        <div>
+          <div class="badge-name">Context Ninja</div>
+          <div class="badge-desc">10 sessions under 50% context usage</div>
+          <div class="badge-xp">+75 XP</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Special badges (rare, 50&ndash;200 XP)</h3>
+    <p>Hard-to-earn badges that celebrate exceptional achievements:</p>
+    <div class="badge-grid">
+      <div class="badge-card special">
+        <div class="badge-emoji">&#128081;</div>
+        <div>
+          <div class="badge-name">Perfectionist</div>
+          <div class="badge-desc">Score exactly 100 &mdash; no deductions, no bonuses</div>
+          <div class="badge-xp">+100 XP</div>
+        </div>
+      </div>
+      <div class="badge-card special">
+        <div class="badge-emoji">&#128200;</div>
+        <div>
+          <div class="badge-name">Comeback Kid</div>
+          <div class="badge-desc">Score 90+ immediately after a sub-50 session</div>
+          <div class="badge-xp">+50 XP</div>
+        </div>
+      </div>
+      <div class="badge-card special">
+        <div class="badge-emoji">&#128197;</div>
+        <div>
+          <div class="badge-name">Weekly Warrior</div>
+          <div class="badge-desc">Maintain a 7-day coding streak</div>
+          <div class="badge-xp">+50 XP</div>
+        </div>
+      </div>
+      <div class="badge-card special">
+        <div class="badge-emoji">&#127942;</div>
+        <div>
+          <div class="badge-name">Unstoppable</div>
+          <div class="badge-desc">Maintain a 30-day coding streak</div>
+          <div class="badge-xp">+200 XP</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- SKILL TREE -->
+  <section class="section" id="skill-tree">
+    <span class="section-label">Growth Tracking</span>
+    <h2>Skill Tree</h2>
+    <p>Five skill domains with 5 levels each. Skill XP is distributed automatically based on session metrics, giving you a visual fingerprint of your development strengths and weaknesses. Unlocks in <code>/achievements</code> at Level 5.</p>
+
+    <h3>The five domains</h3>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Skill</th><th>What It Measures</th><th>How XP Is Earned</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Prompting</strong></td>
+            <td>Clear AI communication</td>
+            <td>+10 for 0 churn sequences, +5 for score &ge;80, +5 for score &ge;90</td>
+          </tr>
+          <tr>
+            <td><strong>Architecture</strong></td>
+            <td>Planning before building</td>
+            <td>+5 for TDR complete, +5 for foundation complete, +10 for plan phase done</td>
+          </tr>
+          <tr>
+            <td><strong>Testing</strong></td>
+            <td>Quality assurance</td>
+            <td>+10 for tests passing, +5 for test phase done, +10 for coverage &gt;80%</td>
+          </tr>
+          <tr>
+            <td><strong>Context Management</strong></td>
+            <td>Token efficiency</td>
+            <td>+15 for cache &gt;70%, +10 for peak context &lt;50%</td>
+          </tr>
+          <tr>
+            <td><strong>Workflow Discipline</strong></td>
+            <td>Following the process</td>
+            <td>+3 per phase completed, +10 for 0 deductions, +5 for streak &ge;3</td>
+          </tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <h3>Skill levels</h3>
+    <div class="skill-levels">
+      <div class="skill-level-item">
+        <div class="skill-level-num">0</div>
+        <div>
+          <strong>Novice</strong>
+          <span class="skill-xp-req">0 XP</span>
+        </div>
+      </div>
+      <div class="skill-level-item">
+        <div class="skill-level-num">1</div>
+        <div>
+          <strong>Apprentice</strong>
+          <span class="skill-xp-req">50 XP</span>
+        </div>
+      </div>
+      <div class="skill-level-item">
+        <div class="skill-level-num">2</div>
+        <div>
+          <strong>Practitioner</strong>
+          <span class="skill-xp-req">200 XP</span>
+        </div>
+      </div>
+      <div class="skill-level-item">
+        <div class="skill-level-num">3</div>
+        <div>
+          <strong>Expert</strong>
+          <span class="skill-xp-req">600 XP</span>
+        </div>
+      </div>
+      <div class="skill-level-item">
+        <div class="skill-level-num">4</div>
+        <div>
+          <strong>Master</strong>
+          <span class="skill-xp-req">1,400 XP</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>CLI display</h3>
+    <pre><code>Prompting          [####------] Level 2 (35/200 to Level 3)
+Architecture       [######----] Level 3 (120/600 to Level 4)
+Testing            [##--------] Level 1 (25/200 to Level 2)
+Context Management [########--] Level 4 (800/1400 to Level 5)
+Workflow Discipline[#####-----] Level 2 (150/200 to Level 3)</code></pre>
+
+    <p>The visual dashboard renders this as a 5-axis radar chart, making it easy to spot your development profile shape at a glance.</p>
+  </section>
+
+  <hr>
+
+  <!-- STREAKS -->
+  <section class="section" id="streaks">
+    <span class="section-label">Consistency</span>
+    <h2>Streaks</h2>
+    <p>Streaks track consecutive days of coding. They&rsquo;re designed to celebrate consistency without demanding it &mdash; a broken streak is just a number, not a loss.</p>
+
+    <h3>How they work</h3>
+    <div class="streak-rules">
+      <div class="streak-rule">
+        <div class="streak-icon">&#128197;</div>
+        <div>
+          <strong>Increments on <code>/wrap</code></strong>
+          <p>Each calendar day you run <code>/wrap</code> counts. Multiple wraps per day still count as one.</p>
+        </div>
+      </div>
+      <div class="streak-rule">
+        <div class="streak-icon">&#127774;</div>
+        <div>
+          <strong>Weekend auto-grace</strong>
+          <p>Saturdays and Sundays never break streaks and never consume grace credits. Take weekends off freely.</p>
+        </div>
+      </div>
+      <div class="streak-rule">
+        <div class="streak-icon">&#10052;</div>
+        <div>
+          <strong>2 grace days per month</strong>
+          <p>Miss a weekday? The streak continues if you have grace days remaining. Resets on the 1st of each month.</p>
+        </div>
+      </div>
+      <div class="streak-rule">
+        <div class="streak-icon">&#128154;</div>
+        <div>
+          <strong>No penalty for breaking</strong>
+          <p>When a streak breaks, the counter resets to 0. No XP is lost, no badges are revoked. Start fresh.</p>
+        </div>
+      </div>
+      <div class="streak-rule">
+        <div class="streak-icon">&#128276;</div>
+        <div>
+          <strong>Reminders are opt-in</strong>
+          <p>Streak reminders are disabled by default. Enable via <code>/profile</code> (set gamification to &ldquo;All In&rdquo;) or in <code>config.json</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Streak data tracked</h3>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Field</th><th>What It Stores</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>streak.current</code></td><td>Current consecutive day count</td></tr>
+          <tr><td><code>streak.longest</code></td><td>All-time longest streak (for bragging rights)</td></tr>
+          <tr><td><code>streak.last_session_date</code></td><td>Last date <code>/wrap</code> was run</td></tr>
+          <tr><td><code>streak.grace_days_remaining</code></td><td>Grace credits left this month (0&ndash;2)</td></tr>
+          <tr><td><code>streak.frozen_today</code></td><td>Whether a grace day was used today</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+  </section>
+
+  <hr>
+
+  <!-- CHALLENGES -->
+  <section class="section" id="challenges">
+    <span class="section-label">Goals</span>
+    <h2>Challenges</h2>
+    <p>Optional, time-limited goals that guide your improvement. Never required, never punish failure. Challenge selection is weighted toward your weakest skill domain to help you grow where it matters most.</p>
+
+    <h3>Daily challenges <span class="unlock-tag">Unlock Level 2</span></h3>
+    <p>Refresh each morning. One active daily challenge at a time.</p>
+    <div class="challenge-cards">
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Clean Sweep</h5>
+        <p>Complete a session with 0 deductions</p>
+        <div class="challenge-reward">+20 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Cache Champion</h5>
+        <p>Achieve &gt;70% cache utilization</p>
+        <div class="challenge-reward">+20 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Clear Channel</h5>
+        <p>Complete a session with 0 prompt churn</p>
+        <div class="challenge-reward">+20 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Light Footprint</h5>
+        <p>Keep context usage under 40%</p>
+        <div class="challenge-reward">+25 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Green Light</h5>
+        <p>All tests pass on first run</p>
+        <div class="challenge-reward">+20 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type daily">Daily</div>
+        <h5>Phase Finisher</h5>
+        <p>Complete at least 1 Tier 2 phase</p>
+        <div class="challenge-reward">+15 XP</div>
+      </div>
+    </div>
+
+    <h3>Weekly challenges <span class="unlock-tag">Unlock Level 5</span></h3>
+    <p>Refresh every Monday. Require sustained effort across multiple sessions.</p>
+    <div class="challenge-cards">
+      <div class="challenge-card">
+        <div class="challenge-type weekly">Weekly</div>
+        <h5>Ship Week</h5>
+        <p>Ship 1 complete feature this week</p>
+        <div class="challenge-reward">+50 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type weekly">Weekly</div>
+        <h5>Perfect Week</h5>
+        <p>All sessions score 90+ this week</p>
+        <div class="challenge-reward">+75 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type weekly">Weekly</div>
+        <h5>Coverage Push</h5>
+        <p>Average test coverage &gt;80% this week</p>
+        <div class="challenge-reward">+60 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type weekly">Weekly</div>
+        <h5>Blueprint Week</h5>
+        <p>Complete 2+ plan phases this week</p>
+        <div class="challenge-reward">+40 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type weekly">Weekly</div>
+        <h5>Five-Day Streak</h5>
+        <p>Build a 5-day streak this week</p>
+        <div class="challenge-reward">+40 XP</div>
+      </div>
+    </div>
+
+    <h3>One-time challenges <span class="unlock-tag">Unlock Level 8</span></h3>
+    <p>Permanent goals with high XP payouts. Each has its own level requirement.</p>
+    <div class="challenge-cards">
+      <div class="challenge-card">
+        <div class="challenge-type onetime">One-Time &middot; Lvl 5</div>
+        <h5>Speed Ship</h5>
+        <p>Ship a feature in a single session</p>
+        <div class="challenge-reward">+100 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type onetime">One-Time &middot; Lvl 10</div>
+        <h5>Full Coverage</h5>
+        <p>Achieve &gt;90% test coverage on a feature</p>
+        <div class="challenge-reward">+75 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type onetime">One-Time &middot; Lvl 8</div>
+        <h5>Marathon Coder</h5>
+        <p>Ship 3 features in one week</p>
+        <div class="challenge-reward">+100 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type onetime">One-Time &middot; Lvl 8</div>
+        <h5>Perfect Ten</h5>
+        <p>10 consecutive sessions scoring 85+</p>
+        <div class="challenge-reward">+100 XP</div>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-type onetime">One-Time &middot; Lvl 10</div>
+        <h5>Context Master</h5>
+        <p>20 sessions under 50% context usage</p>
+        <div class="challenge-reward">+75 XP</div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- QUIZZES -->
+  <section class="section" id="quizzes">
+    <span class="section-label">Learning</span>
+    <h2>Quizzes</h2>
+    <p>Short (3&ndash;5 question) knowledge checks delivered interactively in the CLI. Each question shows the correct answer and an educational explanation regardless of whether you got it right. Quizzes unlock at Level 3.</p>
+
+    <h3>Available quizzes</h3>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Quiz</th><th>Topic</th><th>Level</th><th>Questions</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>context-management-101</code></td><td>Cache utilization, Context7, token efficiency</td><td>3</td><td>5</td></tr>
+          <tr><td><code>prompting-basics</code></td><td>Clear instructions, reducing churn, spec-first</td><td>3</td><td>5</td></tr>
+          <tr><td><code>testing-discipline</code></td><td>TDD-hybrid, when to test first vs after</td><td>3</td><td>4</td></tr>
+          <tr><td><code>architecture-planning</code></td><td>TDR purpose, foundation artifacts, phase gates</td><td>3</td><td>4</td></tr>
+          <tr><td><code>workflow-mastery</code></td><td>Phase sequence, <code>/wrap</code>, <code>/check</code>, streaks</td><td>3</td><td>5</td></tr>
+          <tr><td><code>advanced-context</code></td><td>Subagent isolation, compaction, cache optimization</td><td>15</td><td>4</td></tr>
+          <tr><td><code>advanced-testing</code></td><td>Playwright, axe-core, spec-first vs impl-first</td><td>15</td><td>4</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <h3>How quizzes are triggered</h3>
+    <ol>
+      <li><strong>Explicit:</strong> Run <code>/quiz</code> for a random quiz, or <code>/quiz context-management-101</code> for a specific one</li>
+      <li><strong>Contextual:</strong> The Performance Coach suggests a relevant quiz after <code>/wrap</code> when it detects an anti-pattern (e.g., low cache &rarr; <code>context-management-101</code>)</li>
+      <li><strong>Periodic:</strong> Session Startup suggests an overdue quiz if more than 30 days since the last one (never forces it)</li>
+    </ol>
+
+    <h3>XP from quizzes</h3>
+    <p><strong>+5 XP per correct answer</strong>, awarded only on first completion. You can retake quizzes for practice but won&rsquo;t earn XP again. Quiz XP is intentionally modest &mdash; it cannot substitute for real work XP.</p>
+  </section>
+
+  <hr>
+
+  <!-- PERFORMANCE COACH -->
+  <section class="section" id="performance-coach">
+    <span class="section-label">Self-Improvement</span>
+    <h2>Performance Coach</h2>
+    <p>The Performance Coach is an Opus agent that analyzes Vibe Score trends across sessions and proposes permanent improvements to your project&rsquo;s CLAUDE.md. It&rsquo;s the self-improving feedback loop at the heart of VibeCrew.</p>
+
+    <h3>How it works</h3>
+    <div class="coach-flow">
+      <div class="coach-step">
+        <div class="coach-num">1</div>
+        <div>
+          <strong>Detection</strong>
+          <p>Reads the latest score file, extracts deduction patterns</p>
+        </div>
+      </div>
+      <div class="coach-step">
+        <div class="coach-num">2</div>
+        <div>
+          <strong>Correlation</strong>
+          <p>Cross-references against MEMORY.md to find recurring patterns</p>
+        </div>
+      </div>
+      <div class="coach-step">
+        <div class="coach-num">3</div>
+        <div>
+          <strong>Eligibility</strong>
+          <p>Validates against guardrails: min 5 sessions, no duplicates, not recently rejected</p>
+        </div>
+      </div>
+      <div class="coach-step">
+        <div class="coach-num">4</div>
+        <div>
+          <strong>Proposal</strong>
+          <p>Generates a specific CLAUDE.md rule mutation targeting the highest-impact pattern</p>
+        </div>
+      </div>
+      <div class="coach-step">
+        <div class="coach-num">5</div>
+        <div>
+          <strong>Decision</strong>
+          <p>You approve, reject, or edit the mutation. Rejections have a cooldown period</p>
+        </div>
+      </div>
+      <div class="coach-step">
+        <div class="coach-num">6</div>
+        <div>
+          <strong>Recording</strong>
+          <p>Updates MEMORY.md and mutation-log.json for future analysis</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Guardrails</h3>
+    <ul>
+      <li><strong>Max 1 mutation per session</strong> &mdash; prevents overwhelming changes</li>
+      <li><strong>Min 5 sessions</strong> required before any mutation is proposed</li>
+      <li><strong>3-rejection cooldown:</strong> rejected patterns wait <code>rejection_count &times; 7 days</code> before being proposed again</li>
+      <li><strong>No duplicate rules</strong> &mdash; won&rsquo;t propose what already exists in CLAUDE.md</li>
+      <li><strong>No hook-redundant rules</strong> &mdash; won&rsquo;t propose rules that hooks already enforce</li>
+      <li><strong>Max 15 Session Learnings</strong> in CLAUDE.md &mdash; auto-prunes oldest entries</li>
+    </ul>
+
+    <h3>Pattern templates</h3>
+    <p>The coach tracks six anti-pattern categories and generates targeted mutation proposals:</p>
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>Pattern</th><th>Score Impact</th><th>Example Mutation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Prompt Churn</td><td>&minus;5 per sequence</td><td>&ldquo;Write acceptance criteria before starting implementation&rdquo;</td></tr>
+          <tr><td>Tool Loops</td><td>&minus;10 per loop</td><td>&ldquo;After 2 failed attempts, change approach instead of retrying&rdquo;</td></tr>
+          <tr><td>Low Cache</td><td>&minus;15</td><td>&ldquo;Use Context7 for library docs instead of pasting them&rdquo;</td></tr>
+          <tr><td>Context Violations</td><td>&minus;20</td><td>&ldquo;Offload research to worktree subagents&rdquo;</td></tr>
+          <tr><td>Missing Artifacts</td><td>&minus;5</td><td>&ldquo;Always run /check before /wrap&rdquo;</td></tr>
+          <tr><td>Documentation Drift</td><td>&minus;3 per doc</td><td>&ldquo;Update feature docs in the same session as code changes&rdquo;</td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+  </section>
+
+  <hr>
+
+  <!-- ACHIEVEMENTS DASHBOARD -->
+  <section class="section" id="achievements-dashboard">
+    <span class="section-label">Visualization</span>
+    <h2>Achievements Dashboard</h2>
+    <p>There are two ways to view your gamification data:</p>
+
+    <h3>CLI view (<code>/achievements</code>)</h3>
+    <p>A compact text summary showing your level, badges, streak, and active challenges. Available from any terminal session.</p>
+
+    <pre><code>Achievements: Level 7 "Focused Builder" | 8/21 badges | Streak: 12 days
+
+Open full dashboard: http://localhost:5173/achievements</code></pre>
+
+    <h3>Visual dashboard</h3>
+    <p>The VitePress dashboard provides the full visual experience:</p>
+
+    <div class="dashboard-cards">
+      <div class="card">
+        <div class="card-icon purple">&#127942;</div>
+        <h4>Profile Header</h4>
+        <p>Level badge (color-coded by tier), title, XP progress bar, streak counter, total sessions and features shipped.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon amber">&#11088;</div>
+        <h4>Badge Gallery</h4>
+        <p>3-column grid with category tabs (Milestones, Skills, Special). Earned badges full-color, locked badges faded with progress.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">&#9672;</div>
+        <h4>Skill Radar Chart</h4>
+        <p>SVG 5-axis spider chart showing skill levels. Your development profile shape at a glance.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon green">&#9632;</div>
+        <h4>Streak Calendar</h4>
+        <p>GitHub-style 12-week heatmap. Color intensity = Vibe Score. Grace days marked with a frost icon.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon red">&#9889;</div>
+        <h4>Active Challenges</h4>
+        <p>Cards for each challenge with progress bar, time remaining, and type badge.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon purple">&#128200;</div>
+        <h4>Score Sparkline</h4>
+        <p>Last 30 sessions as a mini SVG line chart with trend arrow and average.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- DATA FILES -->
+  <section class="section" id="data-files">
+    <span class="section-label">Technical Details</span>
+    <h2>Data Files &amp; Storage</h2>
+    <p>All gamification state is stored locally in your project&rsquo;s <code>.vibecrew/</code> directory. Nothing leaves your machine.</p>
+
+    <TableWrap>
+      <table>
+        <thead>
+          <tr><th>File</th><th>Purpose</th><th>Updated By</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>.vibecrew/gamification.json</code></td><td>Level, XP, badges, skills, streaks, challenges, quiz progress, stats</td><td><code>award-xp.sh</code>, <code>check-badges.sh</code>, <code>update-streak.sh</code>, etc.</td></tr>
+          <tr><td><code>.vibecrew/config.json</code></td><td>Gamification toggle, streak reminders, quiz frequency, user profile</td><td><code>/profile</code>, manual edit</td></tr>
+          <tr><td><code>.vibecrew/scores/score-*.json</code></td><td>Per-session Vibe Score breakdown (deductions, metrics, phases)</td><td><code>calculate-vibe-score.sh</code></td></tr>
+          <tr><td><code>MEMORY.md</code></td><td>Performance Coach persistent memory (anti-patterns, mutations, trends)</td><td>Performance Coach agent</td></tr>
+          <tr><td><code>.vibecrew/mutation-log.json</code></td><td>History of proposed, accepted, and rejected CLAUDE.md mutations</td><td><code>apply-mutation.sh</code></td></tr>
+        </tbody>
+      </table>
+    </TableWrap>
+
+    <h3>Concurrency safety</h3>
+    <p>All gamification scripts use advisory locks (<code>.vibecrew/locks/gamification.lock</code>) and atomic writes (temp file + mv) to prevent corruption when multiple agents update simultaneously.</p>
+
+    <Callout type="info" title="Data portability">
+      <p>Your <code>gamification.json</code> file is self-contained. If you move to a new machine, copy <code>.vibecrew/gamification.json</code> and <code>.vibecrew/config.json</code> to preserve your full progression history.</p>
+    </Callout>
+  </section>
+
+</DocsLayout>
+
+<style>
+/* Principles */
+.principles { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+.principle { display: flex; gap: 1rem; align-items: flex-start; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem; }
+.principle-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 2px; }
+.principle p { margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--color-text-secondary); }
+
+/* Badge grid */
+.badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+.badge-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; display: flex; gap: 0.75rem; align-items: flex-start; }
+.badge-card.special { border-color: var(--color-amber-dim); }
+.badge-card .badge-emoji { font-size: 1.5rem; flex-shrink: 0; }
+.badge-card .badge-name { font-weight: 600; font-size: 0.9rem; color: var(--color-text); }
+.badge-card .badge-desc { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.15rem; }
+.badge-card .badge-xp { font-size: 0.75rem; font-weight: 600; color: var(--color-green); margin-top: 0.35rem; }
+
+/* Level badges */
+.badge.muted { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.badge.blue { background: var(--color-blue-dim); color: var(--color-blue); }
+.badge.purple { background: var(--color-accent-bg); color: var(--color-accent); }
+.badge.amber { background: var(--color-amber-dim); color: var(--color-amber); }
+.badge.red { background: var(--color-red-dim); color: var(--color-red); }
+.badge.green { background: var(--color-green-dim); color: var(--color-green); }
+
+/* Unlock timeline */
+.unlock-timeline { display: grid; gap: 0; margin: 1.5rem 0; }
+.unlock-item { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 0; border-left: 2px solid var(--color-border); padding-left: 1.5rem; position: relative; }
+.unlock-item::before { content: ''; position: absolute; left: -5px; top: 1.25rem; width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); }
+.unlock-level { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--color-accent); background: var(--color-accent-bg); border-radius: var(--radius-xs); padding: 0.15rem 0.5rem; flex-shrink: 0; }
+.unlock-content p { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--color-text-secondary); }
+.unlock-tag { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-accent); background: var(--color-accent-bg); padding: 0.15rem 0.5rem; border-radius: var(--radius-xs); vertical-align: middle; margin-left: 0.5rem; }
+
+/* Challenge cards */
+.challenge-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+.challenge-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.25rem; }
+.challenge-card h5 { margin: 0.5rem 0 0.25rem; }
+.challenge-card p { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; }
+.challenge-card .challenge-type { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.challenge-card .challenge-type.daily { color: var(--color-blue); }
+.challenge-card .challenge-type.weekly { color: var(--color-accent); }
+.challenge-card .challenge-type.onetime { color: var(--color-amber); }
+.challenge-card .challenge-reward { font-size: 0.8rem; font-weight: 600; color: var(--color-green); margin-top: 0.5rem; }
+
+/* Streak rules */
+.streak-rules { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+.streak-rule { display: flex; gap: 1rem; align-items: flex-start; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; }
+.streak-icon { font-size: 1.25rem; flex-shrink: 0; }
+.streak-rule p { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--color-text-secondary); }
+
+/* Skill levels */
+.skill-levels { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0; }
+.skill-level-item { display: flex; gap: 0.75rem; align-items: center; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 0.75rem 1rem; }
+.skill-level-num { font-family: var(--font-mono); font-weight: 700; font-size: 1rem; color: var(--color-accent); }
+.skill-xp-req { font-size: 0.8rem; color: var(--color-text-muted); margin-left: 0.25rem; }
+
+/* Coach flow */
+.coach-flow { display: grid; gap: 0; margin: 1.5rem 0; }
+.coach-step { display: flex; gap: 1rem; align-items: flex-start; padding: 0.75rem 0; border-left: 2px solid var(--color-border); padding-left: 1.5rem; position: relative; }
+.coach-step::before { content: ''; position: absolute; left: -5px; top: 1rem; width: 8px; height: 8px; border-radius: 50%; background: var(--color-green); }
+.coach-num { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--color-green); background: var(--color-green-dim); border-radius: var(--radius-xs); padding: 0.15rem 0.5rem; flex-shrink: 0; }
+.coach-step p { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--color-text-secondary); }
+
+/* Dashboard cards */
+.dashboard-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+
+/* Card icon colors (reuse from components.css if available) */
+.card-icon { width: 36px; height: 36px; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-bottom: 0.75rem; }
+.card-icon.purple { background: var(--color-accent-bg); color: var(--color-accent); }
+.card-icon.amber { background: var(--color-amber-dim); color: var(--color-amber); }
+.card-icon.blue { background: var(--color-blue-dim); color: var(--color-blue); }
+.card-icon.green { background: var(--color-green-dim); color: var(--color-green); }
+.card-icon.red { background: var(--color-red-dim); color: var(--color-red); }
+</style>

@@ -47,7 +47,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "session-startup"
 Output EXACTLY 4 lines. No preamble, no trailing text.
 
 ```
-VibeCrew v1.8.0 | {project_name} | Branch: {branch}
+VibeCrew v1.0.0 | {project_name} | Branch: {branch}
 Foundation: {status} | Active feature: {name} ({phase})
 → {routing_instruction}
 Dashboard: {dashboard_url_or_"not running"}

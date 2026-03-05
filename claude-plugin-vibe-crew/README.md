@@ -73,7 +73,7 @@ in your browser, or browse them on GitHub:
 | [Example Session](../docs/example-session.html) | Full walkthrough: Day 1 foundation through parallel features, dev servers, best practices. |
 | [Architecture](../docs/architecture.html) | 14-agent system, hooks, interrupt protocol, state management, VitePress dashboard. |
 | [Warp Tips](../docs/warp.html) | Launch Configurations, keyboard shortcuts, Warp Drive, Notebooks, themes. |
-| [Release Notes](../docs/releases.html) | Complete changelog from v1.0.0 through v1.7.0. |
+| [Release Notes](../docs/releases.html) | Complete changelog for v1.0.0. |
 
 > **Tip:** To browse the docs locally, open `docs/index.html` in your browser.
 

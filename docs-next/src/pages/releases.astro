@@ -12,55 +12,8 @@ import '../styles/pages/releases.css';
   </section>
 
   <div class="version-nav">
-    <a href="#v1.9.0" class="latest">v1.9.0</a>
-    <a href="#v1.0.0">v1.0.0</a>
+    <a href="#v1.0.0" class="latest">v1.0.0</a>
   </div>
-
-  <!-- ============================================================ -->
-  <!-- v1.9.0                                                       -->
-  <!-- ============================================================ -->
-  <div class="release-section" id="v1.9.0">
-    <div class="release-header">
-      <span class="release-version">v1.9.0</span>
-      <span class="release-date">2026-03-05</span>
-    </div>
-
-    <p class="release-summary">Planning workflow enhancements &mdash; 7 improvements that strengthen VibeCrew's planning-to-code pipeline.</p>
-
-    <div class="change-category">
-      <h3><span class="change-type added">Added</span></h3>
-    </div>
-
-    <div class="feature-group">
-      <h4>Planning Workflow Enhancements</h4>
-      <ul class="file-list">
-        <li><strong>Implementation plan files</strong> &mdash; Builder writes <code>docs/features/&lbrace;name&rbrace;/plan.md</code> before coding, committed as a decision record</li>
-        <li><strong>Codebase exploration</strong> &mdash; Builder reads existing files the feature will touch before writing the plan</li>
-        <li><strong>ASCII wireframes</strong> &mdash; Visual layout mockups generated during Design Phase, iterable before code is written</li>
-        <li><strong>Complexity field</strong> &mdash; Features classified as trivial/standard/complex; trivial features skip Design and Review</li>
-        <li><strong>Milestone decomposition</strong> &mdash; Complex features broken into 2-3 milestones with independent verification</li>
-        <li><strong>Plan revision tracking</strong> &mdash; Counter in state.json warns after 2+ spec changes mid-feature</li>
-        <li><strong>Extended thinking for complex features</strong> &mdash; Builder evaluates alternative approaches during Plan and Design</li>
-      </ul>
-    </div>
-
-    <div class="change-category">
-      <h3><span class="change-type changed">Changed</span></h3>
-    </div>
-
-    <div class="feature-group">
-      <h4>Phase Transition System</h4>
-      <ul class="file-list">
-        <li><code>complete-phase.sh</code> now reads complexity from backlog.json; trivial features skip design and review</li>
-        <li><code>update-state.sh</code> phase validation is now complexity-aware</li>
-        <li><code>claim-task.sh</code> initializes <code>plan_revision_count: 0</code> when claiming features</li>
-        <li><code>compact-reinject.sh</code> preserves <code>plan_revision_count</code> across context compaction</li>
-        <li><code>calculate-vibe-score.sh</code> adds plan revision deduction alongside existing drift/erosion deductions</li>
-      </ul>
-    </div>
-  </div>
-
-  <hr>
 
   <!-- ============================================================ -->
   <!-- v1.0.0                                                       -->

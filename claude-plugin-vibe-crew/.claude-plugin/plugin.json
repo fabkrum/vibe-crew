@@ -1,6 +1,6 @@
 {
   "name": "vibe-crew",
-  "version": "1.8.0",
+  "version": "1.0.0",
   "description": "Autonomous vibe-coding operating system for Claude Code",
   "author": {
     "name": "Fabian Krumbholz",

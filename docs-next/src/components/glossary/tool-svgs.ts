@@ -193,4 +193,38 @@ export const toolSvgs: Record<string, string> = {
   <rect x="60" y="92" width="72" height="5" rx="2.5" style="fill: var(--color-text-muted); opacity: 0.3"/>
 </svg>`,
 
+'Context Monitor': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="24" y="12" width="152" height="96" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="100" y="28" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Context Usage</text>
+  <line x1="32" y1="34" x2="168" y2="34" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="40" y="42" width="120" height="14" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="40" y="42" width="54" height="14" rx="4" style="fill: var(--color-green)"/>
+  <text x="100" y="52" text-anchor="middle" style="fill: var(--color-text); font-size: 8px; font-weight: 700; font-family: var(--font-mono)">45%</text>
+  <line x1="94" y1="60" x2="94" y2="66" style="stroke: var(--color-amber)" stroke-width="1.5"/>
+  <text x="94" y="74" text-anchor="middle" style="fill: var(--color-amber); font-size: 7px; font-weight: 600; font-family: var(--font-mono)">45%</text>
+  <line x1="112" y1="60" x2="112" y2="66" style="stroke: var(--color-amber)" stroke-width="1.5"/>
+  <text x="112" y="74" text-anchor="middle" style="fill: var(--color-amber); font-size: 7px; font-weight: 600; font-family: var(--font-mono)">60%</text>
+  <line x1="136" y1="60" x2="136" y2="66" style="stroke: var(--color-red)" stroke-width="1.5"/>
+  <text x="136" y="74" text-anchor="middle" style="fill: var(--color-red); font-size: 7px; font-weight: 600; font-family: var(--font-mono)">80%</text>
+  <rect x="56" y="82" width="88" height="16" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="94" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Warnings at thresholds</text>
+</svg>`,
+
+'Intent Map': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="20" width="80" height="36" rx="10" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <path d="M20,56 L12,64 L24,56" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="50" y="42" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-style: italic; font-family: var(--font-sans)">check my code</text>
+  <line x1="96" y1="38" x2="114" y2="38" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+  <polyline points="110,34 114,38 110,42" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="120" y="20" width="68" height="36" rx="6" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <text x="154" y="42" text-anchor="middle" style="fill: var(--color-accent); font-size: 11px; font-weight: 700; font-family: var(--font-mono)">/check</text>
+  <rect x="10" y="72" width="80" height="36" rx="10" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <path d="M20,108 L12,116 L24,108" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="50" y="94" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-style: italic; font-family: var(--font-sans)">start building</text>
+  <line x1="96" y1="90" x2="114" y2="90" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+  <polyline points="110,86 114,90 110,94" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="120" y="72" width="68" height="36" rx="6" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <text x="154" y="94" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-weight: 700; font-family: var(--font-mono)">/run-backlog</text>
+</svg>`,
+
 };

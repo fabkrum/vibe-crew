@@ -95,4 +95,30 @@ export const designSvgs: Record<string, string> = {
   <text x="176" y="90" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-mono)">+5</text>
 </svg>`,
 
+'EARS': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="8" width="176" height="104" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="100" y="24" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">5 EARS Patterns</text>
+  <line x1="20" y1="30" x2="180" y2="30" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="20" y="36" width="40" height="12" rx="3" style="fill: var(--color-accent)"/>
+  <text x="40" y="45" text-anchor="middle" style="fill: #fff; font-size: 7px; font-weight: 700; font-family: var(--font-sans)">WHEN</text>
+  <rect x="64" y="36" width="112" height="5" rx="2.5" style="fill: var(--color-text-muted); opacity: 0.3"/>
+  <rect x="64" y="44" width="28" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.4"/>
+  <rect x="20" y="54" width="40" height="12" rx="3" style="fill: var(--color-accent); opacity: 0.8"/>
+  <text x="40" y="63" text-anchor="middle" style="fill: #fff; font-size: 7px; font-weight: 700; font-family: var(--font-sans)">WHILE</text>
+  <rect x="64" y="54" width="96" height="5" rx="2.5" style="fill: var(--color-text-muted); opacity: 0.3"/>
+  <rect x="64" y="62" width="28" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.4"/>
+  <rect x="20" y="72" width="40" height="12" rx="3" style="fill: var(--color-accent); opacity: 0.6"/>
+  <text x="40" y="81" text-anchor="middle" style="fill: #fff; font-size: 7px; font-weight: 700; font-family: var(--font-sans)">IF</text>
+  <rect x="64" y="72" width="104" height="5" rx="2.5" style="fill: var(--color-text-muted); opacity: 0.3"/>
+  <rect x="64" y="80" width="28" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.4"/>
+  <rect x="20" y="90" width="40" height="12" rx="3" style="fill: var(--color-accent); opacity: 0.4"/>
+  <text x="40" y="99" text-anchor="middle" style="fill: #fff; font-size: 7px; font-weight: 700; font-family: var(--font-sans)">WHERE</text>
+  <rect x="64" y="90" width="88" height="5" rx="2.5" style="fill: var(--color-text-muted); opacity: 0.3"/>
+  <rect x="64" y="98" width="28" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.4"/>
+  <text x="96" y="45" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">SHALL</text>
+  <text x="96" y="63" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">SHALL</text>
+  <text x="96" y="81" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">SHALL</text>
+  <text x="96" y="99" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">SHALL</text>
+</svg>`,
+
 };

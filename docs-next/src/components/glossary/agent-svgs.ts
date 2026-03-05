@@ -183,4 +183,66 @@ export const agentSvgs: Record<string, string> = {
   <text x="48" y="106" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Isolated</text>
 </svg>`,
 
+'Agent Helpers': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="64" y="8" width="72" height="88" rx="6" style="fill: var(--color-surface); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <text x="100" y="24" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 700; font-family: var(--font-mono)">helpers.md</text>
+  <line x1="72" y1="30" x2="128" y2="30" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="72" y="36" width="56" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.3"/>
+  <rect x="72" y="46" width="48" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.3"/>
+  <rect x="72" y="56" width="52" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.3"/>
+  <rect x="72" y="66" width="40" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.3"/>
+  <rect x="72" y="76" width="56" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.3"/>
+  <line x1="64" y1="40" x2="28" y2="28" style="stroke: var(--color-border)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="64" y1="52" x2="28" y2="60" style="stroke: var(--color-border)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="64" y1="68" x2="28" y2="92" style="stroke: var(--color-border)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="136" y1="40" x2="172" y2="28" style="stroke: var(--color-border)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="136" y1="52" x2="172" y2="60" style="stroke: var(--color-border)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="136" y1="68" x2="172" y2="92" style="stroke: var(--color-border)" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="20" cy="24" r="10" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <circle cx="20" cy="56" r="10" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <circle cx="20" cy="88" r="10" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <circle cx="180" cy="24" r="10" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <circle cx="180" cy="56" r="10" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <circle cx="180" cy="88" r="10" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Shared procedures for all agents</text>
+</svg>`,
+
+'Agent Memory': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="56" cy="48" r="28" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <path d="M40,40 Q48,28 56,40 Q64,28 72,40" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40,48 Q48,36 56,48 Q64,36 72,48" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-linecap="round"/>
+  <line x1="40" y1="56" x2="72" y2="56" style="stroke: var(--color-accent)" stroke-width="2" stroke-linecap="round"/>
+  <line x1="90" y1="48" x2="110" y2="48" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+  <polyline points="106,44 110,48 106,52" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="116" y="20" width="72" height="72" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="152" y="36" text-anchor="middle" style="fill: var(--color-text); font-size: 8px; font-weight: 600; font-family: var(--font-mono)">.jsonl</text>
+  <line x1="124" y1="42" x2="180" y2="42" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="124" y="48" width="48" height="4" rx="2" style="fill: var(--color-accent); opacity: 0.5"/>
+  <rect x="124" y="56" width="40" height="4" rx="2" style="fill: var(--color-accent); opacity: 0.4"/>
+  <rect x="124" y="64" width="44" height="4" rx="2" style="fill: var(--color-accent); opacity: 0.3"/>
+  <rect x="124" y="72" width="36" height="4" rx="2" style="fill: var(--color-text-muted); opacity: 0.2"/>
+  <rect x="124" y="80" width="32" height="4" rx="2" style="fill: var(--color-text-muted); opacity: 0.15"/>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Persistent per-agent knowledge</text>
+</svg>`,
+
+'Agent Overlay': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="24" y="16" width="100" height="88" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="74" y="32" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Base Agent</text>
+  <line x1="32" y1="38" x2="116" y2="38" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="32" y="44" width="80" height="5" rx="2.5" style="fill: var(--color-surface-2)"/>
+  <rect x="32" y="54" width="64" height="5" rx="2.5" style="fill: var(--color-surface-2)"/>
+  <rect x="32" y="64" width="72" height="5" rx="2.5" style="fill: var(--color-surface-2)"/>
+  <rect x="32" y="74" width="56" height="5" rx="2.5" style="fill: var(--color-surface-2)"/>
+  <rect x="32" y="84" width="68" height="5" rx="2.5" style="fill: var(--color-surface-2)"/>
+  <rect x="76" y="8" width="100" height="88" rx="6" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5" opacity="0.9"/>
+  <text x="126" y="24" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Override</text>
+  <line x1="84" y1="30" x2="168" y2="30" style="stroke: var(--color-accent)" stroke-width="1" opacity="0.3"/>
+  <rect x="84" y="36" width="76" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.4"/>
+  <rect x="84" y="46" width="60" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.4"/>
+  <rect x="84" y="56" width="68" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.4"/>
+  <rect x="84" y="70" width="72" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.6"/>
+  <rect x="84" y="80" width="52" height="5" rx="2.5" style="fill: var(--color-accent); opacity: 0.6"/>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Per-project customization layer</text>
+</svg>`,
+
 };

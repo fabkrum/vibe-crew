@@ -21,7 +21,7 @@ import '../styles/pages/releases.css';
   <div class="release-section" id="v1.0.0">
     <div class="release-header">
       <span class="release-version">v1.0.0</span>
-      <span class="release-date">2026-03-04</span>
+      <span class="release-date">2026-03-05</span>
       <a href="https://github.com/fabkrum/vibe-crew/releases/tag/v1.0.0" class="release-badge latest">GitHub Release</a>
     </div>
 
@@ -72,6 +72,7 @@ import '../styles/pages/releases.css';
         <li><strong>Safety</strong> &mdash; <code>/audit</code>, <code>/heal</code>, <code>/cost</code>, <code>/undo</code></li>
         <li><strong>Session management</strong> &mdash; <code>/wrap</code>, <code>/handoff</code>, <code>/release</code>, <code>/recover-state</code></li>
         <li><strong>Gamification</strong> &mdash; <code>/achievements</code>, <code>/quiz</code></li>
+        <li><strong>Utilities</strong> &mdash; <code>/quick</code>, <code>/install-skill</code></li>
       </ul>
     </div>
 
@@ -81,6 +82,68 @@ import '../styles/pages/releases.css';
         <li>Bundled servers for library docs (Context7), browser testing (Playwright, Chrome DevTools), and more</li>
         <li>Registry of additional servers auto-discovered and injected based on TDR technology choices</li>
         <li>Conditional activation &mdash; Semgrep, Sentry, Supabase, Stripe, Vercel, and Figma enabled from TDR</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Planning Workflow</h4>
+      <ul class="file-list">
+        <li><strong>Implementation plan files</strong> &mdash; Builder writes <code>docs/features/&lbrace;name&rbrace;/plan.md</code> with structured tasks (Files/Action/Verify/Done) before coding</li>
+        <li><strong>Clarify sub-step</strong> &mdash; Resolves spec ambiguities before Design phase, checking 6 categories of gray areas</li>
+        <li><strong>ASCII wireframes</strong> &mdash; Visual layout mockups generated during Design Phase for cheap iteration before code</li>
+        <li><strong>Complexity classification</strong> &mdash; Features classified as trivial/standard/complex; trivial skips Design and Review, complex enables milestone decomposition</li>
+        <li><strong>Milestone waves</strong> &mdash; Complex features broken into milestones with dependency analysis and parallel execution of independent milestones</li>
+        <li><strong>Plan staleness detection</strong> &mdash; Checks if codebase changed since plan was written; auto-refreshes affected tasks</li>
+        <li><strong>Plan revision tracking</strong> &mdash; Counter in state.json warns after 2+ spec changes mid-feature</li>
+        <li><strong><code>/quick</code> command</strong> &mdash; Rapid single-feature execution for small tasks, skipping full backlog workflow</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Companion Skills</h4>
+      <ul class="file-list">
+        <li><strong>Curated registry</strong> &mdash; 6 pre-vetted skills from Anthropic, Vercel, Supabase, Cloudflare, and Stripe matched against TDR technology choices</li>
+        <li><strong>Two-tier discovery</strong> &mdash; Registry match for known skills, then skills.sh search for unmatched technologies (Anthropic &rarr; vendor &rarr; community priority)</li>
+        <li><strong>5-gate quality check</strong> &mdash; Trusted author, repo health, SKILL.md scan, dangerous pattern detection, and script audit before recommending discovered skills</li>
+        <li><strong><code>/install-skill</code> command</strong> &mdash; Manual installation from GitHub repos, local paths, or company-internal repositories</li>
+        <li><strong>Builder adaptation</strong> &mdash; When Anthropic's <code>frontend-design</code> skill is detected, Builder defers aesthetic choices to the skill</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Agent Observability</h4>
+      <ul class="file-list">
+        <li><strong>Agent identity system</strong> &mdash; <code>register-agent.sh</code> / <code>deregister-agent.sh</code> for lifecycle tracking with PID, session, and timestamp</li>
+        <li><strong>JSONL event logging</strong> &mdash; Structured log entries for agent registration, phase completion, errors, and performance metrics</li>
+        <li><strong>Session metrics</strong> &mdash; Duration, token usage, cost, cache hit rates, and tool call counts per agent session</li>
+        <li><strong>Self-improvement pipeline</strong> &mdash; Performance Coach analyzes observability data to propose CLAUDE.md rule mutations</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Expertise System</h4>
+      <ul class="file-list">
+        <li><strong>Structured expertise records</strong> &mdash; Persist conventions, decisions, and failure patterns across sessions</li>
+        <li><strong>Drift detection</strong> &mdash; Tracks when codebase conventions diverge from recorded expertise</li>
+        <li><strong>Erosion tracking</strong> &mdash; Monitors degradation of code quality patterns over time</li>
+        <li><strong>Expertise priming</strong> &mdash; Agents load relevant expertise records before each phase via <code>expertise-prime.sh</code></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Testing Infrastructure</h4>
+      <ul class="file-list">
+        <li><strong>BATS test suite</strong> &mdash; 125+ unit tests and 5 integration test suites with CI/CD on GitHub Actions</li>
+        <li><strong>Regression test generator</strong> &mdash; Auto-generates test cases from bug fixes to prevent regressions</li>
+        <li><strong>Test helpers</strong> &mdash; Isolated temp projects, state fixture builders, command mocking, and hook input constructors</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>Codebase Onboarding</h4>
+      <ul class="file-list">
+        <li><strong>Persistent analysis</strong> &mdash; <code>/onboard</code> produces 4 analysis docs (conventions, stack, architecture, patterns) that persist across sessions</li>
+        <li><strong>Analysis injection</strong> &mdash; Builder loads analysis docs before planning to skip re-discovering project conventions</li>
       </ul>
     </div>
 

@@ -22,6 +22,7 @@
 10. [Design Decisions](#10-design-decisions)
 11. [System Reviewer Agent](#11-system-reviewer-agent)
 12. [Per-Agent Persistent Memory](#12-per-agent-persistent-memory)
+13. [Agent Overlay Customization](#13-agent-overlay-customization)
 
 ---
 
@@ -1017,6 +1018,7 @@ To reduce prompt duplication across 14 agent files, shared procedures are centra
 | Budget Discipline | All 14 agents | Context window management |
 | Expertise Integration | 3 agents (Builder, Code Reviewer, Performance Coach) | Cross-session knowledge accumulation |
 | Agent Memory Integration | 4 agents (Builder, Verifier, Stack Scout, Code Reviewer) | Per-agent persistent knowledge base across sessions |
+| Load Agent With Overrides | Workflow Orchestrator (during delegation) | Per-project agent customization surviving plugin updates |
 | Signal File Format | 3 agents (Builder, Verifier, Workflow Orchestrator) | Standardized inter-agent communication |
 | Phase Advancement | 2 agents (Builder, Verifier) | Feature lifecycle state transitions |
 
@@ -1308,3 +1310,48 @@ Each line in a `.jsonl` file is a JSON object:
 | Format | JSONL with structured fields (type, tier, confidence) | JSONL with content + TTL |
 | Use case | Cross-agent domain knowledge | Agent-specific operational patterns |
 | Lifespan | Permanent (no TTL) | Time-limited (TTL with auto-prune) |
+
+---
+
+## 13. Agent Overlay Customization
+
+Users can customize agent behavior per-project without modifying plugin files. Override files in `.vibecrew/agent-overrides/<agent>.md` are merged with base agent prompts at delegation time.
+
+### 13.1 Override File Location
+
+```
+.vibecrew/agent-overrides/
+  builder.md          # Customize Builder behavior for this project
+  code-reviewer.md    # Customize Code Reviewer for this project
+  verifier.md         # Customize Verifier for this project
+```
+
+### 13.2 Merge Rules
+
+1. **Section matching** — Override sections with `## Heading` names that match base agent sections **replace** the base section entirely.
+2. **New sections** — Override sections with headings not found in the base are **appended** after all base sections.
+3. **Frontmatter preservation** — The base agent's YAML frontmatter (model, tools, isolation, maxTurns) is always preserved. Overrides cannot change agent capabilities.
+4. **Empty/missing overrides** — If no override file exists or the file is empty, the base agent is used unchanged.
+
+### 13.3 Integration
+
+- The Workflow Orchestrator calls `load-agent-with-overrides.sh` before creating Agent Teams (see `helpers.md#Load-Agent-With-Overrides`).
+- Overrides survive plugin updates because they live in `.vibecrew/` (project directory), not in the plugin directory.
+- Users create override files manually or via future tooling.
+
+### 13.4 Example Override
+
+```markdown
+## Code Phase
+
+For this project, always use the repository pattern for database access.
+Never use raw SQL queries — use the ORM (Prisma) for all database operations.
+
+## Project-Specific Conventions
+
+- All API routes must be prefixed with /api/v2
+- Use Zod for all input validation
+- Components use CSS Modules, not Tailwind
+```
+
+This override replaces the Builder's Code Phase instructions while appending a new Project-Specific Conventions section.

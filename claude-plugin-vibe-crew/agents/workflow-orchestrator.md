@@ -135,13 +135,14 @@ Non-blocking — proceed regardless.
 ## Tier 2 Routing (Feature Development)
 
 1. Identify the next ready feature from `.vibecrew/backlog.json` (status: `ready`, highest priority).
-2. Create an Agent Team named `feat-{id}-{name}` using `TeamCreate`.
-3. Assign agents via `TaskCreate`:
+2. Check for agent overrides: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/load-agent-with-overrides.sh" "builder"`. If overrides exist, the merged prompt is used for agent delegation. See `helpers.md#Load-Agent-With-Overrides`.
+3. Create an Agent Team named `feat-{id}-{name}` using `TeamCreate`.
+4. Assign agents via `TaskCreate`:
    - **Builder** for design and code phases.
    - **Verifier** for test phase.
    - **Code Reviewer** for review phase (after tests pass).
-4. Coordinate handoffs via `SendMessage` — notify Builder when design spec is approved, notify Verifier when code phase completes, notify Code Reviewer when tests pass.
-5. Process completion signals and advance phases.
+5. Coordinate handoffs via `SendMessage` — notify Builder when design spec is approved, notify Verifier when code phase completes, notify Code Reviewer when tests pass.
+6. Process completion signals and advance phases.
 
 ### Tier 2 Phase Sequence
 

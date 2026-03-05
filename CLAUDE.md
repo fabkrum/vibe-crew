@@ -114,7 +114,7 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/fix-issue`, `/sync-issues`, `/simplify`, `/apply-simplifications`, `/reconsider`, `/recover-state`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`, `/quick "description"`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/fix-issue`, `/sync-issues`, `/simplify`, `/apply-simplifications`, `/reconsider`, `/recover-state`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`, `/quick "description"`, `/install-skill`
 
 ### User Profile System
 
@@ -139,6 +139,10 @@ The `/profile` command runs a 7-question interview that stores user preferences 
 - Code Reviewer: finding explanations from `code_literacy`, review thoroughness from `pr_review`
 
 **Scripts:** `read-profile.sh` (universal reader with defaults), `save-profile.sh` (writer with gamification sync)
+
+## Companion Skills
+
+VibeCrew detects and adapts to companion Claude Code skills. After TDR approval, `recommend-companion-skills.sh` matches stack choices against the curated registry (`templates/companion-skills.json` — Anthropic, Vercel, Supabase, Cloudflare, Stripe). For unmatched technologies, it searches in priority order: Anthropic skills → official vendor repos → skills.sh, validating discoveries through a 5-gate quality check (`validate-skill-safety.sh`). Users can manually install skills via `/install-skill <source>` (GitHub repos, local paths, company-internal skills). When `frontend-design` is detected, the Builder defers aesthetic choices.
 
 ## Design Principles
 

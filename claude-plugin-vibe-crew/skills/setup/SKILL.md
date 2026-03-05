@@ -277,6 +277,20 @@ Optional features not available:
   - Desktop notifications (install: brew install terminal-notifier)
 ```
 
+## Step 9.5: Detect Companion Skills
+
+Run the companion skills detector:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/recommend-companion-skills.sh" --detect-only
+```
+
+Parse the JSON output. Add to the summary:
+- If skills are installed: `Companion Skills: <list> (installed)`
+- If none detected: `Companion Skills: none detected (recommendations after /new-project)`
+
+Do NOT recommend installing skills during `/setup` — the TDR doesn't exist yet, so technology-based recommendations aren't possible.
+
 ## Step 10: Launch Dashboard
 
 After the summary, launch the dashboard using the shared liveness script. It handles all checks internally (no docs yet → silent exit, already running → report URL, dead → relaunch):

@@ -1,0 +1,291 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Companion Skills" sectionLabel="How It Works" activeSlug="companion-skills">
+
+  <div class="panel-intro">
+    <h2>Companion Skills</h2>
+    <p>Companion skills are <strong>third-party Claude Code skills</strong> that extend VibeCrew with specialized domain expertise &mdash; frontend aesthetics, framework best practices, database optimization, security analysis, and more. VibeCrew automatically recommends relevant skills after your TDR is approved, following the same pattern-matching approach as MCP server sync.</p>
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>What they are</strong>
+          <p>SKILL.md files published by official vendors (Anthropic, Vercel, Supabase, Cloudflare, Stripe) that inject domain-specific rules and patterns into Claude Code sessions. Unlike MCP servers (which provide tool access), skills provide <em>knowledge and conventions</em> &mdash; best practices, optimization rules, and design guidelines.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon green">&#10003;</span>
+        <div>
+          <strong>What problem they solve</strong>
+          <p>VibeCrew handles architecture, workflow orchestration, and code quality. But domain-specific expertise (React re-render optimization, Postgres query tuning, Core Web Vitals auditing) is better maintained by the technology vendors themselves. Companion skills bring that vendor expertise into VibeCrew sessions without bloating agent prompts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Three Ways to Get Skills ── -->
+  <section class="section">
+    <h3>Three Ways to Get Skills</h3>
+
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon blue">&#9654;</span>
+        <div>
+          <strong>1. Auto-recommend (Registry)</strong>
+          <p>After TDR approval, <code>recommend-companion-skills.sh</code> pattern-matches your technology choices against the curated registry (<code>templates/companion-skills.json</code>). If your TDR mentions "React" and "Supabase," it recommends <em>React Best Practices</em>, <em>Web Design Guidelines</em>, <em>Frontend Design</em>, and <em>Supabase Postgres Best Practices</em>.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon amber">&#9888;</span>
+        <div>
+          <strong>2. Discovery (skills.sh)</strong>
+          <p>For TDR technologies with no registry match (e.g., Prisma, Drizzle), VibeCrew searches the broader ecosystem in priority order: Anthropic skills &rarr; official vendor repos &rarr; skills.sh. Every discovered skill passes through a 5-gate quality check before being recommended.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon green">&#10003;</span>
+        <div>
+          <strong>3. Manual (<code>/install-skill</code>)</strong>
+          <p>Install any skill directly &mdash; GitHub repos, local paths, or company-internal repositories. Run <code>/install-skill https://github.com/my-company/our-skills</code> or <code>/install-skill /path/to/local/skill</code>. Safety validation runs automatically for remote sources.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Quality Gate ── -->
+  <section class="section">
+    <h3>5-Gate Quality Check</h3>
+    <p>Every discovered skill (from skills.sh or manual install of remote sources) passes through <code>validate-skill-safety.sh</code> before being recommended or installed. All 5 gates must pass.</p>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Gate</th><th>Check</th><th>Reject If</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Trusted Author</strong></td>
+            <td>Compare GitHub org against allowlist (Anthropic, Vercel, Cloudflare, Supabase, Stripe, Trail of Bits, Clerk, Hookdeck, Netlify, Prisma)</td>
+            <td>Unknown org gets a warning flag (shown to user, not auto-rejected)</td>
+          </tr>
+          <tr>
+            <td><strong>2. Repo Health</strong></td>
+            <td>GitHub API: stars, last commit date, license</td>
+            <td>&lt;20 stars OR no commits in 6 months OR no license</td>
+          </tr>
+          <tr>
+            <td><strong>3. SKILL.md Scan</strong></td>
+            <td>Read SKILL.md content, check size and structure</td>
+            <td>&gt;15KB (bloated) or missing expected structure</td>
+          </tr>
+          <tr>
+            <td><strong>4. Dangerous Patterns</strong></td>
+            <td>Grep for: <code>rm -rf</code>, <code>curl|sh</code>, <code>eval</code>, <code>exec(</code>, <code>process.env</code> reads of secrets, base64 decode, outbound fetch</td>
+            <td>Any match = reject</td>
+          </tr>
+          <tr>
+            <td><strong>5. Script Audit</strong></td>
+            <td>If skill has <code>scripts/</code> directory, scan each file</td>
+            <td>Network calls to non-GitHub URLs, file deletion outside project, env var exfiltration</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Skills from <strong>trusted authors</strong> with a passing verdict are recommended directly. Skills from <strong>unknown authors</strong> with a passing verdict are recommended with a warning: <em>"This skill is from an unverified author. Review it before installing."</em></p>
+  </section>
+
+  <hr>
+
+  <!-- ── Curated Registry ── -->
+  <section class="section">
+    <h3>Curated Registry</h3>
+    <p>The registry at <code>templates/companion-skills.json</code> contains pre-vetted skills from official vendors. These are always safe to recommend &mdash; no quality gate needed.</p>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Skill</th><th>Author</th><th>Category</th><th>What It Does</th><th>TDR Triggers</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Frontend Design</strong></td>
+            <td>Anthropic</td>
+            <td>Design</td>
+            <td>Distinctive, production-grade frontend aesthetics &mdash; anti-AI-slop typography, color, and motion</td>
+            <td>Any frontend framework, Tailwind, CSS</td>
+          </tr>
+          <tr>
+            <td><strong>React Best Practices</strong></td>
+            <td>Vercel</td>
+            <td>Frontend</td>
+            <td>45 rules across 8 categories: waterfall elimination, bundle size, server performance, re-render optimization</td>
+            <td>React, Next.js, Remix</td>
+          </tr>
+          <tr>
+            <td><strong>Web Design Guidelines</strong></td>
+            <td>Vercel</td>
+            <td>Frontend</td>
+            <td>100+ rules for accessibility, performance, and UX auditing</td>
+            <td>Any frontend framework, Tailwind</td>
+          </tr>
+          <tr>
+            <td><strong>Supabase Postgres Best Practices</strong></td>
+            <td>Supabase</td>
+            <td>Database</td>
+            <td>30 rules for query performance, connection management, schema design, RLS security</td>
+            <td>Supabase, PostgreSQL</td>
+          </tr>
+          <tr>
+            <td><strong>Web Performance</strong></td>
+            <td>Cloudflare</td>
+            <td>Performance</td>
+            <td>Core Web Vitals auditing &mdash; FCP, LCP, TBT, CLS analysis and render-blocking detection</td>
+            <td>Cloudflare, Workers, Pages</td>
+          </tr>
+          <tr>
+            <td><strong>Stripe Best Practices</strong></td>
+            <td>Stripe</td>
+            <td>Payments</td>
+            <td>Payment processing patterns, PCI compliance, checkout flows, subscriptions, webhooks</td>
+            <td>Stripe</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Agent Adaptation ── -->
+  <section class="section">
+    <h3>How VibeCrew Adapts</h3>
+    <p>When companion skills are detected, VibeCrew agents adjust their behavior to avoid duplication and leverage the skill's expertise.</p>
+
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon blue">&#9654;</span>
+        <div>
+          <strong>Builder + Frontend Design</strong>
+          <p>When Anthropic's <code>frontend-design</code> skill is installed, the Builder defers typography, color aesthetic, and motion choices to the skill. Design specs focus on component architecture, data flow, and business patterns instead. Wireframes remain unchanged (they're about layout, not aesthetics).</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>Detection mechanism</strong>
+          <p><code>detect-companion-skill.sh</code> checks <code>~/.claude/skills/</code> and <code>.claude/skills/</code> for installed skill folders. Agents call this lightweight script inline before phases where skill overlap would occur.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Manual Installation ── -->
+  <section class="section">
+    <h3>Manual Installation</h3>
+    <p>Use <code>/install-skill</code> to add any skill &mdash; including company-internal, private, or custom skills that aren't in the registry or on skills.sh.</p>
+
+    <h4 class="agent-table-heading">Examples</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Command</th><th>Source Type</th><th>Quality Gate</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>/install-skill vercel-labs/agent-skills --skill react-best-practices</code></td>
+            <td>GitHub (public)</td>
+            <td>Full validation</td>
+          </tr>
+          <tr>
+            <td><code>/install-skill https://github.com/my-company/internal-skills</code></td>
+            <td>GitHub (private)</td>
+            <td>Full validation (requires <code>gh</code> auth)</td>
+          </tr>
+          <tr>
+            <td><code>/install-skill /path/to/local/skill</code></td>
+            <td>Local path (in project)</td>
+            <td>Skipped (trusted)</td>
+          </tr>
+          <tr>
+            <td><code>/install-skill ~/company-skills/our-patterns</code></td>
+            <td>Local path (outside project)</td>
+            <td>Full validation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Installed skills are tracked in <code>.vibecrew/config.json</code> under <code>companion_skills.manual</code> with source, install timestamp, and safety verdict.</p>
+  </section>
+
+  <hr>
+
+  <!-- ── Companion Skills vs MCP Servers ── -->
+  <section class="section">
+    <h3>Companion Skills vs MCP Servers</h3>
+    <p>Both extend VibeCrew, but they serve different purposes.</p>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Aspect</th><th>Companion Skills</th><th>MCP Servers</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>What they provide</strong></td>
+            <td>Knowledge, rules, conventions</td>
+            <td>Tool access (APIs, browsers, databases)</td>
+          </tr>
+          <tr>
+            <td><strong>Format</strong></td>
+            <td>SKILL.md files with guidelines</td>
+            <td>JSON-RPC servers exposing tool endpoints</td>
+          </tr>
+          <tr>
+            <td><strong>Runtime cost</strong></td>
+            <td>Context tokens (loaded into prompts)</td>
+            <td>Process overhead (running servers)</td>
+          </tr>
+          <tr>
+            <td><strong>Auth required</strong></td>
+            <td>Rarely (only for private GitHub repos)</td>
+            <td>Often (API keys, tokens)</td>
+          </tr>
+          <tr>
+            <td><strong>Discovery</strong></td>
+            <td>Registry + skills.sh</td>
+            <td>Registry (<code>mcp-registry.json</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Install mechanism</strong></td>
+            <td><code>npx skills add &lt;source&gt;</code></td>
+            <td>Added to <code>.mcp.json</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Notes ── -->
+  <section class="section">
+    <h3>Notes</h3>
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon amber">&#9888;</span>
+        <div>
+          <strong>No official backend skill</strong>
+          <p>As of March 2026, no official vendor publishes a general backend development skill. VibeCrew's Tier 2 workflow (Builder agent, TDR boundaries, Context7 docs) covers backend development natively.</p>
+        </div>
+      </div>
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>Trail of Bits for security</strong>
+          <p>Trail of Bits (<code>trailofbits/skills</code>) offers 40+ professional security analysis skills. These are recommended manually for security-critical projects rather than auto-installed, as they significantly expand the agent's security analysis scope.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</DocsLayout>

@@ -111,6 +111,30 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/sync-mcp-from-tdr.sh" "<path-to-tdr-file>"
 5. For newly added servers that require environment variables (check `env_vars` in the recommendation), list the required variables.
 6. This step is non-blocking — proceed to Step 4 (Architecture Diagrams) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
 
+### Companion Skills Check
+
+After MCP server sync, recommend companion skills for the TDR stack:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/recommend-companion-skills.sh" "<path-to-tdr-file>"
+```
+
+Parse the JSON output and present results in two groups:
+
+**Registry skills** (pre-vetted, from official vendors):
+| Skill | Author | What It Does | Install |
+
+Present with: "These curated skills from official vendors enhance VibeCrew for your stack:"
+
+**Discovered skills** (found on skills.sh, passed quality gate):
+| Skill | Author | What It Does | Install | Note |
+
+Present with: "These additional skills were found on skills.sh and passed safety validation:"
+For unverified authors, show the warning from `validate-skill-safety.sh` output.
+
+Say: "All skills are optional. Install anytime — VibeCrew adapts automatically."
+Non-blocking — proceed regardless.
+
 ## Tier 2 Routing (Feature Development)
 
 1. Identify the next ready feature from `.vibecrew/backlog.json` (status: `ready`, highest priority).

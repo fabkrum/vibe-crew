@@ -117,6 +117,11 @@
     "quiz_frequency": "weekly",
     "show_xp_in_status": true
   },
+  "companion_skills": {
+    "detected": {},
+    "manual": [],
+    "last_checked": null
+  },
   "user_profile": {
     "interview_completed": false,
     "code_literacy": null,

@@ -155,6 +155,19 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-prime.sh" --agent builder
 
 This injects project-specific conventions and patterns into your context. Follow these conventions during both design and code phases.
 
+### Companion Skill Awareness
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/detect-companion-skill.sh" frontend-design
+```
+
+If installed: defer typography, color aesthetic, and motion choices to the frontend-design skill.
+Focus design specs on component architecture, data flow, business patterns, layout.
+Replace Typography/Color sections with: "Managed by frontend-design companion skill."
+Wireframes remain unchanged (layout, not aesthetics).
+
+If not installed: full design guidance as documented below.
+
 ### Design Phase
 
 1. Read the feature spec from `.vibecrew/backlog.json`.

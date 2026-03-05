@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "skills": {
+    "frontend-design": {
+      "name": "Frontend Design",
+      "author": "Anthropic",
+      "description": "Distinctive, production-grade frontend aesthetics — anti-AI-slop typography, color, and motion.",
+      "category": "design",
+      "install": "npx skills add anthropics/skills --skill frontend-design",
+      "source": "https://github.com/anthropics/skills",
+      "tdr_patterns": ["react", "next.js", "nextjs", "svelte", "vue", "nuxt", "astro", "remix", "angular", "tailwind", "css", "frontend"],
+      "agent_adaptation": {
+        "builder": "Defer typography, color aesthetic, and motion choices. Focus on component architecture, data flow, and business patterns."
+      }
+    },
+    "react-best-practices": {
+      "name": "React Best Practices",
+      "author": "Vercel",
+      "description": "45 rules across 8 categories: waterfall elimination, bundle size, server performance, re-render optimization.",
+      "category": "frontend",
+      "install": "npx skills add vercel-labs/agent-skills --skill react-best-practices",
+      "source": "https://github.com/vercel-labs/agent-skills",
+      "tdr_patterns": ["react", "next.js", "nextjs", "remix"]
+    },
+    "web-design-guidelines": {
+      "name": "Web Design Guidelines",
+      "author": "Vercel",
+      "description": "100+ rules for accessibility, performance, and UX auditing.",
+      "category": "frontend",
+      "install": "npx skills add vercel-labs/agent-skills --skill web-design-guidelines",
+      "source": "https://github.com/vercel-labs/agent-skills",
+      "tdr_patterns": ["react", "next.js", "nextjs", "svelte", "vue", "nuxt", "astro", "remix", "angular", "tailwind", "frontend"]
+    },
+    "supabase-postgres-best-practices": {
+      "name": "Supabase Postgres Best Practices",
+      "author": "Supabase",
+      "description": "30 rules for query performance, connection management, schema design, RLS security.",
+      "category": "database",
+      "install": "npx skills add supabase/agent-skills --skill supabase-postgres-best-practices",
+      "source": "https://github.com/supabase/agent-skills",
+      "tdr_patterns": ["supabase", "postgres"]
+    },
+    "web-perf": {
+      "name": "Web Performance",
+      "author": "Cloudflare",
+      "description": "Core Web Vitals auditing — FCP, LCP, TBT, CLS analysis and render-blocking detection.",
+      "category": "performance",
+      "install": "npx skills add cloudflare/skills --skill web-perf",
+      "source": "https://github.com/cloudflare/skills",
+      "tdr_patterns": ["cloudflare", "workers", "pages"]
+    },
+    "stripe-best-practices": {
+      "name": "Stripe Best Practices",
+      "author": "Stripe",
+      "description": "Payment processing patterns, PCI compliance, checkout flows, subscriptions, webhooks.",
+      "category": "payments",
+      "install": "npx skills add stripe/agent-skills --skill stripe-best-practices",
+      "source": "https://github.com/stripe/agent-skills",
+      "tdr_patterns": ["stripe"]
+    }
+  },
+  "trusted_authors": [
+    "anthropics", "vercel-labs", "cloudflare", "supabase", "stripe",
+    "trailofbits", "clerk", "hookdeck", "netlify", "prisma"
+  ],
+  "notes": {
+    "no_backend_skill": "No official vendor backend development skill exists as of March 2026. VibeCrew's Tier 2 workflow covers backend development natively.",
+    "security_skills": "Trail of Bits (trailofbits/skills) offers 40+ professional security skills. Recommend manually for security-critical projects."
+  }
+}

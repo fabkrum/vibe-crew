@@ -36,6 +36,7 @@ export const navigation: NavGroup[] = [
       { title: 'Gamification', slug: 'gamification' },
       { title: 'Hooks', slug: 'hooks' },
       { title: 'MCP Servers', slug: 'mcp-servers' },
+      { title: 'Companion Skills', slug: 'companion-skills' },
       { title: 'Permissions & Safety', slug: 'safety' },
       { title: 'Personalization', slug: 'personalization' },
       { title: 'Plugin Structure', slug: 'plugin' },

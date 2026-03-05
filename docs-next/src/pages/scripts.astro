@@ -97,6 +97,141 @@ import { scriptsDiagram } from '../data/diagrams';
     </table>
   </div>
 
+  <h4 class="agent-table-heading">Agent Infrastructure</h4>
+  <p class="cmd-group-desc">Scripts that manage agent identity, memory, expertise, and per-project overrides.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>agent-memory-read.sh</code></td><td>Agent</td><td>Reads persistent per-agent memory from <code>.vibecrew/memory/&lt;agent&gt;/&lt;domain&gt;.jsonl</code>.</td></tr>
+        <tr><td><code>agent-memory-write.sh</code></td><td>Agent</td><td>Appends entries to agent memory with TTL-based auto-pruning.</td></tr>
+        <tr><td><code>expertise-read.sh</code> / <code>expertise-write.sh</code></td><td>Agent</td><td>Reads/writes agent expertise records in <code>.vibecrew/expertise/</code>.</td></tr>
+        <tr><td><code>expertise-sync-learnings.sh</code></td><td>Agent</td><td>Syncs session learnings into expertise records for cross-session improvement.</td></tr>
+        <tr><td><code>register-agent.sh</code> / <code>deregister-agent.sh</code></td><td>Hook</td><td>Registers or deregisters an agent with the session tracking system.</td></tr>
+        <tr><td><code>load-agent-with-overrides.sh</code></td><td>Hook</td><td>Loads an agent prompt with per-project overrides merged from <code>.vibecrew/agent-overrides/</code>.</td></tr>
+        <tr><td><code>collect-agent-metrics.sh</code></td><td>Agent</td><td>Collects agent performance metrics (tokens, cost, duration) during <code>/wrap</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Documentation &amp; Release</h4>
+  <p class="cmd-group-desc">Scripts that generate and update project documentation.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>generate-feature-docs.sh</code></td><td>Agent</td><td>Generates feature documentation from backlog specs and git history.</td></tr>
+        <tr><td><code>update-changelog.sh</code></td><td>Agent</td><td>Updates CHANGELOG.md from conventional commits made during the session.</td></tr>
+        <tr><td><code>rebuild-sidebar.sh</code></td><td>Agent</td><td>Regenerates the VitePress sidebar when doc pages are added or removed.</td></tr>
+        <tr><td><code>generate-release-notes.sh</code></td><td>Skill</td><td>Generates release notes from git history and backlog data for <code>/release</code>.</td></tr>
+        <tr><td><code>update-docs.sh</code></td><td>Agent</td><td>Coordinates documentation drift checks during <code>/wrap</code>.</td></tr>
+        <tr><td><code>drift-tracker.sh</code></td><td>Agent</td><td>Compares modified source files against existing docs to detect documentation drift.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Gamification &amp; Progression</h4>
+  <p class="cmd-group-desc">Scripts that power the XP, badges, streaks, and challenge systems.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>award-xp.sh</code></td><td>Agent</td><td>Awards experience points for completed actions and quality achievements.</td></tr>
+        <tr><td><code>check-badges.sh</code></td><td>Agent</td><td>Evaluates badge unlock conditions against current session and history.</td></tr>
+        <tr><td><code>check-level-up.sh</code></td><td>Agent</td><td>Checks if accumulated XP crosses a level threshold and triggers level-up.</td></tr>
+        <tr><td><code>distribute-skill-xp.sh</code></td><td>Agent</td><td>Distributes XP across skill tree branches based on session activities.</td></tr>
+        <tr><td><code>update-streak.sh</code></td><td>Agent</td><td>Updates active streaks (daily sessions, clean scores, TDD, etc.).</td></tr>
+        <tr><td><code>refresh-challenges.sh</code></td><td>Agent</td><td>Rotates weekly and monthly challenges based on user performance patterns.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Integration &amp; MCP</h4>
+  <p class="cmd-group-desc">Scripts that manage MCP servers and third-party integrations.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>add-mcp-server.sh</code></td><td>Skill</td><td>Adds a new MCP server entry to <code>.mcp.json</code>.</td></tr>
+        <tr><td><code>enable-mcp-server.sh</code></td><td>Agent</td><td>Enables or disables a conditional MCP server based on TDR technology choices.</td></tr>
+        <tr><td><code>check-mcp-health.sh</code></td><td>Hook</td><td>Validates MCP server connectivity and reports unhealthy servers.</td></tr>
+        <tr><td><code>recommend-mcp-servers.sh</code></td><td>Agent</td><td>Matches TDR choices against the MCP registry to recommend relevant servers.</td></tr>
+        <tr><td><code>recommend-companion-skills.sh</code></td><td>Agent</td><td>Matches TDR stack against the companion skills registry for skill recommendations.</td></tr>
+        <tr><td><code>search-companion-skills.sh</code></td><td>Agent</td><td>Searches Anthropic skills, vendor repos, and skills.sh for unmatched technologies.</td></tr>
+        <tr><td><code>validate-skill-safety.sh</code></td><td>Agent</td><td>5-gate quality check for discovered companion skills before installation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Erosion &amp; Performance</h4>
+  <p class="cmd-group-desc">Scripts that track quality erosion and performance trends over time.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>calculate-erosion-score.sh</code></td><td>Agent</td><td>Computes the erosion score from lint/build/test/coverage deltas.</td></tr>
+        <tr><td><code>capture-erosion-baseline.sh</code></td><td>Agent</td><td>Captures initial quality baselines (lint warnings, build errors, coverage %) after foundation.</td></tr>
+        <tr><td><code>collect-erosion-metrics.sh</code></td><td>Agent</td><td>Collects current erosion metrics for comparison against baselines.</td></tr>
+        <tr><td><code>update-erosion-trends.sh</code></td><td>Agent</td><td>Appends erosion data points for multi-session trend analysis.</td></tr>
+        <tr><td><code>drift-circuit-breaker.sh</code></td><td>Agent</td><td>Halts autonomous runs if erosion score exceeds the configured threshold.</td></tr>
+        <tr><td><code>detect-anti-patterns.sh</code></td><td>Agent</td><td>Identifies recurring anti-patterns across sessions for Performance Coach analysis.</td></tr>
+        <tr><td><code>visual-verify.sh</code></td><td>Agent</td><td>Takes screenshots for visual regression verification using Chrome DevTools MCP.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Git &amp; CI/CD</h4>
+  <p class="cmd-group-desc">Scripts that interact with git, GitHub/GitLab, and CI pipelines.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>git-commit-validate.sh</code></td><td>Hook</td><td>Validates commit messages follow conventional commit format.</td></tr>
+        <tr><td><code>setup-git-repo.sh</code></td><td>Skill</td><td>Initializes git repo with branch protection and hook setup during <code>/setup</code>.</td></tr>
+        <tr><td><code>check-gh-auth.sh</code></td><td>Skill</td><td>Verifies GitHub CLI authentication and permissions.</td></tr>
+        <tr><td><code>fetch-ci-logs.sh</code></td><td>Agent</td><td>Fetches CI pipeline logs from GitHub Actions or GitLab CI for <code>/heal</code>.</td></tr>
+        <tr><td><code>diagnose-ci-failure.sh</code></td><td>Agent</td><td>Parses CI logs to identify failure categories and suggest fixes.</td></tr>
+        <tr><td><code>fetch-github-issue.sh</code></td><td>Skill</td><td>Fetches a GitHub/GitLab issue by number for <code>/fix-issue</code>.</td></tr>
+        <tr><td><code>import-issue-to-backlog.sh</code></td><td>Skill</td><td>Imports issues from GitHub/GitLab into <code>backlog.json</code> for <code>/sync-issues</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Architecture &amp; Context</h4>
+  <p class="cmd-group-desc">Scripts that manage architecture diagrams and context injection.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>inject-architecture.sh</code></td><td>Hook / Agent</td><td>Pre-loads architecture diagrams (<code>.mmd</code>) into the agent context once per session.</td></tr>
+        <tr><td><code>inject-analysis.sh</code></td><td>Hook / Agent</td><td>Injects <code>/onboard</code> analysis docs (stack, architecture, conventions, gaps) into context.</td></tr>
+        <tr><td><code>prepare-feature-context.sh</code></td><td>Skill</td><td>Assembles the full context bundle for Agent-delegated feature execution.</td></tr>
+        <tr><td><code>compact-reinject.sh</code></td><td>Hook</td><td>Re-injects fresh project state and architecture after <code>/compact</code>.</td></tr>
+        <tr><td><code>check-analysis-staleness.sh</code></td><td>Hook</td><td>Checks if <code>/onboard</code> analysis docs are stale and need refreshing.</td></tr>
+        <tr><td><code>generate-analysis-docs.sh</code></td><td>Agent</td><td>Generates the 4 analysis markdown files during <code>/onboard</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="agent-table-heading">Shared Libraries (<code>scripts/lib/</code>)</h4>
+  <p class="cmd-group-desc">Reusable functions sourced by other scripts. Not called directly.</p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Library</th><th>What It Provides</th></tr></thead>
+      <tbody>
+        <tr><td><code>atomic-write.sh</code></td><td>Atomic file writes with temp-file-then-rename to prevent corruption.</td></tr>
+        <tr><td><code>lock.sh</code></td><td>Advisory locking with stale-lock detection and cleanup.</td></tr>
+        <tr><td><code>agent-identity.sh</code></td><td>Agent identification helpers (name, model, session ID).</td></tr>
+        <tr><td><code>git-provider.sh</code></td><td>Abstraction layer for GitHub vs GitLab operations.</td></tr>
+        <tr><td><code>error-log.sh</code></td><td>Structured error logging and reporting.</td></tr>
+        <tr><td><code>compat.sh</code></td><td>Cross-platform compatibility shims (macOS vs Linux).</td></tr>
+        <tr><td><code>drift-classify.sh</code></td><td>Classification helpers for documentation drift severity.</td></tr>
+        <tr><td><code>dual-write.sh</code></td><td>Writes to both local state and telemetry simultaneously.</td></tr>
+        <tr><td><code>expertise-id.sh</code></td><td>Generates stable IDs for expertise records.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <MermaidDiagram chart={scriptsDiagram} caption="Script categories and who calls them" />
 
 </DocsLayout>

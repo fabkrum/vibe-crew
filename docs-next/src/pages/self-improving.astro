@@ -268,7 +268,7 @@ import { selfImprovingDiagram } from '../data/diagrams';
           </tr>
           <tr>
             <td><strong>Agent Memory</strong></td>
-            <td><code>.claude/agent-memory/</code></td>
+            <td><code>.vibecrew/memory/</code></td>
             <td>Agent-private (free-form)</td>
             <td>Performance Coach, Code Simplifier, Security Auditor</td>
           </tr>
@@ -292,7 +292,7 @@ import { selfImprovingDiagram } from '../data/diagrams';
   <!-- ── Skill Evaluation ── -->
   <section class="section">
     <h3>Skill Evaluation &amp; Model-Change Resilience</h3>
-    <p>VibeCrew tracks whether its 36 skills remain effective as models improve. The <code>/validate-skills</code> command evaluates skill health, and model-change detection at session startup alerts you when re-evaluation is needed.</p>
+    <p>VibeCrew tracks whether its skills remain effective as models improve. The <code>/validate-skills</code> command evaluates skill health, and model-change detection at session startup alerts you when re-evaluation is needed.</p>
 
     <h4 class="agent-table-heading">The Evaluation Loop</h4>
     <div class="agent-table-wrap">
@@ -310,13 +310,13 @@ import { selfImprovingDiagram } from '../data/diagrams';
     <h4 class="agent-table-heading">Skill Categories</h4>
     <div class="agent-table-wrap">
       <table class="agent-table">
-        <thead><tr><th>Category</th><th>Count</th><th>Maintenance Strategy</th></tr></thead>
+        <thead><tr><th>Category</th><th>Maintenance Strategy</th></tr></thead>
         <tbody>
-          <tr><td><strong>workflow</strong></td><td>7</td><td>Durable &mdash; encodes preferences, optimize triggers</td></tr>
-          <tr><td><strong>analysis</strong></td><td>6</td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
-          <tr><td><strong>action</strong></td><td>8</td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
-          <tr><td><strong>dashboard</strong></td><td>4</td><td>Durable &mdash; read-only, optimize for speed</td></tr>
-          <tr><td><strong>utility</strong></td><td>9</td><td>Durable &mdash; simple operations, minimal maintenance</td></tr>
+          <tr><td><strong>workflow</strong></td><td>Durable &mdash; encodes preferences, optimize triggers</td></tr>
+          <tr><td><strong>analysis</strong></td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
+          <tr><td><strong>action</strong></td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
+          <tr><td><strong>dashboard</strong></td><td>Durable &mdash; read-only, optimize for speed</td></tr>
+          <tr><td><strong>utility</strong></td><td>Durable &mdash; simple operations, minimal maintenance</td></tr>
         </tbody>
       </table>
     </div>

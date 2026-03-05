@@ -36,7 +36,7 @@
     window.addEventListener('scroll', update, { passive: true });
     update();
   })();
-</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>How It Works</span>  <span class="separator">/</span> <span>Bash Scripts</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"How It Works"},{"@type":"ListItem","position":3,"name":"Bash Scripts"}]}</script>  <div class="panel-intro"> <h2>Bash Scripts</h2> <p>Scripts are the <strong>worker bees</strong> of VibeCrew &mdash; small bash programs that do the actual mechanical work. While agents think and make decisions, scripts create files, update project state, calculate scores, and send notifications. They run in milliseconds and always produce the same result for the same input.</p> <div class="key-points"> <div class="key-point"> <span class="key-icon purple">&#9632;</span> <div> <strong>What they are</strong> <p>Deterministic bash scripts organized by function: core lifecycle, feature management, quality scoring, project analysis, documentation, gamification, and state management. Agents never write state files directly &mdash; all mutations go through scripts.</p> </div> </div> <div class="key-point"> <span class="key-icon green">&#10003;</span> <div> <strong>What problem they solve</strong> <p>AI token cost scales with complexity. By offloading mechanical tasks (JSON manipulation, git operations, file formatting) to scripts, VibeCrew keeps AI focused on decisions while scripts handle bookkeeping at zero token cost. Scripts also guarantee consistency &mdash; state mutations are atomic and predictable.</p> </div> </div> </div> </div> <h4 class="agent-table-heading">Core Lifecycle</h4> <p class="cmd-group-desc">Scripts that run during session startup and completion.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>session-startup.sh</code></td><td>Hook</td><td>Environment check, terminal detection, state loading, and workflow routing on every session start.</td></tr> <tr><td><code>quality-gate.sh</code></td><td>Hook</td><td>Runs typecheck, lint, and build on modified files at task completion. Blocks on failure.</td></tr> <tr><td><code>statusline.sh</code></td><td>Hook</td><td>Updates the terminal status bar with current feature, phase, and Vibe Score.</td></tr> <tr><td><code>notify.sh</code></td><td>Hook</td><td>Sends native OS notifications for permission stalls, completions, and errors.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Feature Management</h4> <p class="cmd-group-desc">Scripts that manage the feature lifecycle and backlog.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>update-backlog.sh</code></td><td>Agent / Skill</td><td>Adds, updates, or moves features in <code>backlog.json</code>. Manages Kanban column transitions.</td></tr> <tr><td><code>complete-phase.sh</code></td><td>Agent / Skill</td><td>Marks a development phase as done and advances to the next phase in the 6-phase cycle.</td></tr> <tr><td><code>git-branch-create.sh</code></td><td>Agent</td><td>Creates a feature branch with consistent naming: <code>feat/&lt;feature-name&gt;</code>.</td></tr> <tr><td><code>create-checkpoint.sh</code></td><td>Agent</td><td>Creates a git tag checkpoint before risky operations so you can roll back with <code>/undo</code>.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Quality &amp; Scoring</h4> <p class="cmd-group-desc">Scripts that calculate Vibe Scores and analyze quality.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>calculate-vibe-score.sh</code></td><td>Agent</td><td>Computes the session's Vibe Score (0&ndash;130) based on deductions and bonuses across quality dimensions.</td></tr> <tr><td><code>aggregate-scores.sh</code></td><td>Agent</td><td>Aggregates Vibe Scores across sessions for trend analysis and Performance Coach input.</td></tr> <tr><td><code>analyze-test-gaps.sh</code></td><td>Agent</td><td>Compares modified source files against test coverage to identify untested code paths.</td></tr> <tr><td><code>apply-mutation.sh</code></td><td>Agent</td><td>Applies Performance Coach CLAUDE.md mutation proposals after user approval.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Project Analysis</h4> <p class="cmd-group-desc">Scripts that analyze the codebase and extract patterns.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>detect-conventions.sh</code></td><td>Agent</td><td>Scans the codebase for naming conventions, file patterns, and code style to populate CLAUDE.md.</td></tr> <tr><td><code>extract-design-system.sh</code></td><td>Agent</td><td>Extracts CSS tokens, color palette, typography, and spacing from existing stylesheets.</td></tr> <tr><td><code>detect-secrets.sh</code></td><td>Agent</td><td>Scans for accidentally committed secrets, API keys, and credentials.</td></tr> <tr><td><code>scan-dependencies.sh</code></td><td>Agent</td><td>Audits dependencies for known vulnerabilities and license compliance issues.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">State &amp; Config</h4> <p class="cmd-group-desc">Scripts that manage the <code>.vibecrew/</code> runtime state.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>init-vibecrew-state.sh</code></td><td>Skill</td><td>Creates the initial <code>.vibecrew/</code> directory structure and default JSON files during <code>/setup</code>.</td></tr> <tr><td><code>migrate-state.sh</code></td><td>Skill</td><td>Migrates state files between VibeCrew versions when schemas change.</td></tr> <tr><td><code>generate-handoff.sh</code></td><td>Skill</td><td>Creates a structured context transfer document for cross-session continuity.</td></tr> <tr><td><code>detect-terminal.sh</code></td><td>Skill</td><td>Detects terminal type (Warp, iTerm2, VS Code, etc.) and configures notification and deep-link support.</td></tr> </tbody> </table> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>How It Works</span>  <span class="separator">/</span> <span>Bash Scripts</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"How It Works"},{"@type":"ListItem","position":3,"name":"Bash Scripts"}]}</script>  <div class="panel-intro"> <h2>Bash Scripts</h2> <p>Scripts are the <strong>worker bees</strong> of VibeCrew &mdash; small bash programs that do the actual mechanical work. While agents think and make decisions, scripts create files, update project state, calculate scores, and send notifications. They run in milliseconds and always produce the same result for the same input.</p> <div class="key-points"> <div class="key-point"> <span class="key-icon purple">&#9632;</span> <div> <strong>What they are</strong> <p>Deterministic bash scripts organized by function: core lifecycle, feature management, quality scoring, project analysis, documentation, gamification, and state management. Agents never write state files directly &mdash; all mutations go through scripts.</p> </div> </div> <div class="key-point"> <span class="key-icon green">&#10003;</span> <div> <strong>What problem they solve</strong> <p>AI token cost scales with complexity. By offloading mechanical tasks (JSON manipulation, git operations, file formatting) to scripts, VibeCrew keeps AI focused on decisions while scripts handle bookkeeping at zero token cost. Scripts also guarantee consistency &mdash; state mutations are atomic and predictable.</p> </div> </div> </div> </div> <h4 class="agent-table-heading">Core Lifecycle</h4> <p class="cmd-group-desc">Scripts that run during session startup and completion.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>session-startup.sh</code></td><td>Hook</td><td>Environment check, terminal detection, state loading, and workflow routing on every session start.</td></tr> <tr><td><code>quality-gate.sh</code></td><td>Hook</td><td>Runs typecheck, lint, and build on modified files at task completion. Blocks on failure.</td></tr> <tr><td><code>statusline.sh</code></td><td>Hook</td><td>Updates the terminal status bar with current feature, phase, and Vibe Score.</td></tr> <tr><td><code>notify.sh</code></td><td>Hook</td><td>Sends native OS notifications for permission stalls, completions, and errors.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Feature Management</h4> <p class="cmd-group-desc">Scripts that manage the feature lifecycle and backlog.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>update-backlog.sh</code></td><td>Agent / Skill</td><td>Adds, updates, or moves features in <code>backlog.json</code>. Manages Kanban column transitions.</td></tr> <tr><td><code>complete-phase.sh</code></td><td>Agent / Skill</td><td>Marks a development phase as done and advances to the next phase in the 6-phase cycle.</td></tr> <tr><td><code>git-branch-create.sh</code></td><td>Agent</td><td>Creates a feature branch with consistent naming: <code>feat/&lt;feature-name&gt;</code>.</td></tr> <tr><td><code>create-checkpoint.sh</code></td><td>Agent</td><td>Creates a git tag checkpoint before risky operations so you can roll back with <code>/undo</code>.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Quality &amp; Scoring</h4> <p class="cmd-group-desc">Scripts that calculate Vibe Scores and analyze quality.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>calculate-vibe-score.sh</code></td><td>Agent</td><td>Computes the session's Vibe Score (0&ndash;130) based on deductions and bonuses across quality dimensions.</td></tr> <tr><td><code>aggregate-scores.sh</code></td><td>Agent</td><td>Aggregates Vibe Scores across sessions for trend analysis and Performance Coach input.</td></tr> <tr><td><code>analyze-test-gaps.sh</code></td><td>Agent</td><td>Compares modified source files against test coverage to identify untested code paths.</td></tr> <tr><td><code>apply-mutation.sh</code></td><td>Agent</td><td>Applies Performance Coach CLAUDE.md mutation proposals after user approval.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Project Analysis</h4> <p class="cmd-group-desc">Scripts that analyze the codebase and extract patterns.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>detect-conventions.sh</code></td><td>Agent</td><td>Scans the codebase for naming conventions, file patterns, and code style to populate CLAUDE.md.</td></tr> <tr><td><code>extract-design-system.sh</code></td><td>Agent</td><td>Extracts CSS tokens, color palette, typography, and spacing from existing stylesheets.</td></tr> <tr><td><code>detect-secrets.sh</code></td><td>Agent</td><td>Scans for accidentally committed secrets, API keys, and credentials.</td></tr> <tr><td><code>scan-dependencies.sh</code></td><td>Agent</td><td>Audits dependencies for known vulnerabilities and license compliance issues.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">State &amp; Config</h4> <p class="cmd-group-desc">Scripts that manage the <code>.vibecrew/</code> runtime state.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>init-vibecrew-state.sh</code></td><td>Skill</td><td>Creates the initial <code>.vibecrew/</code> directory structure and default JSON files during <code>/setup</code>.</td></tr> <tr><td><code>migrate-state.sh</code></td><td>Skill</td><td>Migrates state files between VibeCrew versions when schemas change.</td></tr> <tr><td><code>generate-handoff.sh</code></td><td>Skill</td><td>Creates a structured context transfer document for cross-session continuity.</td></tr> <tr><td><code>detect-terminal.sh</code></td><td>Skill</td><td>Detects terminal type (Warp, iTerm2, VS Code, etc.) and configures notification and deep-link support.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Agent Infrastructure</h4> <p class="cmd-group-desc">Scripts that manage agent identity, memory, expertise, and per-project overrides.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>agent-memory-read.sh</code></td><td>Agent</td><td>Reads persistent per-agent memory from <code>.vibecrew/memory/&lt;agent&gt;/&lt;domain&gt;.jsonl</code>.</td></tr> <tr><td><code>agent-memory-write.sh</code></td><td>Agent</td><td>Appends entries to agent memory with TTL-based auto-pruning.</td></tr> <tr><td><code>expertise-read.sh</code> / <code>expertise-write.sh</code></td><td>Agent</td><td>Reads/writes agent expertise records in <code>.vibecrew/expertise/</code>.</td></tr> <tr><td><code>expertise-sync-learnings.sh</code></td><td>Agent</td><td>Syncs session learnings into expertise records for cross-session improvement.</td></tr> <tr><td><code>register-agent.sh</code> / <code>deregister-agent.sh</code></td><td>Hook</td><td>Registers or deregisters an agent with the session tracking system.</td></tr> <tr><td><code>load-agent-with-overrides.sh</code></td><td>Hook</td><td>Loads an agent prompt with per-project overrides merged from <code>.vibecrew/agent-overrides/</code>.</td></tr> <tr><td><code>collect-agent-metrics.sh</code></td><td>Agent</td><td>Collects agent performance metrics (tokens, cost, duration) during <code>/wrap</code>.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Documentation &amp; Release</h4> <p class="cmd-group-desc">Scripts that generate and update project documentation.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>generate-feature-docs.sh</code></td><td>Agent</td><td>Generates feature documentation from backlog specs and git history.</td></tr> <tr><td><code>update-changelog.sh</code></td><td>Agent</td><td>Updates CHANGELOG.md from conventional commits made during the session.</td></tr> <tr><td><code>rebuild-sidebar.sh</code></td><td>Agent</td><td>Regenerates the VitePress sidebar when doc pages are added or removed.</td></tr> <tr><td><code>generate-release-notes.sh</code></td><td>Skill</td><td>Generates release notes from git history and backlog data for <code>/release</code>.</td></tr> <tr><td><code>update-docs.sh</code></td><td>Agent</td><td>Coordinates documentation drift checks during <code>/wrap</code>.</td></tr> <tr><td><code>drift-tracker.sh</code></td><td>Agent</td><td>Compares modified source files against existing docs to detect documentation drift.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Gamification &amp; Progression</h4> <p class="cmd-group-desc">Scripts that power the XP, badges, streaks, and challenge systems.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>award-xp.sh</code></td><td>Agent</td><td>Awards experience points for completed actions and quality achievements.</td></tr> <tr><td><code>check-badges.sh</code></td><td>Agent</td><td>Evaluates badge unlock conditions against current session and history.</td></tr> <tr><td><code>check-level-up.sh</code></td><td>Agent</td><td>Checks if accumulated XP crosses a level threshold and triggers level-up.</td></tr> <tr><td><code>distribute-skill-xp.sh</code></td><td>Agent</td><td>Distributes XP across skill tree branches based on session activities.</td></tr> <tr><td><code>update-streak.sh</code></td><td>Agent</td><td>Updates active streaks (daily sessions, clean scores, TDD, etc.).</td></tr> <tr><td><code>refresh-challenges.sh</code></td><td>Agent</td><td>Rotates weekly and monthly challenges based on user performance patterns.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Integration &amp; MCP</h4> <p class="cmd-group-desc">Scripts that manage MCP servers and third-party integrations.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>add-mcp-server.sh</code></td><td>Skill</td><td>Adds a new MCP server entry to <code>.mcp.json</code>.</td></tr> <tr><td><code>enable-mcp-server.sh</code></td><td>Agent</td><td>Enables or disables a conditional MCP server based on TDR technology choices.</td></tr> <tr><td><code>check-mcp-health.sh</code></td><td>Hook</td><td>Validates MCP server connectivity and reports unhealthy servers.</td></tr> <tr><td><code>recommend-mcp-servers.sh</code></td><td>Agent</td><td>Matches TDR choices against the MCP registry to recommend relevant servers.</td></tr> <tr><td><code>recommend-companion-skills.sh</code></td><td>Agent</td><td>Matches TDR stack against the companion skills registry for skill recommendations.</td></tr> <tr><td><code>search-companion-skills.sh</code></td><td>Agent</td><td>Searches Anthropic skills, vendor repos, and skills.sh for unmatched technologies.</td></tr> <tr><td><code>validate-skill-safety.sh</code></td><td>Agent</td><td>5-gate quality check for discovered companion skills before installation.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Erosion &amp; Performance</h4> <p class="cmd-group-desc">Scripts that track quality erosion and performance trends over time.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>calculate-erosion-score.sh</code></td><td>Agent</td><td>Computes the erosion score from lint/build/test/coverage deltas.</td></tr> <tr><td><code>capture-erosion-baseline.sh</code></td><td>Agent</td><td>Captures initial quality baselines (lint warnings, build errors, coverage %) after foundation.</td></tr> <tr><td><code>collect-erosion-metrics.sh</code></td><td>Agent</td><td>Collects current erosion metrics for comparison against baselines.</td></tr> <tr><td><code>update-erosion-trends.sh</code></td><td>Agent</td><td>Appends erosion data points for multi-session trend analysis.</td></tr> <tr><td><code>drift-circuit-breaker.sh</code></td><td>Agent</td><td>Halts autonomous runs if erosion score exceeds the configured threshold.</td></tr> <tr><td><code>detect-anti-patterns.sh</code></td><td>Agent</td><td>Identifies recurring anti-patterns across sessions for Performance Coach analysis.</td></tr> <tr><td><code>visual-verify.sh</code></td><td>Agent</td><td>Takes screenshots for visual regression verification using Chrome DevTools MCP.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Git &amp; CI/CD</h4> <p class="cmd-group-desc">Scripts that interact with git, GitHub/GitLab, and CI pipelines.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>git-commit-validate.sh</code></td><td>Hook</td><td>Validates commit messages follow conventional commit format.</td></tr> <tr><td><code>setup-git-repo.sh</code></td><td>Skill</td><td>Initializes git repo with branch protection and hook setup during <code>/setup</code>.</td></tr> <tr><td><code>check-gh-auth.sh</code></td><td>Skill</td><td>Verifies GitHub CLI authentication and permissions.</td></tr> <tr><td><code>fetch-ci-logs.sh</code></td><td>Agent</td><td>Fetches CI pipeline logs from GitHub Actions or GitLab CI for <code>/heal</code>.</td></tr> <tr><td><code>diagnose-ci-failure.sh</code></td><td>Agent</td><td>Parses CI logs to identify failure categories and suggest fixes.</td></tr> <tr><td><code>fetch-github-issue.sh</code></td><td>Skill</td><td>Fetches a GitHub/GitLab issue by number for <code>/fix-issue</code>.</td></tr> <tr><td><code>import-issue-to-backlog.sh</code></td><td>Skill</td><td>Imports issues from GitHub/GitLab into <code>backlog.json</code> for <code>/sync-issues</code>.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Architecture &amp; Context</h4> <p class="cmd-group-desc">Scripts that manage architecture diagrams and context injection.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>inject-architecture.sh</code></td><td>Hook / Agent</td><td>Pre-loads architecture diagrams (<code>.mmd</code>) into the agent context once per session.</td></tr> <tr><td><code>inject-analysis.sh</code></td><td>Hook / Agent</td><td>Injects <code>/onboard</code> analysis docs (stack, architecture, conventions, gaps) into context.</td></tr> <tr><td><code>prepare-feature-context.sh</code></td><td>Skill</td><td>Assembles the full context bundle for Agent-delegated feature execution.</td></tr> <tr><td><code>compact-reinject.sh</code></td><td>Hook</td><td>Re-injects fresh project state and architecture after <code>/compact</code>.</td></tr> <tr><td><code>check-analysis-staleness.sh</code></td><td>Hook</td><td>Checks if <code>/onboard</code> analysis docs are stale and need refreshing.</td></tr> <tr><td><code>generate-analysis-docs.sh</code></td><td>Agent</td><td>Generates the 4 analysis markdown files during <code>/onboard</code>.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Shared Libraries (<code>scripts/lib/</code>)</h4> <p class="cmd-group-desc">Reusable functions sourced by other scripts. Not called directly.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Library</th><th>What It Provides</th></tr></thead> <tbody> <tr><td><code>atomic-write.sh</code></td><td>Atomic file writes with temp-file-then-rename to prevent corruption.</td></tr> <tr><td><code>lock.sh</code></td><td>Advisory locking with stale-lock detection and cleanup.</td></tr> <tr><td><code>agent-identity.sh</code></td><td>Agent identification helpers (name, model, session ID).</td></tr> <tr><td><code>git-provider.sh</code></td><td>Abstraction layer for GitHub vs GitLab operations.</td></tr> <tr><td><code>error-log.sh</code></td><td>Structured error logging and reporting.</td></tr> <tr><td><code>compat.sh</code></td><td>Cross-platform compatibility shims (macOS vs Linux).</td></tr> <tr><td><code>drift-classify.sh</code></td><td>Classification helpers for documentation drift severity.</td></tr> <tr><td><code>dual-write.sh</code></td><td>Writes to both local state and telemetry simultaneously.</td></tr> <tr><td><code>expertise-id.sh</code></td><td>Generates stable IDs for expertise records.</td></tr> </tbody> </table> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
   subgraph Callers["Who Calls Scripts"]
     HK["Hooks"]
     AG["Agents"]
@@ -78,12 +78,60 @@
     DT["detect-terminal.sh"]
   end
 
+  subgraph AgentInfra["Agent Infrastructure"]
+    AMR["agent-memory-*.sh"]
+    EXP["expertise-*.sh"]
+    LAO["load-agent-with-overrides.sh"]
+  end
+
+  subgraph Docs["Documentation & Release"]
+    GFD["generate-feature-docs.sh"]
+    UCL["update-changelog.sh"]
+    DRF["drift-tracker.sh"]
+  end
+
+  subgraph Integration["Integration & MCP"]
+    MCS["*-mcp-*.sh"]
+    RCS["recommend-companion-skills.sh"]
+    VSS["validate-skill-safety.sh"]
+  end
+
+  subgraph Erosion["Erosion & Performance"]
+    CES["calculate-erosion-score.sh"]
+    DCB["drift-circuit-breaker.sh"]
+    DAP["detect-anti-patterns.sh"]
+  end
+
+  subgraph GitCI["Git & CI/CD"]
+    GCV["git-commit-validate.sh"]
+    FCL["fetch-ci-logs.sh"]
+    FGI["fetch-github-issue.sh"]
+  end
+
+  subgraph Context["Architecture & Context"]
+    IA["inject-architecture.sh"]
+    PFC["prepare-feature-context.sh"]
+    CRI["compact-reinject.sh"]
+  end
+
+  subgraph Lib["scripts/lib/"]
+    AW["atomic-write.sh"]
+    LK["lock.sh"]
+    GP["git-provider.sh"]
+  end
+
   HK --> Core
+  HK --> AgentInfra
+  HK --> Context
   AG --> Feature
   AG --> Quality
   AG --> Analysis
+  AG --> Docs
+  AG --> Erosion
+  AG --> Integration
   SK --> Feature
   SK --> State
+  SK --> GitCI
 
   style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
   style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
@@ -91,6 +139,13 @@
   style Quality fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Analysis fill:#18181b,stroke:#60a5fa,color:#fafafa
   style State fill:#18181b,stroke:#f87171,color:#fafafa
+  style AgentInfra fill:#18181b,stroke:#c084fc,color:#fafafa
+  style Docs fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Integration fill:#18181b,stroke:#34d399,color:#fafafa
+  style Erosion fill:#18181b,stroke:#fb923c,color:#fafafa
+  style GitCI fill:#18181b,stroke:#f472b6,color:#fafafa
+  style Context fill:#18181b,stroke:#38bdf8,color:#fafafa
+  style Lib fill:#18181b,stroke:#94a3b8,color:#fafafa
 </pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Script categories and who calls them</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
   subgraph Callers[&quot;Who Calls Scripts&quot;]
     HK[&quot;Hooks&quot;]
@@ -133,12 +188,60 @@
     DT[&quot;detect-terminal.sh&quot;]
   end
 
+  subgraph AgentInfra[&quot;Agent Infrastructure&quot;]
+    AMR[&quot;agent-memory-*.sh&quot;]
+    EXP[&quot;expertise-*.sh&quot;]
+    LAO[&quot;load-agent-with-overrides.sh&quot;]
+  end
+
+  subgraph Docs[&quot;Documentation &amp; Release&quot;]
+    GFD[&quot;generate-feature-docs.sh&quot;]
+    UCL[&quot;update-changelog.sh&quot;]
+    DRF[&quot;drift-tracker.sh&quot;]
+  end
+
+  subgraph Integration[&quot;Integration &amp; MCP&quot;]
+    MCS[&quot;*-mcp-*.sh&quot;]
+    RCS[&quot;recommend-companion-skills.sh&quot;]
+    VSS[&quot;validate-skill-safety.sh&quot;]
+  end
+
+  subgraph Erosion[&quot;Erosion &amp; Performance&quot;]
+    CES[&quot;calculate-erosion-score.sh&quot;]
+    DCB[&quot;drift-circuit-breaker.sh&quot;]
+    DAP[&quot;detect-anti-patterns.sh&quot;]
+  end
+
+  subgraph GitCI[&quot;Git &amp; CI/CD&quot;]
+    GCV[&quot;git-commit-validate.sh&quot;]
+    FCL[&quot;fetch-ci-logs.sh&quot;]
+    FGI[&quot;fetch-github-issue.sh&quot;]
+  end
+
+  subgraph Context[&quot;Architecture &amp; Context&quot;]
+    IA[&quot;inject-architecture.sh&quot;]
+    PFC[&quot;prepare-feature-context.sh&quot;]
+    CRI[&quot;compact-reinject.sh&quot;]
+  end
+
+  subgraph Lib[&quot;scripts/lib/&quot;]
+    AW[&quot;atomic-write.sh&quot;]
+    LK[&quot;lock.sh&quot;]
+    GP[&quot;git-provider.sh&quot;]
+  end
+
   HK --&gt; Core
+  HK --&gt; AgentInfra
+  HK --&gt; Context
   AG --&gt; Feature
   AG --&gt; Quality
   AG --&gt; Analysis
+  AG --&gt; Docs
+  AG --&gt; Erosion
+  AG --&gt; Integration
   SK --&gt; Feature
   SK --&gt; State
+  SK --&gt; GitCI
 
   style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
   style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
@@ -146,6 +249,13 @@
   style Quality fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Analysis fill:#18181b,stroke:#60a5fa,color:#fafafa
   style State fill:#18181b,stroke:#f87171,color:#fafafa
+  style AgentInfra fill:#18181b,stroke:#c084fc,color:#fafafa
+  style Docs fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Integration fill:#18181b,stroke:#34d399,color:#fafafa
+  style Erosion fill:#18181b,stroke:#fb923c,color:#fafafa
+  style GitCI fill:#18181b,stroke:#f472b6,color:#fafafa
+  style Context fill:#18181b,stroke:#38bdf8,color:#fafafa
+  style Lib fill:#18181b,stroke:#94a3b8,color:#fafafa
 </code></pre> </noscript> </div>  <script>
   (function() {
     if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {

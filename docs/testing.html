@@ -38,24 +38,24 @@
   })();
 </script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>How It Works</span>  <span class="separator">/</span> <span>Testing Strategy</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"How It Works"},{"@type":"ListItem","position":3,"name":"Testing Strategy"}]}</script>  <div class="panel-intro"> <h2>Testing Strategy</h2> <p>
 VibeCrew provides testing commands for your project code <em>and</em> includes its own comprehensive
-    test suite for the plugin's 127 bash scripts. This page covers both.
+    test suite for the plugin's bash scripts. This page covers both.
 </p> <div class="key-points"> <div class="key-point"> <span class="key-icon purple">&#9874;</span> <div> <strong>Project Testing</strong>
 4 slash commands for TDD, E2E, accessibility, and performance testing in your project.
 </div> </div> <div class="key-point"> <span class="key-icon green">&#9939;</span> <div> <strong>Plugin Test Suite</strong>
-1413 unit tests + 69 integration tests validating VibeCrew's own scripts.
+Comprehensive unit and integration tests validating VibeCrew's own scripts.
 </div> </div> </div> </div>  <section class="section"> <h3>Testing Your Project</h3> <p>VibeCrew provides 4 testing commands that work on your project code. Each integrates with the Vibe Score &mdash; running these commands earns bonuses, skipping them incurs deductions.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Command</th><th>Tool</th><th>What It Does</th></tr></thead> <tbody> <tr> <td><code>/tdd</code></td> <td>Vitest / Jest</td> <td>Red-green-refactor cycle. Writes ONE failing test, implements minimum code to pass, refactors, and commits. Produces a Discipline Score (0&ndash;10) measuring TDD adherence.</td> </tr> <tr> <td><code>/e2e</code></td> <td>Playwright</td> <td>Scaffolds Page Object Model, generates spec files with accessibility-first locators, and runs with trace-on-failure for debugging.</td> </tr> <tr> <td><code>/a11y</code></td> <td>axe-core</td> <td>WCAG 2.1 AA audit: automated axe scan, keyboard navigation checklist, ARIA validation. Saves a JSON report to the project.</td> </tr> <tr> <td><code>/perf-test</code></td> <td>k6</td> <td>Load, stress, spike, and soak test profiles. Configures thresholds and reports p95/p99 latency, throughput, and error rates.</td> </tr> </tbody> </table> </div> <div class="key-points"> <div class="key-point"> <span class="key-icon amber">&#9888;</span> <div> <strong>Project tests, not plugin tests</strong> <p>These commands test <em>your</em> application code. The section below covers VibeCrew's own internal test suite.</p> </div> </div> </div> </section> <h4 class="agent-table-heading">TDD Rationalization Resistance</h4> <p class="cmd-group-desc">
 The <code>/tdd</code> command includes built-in resistance to common reasons for skipping test-driven development. When the agent detects &ldquo;red flag&rdquo; phrases (like &ldquo;I&rsquo;ll add tests later&rdquo; or &ldquo;this is too simple to test&rdquo;), it stops and returns to the Red phase. The Iron Law: <strong>write code before the test? Delete it. Start over.</strong> </p> <h4 class="agent-table-heading">Nyquist Test Coverage Mapping</h4> <p class="cmd-group-desc">
 Before the Code phase begins, VibeCrew maps existing test coverage to acceptance criteria via <code>map-test-coverage.sh</code>. Criteria without matching tests become <strong>Wave 0 tasks</strong> &mdash; test scaffolding tasks inserted at the beginning of the plan, establishing the red-green-refactor starting point before any implementation.
 </p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Step</th><th>What Happens</th></tr></thead> <tbody> <tr><td><strong>Detect</strong></td><td>Identifies test framework (vitest, jest, playwright, cypress, bats) from config files</td></tr> <tr><td><strong>Map</strong></td><td>Searches existing test files for keyword matches against each acceptance criterion</td></tr> <tr><td><strong>Gap</strong></td><td>Flags criteria with no matching test file as coverage gaps</td></tr> <tr><td><strong>Wave 0</strong></td><td>Generates test scaffolding tasks for each gap (create test file with failing test)</td></tr> </tbody> </table> </div> <p>Wave 0 tasks go before implementation tasks in the plan. This is advisory &mdash; it never blocks plan completion. If no test framework is detected, VibeCrew notes it and skips.</p> <hr>  <section class="section"> <h3>Plugin Test Suite</h3> <p>
-VibeCrew's 127 bash scripts form complex workflow chains. 1413 unit tests validate individual
-    scripts in isolation. 69 integration tests validate the chains compose correctly &mdash; catching
+VibeCrew's bash scripts form complex workflow chains. Unit tests validate individual
+    scripts in isolation. Integration tests validate the chains compose correctly &mdash; catching
     the category of bugs that only appear when script A's output becomes script B's input.
     All tests run in isolated temp directories with mocked external tools &mdash; zero network, zero side effects.
 </p> </section>  <h4 class="agent-table-heading">Testing Flow</h4> <p class="cmd-group-desc">
 How tests flow through the system, from development to CI to regression feedback.
 </p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
-    DEV["Developer writes code"] --> UNIT["Unit Tests<br/>1413 tests · ~2min"]
-    DEV --> INT["Integration Tests<br/>69 tests · ~2-5min"]
+    DEV["Developer writes code"] --> UNIT["Unit Tests"]
+    DEV --> INT["Integration Tests"]
     UNIT --> CI["CI Pipeline<br/>ubuntu + macOS matrix"]
     INT --> CI
     CI --> PASS{"All pass?"}
@@ -73,8 +73,8 @@ How tests flow through the system, from development to CI to regression feedback
     style CI fill:#ffd,stroke:#333,stroke-width:1px
     style SKELETON fill:#fde8e8,stroke:#333,stroke-width:1px
     style OK fill:#e8fde8,stroke:#333,stroke-width:1px</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Full testing flow: unit and integration tests feed CI, /wrap detects fix commits without regression tests.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
-    DEV[&quot;Developer writes code&quot;] --&gt; UNIT[&quot;Unit Tests&lt;br/&gt;1413 tests · ~2min&quot;]
-    DEV --&gt; INT[&quot;Integration Tests&lt;br/&gt;69 tests · ~2-5min&quot;]
+    DEV[&quot;Developer writes code&quot;] --&gt; UNIT[&quot;Unit Tests&quot;]
+    DEV --&gt; INT[&quot;Integration Tests&quot;]
     UNIT --&gt; CI[&quot;CI Pipeline&lt;br/&gt;ubuntu + macOS matrix&quot;]
     INT --&gt; CI
     CI --&gt; PASS{&quot;All pass?&quot;}
@@ -144,14 +144,14 @@ How tests flow through the system, from development to CI to regression feedback
 Two automated tiers plus manual validation for complete coverage.
 </p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
     A["Manual Testing<br/>(Full Claude Code session)"] --> B
-    B["Integration Tests<br/>(69 tests — workflow chains)"] --> C
-    C["Unit Tests<br/>(1413 tests — individual scripts)"]
+    B["Integration Tests<br/>(workflow chains)"] --> C
+    C["Unit Tests<br/>(individual scripts)"]
     style A fill:#f9f,stroke:#333,stroke-width:1px
     style B fill:#bbf,stroke:#333,stroke-width:1px
     style C fill:#bfb,stroke:#333,stroke-width:1px</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Test pyramid: unit tests form the base, integration tests validate chains, manual testing covers full sessions.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
     A[&quot;Manual Testing&lt;br/&gt;(Full Claude Code session)&quot;] --&gt; B
-    B[&quot;Integration Tests&lt;br/&gt;(69 tests — workflow chains)&quot;] --&gt; C
-    C[&quot;Unit Tests&lt;br/&gt;(1413 tests — individual scripts)&quot;]
+    B[&quot;Integration Tests&lt;br/&gt;(workflow chains)&quot;] --&gt; C
+    C[&quot;Unit Tests&lt;br/&gt;(individual scripts)&quot;]
     style A fill:#f9f,stroke:#333,stroke-width:1px
     style B fill:#bbf,stroke:#333,stroke-width:1px
     style C fill:#bfb,stroke:#333,stroke-width:1px</code></pre> </noscript> </div>  <script>
@@ -203,7 +203,7 @@ Two automated tiers plus manual validation for complete coverage.
       document.head.appendChild(s);
     }
   })();
-</script>  <h4 class="agent-table-heading">Test Suites</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead> <tr><th>Suite</th><th>Tests</th><th>What It Tests</th><th>Speed</th></tr> </thead> <tbody> <tr> <td><strong>Unit</strong></td> <td>1413</td> <td>Individual script logic, edge cases, error paths</td> <td>~2min</td> </tr> <tr> <td><strong>Feature Lifecycle</strong></td> <td>16</td> <td>claim &rarr; 6 phases &rarr; done state machine (incl. complexity-aware skipping)</td> <td>~15s</td> </tr> <tr> <td><strong>Session Startup</strong></td> <td>13</td> <td>Migration, sync, repair, model-change detection</td> <td>~10s</td> </tr> <tr> <td><strong>Hook Enforcement</strong></td> <td>16</td> <td>Full PreToolUse &rarr; PostToolUse pipeline</td> <td>~10s</td> </tr> <tr> <td><strong>Wrap Sequence</strong></td> <td>14</td> <td>Score &rarr; docs &rarr; sidebar &rarr; handoff &rarr; agent metrics</td> <td>~10s</td> </tr> <tr> <td><strong>Concurrency</strong></td> <td>10</td> <td>Lock contention, parallel writers, stale cleanup</td> <td>~30s</td> </tr> </tbody> </table> </div>  <h4 class="agent-table-heading">How Tests Are Isolated</h4> <p class="cmd-group-desc">
+</script>  <h4 class="agent-table-heading">Test Suites</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead> <tr><th>Suite</th><th>Tests</th><th>What It Tests</th><th>Speed</th></tr> </thead> <tbody> <tr> <td><strong>Unit</strong></td> <td>&mdash;</td> <td>Individual script logic, edge cases, error paths</td> <td>~15-20min</td> </tr> <tr> <td><strong>Feature Lifecycle</strong></td> <td>16</td> <td>claim &rarr; 6 phases &rarr; done state machine (incl. complexity-aware skipping)</td> <td>~15s</td> </tr> <tr> <td><strong>Session Startup</strong></td> <td>13</td> <td>Migration, sync, repair, model-change detection</td> <td>~10s</td> </tr> <tr> <td><strong>Hook Enforcement</strong></td> <td>16</td> <td>Full PreToolUse &rarr; PostToolUse pipeline</td> <td>~10s</td> </tr> <tr> <td><strong>Wrap Sequence</strong></td> <td>14</td> <td>Score &rarr; docs &rarr; sidebar &rarr; handoff &rarr; agent metrics</td> <td>~10s</td> </tr> <tr> <td><strong>Concurrency</strong></td> <td>10</td> <td>Lock contention, parallel writers, stale cleanup</td> <td>~30s</td> </tr> </tbody> </table> </div>  <h4 class="agent-table-heading">How Tests Are Isolated</h4> <p class="cmd-group-desc">
 Every test creates an ephemeral project directory, runs in isolation, and cleans up after itself.
 </p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart LR
     A["mktemp -d"] --> B["git init"]
@@ -346,7 +346,7 @@ The Vibe Score applies a <strong>-5 deduction</strong> per fix commit without a 
   enforcing TDD-style bug fixing.
 </p>  <h4 class="agent-table-heading">CI Pipeline</h4> <p class="cmd-group-desc">
 GitHub Actions runs two parallel jobs on push/PR to <code>main</code>.
-</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead> <tr><th>Job</th><th>Suite</th><th>Speed</th><th>Timeout</th></tr> </thead> <tbody> <tr> <td><code>unit-tests</code></td> <td><code>tests/*.bats</code></td> <td>~30s</td> <td>Default</td> </tr> <tr> <td><code>integration-tests</code></td> <td><code>tests/integration/*.bats</code></td> <td>~2-5min</td> <td>10min</td> </tr> </tbody> </table> </div> <p>
+</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead> <tr><th>Job</th><th>Suite</th><th>Speed</th><th>Timeout</th></tr> </thead> <tbody> <tr> <td><code>unit-tests</code></td> <td><code>tests/*.bats</code></td> <td>~15-20min</td> <td>30min</td> </tr> <tr> <td><code>integration-tests</code></td> <td><code>tests/integration/*.bats</code></td> <td>~2-5min</td> <td>10min</td> </tr> </tbody> </table> </div> <p>
 Both run on <code>ubuntu-latest</code> + <code>macos-latest</code> matrix with <code>fail-fast: false</code>.
 </p>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/templates.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Templates</span></a><a href="/vibe-crew/dashboard.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Vibe Dashboard</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
   (function() {

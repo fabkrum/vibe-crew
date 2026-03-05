@@ -24,7 +24,7 @@ export const glossary: GlossaryTerm[] = [
   {
     term: 'Agent',
     category: 'agent',
-    definition: 'A specialized AI team member that handles one specific job. VibeCrew has 14 agents &mdash; think of them like departments in a company. One writes code, another reviews it, another handles documentation, and so on. Each agent is tuned for its role, so the right expert always handles the right task.',
+    definition: 'A specialized AI team member that handles one specific job. VibeCrew has a team of agents &mdash; think of them like departments in a company. One writes code, another reviews it, another handles documentation, and so on. Each agent is tuned for its role, so the right expert always handles the right task.',
     learnMoreUrl: 'https://docs.anthropic.com/en/docs/build-with-claude/agentic-tool-use',
     learnMoreLabel: 'Anthropic: Agentic tool use',
   },
@@ -236,7 +236,7 @@ export const glossary: GlossaryTerm[] = [
   {
     term: 'Agent Helpers',
     category: 'agent',
-    definition: 'A centralized reference file (<code>agents/helpers.md</code>) containing shared procedures that all 14 agents use: registration, deregistration, profile reading, state loading, budget discipline, escalation, and more. Agents reference named sections instead of duplicating instructions inline, reducing prompt bloat and ensuring consistency.',
+    definition: 'A centralized reference file (<code>agents/helpers.md</code>) containing shared procedures that all agents use: registration, deregistration, profile reading, state loading, budget discipline, escalation, and more. Agents reference named sections instead of duplicating instructions inline, reducing prompt bloat and ensuring consistency.',
   },
   {
     term: 'EARS',
@@ -296,7 +296,7 @@ export const glossary: GlossaryTerm[] = [
   {
     term: 'Intent Map',
     category: 'tool',
-    definition: 'A mapping file (<code>templates/intent-map.md</code>) that connects natural language phrases to slash commands. Instead of remembering exact command names, users can describe what they want (&ldquo;I want to check my code&rdquo;) and the Session Startup agent matches it to the right skill (<code>/check</code>). Covers all 38 skills across 8 categories.',
+    definition: 'A mapping file (<code>templates/intent-map.md</code>) that connects natural language phrases to slash commands. Instead of remembering exact command names, users can describe what they want (&ldquo;I want to check my code&rdquo;) and the Session Startup agent matches it to the right skill (<code>/check</code>). Covers all skills across every category.',
   },
   {
     term: 'Parallel Backlog',

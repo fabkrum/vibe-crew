@@ -250,12 +250,60 @@ export const scriptsDiagram = `flowchart TD
     DT["detect-terminal.sh"]
   end
 
+  subgraph AgentInfra["Agent Infrastructure"]
+    AMR["agent-memory-*.sh"]
+    EXP["expertise-*.sh"]
+    LAO["load-agent-with-overrides.sh"]
+  end
+
+  subgraph Docs["Documentation & Release"]
+    GFD["generate-feature-docs.sh"]
+    UCL["update-changelog.sh"]
+    DRF["drift-tracker.sh"]
+  end
+
+  subgraph Integration["Integration & MCP"]
+    MCS["*-mcp-*.sh"]
+    RCS["recommend-companion-skills.sh"]
+    VSS["validate-skill-safety.sh"]
+  end
+
+  subgraph Erosion["Erosion & Performance"]
+    CES["calculate-erosion-score.sh"]
+    DCB["drift-circuit-breaker.sh"]
+    DAP["detect-anti-patterns.sh"]
+  end
+
+  subgraph GitCI["Git & CI/CD"]
+    GCV["git-commit-validate.sh"]
+    FCL["fetch-ci-logs.sh"]
+    FGI["fetch-github-issue.sh"]
+  end
+
+  subgraph Context["Architecture & Context"]
+    IA["inject-architecture.sh"]
+    PFC["prepare-feature-context.sh"]
+    CRI["compact-reinject.sh"]
+  end
+
+  subgraph Lib["scripts/lib/"]
+    AW["atomic-write.sh"]
+    LK["lock.sh"]
+    GP["git-provider.sh"]
+  end
+
   HK --> Core
+  HK --> AgentInfra
+  HK --> Context
   AG --> Feature
   AG --> Quality
   AG --> Analysis
+  AG --> Docs
+  AG --> Erosion
+  AG --> Integration
   SK --> Feature
   SK --> State
+  SK --> GitCI
 
   style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
   style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
@@ -263,6 +311,13 @@ export const scriptsDiagram = `flowchart TD
   style Quality fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Analysis fill:#18181b,stroke:#60a5fa,color:#fafafa
   style State fill:#18181b,stroke:#f87171,color:#fafafa
+  style AgentInfra fill:#18181b,stroke:#c084fc,color:#fafafa
+  style Docs fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style Integration fill:#18181b,stroke:#34d399,color:#fafafa
+  style Erosion fill:#18181b,stroke:#fb923c,color:#fafafa
+  style GitCI fill:#18181b,stroke:#f472b6,color:#fafafa
+  style Context fill:#18181b,stroke:#38bdf8,color:#fafafa
+  style Lib fill:#18181b,stroke:#94a3b8,color:#fafafa
 `;
 
 export const runtimeStateDiagram = `flowchart TD
@@ -284,6 +339,8 @@ export const runtimeStateDiagram = `flowchart TD
     Handoffs["handoffs/"]
     Workflows["workflows/"]
     Expertise["expertise/"]
+    Memory["memory/"]
+    AgentOverrides["agent-overrides/"]
   end
 
   subgraph Consumers["Who Reads/Writes"]
@@ -350,9 +407,9 @@ export const safetyDiagram = `flowchart TD
 export const mcpServersDiagram = `flowchart TD
   TDR["TDR Finalized"] --> Sync["sync-mcp-from-tdr.sh"]
 
-  subgraph Registry["MCP Registry (24 servers)"]
-    Bundled["9 Bundled"]
-    Extended["15 Extended"]
+  subgraph Registry["MCP Registry"]
+    Bundled["Bundled Servers"]
+    Extended["Extended Servers"]
   end
 
   Sync --> Registry

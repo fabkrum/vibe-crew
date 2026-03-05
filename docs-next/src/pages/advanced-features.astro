@@ -23,6 +23,8 @@ import TableWrap from '../components/TableWrap.astro';
         <li><a href="#security-audit">Security Audit (/audit)</a></li>
         <li><a href="#more-commands">More Commands</a></li>
         <li><a href="#multi-lang">Multi-Language Support</a></li>
+        <li><a href="#parallel-backlog">Parallel Backlog Execution</a></li>
+        <li><a href="#agent-overlays">Agent Overlay System</a></li>
       </ol>
     </div>
 
@@ -535,6 +537,20 @@ Results feed into <span class="highlight">Code Auditor</span> and <span class="h
           </tbody>
         </table>
       </div>
+      <h4 class="agent-table-heading">How it works under the hood</h4>
+      <p>
+        Parallel features are <strong>not</strong> separate Claude Code sessions or terminal tabs. Each feature
+        runs as a concurrent <strong>Agent tool call</strong> within the same parent orchestration session.
+        Every Agent call gets its own fresh 200k context window and isolated git worktree &mdash; so
+        features cannot interfere with each other&apos;s files or accumulate stale context.
+      </p>
+      <p>
+        The parent session stays lightweight: it manages wave ordering, monitors Agent completion,
+        runs the quality gate after each wave merges, and advances to the next wave. The
+        <code>analyze-feature-dependencies.sh</code> script performs a topological sort on the
+        <code>depends_on</code> fields to compute which features can safely run in the same wave.
+      </p>
+
       <Callout type="info" title="When to use parallel mode">
         Use <code>--parallel</code> when your backlog has 3+ features with few dependencies between them.
         For backlogs with chain dependencies (A&rarr;B&rarr;C), parallel mode adds no benefit and falls back to sequential.

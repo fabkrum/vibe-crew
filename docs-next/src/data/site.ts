@@ -1,4 +1,4 @@
-export const SITE_VERSION = 'v1.0.0';
+export const SITE_VERSION = 'v1.1.0';
 export const SITE_TITLE = 'VibeCrew Documentation';
 export const SITE_DESCRIPTION = 'The autonomous vibe-coding operating system that turns Claude Code into a full development team.';
 export const SITE_AUTHOR = 'Fabian Krumbholz';

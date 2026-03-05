@@ -351,10 +351,12 @@ const backlogJson = `{
       Add <code>--parallel</code> to process independent features simultaneously:
       <code>/run-backlog --parallel</code>. VibeCrew analyzes feature dependencies and groups
       features into <strong>waves</strong>. Features within the same wave have no dependencies on
-      each other and can be built concurrently in separate worktrees (up to
-      <code>max_parallel_agents</code> from config.json, default 3). Waves are processed
+      each other and can be built concurrently (up to
+      <code>max_parallel_agents</code> from config.json, default 3). Each parallel feature runs
+      as a concurrent Agent tool call within the same parent session &mdash; not a separate Claude Code
+      session. Every Agent gets its own fresh context window and isolated git worktree. Waves are processed
       sequentially &mdash; Wave 2 only starts after all Wave 1 features are merged and pass
-      the quality gate.
+      the quality gate. See <a href="advanced-features.html#parallel-backlog">Advanced Features</a> for details.
     </p>
 
     <h3>Fresh-session execution</h3>

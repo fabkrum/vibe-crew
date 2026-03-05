@@ -118,6 +118,11 @@ import { runtimeStateDiagram } from '../data/diagrams';
           <td>Per-agent persistent memory &mdash; operational knowledge accumulated across sessions (JSONL). Organized as <code>memory/&lt;agent&gt;/&lt;domain&gt;.jsonl</code> with TTL-based auto-pruning.</td>
           <td>Builder (API patterns, conventions), Verifier (flaky tests), Stack Scout (library gotchas), Code Reviewer (recurring issues).</td>
         </tr>
+        <tr>
+          <td><code>agent-overrides/</code></td>
+          <td>Per-project agent customization files (<code>&lt;agent&gt;.md</code>). Sections with matching headings replace the base agent&rsquo;s sections; new headings are appended. Frontmatter (model, tools, isolation) is always preserved from the base agent. Survives plugin updates.</td>
+          <td>All agents (loaded via <code>load-agent-with-overrides.sh</code> at agent start).</td>
+        </tr>
       </tbody>
     </table>
   </div>

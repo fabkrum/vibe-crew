@@ -294,17 +294,24 @@ import { selfImprovingDiagram } from '../data/diagrams';
     A["fix: commit"] --> B{"Test files<br/>changed?"}
     B -->|No| C["detect-fix-commits.sh"]
     C --> D["generate-regression-test.sh"]
-    D --> E["Skeleton committed"]
-    E --> F["-5 Vibe Score"]
+    D --> AP{"User<br/>approves?"}
+    AP -->|Yes| E["Skeleton committed"]
+    AP -->|No| F["-5 Vibe Score"]
+    C --> F["-5 Vibe Score"]
     B -->|Yes| G["No action"]
     G --> H["Neutral score"]
+    E --> EX["expertise-write.sh<br/>(domain: failures)"]
     F --> I["3+ sessions?"]
     I -->|Yes| J["CLAUDE.md mutation<br/>proposed"]
+    I -->|No| K["Logged for<br/>future tracking"]
     style A fill:#fde8e8,stroke:#333
-    style E fill:#fff3cd,stroke:#333
+    style AP fill:#fff3cd,stroke:#333
+    style E fill:#e8fde8,stroke:#333
     style G fill:#e8fde8,stroke:#333
-    style J fill:#e8e8fd,stroke:#333`}
-      caption="Bug fixes without tests trigger skeleton generation, scoring deductions, and eventually a permanent CLAUDE.md rule."
+    style F fill:#fde8e8,stroke:#333
+    style J fill:#e8e8fd,stroke:#333
+    style EX fill:#e8e8fd,stroke:#333`}
+      caption="Bug fixes without tests trigger scoring deductions (computed independently by calculate-vibe-score.sh), skeleton generation with user approval, expertise recording, and eventually a permanent CLAUDE.md rule."
     />
   </section>
 

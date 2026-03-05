@@ -418,14 +418,18 @@ export const selfImprovingDiagram = `flowchart TD
   Session["Development Session"] --> Wrap["/wrap"]
   Wrap --> Score["Vibe Score Calculation"]
   Score --> Coach["Performance Coach Analysis"]
-  Coach --> Patterns{"Anti-pattern\ndetected 3+ times?"}
+  Coach --> Eligible{"check-mutation-eligibility.sh\n(cooldown, dedup, frequency)"}
+
+  Eligible -->|Eligible| Patterns{"Anti-pattern\ndetected 3+ times?"}
+  Eligible -->|Blocked| Log["Log Session Data"]
 
   Patterns -->|Yes| Propose["Propose CLAUDE.md Mutation"]
-  Patterns -->|No| Log["Log Session Data"]
+  Patterns -->|No| Log
 
-  Propose --> Approve{"User Approves?"}
-  Approve -->|Yes| Mutate["apply-mutation.sh\nUpdates CLAUDE.md"]
-  Approve -->|No| Log
+  Propose --> Approve{"User Response"}
+  Approve -->|Approve| Mutate["apply-mutation.sh\nUpdates CLAUDE.md"]
+  Approve -->|Edit| Revise["User revises rule text"] --> Mutate
+  Approve -->|Reject| Log
 
   Mutate --> Log
   Log --> Telemetry["Cross-Project Telemetry"]
@@ -436,9 +440,11 @@ export const selfImprovingDiagram = `flowchart TD
   style Wrap fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Score fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Coach fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Eligible fill:#18181b,stroke:#f87171,color:#fafafa
   style Patterns fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Propose fill:#18181b,stroke:#60a5fa,color:#fafafa
   style Approve fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Revise fill:#18181b,stroke:#60a5fa,color:#fafafa
   style Mutate fill:#18181b,stroke:#4ade80,color:#fafafa
   style Log fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Telemetry fill:#18181b,stroke:#60a5fa,color:#fafafa

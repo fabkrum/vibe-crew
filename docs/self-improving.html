@@ -40,29 +40,43 @@
     A["fix: commit"] --> B{"Test files<br/>changed?"}
     B -->|No| C["detect-fix-commits.sh"]
     C --> D["generate-regression-test.sh"]
-    D --> E["Skeleton committed"]
-    E --> F["-5 Vibe Score"]
+    D --> AP{"User<br/>approves?"}
+    AP -->|Yes| E["Skeleton committed"]
+    AP -->|No| F["-5 Vibe Score"]
+    C --> F["-5 Vibe Score"]
     B -->|Yes| G["No action"]
     G --> H["Neutral score"]
+    E --> EX["expertise-write.sh<br/>(domain: failures)"]
     F --> I["3+ sessions?"]
     I -->|Yes| J["CLAUDE.md mutation<br/>proposed"]
+    I -->|No| K["Logged for<br/>future tracking"]
     style A fill:#fde8e8,stroke:#333
-    style E fill:#fff3cd,stroke:#333
+    style AP fill:#fff3cd,stroke:#333
+    style E fill:#e8fde8,stroke:#333
     style G fill:#e8fde8,stroke:#333
-    style J fill:#e8e8fd,stroke:#333</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Bug fixes without tests trigger skeleton generation, scoring deductions, and eventually a permanent CLAUDE.md rule.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart LR
+    style F fill:#fde8e8,stroke:#333
+    style J fill:#e8e8fd,stroke:#333
+    style EX fill:#e8e8fd,stroke:#333</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Bug fixes without tests trigger scoring deductions (computed independently by calculate-vibe-score.sh), skeleton generation with user approval, expertise recording, and eventually a permanent CLAUDE.md rule.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart LR
     A[&quot;fix: commit&quot;] --&gt; B{&quot;Test files&lt;br/&gt;changed?&quot;}
     B --&gt;|No| C[&quot;detect-fix-commits.sh&quot;]
     C --&gt; D[&quot;generate-regression-test.sh&quot;]
-    D --&gt; E[&quot;Skeleton committed&quot;]
-    E --&gt; F[&quot;-5 Vibe Score&quot;]
+    D --&gt; AP{&quot;User&lt;br/&gt;approves?&quot;}
+    AP --&gt;|Yes| E[&quot;Skeleton committed&quot;]
+    AP --&gt;|No| F[&quot;-5 Vibe Score&quot;]
+    C --&gt; F[&quot;-5 Vibe Score&quot;]
     B --&gt;|Yes| G[&quot;No action&quot;]
     G --&gt; H[&quot;Neutral score&quot;]
+    E --&gt; EX[&quot;expertise-write.sh&lt;br/&gt;(domain: failures)&quot;]
     F --&gt; I[&quot;3+ sessions?&quot;]
     I --&gt;|Yes| J[&quot;CLAUDE.md mutation&lt;br/&gt;proposed&quot;]
+    I --&gt;|No| K[&quot;Logged for&lt;br/&gt;future tracking&quot;]
     style A fill:#fde8e8,stroke:#333
-    style E fill:#fff3cd,stroke:#333
+    style AP fill:#fff3cd,stroke:#333
+    style E fill:#e8fde8,stroke:#333
     style G fill:#e8fde8,stroke:#333
-    style J fill:#e8e8fd,stroke:#333</code></pre> </noscript> </div>  <script>
+    style F fill:#fde8e8,stroke:#333
+    style J fill:#e8e8fd,stroke:#333
+    style EX fill:#e8e8fd,stroke:#333</code></pre> </noscript> </div>  <script>
   (function() {
     if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
       window.__mermaidLoaded = true;
@@ -115,16 +129,21 @@
   Session["Development Session"] --> Wrap["/wrap"]
   Wrap --> Score["Vibe Score Calculation"]
   Score --> Coach["Performance Coach Analysis"]
-  Coach --> Patterns{"Anti-pattern
+  Coach --> Eligible{"check-mutation-eligibility.sh
+(cooldown, dedup, frequency)"}
+
+  Eligible -->|Eligible| Patterns{"Anti-pattern
 detected 3+ times?"}
+  Eligible -->|Blocked| Log["Log Session Data"]
 
   Patterns -->|Yes| Propose["Propose CLAUDE.md Mutation"]
-  Patterns -->|No| Log["Log Session Data"]
+  Patterns -->|No| Log
 
-  Propose --> Approve{"User Approves?"}
-  Approve -->|Yes| Mutate["apply-mutation.sh
+  Propose --> Approve{"User Response"}
+  Approve -->|Approve| Mutate["apply-mutation.sh
 Updates CLAUDE.md"]
-  Approve -->|No| Log
+  Approve -->|Edit| Revise["User revises rule text"] --> Mutate
+  Approve -->|Reject| Log
 
   Mutate --> Log
   Log --> Telemetry["Cross-Project Telemetry"]
@@ -136,9 +155,11 @@ Benefits from new rules"]
   style Wrap fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Score fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Coach fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Eligible fill:#18181b,stroke:#f87171,color:#fafafa
   style Patterns fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Propose fill:#18181b,stroke:#60a5fa,color:#fafafa
   style Approve fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Revise fill:#18181b,stroke:#60a5fa,color:#fafafa
   style Mutate fill:#18181b,stroke:#4ade80,color:#fafafa
   style Log fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Telemetry fill:#18181b,stroke:#60a5fa,color:#fafafa
@@ -147,16 +168,21 @@ Benefits from new rules"]
   Session[&quot;Development Session&quot;] --&gt; Wrap[&quot;/wrap&quot;]
   Wrap --&gt; Score[&quot;Vibe Score Calculation&quot;]
   Score --&gt; Coach[&quot;Performance Coach Analysis&quot;]
-  Coach --&gt; Patterns{&quot;Anti-pattern
+  Coach --&gt; Eligible{&quot;check-mutation-eligibility.sh
+(cooldown, dedup, frequency)&quot;}
+
+  Eligible --&gt;|Eligible| Patterns{&quot;Anti-pattern
 detected 3+ times?&quot;}
+  Eligible --&gt;|Blocked| Log[&quot;Log Session Data&quot;]
 
   Patterns --&gt;|Yes| Propose[&quot;Propose CLAUDE.md Mutation&quot;]
-  Patterns --&gt;|No| Log[&quot;Log Session Data&quot;]
+  Patterns --&gt;|No| Log
 
-  Propose --&gt; Approve{&quot;User Approves?&quot;}
-  Approve --&gt;|Yes| Mutate[&quot;apply-mutation.sh
+  Propose --&gt; Approve{&quot;User Response&quot;}
+  Approve --&gt;|Approve| Mutate[&quot;apply-mutation.sh
 Updates CLAUDE.md&quot;]
-  Approve --&gt;|No| Log
+  Approve --&gt;|Edit| Revise[&quot;User revises rule text&quot;] --&gt; Mutate
+  Approve --&gt;|Reject| Log
 
   Mutate --&gt; Log
   Log --&gt; Telemetry[&quot;Cross-Project Telemetry&quot;]
@@ -168,9 +194,11 @@ Benefits from new rules&quot;]
   style Wrap fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Score fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Coach fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Eligible fill:#18181b,stroke:#f87171,color:#fafafa
   style Patterns fill:#18181b,stroke:#fbbf24,color:#fafafa
   style Propose fill:#18181b,stroke:#60a5fa,color:#fafafa
   style Approve fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Revise fill:#18181b,stroke:#60a5fa,color:#fafafa
   style Mutate fill:#18181b,stroke:#4ade80,color:#fafafa
   style Log fill:#18181b,stroke:#a78bfa,color:#fafafa
   style Telemetry fill:#18181b,stroke:#60a5fa,color:#fafafa

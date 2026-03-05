@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Setup Guide</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><link rel="stylesheet" href="/_astro/advanced-features.derLs_Vl.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Intro </div> <a href="/why.html" class="sidebar-link"> Why VibeCrew </a><a href="/comparison.html" class="sidebar-link"> Comparison </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Getting Started </div> <a href="/quick-start.html" class="sidebar-link"> Quick Start </a><a href="/setup.html" class="sidebar-link active"> Setup </a><a href="/new-project.html" class="sidebar-link"> New Project </a><a href="/design-discovery.html" class="sidebar-link"> Design Discovery </a><a href="/existing-project.html" class="sidebar-link"> Existing Project </a><a href="/warp.html" class="sidebar-link"> Warp </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/workflow.html" class="sidebar-link"> Core Workflow </a><a href="/advanced-features.html" class="sidebar-link"> Advanced Features </a><a href="/personalization.html" class="sidebar-link"> Personalization </a><a href="/tips.html" class="sidebar-link"> Tips &amp; Troubleshooting </a><a href="/example-session.html" class="sidebar-link"> Example Session </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Architecture </div> <a href="/architecture.html" class="sidebar-link"> Overview </a><a href="/arch-system.html" class="sidebar-link"> System Deep Dive </a><a href="/arch-runtime.html" class="sidebar-link"> Runtime Systems </a><a href="/arch-reference.html" class="sidebar-link"> Commands &amp; State </a><a href="/arch-design.html" class="sidebar-link"> Design &amp; Operations </a><a href="/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/commands.html" class="sidebar-link"> Slash Commands </a><a href="/glossary.html" class="sidebar-link"> Glossary </a><a href="/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Releases </div> <a href="/releases.html" class="sidebar-link"> Release Notes </a> </div> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/index.html">Home</a>  <span class="separator">/</span> <span>Getting Started</span>  <span class="separator">/</span> <span>Setup Guide</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Getting Started"},{"@type":"ListItem","position":3,"name":"Setup Guide"}]}</script> <span class="section-label">Getting Started</span>  <div class="toc"> <h3>On This Page</h3> <ol> <li><a href="#install">Installation from Scratch</a></li> <li><a href="#multi-project">Multi-Project Setup (Recommended)</a></li> <li><a href="#warp">Warp Terminal</a></li> <li><a href="#stitch">Enabling Google Stitch (UI Design)</a></li> <li><a href="#troubleshooting">Troubleshooting</a></li> </ol> </div> <section class="section" id="install"> <span class="section-label">Getting Started</span> <h2>Installation from Scratch</h2> <p>A complete walkthrough from zero to a fully operational VibeCrew environment.</p> <h3>Prerequisites</h3> <p>VibeCrew needs 3 required dependencies and has 2 optional ones:</p> <div class="table-wrap">  <table> <thead> <tr><th>Requirement</th><th>Tier</th><th>Minimum Version</th><th>Check Command</th></tr> </thead> <tbody> <tr><td><strong>Git</strong></td><td>Required</td><td>2.30+</td><td><code>git --version</code></td></tr> <tr><td><strong>Node.js</strong></td><td>Required</td><td>18+</td><td><code>node --version</code></td></tr> <tr><td><strong>jq</strong></td><td>Required</td><td>1.6+</td><td><code>jq --version</code></td></tr> <tr><td><strong>GitHub CLI</strong></td><td>Optional</td><td>2.0+</td><td><code>gh --version</code></td></tr> <tr><td><strong>terminal-notifier</strong></td><td>Optional</td><td>any</td><td><code>which terminal-notifier</code></td></tr> </tbody> </table>  </div> <p><strong>Optional dependencies:</strong> GitHub CLI enables PR automation (<code>/review</code>, <code>gh pr create</code>). <code>terminal-notifier</code> enables desktop notifications on macOS. VibeCrew works without both.</p> <h3>Step-by-Step Installation</h3> <ol class="steps"> <li> <h4>Install dependencies</h4> <p>Use the bootstrap script (recommended) or install manually:</p> <pre class="copyable" data-copy="# Option A: Bootstrap script (detects OS, installs only what's missing)
+cd claude-plugin-vibe-crew &#38;&#38; ./install.sh
+
+# Option B: Manual install on macOS
+brew install jq node
+# Optional:
+brew install terminal-notifier gh &#38;&#38; gh auth login"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span># Option A: Bootstrap script (detects OS, installs only what&#39;s missing)
+cd claude-plugin-vibe-crew &amp;&amp; ./install.sh
+
+# Option B: Manual install on macOS
+brew install jq node
+# Optional:
+brew install terminal-notifier gh &amp;&amp; gh auth login</code></pre> <p>Alternatively, <code>/setup</code> inside Claude Code can auto-install missing required dependencies.</p> </li> <li> <h4>Add the plugin to your project</h4> <p>The recommended approach is a <strong>central clone + symlink</strong>, especially if you'll use VibeCrew across multiple projects. See <a href="#multi-project">Multi-Project Setup</a> below for the full guide.</p> <pre class="copyable" data-copy="# Recommended: Central clone + symlink (see Multi-Project Setup below)
+mkdir -p ~/claude-plugins &#38;&#38; cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git
+cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span># Recommended: Central clone + symlink (see Multi-Project Setup below)
+mkdir -p ~/claude-plugins &amp;&amp; cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git
+cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> <p>For alternative approaches (direct copy, git submodule), see the <a href="#multi-project">comparison table</a> in the Multi-Project section.</p> </li> <li> <h4>Verify plugin detection</h4> <p>Start Claude Code in your project directory. It reads the <code>.claude-plugin/plugin.json</code> manifest and loads VibeCrew automatically.</p> <pre class="copyable" data-copy="cd /path/to/your-project
+claude"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>cd /path/to/your-project
+claude</code></pre> <p>You should see the VibeCrew session startup agent run on first launch.</p> </li> <li> <h4>Run the setup wizard</h4> <p>Inside Claude Code, run:</p> <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">claude code</span>/setup</code></pre> <p>The wizard walks you through terminal selection, notification testing, MCP server verification, git checks, and creates the <code>.vibecrew/</code> runtime directory.</p> </li> <li> <h4>Personalize your experience (optional)</h4> <p>Run the profile interview to adapt VibeCrew to your workflow. This takes about 2 minutes, or pick a preset (Builder, Explorer, Founder) for instant configuration.</p> <pre class="copyable" data-copy="/profile"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">claude code</span>/profile</code></pre> <p>This personalizes message verbosity, autonomy level, PR format, code comments, gamification, and more. You can update it anytime by running <code>/profile</code> again. See <a href="/workflow#profile">User Profile &amp; Personalization</a> for full details.</p> </li> <li> <h4>Install MCP servers (optional but recommended)</h4> <p>VibeCrew ships with <strong>10 MCP servers</strong>. Three are enabled by default: <strong>Context7</strong> (documentation lookup, ~1,500 tokens saved per query), <strong>Chrome DevTools</strong> (browser debugging), and <strong>Playwright</strong> (E2E browser testing). All three require no authentication.</p> <p>Seven additional servers ship disabled and are <strong>auto-enabled when your TDR selects matching technologies</strong>: <strong>Semgrep</strong> (security scanning), <strong>Sentry</strong> (error tracking), <strong>Supabase</strong> (database), <strong>Stripe</strong> (payments), <strong>Vercel</strong> (deployment), <strong>Figma</strong> (design), and <strong>Stitch</strong> (Google AI design). Authenticated servers require environment variables &mdash; the setup wizard shows which variables are needed.</p> </li> <li> <h4>Verify the full pipeline</h4> <ul> <li><strong>Notifications:</strong> Tested during setup wizard</li> <li><strong>Session startup:</strong> Exit and restart Claude Code &mdash; the startup agent should show a 3-line status summary</li> <li><strong>Phase gate:</strong> Try writing a source file before running <code>/new-project</code> &mdash; it should be blocked</li> </ul> </li> </ol> <h3>Resulting Directory Structure</h3> <pre><code><span class="code-label">tree</span>your-project/
+  claude-plugin-vibe-crew/          # The plugin (don&#39;t modify)
+    .claude-plugin/
+      plugin.json                 # Plugin manifest
+    .mcp.json                     # MCP server config (10 servers)
+    settings.json                 # Permission rules (allowed + denied tools)
+    hooks/
+      hooks.json                  # Event hook bindings
+    scripts/                      # ~67 bash automation scripts
+    agents/                       # 13 specialized AI agent prompts
+    skills/                       # 25 slash command definitions
+    templates/                    # Project templates and doc-site scaffold
+
+  .vibecrew/                        # Per-project runtime state
+    config.json                   # Terminal preference, notification settings
+    state.json                    # Foundation status + active feature
+    backlog.json                  # Feature backlog with specs
+    sessions/                     # Session logs (JSON)
+    scores/                       # Vibe Score breakdowns (JSON)
+    releases/                     # Release notes data (JSON)
+    handoffs/                     # Cross-session handoff documents
+    workflows/                    # Reusable workflow templates (/replay)
+    simplifications/              # Code simplification reports (/simplify)
+    ci-heals/                     # CI heal reports (/heal)
+    mutation-log.json             # CLAUDE.md mutation audit log</code></pre> <div class="placeholder-media"> <div class="icon">&#128247;</div> <div class="label">Terminal showing VibeCrew setup output</div> </div> </section> <hr> <section class="section" id="multi-project"> <span class="section-label">Recommended</span> <h2>Multi-Project Setup</h2> <p>Most users work on multiple projects. Instead of copying VibeCrew into every project, install it once and share it. This gives you a single source of truth, instant updates across all projects, and zero duplication.</p> <h3>How it works</h3> <div class="flow"><span class="highlight">Central install</span> (one copy on your machine)
+  ~/claude-plugins/vibe-crew/ <span class="muted"># the plugin &mdash; shared by all projects</span> <span class="highlight">Per-project</span> (symlink + local state)
+  ~/projects/tripflow/
+    claude-plugin-vibe-crew &rarr; <span class="muted"># symlink to central install</span>
+.vibecrew/ <span class="muted"># project-specific state</span>
+~/projects/saas-dashboard/
+    claude-plugin-vibe-crew &rarr; <span class="muted"># same symlink, different project</span>
+.vibecrew/ <span class="muted"># its own state</span>
+~/projects/mobile-app/
+    claude-plugin-vibe-crew &rarr; <span class="muted"># same symlink, different project</span>
+.vibecrew/ <span class="muted"># its own state</span></div> <p>The plugin code (agents, hooks, scripts, commands) lives in one place. Each project gets its own <code>.vibecrew/</code> folder with its own backlog, session logs, scores, and config. Projects are fully isolated from each other.</p> <h3>Step-by-step</h3> <ol class="steps"> <li> <h4>Clone VibeCrew to a central location</h4> <p>Pick a permanent home for the plugin. <code>~/claude-plugins/</code> is a good convention.</p> <pre class="copyable" data-copy="mkdir -p ~/claude-plugins
+cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>mkdir -p ~/claude-plugins
+cd ~/claude-plugins
+git clone https://github.com/fabkrum/vibe-crew.git</code></pre> </li> <li> <h4>Symlink into your first project</h4> <p>Create a symbolic link from your project to the central install. Use an absolute path so the link works regardless of where you open the terminal.</p> <pre class="copyable" data-copy="cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>cd ~/projects/my-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> </li> <li> <h4>Run <code>/setup</code> in the project</h4> <p>Start Claude Code and run the setup wizard. This creates the <code>.vibecrew/</code> folder with project-specific state. Each project runs <code>/setup</code> once.</p> <pre class="copyable" data-copy="claude"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>claude</code></pre> <pre class="copyable" data-copy="/setup"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">claude code</span>/setup</code></pre> </li> <li> <h4>Repeat for each new project</h4> <p>For every new project, just create the symlink and run <code>/setup</code>. Two commands, under 30 seconds.</p> <pre class="copyable" data-copy="cd ~/projects/another-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>cd ~/projects/another-project
+ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew</code></pre> </li> </ol> <h3>Updating VibeCrew across all projects</h3> <p>Since every project symlinks to the same central location, updating is one command:</p> <pre class="copyable" data-copy="cd ~/claude-plugins/vibe-crew &#38;&#38; git pull"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>cd ~/claude-plugins/vibe-crew &amp;&amp; git pull</code></pre> <p>Every project picks up the changes instantly. No need to copy files, run installers, or touch individual projects. Check the <a href="/releases">Release Notes</a> after updating to see what changed.</p> <div class="callout tip"> <div class="callout-title">Make it even faster with a shell alias</div>  <p>Add this to your <code>~/.zshrc</code> to create new VibeCrew projects in one command:</p>  </div> <pre class="copyable" data-copy="# Add to ~/.zshrc
+vibecrew-init() {
+  ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
+  echo &#34;VibeCrew linked. Run 'claude' then '/setup' to initialize.&#34;
+}
+
+vibecrew-update() {
+  (cd ~/claude-plugins/vibe-crew &#38;&#38; git pull)
+  echo &#34;VibeCrew updated to $(cd ~/claude-plugins/vibe-crew &#38;&#38; git describe --tags 2>/dev/null || git log -1 --format=%h)&#34;
+}"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">.zshrc</span># Add to ~/.zshrc
+vibecrew-init() {
+  ln -s ~/claude-plugins/vibe-crew/claude-plugin-vibe-crew ./claude-plugin-vibe-crew
+  echo &quot;VibeCrew linked. Run &#39;claude&#39; then &#39;/setup&#39; to initialize.&quot;
+}
+
+vibecrew-update() {
+  (cd ~/claude-plugins/vibe-crew &amp;&amp; git pull)
+  echo &quot;VibeCrew updated to $(cd ~/claude-plugins/vibe-crew &amp;&amp; git describe --tags 2&gt;/dev/null || git log -1 --format=%h)&quot;
+}</code></pre> <p>Then for any new project: <code>cd ~/projects/new-project && vibecrew-init</code></p> <h3>Git and symlinks</h3> <p>By default, Git tracks symlinks as tiny pointer files (not the target contents). This means:</p> <ul> <li><strong>Your project repo stays small</strong> &mdash; only the symlink is committed, not the entire plugin</li> <li><strong>Teammates need their own central install</strong> &mdash; the symlink points to your local path, so each person clones the plugin to the same location or updates the symlink</li> </ul> <div class="callout info"> <div class="callout-title">For teams: standardize the path</div>  <p>Agree on a team-wide convention like <code>~/claude-plugins/vibe-crew/</code>. If everyone uses the same path, symlinks work across the entire team with zero config. Document this in your project's README or onboarding guide.</p>  </div> <h3>Comparing installation approaches</h3> <div class="table-wrap">  <table> <thead> <tr><th>Approach</th><th>Best For</th><th>Update Method</th><th>Duplication</th></tr> </thead> <tbody> <tr> <td><strong>Central clone + symlink</strong></td> <td>Solo devs, small teams</td> <td><code>git pull</code> once &rarr; all projects updated</td> <td>None</td> </tr> <tr> <td><strong>Git submodule</strong></td> <td>Teams needing pinned versions</td> <td><code>git submodule update</code> per project</td> <td>Full copy per project</td> </tr> <tr> <td><strong>Direct copy</strong></td> <td>Quick experiments, air-gapped</td> <td>Manual copy per project</td> <td>Full copy per project</td> </tr> </tbody> </table>  </div> <div class="callout warn"> <div class="callout-title">Don&#39;t mix approaches</div>  <p>Pick one method and stick with it. If some projects use symlinks and others use submodules, updates become confusing and you risk running different VibeCrew versions across projects without realizing it.</p>  </div> <h3>What's shared vs. what's project-specific</h3> <div class="card-grid">  <div class="card"><div class="card-icon purple">⇄</div><h4>Shared (via symlink)</h4> <p>
+Agent prompts, hook scripts, slash commands, plugin manifest, MCP config, templates. These are the same across all projects and update together.
+</p> </div> <div class="card"><div class="card-icon green">☗</div><h4>Project-specific (.vibecrew/)</h4> <p>
+Backlog, session logs, Vibe Scores, config, state, handoffs, workflows. Each project has its own isolated state folder that's never shared.
+</p> </div>  </div> <div class="card-grid">  <div class="card"><div class="card-icon blue">✍</div><h4>Project-specific (project root)</h4> <p> <code>CLAUDE.md</code>, <code>VISION.md</code>, <code>design-system.css</code>, TDR, roadmap. These are created by VibeCrew during the foundation phase and are unique to each project.
+</p> </div> <div class="card"><div class="card-icon amber">⚙</div><h4>Machine-specific (~/.zshrc)</h4> <p>
+Shell aliases (<code>vibecrew-init</code>, <code>vibecrew-update</code>), shell traps, Warp Terminal config. Each developer sets these up once on their machine.
+</p> </div>  </div> </section> <hr> <section class="section" id="warp"> <span class="section-label">Terminal Setup</span> <h2>Warp Terminal</h2> <p>Warp is the recommended terminal for VibeCrew. It provides tab deep-linking (click a notification and land on the exact session that needs attention), structured output blocks, Launch Configurations for instant workspace setup, and session restoration.</p> <p>Everything you need &mdash; installation, deep-linking setup, keyboard shortcuts, Warp Drive, window layouts, and more &mdash; is covered on the dedicated Warp page:</p> <p style="margin-top: 1.5rem;"><a href="/warp" style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--color-accent-bg); border: 1px solid var(--color-accent-dim); color: var(--color-accent); padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; text-decoration: none; transition: all 0.15s;">Warp Tips &amp; Tricks &rarr;</a></p> <div class="callout info"> <div class="callout-title">Using a different terminal?</div>  <p>VibeCrew works with any terminal. You'll get macOS banner notifications regardless. The only difference is that non-Warp terminals can't deep-link to a specific tab &mdash; clicking the notification brings the terminal app to focus but you'll need to find the tab manually.</p>  </div> </section> <hr> <section class="section" id="stitch"> <span class="section-label">Optional MCP Server</span> <h2>Enabling Google Stitch (UI Design)</h2> <p><a href="https://labs.google/stitch">Google Stitch</a> is an AI design tool from Google Labs that transforms text prompts into complete UI designs and production-ready HTML/CSS. VibeCrew ships with the Stitch MCP server <strong>disabled by default</strong> &mdash; here's how to enable it and use it in your workflow.</p> <div class="callout info"> <div class="callout-title">What does Stitch add?</div>  <p>Without Stitch, VibeCrew's Builder agent generates UI code from your design system tokens and feature specs. With Stitch, you get an additional option: generate a <strong>visual UI design first</strong> in Google Stitch, preview it, then pull the production HTML/CSS into your project. This is especially useful for complex layouts, landing pages, and when you want to iterate on the visual design before writing any code.</p>  </div> <h3>Prerequisites</h3> <ul> <li>Node.js 18+ (already required for VibeCrew)</li> <li>A Google account to access <a href="https://labs.google/stitch">Google Stitch</a></li> </ul> <h3>Setup</h3> <ol class="steps"> <li> <h4>Authenticate with Stitch</h4> <p>Run the Stitch CLI init command to set up OAuth authentication or provide an API key.</p> <pre class="copyable" data-copy="npx @_davideast/stitch-mcp init"><button class="copy-btn" aria-label="Copy to clipboard">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button><code><span class="code-label">bash</span>npx @_davideast/stitch-mcp init</code></pre> </li> <li> <h4>Enable the MCP server</h4> <p>Open <code>claude-plugin-vibe-crew/.mcp.json</code> and change <code>"disabled": true</code> to <code>"disabled": false</code> for the Stitch entry.</p> <pre><code><span class="code-label">.mcp.json</span>{
+  &quot;mcpServers&quot;: {
+    &quot;context7&quot;: { ... },
+    &quot;chrome-devtools&quot;: { ... },
+    &quot;stitch&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@_davideast/stitch-mcp&quot;, &quot;proxy&quot;],
+      &quot;env&quot;: {},
+      &quot;disabled&quot;: false    <span style="color:var(--color-green);">&larr; change this from true to false</span>
+    }
+  }
+}</code></pre> </li> <li> <h4>Restart Claude Code</h4> <p>MCP servers are loaded on startup. Exit and relaunch Claude Code so it picks up the Stitch server.</p> </li> </ol> <h3>UI Design Workflow with Stitch</h3> <p>Once enabled, Stitch integrates into VibeCrew's <strong>Tier 2, Phase 2 (UI Design)</strong> workflow. Here's how a typical feature development cycle looks:</p> <div class="flow"><span class="highlight">Phase 1: Plan</span>
+Feature spec written &rarr; requirements defined
+       |
+<span class="highlight">Phase 2: UI Design (with Stitch)</span>
+|
+<span class="muted">1.</span> Create designs in <a href="https://labs.google/stitch" style="color:var(--color-accent);">labs.google/stitch</a> <span class="muted"> Describe your UI in natural language.</span> <span class="muted"> Stitch generates screens with full visual fidelity.</span>
+|
+<span class="muted">2.</span> Preview screens locally
+<span class="muted"> npx @_davideast/stitch-mcp serve -p &lt;project-id&gt;</span>
+|
+<span class="muted">3.</span> Pull design code via MCP
+<span class="muted"> The Builder agent calls get_screen_code to retrieve</span> <span class="muted"> production HTML/CSS for each screen.</span>
+|
+<span class="muted">4.</span> Integrate into your project
+<span class="muted"> Builder adapts the Stitch output to match your</span> <span class="muted"> design-system.css tokens and component structure.</span>
+|
+<span class="highlight">Phase 3: Code</span>
+Builder implements business logic on top of the UI
+       |
+<span class="highlight">Phase 4: Test</span> &rarr; <span class="highlight">Phase 5: Docs</span></div> <h3>Stitch MCP Tools</h3> <div class="table-wrap">  <table> <thead> <tr><th>Tool</th><th>Description</th><th>Used By</th></tr> </thead> <tbody> <tr><td><code>build_site</code></td><td>Maps Stitch screens to routes and returns design HTML for each page</td><td>Builder agent</td></tr> <tr><td><code>get_screen_code</code></td><td>Retrieves the HTML/CSS code for a single screen</td><td>Builder agent</td></tr> <tr><td><code>get_screen_image</code></td><td>Downloads a screenshot of a screen as base64 for visual review</td><td>Builder agent, Verifier</td></tr> </tbody> </table>  </div> <div class="callout tip"> <div class="callout-title">When to use Stitch vs. direct coding</div>  <p><strong>Use Stitch</strong> for landing pages, complex multi-screen layouts, and when you want to iterate on visuals before writing code. <strong>Skip Stitch</strong> for simple CRUD interfaces, API-heavy features, or when your design system already has the components you need. The Builder agent handles both paths &mdash; Stitch is an accelerator, not a requirement.</p>  </div> <div class="callout warn"> <div class="callout-title">Stitch is experimental</div>  <p>Google Stitch is a Google Labs experiment and may change or be discontinued. VibeCrew treats it as a fully optional enhancement &mdash; nothing in the core workflow depends on it. If Stitch is unavailable, the Builder agent generates UI code directly from your design system tokens and feature spec as usual.</p>  </div> </section> <hr> <section class="section" id="troubleshooting"> <span class="section-label">Help</span> <h2>Troubleshooting</h2> <h3>Notifications don't appear</h3> <ol> <li>Test <code>terminal-notifier</code> directly: <code>terminal-notifier -message "test"</code></li> <li>If nothing appears, reinstall: <code>brew install terminal-notifier</code></li> <li>Check macOS: <strong>System Settings &rarr; Notifications &rarr; terminal-notifier &rarr; Allow Notifications</strong></li> <li>Check VibeCrew config: verify <code>.vibecrew/config.json</code> has <code>"notifications": true</code></li> <li>Warp deep-links not working: see the <a href="/warp#deep-linking">deep-linking guide</a> on the Warp page</li> </ol> <h3>MCP servers not available</h3> <ol> <li><strong>Default servers (Context7, Chrome DevTools, Playwright):</strong> These should work out of the box via <code>npx</code>. Try restarting Claude Code.</li> <li><strong>Bundled conditional servers (Supabase, Stripe, Vercel, Figma, Sentry, etc.):</strong> Set the required environment variables, then run <code>bash scripts/enable-mcp-server.sh &lt;name&gt; enable</code>.</li> <li><strong>Registry servers not yet in .mcp.json (Firebase, Clerk, MongoDB, etc.):</strong> Add from the registry with <code>bash scripts/add-mcp-server.sh &lt;key&gt;</code>, or see all available servers with <code>bash scripts/add-mcp-server.sh --list</code>.</li> <li>All MCP servers are optional. VibeCrew agents gracefully fall back to built-in tools when servers are unavailable.</li> </ol> <h3>Stale locks or corrupted state</h3> <ol> <li>Run <code>./scripts/error-recovery.sh</code> to clear lock files and repair corrupted JSON</li> <li>This resets any in-progress tasks that were interrupted by a crashed session</li> </ol> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/quick-start.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Quick Start</span></a><a href="/new-project.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">New Project</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; February 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> </body></html>

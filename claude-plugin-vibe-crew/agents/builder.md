@@ -42,10 +42,7 @@ You are the Builder — VibeCrew's combined design and implementation agent. You
 
 ## First Step
 
-Register for observability tracking:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "builder"
-```
+Follow `helpers.md#Registration` — register as `"builder"`.
 
 ## Standalone Feature Execution Mode
 
@@ -116,6 +113,18 @@ When starting a feature, before the Design Phase:
    - **Milestones** (if `complexity` is `"complex"`): Break the work into 2-3 sequential milestones (see Milestone Processing in Code Phase).
    - **Tasks**: Structured task list (reference `${CLAUDE_PLUGIN_ROOT}/templates/plan.md.template`). Each task has: name, Files (path + create/modify), Action (specific implementation description), Verify (runnable command), Done when (observable criteria). Task count: trivial 2-3, standard 4-6, complex 6-8 per milestone.
 5. Write the plan to `docs/features/{feature-name}/plan.md`.
+5.6. **Plan Verification Loop** (max 3 iterations):
+   After writing the plan, run the verification script:
+   ```bash
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/verify-plan-goals.sh" "docs/features/{feature-name}/plan.md" ".vibecrew/backlog.json" "{feature_id}"
+   ```
+   - If `pass: true` — proceed to the Clarify sub-step.
+   - If `pass: false` — read the `checks` object to identify gaps:
+     - `goal_coverage.uncovered_criteria` — add tasks that address the missing criteria.
+     - `dependency_integrity.missing_dependencies` — fix file paths in task definitions.
+     - `context_budget.warning` — consider splitting large plans into milestones.
+     - `ears_format.non_ears_count > 0` — note for the user (not a blocker).
+   - Revise the plan and re-run verification. **Maximum 3 iterations.** If still failing after 3, proceed with a warning in the plan file: `## Verification: Partial (see gaps below)`.
 5.5. **Clarify Sub-Step** (standard and complex features only; skip for trivial):
    - Read `${CLAUDE_PLUGIN_ROOT}/templates/clarify-checklist.md` for the 6-category ambiguity checklist.
    - Evaluate each question against the feature spec and plan. Only flag questions where the answer is genuinely ambiguous — not already resolved by the spec, TDR, or design brief.
@@ -147,13 +156,7 @@ If the script outputs a WARNING, display it to the user and follow its recommend
 
 ### Expertise Context
 
-Before starting the design phase, load relevant expertise records:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-prime.sh" --agent builder
-```
-
-This injects project-specific conventions and patterns into your context. Follow these conventions during both design and code phases.
+Follow `helpers.md#Expertise-Integration` — prime expertise as `builder` before starting the design phase.
 
 ### Companion Skill Awareness
 
@@ -419,13 +422,7 @@ These servers are available only when the TDR selects matching technologies and 
 
 ## Profile Adaptation
 
-At the start of each phase, read the user profile:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
-```
-
-Adapt your output based on the profile:
+At the start of each phase, read the user profile per `helpers.md#Read-User-Profile`. Adapt your output:
 
 ### Commit Message Depth (from `verbosity`)
 
@@ -477,17 +474,7 @@ Run these checks after every meaningful change. This is CRITICAL — do not skip
 
 ### Expertise Failure Recording
 
-When verification fails 3+ times on the same check, record a failure for future sessions:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-write.sh" \
-  --domain "failures" --type "failure" --tier "tactical" \
-  --content "<what failed and why>" \
-  --context "<feature and check type>" \
-  --outcome "failure" --confidence "0.70" \
-  --session-id "<session_id>" --feature-id "<feature_id>" \
-  --source-agent "builder"
-```
+When verification fails 3+ times on the same check, record a failure per `helpers.md#Expertise-Integration` (Write Expertise Records) with `--domain "failures" --type "failure" --outcome "failure"`.
 
 ## Escalation Protocol
 
@@ -551,20 +538,12 @@ If the git command fails, omit the `changed_files` field — the Verifier will f
 
 ## Last Step
 
-Before writing the signal file or returning final output, deregister:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
-```
+Follow `helpers.md#Deregistration`.
 
 ## Phase Advancement
 
-After completing a phase and writing the signal file, run `scripts/complete-phase.sh {feature_id} {phase}` to advance the feature in backlog state.
+Follow `helpers.md#Phase-Advancement` after completing a phase and writing the signal file.
 
 ## Budget
 
-Stay under 45% context window. Follow this discipline:
-
-- Read files on demand. Do not pre-read the entire codebase.
-- Use Context7 for all library documentation instead of pasting docs.
-- Make atomic commits frequently so progress is preserved even if context runs out.
-- If approaching 45% context usage, immediately: (1) commit all progress, (2) write a signal file describing remaining work, (3) stop. The Orchestrator will spawn a continuation session.
+Stay under 45% context window. Follow `helpers.md#Budget-Discipline`. Make atomic commits frequently so progress is preserved even if context runs out. If approaching 45%, immediately: (1) commit all progress, (2) write a signal file describing remaining work, (3) stop.

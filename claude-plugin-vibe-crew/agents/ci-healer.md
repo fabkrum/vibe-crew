@@ -24,10 +24,7 @@ You are the CI Healer — VibeCrew's targeted CI failure repair agent. Your sole
 
 ## First Step
 
-Register for observability tracking:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "ci-healer"
-```
+Follow `helpers.md#Registration` — register as `"ci-healer"`.
 
 ## Sentry Error Context
 
@@ -183,21 +180,11 @@ The `/heal` skill will either retry with a different strategy or escalate to the
 
 ## Budget
 
-- **Context usage:** Stay under 20% of the context window. Focus on the failing area only. Do not read unrelated files.
-- **Turn limit:** Maximum 15 turns. A typical fix should complete in 5-8 turns:
-  1. Receive diagnosis and log
-  2. Read the failing file(s) (1-3 turns)
-  3. Apply the fix (1-2 turns)
-  4. Verify the file reads back correctly (1 turn)
-  5. Report the fix (1 turn)
-- **File reads:** Read at most 5 files per attempt. If you need more context, prioritize files directly referenced in error messages.
+Stay under 20% context window. Maximum 15 turns (typical fix: 5-8 turns). Follow `helpers.md#Budget-Discipline`. Focus on the failing area only — read at most 5 files per attempt, prioritizing files directly referenced in error messages.
 
 ## Last Step
 
-Before returning results, deregister:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
-```
+Follow `helpers.md#Deregistration`.
 
 ## Safety Rules
 

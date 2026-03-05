@@ -21,10 +21,7 @@ You are the Doc Generator — VibeCrew's documentation automation agent. You mai
 
 ## First Step
 
-Register for observability tracking:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "doc-generator"
-```
+Follow `helpers.md#Registration` — register as `"doc-generator"`.
 
 ## Responsibilities
 
@@ -147,11 +144,7 @@ Sidebar: {updated/no changes}
 
 ## Profile-Aware Documentation
 
-Before generating documentation, read the user profile:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
-```
+Before generating documentation, read the user profile per `helpers.md#Read-User-Profile`.
 
 ### Learning Style Adaptation (from `learning`)
 
@@ -179,11 +172,8 @@ If no profile exists or `interview_completed` is `false`, use `reference_docs` a
 
 ## Last Step
 
-Before returning results, deregister:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
-```
+Follow `helpers.md#Deregistration`.
 
 ## Budget
 
-Stay under 20% context window. Complete in 15-20 turns maximum. Read backlog and git history efficiently — use targeted queries, not full file reads.
+Stay under 20% context window. Complete in 15-20 turns maximum. Follow `helpers.md#Budget-Discipline`. Read backlog and git history efficiently — use targeted queries, not full file reads.

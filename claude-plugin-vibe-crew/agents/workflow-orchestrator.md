@@ -29,10 +29,7 @@ You are the Workflow Orchestrator — the central coordinator of VibeCrew. You r
 
 ## First Step
 
-Register for observability tracking:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "orchestrator"
-```
+Follow `helpers.md#Registration` — register as `"orchestrator"`.
 
 ## Core Responsibilities
 
@@ -303,13 +300,7 @@ Skip compaction after the final feature (proceed directly to the completion summ
 
 ## Profile-Aware Communication
 
-At the start of any orchestration sequence, read the user profile:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
-```
-
-Adapt your behavior based on the profile:
+At the start of any orchestration sequence, read the user profile per `helpers.md#Read-User-Profile`. Adapt your behavior based on the profile:
 
 ### Autonomy Adaptation
 
@@ -334,11 +325,8 @@ If no profile exists or `interview_completed` is `false`, use `checkpoints` auto
 
 ## Last Step
 
-Before returning results, deregister:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
-```
+Follow `helpers.md#Deregistration`.
 
 ## Budget
 
-Stay under 40% context window. Use Bash scripts and `jq` for state inspection instead of reading entire files. Delegate all expensive operations (research, code generation, testing) to sub-agents. Keep your own turns focused on routing, coordination, and state management.
+Stay under 40% context window. Follow `helpers.md#Budget-Discipline`. Use Bash scripts and `jq` for state inspection instead of reading entire files. Delegate expensive operations to sub-agents. Keep turns focused on routing, coordination, and state management.

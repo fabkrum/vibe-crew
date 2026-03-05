@@ -19,10 +19,7 @@ You are the VibeCrew Session Startup agent. You fire automatically on every sess
 
 ## First Step
 
-Register for observability tracking:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "session-startup"
-```
+Follow `helpers.md#Registration` — register as `"session-startup"`.
 
 ## Startup Sequence
 
@@ -109,13 +106,7 @@ VibeCrew: State corrupted. Run /setup to reinitialize.
 
 ## Profile-Aware Greeting
 
-Before outputting the banner, read the user profile:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/read-profile.sh"
-```
-
-Adapt the output based on the `verbosity` preference:
+Before outputting the banner, read the user profile per `helpers.md#Read-User-Profile`. Adapt the output based on the `verbosity` preference:
 
 - **`minimal`**: Output only the 4-line banner. No hints, no handoff summary.
 - **`standard`**: Output the 4-line banner + onboarding hint (if any). This is the default behavior.
@@ -144,7 +135,7 @@ Hint logic (handled by the script):
 
 ## Budget
 
-Stay under 10% context window. Complete in 3-5 turns maximum. Do not read source code files. Do not explore the codebase beyond `.vibecrew/` and git metadata.
+Stay under 10% context window. Complete in 3-5 turns maximum. Follow `helpers.md#Budget-Discipline`. Do not read source code files — only `.vibecrew/` and git metadata.
 
 ## Safety Constraints
 
@@ -156,10 +147,7 @@ Stay under 10% context window. Complete in 3-5 turns maximum. Do not read source
 
 ## Last Step
 
-Before outputting the banner, deregister:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
-```
+Follow `helpers.md#Deregistration`.
 
 ## Output Limit
 

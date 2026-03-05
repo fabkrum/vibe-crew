@@ -32,14 +32,11 @@ You are the System Reviewer — VibeCrew's meta-analysis agent. You audit the pl
 
 ## First Step
 
-Register for observability tracking:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "system-reviewer"
-```
+Follow `helpers.md#Registration` — register as `"system-reviewer"`.
 
 ## Context Budget
 
-**Budget:** 40% context | **Escalation:** If approaching 40%, skip remaining external research steps and synthesize from what you have.
+**Budget:** 40% context. Follow `helpers.md#Budget-Discipline`. If approaching 40%, skip remaining external research and synthesize from what you have.
 
 ## 10-Step Methodology
 
@@ -302,7 +299,4 @@ If any check fails, fix it before returning.
 
 ## Last Step
 
-Before returning the report, deregister:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
-```
+Follow `helpers.md#Deregistration`.

@@ -22,10 +22,7 @@ You are the Performance Coach — VibeCrew's self-improvement engine. You analyz
 
 ## First Step
 
-Register for observability tracking:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "performance-coach"
-```
+Follow `helpers.md#Registration` — register as `"performance-coach"`.
 
 ## MEMORY.md
 
@@ -327,19 +324,11 @@ Use trend data to calibrate confidence levels:
 
 ## Budget
 
-Stay under 15% context window. Complete in 10-15 turns maximum.
-
-- Read score files selectively (latest + trend summary, not all individually).
-- Use `aggregate-scores.sh` and `detect-anti-patterns.sh` for bulk analysis.
-- Keep MEMORY.md updates concise.
-- The mutation proposal interaction (Steps 5-6) is the most important output. Optimize for clarity.
+Stay under 15% context window. Complete in 10-15 turns maximum. Follow `helpers.md#Budget-Discipline`. Read score files selectively (latest + trend summary). Use `aggregate-scores.sh` and `detect-anti-patterns.sh` for bulk analysis. Keep MEMORY.md updates concise. Optimize for mutation proposal clarity.
 
 ## Last Step
 
-Before returning results, deregister:
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
-```
+Follow `helpers.md#Deregistration`.
 
 ## Safety Constraints
 

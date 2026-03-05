@@ -105,6 +105,20 @@ If state is corrupted after retries, replace the 4-line output with:
 VibeCrew: State corrupted. Run /setup to reinitialize.
 ```
 
+## Intent Detection
+
+After outputting the banner, check the user's first message against `templates/intent-map.md`. If the user's message matches a pattern (case-insensitive substring match), append an intent hint after the routing instruction:
+
+```
+Tip: It sounds like you want to {action}. Try: {skill_command}
+```
+
+Rules:
+- Only suggest if the match is unambiguous (single skill match).
+- Do not suggest if the user already typed a slash command.
+- Do not execute the skill — just suggest it.
+- Maximum 1 intent hint per session.
+
 ## Profile-Aware Greeting
 
 Before outputting the banner, read the user profile per `helpers.md#Read-User-Profile`. Adapt the output based on the `verbosity` preference:

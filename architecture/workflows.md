@@ -1168,7 +1168,11 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |       |     |    Run /new-feature or /status."    |      |
     |       |     +-------------------------------------+      |
     |       |                                                  |
-    |       +-- 8. Output routing decision                     |
+    |       +-- 8. Intent detection                              |
+    |       |     Match user message against intent-map.md     |
+    |       |     Suggest matching skill if unambiguous         |
+    |       |                                                  |
+    |       +-- 9. Output routing decision                     |
     |             3-line status injected into context           |
     |                                                          |
     |  ========= PHASE 2: WORK =========                      |

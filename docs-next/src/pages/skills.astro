@@ -79,6 +79,19 @@ import { commands, categories } from '../data/commands';
       </table>
     </div>
 
+    <h4 class="agent-table-heading">Intent-Based Triggering</h4>
+    <p>
+      You don&apos;t need to memorize all 38 commands. VibeCrew includes an intent detection layer that matches
+      natural language to the right skill. For example, saying &ldquo;fix a bug&rdquo; suggests <code>/fix-issue</code>,
+      and &ldquo;check quality&rdquo; suggests <code>/check</code>. Intent detection runs automatically during
+      session startup and when the Orchestrator processes your requests.
+    </p>
+    <p>
+      The full mapping is defined in <code>templates/intent-map.md</code> and covers all core workflows:
+      project setup, planning, development, quality, session management, CI/CD, analysis, and gamification.
+      Slash commands remain the primary interface &mdash; intent detection is a convenience layer for discoverability.
+    </p>
+
     <h4 class="agent-table-heading">Skill Categories</h4>
     <p>Every skill has a <code>category</code> field that determines its evaluation strategy and retirement criteria.</p>
     <div class="agent-table-wrap">

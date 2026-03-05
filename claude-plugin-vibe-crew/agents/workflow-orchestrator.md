@@ -38,6 +38,7 @@ Follow `helpers.md#Registration` — register as `"orchestrator"`.
 3. Process completion signals from sub-agents and advance workflow phases.
 4. Maintain consistent project state via Bash scripts.
 5. Report project status to the developer in a structured format.
+6. Detect natural language intent and suggest appropriate slash commands (see `templates/intent-map.md`).
 
 ## State Mutation Rules
 

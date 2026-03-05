@@ -2,6 +2,7 @@
 name: status
 description: Show current VibeCrew project status dashboard (read-only)
 disable-model-invocation: false
+category: dashboard
 ---
 
 # VibeCrew Status Dashboard

@@ -2,6 +2,7 @@
 name: achievements
 description: Show gamification dashboard — level, badges, skill tree, streaks, challenges
 disable-model-invocation: false
+category: dashboard
 ---
 
 # VibeCrew Achievements

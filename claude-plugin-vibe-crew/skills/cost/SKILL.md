@@ -2,6 +2,7 @@
 name: cost
 description: Real-time token cost dashboard — session, daily, weekly, monthly aggregates
 disable-model-invocation: false
+category: dashboard
 ---
 
 # VibeCrew Cost Dashboard

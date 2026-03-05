@@ -154,6 +154,17 @@ if [[ -n "$HANDOFF_FILE" && -f "$HANDOFF_FILE" ]]; then
   fi
 fi
 
+# --- Model-change detection ---
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+MODEL_FILE="$PLUGIN_ROOT/.last-validated-model.txt"
+CURRENT_MODEL="${CLAUDE_MODEL:-unknown}"
+if [[ -f "$MODEL_FILE" && "$CURRENT_MODEL" != "unknown" ]]; then
+  LAST_MODEL=$(cat "$MODEL_FILE" 2>/dev/null || echo "")
+  if [[ -n "$LAST_MODEL" && "$LAST_MODEL" != "$CURRENT_MODEL" ]]; then
+    echo "  Model changed ($LAST_MODEL → $CURRENT_MODEL). Run /validate-skills to check skill health."
+  fi
+fi
+
 echo "---"
 
 exit 0

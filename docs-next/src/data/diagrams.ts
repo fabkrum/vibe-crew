@@ -123,6 +123,7 @@ export const hooksDiagram = `flowchart TD
 
   subgraph Post["Post-Action Processors"]
     FC["format-code.sh"]
+    VSS["validate-skill-schema.sh"]
     NT["notify.sh"]
   end
 
@@ -145,6 +146,7 @@ export const hooksDiagram = `flowchart TD
   E3 --> PD
   E2 --> VS
   E4 --> FC
+  E4 --> VSS
   E5 --> NT
   E6 --> Stop
 

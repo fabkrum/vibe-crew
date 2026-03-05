@@ -2,6 +2,7 @@
 name: wrap
 description: End-of-session wrap-up — quality gate, Vibe Score, session log, commit
 disable-model-invocation: false
+category: workflow
 ---
 
 # VibeCrew Wrap: End-of-Session Wrap-Up

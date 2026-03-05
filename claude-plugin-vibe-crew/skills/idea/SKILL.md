@@ -6,6 +6,7 @@ arguments:
   - name: description
     description: The idea to capture
     required: true
+category: utility
 ---
 
 # VibeCrew Idea Capture

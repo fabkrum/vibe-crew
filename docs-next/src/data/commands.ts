@@ -41,6 +41,7 @@ export const commands: Command[] = [
   { name: '/fix-issue', category: 'Development', purpose: 'Fix an issue (GitHub/GitLab) — fetch, diagnose, implement, test, PR/MR with auto-close', agent: 'Builder, Verifier, Code Reviewer', tier: '2', args: '<number>' },
   { name: '/sync-issues', category: 'Planning', purpose: 'Import open issues by label into the VibeCrew backlog', agent: 'None (script only)', tier: '2', args: '--label <name> --limit <n>' },
   { name: '/system-review', category: 'Quality', purpose: 'Plugin meta-analysis, cross-project telemetry, ecosystem research', agent: 'System Reviewer', tier: 'Any', args: '' },
+  { name: '/validate-skills', category: 'Quality', purpose: 'Evaluate skill schema quality, model-version tracking, A/B test recommendations', agent: 'None (script only)', tier: 'Any', args: '' },
 ];
 
 export const categories = [...new Set(commands.map((c) => c.category))];

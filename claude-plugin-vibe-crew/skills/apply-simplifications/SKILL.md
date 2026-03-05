@@ -2,6 +2,7 @@
 name: apply-simplifications
 description: Apply approved suggestions from the Code Simplifier report
 disable-model-invocation: false
+category: action
 ---
 
 # VibeCrew Apply Simplifications

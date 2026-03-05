@@ -3,6 +3,7 @@ name: a11y
 description: WCAG 2.1 AA accessibility audit — axe-core scan, keyboard navigation, ARIA validation
 disable-model-invocation: false
 args: target_url
+category: action
 ---
 
 # /a11y

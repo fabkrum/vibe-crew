@@ -2,6 +2,7 @@
 name: plan-features
 description: Interactive planning session to populate the backlog with feature specs
 disable-model-invocation: true
+category: workflow
 ---
 
 # VibeCrew Feature Planning Session

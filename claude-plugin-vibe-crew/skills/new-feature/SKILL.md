@@ -3,6 +3,7 @@ name: new-feature
 description: Start a new feature — foundation check, branch, phase tracker, agent handoff
 disable-model-invocation: false
 args: feature_name
+category: workflow
 ---
 
 # /new-feature

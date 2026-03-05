@@ -2,6 +2,7 @@
 name: run-backlog
 description: Automated backlog processing — picks features, runs phases, quality gates
 disable-model-invocation: false
+category: workflow
 ---
 
 # VibeCrew Automated Backlog Processing

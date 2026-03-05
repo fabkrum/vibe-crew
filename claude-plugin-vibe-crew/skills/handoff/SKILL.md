@@ -2,6 +2,7 @@
 name: handoff
 description: Generate a structured context transfer document for the next session — state, work done, blockers, next steps, decisions
 disable-model-invocation: false
+category: dashboard
 ---
 
 # VibeCrew Handoff: Cross-Session Context Transfer

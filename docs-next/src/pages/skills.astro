@@ -26,6 +26,77 @@ import { commands, categories } from '../data/commands';
     </div>
   </div>
 
+  <!-- ── Modern Skill Patterns ── -->
+  <section class="section">
+    <h3>Modern Skill Patterns</h3>
+    <p>VibeCrew skills leverage advanced Claude Code features for better autocomplete, cost optimization, tool scoping, and native subagent isolation.</p>
+
+    <h4 class="agent-table-heading">Frontmatter Fields</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Field</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><code>argument-hint</code></td><td>Shows placeholder text in autocomplete after the skill name</td><td><code>"User Authentication"</code></td></tr>
+          <tr><td><code>allowed-tools</code></td><td>Restricts which tools the skill can use &mdash; enforces read-only for dashboards</td><td><code>Read, Bash, Glob, Grep</code></td></tr>
+          <tr><td><code>model</code></td><td>Routes skill to a specific model for cost optimization</td><td><code>haiku</code> for dashboards</td></tr>
+          <tr><td><code>context: fork</code></td><td>Runs the skill as an isolated subagent &mdash; results return to main session</td><td>Used by <code>/review</code>, <code>/audit</code></td></tr>
+          <tr><td><code>agent:</code></td><td>Specifies which agent runs in a forked context</td><td><code>code-reviewer</code></td></tr>
+          <tr><td><code>category</code></td><td>Classifies skill for evaluation and retirement tracking</td><td><code>workflow</code>, <code>analysis</code>, <code>action</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Dynamic Injection (<code>!</code> Backtick)</h4>
+    <p>Skills can pre-load data at load time using <code>!</code> backtick syntax. The shell command runs before Claude sees the prompt, eliminating the first &ldquo;read state&rdquo; turn and saving tokens.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Skill</th><th>What Gets Injected</th></tr></thead>
+        <tbody>
+          <tr><td><code>/status</code></td><td>state.json, backlog.json, git branch, recent commits, latest score</td></tr>
+          <tr><td><code>/cost</code></td><td>Session cost data, aggregated spending</td></tr>
+          <tr><td><code>/check</code></td><td>package.json (scripts section)</td></tr>
+          <tr><td><code>/wrap</code></td><td>state.json, backlog.json, git diff --stat</td></tr>
+          <tr><td><code>/fix-issue</code></td><td>Git provider auth check</td></tr>
+          <tr><td><code>/heal</code></td><td>CI logs, provider auth check</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Native Argument Substitution</h4>
+    <p>Skills use <code>$ARGUMENTS</code> and <code>$0</code> for native argument parsing instead of manual extraction steps. <code>$0</code> captures the first argument, <code>$ARGUMENTS</code> captures the full argument string.</p>
+
+    <h4 class="agent-table-heading">Forked Skills</h4>
+    <p>Four analysis skills use <code>context: fork</code> with a dedicated <code>agent:</code> to run in native subagent isolation. The forked agent produces formatted output directly and returns results to the main session.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Skill</th><th>Agent</th><th>Why Forked</th></tr></thead>
+        <tbody>
+          <tr><td><code>/review</code></td><td>Code Reviewer</td><td>Read-only analysis &mdash; clean single-agent scope</td></tr>
+          <tr><td><code>/simplify</code></td><td>Code Simplifier</td><td>Analysis-only; <code>/apply-simplifications</code> handles interactive changes</td></tr>
+          <tr><td><code>/audit</code></td><td>Security Auditor</td><td>OWASP scan with pre-injected dependency + secret data</td></tr>
+          <tr><td><code>/system-review</code></td><td>System Reviewer</td><td>Cross-project telemetry analysis</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Skill Categories</h4>
+    <p>Every skill has a <code>category</code> field that determines its evaluation strategy and retirement criteria.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Category</th><th>Count</th><th>Evaluation Strategy</th></tr></thead>
+        <tbody>
+          <tr><td><strong>workflow</strong></td><td>7 skills</td><td>Durable (preference-encoding) &mdash; optimize triggers, rarely retire</td></tr>
+          <tr><td><strong>analysis</strong></td><td>6 skills</td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
+          <tr><td><strong>action</strong></td><td>8 skills</td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
+          <tr><td><strong>dashboard</strong></td><td>4 skills</td><td>Durable &mdash; read-only, optimize for speed</td></tr>
+          <tr><td><strong>utility</strong></td><td>9 skills</td><td>Durable &mdash; simple operations, minimal maintenance</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
   <div class="skills-filters" id="skills-filters">
     <button class="filter-pill active" data-cat="all">All</button>
     {categories.map((cat) => (

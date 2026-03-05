@@ -104,6 +104,11 @@ import { hooksDiagram } from '../data/diagrams';
           <td>Auto-formats files after every write using the project's configured formatter (Prettier, ESLint, etc.).</td>
         </tr>
         <tr>
+          <td><code>validate-skill-schema.sh</code></td>
+          <td>PostToolUse (Write/Edit)</td>
+          <td>Validates SKILL.md frontmatter on every skill write. Checks required fields, category values, argument-hint consistency, and fork/agent pairing.</td>
+        </tr>
+        <tr>
           <td><code>notify.sh</code></td>
           <td>Notification / PostToolUseFailure</td>
           <td>Sends native OS notifications for permission stalls, task completions, and errors. Includes Warp Terminal deep-links when available.</td>

@@ -2,6 +2,7 @@
 name: heal
 description: Auto-heal failing CI — fetch logs, diagnose, fix (max 3 attempts), verify
 disable-model-invocation: false
+category: action
 ---
 
 # /heal

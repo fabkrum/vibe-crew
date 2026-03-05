@@ -2,6 +2,7 @@
 name: check
 description: Run quality checks — tests, build, lint, type checking
 disable-model-invocation: false
+category: analysis
 ---
 
 # VibeCrew Quality Check

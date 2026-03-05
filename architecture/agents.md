@@ -25,22 +25,22 @@
 
 ## 1. Agent Summary Table
 
-| # | Agent | Model | Trigger | Context Budget | Isolation | maxTurns |
-|---|-------|-------|---------|----------------|-----------|----------|
-| 1 | Session Startup | Haiku | `SessionStart` hook | <10% | Inline | 5 |
-| 2 | Workflow Orchestrator | Opus | Primary tab (always running) | <40% | Inline | 30 |
-| 3 | Stack Scout | Opus | Delegated by Orchestrator for research | <45% | Worktree | 50 |
-| 4 | Builder | Opus | Delegated for design and code phases | <45% | Worktree | 100 |
-| 5 | Verifier | Haiku | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | 60 |
-| 6 | Performance Coach | Opus | `/wrap` Step 9.5 (after 5+ sessions) | <30% | Inline | 25 |
-| 7 | Doc Generator | Sonnet | `/wrap` Step 10, `/handoff`, `/release` | <25% | Inline | 20 |
-| 8 | Code Auditor | Opus | `/audit`, `/onboard` | <40% | Worktree | 40 |
-| 9 | Security Auditor | Opus | Security analysis (manual trigger) | <40% | Worktree | 40 |
-| 10 | Code Simplifier | Opus | `/simplify` | <35% | Worktree | 30 |
-| 11 | CI Healer | Opus | `/heal` (GitHub Actions and GitLab CI) | <30% | Inline | 15 |
-| 12 | Opponent Processor | Opus | TDR counter-analysis (Tier 1 Step 3.5) | <35% | Worktree | 30 |
-| 13 | Code Reviewer | Opus | `/review`, `/run-backlog` Phase 4.5 | <35% | Worktree | 30 |
-| 14 | System Reviewer | Opus | `/system-review` | <30% | Worktree | 25 |
+| # | Agent | Model | Trigger | Context Budget | Isolation | Memory | maxTurns |
+|---|-------|-------|---------|----------------|-----------|--------|----------|
+| 1 | Session Startup | Haiku | `SessionStart` hook | <10% | Inline | — | 5 |
+| 2 | Workflow Orchestrator | Opus | Primary tab (always running) | <40% | Inline | — | 30 |
+| 3 | Stack Scout | Opus | Delegated by Orchestrator for research | <45% | Worktree | — | 50 |
+| 4 | Builder | Opus | Delegated for design and code phases | <45% | Worktree | Expertise | 100 |
+| 5 | Verifier | Haiku | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | — | 60 |
+| 6 | Performance Coach | Opus | `/wrap` Step 9.5 (after 5+ sessions) | <30% | Inline | Project | 25 |
+| 7 | Doc Generator | Sonnet | `/wrap` Step 10, `/handoff`, `/release` | <25% | Inline | — | 20 |
+| 8 | Code Auditor | Opus | `/audit`, `/onboard` | <40% | Worktree | — | 40 |
+| 9 | Security Auditor | Opus | `/audit` (fork) | <40% | Worktree | Project | 40 |
+| 10 | Code Simplifier | Opus | `/simplify` (fork) | <35% | Worktree | Project | 30 |
+| 11 | CI Healer | Opus | `/heal` (GitHub Actions and GitLab CI) | <30% | Inline | — | 15 |
+| 12 | Opponent Processor | Opus | TDR counter-analysis (Tier 1 Step 3.5) | <35% | Worktree | — | 30 |
+| 13 | Code Reviewer | Opus | `/review` (fork), `/run-backlog` Phase 4.5 | <35% | Worktree | Expertise | 30 |
+| 14 | System Reviewer | Opus | `/system-review` (fork) | <30% | Worktree | — | 25 |
 
 ### Agents Originally Deferred, Now Implemented
 

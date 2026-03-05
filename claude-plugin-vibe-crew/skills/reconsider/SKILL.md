@@ -2,6 +2,7 @@
 name: reconsider
 description: Reconsider a specific TDR technology decision with fresh research
 disable-model-invocation: false
+category: utility
 ---
 
 # VibeCrew TDR Reconsideration

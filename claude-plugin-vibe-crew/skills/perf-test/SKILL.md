@@ -3,6 +3,7 @@ name: perf-test
 description: k6 performance testing — load, stress, spike, and soak test profiles
 disable-model-invocation: false
 args: test_type
+category: action
 ---
 
 # /perf-test

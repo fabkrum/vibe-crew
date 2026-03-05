@@ -36,13 +36,14 @@ import { agentInteractionDiagram } from '../data/diagrams';
   <div class="agent-table-wrap">
     <table class="agent-table">
       <thead>
-        <tr><th>Agent</th><th>Model</th><th>Isolation</th><th>What It Does</th><th>Triggered By</th></tr>
+        <tr><th>Agent</th><th>Model</th><th>Isolation</th><th>Memory</th><th>What It Does</th><th>Triggered By</th></tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Session Startup</strong></td>
           <td><span class="badge amber">Haiku</span></td>
           <td>Inline</td>
+          <td>—</td>
           <td>Environment check, state detection, handoff detection, routing</td>
           <td>Every session start</td>
         </tr>
@@ -50,6 +51,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Workflow Orchestrator</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Inline</td>
+          <td>—</td>
           <td>Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog</td>
           <td>Command routing</td>
         </tr>
@@ -57,6 +59,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Stack Scout</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>—</td>
           <td>Read-only research via WebSearch, Context7, Chrome DevTools. Produces TDR</td>
           <td>Tier 1 architecture step</td>
         </tr>
@@ -64,6 +67,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Builder</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>Expertise</td>
           <td>Creates implementation plans, generates ASCII wireframes, implements features: component selection, code generation, accessibility and visual verification</td>
           <td>Tier 2 plan + design + code phases</td>
         </tr>
@@ -71,6 +75,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Verifier</strong></td>
           <td><span class="badge amber">Haiku</span></td>
           <td>Inline</td>
+          <td>—</td>
           <td>Runs tests, lint, build, and type-check. Reports pass/fail results</td>
           <td><code>/check</code>, <code>/wrap</code>, <code>/run-backlog</code></td>
         </tr>
@@ -78,6 +83,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Performance Coach</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Inline</td>
+          <td>Project</td>
           <td>Cross-session trend analysis, anti-pattern detection, CLAUDE.md mutation proposals</td>
           <td><code>/wrap</code> session end</td>
         </tr>
@@ -85,6 +91,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Code Auditor</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>—</td>
           <td>Read-only codebase analysis for existing project onboarding</td>
           <td><code>/onboard</code></td>
         </tr>
@@ -92,6 +99,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Security Auditor</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>Project</td>
           <td>OWASP Top 10 security analysis: injection, auth, XSS, secrets</td>
           <td><code>/audit</code></td>
         </tr>
@@ -99,6 +107,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Doc Generator</strong></td>
           <td><span class="badge sonnet">Sonnet</span></td>
           <td>Inline</td>
+          <td>—</td>
           <td>Feature docs, CHANGELOG, release notes, VitePress sidebar regeneration</td>
           <td><code>/wrap</code>, Tier 2 docs phase</td>
         </tr>
@@ -106,6 +115,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Code Simplifier</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>Project</td>
           <td>Dead code detection, abstraction flattening, API surface reduction</td>
           <td><code>/simplify</code></td>
         </tr>
@@ -113,6 +123,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>CI Healer</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Inline</td>
+          <td>—</td>
           <td>CI failure diagnosis and repair. Categorizes failures, max 3 fix attempts</td>
           <td><code>/heal</code></td>
         </tr>
@@ -120,6 +131,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Opponent Processor</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>—</td>
           <td>Devil's advocate for TDR decisions: counter-arguments, debate matrices, risks</td>
           <td>Tier 1 after TDR</td>
         </tr>
@@ -127,6 +139,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>Code Reviewer</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>Expertise</td>
           <td>Read-only code review against feature spec, TDR compliance, conventions</td>
           <td><code>/review</code>, <code>/run-backlog</code></td>
         </tr>
@@ -134,6 +147,7 @@ import { agentInteractionDiagram } from '../data/diagrams';
           <td><strong>System Reviewer</strong></td>
           <td><span class="badge opus">Opus</span></td>
           <td>Worktree</td>
+          <td>—</td>
           <td>Plugin meta-analysis, cross-project telemetry, ecosystem research</td>
           <td><code>/system-review</code></td>
         </tr>

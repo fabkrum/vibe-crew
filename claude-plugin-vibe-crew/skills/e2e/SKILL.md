@@ -3,6 +3,7 @@ name: e2e
 description: Playwright E2E testing with Page Object Model — scaffold, generate, run
 disable-model-invocation: false
 args: scope
+category: action
 ---
 
 # /e2e

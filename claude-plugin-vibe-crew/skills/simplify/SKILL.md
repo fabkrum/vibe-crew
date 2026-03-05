@@ -2,6 +2,7 @@
 name: simplify
 description: Analyze feature code for simplification opportunities — dead code, abstraction flattening, API reduction
 disable-model-invocation: false
+category: analysis
 ---
 
 # /simplify

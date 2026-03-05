@@ -2,6 +2,7 @@
 name: fix-issue
 description: Fix an issue (GitHub/GitLab) — fetch, diagnose, implement, test, and open a PR/MR with auto-close
 disable-model-invocation: false
+category: action
 ---
 
 # /fix-issue

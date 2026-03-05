@@ -2,6 +2,7 @@
 name: new-project
 description: Run the Tier 1 foundation workflow to create all 6 project artifacts
 disable-model-invocation: true
+category: workflow
 ---
 
 # VibeCrew Tier 1: New Project Foundation

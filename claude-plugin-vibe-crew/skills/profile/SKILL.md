@@ -2,6 +2,7 @@
 name: profile
 description: Personalize VibeCrew — user profile interview
 disable-model-invocation: true
+category: utility
 ---
 
 # VibeCrew User Profile Interview

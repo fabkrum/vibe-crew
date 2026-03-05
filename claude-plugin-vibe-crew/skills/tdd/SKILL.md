@@ -2,6 +2,7 @@
 name: tdd
 description: Red-green-refactor TDD cycle — vertical-slice test-driven development
 disable-model-invocation: false
+category: action
 ---
 
 # /tdd

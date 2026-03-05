@@ -2,6 +2,7 @@
 name: release
 description: Bump version, regenerate release notes, commit, and tag a new release
 disable-model-invocation: false
+category: workflow
 ---
 
 # VibeCrew Release: Automated Version Release

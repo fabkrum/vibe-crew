@@ -2,6 +2,7 @@
 name: review
 description: Structured code review with severity levels — invoke code-reviewer agent in worktree
 disable-model-invocation: false
+category: analysis
 ---
 
 # /review

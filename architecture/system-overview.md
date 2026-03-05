@@ -1064,7 +1064,7 @@ The Vibe Score deducts 15 points when cache utilization drops below 20%, incenti
 
 ### 6.1 Overview
 
-VibeCrew exposes 28 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
+VibeCrew exposes 34 slash commands, each implemented as a `SKILL.md` file in the `skills/` directory. Skills follow the Agent Skills open standard and create `/name` shortcuts in the Claude Code interface.
 
 All VibeCrew commands use `disable-model-invocation: true` to prevent Claude from auto-loading them. They are user-triggered workflows, not background capabilities. Two commands (`/status` and `/check`) also allow model invocation for internal use by the Orchestrator.
 
@@ -1154,6 +1154,7 @@ All VibeCrew commands use `disable-model-invocation: true` to prevent Claude fro
 | `/fix-issue` | `fix-issue` | `<number> [--full]` | Inline | Builder, Verifier, Code Reviewer | Opus |
 | `/sync-issues` | `sync-issues` | `[--label <name>] [--limit <n>]` | Inline (script only) | -- | Inherit |
 | `/system-review` | `system-review` | None | Worktree | System Reviewer | Opus |
+| `/validate-skills` | `validate-skills` | None | Inline (script only) | -- | Inherit |
 
 ### 6.4 Command Details
 

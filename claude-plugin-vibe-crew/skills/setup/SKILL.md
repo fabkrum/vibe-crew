@@ -2,6 +2,7 @@
 name: setup
 description: First-run installation wizard for VibeCrew
 disable-model-invocation: true
+category: workflow
 ---
 
 # VibeCrew Setup Wizard

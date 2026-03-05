@@ -2,6 +2,7 @@
 name: undo
 description: Checkpoint rollback — list checkpoints, pick target, revert or reset
 disable-model-invocation: false
+category: utility
 ---
 
 # /undo

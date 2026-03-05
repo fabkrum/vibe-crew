@@ -2,6 +2,7 @@
 name: quiz
 description: Interactive knowledge quiz on vibe-coding skills
 disable-model-invocation: false
+category: utility
 ---
 
 # VibeCrew Quiz

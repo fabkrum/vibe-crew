@@ -181,6 +181,96 @@ import { selfImprovingDiagram } from '../data/diagrams';
 
   <hr>
 
+  <!-- ── Agent Persistent Memory ── -->
+  <section class="section">
+    <h3>Agent Persistent Memory</h3>
+    <p>Some agents maintain <strong>persistent memory</strong> across sessions using two complementary mechanisms. This allows agents to learn from previous runs without relying solely on CLAUDE.md mutations.</p>
+
+    <h4 class="agent-table-heading">Three Learning Mechanisms</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Mechanism</th><th>Storage</th><th>Scope</th><th>Used By</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Performance Coach Mutations</strong></td>
+            <td>CLAUDE.md rules</td>
+            <td>All agents (global)</td>
+            <td>Performance Coach</td>
+          </tr>
+          <tr>
+            <td><strong>Expertise Records</strong></td>
+            <td><code>.vibecrew/expertise/</code> JSON</td>
+            <td>Cross-agent (structured)</td>
+            <td>Builder, Code Reviewer</td>
+          </tr>
+          <tr>
+            <td><strong>Agent Memory</strong></td>
+            <td><code>.claude/agent-memory/</code></td>
+            <td>Agent-private (free-form)</td>
+            <td>Performance Coach, Code Simplifier, Security Auditor</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon purple">&#9632;</span>
+        <div>
+          <strong>Why three mechanisms?</strong>
+          <p>Each serves a different purpose: CLAUDE.md mutations encode <em>global rules</em> that all agents follow. Expertise records store <em>structured, queryable</em> data (conventions, failure patterns, decisions) shared across agents. Agent memory stores <em>private, free-form</em> notes for unstructured learnings specific to one agent.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Skill Evaluation ── -->
+  <section class="section">
+    <h3>Skill Evaluation &amp; Model-Change Resilience</h3>
+    <p>VibeCrew tracks whether its 34 skills remain effective as models improve. The <code>/validate-skills</code> command evaluates skill health, and model-change detection at session startup alerts you when re-evaluation is needed.</p>
+
+    <h4 class="agent-table-heading">The Evaluation Loop</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Step</th><th>What Happens</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Detection</strong></td><td>Session startup compares the current model against <code>.last-validated-model.txt</code>. If changed, a one-line warning fires.</td></tr>
+          <tr><td><strong>2. Evaluation</strong></td><td><code>/validate-skills</code> runs 3-tier analysis: schema check, model-version tracking, and A/B test recommendations.</td></tr>
+          <tr><td><strong>3. Testing</strong></td><td>Capability-uplift skills (<code>analysis</code> + <code>action</code> categories) are flagged for A/B testing via Skill Creator.</td></tr>
+          <tr><td><strong>4. Tracking</strong></td><td>Results stored in <code>.vibecrew/reviews/skill-health-*.json</code> with model version and validation date.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Skill Categories</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Category</th><th>Count</th><th>Maintenance Strategy</th></tr></thead>
+        <tbody>
+          <tr><td><strong>workflow</strong></td><td>7</td><td>Durable &mdash; encodes preferences, optimize triggers</td></tr>
+          <tr><td><strong>analysis</strong></td><td>6</td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
+          <tr><td><strong>action</strong></td><td>8</td><td>Capability-uplift &mdash; A/B test after model upgrades</td></tr>
+          <tr><td><strong>dashboard</strong></td><td>4</td><td>Durable &mdash; read-only, optimize for speed</td></tr>
+          <tr><td><strong>utility</strong></td><td>9</td><td>Durable &mdash; simple operations, minimal maintenance</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="key-points">
+      <div class="key-point">
+        <span class="key-icon green">&#10003;</span>
+        <div>
+          <strong>Schema Validation Hook</strong>
+          <p>The <code>validate-skill-schema.sh</code> PostToolUse hook automatically validates every SKILL.md write. It checks required fields, category values, and <code>context: fork</code> / <code>agent:</code> pairing &mdash; catching schema errors before they reach production.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
   <!-- ── Feedback Loop Diagram ── -->
   <section class="section">
     <h3>The Self-Improvement Loop</h3>

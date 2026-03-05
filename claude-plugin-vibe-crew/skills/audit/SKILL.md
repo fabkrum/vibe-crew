@@ -2,6 +2,7 @@
 name: audit
 description: OWASP Top 10 security review — scan codebase, check dependencies, detect secrets
 disable-model-invocation: false
+category: analysis
 ---
 
 # /audit

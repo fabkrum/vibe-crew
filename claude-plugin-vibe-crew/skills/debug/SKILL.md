@@ -3,6 +3,7 @@ name: debug
 description: Four-phase systematic debugging — observe, hypothesize, test, verify
 disable-model-invocation: false
 args: error_description
+category: action
 ---
 
 # /debug

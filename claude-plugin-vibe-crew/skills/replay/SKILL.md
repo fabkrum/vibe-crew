@@ -2,6 +2,7 @@
 name: replay
 description: List, create, or apply reusable workflow templates from successful sessions
 disable-model-invocation: false
+category: utility
 ---
 
 # VibeCrew Replay: Reusable Workflow Templates

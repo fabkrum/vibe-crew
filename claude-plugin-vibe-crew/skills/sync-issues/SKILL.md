@@ -2,6 +2,7 @@
 name: sync-issues
 description: Import open issues by label into the VibeCrew backlog (GitHub/GitLab)
 disable-model-invocation: true
+category: utility
 ---
 
 # /sync-issues

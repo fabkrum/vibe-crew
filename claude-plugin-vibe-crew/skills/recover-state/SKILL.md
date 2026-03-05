@@ -2,6 +2,7 @@
 name: recover-state
 description: List and restore VibeCrew state backups
 disable-model-invocation: false
+category: utility
 ---
 
 # VibeCrew State Recovery

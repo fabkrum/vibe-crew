@@ -2,6 +2,7 @@
 name: system-review
 description: Meta-level audit of VibeCrew plugin internals, cross-project telemetry analysis, and ecosystem research
 disable-model-invocation: false
+category: analysis
 ---
 
 # /system-review

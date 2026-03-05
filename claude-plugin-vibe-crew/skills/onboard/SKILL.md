@@ -2,6 +2,7 @@
 name: onboard
 description: Onboard an existing project into VibeCrew — analyzes codebase, extracts conventions, generates CLAUDE.md, and initializes state
 disable-model-invocation: false
+category: analysis
 ---
 
 # VibeCrew Onboard: Existing Project Onboarding

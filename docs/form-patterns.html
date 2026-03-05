@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Form Patterns</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.pattern-illustration[data-astro-cid-dzbyjrfs]{flex-shrink:0;width:200px;height:120px}.pattern-illustration[data-astro-cid-dzbyjrfs] svg{width:100%;height:100%;display:block}.category-nav[data-astro-cid-hifofup3]{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem;padding:1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm)}.category-nav[data-astro-cid-hifofup3] a[data-astro-cid-hifofup3]{padding:.35rem .75rem;border-radius:var(--radius-xs);font-size:.82rem;font-weight:600;color:var(--color-text-secondary);text-decoration:none;transition:all .15s;white-space:nowrap}.category-nav[data-astro-cid-hifofup3] a[data-astro-cid-hifofup3]:hover{background:var(--color-accent-bg);color:var(--color-accent);text-decoration:none}.category-heading[data-astro-cid-hifofup3]{font-size:1.5rem;font-weight:800;color:var(--color-accent);border-bottom:1px solid var(--color-border);padding-bottom:.5rem;margin-bottom:.5rem;margin-top:2rem}.category-description[data-astro-cid-hifofup3]{margin:0 0 1.25rem;font-size:.92rem;color:var(--color-text-secondary);line-height:1.6}.pattern-list[data-astro-cid-hifofup3]{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem}.pattern-card[data-astro-cid-hifofup3]{padding:1.25rem;border:1px solid var(--color-border-subtle);border-radius:var(--radius-sm);background:var(--color-surface)}.pattern-card-inner[data-astro-cid-hifofup3]{display:flex;gap:1.25rem;align-items:flex-start}.pattern-content[data-astro-cid-hifofup3]{flex:1;min-width:0}@media(max-width:600px){.pattern-card-inner[data-astro-cid-hifofup3]{flex-direction:column}}.pattern-name[data-astro-cid-hifofup3]{font-size:1rem;font-weight:700;color:var(--color-text);margin:0 0 .5rem}.pattern-desc[data-astro-cid-hifofup3]{font-size:.92rem;color:var(--color-text-secondary);line-height:1.6;margin:0 0 .75rem}.pattern-meta[data-astro-cid-hifofup3]{display:flex;flex-direction:column;gap:.5rem}.meta-block[data-astro-cid-hifofup3]{font-size:.85rem;line-height:1.5}.meta-block[data-astro-cid-hifofup3] p[data-astro-cid-hifofup3]{margin:0;color:var(--color-text-secondary)}.meta-label[data-astro-cid-hifofup3]{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-muted);margin-right:.35rem}.docs-link[data-astro-cid-hifofup3]{display:inline-block;margin-top:.25rem;font-size:.82rem;font-weight:600;color:var(--color-accent);text-decoration:none}.docs-link[data-astro-cid-hifofup3]:hover{text-decoration:underline}.further-reading[data-astro-cid-hifofup3]{margin-top:3rem}.further-reading[data-astro-cid-hifofup3] ul[data-astro-cid-hifofup3]{list-style:none;padding:0;margin:1rem 0 0}.further-reading[data-astro-cid-hifofup3] li[data-astro-cid-hifofup3]{padding:.5rem 0;border-bottom:1px solid var(--color-border-subtle);font-size:.92rem;line-height:1.6}.further-reading[data-astro-cid-hifofup3] li[data-astro-cid-hifofup3]:last-child{border-bottom:none}.further-reading[data-astro-cid-hifofup3] a[data-astro-cid-hifofup3]{font-weight:600;color:var(--color-accent);text-decoration:none}.further-reading[data-astro-cid-hifofup3] a[data-astro-cid-hifofup3]:hover{text-decoration:underline}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/animation-patterns.html" class="sidebar-link"> Animation Patterns </a><a href="/vibe-crew/form-patterns.html" class="sidebar-link active"> Form Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Reference</span>  <span class="separator">/</span> <span>Form Patterns</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Reference"},{"@type":"ListItem","position":3,"name":"Form Patterns"}]}</script>  <h2 data-astro-cid-hifofup3>Form Patterns</h2> <p data-astro-cid-hifofup3>Research-backed form design patterns that VibeCrew agents apply during design and code review. Each pattern includes implementation guidance and accessibility requirements.</p> <nav class="category-nav" aria-label="Pattern categories" data-astro-cid-hifofup3> <a href="#cat-validation" data-astro-cid-hifofup3>Validation &amp; Error Handling</a><a href="#cat-autocomplete" data-astro-cid-hifofup3>Autocomplete &amp; Autofill</a><a href="#cat-enhancement" data-astro-cid-hifofup3>Input Enhancement</a><a href="#cat-structure" data-astro-cid-hifofup3>Form Structure</a><a href="#cat-resilience" data-astro-cid-hifofup3>Resilience</a> </nav> <section class="pattern-section" id="cat-validation" data-astro-cid-hifofup3> <h3 class="category-heading" data-astro-cid-hifofup3>Validation &amp; Error Handling</h3> <p class="category-description" data-astro-cid-hifofup3>Inline validation, error summaries, focus management, and action-first error messages that help users fix mistakes fast.</p> <div class="pattern-list" data-astro-cid-hifofup3> <div class="pattern-card" id="inline-validation" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="28" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="28" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">john@example.com</text>
+  <circle cx="168" cy="24" r="7" style="fill: hsl(142, 71%, 45%)"/>
+  <text x="168" y="28" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 700; font-family: var(--font-sans)">&#x2713;</text>
+  <rect x="20" y="50" width="160" height="28" rx="6" style="stroke: hsl(0, 84%, 60%); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="68" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">bad-email</text>
+  <text x="20" y="94" style="fill: hsl(0, 84%, 60%); font-size: 9px; font-family: var(--font-sans)">Enter a valid email address</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Inline Validation</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Validate on blur (not on keystroke). Show success checkmarks for valid fields and error messages inline below the field. Never clear the field on error.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Attach onBlur handler to each field. Show error via aria-describedby. Use aria-invalid=&quot;true&quot; on the field. Success: green checkmark icon.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Error messages linked via aria-describedby. aria-invalid=&quot;true&quot; on the field. Never color-only indicators.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="error-summary" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="55" rx="6" style="stroke: hsl(0, 84%, 60%); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="28" style="fill: hsl(0, 84%, 60%); font-size: 10px; font-weight: 700; font-family: var(--font-sans)">Please fix 2 errors:</text>
+  <text x="32" y="44" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-sans)">&#x2192; Email is required</text>
+  <text x="32" y="58" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-sans)">&#x2192; Password too short</text>
+  <rect x="20" y="75" width="160" height="22" rx="5" style="stroke: hsl(0, 84%, 60%); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="20" y="100" width="160" height="14" rx="3" style="fill: var(--color-surface-2)"/>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Error Summary</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Show a summary box at the top of the form listing all errors on failed submission. Each error links to the corresponding field.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>role=&quot;alert&quot; container. Focus the summary on submit failure. Each item is an anchor to the field ID.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>role=&quot;alert&quot; or aria-live=&quot;polite&quot;. Focus management on submit failure.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="focus-on-first-error" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="15" width="160" height="24" rx="5" style="stroke: hsl(0, 84%, 60%); fill: var(--color-surface)" stroke-width="2"/>
+  <rect x="24" y="19" width="152" height="16" rx="3" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <text x="32" y="31" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Email &#x2190; focus here</text>
+  <rect x="20" y="50" width="160" height="24" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="20" y="85" width="160" height="24" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Focus on First Error</h4> <p class="pattern-desc" data-astro-cid-hifofup3>On submission failure, automatically focus the first invalid field and scroll it into view. Never focus the submit button on error.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>After validation, find first invalid field, call .focus() and .scrollIntoView({ behavior: &quot;smooth&quot;, block: &quot;center&quot; }).</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Ensures keyboard users are positioned at the first problem without manual searching.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-autocomplete" data-astro-cid-hifofup3> <h3 class="category-heading" data-astro-cid-hifofup3>Autocomplete &amp; Autofill</h3> <p class="category-description" data-astro-cid-hifofup3>HTML autocomplete tokens, address lookup, and OTP autofill that reduce typing effort by 30-50%.</p> <div class="pattern-list" data-astro-cid-hifofup3> <div class="pattern-card" id="autocomplete-tokens" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="28" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="28" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">John Doe</text>
+  <rect x="130" y="14" width="45" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="152" y="26" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">autofill</text>
+  <rect x="20" y="48" width="160" height="28" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="66" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">john@example.com</text>
+  <rect x="130" y="52" width="45" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="152" y="64" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">autofill</text>
+  <rect x="20" y="86" width="160" height="28" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="104" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">+1 555-123-4567</text>
+  <rect x="130" y="90" width="45" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="152" y="102" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">autofill</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Autocomplete Tokens</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Set the autocomplete attribute on every standard form field (name, email, tel, address, cc-number). Browsers auto-fill known values, reducing effort by 30-50%.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Add autocomplete=&quot;name|email|tel|address-line1|postal-code|country|cc-number|cc-exp|cc-csc&quot; to inputs.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Autocomplete helps motor-impaired users avoid retyping. Never disable autocomplete on standard fields.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete" target="_blank" rel="noopener noreferrer" data-astro-cid-hifofup3>Docs →</a> </div> </div> </div> </div><div class="pattern-card" id="address-autocomplete" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="28" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="28" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">123 Main St</text>
+  <rect x="20" y="42" width="160" height="60" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="26" y="48" width="148" height="20" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="36" y="62" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">123 Main St, New York, NY</text>
+  <text x="36" y="82" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">123 Main St, Boston, MA</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Address Autocomplete</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Integrate address lookup (Google Places API or similar) to auto-fill city, state, and zip from partial address input. Pre-select country from locale.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Attach Places Autocomplete to the first address field. On selection, populate all address fields. Fallback to standard fields with autocomplete tokens.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Autocomplete dropdown must be keyboard-navigable. aria-expanded on the input. aria-activedescendant for selection.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-enhancement" data-astro-cid-hifofup3> <h3 class="category-heading" data-astro-cid-hifofup3>Input Enhancement</h3> <p class="category-description" data-astro-cid-hifofup3>Password strength meters, reveal toggles, character counters, and input masking for better field interactions.</p> <div class="pattern-list" data-astro-cid-hifofup3> <div class="pattern-card" id="password-strength" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="28" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="28" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</text>
+  <rect x="20" y="46" width="40" height="6" rx="3" style="fill: hsl(0, 84%, 60%)"/>
+  <rect x="64" y="46" width="40" height="6" rx="3" style="fill: hsl(38, 92%, 50%)"/>
+  <rect x="108" y="46" width="40" height="6" rx="3" style="fill: hsl(142, 71%, 45%)"/>
+  <rect x="152" y="46" width="28" height="6" rx="3" style="fill: var(--color-surface-2)"/>
+  <text x="20" y="68" style="fill: hsl(142, 71%, 45%); font-size: 9px; font-family: var(--font-sans)">&#x2713; 8+ characters</text>
+  <text x="20" y="82" style="fill: hsl(142, 71%, 45%); font-size: 9px; font-family: var(--font-sans)">&#x2713; One uppercase</text>
+  <text x="20" y="96" style="fill: hsl(0, 84%, 60%); font-size: 9px; font-family: var(--font-sans)">&#x2717; One number</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Password Strength</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Entropy-based strength meter for password creation. Show as a colored bar (red → yellow → green) with a specific requirements checklist.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Calculate entropy from character set diversity and length. Show requirements as checkmarks. aria-live=&quot;polite&quot; for strength changes.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Strength meter uses aria-valuenow/min/max. Requirements list uses aria-live=&quot;polite&quot; for updates.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="password-reveal" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="160" height="32" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="40" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</text>
+  <circle cx="162" cy="36" r="8" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5"/>
+  <circle cx="162" cy="36" r="3" style="fill: var(--color-text-muted)"/>
+  <rect x="20" y="68" width="160" height="32" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="88" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">MyP@ss123</text>
+  <circle cx="162" cy="84" r="8" style="stroke: var(--color-accent); fill: none" stroke-width="1.5"/>
+  <line x1="155" y1="84" x2="169" y2="84" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Password Reveal</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Eye icon toggle that switches between type=&quot;password&quot; and type=&quot;text&quot;. Essential on mobile where autocorrect can corrupt hidden passwords.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Button with aria-label=&quot;Show password&quot; / &quot;Hide password&quot;. Toggles input type attribute. Preserves cursor position.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>aria-label updates on toggle. Button is focusable and keyboard-operable.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="character-counter" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="60" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="30" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">This is my bio text</text>
+  <text x="32" y="46" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">with multiple lines</text>
+  <text x="152" y="82" text-anchor="end" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">42/280</text>
+  <rect x="20" y="90" width="160" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="90" width="24" height="4" rx="2" style="fill: var(--color-accent)"/>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Character Counter</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Show remaining or used characters as &quot;42/280&quot; below the field. Warn when approaching the limit. Never silently truncate input.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Live counter tied to input event. aria-describedby links the counter to the field. Warn at 90% of limit.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Counter announced via aria-describedby. Warning state via aria-live=&quot;polite&quot;.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="input-masking" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="25" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">User types:</text>
+  <rect x="20" y="30" width="160" height="28" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="48" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">5551234567</text>
+  <text x="20" y="78" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">On blur:</text>
+  <rect x="20" y="82" width="160" height="28" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="100" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">(555) 123-4567</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Input Masking</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Format inputs like phone numbers and credit cards on blur, not during typing. Accept flexible user input and normalize server-side.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Format on blur event. Store raw value internally. Display formatted value. Never prevent free typing.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Formatted value must remain readable by screen readers. aria-label describes the expected format.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-structure" data-astro-cid-hifofup3> <h3 class="category-heading" data-astro-cid-hifofup3>Form Structure</h3> <p class="category-description" data-astro-cid-hifofup3>Single-column layouts, multi-step wizards, conditional fields, and fieldset grouping for organized, scannable forms.</p> <div class="pattern-list" data-astro-cid-hifofup3> <div class="pattern-card" id="multi-step-form" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="45" cy="20" r="12" style="fill: var(--color-accent)"/>
+  <text x="45" y="24" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 700; font-family: var(--font-sans)">1</text>
+  <line x1="57" y1="20" x2="83" y2="20" style="stroke: var(--color-accent)" stroke-width="2"/>
+  <circle cx="95" cy="20" r="12" style="fill: var(--color-accent)"/>
+  <text x="95" y="24" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 700; font-family: var(--font-sans)">2</text>
+  <line x1="107" y1="20" x2="133" y2="20" style="stroke: var(--color-border)" stroke-width="2"/>
+  <circle cx="145" cy="20" r="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="145" y="24" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-weight: 700; font-family: var(--font-sans)">3</text>
+  <rect x="30" y="42" width="130" height="20" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="30" y="68" width="130" height="20" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="100" y="96" width="60" height="22" rx="5" style="fill: var(--color-accent)"/>
+  <text x="130" y="111" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Next &#x2192;</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Multi-Step Form</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Break forms with 7+ fields into 3-5 logical steps. Show progress indicator. Validate per step. Persist progress. Allow back navigation.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Step indicator at top. Validate current step on &quot;Next&quot;. Save to localStorage on every step. Enable back without losing data.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Progress indicator has aria-label. Current step announced. Focus moves to first field of new step.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="conditional-fields" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="26" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="28" y="16" width="14" height="14" rx="3" style="fill: var(--color-accent)"/>
+  <text x="28" y="27" style="fill: #fff; font-size: 10px; font-weight: 700; font-family: var(--font-sans)"> &#x2713;</text>
+  <text x="48" y="27" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">Ship to different address</text>
+  <rect x="35" y="44" width="145" height="22" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="44" y="59" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-sans)">Street address</text>
+  <rect x="35" y="70" width="145" height="22" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="44" y="85" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-sans)">City, State, ZIP</text>
+  <text x="35" y="108" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">&#x21B3; shown when checkbox is checked</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Conditional Fields</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Show or hide fields based on previous answers. Use the collapse/expand animation pattern. Clear hidden field values on parent change.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>aria-expanded on the controlling field. Animate with grid-template-rows: 0fr/1fr. Remove hidden fields from form data on submit.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>aria-expanded indicates state. Conditional fields are removed from tab order when hidden.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="fieldset-grouping" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="12" width="170" height="48" rx="6" style="stroke: var(--color-border); fill: none" stroke-width="1.5"/>
+  <rect x="25" y="5" width="70" height="14" rx="3" style="fill: var(--color-surface)"/>
+  <text x="30" y="15" style="fill: var(--color-accent); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Personal Info</text>
+  <rect x="25" y="24" width="150" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="25" y="42" width="150" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="15" y="70" width="170" height="44" rx="6" style="stroke: var(--color-border); fill: none" stroke-width="1.5"/>
+  <rect x="25" y="63" width="50" height="14" rx="3" style="fill: var(--color-surface)"/>
+  <text x="30" y="73" style="fill: var(--color-accent); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Address</text>
+  <rect x="25" y="82" width="150" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="25" y="98" width="150" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Fieldset Grouping</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Wrap related field groups (address, payment, personal info) in &lt;fieldset&gt; with &lt;legend&gt;. Provides context for screen readers.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>&lt;fieldset&gt; with &lt;legend&gt;. Never use &lt;div&gt; for groups that have a shared label.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Screen readers announce the legend when entering the fieldset, providing group context.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset" target="_blank" rel="noopener noreferrer" data-astro-cid-hifofup3>Docs →</a> </div> </div> </div> </div><div class="pattern-card" id="required-optional-marking" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="20" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Email <tspan style="fill: hsl(0, 84%, 60%)">*</tspan></text>
+  <rect x="20" y="25" width="160" height="22" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="20" y="66" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Name <tspan style="fill: hsl(0, 84%, 60%)">*</tspan></text>
+  <rect x="20" y="71" width="160" height="22" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="20" y="110" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Company <tspan style="fill: var(--color-text-muted); font-size: 8px">(optional)</tspan></text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Required/Optional Marking</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Mark the minority: if most fields are required, mark optional ones as &quot;(optional)&quot;. If most are optional, mark required ones with an asterisk.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>required attribute or aria-required=&quot;true&quot; on required fields. Visual indicator matches the minority pattern.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>required attribute is the primary mechanism. Visual indicators supplement, never replace.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-resilience" data-astro-cid-hifofup3> <h3 class="category-heading" data-astro-cid-hifofup3>Resilience</h3> <p class="category-description" data-astro-cid-hifofup3>Auto-save drafts, form recovery, and undo patterns that never lose user input.</p> <div class="pattern-list" data-astro-cid-hifofup3> <div class="pattern-card" id="auto-save-draft" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="60" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="28" y="20" width="120" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="28" y="34" width="90" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="28" y="48" width="60" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="60" y="82" width="80" height="24" rx="6" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1"/>
+  <text x="100" y="98" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">&#x2713; Saved</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Auto-Save Draft</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Save form state to localStorage on debounce (2-5 seconds). Show a &quot;Saved&quot; indicator. Restore on page reload. Essential for long forms.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Debounce form change events (2s). Save serialized form data to localStorage. Show &quot;Saved&quot; via aria-live=&quot;polite&quot; region.</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Save status announced via aria-live=&quot;polite&quot;. Recovery banner on reload is focusable.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="form-recovery" data-astro-cid-hifofup3> <div class="pattern-card-inner" data-astro-cid-hifofup3> <div class="pattern-illustration" data-astro-cid-dzbyjrfs><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="30" rx="6" style="fill: hsl(38, 92%, 50%)" opacity="0.15"/>
+  <rect x="20" y="10" width="160" height="30" rx="6" style="stroke: hsl(38, 92%, 50%); fill: none" stroke-width="1.5"/>
+  <text x="100" y="29" text-anchor="middle" style="fill: hsl(38, 92%, 50%); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Draft recovered. Continue or discard?</text>
+  <rect x="20" y="50" width="160" height="22" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="28" y="65" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-sans)">john@example.com</text>
+  <rect x="20" y="78" width="160" height="22" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="28" y="93" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-sans)">My project description...</text>
+</svg></div> <div class="pattern-content" data-astro-cid-hifofup3> <h4 class="pattern-name" data-astro-cid-hifofup3>Form Recovery</h4> <p class="pattern-desc" data-astro-cid-hifofup3>Persist form state to localStorage on every change. Restore on page reload. Show a &quot;Recovered draft&quot; banner with option to discard.</p> <div class="pattern-meta" data-astro-cid-hifofup3> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Implementation</span> <p data-astro-cid-hifofup3>Listen to beforeunload to save. On load, check for saved state. Show banner: &quot;We recovered your draft. Continue or discard?&quot;</p> </div> <div class="meta-block" data-astro-cid-hifofup3> <span class="meta-label" data-astro-cid-hifofup3>Accessibility</span> <p data-astro-cid-hifofup3>Recovery banner uses role=&quot;alert&quot;. Discard button is keyboard-accessible.</p> </div>  </div> </div> </div> </div> </div> </section><section class="further-reading" id="further-reading" data-astro-cid-hifofup3> <h3 class="category-heading" data-astro-cid-hifofup3>Further Reading</h3> <ul data-astro-cid-hifofup3> <li data-astro-cid-hifofup3><a href="https://www.w3.org/WAI/tutorials/forms/" target="_blank" rel="noopener noreferrer" data-astro-cid-hifofup3>W3C Forms Tutorial</a> &mdash; Accessible form design patterns from the W3C</li> <li data-astro-cid-hifofup3><a href="https://www.nngroup.com/articles/errors-forms-design-guidelines/" target="_blank" rel="noopener noreferrer" data-astro-cid-hifofup3>NN/g Error Guidelines</a> &mdash; Error message best practices from Nielsen Norman Group</li> <li data-astro-cid-hifofup3><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete" target="_blank" rel="noopener noreferrer" data-astro-cid-hifofup3>MDN autocomplete</a> &mdash; Complete reference for HTML autocomplete tokens</li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/animation-patterns.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Animation Patterns</span></a><a href="/vibe-crew/glossary.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Glossary</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html> 

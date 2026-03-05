@@ -424,6 +424,44 @@ Cross-reference with `responsive-patterns.md` for full implementation guidance.
 
 **Rules:** Mobile-first CSS. Touch targets 44px minimum. `clamp()` for fluid text. Logical properties over physical. `aspect-ratio` on all images.
 
+## 12. Form Patterns
+
+Cross-reference with `form-patterns.md` for full implementation guidance and accessibility requirements.
+
+| Pattern | When to apply | Implementation |
+|---------|---------------|----------------|
+| Inline Validation | Every form with required fields | Validate on blur, show error via `aria-describedby`, `aria-invalid="true"` |
+| Error Summary | Forms with 3+ fields on submit failure | `role="alert"` container at top, focus summary, link each error to field |
+| Focus on First Error | Every form on submit failure | `.focus()` + `.scrollIntoView()` on first invalid field |
+| Autocomplete Tokens | Every standard input (name, email, tel, address) | `autocomplete="name\|email\|tel\|address-line1\|postal-code"` |
+| Password Strength | Password creation fields | Entropy-based meter, `aria-valuenow/min/max`, requirements checklist |
+| Character Counter | Textarea with limits | Live "42/280" counter, `aria-describedby`, warn at 90% |
+| Input Masking | Phone, credit card, date fields | Format on blur only, store raw value, never block typing |
+| Multi-Step Form | Forms with 7+ fields | Step indicator, validate per step, persist to localStorage, allow back |
+| Conditional Fields | Forms with dependent inputs | `aria-expanded`, animate with `grid-template-rows`, clear hidden values |
+| Required/Optional Marking | Every form | Mark the minority: if most required, mark optional ones "(optional)" |
+| Auto-Save Draft | Long forms, wizards | Debounce 2s to localStorage, "Saved" indicator via `aria-live="polite"` |
+| Form Recovery | Critical forms (checkout, application) | Persist on every change, restore on reload, "Recovered draft" banner |
+
+**Rules:** Single-column layout. Labels above fields. Validate on blur, never on keystroke. `autocomplete` on every standard field. `<fieldset>` + `<legend>` for related groups.
+
+## 13. Error Handling Patterns
+
+Cross-reference with `error-handling-patterns.md` for full implementation guidance.
+
+| Pattern | When to apply | Implementation |
+|---------|---------------|----------------|
+| Error Boundary | Every React/Vue app | Component-level catch, fallback UI, error logging, reset/retry button |
+| Retry with Backoff | Network requests | Exponential backoff (1s, 2s, 4s), max 3 retries, user-visible retry button |
+| Offline Indicator | Apps with network dependency | `navigator.onLine` + `online`/`offline` events, banner with status |
+| Custom 404 | Every multi-page app | Search box, popular links, friendly message, "Go home" CTA |
+| Custom 500 | Every server-rendered app | Apology, auto-retry option, status page link, incident ID |
+| Empty State — First Use | Zero-data views | Explain value, show sample, guide first action with primary CTA |
+| Empty State — No Results | Search/filter views | Suggest alternatives, offer to clear filters, show popular items |
+| Network Error Toast | API failures | Sonner toast with retry action, `role="alert"` for critical errors |
+
+**Rules:** Never show blank error pages. Always provide a next action. Log errors server-side. Retry before showing failure to user.
+
 ## Builder Agent Key Principle
 
 shadcn/ui (Radix UI) handles most keyboard patterns automatically. The agent ensures:

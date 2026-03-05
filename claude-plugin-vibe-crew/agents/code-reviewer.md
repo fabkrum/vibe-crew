@@ -214,6 +214,30 @@ Read `${CLAUDE_PLUGIN_ROOT}/templates/responsive-patterns.md`. Check responsive 
 
 Severity: All responsive findings are `warning` unless noted. Category: `"responsive-compliance"`.
 
+### Step 10.8: Form Compliance
+
+Read `${CLAUDE_PLUGIN_ROOT}/templates/form-patterns.md`. Check form implementation quality:
+
+1. **Validation timing** — Forms validate on blur, not on keystroke. Flag `onChange` validation without debounce as `warning`.
+2. **Autocomplete tokens** — Standard inputs (name, email, tel, address) have `autocomplete` attributes. Flag missing `autocomplete` on standard fields as `warning`.
+3. **Error handling** — Submit failures show an error summary (`role="alert"`) and focus the first invalid field. Flag missing error summary as `warning`.
+4. **Accessibility** — Labels use `<label for>`, errors linked via `aria-describedby`, `aria-invalid="true"` on invalid fields. Flag missing `aria-invalid` as `warning`.
+5. **Form structure** — Single-column layout, `<fieldset>` + `<legend>` for related groups, required/optional marking follows minority pattern. Flag placeholder-only labels as `critical`.
+
+Severity: All form findings are `warning` unless noted. Category: `"form-compliance"`.
+
+### Step 10.10: Error Handling Compliance
+
+Read `${CLAUDE_PLUGIN_ROOT}/templates/error-handling-patterns.md`. Check error handling strategy:
+
+1. **Error boundaries** — React/Vue apps have error boundaries wrapping async components. Flag missing error boundaries on route-level components as `warning`.
+2. **Empty states** — Zero-data views explain value and guide first action. Flag blank empty states as `warning`. Blank empty states on primary features are `critical`.
+3. **Network errors** — API failures show user-visible feedback (toast, inline error). Flag silent network failures as `warning`.
+4. **Retry patterns** — Failed network requests offer retry. Flag auto-retry without backoff as `warning`.
+5. **Custom error pages** — Multi-page apps have 404 and 500 pages. Flag missing custom error pages as `info`.
+
+Severity: All error handling findings are `warning` unless noted. Category: `"error-handling-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

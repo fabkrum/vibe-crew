@@ -261,6 +261,20 @@ Project state tracking. Created by `/new-project` (Tier 1) or `/setup` (existing
     "plan_commit_sha": null               // Git SHA at plan phase completion (reset on claim)
   },
 
+  // Paused feature (set by /pause, cleared by /resume)
+  "paused_feature": {
+    "id": null,                          // Feature ID | null (no paused feature)
+    "name": null,                        // Human-readable name
+    "phase": null,                       // Phase at time of pause
+    "branch": null,                      // Git branch name (preserved, never deleted)
+    "commit": null,                      // HEAD commit at pause time
+    "paused_at": null,                   // ISO 8601 timestamp
+    "worktree": null,                    // Original worktree path (for recreation)
+    "phases_completed": [],              // Preserved from active_feature
+    "plan_revision_count": 0,            // Preserved from active_feature
+    "plan_commit_sha": null              // Preserved from active_feature
+  },
+
   // Git state
   "git": {
     "default_branch": "main",
@@ -316,6 +330,12 @@ The `phases_completed` array tracks which phases have been completed at least on
 | `active_feature.phases_completed` | string[] | yes | Completed phase names |
 | `active_feature.plan_revision_count` | number | yes | Times plan/spec revised mid-feature (reset on claim) |
 | `active_feature.plan_commit_sha` | string\|null | yes | Git SHA at plan phase completion. Used by check-plan-staleness.sh to detect codebase drift before Code phase. Reset to null on claim-task. |
+| `paused_feature.id` | string\|null | no | ID of paused feature (set by `/pause`, cleared by `/resume`) |
+| `paused_feature.name` | string\|null | no | Name of paused feature |
+| `paused_feature.phase` | enum\|null | no | Phase at time of pause |
+| `paused_feature.branch` | string\|null | no | Git branch (preserved, never deleted) |
+| `paused_feature.commit` | string\|null | no | HEAD commit SHA at pause |
+| `paused_feature.paused_at` | string\|null | no | ISO 8601 timestamp of pause |
 | `git.default_branch` | string | yes | Default git branch |
 | `git.initialized` | boolean | yes | Whether git repo exists |
 | `updated_at` | string | yes | Last modification timestamp |

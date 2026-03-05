@@ -23,11 +23,11 @@ Follow `helpers.md#Registration` — register as `"session-startup"`.
 
 ## Startup Sequence
 
-1. Read `.vibecrew/state.json` to determine foundation status, active feature, and current phase.
+1. Read `.vibecrew/state.json` to determine foundation status, active feature, current phase, and **paused feature** (`.paused_feature`).
 2. Read `.vibecrew/backlog.json` to determine queued and in-progress features.
 3. Run `git branch --show-current` and `git status --porcelain` to detect the current branch and working tree state.
 4. Scan `.vibecrew/sessions/` and `.vibecrew/signals/` for stale locks and orphaned signal files.
-5. Check `.vibecrew/handoffs/` for the latest handoff document from a previous session.
+5. Check `.vibecrew/handoffs/` for the latest handoff document from a previous session. Also check for `pause-*.md` files indicating a paused feature.
 6. Read the dashboard URL from `.vibecrew/dashboard.pid` (the session-startup hook auto-launches the dashboard, so just read the URL):
    ```bash
    DASHBOARD_URL=""
@@ -60,7 +60,8 @@ Dashboard: {dashboard_url_or_"not running"}
   - `Resuming Tier 1: {next_step}` (foundation incomplete, 2+ artifacts done)
   - `VibeCrew uses a design-first approach: run /new-project to define your project vision, design system, and tech stack before writing code.` (foundation incomplete AND fewer than 2 artifacts complete — brand new project)
   - `Resuming Tier 2: {feature_name} → {phase}` (feature in progress)
-  - `Ready for next feature. Run /new-feature or /run-backlog.` (foundation complete, no active feature)
+  - `Paused feature: {feature_name} ({phase}). Run /resume to continue, or /new-feature for something else.` (paused feature detected, no active feature)
+  - `Ready for next feature. Run /new-feature or /run-backlog.` (foundation complete, no active feature, no paused feature)
 
 ## Handoff Detection
 

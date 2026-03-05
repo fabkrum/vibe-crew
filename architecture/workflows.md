@@ -410,7 +410,16 @@ idea -> planning -> planned -> in-progress -> testing -> review -> done
                                     |                       |
                                     +-- review-fix cycle ---+
                                     (max 2 cycles)
+
+    /pause (from any active phase)     /resume
+    +----------+                      +----------+
+    |  PAUSED  |--------------------->| RESUMED  |
+    | WIP commit, handoff created,    | State restored, worktree
+    | worktree optionally cleaned     | recreated, phase continues
+    +----------+                      +----------+
 ```
+
+**Pause/Resume:** A feature can be paused from any active phase via `/pause`. This commits WIP changes, creates a structured handoff file (`pause-<feature-id>.md`), stores the paused state in `state.json`, and optionally cleans up the worktree. `/resume` restores the feature to its pre-pause state, recreates the worktree from the preserved branch, and continues at the paused phase. Only one feature can be paused at a time.
 
 ### 3.2 Feature State Machine
 

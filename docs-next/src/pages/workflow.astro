@@ -597,6 +597,43 @@ const backlogJson = `{
 
   <hr>
 
+  <!-- ============ PAUSE / RESUME ============ -->
+  <section class="section" id="pause-resume">
+    <span class="section-label">Feature Management</span>
+    <h2>Pause &amp; Resume</h2>
+    <p>Need to switch context? <code>/pause</code> checkpoints your current feature so you can safely start something else, then <code>/resume</code> picks up exactly where you left off.</p>
+
+    <pre><code><span class="code-label">Mid-Feature</span><span class="prompt">&gt;</span> /pause
+
+<span class="output">Feature paused: user-authentication (feat-003)</span>
+<span class="output">  Phase: code</span>
+<span class="output">  Branch: feat/user-authentication (preserved)</span>
+<span class="output">  Handoff: .vibecrew/handoffs/pause-feat-003.md</span>
+<span class="output">  Worktree: cleaned up</span>
+<span class="output"></span>
+<span class="output">Run /resume to continue this feature in a new session.</span></code></pre>
+
+    <pre><code><span class="code-label">New Session</span><span class="prompt">&gt;</span> /resume
+
+<span class="output">Feature resumed: user-authentication (feat-003)</span>
+<span class="output">  Phase: code</span>
+<span class="output">  Branch: feat/user-authentication</span>
+<span class="output">  Worktree: recreated</span>
+<span class="output"></span>
+<span class="output">Continuing at the code phase. Ready to work.</span></code></pre>
+
+    <p>What happens during <code>/pause</code>:</p>
+    <ol>
+      <li>Uncommitted changes are committed as a WIP checkpoint</li>
+      <li>A structured handoff file captures the full context</li>
+      <li>The feature branch is preserved (never deleted)</li>
+      <li>The worktree is optionally cleaned up to free disk space</li>
+      <li>Session Startup detects paused features and suggests <code>/resume</code></li>
+    </ol>
+  </section>
+
+  <hr>
+
   <!-- ============ BEST PRACTICES ============ -->
   <section class="section" id="best-practices">
     <span class="section-label">Quick Reference</span>

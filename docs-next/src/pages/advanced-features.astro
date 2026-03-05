@@ -385,6 +385,14 @@ Presents suggestions one at a time for your approval
           <p>Generates a structured context transfer document capturing in-progress work, decisions made, and next steps. Use when context is running low or you need to continue in a new session.</p>
         </div>
         <div class="card">
+          <h4><code>/pause</code></h4>
+          <p>Checkpoints the active feature: commits WIP changes, creates a pause handoff file, cleans up the worktree, and preserves the branch. Use when you need to switch context mid-feature.</p>
+        </div>
+        <div class="card">
+          <h4><code>/resume</code></h4>
+          <p>Resumes a previously paused feature: restores state, recreates the worktree from the preserved branch, and continues at the paused phase. Session Startup auto-detects paused features.</p>
+        </div>
+        <div class="card">
           <h4><code>/release</code></h4>
           <p>Automates version bumps, changelog generation from conventional commits, and release notes creation. The Doc Generator compiles a release summary from git history and session logs.</p>
         </div>

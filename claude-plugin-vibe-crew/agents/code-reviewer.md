@@ -238,6 +238,30 @@ Read `${CLAUDE_PLUGIN_ROOT}/templates/error-handling-patterns.md`. Check error h
 
 Severity: All error handling findings are `warning` unless noted. Category: `"error-handling-compliance"`.
 
+### Step 10.11: i18n Compliance
+
+Read `${CLAUDE_PLUGIN_ROOT}/templates/i18n-patterns.md`. Check internationalization quality:
+
+1. **Hardcoded strings** — User-facing strings are externalized, not hardcoded in components. Flag hardcoded strings as `warning`.
+2. **String concatenation** — Sentences are not built via concatenation (breaks in other languages). Flag string concat for user text as `warning`.
+3. **Locale formatting** — Numbers, dates, and currencies use `Intl` APIs, not manual formatting. Flag manual `toFixed()` or template-literal dates as `warning`.
+4. **Physical CSS properties** — New CSS uses logical properties (`margin-inline`) over physical (`margin-left`). Flag physical properties in new code as `info`.
+5. **`lang` attribute** — `<html>` has `lang` attribute. Flag missing `lang` as `warning`.
+
+Severity: All i18n findings are `warning` unless noted. Category: `"i18n-compliance"`.
+
+### Step 10.12: Legal Compliance
+
+Run `${CLAUDE_PLUGIN_ROOT}/scripts/validate-legal-compliance.sh` against the project root. Report findings:
+
+1. **Missing privacy policy** — No privacy policy page detected. Severity: `critical`.
+2. **Missing impressum** — No impressum/imprint page detected (DACH region). Severity: `warning`.
+3. **Ungated third-party scripts** — Analytics/marketing scripts loading before consent. Severity: `critical`.
+4. **Missing cookie consent** — No cookie consent implementation detected. Severity: `warning`.
+5. **Missing accessibility statement** — No accessibility statement page detected. Severity: `info`.
+
+Severity: Varies per check (see above). Category: `"legal-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

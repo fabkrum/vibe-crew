@@ -1,0 +1,310 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — i18n Guide</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.pattern-illustration[data-astro-cid-lkb6ohgz]{flex-shrink:0;width:200px;height:120px}.pattern-illustration[data-astro-cid-lkb6ohgz] svg{width:100%;height:100%;display:block}.category-nav[data-astro-cid-ddqgikr4]{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem;padding:1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm)}.category-nav[data-astro-cid-ddqgikr4] a[data-astro-cid-ddqgikr4]{padding:.35rem .75rem;border-radius:var(--radius-xs);font-size:.82rem;font-weight:600;color:var(--color-text-secondary);text-decoration:none;transition:all .15s;white-space:nowrap}.category-nav[data-astro-cid-ddqgikr4] a[data-astro-cid-ddqgikr4]:hover{background:var(--color-accent-bg);color:var(--color-accent);text-decoration:none}.category-heading[data-astro-cid-ddqgikr4]{font-size:1.5rem;font-weight:800;color:var(--color-accent);border-bottom:1px solid var(--color-border);padding-bottom:.5rem;margin-bottom:.5rem;margin-top:2rem}.category-description[data-astro-cid-ddqgikr4]{margin:0 0 1.25rem;font-size:.92rem;color:var(--color-text-secondary);line-height:1.6}.pattern-list[data-astro-cid-ddqgikr4]{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem}.pattern-card[data-astro-cid-ddqgikr4]{padding:1.25rem;border:1px solid var(--color-border-subtle);border-radius:var(--radius-sm);background:var(--color-surface)}.pattern-card-inner[data-astro-cid-ddqgikr4]{display:flex;gap:1.25rem;align-items:flex-start}.pattern-content[data-astro-cid-ddqgikr4]{flex:1;min-width:0}@media(max-width:600px){.pattern-card-inner[data-astro-cid-ddqgikr4]{flex-direction:column}}.pattern-name[data-astro-cid-ddqgikr4]{font-size:1rem;font-weight:700;color:var(--color-text);margin:0 0 .5rem}.pattern-desc[data-astro-cid-ddqgikr4]{font-size:.92rem;color:var(--color-text-secondary);line-height:1.6;margin:0 0 .75rem}.pattern-meta[data-astro-cid-ddqgikr4]{display:flex;flex-direction:column;gap:.5rem}.meta-block[data-astro-cid-ddqgikr4]{font-size:.85rem;line-height:1.5}.meta-block[data-astro-cid-ddqgikr4] p[data-astro-cid-ddqgikr4]{margin:0;color:var(--color-text-secondary)}.meta-label[data-astro-cid-ddqgikr4]{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-muted);margin-right:.35rem}.docs-link[data-astro-cid-ddqgikr4]{display:inline-block;margin-top:.25rem;font-size:.82rem;font-weight:600;color:var(--color-accent);text-decoration:none}.docs-link[data-astro-cid-ddqgikr4]:hover{text-decoration:underline}.further-reading[data-astro-cid-ddqgikr4]{margin-top:3rem}.further-reading[data-astro-cid-ddqgikr4] ul[data-astro-cid-ddqgikr4]{list-style:none;padding:0;margin:1rem 0 0}.further-reading[data-astro-cid-ddqgikr4] li[data-astro-cid-ddqgikr4]{padding:.5rem 0;border-bottom:1px solid var(--color-border-subtle);font-size:.92rem;line-height:1.6}.further-reading[data-astro-cid-ddqgikr4] li[data-astro-cid-ddqgikr4]:last-child{border-bottom:none}.further-reading[data-astro-cid-ddqgikr4] a[data-astro-cid-ddqgikr4]{font-weight:600;color:var(--color-accent);text-decoration:none}.further-reading[data-astro-cid-ddqgikr4] a[data-astro-cid-ddqgikr4]:hover{text-decoration:underline}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/animation-patterns.html" class="sidebar-link"> Animation Patterns </a><a href="/vibe-crew/form-patterns.html" class="sidebar-link"> Form Patterns </a><a href="/vibe-crew/i18n-guide.html" class="sidebar-link active"> i18n Guide </a><a href="/vibe-crew/legal-compliance.html" class="sidebar-link"> Legal &amp; Compliance </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Reference</span>  <span class="separator">/</span> <span>i18n Guide</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Reference"},{"@type":"ListItem","position":3,"name":"i18n Guide"}]}</script>  <h2 data-astro-cid-ddqgikr4>i18n Guide</h2> <p data-astro-cid-ddqgikr4>Internationalization patterns that VibeCrew agents apply during planning, design, and code review. Every pattern addresses a specific pitfall that breaks applications in non-English locales, with concrete implementation guidance using browser-native APIs.</p> <nav class="category-nav" aria-label="Pattern categories" data-astro-cid-ddqgikr4> <a href="#cat-text" data-astro-cid-ddqgikr4>Text &amp; Content</a><a href="#cat-names" data-astro-cid-ddqgikr4>Names &amp; Identity</a><a href="#cat-addresses" data-astro-cid-ddqgikr4>Addresses &amp; Geography</a><a href="#cat-formatting" data-astro-cid-ddqgikr4>Number, Date &amp; Currency</a><a href="#cat-rtl" data-astro-cid-ddqgikr4>Right-to-Left</a><a href="#cat-testing" data-astro-cid-ddqgikr4>Testing &amp; QA</a> </nav> <section class="pattern-section" id="cat-text" data-astro-cid-ddqgikr4> <h3 class="category-heading" data-astro-cid-ddqgikr4>Text &amp; Content</h3> <p class="category-description" data-astro-cid-ddqgikr4>Handling text content across languages — expansion, contraction, pluralization rules, and string formatting that goes beyond simple translation.</p> <div class="pattern-list" data-astro-cid-ddqgikr4> <div class="pattern-card" id="text-expansion-buffer" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="15" width="75" height="36" rx="6" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="52" y="37" text-anchor="middle" style="fill: var(--color-accent); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Cart</text>
+  <text x="52" y="65" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">EN: 4 chars</text>
+  <rect x="105" y="15" width="85" height="36" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="105" y="15" width="85" height="36" rx="6" style="stroke: hsl(0, 84%, 60%); fill: none" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="147" y="33" text-anchor="middle" style="fill: var(--color-text); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Einkaufswag...</text>
+  <text x="147" y="65" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">DE: 13 chars</text>
+  <text x="100" y="100" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">+30-40% expansion</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Text Expansion Buffer</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Design UI to accommodate 30-40% longer text in German/Finnish translations. Fixed-width containers will truncate or break with translated strings.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>Use flexible layouts (flex, grid, min-width instead of fixed width). Test with pseudo-localization — pad every string with 35% extra characters. Avoid fixed heights on text containers. Set overflow-wrap: break-word as a safety net.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>Fixed-width containers truncate or break with translated strings. &quot;Shopping Cart&quot; (13 chars) becomes &quot;Einkaufswagen&quot; (13 chars in German but wider) or &quot;Ostoskori&quot; in Finnish. Button text, nav labels, and table headers are the most common casualties.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="pluralization-rules" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="15" y="22" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">EN</text>
+  <rect x="35" y="10" width="65" height="20" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="67" y="24" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-mono)">1 item</text>
+  <rect x="108" y="10" width="65" height="20" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="140" y="24" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-mono)">2 items</text>
+  <text x="15" y="55" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">AR</text>
+  <rect x="35" y="42" width="30" height="20" rx="4" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="50" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-mono)">0</text>
+  <rect x="69" y="42" width="26" height="20" rx="4" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="82" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-mono)">1</text>
+  <rect x="99" y="42" width="26" height="20" rx="4" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="112" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-mono)">2</text>
+  <rect x="129" y="42" width="26" height="20" rx="4" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="142" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-mono)">3-10</text>
+  <rect x="159" y="42" width="26" height="20" rx="4" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="172" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-mono)">11-99</text>
+  <text x="15" y="88" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">JA</text>
+  <rect x="35" y="76" width="138" height="20" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="104" y="90" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-sans)">no plural distinction</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">CLDR plural categories</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Pluralization Rules</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Use CLDR plural categories, not simple if/else. Different languages have vastly different plural rules — English has 2 forms, Arabic has 6, Japanese has 0 distinct forms.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>Use ICU MessageFormat: `{count, plural, one {# item} other {# items}}`. Libraries like i18next, FormatJS, or Intl.PluralRules handle CLDR rules automatically. Never hand-roll plural logic.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>Writing `count === 1 ? &quot;item&quot; : &quot;items&quot;` only works for English. Arabic has singular, dual, and 4 plural forms. Polish has different rules for 2-4 vs 5-21. Japanese uses no plural distinctions at all.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-names" data-astro-cid-ddqgikr4> <h3 class="category-heading" data-astro-cid-ddqgikr4>Names &amp; Identity</h3> <p class="category-description" data-astro-cid-ddqgikr4>Personal identity fields that vary across cultures — name structures, phone numbers, and identity formats that break the Western-centric assumptions.</p> <div class="pattern-list" data-astro-cid-ddqgikr4> <div class="pattern-card" id="single-full-name-field" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="15" y="18" style="fill: var(--color-text-muted); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">FULL NAME</text>
+  <rect x="15" y="22" width="170" height="28" rx="5" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="25" y="40" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">Sukarno</text>
+  <circle cx="175" cy="36" r="8" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="175" y="40" text-anchor="middle" style="fill: var(--color-accent); font-size: 12px; font-weight: 700; font-family: var(--font-sans)">&#x2713;</text>
+  <line x1="15" y1="62" x2="185" y2="62" style="stroke: var(--color-border)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="15" y="78" style="fill: var(--color-text-muted); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">FIRST NAME</text>
+  <rect x="15" y="82" width="78" height="24" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+  <text x="107" y="78" style="fill: var(--color-text-muted); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">LAST NAME</text>
+  <rect x="107" y="82" width="78" height="24" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+  <line x1="15" y1="82" x2="93" y2="106" style="stroke: hsl(0, 84%, 60%)" stroke-width="1.5" opacity="0.6"/>
+  <line x1="93" y1="82" x2="15" y2="106" style="stroke: hsl(0, 84%, 60%)" stroke-width="1.5" opacity="0.6"/>
+  <line x1="107" y1="82" x2="185" y2="106" style="stroke: hsl(0, 84%, 60%)" stroke-width="1.5" opacity="0.6"/>
+  <line x1="185" y1="82" x2="107" y2="106" style="stroke: hsl(0, 84%, 60%)" stroke-width="1.5" opacity="0.6"/>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Single Full Name Field</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Use one &quot;Full name&quot; field instead of splitting into first/last name. Name structures vary wildly across cultures — mononymous names, patronymics, multi-part family names, and name order all break the first/last assumption.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>Single &quot;Full name&quot; input field. Add an optional &quot;Display name&quot; or &quot;Preferred name&quot; field for how the user wants to be addressed. Store the full string as-is — never try to programmatically split or reorder.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>Splitting names fails for mononymous names (Sukarno), patronymic systems (Icelandic), multi-part family names (van der Berg), and cultures where family name comes first (Chinese, Japanese, Korean, Hungarian).</p> </div> <a class="docs-link" href="https://www.w3.org/International/questions/qa-personal-names" target="_blank" rel="noopener noreferrer" data-astro-cid-ddqgikr4>Docs &#x2192;</a> </div> </div> </div> </div><div class="pattern-card" id="phone-number-format" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="15" y="18" style="fill: var(--color-text-muted); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">PHONE NUMBER</text>
+  <rect x="15" y="24" width="45" height="28" rx="5" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="37" y="42" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">+1 ▾</text>
+  <rect x="64" y="24" width="121" height="28" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="74" y="42" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-mono)">(415) 555-1234</text>
+  <text x="15" y="72" style="fill: var(--color-text-muted); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">STORED AS</text>
+  <rect x="15" y="76" width="170" height="22" rx="4" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="100" y="91" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">+14155551234</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">E.164 format</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Phone Number Format</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Accept flexible phone input, store in E.164 format, and display in locale-appropriate format. International phone numbers have wildly different lengths, groupings, and prefix rules.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>Use `inputmode=&quot;tel&quot;` for mobile keyboard. Provide a country code dropdown. Store all numbers in E.164 format (+14155551234). Use libphonenumber for validation and display formatting. Never enforce a single country&#39;s format.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>Validating against US format (xxx-xxx-xxxx) rejects valid international numbers. UK numbers have variable length, Indian numbers are 10 digits, and some countries share country codes. Stripping the + prefix corrupts international numbers.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-addresses" data-astro-cid-ddqgikr4> <h3 class="category-heading" data-astro-cid-ddqgikr4>Addresses &amp; Geography</h3> <p class="category-description" data-astro-cid-ddqgikr4>Physical address formats that change dramatically by country — field order, required fields, postal code formats, and administrative divisions.</p> <div class="pattern-list" data-astro-cid-ddqgikr4> <div class="pattern-card" id="dynamic-address-form" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="8" width="85" height="104" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="52" y="22" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-weight: 700; font-family: var(--font-sans)">US</text>
+  <rect x="18" y="28" width="69" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="22" y="38" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Street</text>
+  <rect x="18" y="46" width="40" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="22" y="56" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">City</text>
+  <rect x="62" y="46" width="25" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="66" y="56" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">ST</text>
+  <rect x="18" y="64" width="40" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="22" y="74" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">ZIP</text>
+  <rect x="105" y="8" width="85" height="104" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="147" y="22" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-weight: 700; font-family: var(--font-sans)">DE</text>
+  <rect x="113" y="28" width="69" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="117" y="38" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Stra&#223;e</text>
+  <rect x="113" y="46" width="25" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="117" y="56" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">PLZ</text>
+  <rect x="142" y="46" width="40" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="146" y="56" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Ort</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">country-specific layout</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Dynamic Address Form</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Render address fields dynamically based on the selected country. Address formats vary dramatically — field names, order, required fields, and postal code formats all change by country.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>Start with a country selector. Load country-specific field order and labels from locale data (Google&#39;s Address Data Service or libaddressinput). Show/hide fields dynamically — not all countries need state/province, postal code, or apartment fields.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>US address format (Street, City, State, ZIP) doesn&#39;t work for Germany (PLZ before city), Japan (largest to smallest: prefecture, city, ward, block), UK (no state equivalent), or countries without postal codes (Ireland until 2015).</p> </div> <a class="docs-link" href="https://www.w3.org/International/wiki/Address_Formats" target="_blank" rel="noopener noreferrer" data-astro-cid-ddqgikr4>Docs &#x2192;</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-formatting" data-astro-cid-ddqgikr4> <h3 class="category-heading" data-astro-cid-ddqgikr4>Number, Date &amp; Currency</h3> <p class="category-description" data-astro-cid-ddqgikr4>Numbers, dates, and currencies that look different in every locale — separators, symbol positions, decimal precision, and calendar conventions.</p> <div class="pattern-list" data-astro-cid-ddqgikr4> <div class="pattern-card" id="locale-number-format" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="10" width="170" height="28" rx="5" style="fill: var(--color-accent-bg)"/>
+  <text x="30" y="22" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">US</text>
+  <text x="170" y="28" text-anchor="end" style="fill: var(--color-accent); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">1,000.50</text>
+  <rect x="15" y="44" width="170" height="28" rx="5" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="30" y="56" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">DE</text>
+  <text x="170" y="62" text-anchor="end" style="fill: var(--color-text); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">1.000,50</text>
+  <rect x="15" y="78" width="170" height="28" rx="5" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="30" y="90" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">FR</text>
+  <text x="170" y="96" text-anchor="end" style="fill: var(--color-text); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">1 000,50</text>
+  <text x="100" y="116" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Intl.NumberFormat</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Locale Number Format</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Use Intl.NumberFormat for all displayed numbers. Thousands separators and decimal marks vary by locale and mixing them up causes data entry errors or misreading.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>`new Intl.NumberFormat(locale).format(number)` for display. For inputs, parse with locale awareness — accept both comma and period as decimal separators based on locale. Never format numbers with string concatenation.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>1,000.50 (US) vs 1.000,50 (DE) vs 1 000,50 (FR) vs 1&#39;000.50 (CH). Using the wrong separator can turn 1.234 into &quot;one point two three four&quot; or &quot;one thousand two hundred thirty-four&quot; depending on locale.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="locale-date-format" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="15" width="80" height="50" rx="6" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="55" y="34" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-weight: 700; font-family: var(--font-sans)">US (MM/DD)</text>
+  <text x="55" y="52" text-anchor="middle" style="fill: var(--color-accent); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">03/05</text>
+  <text x="100" y="45" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 16px; font-weight: 300; font-family: var(--font-sans)">&#x2260;</text>
+  <rect x="105" y="15" width="80" height="50" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="145" y="34" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-weight: 700; font-family: var(--font-sans)">EU (DD.MM)</text>
+  <text x="145" y="52" text-anchor="middle" style="fill: var(--color-text); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">05.03</text>
+  <rect x="40" y="78" width="120" height="24" rx="5" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="94" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-mono)">5 Mar 2026</text>
+  <text x="100" y="114" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">unambiguous format</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Locale Date Format</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Use Intl.DateTimeFormat for all displayed dates. The ambiguity of numeric date formats causes real-world confusion — 03/05/2026 means March 5 in the US but May 3 in most of Europe.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>`new Intl.DateTimeFormat(locale, { year: &quot;numeric&quot;, month: &quot;short&quot;, day: &quot;numeric&quot; }).format(date)`. Use named months (&quot;5 Mar 2026&quot;) to eliminate ambiguity in mixed-locale contexts. Store dates as ISO 8601 internally.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>03/05/2026 means March 5 (US), May 3 (UK/EU), or could be read as 2026-05-03 in ISO contexts. MM/DD vs DD/MM ambiguity causes booking errors, incorrect deadlines, and data corruption when parsing user input.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat" target="_blank" rel="noopener noreferrer" data-astro-cid-ddqgikr4>Docs &#x2192;</a> </div> </div> </div> </div><div class="pattern-card" id="currency-formatting" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="8" width="170" height="28" rx="5" style="fill: var(--color-accent-bg)"/>
+  <text x="30" y="20" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">US</text>
+  <text x="170" y="26" text-anchor="end" style="fill: var(--color-accent); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">$100.00</text>
+  <rect x="15" y="40" width="170" height="28" rx="5" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="30" y="52" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">DE</text>
+  <text x="170" y="58" text-anchor="end" style="fill: var(--color-text); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">100,00 &#x20AC;</text>
+  <rect x="15" y="72" width="170" height="28" rx="5" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="30" y="84" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">JP</text>
+  <text x="170" y="90" text-anchor="end" style="fill: var(--color-text); font-size: 14px; font-weight: 700; font-family: var(--font-mono)">&#xA5;100</text>
+  <text x="100" y="114" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">symbol position + decimals vary</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Currency Formatting</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Use Intl.NumberFormat with style: &quot;currency&quot; for all monetary values. Symbol position, spacing, decimal rules, and symbol itself all vary by locale.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>`new Intl.NumberFormat(locale, { style: &quot;currency&quot;, currency: currencyCode }).format(amount)`. Always pass the ISO 4217 currency code (USD, EUR, JPY) separately from the locale. Never hardcode currency symbols or decimal places.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>$100.00 (US) vs 100,00 € (DE) vs 100 € (FR) vs ¥100 (JP, no decimals) vs Fr. 100.00 (CH). The currency symbol can appear before or after the number, with or without a space, and decimal precision varies.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat" target="_blank" rel="noopener noreferrer" data-astro-cid-ddqgikr4>Docs &#x2192;</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-rtl" data-astro-cid-ddqgikr4> <h3 class="category-heading" data-astro-cid-ddqgikr4>Right-to-Left</h3> <p class="category-description" data-astro-cid-ddqgikr4>Right-to-left language support for Arabic, Hebrew, and Farsi — layout mirroring, CSS logical properties, and bidirectional text handling.</p> <div class="pattern-list" data-astro-cid-ddqgikr4> <div class="pattern-card" id="rtl-layout-support" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="85" height="100" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="52" y="24" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-weight: 700; font-family: var(--font-sans)">LTR</text>
+  <rect x="18" y="30" width="20" height="20" rx="3" style="fill: var(--color-accent)"/>
+  <rect x="42" y="32" width="45" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="42" y="42" width="30" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="18" y="58" width="20" height="20" rx="3" style="fill: var(--color-accent)" opacity="0.6"/>
+  <rect x="42" y="60" width="45" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="42" y="70" width="35" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="18" y="86" width="69" height="16" rx="4" style="fill: var(--color-accent)"/>
+  <text x="52" y="97" text-anchor="middle" style="fill: #fff; font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Submit →</text>
+  <rect x="105" y="10" width="85" height="100" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="147" y="24" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 700; font-family: var(--font-sans)">RTL</text>
+  <rect x="162" y="30" width="20" height="20" rx="3" style="fill: var(--color-accent)"/>
+  <rect x="113" y="32" width="45" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="128" y="42" width="30" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="162" y="58" width="20" height="20" rx="3" style="fill: var(--color-accent)" opacity="0.6"/>
+  <rect x="113" y="60" width="45" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="123" y="70" width="35" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="113" y="86" width="69" height="16" rx="4" style="fill: var(--color-accent)"/>
+  <text x="147" y="97" text-anchor="middle" style="fill: #fff; font-size: 8px; font-weight: 600; font-family: var(--font-sans)">&#x2190; &#x625;&#x631;&#x633;&#x627;&#x644;</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>RTL Layout Support</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Use CSS logical properties and dir=&quot;rtl&quot; for Arabic, Hebrew, and Farsi layouts. Physical CSS properties create broken layouts when content direction is reversed.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>Replace all physical properties: margin-inline-start instead of margin-left, padding-inline-end instead of padding-right, inset-inline-start instead of left. Set dir=&quot;auto&quot; on user-input fields. Use logical values (start/end) for text-align and float.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>Physical CSS properties (margin-left, padding-right, text-align: left, float: left) break in RTL layouts. Icons with directional meaning (arrows, progress indicators) need to be mirrored. Mixing LTR and RTL content in one page creates visual chaos.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-testing" data-astro-cid-ddqgikr4> <h3 class="category-heading" data-astro-cid-ddqgikr4>Testing &amp; QA</h3> <p class="category-description" data-astro-cid-ddqgikr4>Testing and QA patterns for internationalized applications — locale switching, pseudo-localization, and validation across locales.</p> <div class="pattern-list" data-astro-cid-ddqgikr4> <div class="pattern-card" id="locale-switcher" data-astro-cid-ddqgikr4> <div class="pattern-card-inner" data-astro-cid-ddqgikr4> <div class="pattern-illustration" data-astro-cid-lkb6ohgz><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="15" y="10" width="170" height="24" rx="5" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <rect x="22" y="15" width="30" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="37" y="25" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Logo</text>
+  <rect x="60" y="18" width="25" height="8" rx="2" style="fill: var(--color-accent-bg)" opacity="0.5"/>
+  <rect x="90" y="18" width="25" height="8" rx="2" style="fill: var(--color-accent-bg)" opacity="0.5"/>
+  <circle cx="148" cy="22" r="8" style="stroke: var(--color-accent); fill: none" stroke-width="1.5"/>
+  <ellipse cx="148" cy="22" rx="3" ry="8" style="stroke: var(--color-accent); fill: none" stroke-width="1"/>
+  <line x1="140" y1="22" x2="156" y2="22" style="stroke: var(--color-accent)" stroke-width="1"/>
+  <rect x="160" y="15" width="18" height="14" rx="3" style="fill: var(--color-accent)"/>
+  <text x="169" y="25" text-anchor="middle" style="fill: #fff; font-size: 7px; font-weight: 600; font-family: var(--font-sans)">EN</text>
+  <rect x="130" y="38" width="55" height="72" rx="5" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="136" y="44" width="43" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="157" y="55" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">English</text>
+  <text x="157" y="73" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Deutsch</text>
+  <text x="157" y="88" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Fran&#231;ais</text>
+  <text x="157" y="103" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">&#x65E5;&#x672C;&#x8A9E;</text>
+</svg></div> <div class="pattern-content" data-astro-cid-ddqgikr4> <h4 class="pattern-name" data-astro-cid-ddqgikr4>Locale Switcher</h4> <p class="pattern-desc" data-astro-cid-ddqgikr4>Provide a visible language/locale switcher that persists the user&#39;s choice across navigation. The switcher should be easy to find and respect browser language preferences for the initial selection.</p> <div class="pattern-meta" data-astro-cid-ddqgikr4> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Implementation</span> <p data-astro-cid-ddqgikr4>Place a dropdown in the header or footer using language names in their own script (Deutsch, not German). Persist choice to localStorage + URL parameter (?lang=de). Respect Accept-Language header for initial selection. Use ISO 639-1 language codes.</p> </div> <div class="meta-block" data-astro-cid-ddqgikr4> <span class="meta-label" data-astro-cid-ddqgikr4>Pitfall</span> <p data-astro-cid-ddqgikr4>Hiding the locale switcher in deep settings makes it unfindable. Losing the language preference on navigation forces users to re-select every page. Using flags for languages is inaccurate — Spanish is spoken in 20+ countries, English in 60+.</p> </div>  </div> </div> </div> </div> </div> </section><section class="further-reading" id="further-reading" data-astro-cid-ddqgikr4> <h3 class="category-heading" data-astro-cid-ddqgikr4>Further Reading</h3> <ul data-astro-cid-ddqgikr4> <li data-astro-cid-ddqgikr4><a href="https://www.w3.org/International/questions/qa-personal-names" target="_blank" rel="noopener noreferrer" data-astro-cid-ddqgikr4>W3C Personal Names Around the World</a> &mdash; Why splitting names into first/last fails across cultures</li> <li data-astro-cid-ddqgikr4><a href="https://www.w3.org/International/wiki/Address_Formats" target="_blank" rel="noopener noreferrer" data-astro-cid-ddqgikr4>W3C International Address Formats</a> &mdash; Country-specific address field layouts and postal conventions</li> <li data-astro-cid-ddqgikr4><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl" target="_blank" rel="noopener noreferrer" data-astro-cid-ddqgikr4>MDN Intl</a> &mdash; Browser-native internationalization APIs for numbers, dates, currencies, and pluralization</li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/form-patterns.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Form Patterns</span></a><a href="/vibe-crew/legal-compliance.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Legal &amp; Compliance</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html> 

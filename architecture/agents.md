@@ -538,6 +538,8 @@ isolation: worktree
 | `templates/responsive-patterns.md` | Responsive design reference (mobile-first, touch targets, fluid type) | Template |
 | `templates/form-patterns.md` | Form UX patterns (validation, autocomplete, multi-step, auto-save) | Template |
 | `templates/error-handling-patterns.md` | Error handling patterns (boundaries, retry, empty states, offline) | Template |
+| `templates/i18n-patterns.md` | Internationalization patterns (names, addresses, RTL, Intl APIs, testing) | Template |
+| `templates/legal-compliance.md` | Legal compliance reference (GDPR, impressum, cookie consent, EAA) | Template |
 
 **Output (Tier 1 -- Foundation Design):**
 

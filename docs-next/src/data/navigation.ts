@@ -59,6 +59,8 @@ export const navigation: NavGroup[] = [
       { title: 'Business Patterns', slug: 'business-patterns' },
       { title: 'Animation Patterns', slug: 'animation-patterns' },
       { title: 'Form Patterns', slug: 'form-patterns' },
+      { title: 'i18n Guide', slug: 'i18n-guide' },
+      { title: 'Legal & Compliance', slug: 'legal-compliance' },
       { title: 'Glossary', slug: 'glossary' },
     ],
   },

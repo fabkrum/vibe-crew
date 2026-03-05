@@ -462,6 +462,38 @@ Cross-reference with `error-handling-patterns.md` for full implementation guidan
 
 **Rules:** Never show blank error pages. Always provide a next action. Log errors server-side. Retry before showing failure to user.
 
+## 14. Internationalization
+
+Cross-reference with `i18n-patterns.md` for full implementation guidance and pitfall avoidance.
+
+| Pattern | When to apply | Implementation |
+|---------|---------------|----------------|
+| String Externalization | Every user-facing text | Extract to translation files, never hardcode in components |
+| Single Full Name Field | Name inputs | One "Full name" input, optional "display name" field |
+| Dynamic Address Form | Address inputs | Country-specific field order from locale data |
+| Locale Number/Date/Currency | All displayed numbers/dates/currency | `Intl.NumberFormat`, `Intl.DateTimeFormat` — never manual formatting |
+| RTL Layout | Arabic, Hebrew, Farsi, Urdu targets | CSS logical properties, `dir="rtl"`, `dir="auto"` on inputs |
+| Pluralization | Any count-dependent text | ICU MessageFormat `{count, plural, ...}` with CLDR categories |
+| Text Expansion Buffer | All fixed-width UI containers | Flexible layouts, test with German (+30%) and pseudo-localization |
+
+**Rules:** Never concatenate strings for sentences. Never hardcode number/date formats. Use `Intl` APIs. Logical CSS properties over physical. `lang` attribute on `<html>`.
+
+## 15. Legal & Compliance
+
+Cross-reference with `legal-compliance.md` for jurisdiction-specific requirements.
+
+| Pattern | When to apply | Implementation |
+|---------|---------------|----------------|
+| Impressum Page | DACH-region sites | Legal entity name, address, email, VAT ID — linked from every page footer |
+| Privacy Policy | Every site collecting data | GDPR Art. 13/14 disclosure — separate page, linked from footer |
+| Cookie Consent | Sites using non-essential cookies | Block before consent, reject = accept ease, granular categories, log consent |
+| Terms of Service | B2C services | Usage terms, cancellation rights (Widerrufsrecht), referenced during signup |
+| Accessibility Statement | EAA-scope sites (June 2025) | Conformance level, known issues, remediation timeline, feedback mechanism |
+| Consent Logging | Any consent collection | Store timestamp, version, choices for audit trail |
+| Third-Party Script Gating | Analytics, marketing, chat tools | Load dynamically after consent callback, never on first page load |
+
+**Rules:** Run `validate-legal-compliance.sh` during review. Missing privacy policy = critical. Missing impressum = warning (DACH). Ungated third-party scripts = critical.
+
 ## Builder Agent Key Principle
 
 shadcn/ui (Radix UI) handles most keyboard patterns automatically. The agent ensures:

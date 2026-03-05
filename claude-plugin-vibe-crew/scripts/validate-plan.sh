@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 # scripts/validate-plan.sh
-# Validates a plan.md file for structured tasks.
-# Informational only — always exits 0.
-# Usage: validate-plan.sh <plan-file-path>
+# Validates a plan.md file for structured tasks and EARS-format acceptance criteria.
+# Exits 0 on valid plans, exits 1 on structural issues (missing fields).
+# Usage: validate-plan.sh <plan-file-path> [backlog-file-path] [feature-id]
 
 set -euo pipefail
 
 PLAN_FILE="${1:-}"
+BACKLOG_FILE="${2:-}"
+FEATURE_ID="${3:-}"
 
 if [[ -z "$PLAN_FILE" || ! -f "$PLAN_FILE" ]]; then
   echo '{"valid": false, "error": "Plan file not found", "task_count": 0, "missing_fields": []}'
-  exit 0
+  exit 1
 fi
 
 # Count structured tasks (### Task N: headings)
@@ -68,11 +70,42 @@ MISSING="[]"
 
 TOTAL_MISSING=$((MISSING_FILES + MISSING_ACTION + MISSING_VERIFY + MISSING_DONE))
 
+# Check for EARS-format acceptance criteria (if backlog and feature ID provided)
+EARS_COUNT=0
+NON_EARS_COUNT=0
+EARS_CHECK="skipped"
+
+if [[ -n "$BACKLOG_FILE" && -f "$BACKLOG_FILE" && -n "$FEATURE_ID" ]]; then
+  CRITERIA_JSON=$(jq -r --arg id "$FEATURE_ID" \
+    '(.features // [])[] | select(.id == $id) | .spec.acceptance_criteria // []' \
+    "$BACKLOG_FILE" 2>/dev/null || echo "[]")
+  CRITERIA_COUNT=$(echo "$CRITERIA_JSON" | jq 'length' 2>/dev/null || echo "0")
+
+  if [[ "$CRITERIA_COUNT" -gt 0 ]]; then
+    while IFS= read -r criterion; do
+      if echo "$criterion" | grep -qiE '(WHEN .+ (THE SYSTEM )?SHALL|IF .+ THEN .+ SHALL|WHERE .+ SHALL|WHILE .+ SHALL|THE SYSTEM SHALL)'; then
+        EARS_COUNT=$((EARS_COUNT + 1))
+      else
+        NON_EARS_COUNT=$((NON_EARS_COUNT + 1))
+      fi
+    done < <(echo "$CRITERIA_JSON" | jq -r '.[]' 2>/dev/null)
+    EARS_CHECK="checked"
+  fi
+fi
+
 jq -n \
   --argjson structured true \
   --argjson task_count "$TASK_COUNT" \
   --argjson missing_field_count "$TOTAL_MISSING" \
   --argjson missing_fields "$MISSING" \
-  '{structured: $structured, task_count: $task_count, missing_field_count: $missing_field_count, missing_fields: $missing_fields}'
+  --arg ears_check "$EARS_CHECK" \
+  --argjson ears_count "$EARS_COUNT" \
+  --argjson non_ears_count "$NON_EARS_COUNT" \
+  '{structured: $structured, task_count: $task_count, missing_field_count: $missing_field_count, missing_fields: $missing_fields, ears: {status: $ears_check, ears_count: $ears_count, non_ears_count: $non_ears_count}}'
+
+# Exit non-zero if structural issues found (missing required fields)
+if [[ "$TOTAL_MISSING" -gt 0 ]]; then
+  exit 1
+fi
 
 exit 0

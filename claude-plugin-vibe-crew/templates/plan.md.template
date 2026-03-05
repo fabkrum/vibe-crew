@@ -18,6 +18,47 @@
 ## Data Flow
 <!-- How data moves through the feature: API → state → UI -->
 
+## Acceptance Criteria (EARS Format)
+
+<!--
+Use EARS (Easy Approach to Requirements Syntax) for all acceptance criteria.
+EARS makes criteria directly testable and eliminates ambiguity.
+
+Five EARS patterns:
+
+1. UBIQUITOUS (always active):
+   "THE SYSTEM SHALL {behavior}"
+   Example: "The system shall display timestamps in the user's local timezone."
+
+2. EVENT-DRIVEN (triggered by an event):
+   "WHEN {event} THE SYSTEM SHALL {behavior}"
+   Example: "When the user clicks Submit, the system shall validate all required fields."
+
+3. STATE-DRIVEN (depends on system state):
+   "WHILE {state} THE SYSTEM SHALL {behavior}"
+   Example: "While the user is unauthenticated, the system shall redirect all protected routes to /login."
+
+4. UNWANTED (handles failure conditions):
+   "IF {condition} THEN THE SYSTEM SHALL {behavior}"
+   Example: "If the API returns a 429 status, then the system shall retry with exponential backoff up to 3 times."
+
+5. OPTIONAL (depends on a feature flag or config):
+   "WHERE {condition} THE SYSTEM SHALL {behavior}"
+   Example: "Where dark mode is enabled, the system shall apply the dark color palette to all components."
+
+Guidelines:
+  - Each criterion maps to exactly one test case
+  - Use SHALL (not should, must, or will) for mandatory behavior
+  - Include the trigger condition (WHEN/WHILE/IF/WHERE) for context-dependent behavior
+  - Keep each criterion to a single sentence
+-->
+
+| # | Criterion |
+|---|-----------|
+| 1 | WHEN {event} THE SYSTEM SHALL {behavior} |
+| 2 | IF {condition} THEN THE SYSTEM SHALL {behavior} |
+| 3 | THE SYSTEM SHALL {behavior} |
+
 ## Testing Approach
 <!-- What types of tests, key test scenarios from acceptance criteria -->
 

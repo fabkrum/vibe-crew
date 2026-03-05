@@ -85,16 +85,27 @@ A good answer is 1-3 sentences. Example: "Enterprise admins can't see which team
 
 Store the action in `spec.expected_action` alongside the existing `spec.problem_statement`.
 
-### C. Acceptance Criteria (3-5 items)
+### C. Acceptance Criteria (3-5 items, EARS Format)
 
 Ask the user: "What does 'done' look like for this feature? Let's define 3-5 specific, testable acceptance criteria."
 
-Guide the user to write criteria that are:
-- **Specific**: "User can filter tasks by status" not "filtering works"
-- **Testable**: Can be verified with a test or manual check
-- **User-focused**: Written from the user's perspective
+Write criteria in **EARS format** (Easy Approach to Requirements Syntax). Each criterion uses one of these patterns:
 
-If the user gives vague criteria, ask clarifying questions to make them specific.
+| Pattern | Template | Example |
+|---|---|---|
+| **Event-driven** | WHEN {event} THE SYSTEM SHALL {behavior} | "When the user clicks Submit, the system shall validate all required fields." |
+| **Ubiquitous** | THE SYSTEM SHALL {behavior} | "The system shall display timestamps in the user's local timezone." |
+| **State-driven** | WHILE {state} THE SYSTEM SHALL {behavior} | "While unauthenticated, the system shall redirect protected routes to /login." |
+| **Unwanted** | IF {condition} THEN THE SYSTEM SHALL {behavior} | "If the API returns 429, then the system shall retry with exponential backoff." |
+| **Optional** | WHERE {condition} THE SYSTEM SHALL {behavior} | "Where dark mode is enabled, the system shall apply the dark color palette." |
+
+Guide the user:
+- Use **SHALL** for mandatory behavior (not "should" or "must")
+- Each criterion = one testable behavior
+- Include the trigger (WHEN/WHILE/IF/WHERE) for context-dependent behavior
+- If the user gives informal criteria, rephrase them into EARS format and confirm
+
+If the user prefers their own phrasing, accept it — but note in the spec that EARS format is recommended for testability.
 
 ### D. UI Description
 

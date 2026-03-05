@@ -8,6 +8,8 @@ import { overlaySvgs } from './overlay-svgs';
 import { layoutSvgs } from './layout-svgs';
 import { interactionSvgs } from './interaction-svgs';
 import { keyboardSvgs } from './keyboard-svgs';
+import { responsiveSvgs } from './responsive-svgs';
+import { errorSvgs } from './error-svgs';
 
 interface Props {
   name: string;
@@ -25,6 +27,8 @@ const allSvgs: Record<string, string> = {
   ...layoutSvgs,
   ...interactionSvgs,
   ...keyboardSvgs,
+  ...responsiveSvgs,
+  ...errorSvgs,
 };
 
 const svg = allSvgs[name];

@@ -212,6 +212,8 @@ If not installed: full design guidance as documented below.
    - Note shadcn install commands for each selected component.
    - **Check interaction/performance patterns**: Evaluate whether any patterns from the "Interaction & Performance Patterns" section apply. For each pattern, check its trigger conditions against the feature spec. Include applicable patterns in the design spec with implementation notes.
    - **Check keyboard/focus requirements**: Note which keyboard patterns each selected component requires (from the component entries and "Keyboard Navigation & Focus Management" section).
+4.7. Read `${CLAUDE_PLUGIN_ROOT}/templates/animation-patterns.md` for motion pattern reference. Cross-reference feature spec for animation needs (loading states, transitions, micro-interactions). Note applicable patterns and tokens in the design spec under "Animation Patterns Applied".
+4.9. Read `${CLAUDE_PLUGIN_ROOT}/templates/responsive-patterns.md` for responsive requirements. Identify breakpoint strategy, touch target concerns, fluid typography needs, and responsive navigation pattern. Note in design spec under "Responsive Breakpoints".
 4.5. Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md` for business success patterns. Cross-reference the feature spec (especially `spec.expected_action` if present) against the pattern trigger conditions. For each applicable pattern:
    - Include the recommendation in the design spec under a "Business Patterns Applied" section.
    - Explain WHY the pattern applies to this feature (cite the research rationale from the reference).

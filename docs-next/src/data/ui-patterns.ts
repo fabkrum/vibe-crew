@@ -1,7 +1,7 @@
 export interface UIPattern {
   name: string;
   aliases: string[];
-  category: 'input' | 'data' | 'navigation' | 'feedback' | 'overlay' | 'layout' | 'interaction' | 'keyboard';
+  category: 'input' | 'data' | 'navigation' | 'feedback' | 'overlay' | 'layout' | 'interaction' | 'keyboard' | 'responsive' | 'error';
   description: string;
   shadcn: string | null;
   docsUrl: string | null;
@@ -16,10 +16,12 @@ export const categoryLabels: Record<UIPattern['category'], string> = {
   layout: 'Layout',
   interaction: 'Interaction & Performance Patterns',
   keyboard: 'Keyboard & Focus Patterns',
+  responsive: 'Responsive Design',
+  error: 'Error Handling',
 };
 
 export const categoryOrder: UIPattern['category'][] = [
-  'input', 'data', 'navigation', 'feedback', 'overlay', 'layout', 'interaction', 'keyboard',
+  'input', 'data', 'navigation', 'feedback', 'overlay', 'layout', 'interaction', 'keyboard', 'responsive', 'error',
 ];
 
 export const uiPatterns: UIPattern[] = [
@@ -110,4 +112,24 @@ export const uiPatterns: UIPattern[] = [
   { name: 'Escape to Close', aliases: ['dismiss on escape', 'escape key'], category: 'keyboard', description: 'Pressing Escape closes any overlay \u2014 popovers, dialogs, drawers, dropdowns, and tooltips.', shadcn: null, docsUrl: 'https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/' },
   { name: 'Enter/Space to Activate', aliases: ['keyboard activation'], category: 'keyboard', description: 'Enter or Space triggers buttons and links. Every clickable element must respond to both keys.', shadcn: null, docsUrl: 'https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/' },
   { name: 'Live Regions', aliases: ['ARIA live', 'dynamic announcements'], category: 'keyboard', description: 'Screen readers announce dynamic changes \u2014 toast notifications, form errors, loading states \u2014 without moving focus.', shadcn: null, docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions' },
+
+  // --- Responsive Design ---
+  { name: 'Mobile-First Layout', aliases: ['mobile first', 'progressive enhancement'], category: 'responsive', description: 'Write base CSS for mobile, then add min-width media queries to enhance for larger screens. Forces content prioritization.', shadcn: null, docsUrl: null },
+  { name: 'Breakpoint System', aliases: ['media queries', 'responsive breakpoints'], category: 'responsive', description: 'Standard breakpoints at 360/768/1024/1440px. Use content-driven breakpoints when the design breaks at non-standard widths.', shadcn: null, docsUrl: null },
+  { name: 'Container Query', aliases: ['container query', '@container'], category: 'responsive', description: 'Component adapts to its container width instead of the viewport. Essential for reusable components in different layout contexts.', shadcn: null, docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries' },
+  { name: 'Fluid Typography', aliases: ['responsive text', 'clamp font'], category: 'responsive', description: 'Font sizes scale smoothly between breakpoints using clamp(min, preferred, max). Never use raw vw units alone for text.', shadcn: null, docsUrl: null },
+  { name: 'Touch Target Sizing', aliases: ['tap target', 'touch area'], category: 'responsive', description: 'All interactive elements must be at least 44\u00d744px with 8px gaps between adjacent targets (WCAG 2.5.8).', shadcn: null, docsUrl: 'https://www.w3.org/WAI/WCAG21/Understanding/target-size.html' },
+  { name: 'Responsive Images', aliases: ['srcset', 'picture element', 'lazy images'], category: 'responsive', description: 'Use srcset + sizes for resolution switching, <picture> for art direction, loading="lazy" for below-fold, and aspect-ratio to prevent layout shift.', shadcn: null, docsUrl: 'https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images' },
+  { name: 'Responsive Navigation', aliases: ['mobile nav', 'bottom tab bar'], category: 'responsive', description: 'Desktop: persistent top bar or sidebar. Mobile: bottom tab bar (3\u20145 items) or hamburger menu. Never hide-only on desktop.', shadcn: null, docsUrl: null },
+  { name: 'Logical Properties', aliases: ['inline-start', 'block-end', 'RTL support'], category: 'responsive', description: 'Use margin-inline, padding-block, border-inline-start instead of physical directions. Automatically adapts to RTL and vertical writing modes.', shadcn: null, docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_logical_properties_and_values' },
+
+  // --- Error Handling ---
+  { name: 'Error Boundary', aliases: ['error catching', 'fallback UI'], category: 'error', description: 'Component-level error catching with fallback UI, error logging, and reset/retry actions. Prevents a single broken component from crashing the page.', shadcn: null, docsUrl: 'https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary' },
+  { name: 'Retry Pattern', aliases: ['exponential backoff', 'auto-retry'], category: 'error', description: 'Retry failed network requests with exponential backoff (1s \u2192 2s \u2192 4s). Show a retry button after max attempts. Never retry indefinitely.', shadcn: null, docsUrl: null },
+  { name: 'Offline Indicator', aliases: ['connectivity status', 'offline banner'], category: 'error', description: 'Detect offline status and show a persistent banner. Serve cached content via service worker. Queue mutations for sync-on-reconnect.', shadcn: null, docsUrl: null },
+  { name: 'Custom 404', aliases: ['not found page', 'missing page'], category: 'error', description: 'Friendly 404 page with search bar, popular links, and a clear path home. Never show a raw server error page.', shadcn: null, docsUrl: null },
+  { name: 'Custom 500', aliases: ['server error page', 'internal error'], category: 'error', description: 'Apologetic 500 page with retry button and status page link. Log the error server-side. Show a reference ID for support.', shadcn: null, docsUrl: null },
+  { name: 'Empty State \u2014 First Use', aliases: ['first run empty', 'welcome state'], category: 'error', description: 'When there is no data yet: show an illustration, explain what will appear here, and provide a primary CTA to create the first item.', shadcn: null, docsUrl: null },
+  { name: 'Empty State \u2014 No Results', aliases: ['no matches', 'search empty'], category: 'error', description: 'When a search or filter returns nothing: show the query, suggest alternatives, and offer a way to clear filters.', shadcn: null, docsUrl: null },
+  { name: 'Network Error Toast', aliases: ['API error notification', 'connection error'], category: 'error', description: 'Non-blocking toast for transient network errors with a retry action. For persistent failures, escalate to a full-page error state.', shadcn: null, docsUrl: null },
 ];

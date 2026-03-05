@@ -388,6 +388,42 @@ maps business patterns to specific component implementations.
 | Inline Validation | Form + Input + Label | Validate on blur, not on type. Show errors via `aria-describedby`. |
 | Pricing Comparison | Table + Card + Badge + Toggle | 3 tiers, center highlighted (Von Restorff), annual/monthly toggle. |
 
+## 10. Animation & Motion Patterns
+
+Cross-reference with `animation-patterns.md` for full token reference and reduced-motion requirements.
+
+| Pattern | When to apply | Token | Reduced Motion |
+|---------|---------------|-------|----------------|
+| Fade (enter/exit) | Content reveal, page transitions, image loading | `--duration-normal` + `--ease-out` (enter), `--ease-in` (exit) | Instant show/hide |
+| Slide | Drawers, sheets, mobile nav, panels from edge | `--duration-normal` + `--ease-out` | Instant position or crossfade |
+| Scale | Modals, dialogs, popovers, tooltips appearing | `--duration-fast` + `--ease-out` | Opacity only, no scale |
+| Collapse/Expand | Accordions, collapsible sections | `--duration-normal` + `--ease-in-out` via `grid-template-rows: 0fr/1fr` | Instant toggle |
+| Hover Feedback | Buttons, cards, interactive items | `--duration-fast` + `--ease-spring`, `scale(1.02)` | Color/shadow only |
+| Press Feedback | Buttons on `:active` | `--duration-instant`, `scale(0.97)` | Opacity change only |
+| Shimmer/Skeleton | Data loading states | Continuous gradient sweep, `aria-busy="true"` | Static gray placeholder |
+| Scroll Reveal | Sections entering viewport | `--duration-normal` + `--ease-out` via IntersectionObserver | Content visible immediately |
+| Staggered List | List items entering viewport | `delay: index * 50ms`, cap 500ms | All items appear at once |
+| Toast Slide-In | Toast notifications | `--duration-normal` + `--ease-out` | Instant appear/disappear |
+
+**Rules:** Only animate `transform` + `opacity` (GPU-safe). Cap at 600ms. `ease-out` for enter, `ease-in` for exit, `spring` for micro-interactions.
+
+## 11. Responsive Design Patterns
+
+Cross-reference with `responsive-patterns.md` for full implementation guidance.
+
+| Pattern | When to apply | Implementation |
+|---------|---------------|----------------|
+| Mobile-First | Always — base CSS targets mobile | `min-width` media queries to enhance for larger screens |
+| Breakpoints | Standard: 360/768/1024/1440px | Content-driven breakpoints when design breaks at non-standard widths |
+| Container Queries | Reusable components in different layouts | `container-type: inline-size` on wrapper, `@container (min-width)` |
+| Fluid Typography | All heading and body text | `clamp(min, preferred, max)` with `rem + vw`. Never raw `vw` alone |
+| Touch Targets | Every interactive element on touch devices | 44×44px minimum, 8px gap. Use `@media (pointer: fine)` for desktop exception |
+| Responsive Images | Content images at different sizes | `srcset` + `sizes`, `<picture>` for art direction, `loading="lazy"`, `aspect-ratio` |
+| Logical Properties | All spacing and alignment | `margin-inline`, `padding-block`, `border-inline-start` — auto-adapts to RTL |
+| Responsive Navigation | App navigation across breakpoints | Desktop: top bar/sidebar. Mobile: bottom tab bar (preferred) or hamburger |
+
+**Rules:** Mobile-first CSS. Touch targets 44px minimum. `clamp()` for fluid text. Logical properties over physical. `aspect-ratio` on all images.
+
 ## Builder Agent Key Principle
 
 shadcn/ui (Radix UI) handles most keyboard patterns automatically. The agent ensures:

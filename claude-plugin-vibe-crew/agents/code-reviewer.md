@@ -190,6 +190,30 @@ Check for common performance issues:
 4. **N+1 queries** — Database or API calls in loops
 5. **Missing pagination** — Unbounded list rendering
 
+### Step 10.7: Animation Compliance
+
+Read `${CLAUDE_PLUGIN_ROOT}/templates/animation-patterns.md`. Check if the implementation follows animation best practices:
+
+1. **GPU-safe properties** — Only `transform` and `opacity` are animated. Flag `width`, `height`, `top`, `left`, `margin`, `padding` animations as `warning`.
+2. **Reduced motion** — Animations are gated behind `prefers-reduced-motion` or use design-system duration tokens (which zero out automatically). Flag ungated custom animations as `warning`.
+3. **Design tokens** — Animation durations and easings use `--duration-*` and `--ease-*` tokens, not hardcoded values. Flag `300ms`, `ease-in-out` literals as `warning`.
+4. **Easing direction** — Enter animations use `ease-out`, exit use `ease-in`. Mismatched easing is `info`.
+5. **Duration cap** — No UI animation exceeds 600ms. Flag longer durations as `warning`.
+
+Severity: All animation findings are `warning` unless noted. Category: `"animation-compliance"`.
+
+### Step 10.9: Responsive Compliance
+
+Read `${CLAUDE_PLUGIN_ROOT}/templates/responsive-patterns.md`. Check responsive design implementation:
+
+1. **Touch targets** — Interactive elements are at least 44×44px with 8px gaps. Flag undersized targets as `warning`.
+2. **Fluid typography** — Text uses `clamp()` or responsive sizing. Flag raw `vw` font sizes as `warning`.
+3. **Logical properties** — Uses `margin-inline`/`padding-block` over `margin-left`/`padding-top` where applicable. Flag physical properties in new code as `info`.
+4. **Mobile-first** — Media queries use `min-width` (mobile-first), not `max-width`. Flag `max-width`-primary breakpoint strategy as `warning`.
+5. **Image optimization** — Images use `loading="lazy"` (below-fold), `aspect-ratio` or explicit dimensions. Flag missing `aspect-ratio` as `info`.
+
+Severity: All responsive findings are `warning` unless noted. Category: `"responsive-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

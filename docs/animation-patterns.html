@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Animation Patterns</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.pattern-illustration[data-astro-cid-7fzqqofr]{flex-shrink:0;width:200px;height:120px}.pattern-illustration[data-astro-cid-7fzqqofr] svg{width:100%;height:100%;display:block}.category-nav[data-astro-cid-znrwjdcd]{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem;padding:1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm)}.category-nav[data-astro-cid-znrwjdcd] a[data-astro-cid-znrwjdcd]{padding:.35rem .75rem;border-radius:var(--radius-xs);font-size:.82rem;font-weight:600;color:var(--color-text-secondary);text-decoration:none;transition:all .15s;white-space:nowrap}.category-nav[data-astro-cid-znrwjdcd] a[data-astro-cid-znrwjdcd]:hover{background:var(--color-accent-bg);color:var(--color-accent);text-decoration:none}.category-heading[data-astro-cid-znrwjdcd]{font-size:1.5rem;font-weight:800;color:var(--color-accent);border-bottom:1px solid var(--color-border);padding-bottom:.5rem;margin-bottom:.5rem;margin-top:2rem}.category-description[data-astro-cid-znrwjdcd]{margin:0 0 1.25rem;font-size:.92rem;color:var(--color-text-secondary);line-height:1.6}.pattern-list[data-astro-cid-znrwjdcd]{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem}.pattern-card[data-astro-cid-znrwjdcd]{padding:1.25rem;border:1px solid var(--color-border-subtle);border-radius:var(--radius-sm);background:var(--color-surface)}.pattern-card-inner[data-astro-cid-znrwjdcd]{display:flex;gap:1.25rem;align-items:flex-start}.pattern-content[data-astro-cid-znrwjdcd]{flex:1;min-width:0}@media(max-width:600px){.pattern-card-inner[data-astro-cid-znrwjdcd]{flex-direction:column}}.pattern-name[data-astro-cid-znrwjdcd]{font-size:1rem;font-weight:700;color:var(--color-text);margin:0 0 .5rem}.pattern-desc[data-astro-cid-znrwjdcd]{font-size:.92rem;color:var(--color-text-secondary);line-height:1.6;margin:0 0 .75rem}.pattern-meta[data-astro-cid-znrwjdcd]{display:flex;flex-direction:column;gap:.5rem}.meta-block[data-astro-cid-znrwjdcd]{font-size:.85rem;line-height:1.5}.meta-block[data-astro-cid-znrwjdcd] p[data-astro-cid-znrwjdcd]{margin:0;color:var(--color-text-secondary)}.meta-label[data-astro-cid-znrwjdcd]{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-muted);margin-right:.35rem}.docs-link[data-astro-cid-znrwjdcd]{display:inline-block;margin-top:.25rem;font-size:.82rem;font-weight:600;color:var(--color-accent);text-decoration:none}.docs-link[data-astro-cid-znrwjdcd]:hover{text-decoration:underline}.further-reading[data-astro-cid-znrwjdcd]{margin-top:3rem}.further-reading[data-astro-cid-znrwjdcd] ul[data-astro-cid-znrwjdcd]{list-style:none;padding:0;margin:1rem 0 0}.further-reading[data-astro-cid-znrwjdcd] li[data-astro-cid-znrwjdcd]{padding:.5rem 0;border-bottom:1px solid var(--color-border-subtle);font-size:.92rem;line-height:1.6}.further-reading[data-astro-cid-znrwjdcd] li[data-astro-cid-znrwjdcd]:last-child{border-bottom:none}.further-reading[data-astro-cid-znrwjdcd] a[data-astro-cid-znrwjdcd]{font-weight:600;color:var(--color-accent);text-decoration:none}.further-reading[data-astro-cid-znrwjdcd] a[data-astro-cid-znrwjdcd]:hover{text-decoration:underline}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/animation-patterns.html" class="sidebar-link active"> Animation Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Reference</span>  <span class="separator">/</span> <span>Animation Patterns</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Reference"},{"@type":"ListItem","position":3,"name":"Animation Patterns"}]}</script>  <h2 data-astro-cid-znrwjdcd>Animation & Motion Patterns</h2> <p data-astro-cid-znrwjdcd>Design-system-aware animation patterns that VibeCrew agents apply during design and code review. Every pattern uses design tokens, respects <code data-astro-cid-znrwjdcd>prefers-reduced-motion</code>, and only animates GPU-composited properties.</p> <nav class="category-nav" aria-label="Pattern categories" data-astro-cid-znrwjdcd> <a href="#cat-foundations" data-astro-cid-znrwjdcd>Motion Foundations</a><a href="#cat-entrance-exit" data-astro-cid-znrwjdcd>Entrance &amp; Exit</a><a href="#cat-micro" data-astro-cid-znrwjdcd>Micro-Interactions</a><a href="#cat-loading" data-astro-cid-znrwjdcd>Loading States</a><a href="#cat-scroll" data-astro-cid-znrwjdcd>Scroll-Driven</a> </nav> <section class="pattern-section" id="cat-foundations" data-astro-cid-znrwjdcd> <h3 class="category-heading" data-astro-cid-znrwjdcd>Motion Foundations</h3> <p class="category-description" data-astro-cid-znrwjdcd>Core principles that apply to every animation — reduced motion compliance, GPU-safe properties, and duration/easing token selection.</p> <div class="pattern-list" data-astro-cid-znrwjdcd> <div class="pattern-card" id="reduced-motion" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="70" height="80" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <circle cx="55" cy="50" r="12" style="fill: var(--color-accent)"/>
+  <text x="55" y="54" text-anchor="middle" style="fill: #fff; font-size: 14px; font-weight: 700; font-family: var(--font-sans)">✓</text>
+  <text x="55" y="82" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Motion ON</text>
+  <rect x="110" y="20" width="70" height="80" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <circle cx="145" cy="50" r="12" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="145" y="54" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 14px; font-weight: 700; font-family: var(--font-sans)">✓</text>
+  <text x="145" y="82" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Reduced</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Reduced Motion</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Gate every animation behind prefers-reduced-motion. The design system zeros all duration tokens automatically; complex animations (parallax, stagger) need explicit @media overrides.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>Design system tokens (--duration-*) zero out via the prefers-reduced-motion block. For custom animations, wrap in @media (prefers-reduced-motion: no-preference) { }.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>All motion disabled. Essential state transitions use instant crossfade.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion" target="_blank" rel="noopener noreferrer" data-astro-cid-znrwjdcd>Docs →</a> </div> </div> </div> </div><div class="pattern-card" id="gpu-safe-animation" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="60" height="60" rx="6" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5" transform="rotate(-5 50 60)"/>
+  <text x="50" y="55" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">transform</text>
+  <text x="50" y="70" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">opacity</text>
+  <rect x="120" y="30" width="60" height="60" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="150" y="55" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">width</text>
+  <text x="150" y="70" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">height</text>
+  <line x1="120" y1="30" x2="180" y2="90" style="stroke: var(--color-text-muted)" stroke-width="1.5"/>
+  <line x1="180" y1="30" x2="120" y2="90" style="stroke: var(--color-text-muted)" stroke-width="1.5"/>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>GPU-Safe Animation</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Only animate transform and opacity — the two GPU-composited properties. Animating width, height, top, left, margin, or padding triggers layout recalculation and causes jank.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>Use transform: translate(), scale(), rotate() for position/size changes. Use opacity for visibility. Use will-change: transform sparingly on known animated elements.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>N/A — this is a performance rule, not a motion preference.</p> </div> <a class="docs-link" href="https://web.dev/articles/animations-guide" target="_blank" rel="noopener noreferrer" data-astro-cid-znrwjdcd>Docs →</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-entrance-exit" data-astro-cid-znrwjdcd> <h3 class="category-heading" data-astro-cid-znrwjdcd>Entrance &amp; Exit</h3> <p class="category-description" data-astro-cid-znrwjdcd>Patterns for showing and hiding content — fades, slides, scales, and height-safe collapse animations.</p> <div class="pattern-list" data-astro-cid-znrwjdcd> <div class="pattern-card" id="fade" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="40" height="60" rx="6" style="fill: var(--color-accent)" opacity="0.15"/>
+  <rect x="70" y="30" width="40" height="60" rx="6" style="fill: var(--color-accent)" opacity="0.45"/>
+  <rect x="120" y="30" width="40" height="60" rx="6" style="fill: var(--color-accent)" opacity="0.75"/>
+  <rect x="168" y="30" width="14" height="60" rx="4" style="fill: var(--color-accent)"/>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">opacity 0 → 1</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Fade</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>The simplest entrance/exit — opacity transition from 0 to 1. Use for content reveals, page transitions, and image loading.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>opacity: 0 → 1 with --duration-normal + --ease-out (enter) or --ease-in (exit). Combine with translateY for a subtle slide-fade.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>Instant show/hide — no fade animation.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="slide" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="130" y="10" width="60" height="100" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="136" y="20" width="48" height="8" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="136" y="34" width="48" height="8" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="136" y="48" width="48" height="8" rx="3" style="fill: var(--color-accent-bg)"/>
+  <path d="M100 60 L120 60" style="stroke: var(--color-accent)" stroke-width="2" stroke-linecap="round"/>
+  <polyline points="115,55 120,60 115,65" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="20" y="35" width="60" height="50" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Slide</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Content enters from a screen edge via translateX/Y. Use for panels, drawers, sheets, and mobile navigation.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>transform: translateX(100%) → translateX(0) with --duration-normal + --ease-out. Vary direction based on context (left for nav, bottom for sheets).</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>Instant position change or crossfade — no sliding motion.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="scale" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="35" width="35" height="50" rx="6" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1" opacity="0.4"/>
+  <rect x="45" y="20" width="65" height="80" rx="8" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5" opacity="0.7"/>
+  <rect x="115" y="15" width="70" height="90" rx="8" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="150" y="55" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Modal</text>
+  <text x="150" y="70" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">scale 0.95→1</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Scale</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Element appears by scaling from 0.95 to 1 with an opacity fade. Use for modals, dialogs, popovers, and tooltips.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>transform: scale(0.95) → scale(1) + opacity: 0 → 1 with --duration-fast + --ease-out. Never scale from 0 — too dramatic.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>Instant appear — opacity only, no scale transform.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="collapse" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="70" height="24" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="55" y="26" text-anchor="middle" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Section ▼</text>
+  <rect x="20" y="36" width="70" height="40" rx="5" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="28" y="44" width="54" height="6" rx="2" style="fill: var(--color-accent)" opacity="0.4"/>
+  <rect x="28" y="54" width="40" height="6" rx="2" style="fill: var(--color-accent)" opacity="0.3"/>
+  <rect x="110" y="10" width="70" height="24" rx="5" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="145" y="26" text-anchor="middle" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Section ▶</text>
+  <rect x="110" y="36" width="70" height="4" rx="2" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1" opacity="0.3"/>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Collapse</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Expand or collapse a section without animating height (layout-safe). Use for accordions, collapsible panels, and expandable rows.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>grid-template-rows: 0fr → 1fr on parent, overflow: hidden on child. Uses --duration-normal + --ease-in-out.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>Instant expand/collapse — no animation.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-micro" data-astro-cid-znrwjdcd> <h3 class="category-heading" data-astro-cid-znrwjdcd>Micro-Interactions</h3> <p class="category-description" data-astro-cid-znrwjdcd>Subtle feedback animations that make interfaces feel alive — hover, press, toggle, and validation effects.</p> <div class="pattern-list" data-astro-cid-znrwjdcd> <div class="pattern-card" id="hover-feedback" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="70" height="60" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="55" y="65" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Normal</text>
+  <rect x="108" y="26" width="74" height="64" rx="8" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="2"/>
+  <rect x="110" y="24" width="74" height="64" rx="8" style="fill: none; stroke: var(--color-accent)" stroke-width="0" opacity="0.1"/>
+  <text x="145" y="61" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Hovered</text>
+  <text x="145" y="76" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">scale(1.02)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Hover Feedback</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Subtle scale or lift on hover for buttons, cards, and interactive elements. Creates a sense of direct manipulation.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>transform: scale(1.02) or translateY(-1px) + shadow increase on :hover. Use --duration-fast + --ease-spring.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>No transform; color/shadow change only.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="press-feedback" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="25" y="35" width="65" height="36" rx="8" style="fill: var(--color-accent)"/>
+  <text x="57" y="57" text-anchor="middle" style="fill: #fff; font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Button</text>
+  <rect x="112" y="38" width="61" height="32" rx="7" style="fill: var(--color-accent)" opacity="0.85"/>
+  <text x="142" y="58" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Pressed</text>
+  <text x="142" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">scale(0.97)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Press Feedback</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Scale-down effect on :active state for buttons. Provides tactile confirmation of interaction.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>transform: scale(0.97) on :active. Use --duration-instant + --ease-default.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>No transform; opacity change only.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="validation-shake" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="30" width="140" height="32" rx="6" style="stroke: hsl(0, 84%, 60%); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="45" y="50" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-sans)">bad@email</text>
+  <path d="M30 68 L35 62 L40 68 L45 62 L50 68" style="stroke: hsl(0, 84%, 60%); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="30" y="90" style="fill: hsl(0, 84%, 60%); font-size: 10px; font-family: var(--font-sans)">Please enter a valid email</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Validation Shake</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Horizontal shake animation for form fields with invalid input. Always pair with aria-invalid and visible error text — never shake as the only error indicator.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>@keyframes shake: translateX(-4px/4px) for 2-3 cycles over --duration-normal. Apply on submit validation failure.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>No shake — rely on red border + error message only.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-loading" data-astro-cid-znrwjdcd> <h3 class="category-heading" data-astro-cid-znrwjdcd>Loading States</h3> <p class="category-description" data-astro-cid-znrwjdcd>Visual indicators for asynchronous operations — skeleton loading, spinners, progress bars, and content transitions.</p> <div class="pattern-list" data-astro-cid-znrwjdcd> <div class="pattern-card" id="shimmer-loading" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="15" width="160" height="20" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="15" width="60" height="20" rx="4" style="fill: var(--color-accent-bg)" opacity="0.5"/>
+  <rect x="20" y="45" width="160" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="65" width="120" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="85" width="160" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="85" width="40" height="12" rx="3" style="fill: var(--color-accent-bg)" opacity="0.3"/>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">shimmer sweep →</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Shimmer Loading</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Gradient sweep animation over skeleton placeholders while data loads. Communicates that content is on its way.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>Animated background-position on a linear-gradient. Container gets aria-busy=&quot;true&quot;, skeletons get aria-hidden=&quot;true&quot;.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>Static gray skeleton — no sweep animation.</p> </div> <a class="docs-link" href="https://ui.shadcn.com/docs/components/skeleton" target="_blank" rel="noopener noreferrer" data-astro-cid-znrwjdcd>Docs →</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-scroll" data-astro-cid-znrwjdcd> <h3 class="category-heading" data-astro-cid-znrwjdcd>Scroll-Driven</h3> <p class="category-description" data-astro-cid-znrwjdcd>Animations triggered by scroll position — reveal effects, parallax, progress indicators, and staggered lists.</p> <div class="pattern-list" data-astro-cid-znrwjdcd> <div class="pattern-card" id="scroll-reveal" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="100" y1="5" x2="100" y2="115" style="stroke: var(--color-border)" stroke-width="1" stroke-dasharray="3 3"/>
+  <rect x="25" y="10" width="50" height="30" rx="5" style="fill: var(--color-accent)"/>
+  <rect x="25" y="48" width="50" height="30" rx="5" style="fill: var(--color-accent)" opacity="0.5"/>
+  <rect x="25" y="86" width="50" height="30" rx="5" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="150" y="30" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">visible</text>
+  <text x="150" y="68" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">entering</text>
+  <text x="150" y="105" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">below fold</text>
+  <polyline points="140,35 150,42 160,35" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Scroll Reveal</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>Content fades and slides into view as the user scrolls. Use IntersectionObserver with threshold: 0.1 for efficient detection.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>IntersectionObserver triggers opacity: 0 → 1 + translateY(20px) → 0 with --duration-normal + --ease-out.</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>Content visible immediately — no scroll animation.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="staggered-list" data-astro-cid-znrwjdcd> <div class="pattern-card-inner" data-astro-cid-znrwjdcd> <div class="pattern-illustration" data-astro-cid-7fzqqofr><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="20" rx="4" style="fill: var(--color-accent)"/>
+  <rect x="20" y="36" width="160" height="20" rx="4" style="fill: var(--color-accent)" opacity="0.7"/>
+  <rect x="20" y="62" width="160" height="20" rx="4" style="fill: var(--color-accent)" opacity="0.4"/>
+  <rect x="20" y="88" width="160" height="20" rx="4" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="40" y="24" style="fill: #fff; font-size: 9px; font-family: var(--font-sans)">0ms</text>
+  <text x="40" y="50" style="fill: #fff; font-size: 9px; font-family: var(--font-sans)">50ms</text>
+  <text x="40" y="76" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-sans)">100ms</text>
+  <text x="40" y="102" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-sans)">150ms</text>
+</svg></div> <div class="pattern-content" data-astro-cid-znrwjdcd> <h4 class="pattern-name" data-astro-cid-znrwjdcd>Staggered List</h4> <p class="pattern-desc" data-astro-cid-znrwjdcd>List items enter sequentially with increasing delays. Creates a cascade effect for card grids, search results, and feeds.</p> <div class="pattern-meta" data-astro-cid-znrwjdcd> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Implementation</span> <p data-astro-cid-znrwjdcd>Each item gets transition-delay: calc(var(--index) * 50ms). Cap total delay at 500ms (10 items max stagger).</p> </div> <div class="meta-block" data-astro-cid-znrwjdcd> <span class="meta-label" data-astro-cid-znrwjdcd>Reduced Motion</span> <p data-astro-cid-znrwjdcd>All items appear simultaneously — no stagger delay.</p> </div>  </div> </div> </div> </div> </div> </section><section class="further-reading" id="further-reading" data-astro-cid-znrwjdcd> <h3 class="category-heading" data-astro-cid-znrwjdcd>Further Reading</h3> <ul data-astro-cid-znrwjdcd> <li data-astro-cid-znrwjdcd><a href="https://web.dev/articles/animations-guide" target="_blank" rel="noopener noreferrer" data-astro-cid-znrwjdcd>web.dev Animation Guide</a> &mdash; Performance-focused animation best practices</li> <li data-astro-cid-znrwjdcd><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion" target="_blank" rel="noopener noreferrer" data-astro-cid-znrwjdcd>MDN prefers-reduced-motion</a> &mdash; Accessibility reference for motion preferences</li> <li data-astro-cid-znrwjdcd><a href="https://animate.style/" target="_blank" rel="noopener noreferrer" data-astro-cid-znrwjdcd>Animate.css</a> &mdash; Premade animation library for reference and inspiration</li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/business-patterns.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Business Patterns</span></a><a href="/vibe-crew/glossary.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Glossary</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html> 

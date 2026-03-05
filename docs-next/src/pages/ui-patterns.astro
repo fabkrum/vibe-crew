@@ -22,6 +22,8 @@ const categoryDescriptions: Record<UIPattern['category'], string> = {
   layout: 'Structural components that organize page content — accordions, resizable panels, scroll areas, and content separators.',
   interaction: 'Performance and UX patterns that make interfaces feel fast and responsive — lazy loading, caching strategies, and optimistic updates.',
   keyboard: 'Accessibility patterns for keyboard and screen reader users — focus management, key bindings, and live announcements.',
+  responsive: 'Mobile-first layouts, fluid typography, touch targets, responsive images, container queries, and logical properties for every screen size.',
+  error: 'Error boundaries, retry patterns, offline indicators, custom error pages, and empty states that guide users through failure gracefully.',
 };
 ---
 
@@ -84,6 +86,8 @@ const categoryDescriptions: Record<UIPattern['category'], string> = {
         <tr><td>"A dashboard"</td><td>Card grid + Chart + Skeleton Loading + SWR (fast perceived load)</td></tr>
         <tr><td>"A search bar"</td><td>Combobox + Debounced Search (waits until you stop typing)</td></tr>
         <tr><td>"A list of 500 items"</td><td>Data Table + List Virtualization (only renders visible rows)</td></tr>
+        <tr><td>"Work on mobile"</td><td>Mobile-First Layout + Touch Target Sizing + Responsive Navigation</td></tr>
+        <tr><td>"Handle errors gracefully"</td><td>Error Boundary + Custom 404/500 + Network Error Toast</td></tr>
       </tbody>
     </table>
   </section>

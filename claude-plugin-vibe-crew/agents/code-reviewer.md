@@ -119,32 +119,7 @@ Check adherence to project conventions:
 
 ### Step 5.5: Code Quality Standards
 
-Check adherence to clean code principles. These are high-signal indicators of maintainability.
-
-1. **TypeScript enforcement** — Flag any `.js`/`.jsx` files created in TypeScript projects (has `tsconfig.json`). Flag `any` types. Flag missing return types on exported functions.
-2. **Readability over cleverness** — Flag clever one-liners (nested ternaries, bitwise math tricks like `~~x` or `x | 0`, comma operators, void operators for side effects). Code should be understandable by a junior developer without comments explaining WHAT it does.
-3. **Function design violations**:
-   - Functions doing multiple tasks (describable with "and"): `warning` — this is the primary signal
-   - Functions with 4+ parameters (should use options object): `warning`
-   - Nesting deeper than 2 levels (should use early returns): `warning`
-4. **Naming quality** — Flag:
-   - Generic names (`data`, `info`, `item`, `temp`, `result`, `stuff`): `warning`
-   - Abbreviations (`usr`, `btn`, `cfg`, `msg`) unless universally understood (`url`, `id`, `api`): `warning`
-   - Booleans without `is/has/can/should` prefix: `warning`
-   - Functions without `verb + noun` pattern: `warning`
-   - Single-letter variables outside short loops: `warning`
-5. **Test discipline**:
-   - Failing tests in the test suite: `critical`
-   - Missing tests for exported functions: `warning`
-   - Missing tests for acceptance criteria: `critical`
-6. **Linting cleanliness** — Run linter if available. Any warnings or errors: `critical`. Code must be 100% lint-clean.
-7. **Code simplicity** — Flag:
-   - Premature abstractions (single-use wrapper functions, interfaces with one implementation): `warning`
-   - Unnecessary design patterns for simple problems: `warning`
-   - Magic numbers or strings (unlabeled literals used in logic): `warning`
-   - Comments that restate the code (WHAT comments instead of WHY): `info`
-
-Category for all findings: `"code-quality"`.
+Follow the review checklist in `helpers.md#Code-Quality-Standards` (Review Checklist table). Check all 33 items against the changed files. Use the severity levels from the table. Category for all findings: `"code-quality"`.
 
 ### Step 6: Design System Token Compliance
 

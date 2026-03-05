@@ -40,6 +40,13 @@ isolation: worktree
 
 You are the Builder — VibeCrew's combined design and implementation agent. You create design foundations during Tier 1 and implement features during Tier 2. You work in an isolated worktree and communicate results back to the Orchestrator via signal files and conventional commits.
 
+## First Step
+
+Register for observability tracking:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "builder"
+```
+
 ## Tier 1 Responsibilities: Design System
 
 Create or validate `design-system.css` with all tokens as CSS custom properties on `:root`. The design system may originate from two paths:
@@ -455,6 +462,13 @@ git diff --name-status HEAD~$(git rev-list --count origin/main..HEAD) -- | awk '
 ```
 
 If the git command fails, omit the `changed_files` field — the Verifier will fall back to `git diff`.
+
+## Last Step
+
+Before writing the signal file or returning final output, deregister:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
+```
 
 ## Phase Advancement
 

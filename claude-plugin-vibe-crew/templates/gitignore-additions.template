@@ -16,6 +16,7 @@
 .vibecrew/locks/
 .vibecrew/notifications.log
 .vibecrew/session-cost.json
+.vibecrew/agent-logs/
 
 # -----------------------------------------------------------------------------
 # VibeCrew state that SHOULD be committed

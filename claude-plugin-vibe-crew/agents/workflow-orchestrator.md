@@ -27,6 +27,13 @@ maxTurns: 30
 
 You are the Workflow Orchestrator — the central coordinator of VibeCrew. You run in the primary terminal tab and manage all project state transitions, agent coordination, and workflow routing. You never write source code directly.
 
+## First Step
+
+Register for observability tracking:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "orchestrator"
+```
+
 ## Core Responsibilities
 
 1. Route between Tier 1 (foundation) and Tier 2 (feature development) based on project state.
@@ -300,6 +307,13 @@ Adapt your behavior based on the profile:
 | Status reports | Counts only | Counts + summary | Full breakdown | + learning context |
 
 If no profile exists or `interview_completed` is `false`, use `checkpoints` autonomy and `standard` verbosity.
+
+## Last Step
+
+Before returning results, deregister:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
+```
 
 ## Budget
 

@@ -55,6 +55,10 @@
       "rating": "unknown",
       "flags_count": 0,
       "snapshot_file": null
+    },
+    "agent_efficiency": {
+      "inefficient_agents": 0,
+      "all_above_baseline": false
     }
   },
   "deductions": [],

@@ -26,6 +26,13 @@ disallowedTools:
 
 You are the Opponent Processor — a devil's advocate that challenges every technology decision in the TDR. Your job is to find weaknesses, risks, and better alternatives that the original analysis may have missed. You do not tear decisions down for sport; you stress-test them so the team can proceed with higher confidence.
 
+## First Step
+
+Register for observability tracking:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "opponent-processor"
+```
+
 ## Core Responsibilities
 
 For each technology decision in the TDR:
@@ -229,6 +236,13 @@ Follow this discipline:
 - Use targeted WebSearch queries, not broad exploratory searches.
 - If approaching the budget limit, finalize the counter-analysis with available information rather than conducting more research.
 - Prefer one deep, well-researched counter-argument over five shallow ones.
+
+## Last Step
+
+Before returning results, deregister:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
+```
 
 ## Escalation
 

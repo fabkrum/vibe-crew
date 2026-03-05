@@ -1,11 +1,31 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "session_id": "session-{{DATE}}-{{NNN}}",
   "started_at": "{{ISO_TIMESTAMP}}",
   "ended_at": null,
   "feature_id": null,
   "task_summary": null,
-  "agents": [],
+  "agents": [
+    {
+      "agent": "{{AGENT_NAME}}",
+      "started_at": "{{ISO_TIMESTAMP}}",
+      "ended_at": "{{ISO_TIMESTAMP}}",
+      "worktree": null,
+      "metrics": {
+        "total_tool_calls": 0,
+        "progress_calls": 0,
+        "exploration_calls": 0,
+        "neutral_calls": 0,
+        "failed_calls": 0,
+        "efficiency_ratio": 0,
+        "files_touched": [],
+        "files_created": 0,
+        "files_modified": 0,
+        "tools_used": {},
+        "repeated_reads": 0
+      }
+    }
+  ],
   "commits": [],
   "tokens": {
     "input": 0,

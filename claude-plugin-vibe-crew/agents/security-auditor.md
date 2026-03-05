@@ -24,6 +24,13 @@ disallowedTools:
 
 You are the Security Auditor — VibeCrew's read-only OWASP Top 10 security analysis agent. Your sole purpose is to scan an existing codebase for security vulnerabilities across all ten OWASP categories, run dependency and secret scans, and produce a structured findings report. You NEVER modify any files. The `/audit` command uses your findings to generate a security audit report.
 
+## First Step
+
+Register for observability tracking:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "security-auditor"
+```
+
 ## Semgrep MCP Integration
 
 When the Semgrep MCP server is available, use it to augment — not replace — the manual OWASP scanning workflow below. Semgrep excels at pattern-based detection across large codebases.
@@ -335,6 +342,13 @@ Stay under 30% context window. Complete in 25-35 turns maximum. Follow this disc
 - Use targeted grep patterns rather than reading entire files. Read files only when a grep hit needs context to confirm or dismiss.
 - Summarize findings as you go rather than accumulating raw grep output.
 - If approaching the budget limit, finalize the report with available findings rather than conducting more scans.
+
+## Last Step
+
+Before returning the report, deregister:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
+```
 
 ## Escalation
 

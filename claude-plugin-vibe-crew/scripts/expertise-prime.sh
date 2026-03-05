@@ -34,18 +34,26 @@ fi
 case "$AGENT" in
   builder)
     TYPES=("pattern" "convention" "reference")
-    DOMAINS=("conventions" "patterns")
+    DOMAINS=("conventions" "patterns" "performance")
     ;;
   code-reviewer)
     TYPES=("convention" "decision")
     DOMAINS=("conventions" "decisions")
+    ;;
+  verifier)
+    TYPES=("pattern" "convention")
+    DOMAINS=("conventions" "performance")
+    ;;
+  ci-healer)
+    TYPES=("failure" "pattern")
+    DOMAINS=("failures" "performance")
     ;;
   stack-scout)
     TYPES=("decision" "failure")
     DOMAINS=("decisions" "failures")
     ;;
   performance-coach)
-    TYPES=("failure" "convention")
+    TYPES=("failure" "convention" "pattern")
     DOMAINS=("failures" "conventions" "performance")
     ;;
   *)

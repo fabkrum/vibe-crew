@@ -172,6 +172,34 @@ case "$CLASSIFICATION" in
     ;;
 esac
 
+# --- Append to agent log (JSONL) ---
+_should_log_tool_calls() {
+  if [[ -f "$CONFIG_FILE" ]]; then
+    local obs_enabled obs_log
+    obs_enabled=$(jq -r 'if .agent_observability.enabled == false then "false" else "true" end' "$CONFIG_FILE" 2>/dev/null || echo "true")
+    obs_log=$(jq -r 'if .agent_observability.log_tool_calls == false then "false" else "true" end' "$CONFIG_FILE" 2>/dev/null || echo "true")
+    [[ "$obs_enabled" == "true" && "$obs_log" == "true" ]]
+  fi
+}
+
+if _should_log_tool_calls; then
+  source "$SCRIPT_DIR/lib/agent-identity.sh"
+  _AGENT_NAME=$(read_active_agent)
+  _AGENT_LOG_DIR="$VIBECREW_DIR/agent-logs"
+  mkdir -p "$_AGENT_LOG_DIR"
+  _SESSION_ID=$(jq -r '.active_feature.session_id // "unknown"' "$STATE_FILE" 2>/dev/null || echo "unknown")
+  _LOG_FILE="$_AGENT_LOG_DIR/session-${_SESSION_ID}.jsonl"
+  _FEAT_ID=$(jq -r '.active_feature.id // ""' "$STATE_FILE" 2>/dev/null || echo "")
+
+  jq -n -c \
+    --arg ts "$TIMESTAMP" --arg agent "$_AGENT_NAME" --arg tool "$TOOL_NAME" \
+    --arg target "${FILE_PATH:0:200}" --argjson exit "${EXIT_CODE:-0}" \
+    --arg class "$CLASSIFICATION" --arg phase "$CURRENT_PHASE" \
+    --arg feat "$_FEAT_ID" \
+    '{ts:$ts,agent:$agent,tool:$tool,target:$target,exit:($exit|tonumber),class:$class,phase:$phase,feat:$feat}' \
+    >> "$_LOG_FILE" 2>/dev/null || true
+fi
+
 # --- Check soft threshold ---
 SOFT_THRESHOLD=""
 if [[ -f "$CONFIG_FILE" ]]; then

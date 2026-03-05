@@ -1,0 +1,12 @@
+{
+  "_comment": "Schema for JSONL entries in .vibecrew/agent-logs/session-*.jsonl",
+  "_note": "One line per tool call, ~180 bytes. Short keys minimize file size.",
+  "ts": "2026-03-05T14:23:01Z",
+  "agent": "builder",
+  "tool": "Write",
+  "target": "src/components/Auth.tsx",
+  "exit": 0,
+  "class": "progress",
+  "phase": "code",
+  "feat": "feat-001"
+}

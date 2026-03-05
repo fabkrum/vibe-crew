@@ -1060,6 +1060,18 @@ The Vibe Score deducts 15 points when cache utilization drops below 20%, incenti
 
 ---
 
+## 5.5 Agent Observability
+
+VibeCrew tracks per-agent tool call behavior to enable accountability and self-improvement. See [agent-observability.md](agent-observability.md) for full architecture.
+
+**Pipeline**: Agents register identity at start → `drift-tracker.sh` appends agent-tagged JSONL per tool call → wrap-time scripts aggregate metrics → Performance Coach detects inefficiency patterns → expertise records feed back into agent context.
+
+**Key metrics**: efficiency ratio (progress/total calls), repeated reads, tool concentration, failure rate. Write-heavy agents (builder, verifier, ci-healer) are flagged when efficiency drops below configurable threshold across 3+ sessions.
+
+**Vibe Score impact**: -3 for persistent agent inefficiency, +2 when all agents are above baseline.
+
+---
+
 ## 6. Slash Commands
 
 ### 6.1 Overview

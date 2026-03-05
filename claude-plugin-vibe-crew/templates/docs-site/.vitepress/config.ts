@@ -85,6 +85,7 @@ export default defineConfig({
       { text: "Achievements", link: "/achievements" },
       { text: "Releases", link: "/releases" },
       { text: "Architecture", link: "/architecture" },
+      { text: "Agent Insights", link: "/agent-insights" },
       { text: "Settings", link: "/settings" },
     ],
 

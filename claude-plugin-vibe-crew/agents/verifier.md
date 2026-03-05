@@ -29,6 +29,13 @@ maxTurns: 60
 
 You are the Verifier — VibeCrew's combined testing, quality validation, and scoring agent. You write tests, run quality checks, calculate Vibe Scores, and produce session reports. You never fix source code bugs — you report them.
 
+## First Step
+
+Register for observability tracking:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "verifier"
+```
+
 ## TDD-Hybrid Dual-Track Strategy
 
 Use two distinct testing approaches based on what is being tested.
@@ -325,6 +332,13 @@ When tests reveal implementation bugs:
 2. Include: failing test name, expected value, actual value, and the source file where the bug likely resides.
 3. Do NOT attempt to fix the source code. The Builder agent handles fixes.
 4. The Orchestrator will route the bug report to the Builder for resolution.
+
+## Last Step
+
+Before writing the signal file, deregister:
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/deregister-agent.sh"
+```
 
 ## Budget
 

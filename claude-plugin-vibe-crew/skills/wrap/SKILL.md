@@ -280,6 +280,17 @@ Update erosion trends:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-erosion-trends.sh"
 ```
 
+### 3.8 Agent metrics
+
+Collect per-agent tool call metrics from the JSONL log and merge into the session log:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/collect-agent-metrics.sh"
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-agent-report.sh"
+```
+
+If either script reports "disabled" or "no agent log found", skip agent metrics silently. These are informational — never block the wrap.
+
 ---
 
 ## Step 4: Calculate Vibe Score
@@ -302,6 +313,7 @@ score -= 10 * min(drift_escalations, 2)    # drift-escalation: -10 each, max -20
 score -= 3 * min(drift_warnings, 3)        # drift-warning: -3 each, max -9
 score -= 3 * min(erosion_complexity_files, 3)  # erosion-complexity: -3 each, max -9
 score -= 5 if erosion_hot_files > 0        # erosion-hot-file: -5 if any hot files exist
+score -= 3 if agent_inefficiency           # agent-inefficiency: -3 if write-heavy agents below threshold
 
 # Bonuses
 score += 5 if all_six_phases_complete       # all-phases: +5
@@ -313,6 +325,7 @@ score += 3 if e2e_tests_passing             # e2e-passing: +3
 score += 2 if a11y_clean                    # a11y-clean: +2
 score += 2 if review_completed              # review-complete: +2
 score += 2 if perf_baselines_exist          # perf-baselines: +2
+score += 2 if agent_efficiency_bonus       # agent-efficiency: +2 if all agents above baseline
 
 score = clamp(score, 0, 100)
 ```
@@ -333,6 +346,8 @@ The `calculate-vibe-score.sh` script detects these additional metrics:
 - **`erosion_rating`**: Rating tier: healthy (90-100), moderate (70-89), concerning (50-69), critical (0-49).
 - **`erosion_complexity_files`**: Count of files with complexity deductions from the erosion score.
 - **`erosion_hot_files`**: Count of hot files (modified 5+ times without `/simplify`).
+- **`agent_inefficiency`**: True if any write-heavy agent has efficiency_ratio below threshold for 3+ sessions (from `analyze-agent-effectiveness.sh`).
+- **`agent_efficiency_bonus`**: True if all agents with 3+ sessions of data have zero flags.
 
 **Important:** The `zero_deductions` check must happen AFTER applying all deductions (including `skipped-review`). If the total deduction sum is 0, the `clean-session` bonus applies.
 

@@ -328,6 +328,25 @@ if [[ -f "$DRIFT_FILE" ]]; then
   DRIFT_CALLS_SINCE_PROGRESS=$(jq -r '.calls_since_progress // 0' "$DRIFT_FILE" 2>/dev/null || echo "0")
 fi
 
+# --- 13a. Agent efficiency metrics ---
+AGENT_INEFFICIENCY=0
+AGENT_EFFICIENCY_BONUS=0
+
+if [[ -x "$SCRIPT_DIR/analyze-agent-effectiveness.sh" ]]; then
+  AGENT_ANALYSIS=$(bash "$SCRIPT_DIR/analyze-agent-effectiveness.sh" 2>/dev/null || echo '{"agents":[],"inefficiency_patterns":[]}')
+  # Check for write-heavy agents below threshold across 3+ sessions
+  INEFFICIENT_COUNT=$(echo "$AGENT_ANALYSIS" | jq '[.agents[]? | select(.flags | index("excessive_exploration") != null)] | length' 2>/dev/null || echo "0")
+  if [[ "$INEFFICIENT_COUNT" -gt 0 ]]; then
+    AGENT_INEFFICIENCY=1
+  fi
+  # Check if ALL agents are above baseline for 3+ sessions
+  TOTAL_AGENTS=$(echo "$AGENT_ANALYSIS" | jq '[.agents[]? | select(.sessions_analyzed >= 3)] | length' 2>/dev/null || echo "0")
+  FLAGGED_AGENTS=$(echo "$AGENT_ANALYSIS" | jq '[.agents[]? | select(.flags | length > 0)] | length' 2>/dev/null || echo "0")
+  if [[ "$TOTAL_AGENTS" -gt 0 && "$FLAGGED_AGENTS" -eq 0 ]]; then
+    AGENT_EFFICIENCY_BONUS=1
+  fi
+fi
+
 # --- 13. Erosion detection metrics ---
 EROSION_SCORE=0
 EROSION_RATING="unknown"
@@ -375,6 +394,8 @@ jq -n \
   --argjson erosion_score "$EROSION_SCORE" \
   --arg erosion_rating "$EROSION_RATING" \
   --argjson erosion_flags "$EROSION_FLAGS" \
+  --argjson agent_inefficiency "$AGENT_INEFFICIENCY" \
+  --argjson agent_efficiency_bonus "$AGENT_EFFICIENCY_BONUS" \
   '{
     tests_exist: $tests_exist,
     tests_passed: $tests_passed,
@@ -407,5 +428,7 @@ jq -n \
     drift_calls_since_progress: $drift_calls_since_progress,
     erosion_score: $erosion_score,
     erosion_rating: $erosion_rating,
-    erosion_flags: $erosion_flags
+    erosion_flags: $erosion_flags,
+    agent_inefficiency: $agent_inefficiency,
+    agent_efficiency_bonus: $agent_efficiency_bonus
   }'

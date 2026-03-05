@@ -49,6 +49,24 @@ const contextPeak = computed(() => {
   if (!ctx) return null;
   return ctx.peak_percentage || ctx.peak_pct || null;
 });
+
+const agentsWithMetrics = computed(() => {
+  const agents = props.session.agents || [];
+  return agents.filter((a) => a.metrics && a.metrics.total_tool_calls > 0);
+});
+
+function barWidth(agent, type) {
+  const m = agent.metrics;
+  const total = m.total_tool_calls || 1;
+  const count = type === "progress" ? m.progress_calls : type === "exploration" ? m.exploration_calls : m.neutral_calls;
+  return (count / total) * 100 + "%";
+}
+
+function effColor(ratio) {
+  if (ratio >= 0.35) return "#22c55e";
+  if (ratio >= 0.20) return "#eab308";
+  return "#ef4444";
+}
 </script>
 
 <template>
@@ -153,6 +171,36 @@ const contextPeak = computed(() => {
         >
           {{ agent }}
         </span>
+      </div>
+    </div>
+
+    <!-- Agent Breakdown (from metrics) -->
+    <div v-if="agentsWithMetrics.length" class="entry-section">
+      <h4>Agent Breakdown</h4>
+      <div class="agent-breakdown">
+        <div
+          v-for="agent in agentsWithMetrics"
+          :key="agent.agent"
+          class="breakdown-row"
+        >
+          <span class="breakdown-name" :style="{ color: AGENT_COLORS[agent.agent] || '#6b7280' }">
+            {{ agent.agent }}
+          </span>
+          <div class="breakdown-bar-container">
+            <div class="breakdown-bar" :style="{ width: barWidth(agent, 'progress'), background: '#22c55e' }" />
+            <div class="breakdown-bar" :style="{ width: barWidth(agent, 'exploration'), background: '#3b82f6' }" />
+            <div class="breakdown-bar" :style="{ width: barWidth(agent, 'neutral'), background: '#6b7280' }" />
+          </div>
+          <span class="breakdown-calls">{{ agent.metrics.total_tool_calls }}</span>
+          <span class="breakdown-eff" :style="{ color: effColor(agent.metrics.efficiency_ratio) }">
+            {{ (agent.metrics.efficiency_ratio * 100).toFixed(0) }}%
+          </span>
+        </div>
+        <div class="breakdown-legend">
+          <span class="legend-item"><span class="legend-dot" style="background:#22c55e" /> progress</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#3b82f6" /> exploration</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#6b7280" /> neutral</span>
+        </div>
       </div>
     </div>
 
@@ -413,5 +461,73 @@ const contextPeak = computed(() => {
   font-size: 0.8rem;
   color: var(--vp-c-text-2);
   line-height: 1.6;
+}
+
+.agent-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.breakdown-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breakdown-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 110px;
+  text-align: right;
+}
+
+.breakdown-bar-container {
+  flex: 1;
+  height: 12px;
+  display: flex;
+  background: var(--vp-c-bg-soft);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.breakdown-bar {
+  height: 100%;
+}
+
+.breakdown-calls {
+  font-size: 0.65rem;
+  color: var(--vp-c-text-3);
+  min-width: 24px;
+  text-align: right;
+}
+
+.breakdown-eff {
+  font-size: 0.65rem;
+  font-weight: 600;
+  min-width: 28px;
+  text-align: right;
+}
+
+.breakdown-legend {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  justify-content: flex-end;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.6rem;
+  color: var(--vp-c-text-3);
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
 }
 </style>

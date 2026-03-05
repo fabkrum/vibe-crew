@@ -82,7 +82,7 @@ if [[ "$PHASE_VALID" == "false" ]]; then
 fi
 
 AGENT=$(echo "$CONTENT" | jq -r '.agent')
-VALID_AGENTS=("builder" "verifier" "code-reviewer" "orchestrator" "ci-healer" "doc-generator" "performance-coach" "code-simplifier" "security-auditor" "code-auditor" "system-reviewer")
+VALID_AGENTS=("builder" "verifier" "code-reviewer" "orchestrator" "ci-healer" "doc-generator" "performance-coach" "code-simplifier" "security-auditor" "code-auditor" "system-reviewer" "agent-observer")
 AGENT_VALID=false
 for a in "${VALID_AGENTS[@]}"; do
   if [[ "$a" == "$AGENT" ]]; then

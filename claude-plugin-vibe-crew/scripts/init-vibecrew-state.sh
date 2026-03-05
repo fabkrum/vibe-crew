@@ -25,7 +25,7 @@ TERMINAL=$(detect_terminal)
 echo "Detected terminal: $TERMINAL"
 
 # --- Create directory structure ---
-mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,handoffs,workflows,.backup}
+mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,handoffs,workflows,expertise,erosion,.backup}
 
 # --- Write config.json (only if it doesn't exist) ---
 if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
@@ -144,6 +144,25 @@ if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then
     "enabled": true,
     "max_attempts": 3,
     "auto_checkpoint": true
+  },
+  "drift_detection": {
+    "enabled": true,
+    "thresholds": {
+      "plan":   { "soft": 40, "hard": 60 },
+      "design": { "soft": 30, "hard": 50 },
+      "code":   { "soft": 20, "hard": 35 },
+      "test":   { "soft": 25, "hard": 40 },
+      "review": { "soft": null, "hard": null },
+      "docs":   { "soft": 25, "hard": 40 }
+    }
+  },
+  "erosion": {
+    "file_max_loc": 300,
+    "function_max_loc": 50,
+    "complexity_max": 10,
+    "hot_file_churn_count": 5,
+    "rapid_decline_points": 15,
+    "rapid_decline_sessions": 3
   },
   "gamification": {
     "enabled": false
@@ -349,6 +368,8 @@ VIBECREW_IGNORES=(
   ".vibecrew/.backup/"
   ".vibecrew/session-errors.jsonl"
   ".vibecrew/session-cost.json"
+  ".vibecrew/drift-tracker.json"
+  ".vibecrew/erosion/"
 )
 
 if [[ -f "$GITIGNORE" ]]; then
@@ -394,5 +415,7 @@ echo "  architecture/      -- Mermaid architecture diagrams"
 echo "  releases/          -- Release notes"
 echo "  handoffs/          -- Cross-session handoffs"
 echo "  workflows/         -- Reusable workflow templates"
+echo "  expertise/         -- Structured expertise records (JSONL)"
+echo "  erosion/           -- Code erosion tracking snapshots"
 
 exit 0

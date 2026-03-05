@@ -42,6 +42,12 @@ FEATURE_NAME=$(jq -r '.active_feature.name // empty' .vibecrew/state.json 2>/dev
 echo "Reviewing: $FEATURE_ID — $FEATURE_NAME"
 ```
 
+Load expertise context for review:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-prime.sh" --agent code-reviewer
+```
+
 Load:
 1. **Feature spec** — acceptance criteria from `.vibecrew/backlog.json`
 2. **TDR** — approved technologies and boundaries from `docs/tdr.md`

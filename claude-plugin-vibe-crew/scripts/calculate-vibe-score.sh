@@ -309,7 +309,31 @@ if [[ -x "$SCRIPT_DIR/detect-perf-baselines.sh" ]]; then
   PERF_TEST_TYPES=$(echo "$PERF_OUTPUT" | jq -c '.test_types // []' 2>/dev/null || echo "[]")
 fi
 
-# --- 12. Output JSON ---
+# --- 12. Drift detection metrics ---
+DRIFT_WARNINGS=0
+DRIFT_ESCALATIONS=0
+DRIFT_CALLS_SINCE_PROGRESS=0
+
+DRIFT_FILE="$PROJECT_ROOT/.vibecrew/drift-tracker.json"
+if [[ -f "$DRIFT_FILE" ]]; then
+  DRIFT_WARNINGS=$(jq -r '.warnings.soft_count // 0' "$DRIFT_FILE" 2>/dev/null || echo "0")
+  DRIFT_ESCALATIONS=$(jq -r '.escalations.hard_count // 0' "$DRIFT_FILE" 2>/dev/null || echo "0")
+  DRIFT_CALLS_SINCE_PROGRESS=$(jq -r '.calls_since_progress // 0' "$DRIFT_FILE" 2>/dev/null || echo "0")
+fi
+
+# --- 13. Erosion detection metrics ---
+EROSION_SCORE=0
+EROSION_RATING="unknown"
+EROSION_FLAGS=0
+
+if [[ -x "$SCRIPT_DIR/calculate-erosion-score.sh" ]]; then
+  EROSION_OUTPUT=$(bash "$SCRIPT_DIR/calculate-erosion-score.sh" "$PROJECT_ROOT" 2>/dev/null || echo '{}')
+  EROSION_SCORE=$(echo "$EROSION_OUTPUT" | jq -r '.score // 0' 2>/dev/null || echo "0")
+  EROSION_RATING=$(echo "$EROSION_OUTPUT" | jq -r '.rating // "unknown"' 2>/dev/null || echo "unknown")
+  EROSION_FLAGS=$(echo "$EROSION_OUTPUT" | jq -r '(.deductions | length) // 0' 2>/dev/null || echo "0")
+fi
+
+# --- 14. Output JSON ---
 # Use jq to construct proper JSON (handles escaping)
 jq -n \
   --argjson tests_exist "$TESTS_EXIST" \
@@ -337,6 +361,12 @@ jq -n \
   --argjson review_findings "$REVIEW_FINDINGS" \
   --argjson perf_baselines_exist "$PERF_BASELINES_EXIST" \
   --argjson perf_test_types "$PERF_TEST_TYPES" \
+  --argjson drift_warnings "$DRIFT_WARNINGS" \
+  --argjson drift_escalations "$DRIFT_ESCALATIONS" \
+  --argjson drift_calls_since_progress "$DRIFT_CALLS_SINCE_PROGRESS" \
+  --argjson erosion_score "$EROSION_SCORE" \
+  --arg erosion_rating "$EROSION_RATING" \
+  --argjson erosion_flags "$EROSION_FLAGS" \
   '{
     tests_exist: $tests_exist,
     tests_passed: $tests_passed,
@@ -362,5 +392,11 @@ jq -n \
     review_completed: $review_completed,
     review_findings: $review_findings,
     perf_baselines_exist: $perf_baselines_exist,
-    perf_test_types: $perf_test_types
+    perf_test_types: $perf_test_types,
+    drift_warnings: $drift_warnings,
+    drift_escalations: $drift_escalations,
+    drift_calls_since_progress: $drift_calls_since_progress,
+    erosion_score: $erosion_score,
+    erosion_rating: $erosion_rating,
+    erosion_flags: $erosion_flags
   }'

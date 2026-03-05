@@ -237,5 +237,8 @@ rm -f "${BACKLOG_FILE}.bak" "${STATE_FILE}.bak"
 
 release_state_lock
 
+# Reset drift tracker between features
+rm -f "$VIBECREW_DIR/drift-tracker.json"
+
 echo "$FEATURE_ID: completed $COMPLETED_PHASE, now in $NEXT_COLUMN"
 exit 0

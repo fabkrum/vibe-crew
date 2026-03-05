@@ -44,6 +44,17 @@
       "token_violations": 0,
       "viewports_checked": 0,
       "clean": false
+    },
+    "drift": {
+      "warnings": 0,
+      "escalations": 0,
+      "calls_since_progress": 0
+    },
+    "erosion": {
+      "score": 0,
+      "rating": "unknown",
+      "flags_count": 0,
+      "snapshot_file": null
     }
   },
   "deductions": [],

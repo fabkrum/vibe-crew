@@ -71,6 +71,21 @@ After the TDR is completed in Tier 1 Step 3, invoke the Opponent Processor for a
 
 The opponent processor is optional — if the developer prefers to skip it, proceed directly to Step 5 (Roadmap). Note: Architecture diagrams are now available before the Opponent Processor runs, giving it access to the full architectural picture for more informed counter-analysis.
 
+### Expertise: Record TDR Decisions
+
+After the TDR is approved, record key technology decisions as expertise records for future sessions:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-write.sh" \
+  --domain "decisions" --type "decision" --tier "foundational" \
+  --content "<technology choice and rationale>" \
+  --context "TDR decision for <category>" \
+  --outcome "pending" --confidence "0.85" \
+  --session-id "<session_id>" --source-agent "workflow-orchestrator"
+```
+
+Record one decision record per major TDR category (framework, database, auth, hosting, styling). These persist across sessions and inform the Stack Scout and Builder.
+
 ### MCP Server Sync
 
 After the TDR is approved (and after the optional Opponent Processor review), run the MCP sync script to auto-enable servers for technologies selected in the TDR:

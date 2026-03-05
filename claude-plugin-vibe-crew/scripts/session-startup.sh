@@ -45,6 +45,9 @@ if [[ ! -f "$STATE_FILE" ]]; then
   exit 0
 fi
 
+# --- Reset drift tracker for new session ---
+rm -f "$PROJECT_ROOT/.vibecrew/drift-tracker.json"
+
 # --- Run state migrations ---
 if [[ -f "$SCRIPT_DIR/migrate-state.sh" ]]; then
   bash "$SCRIPT_DIR/migrate-state.sh" 2>/dev/null || log_error "session-startup" "State migration failed"

@@ -81,6 +81,21 @@ fi
 
 echo "Applied mutation to CLAUDE.md: $RULE"
 
+# --- Dual-write to expertise system ---
+EXPERTISE_WRITE="$(dirname "$0")/expertise-write.sh"
+if [[ -x "$EXPERTISE_WRITE" ]]; then
+  bash "$EXPERTISE_WRITE" \
+    --domain "conventions" \
+    --type "convention" \
+    --tier "foundational" \
+    --content "$RULE" \
+    --context "Applied via Performance Coach mutation" \
+    --outcome "success" \
+    --confidence "0.80" \
+    --session-id "$SESSION_ID" \
+    --source-agent "performance-coach" > /dev/null 2>&1 || true
+fi
+
 # --- Prune Session Learnings to max 15 rules ---
 # Research shows oversized context files increase cost without improving outcomes.
 # Keep only the 15 most recent learnings (newest at the bottom).
@@ -138,6 +153,12 @@ if [[ -f "$MUTATION_LOG" ]]; then
      }]' "$MUTATION_LOG" > "$MUTATION_LOG.tmp" && mv "$MUTATION_LOG.tmp" "$MUTATION_LOG"
 
   echo "Updated mutation-log.json: $MUTATION_ID"
+fi
+
+# --- Sync Session Learnings from expertise ---
+EXPERTISE_SYNC="$(dirname "$0")/expertise-sync-learnings.sh"
+if [[ -x "$EXPERTISE_SYNC" && -d "$PROJECT_ROOT/.vibecrew/expertise" ]]; then
+  bash "$EXPERTISE_SYNC" "$PROJECT_ROOT" 2>/dev/null || true
 fi
 
 exit 0

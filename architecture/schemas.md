@@ -15,12 +15,16 @@
 5. [Session Logs](#5-session-logs)
 6. [Score Files](#6-score-files)
 7. [Signal Files](#7-signal-files)
-8. [Lock Files](#8-lock-files)
-9. [Migration Strategy](#9-migration-strategy)
-10. [Gamification State](#10-gamification-state)
-11. [Project Registry](#11-project-registry)
-12. [Telemetry Aggregate](#12-telemetry-aggregate)
-13. [System Review Report](#13-system-review-report)
+8. [Issue Fix Reports](#8-issue-fix-reports)
+9. [Lock Files](#9-lock-files)
+10. [Migration Strategy](#10-migration-strategy)
+11. [Gamification State](#11-gamification-state)
+12. [Project Registry](#12-project-registry)
+13. [Telemetry Aggregate](#13-telemetry-aggregate)
+14. [System Review Report](#14-system-review-report)
+15. [Expertise Records](#15-expertise-records)
+16. [Drift Tracker](#16-drift-tracker)
+17. [Erosion Schemas](#17-erosion-schemas)
 
 ---
 
@@ -63,9 +67,16 @@ Every `.vibecrew/` JSON file includes a top-level `schema_version` field. When V
 │   └── component-tree.mmd              # Component hierarchy with data flow (flowchart TD)
 ├── signals/
 │   └── <agent>-<event>.signal           # Ephemeral inter-agent signals (JSON)
-└── locks/
-    └── <resource>/                      # mkdir-based atomic locks
-        └── info.json                    # Lock metadata
+├── locks/
+│   └── <resource>/                      # mkdir-based atomic locks
+│       └── info.json                    # Lock metadata
+├── expertise/
+│   └── <domain>.jsonl                   # JSONL expertise records (one per domain)
+├── erosion/
+│   ├── baseline.json                    # Project baseline (captured after first feature)
+│   ├── erosion-<TIMESTAMP>.json         # Per-session erosion snapshots
+│   └── trends.json                      # Rolling 20-session trend summary
+└── drift-tracker.json                   # Ephemeral drift tracking (reset per session)
 ```
 
 ---
@@ -1502,3 +1513,263 @@ Structured output from the System Reviewer agent. Created by `/system-review`. B
 | `proposals[].related_findings` | string[] | yes | Linked finding IDs |
 | `diff_vs_previous` | object | yes | Previous review comparison |
 | `research_sources` | array | yes | Research audit trail |
+
+---
+
+## 15. Expertise Records
+
+Structured knowledge records stored as JSONL (one JSON object per line) in `.vibecrew/expertise/<domain>.jsonl`. Each record captures a typed, tiered learning with confidence scoring and outcome tracking. The expertise system replaces flat Session Learnings in CLAUDE.md with a queryable, ranked knowledge base.
+
+**File pattern:** `.vibecrew/expertise/<domain>.jsonl` where domain is one of: `conventions`, `patterns`, `failures`, `decisions`, `performance`
+
+**Record schema (single JSONL line):**
+
+```jsonc
+{
+  "id": "exp-20260305100000-a1b2",        // Unique ID: exp-YYYYMMDDHHMMSS-XXXX (hex)
+  "type": "convention",                     // "convention" | "pattern" | "failure" | "decision" | "reference" | "guide"
+  "tier": "foundational",                   // "foundational" | "tactical" | "observational"
+  "domain": "conventions",                  // Must match parent JSONL filename
+  "content": "Always use Context7 MCP...",  // The learning (max 500 chars)
+  "context": "When looking up library docs", // When this applies (max 200 chars)
+  "outcome_status": "success",              // "success" | "failure" | "mixed" | "pending"
+  "confidence": 0.85,                       // 0.0-1.0 confidence score
+  "tags": ["mcp", "context7"],             // Searchable tags
+  "created_at": "2026-03-05T10:00:00Z",    // ISO 8601
+  "updated_at": "2026-03-05T10:00:00Z",    // ISO 8601
+  "session_id": "session-2026-03-05-001",   // Originating session
+  "feature_id": "feat-001",                 // Related feature or null
+  "source_agent": "performance-coach",      // Agent that created the record
+  "deprecated": false,                      // Whether record is deprecated
+  "deprecation_reason": null,               // Reason for deprecation or null
+  "access_count": 0,                        // Times read by expertise-read.sh
+  "last_accessed_at": null,                 // Last read timestamp or null
+  "superseded_by": null                     // ID of superseding record or null
+}
+```
+
+### Record Types
+
+| Type | Description | Typical Source |
+|------|-------------|---------------|
+| `convention` | Project-wide coding convention or pattern | Performance Coach, Builder |
+| `pattern` | Reusable implementation pattern | Builder |
+| `failure` | Anti-pattern or mistake to avoid | Performance Coach, Builder |
+| `decision` | Architectural or technology decision | Workflow Orchestrator, Stack Scout |
+| `reference` | External reference or documentation pointer | Stack Scout |
+| `guide` | Step-by-step guide for a specific task | Builder, Code Reviewer |
+
+### Tier Pruning Rules
+
+| Tier | Auto-Expiry | Manual Deprecation | Notes |
+|------|-------------|-------------------|-------|
+| `foundational` | Never | Explicit only | Core project knowledge. These generate Session Learnings in CLAUDE.md. |
+| `tactical` | 5 sessions after related feature reaches `done` | Allowed | Feature-specific knowledge. Expires when no longer relevant. |
+| `observational` | 10 sessions | Allowed | Tentative observations. Promoted to tactical/foundational if confirmed. |
+
+Additionally, records with `access_count == 0` after 20 sessions are auto-deprecated regardless of tier. Domain cap: 500 records per JSONL file (lowest-confidence observational records pruned first).
+
+### Field Reference
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | yes | Unique record identifier |
+| `type` | enum | yes | Record type |
+| `tier` | enum | yes | Pruning tier |
+| `domain` | enum | yes | Domain (matches filename) |
+| `content` | string | yes | The learning (max 500 chars) |
+| `context` | string | no | When this applies (max 200 chars) |
+| `outcome_status` | enum | yes | Outcome status |
+| `confidence` | number | yes | 0.0-1.0 confidence score |
+| `tags` | string[] | no | Searchable tags |
+| `created_at` | string | yes | ISO 8601 creation timestamp |
+| `updated_at` | string | yes | ISO 8601 last update timestamp |
+| `session_id` | string | yes | Originating session |
+| `feature_id` | string\|null | no | Related feature ID |
+| `source_agent` | string | yes | Agent that created the record |
+| `deprecated` | boolean | yes | Whether deprecated |
+| `deprecation_reason` | string\|null | no | Reason for deprecation |
+| `access_count` | integer | yes | Read count |
+| `last_accessed_at` | string\|null | no | Last read timestamp |
+| `superseded_by` | string\|null | no | ID of superseding record |
+
+---
+
+## 16. Drift Tracker
+
+Ephemeral per-session state for the drift detection system. Created by `drift-tracker.sh` on first tool call, reset on session start and feature completion. Not committed to git (listed in `.gitignore`).
+
+**File:** `.vibecrew/drift-tracker.json`
+
+```jsonc
+{
+  "schema_version": "1.0.0",
+  "session_started_at": "2026-03-05T10:00:00Z",  // Session start timestamp
+  "current_phase": "code",                         // Current workflow phase
+  "current_feature_id": "feat-001",                // Active feature ID or null
+  "total_tool_calls": 47,                          // Total tool calls this session
+  "calls_since_progress": 12,                      // Exploration calls since last progress
+  "last_progress_at": "2026-03-05T10:30:00Z",     // Timestamp of last progress event
+  "last_progress_tool": "Write",                   // Tool that triggered last progress
+  "progress_events": 8,                            // Total progress events this session
+  "exploration_events": 35,                        // Total exploration events this session
+  "warnings": {
+    "soft_count": 1,                               // Soft warnings emitted
+    "last_warned_at": "2026-03-05T10:45:00Z"       // Last soft warning timestamp
+  },
+  "escalations": {
+    "hard_count": 0,                               // Hard escalations (circuit breaker trips)
+    "last_escalated_at": null                       // Last escalation timestamp
+  },
+  "recent_reads": ["src/a.ts", "src/b.ts"],       // Last N files read (for repeated-read detection)
+  "repeated_read_count": 1                         // Files read 3+ times
+}
+```
+
+### Tool Classification
+
+The `drift-classify.sh` library classifies each tool call:
+
+| Classification | Tools/Patterns | Effect |
+|---------------|---------------|--------|
+| **progress** | Write/Edit to source files (.ts/.tsx/.js/.jsx/.css/.py/.go/.rs), signal file writes, Bash `git commit` | Resets `calls_since_progress` to 0 |
+| **exploration** | Read, Glob, Grep, WebSearch, WebFetch, failed Bash commands | Increments `calls_since_progress` |
+| **neutral** | Bash test/build/lint, config file writes | No counter change |
+
+### Field Reference
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `schema_version` | string | yes | Schema version |
+| `session_started_at` | string | yes | ISO 8601 session start |
+| `current_phase` | string | yes | Current workflow phase |
+| `current_feature_id` | string\|null | no | Active feature ID |
+| `total_tool_calls` | integer | yes | Total tool calls |
+| `calls_since_progress` | integer | yes | Calls since last progress |
+| `last_progress_at` | string\|null | no | Last progress timestamp |
+| `last_progress_tool` | string\|null | no | Last progress tool name |
+| `progress_events` | integer | yes | Total progress events |
+| `exploration_events` | integer | yes | Total exploration events |
+| `warnings.soft_count` | integer | yes | Soft warning count |
+| `warnings.last_warned_at` | string\|null | no | Last warning timestamp |
+| `escalations.hard_count` | integer | yes | Hard escalation count |
+| `escalations.last_escalated_at` | string\|null | no | Last escalation timestamp |
+| `recent_reads` | string[] | yes | Recently read file paths |
+| `repeated_read_count` | integer | yes | Files read 3+ times |
+
+---
+
+## 17. Erosion Schemas
+
+Three related schemas for the code erosion tracking system. All stored in `.vibecrew/erosion/`.
+
+### 17.1 Erosion Baseline
+
+Project baseline captured after the first feature ships. Used as the reference point for erosion score calculations.
+
+**File:** `.vibecrew/erosion/baseline.json`
+
+```jsonc
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-03-05T10:00:00Z",   // When baseline was captured
+  "total_project_loc": 1250,                 // Total lines of code at baseline
+  "total_dependencies": 12,                  // package.json dependencies count
+  "total_dev_dependencies": 8,               // package.json devDependencies count
+  "files_analyzed": 15,                      // Source files analyzed
+  "file_metrics": [                          // Per-file metrics at baseline
+    {
+      "file": "src/app.ts",
+      "loc": 120,
+      "complexity": 8,
+      "func_count": 5,
+      "max_func_len": 35,
+      "imports": 4
+    }
+  ]
+}
+```
+
+### 17.2 Erosion Snapshot
+
+Per-session erosion snapshot written during `/wrap`. Contains the erosion score calculation results.
+
+**File pattern:** `.vibecrew/erosion/erosion-<TIMESTAMP>.json`
+
+```jsonc
+{
+  "score": 85,                              // 0-100 erosion score
+  "rating": "moderate",                      // "healthy" | "moderate" | "concerning" | "critical"
+  "deductions": [
+    {
+      "category": "file-size",              // Deduction category
+      "points": -4,                          // Points deducted
+      "reason": "2 file(s) over 300 LOC limit"
+    }
+  ],
+  "bonuses": [
+    {
+      "category": "loc-decreased",
+      "points": 3,
+      "reason": "Total LOC decreased from baseline"
+    }
+  ],
+  "hot_files": ["src/api.ts"],             // Files flagged as hot
+  "metrics": {                              // Raw metrics from collect-erosion-metrics.sh
+    "timestamp": "2026-03-05T10:00:00Z",
+    "total_project_loc": 1450,
+    "total_dependencies": 14,
+    "total_dev_dependencies": 8,
+    "files_analyzed": 5,
+    "files_over_loc_limit": 2,
+    "functions_over_length_limit": 1,
+    "functions_over_complexity_limit": 0,
+    "file_metrics": []
+  }
+}
+```
+
+### 17.3 Erosion Trends
+
+Rolling 20-session trend summary with file churn tracking and alert detection. Updated by `update-erosion-trends.sh` during each `/wrap`.
+
+**File:** `.vibecrew/erosion/trends.json`
+
+```jsonc
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-03-05T10:00:00Z",    // Last update timestamp
+  "direction": "stable",                     // "improving" | "stable" | "declining"
+  "window_size": 8,                          // Number of snapshots analyzed (max 20)
+  "average_score": 87,                       // Mean erosion score over window
+  "file_churn": {                            // Per-file modification tracking
+    "src/api.ts": {
+      "count": 7,                            // Times modified across sessions
+      "last_modified": "2026-03-05T10:00:00Z",
+      "last_simplified": null                // null = never simplified, or ISO timestamp
+    }
+  },
+  "hot_files": ["src/api.ts"],             // Files exceeding churn threshold
+  "alert": null                              // null | "rapid-decline"
+}
+```
+
+### Erosion Rating Tiers
+
+| Range | Rating | Interpretation |
+|-------|--------|----------------|
+| 90-100 | `healthy` | Code quality stable or improving |
+| 70-89 | `moderate` | Some complexity growth, manageable |
+| 50-69 | `concerning` | Notable quality degradation, recommend `/simplify` |
+| 0-49 | `critical` | Significant technical debt accumulation |
+
+### Erosion Thresholds (from config.json)
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `erosion.file_max_loc` | 300 | Flag files exceeding this LOC count |
+| `erosion.function_max_loc` | 50 | Flag functions exceeding this line count |
+| `erosion.complexity_max` | 10 | Flag functions exceeding this cyclomatic complexity |
+| `erosion.hot_file_churn_count` | 5 | Churn count to flag as hot file |
+| `erosion.rapid_decline_points` | 15 | Score drop to trigger rapid-decline alert |
+| `erosion.rapid_decline_sessions` | 3 | Window for rapid decline detection |

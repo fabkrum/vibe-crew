@@ -238,6 +238,47 @@ If test files exist but no tests ran (script missing), set `no_tests` to `false`
 
 - **`test_coverage_pct`**: From the test runner output. Default: `0` if not available.
 
+### 3.7 Erosion metrics
+
+Collect code erosion metrics for this session:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/collect-erosion-metrics.sh"
+```
+
+This outputs JSON with per-file LOC, complexity, function length, import count, plus total project LOC and dependencies. Store the output for use in Step 4.
+
+If no erosion baseline exists yet and the foundation is complete (first feature shipped), capture it:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/capture-erosion-baseline.sh"
+```
+
+Calculate the erosion score:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/calculate-erosion-score.sh"
+```
+
+Store the erosion score, rating, deductions, and hot_files for display in Step 9.
+
+Save the erosion snapshot (calculate-erosion-score.sh output) to `.vibecrew/erosion/`:
+
+```bash
+ts=$(date -u +%Y-%m-%dT%H%M%SZ)
+# Write calculate-erosion-score.sh output to erosion snapshot file
+cat > ".vibecrew/erosion/erosion-${ts}.json.tmp" << 'EOF'
+{ ... erosion score JSON ... }
+EOF
+mv ".vibecrew/erosion/erosion-${ts}.json.tmp" ".vibecrew/erosion/erosion-${ts}.json"
+```
+
+Update erosion trends:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-erosion-trends.sh"
+```
+
 ---
 
 ## Step 4: Calculate Vibe Score
@@ -256,6 +297,10 @@ score -= 10 if no_tests                     # no-tests: -10
 score -= 5 if no_spec                       # no-spec: -5
 score -= 3 * min(phases_skipped, 6)         # missing-phase: -3 each, max -18
 score -= 5 if skipped_code_review           # skipped-review: -5
+score -= 10 * min(drift_escalations, 2)    # drift-escalation: -10 each, max -20
+score -= 3 * min(drift_warnings, 3)        # drift-warning: -3 each, max -9
+score -= 3 * min(erosion_complexity_files, 3)  # erosion-complexity: -3 each, max -9
+score -= 5 if erosion_hot_files > 0        # erosion-hot-file: -5 if any hot files exist
 
 # Bonuses
 score += 5 if all_six_phases_complete       # all-phases: +5
@@ -281,6 +326,12 @@ The `calculate-vibe-score.sh` script detects these additional metrics:
 - **`a11y_clean`**: True if an axe-core report exists in `.vibecrew/a11y/` with zero critical/serious violations.
 - **`review_completed`**: True if a review report exists in `.vibecrew/reviews/` for the active feature.
 - **`perf_baselines_exist`**: True if k6 results exist in `.vibecrew/perf-tests/` for the active feature.
+- **`drift_warnings`**: Count of soft drift warnings emitted during the session (from `.vibecrew/drift-tracker.json`).
+- **`drift_escalations`**: Count of hard drift escalations (circuit breaker triggers) during the session.
+- **`erosion_score`**: 0-100 erosion health score from `calculate-erosion-score.sh`.
+- **`erosion_rating`**: Rating tier: healthy (90-100), moderate (70-89), concerning (50-69), critical (0-49).
+- **`erosion_complexity_files`**: Count of files with complexity deductions from the erosion score.
+- **`erosion_hot_files`**: Count of hot files (modified 5+ times without `/simplify`).
 
 **Important:** The `zero_deductions` check must happen AFTER applying all deductions (including `skipped-review`). If the total deduction sum is 0, the `clean-session` bonus applies.
 
@@ -826,6 +877,22 @@ Suggestions:
   consume main session context.
 ```
 
+### 9.8 Erosion display
+
+If erosion metrics were collected in Step 3.7, append an erosion summary after the Vibe Score display:
+
+```
+--- Erosion: {erosion_score}/100 ({erosion_rating}) ---
+{one-line summary of erosion findings}
+```
+
+Only display if the erosion score is below 90 (moderate or worse). If erosion is healthy, skip this section. If hot files exist, list them:
+
+```
+Hot files (recommend /simplify):
+  - src/example.ts (modified 7 times)
+```
+
 ### Coaching tone
 
 Follow these principles strictly:
@@ -919,6 +986,20 @@ avg_score=$(echo "$trend_json" | jq -r '.average_score // 0')
 jq --arg dir "$direction" --argjson ws "$window_size" --argjson avg "$avg_score" \
   '.trend = {direction: $dir, window_size: $ws, average_score: $avg}' \
   "$latest_score" > "${latest_score}.tmp" && mv "${latest_score}.tmp" "$latest_score"
+```
+
+### 9.5.5a Compact expertise
+
+After the Performance Coach completes, run expertise compaction to prune stale records:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-compact.sh"
+```
+
+Then sync the Session Learnings section from expertise:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-sync-learnings.sh"
 ```
 
 ### 9.5.6 Report outcome

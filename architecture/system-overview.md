@@ -1225,15 +1225,19 @@ The complete `hooks/hooks.json` routing table:
 | PreToolUse | `Bash` | `protect-data.sh` | command | Yes (deny) | Dangerous command blocker |
 | PreToolUse | `Bash` | `validate-phase-transition.sh` | command | Yes (deny) | Phase ordering and foundation artifact completeness |
 | PostToolUse | `Write\|Edit` | `format-code.sh` | command | No | Auto-format written files |
+| PostToolUse | (all) | `drift-tracker.sh` | command | No | Classify tool calls, track drift counter, emit soft warnings |
 | Notification | `permission_prompt` | `notify.sh` | command | No | Interrupt Protocol |
 | Notification | `idle_prompt` | `notify.sh` | command | No | Interrupt Protocol |
 | PostToolUseFailure | (all) | `notify.sh` | command | No | Error notifications |
+| Stop | (all) | `drift-circuit-breaker.sh` | command | No | Hard drift threshold check, WIP commit + escalation |
 | Stop | (all) | `check-context.sh` | command | No | Context usage warnings |
 | Stop | (all) | `cost-guardrails.sh` | command | No | Session/daily cost tracking |
 | Stop | (all) | `claude-md-lint.sh` | command | No | CLAUDE.md size and quality validation |
 | Stop | (all) | `quality-gate.sh` | command | Yes (exit 1) | Typecheck/lint/build on modified source files |
 
 **New in v1.0 (post-review):** The `SessionStart` hook with `compact` matcher. This was not present in the pre-review design. It fires after every context compaction event and re-injects a summary of `.vibecrew/state.json` so the agent does not lose track of project state. See [Section 5.7](#57-context-re-injection-after-compaction) for details.
+
+**Post-v1.0 additions:** Two drift detection hooks — `drift-tracker.sh` (PostToolUse, universal matcher) classifies every tool call as progress/exploration/neutral and tracks calls since last meaningful progress. `drift-circuit-breaker.sh` (Stop) checks the hard drift threshold per phase and forces a WIP commit + escalation on breach. See `architecture/scoring.md` Section 3.7 for per-phase thresholds.
 
 **Note:** The `SessionEnd` hook for `coach-retro.sh` (Performance Coach retrospective) is handled by the Performance Coach (Opus) during `/wrap`, which calculates Vibe Scores and proposes CLAUDE.md mutations.
 

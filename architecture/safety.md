@@ -1396,12 +1396,13 @@ For non-technical VibeCrew users, this is especially dangerous because the outpu
 
 ### 8.3 Implementation via Stop Hook Pipeline
 
-The Stop event fires four scripts sequentially after each agent turn. The first three are advisory (exit 0 always); the fourth can block:
+The Stop event fires five scripts sequentially after each agent turn. The first four are advisory (exit 0 always); the fifth can block:
 
-1. **`check-context.sh`** — Context window usage warnings
-2. **`cost-guardrails.sh`** — Session and daily cost tracking (see Section 9)
-3. **`claude-md-lint.sh`** — CLAUDE.md size and quality checks (see Section 10)
-4. **`quality-gate.sh`** — Runs typecheck/lint/build on modified source files (exit 1 on failure, respects `autonomy` profile)
+1. **`drift-circuit-breaker.sh`** — Hard drift threshold check; forces WIP commit + escalation on breach (see Section 8.5)
+2. **`check-context.sh`** — Context window usage warnings
+3. **`cost-guardrails.sh`** — Session and daily cost tracking (see Section 9)
+4. **`claude-md-lint.sh`** — CLAUDE.md size and quality checks (see Section 10)
+5. **`quality-gate.sh`** — Runs typecheck/lint/build on modified source files (exit 1 on failure, respects `autonomy` profile)
 
 The `check-context.sh` script reads context usage from the hook payload:
 
@@ -1543,6 +1544,33 @@ Beyond the Stop hook, context safety is enforced architecturally:
 | State on disk | Session state, backlog, and scores are in `.vibecrew/`, not in context. |
 | Aggressive summarization | Agents summarize results before reporting back to the Orchestrator. |
 | Worktree isolation | Builder and Stack Scout operate in separate context windows, preventing their work from consuming the Orchestrator's context. |
+
+### 8.5 Agent Drift Detection (Circuit Breaker)
+
+Agents — especially during `/run-backlog` — can enter exploration loops where they read files, search code, and fetch documentation without producing meaningful output. This wastes tokens and delays feature delivery.
+
+**Two-hook system.** Drift detection uses a PostToolUse hook (`drift-tracker.sh`) and a Stop hook (`drift-circuit-breaker.sh`):
+
+1. **PostToolUse — `drift-tracker.sh`**: Fires on every tool call. Classifies the tool as progress (Write/Edit to source files, `git commit`), exploration (Read, Glob, Grep, WebSearch, WebFetch), or neutral (Bash test/build/lint). Increments `calls_since_progress` for exploration calls; resets to 0 on progress calls. Emits a soft warning when the counter exceeds the per-phase soft threshold.
+
+2. **Stop — `drift-circuit-breaker.sh`**: Checks the hard threshold after each agent turn. On breach: creates a WIP commit, writes a drift escalation signal, and emits a message instructing the agent to stop exploring and produce deliverables.
+
+**Per-phase thresholds** (configurable via `config.json`):
+
+| Phase | Soft | Hard | Rationale |
+|-------|------|------|-----------|
+| plan | 40 | 60 | Heavy reading/research is normal |
+| design | 30 | 50 | Should produce design spec relatively quickly |
+| code | 20 | 35 | Should produce source file writes regularly |
+| test | 25 | 40 | Reads source code, then writes tests |
+| review | SKIP | SKIP | Read-only agent by design |
+| docs | 25 | 40 | Reads code, then writes docs |
+
+**Tier 1 (Foundation):** Circuit breaker is disabled — research-heavy phases require extensive reading.
+
+**State file:** `.vibecrew/drift-tracker.json` (ephemeral, reset per session). See `architecture/schemas.md` Section 16 for the schema.
+
+**Vibe Score impact:** Each hard escalation deducts -10 (max 2 per session = -20). Each soft warning deducts -3 (max 3 = -9). See `architecture/scoring.md` Section 3.7.
 
 ---
 

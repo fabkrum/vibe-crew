@@ -65,6 +65,17 @@ ls -1t .vibecrew/scores/*.json 2>/dev/null | head -1
 
 Read the latest score file and extract the `deductions` array. If no deductions exist, skip to Step 7 (record clean session in MEMORY.md and exit).
 
+Also read erosion trends if available:
+
+```bash
+cat .vibecrew/erosion/trends.json 2>/dev/null || echo '{}'
+```
+
+Check for erosion-related anti-patterns:
+- `erosion-complexity`: Score deduction for complexity increase without tests (3+ recurrences → propose mutation)
+- `erosion-hot-file`: Score deduction for hot files (3+ recurrences → propose `/simplify`)
+- `erosion-rapid-decline`: Erosion score dropped ≥15 points over last 3 sessions → alert
+
 ### Step 2: Correlation
 
 Cross-reference detected anti-patterns against MEMORY.md history.
@@ -119,6 +130,24 @@ Select from these 5 anti-pattern templates:
 
 Customize the template with session-specific evidence (deduction counts, affected sessions, token impact).
 
+**7. Erosion Complexity**
+> "Add tests when increasing cyclomatic complexity above the configured threshold (default: 10). Run `/simplify` after every 3rd feature to control complexity growth."
+
+Customize the template with session-specific evidence (deduction counts, affected sessions, token impact).
+
+#### Expertise Integration
+
+Write `failure` records for recurring anti-patterns at this step:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-write.sh" \
+  --domain "failures" --type "failure" --tier "observational" \
+  --content "<anti-pattern summary>" \
+  --context "Detected in <N> sessions, <total_impact> points" \
+  --outcome "pending" --confidence "<0-1>" \
+  --session-id "<session_id>" --source-agent "performance-coach"
+```
+
 Write the proposal to a temp file:
 
 ```bash
@@ -171,6 +200,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/apply-mutation.sh" \
 
 Record in MEMORY.md: mutation applied, session ID, rule text.
 Record in mutation-log.json: status = "applied", applied_at = now.
+Write `convention` record to expertise (handled by `apply-mutation.sh` dual-write).
 
 **If "no":**
 Record in MEMORY.md: mutation rejected, reason (if provided).
@@ -192,7 +222,13 @@ Always execute this step, even if no mutation was proposed.
 
 2. Prune MEMORY.md session notes to most recent 20 entries.
 
-3. Update mutation-log.json:
+3. Sync expertise to CLAUDE.md Session Learnings:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-sync-learnings.sh"
+```
+
+4. Update mutation-log.json:
 
 ```bash
 # Read current log, append new entry

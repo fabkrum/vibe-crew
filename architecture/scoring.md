@@ -66,6 +66,10 @@ score -= 5  * (1 if skipped_review else 0)                     # skipped-review:
 score -= 3  * min(stale_docs, 3)                               # doc-drift: -3 each, max -9
 score -= 5  * (1 if visual_console_errors > 0 else 0)          # visual-console-errors: max -5
 score -= 3  * min(visual_token_violations, 3)                   # visual-token-violations: -3 each, max -9
+score -= 10 * min(drift_escalations, 2)                          # drift-escalation: -10 each, max -20
+score -= 3  * min(drift_warnings, 3)                             # drift-warning: -3 each, max -9
+score -= 3  * min(erosion_complexity_files, 3)                   # erosion-complexity: -3 each, max -9
+score -= 5  * (1 if erosion_hot_files > 0 else 0)               # erosion-hot-file: max -5
 
 # Apply bonuses
 score += 5  * (1 if all_six_phases_complete else 0)            # all-phases: +5
@@ -99,12 +103,16 @@ Each deduction category has a per-category cap. Deductions are applied at most t
 | `doc-drift` | -3 per stale doc | -9 (3 docs) | Source code changed but matching feature docs not updated. New API endpoints/routes without doc coverage. See [Section 3.6](#36-documentation-drift-detection). | Stale docs mislead future sessions and accumulate technical debt. Counted within the `missing-phase` category for the Docs phase. |
 | `visual-console-errors` | -5 | -5 | Console errors detected on affected pages during Playwright visual verification (from `visual_verification.console_errors` in builder signal or `visual-compliance` critical findings in review report). | Runtime errors visible to users indicate broken functionality that should be caught before shipping. |
 | `visual-token-violations` | -3 per violation | -9 (3 violations) | Computed style mismatches against design-system.css tokens (from `visual_verification.token_violations` in builder signal or `visual-compliance` warning findings in review report). | Design system drift undermines visual consistency and makes the token system unreliable. |
+| `drift-escalation` | -10 per escalation | -20 (2 escalations) | Hard drift threshold breached -- agent made 35+ exploration tool calls without producing source file writes. Detected by `drift-circuit-breaker.sh` Stop hook reading `.vibecrew/drift-tracker.json`. See [Section 3.7](#37-drift-detection-metrics). | Agent stuck in an exploration loop without delivering output. Burns tokens without progress toward feature completion. |
+| `drift-warning` | -3 per warning | -9 (3 warnings) | Soft drift threshold breached -- agent made 20+ exploration tool calls without progress. Detected by `drift-tracker.sh` PostToolUse hook. See [Section 3.7](#37-drift-detection-metrics). | Early signal of exploration without delivery. Less severe than escalation but indicates suboptimal tool usage patterns. |
+| `erosion-complexity` | -3 per file | -9 (3 files) | Modified files with cyclomatic complexity above configured threshold (default: 10) without corresponding test changes. Detected by `calculate-erosion-score.sh`. See [Section 3.8](#38-erosion-metrics). | Growing complexity without test coverage creates fragile code that breaks during refactoring. |
+| `erosion-hot-file` | -5 | -5 | Files modified 5+ times across sessions without `/simplify` being run. Detected from `.vibecrew/erosion/trends.json` file churn tracking. See [Section 3.8](#38-erosion-metrics). | Frequently modified files accumulate complexity. Running `/simplify` resets the churn counter. |
 
 **Total deduction caps:**
 
-- Sum of all per-category caps: -15 + -30 + -15 + -20 + -10 + -5 + -18 + -5 + -9 + -5 + -9 = **-141** (theoretical maximum if every rule fires at its cap)
-- Practical maximum: **-80** (unlikely that all categories fire simultaneously at cap)
-- Minimum possible score: **0** (clamped). Realistically around **25** in a worst-case session.
+- Sum of all per-category caps: -15 + -30 + -15 + -20 + -10 + -5 + -18 + -5 + -9 + -5 + -9 + -20 + -9 + -9 + -5 = **-184** (theoretical maximum if every rule fires at its cap)
+- Practical maximum: **-80 to -100** (unlikely that all categories fire simultaneously at cap)
+- Minimum possible score: **0** (clamped). Realistically around **20** in a worst-case session.
 
 ### 2.3 Bonus Rules
 
@@ -256,6 +264,72 @@ For each new_route:
 **Scope:** `stale_docs` includes both feature documentation in `docs/features/` AND architecture diagrams in `.vibecrew/architecture/*.mmd`. A stale architecture diagram (e.g., `schema.mmd` not updated after a migration change) counts as one stale doc toward the cap.
 
 **Implementation:** The `calculate-vibe-score.sh` script detects drift by comparing `git diff --name-only` output against doc directory modification times and architecture diagram stale detection rules. The Doc Generator agent resolves drift during `/wrap` by auto-generating or updating stale docs and diagrams.
+
+### 3.7 Drift Detection Metrics
+
+**Source:** `.vibecrew/drift-tracker.json` -- an ephemeral file maintained by two hooks during the session.
+
+The drift detection system tracks tool calls since the last meaningful progress event. Two hooks collaborate:
+
+- **`drift-tracker.sh` (PostToolUse):** Fires after every tool call. Classifies the call as `progress` (Write/Edit to source files, `git commit`), `exploration` (Read, Glob, Grep, WebSearch, WebFetch), or `neutral` (test/build commands, config writes). Increments `calls_since_progress` for exploration calls; resets to 0 on progress calls. Emits a soft warning when the counter exceeds the phase-specific soft threshold.
+- **`drift-circuit-breaker.sh` (Stop):** Fires at each stop point. Checks if `calls_since_progress` exceeds the phase-specific hard threshold. If breached, creates a WIP commit, writes a `builder-blocked.signal`, and outputs an escalation message.
+
+**Per-phase thresholds** (configurable via `config.json` under `drift_detection.thresholds`):
+
+| Phase | Soft Threshold | Hard Threshold | Rationale |
+|-------|---------------|----------------|-----------|
+| plan | 40 | 60 | Heavy reading/research is expected |
+| design | 30 | 50 | Should produce design spec relatively quickly |
+| code | 20 | 35 | Should produce source file writes regularly |
+| test | 25 | 40 | Reads source code, then writes tests |
+| review | skip | skip | Read-only agent by design |
+| docs | 25 | 40 | Reads code, then writes docs |
+
+**Special cases:** Drift detection is disabled entirely during Tier 1 foundation work (research-heavy) and the review phase (read-only by design). It can also be globally disabled via `config.json` (`drift_detection.enabled: false`).
+
+| Metric | Source | Used For |
+|--------|--------|----------|
+| `drift_warnings` | `drift-tracker.json` `.warnings.soft_count` | `drift-warning` deduction |
+| `drift_escalations` | `drift-tracker.json` `.escalations.hard_count` | `drift-escalation` deduction |
+| `drift_calls_since_progress` | `drift-tracker.json` `.calls_since_progress` | Coaching commentary |
+
+### 3.8 Erosion Metrics
+
+**Source:** Four bash scripts that run during `/wrap` Step 3.7, collecting code quality metrics and computing a cumulative erosion score.
+
+The erosion tracking pipeline:
+
+1. **`collect-erosion-metrics.sh`** -- Collects per-file metrics (LOC, cyclomatic complexity, function length, import count) for modified files, plus total project LOC and dependency counts. Uses `wc -l`, `grep -cE`, and `awk` for fast heuristic analysis (~3-5 seconds for a typical project).
+2. **`capture-erosion-baseline.sh`** -- Captures the initial project baseline after the first feature ships. Uses `--force` flag for rebaseline. Only runs once unless forced.
+3. **`calculate-erosion-score.sh`** -- Computes a 0-100 erosion score from current metrics vs baseline. Deductions for file size (-2/file over 300 LOC), function length (-2/file), complexity (-2/file over 10), dependency spike (-5 if >3 new deps), hot files (-3/file). Bonuses for LOC decrease (+3) and dependency reduction (+2).
+4. **`update-erosion-trends.sh`** -- Rolling 20-session trend analysis. Calculates direction (improving/stable/declining), tracks per-file churn counts, detects rapid decline alerts.
+
+**Erosion rating tiers:**
+
+| Range | Rating | Interpretation |
+|-------|--------|----------------|
+| 90-100 | `healthy` | Code quality stable or improving |
+| 70-89 | `moderate` | Some complexity growth, manageable |
+| 50-69 | `concerning` | Notable quality degradation, recommend `/simplify` |
+| 0-49 | `critical` | Significant technical debt accumulation |
+
+**Hot file detection:** Files modified 5+ times across sessions (tracked in `trends.json` `.file_churn`) without `/simplify` resetting the `last_simplified` timestamp are flagged as hot files and contribute to the `erosion-hot-file` Vibe Score deduction.
+
+| Metric | Source | Used For |
+|--------|--------|----------|
+| `erosion_score` | `calculate-erosion-score.sh` output `.score` | Erosion display in `/wrap` |
+| `erosion_rating` | `calculate-erosion-score.sh` output `.rating` | Erosion display |
+| `erosion_complexity_files` | Count of complexity deductions from erosion output | `erosion-complexity` deduction |
+| `erosion_hot_files` | Count of hot files from erosion output | `erosion-hot-file` deduction |
+
+**Storage:**
+
+```
+.vibecrew/erosion/
+  baseline.json              # Project baseline (captured after first feature)
+  erosion-TIMESTAMP.json     # Per-session snapshots
+  trends.json                # Rolling 20-session summary + file churn + alerts
+```
 
 ---
 
@@ -412,24 +486,24 @@ Suggestions:
 
 ---
 
-## 6. v1.1 Roadmap
+## 6. Post-v1.0 Enhancements (Implemented)
 
-The following features are deferred from v1.0 and planned for v1.1 when the Performance Coach agent is introduced as a standalone agent with persistent memory.
+The following features were originally deferred from v1.0 and have since been implemented. This section documents them for historical context and design rationale.
 
-### 6.1 Performance Coach Agent
+### 6.1 Performance Coach Agent (Implemented)
 
-In v1.1, a dedicated Performance Coach agent replaces the Verifier's scoring responsibilities:
+A dedicated Performance Coach agent handles cross-session trend analysis and CLAUDE.md mutations:
 
 - **Model:** Opus
 - **Isolation:** Inline (runs in the main context)
-- **Memory:** `memory: project` -- persistent cross-session memory stored at `.claude/agent-memory/performance-coach/MEMORY.md`
-- **Trigger:** Invoked by `/wrap` after the Verifier completes quality checks
+- **Memory:** `memory: project` -- persistent cross-session memory stored in `MEMORY.md`
+- **Trigger:** Invoked by `/wrap` Step 9.5 after the Verifier completes quality checks
 
-The Performance Coach is defined in [`architecture/agents.md`](agents.md). In v1.0, its scoring logic is absorbed by the Verifier agent (`maxTurns: 60`).
+The Performance Coach is defined in [`architecture/agents.md`](agents.md). It reads erosion trends (`.vibecrew/erosion/trends.json`), correlates anti-patterns across sessions, and proposes CLAUDE.md mutations. It also writes expertise records for detected anti-patterns and approved mutations.
 
-### 6.2 Cross-Session Trend Analysis
+### 6.2 Cross-Session Trend Analysis (Implemented)
 
-The Performance Coach reads historical score files from `.vibecrew/scores/` to identify trends across the last 10 sessions:
+The Performance Coach reads historical score files from `.vibecrew/scores/` via `aggregate-scores.sh` to identify trends across the last 10 sessions:
 
 | Trend | Signal | Coach Response |
 |-------|--------|----------------|
@@ -439,7 +513,7 @@ The Performance Coach reads historical score files from `.vibecrew/scores/` to i
 | Score plateau below 90 | Stable but suboptimal | Suggest new strategies |
 | High score volatility | Wide swings between sessions | Identify patterns in low-scoring sessions |
 
-### 6.3 CLAUDE.md Mutation System
+### 6.3 CLAUDE.md Mutation System (Implemented)
 
 The mutation system is the mechanism by which session-level observations become permanent project rules:
 
@@ -458,7 +532,7 @@ The mutation system is the mechanism by which session-level observations become 
 - No duplicate rules -- check CLAUDE.md before proposing.
 - Respect rejections -- do not re-propose a rejected rule unless the anti-pattern recurs 3+ more times.
 
-### 6.4 Anti-Pattern to Rule Mapping (v1.1)
+### 6.4 Anti-Pattern to Rule Mapping (Implemented)
 
 | Anti-Pattern | Rule Template |
 |--------------|---------------|
@@ -467,8 +541,10 @@ The mutation system is the mechanism by which session-level observations become 
 | Context violation from long research | "Delegate research tasks to the Stack Scout sub-agent to preserve main session context." |
 | No feature spec before coding | "Always create a feature spec (Plan phase) before writing any implementation code." |
 | Repeated prompt corrections | "Write detailed initial prompts that include: what to build, acceptance criteria, and file paths." |
+| Documentation drift | "Always update feature documentation and architecture diagrams in the same session as code changes." |
+| Erosion complexity | "Add tests when increasing cyclomatic complexity above the configured threshold (default: 10). Run `/simplify` after every 3rd feature." |
 
-### 6.5 Persistent Memory Format (v1.1)
+### 6.5 Persistent Memory Format (Implemented)
 
 The Performance Coach's `MEMORY.md` will track:
 
@@ -477,7 +553,7 @@ The Performance Coach's `MEMORY.md` will track:
 - Score trends (last 5 scores for quick reference)
 - User preferences expressed during feedback
 
-### 6.6 User Feedback Collection (v1.1)
+### 6.6 User Feedback Collection (Implemented)
 
 The `/wrap` command will collect user feedback after presenting the Vibe Score:
 
@@ -493,6 +569,26 @@ Optional: Any specific feedback? (press Enter to skip)
 
 Feedback-score correlation allows the Performance Coach to calibrate its analysis: a high score with low satisfaction means the system is missing a pain point; a low score with high satisfaction means the session was exploratory.
 
+### 6.7 Structured Expertise Accumulation (Implemented)
+
+Session Learnings in CLAUDE.md were originally a flat list capped at 15 entries with oldest-pruning. Knowledge was lost, not queryable, and not ranked by value.
+
+The expertise system replaces this with JSONL-based records in `.vibecrew/expertise/` with typed records (convention, pattern, failure, decision, reference, guide), three tiers (foundational, tactical, observational), and outcome tracking. Session Learnings becomes an auto-generated view of the top 15 foundational records via `expertise-sync-learnings.sh`.
+
+Key scripts: `expertise-write.sh`, `expertise-read.sh`, `expertise-prime.sh` (agent context injection), `expertise-compact.sh` (tier-based pruning), `expertise-migrate.sh` (one-time import), `expertise-sync-learnings.sh`. See [`architecture/schemas.md`](schemas.md) for the record schema.
+
+### 6.8 Agent Drift Detection (Implemented)
+
+No detection of behavioral drift existed -- agents could explore endlessly without delivering output, burning tokens during `/run-backlog`.
+
+The drift detection system uses two hooks: `drift-tracker.sh` (PostToolUse) classifies every tool call and tracks calls since last progress, and `drift-circuit-breaker.sh` (Stop) checks hard thresholds and forces WIP commit + signal + escalation. Configurable per-phase soft/hard thresholds. Disabled for review phase and Tier 1 foundation. See [Section 3.7](#37-drift-detection-metrics) for metric collection details.
+
+### 6.9 Code Erosion Tracking (Implemented)
+
+Vibe Score measured per-session process quality but not cumulative code quality. Complexity could grow silently across features.
+
+The erosion tracking system collects heuristic-based code metrics during `/wrap`, trends them across sessions, and produces an erosion score (0-100) with auto-recommendations for `/simplify`. Integrates with the Performance Coach for anti-pattern detection (erosion-complexity, erosion-hot-file, erosion-rapid-decline). See [Section 3.8](#38-erosion-metrics) for metric collection details.
+
 ---
 
 ## Design Decisions Log
@@ -501,9 +597,9 @@ Feedback-score correlation allows the Performance Coach to calibrate its analysi
 
 An earlier draft described deductions as "uncapped" while simultaneously showing per-category maximums in the deduction table. This was contradictory. The resolution: each deduction category has an explicit per-category cap (e.g., `prompt-churn` caps at -15 for 3 sequences). The theoretical maximum deduction is -110 (sum of all caps), but practically a session is unlikely to hit every cap simultaneously. The floor is 0 (clamped).
 
-### Why defer CLAUDE.md mutations to v1.1?
+### Why were CLAUDE.md mutations originally deferred?
 
-Mutations require cross-session memory (`memory: project`) and a dedicated agent context to correlate anti-patterns across sessions. In v1.0, the Verifier handles scoring as a secondary responsibility alongside testing and quality checks. Adding mutation logic would bloat the Verifier's prompt and risk exceeding its context budget. A standalone Performance Coach agent with persistent memory is a cleaner fit.
+Mutations require cross-session memory (`memory: project`) and a dedicated agent context to correlate anti-patterns across sessions. In v1.0, the Verifier handled scoring as a secondary responsibility alongside testing and quality checks. Adding mutation logic would have bloated the Verifier's prompt. The standalone Performance Coach agent with persistent memory was the cleaner fit and has since been implemented.
 
 ### Why not use specific transcript field names?
 

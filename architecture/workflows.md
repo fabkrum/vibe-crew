@@ -1019,7 +1019,14 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |       |     PostToolUseFailure -> notify.sh              |
     |       |     (fires error notification)                   |
     |       |                                                  |
+    |       +-- Every tool call (PostToolUse, post-v1.0):         |
+    |       |     drift-tracker.sh -> classify tool call,       |
+    |       |       update calls_since_progress counter,         |
+    |       |       emit soft warning at per-phase threshold     |
+    |       |                                                  |
     |       +-- After each turn (Stop hook pipeline):            |
+    |       |     drift-circuit-breaker.sh -> hard threshold    |
+    |       |       check, WIP commit + escalation on breach    |
     |       |     check-context.sh   -> context warnings       |
     |       |     cost-guardrails.sh -> cost tracking           |
     |       |     claude-md-lint.sh  -> CLAUDE.md validation    |
@@ -1061,6 +1068,20 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |                                                          |
     |       |                                                  |
     |       v                                                  |
+    |  STEP 3.7: Erosion metrics (post-v1.0)                   |
+    |    a. Collect code metrics (LOC, complexity, imports)     |
+    |       via collect-erosion-metrics.sh                      |
+    |    b. Capture baseline (first feature only)               |
+    |       via capture-erosion-baseline.sh                     |
+    |    c. Calculate erosion score (0-100)                     |
+    |       via calculate-erosion-score.sh                      |
+    |    d. Update 20-session rolling trends                    |
+    |       via update-erosion-trends.sh                        |
+    |    e. Write snapshot to .vibecrew/erosion/                  |
+    |    (See architecture/schemas.md Section 17 for schemas)  |
+    |                                                          |
+    |       |                                                  |
+    |       v                                                  |
     |  STEP 4: Session log                                     |
     |    Verifier writes to .vibecrew/sessions/<id>.json         |
     |    (See architecture/schemas.md Section 5 for schema)    |
@@ -1082,7 +1103,15 @@ Every Claude Code session running under VibeCrew follows a predictable lifecycle
     |                                                          |
     |       |                                                  |
     |       v                                                  |
-    |  STEP 7: Cleanup                                         |
+    |  STEP 7: Expertise compaction (post-v1.0)                 |
+    |    Run expertise-compact.sh (tier-based pruning)         |
+    |    Run expertise-sync-learnings.sh (regenerate           |
+    |      Session Learnings from top 15 foundational records) |
+    |    (See architecture/schemas.md Section 15 for schema)   |
+    |                                                          |
+    |       |                                                  |
+    |       v                                                  |
+    |  STEP 8: Cleanup                                         |
     |    Release any held locks                                |
     |    Remove processed signal files                         |
     |    Clean up agent worktrees (if any remain)              |
@@ -1256,6 +1285,10 @@ The Verifier calculates the Vibe Score during `/wrap`. See `architecture/scoring
     |  No tests written for feature with code       -10        |
     |  No feature spec before coding                -5         |
     |  Missing phase (any Tier 2 phase skipped)     -3 each    |
+    |  Drift escalation (hard threshold breach)     -10 each   |
+    |  Drift warning (soft threshold breach)        -3 each    |
+    |  Erosion complexity (increase w/o tests)      -3/file    |
+    |  Erosion hot file (5+ churn w/o simplify)     -5/file    |
     |                                                          |
     |  BONUSES:                                                |
     |  -------                                                 |
@@ -1273,10 +1306,10 @@ The Verifier calculates the Vibe Score during `/wrap`. See `architecture/scoring
     |    50-69   Needs improvement                             |
     |    0-49    Review session                                |
     |                                                          |
-    |  NOTE: CLAUDE.md mutation proposals are deferred to v1.1 |
-    |  with the standalone Performance Coach agent. In v1.0,   |
-    |  the Verifier provides coaching suggestions in the score |
-    |  file but does not propose rule mutations.               |
+    |  NOTE: The Performance Coach now runs during /wrap and    |
+    |  proposes CLAUDE.md rule mutations. Drift detection and  |
+    |  erosion metrics contribute additional deductions. See   |
+    |  architecture/scoring.md Sections 3.7-3.8 for details.  |
     |                                                          |
     +----------------------------------------------------------+
 ```

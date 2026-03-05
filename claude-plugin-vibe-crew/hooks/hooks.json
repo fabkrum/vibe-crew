@@ -90,6 +90,15 @@
             "statusMessage": "Formatting code..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/drift-tracker.sh",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "Notification": [
@@ -128,6 +137,12 @@
     "Stop": [
       {
         "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/drift-circuit-breaker.sh",
+            "timeout": 5,
+            "statusMessage": "Checking for agent drift..."
+          },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/check-context.sh",

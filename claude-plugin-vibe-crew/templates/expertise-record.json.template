@@ -1,0 +1,37 @@
+{
+  "$schema": "expertise-record/1.0.0",
+  "description": "Schema reference for expertise JSONL records in .vibecrew/expertise/",
+  "record": {
+    "id": "exp-YYYYMMDDHHMMSS-XXXX",
+    "type": "convention|pattern|failure|decision|reference|guide",
+    "tier": "foundational|tactical|observational",
+    "domain": "conventions|patterns|failures|decisions|performance",
+    "content": "The actual learning (max 500 chars)",
+    "context": "When this applies (max 200 chars)",
+    "outcome_status": "success|failure|mixed|pending",
+    "confidence": 0.85,
+    "tags": [],
+    "created_at": "ISO8601",
+    "updated_at": "ISO8601",
+    "session_id": "session-xxx",
+    "feature_id": null,
+    "source_agent": "performance-coach|builder|code-reviewer|stack-scout|user|migration",
+    "deprecated": false,
+    "deprecation_reason": null,
+    "access_count": 0,
+    "last_accessed_at": null,
+    "superseded_by": null
+  },
+  "valid_types": ["convention", "pattern", "failure", "decision", "reference", "guide"],
+  "valid_tiers": ["foundational", "tactical", "observational"],
+  "valid_domains": ["conventions", "patterns", "failures", "decisions", "performance"],
+  "valid_outcomes": ["success", "failure", "mixed", "pending"],
+  "valid_agents": ["performance-coach", "builder", "code-reviewer", "stack-scout", "workflow-orchestrator", "user", "migration"],
+  "pruning_rules": {
+    "observational": "Expires after 10 sessions",
+    "tactical": "Expires 5 sessions after related feature reaches done",
+    "foundational": "Never auto-pruned, only explicit deprecation",
+    "access_based": "Records with access_count == 0 after 20 sessions are deprecated",
+    "cap_per_domain": 500
+  }
+}

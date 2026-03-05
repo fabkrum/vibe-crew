@@ -100,6 +100,23 @@ if [[ -x "$INJECT_ARCH" ]]; then
   bash "$INJECT_ARCH" 2>/dev/null || log_error "compact-reinject" "Architecture injection failed"
 fi
 
+# ── Expertise context (agent-agnostic top records) ──
+EXPERTISE_PRIME="$SCRIPT_DIR_CR/expertise-prime.sh"
+if [[ -x "$EXPERTISE_PRIME" ]]; then
+  bash "$EXPERTISE_PRIME" --agent builder --max-tokens 500 2>/dev/null || true
+fi
+
+# ── Drift tracker summary (if warnings emitted) ──
+DRIFT_FILE="$PROJECT_ROOT/.vibecrew/drift-tracker.json"
+if [[ -f "$DRIFT_FILE" ]]; then
+  DRIFT_WARNINGS=$(jq -r '.warnings.soft_count // 0' "$DRIFT_FILE" 2>/dev/null || echo "0")
+  if [[ "$DRIFT_WARNINGS" -gt 0 ]]; then
+    DRIFT_SINCE=$(jq -r '.calls_since_progress // 0' "$DRIFT_FILE" 2>/dev/null || echo "0")
+    DRIFT_PHASE=$(jq -r '.current_phase // "unknown"' "$DRIFT_FILE" 2>/dev/null || echo "unknown")
+    echo "Drift: $DRIFT_SINCE calls since progress in $DRIFT_PHASE phase ($DRIFT_WARNINGS warnings)"
+  fi
+fi
+
 # ── Current branch + last 5 commits ──
 echo "Branch: $GIT_BRANCH"
 echo "Recent commits:"

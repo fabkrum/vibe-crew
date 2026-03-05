@@ -308,6 +308,20 @@ if [[ -n "$REPORT_FILE" ]]; then
 fi
 ```
 
+If any suggestions were applied, update erosion `trends.json` to mark simplified files with `last_simplified` timestamp. This prevents those files from being flagged as "hot files" in future erosion checks:
+
+```bash
+TRENDS_FILE=".vibecrew/erosion/trends.json"
+if [[ -f "$TRENDS_FILE" ]]; then
+  TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+  for file in <list_of_applied_files>; do
+    jq --arg f "$file" --arg ts "$TS" \
+      '.file_churn[$f].last_simplified = $ts' \
+      "$TRENDS_FILE" > "${TRENDS_FILE}.tmp" && mv "${TRENDS_FILE}.tmp" "$TRENDS_FILE"
+  done
+fi
+```
+
 ---
 
 ## Rules

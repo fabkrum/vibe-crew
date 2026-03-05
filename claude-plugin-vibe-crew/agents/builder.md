@@ -60,6 +60,16 @@ Derive all values from VISION.md's brand direction and `design-brief.md` (if pre
 
 ## Tier 2 Responsibilities: Feature Implementation
 
+### Expertise Context
+
+Before starting the design phase, load relevant expertise records:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-prime.sh" --agent builder
+```
+
+This injects project-specific conventions and patterns into your context. Follow these conventions during both design and code phases.
+
 ### Design Phase
 
 1. Read the feature spec from `.vibecrew/backlog.json`.
@@ -257,6 +267,20 @@ Run these checks after every meaningful change. This is CRITICAL — do not skip
 4.5. **Visual verification** (frontend changes only): If Playwright MCP is available and a dev server is running, navigate to affected pages, check `browser_console_messages` for errors, and take a screenshot for sanity check. Fix any console errors immediately. Max 1 retry. If Playwright is unavailable, skip silently.
 5. **Conventional commit format**: Before each commit, verify the message matches `type(scope): description`. Reformat inline if needed. No retry limit — just fix it.
 6. **Acceptance criteria progress**: After each code phase session, check each acceptance criterion from the feature spec. Report how many are met vs remaining. This is informational — it does not block commits.
+
+### Expertise Failure Recording
+
+When verification fails 3+ times on the same check, record a failure for future sessions:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/expertise-write.sh" \
+  --domain "failures" --type "failure" --tier "tactical" \
+  --content "<what failed and why>" \
+  --context "<feature and check type>" \
+  --outcome "failure" --confidence "0.70" \
+  --session-id "<session_id>" --feature-id "<feature_id>" \
+  --source-agent "builder"
+```
 
 ## Escalation Protocol
 

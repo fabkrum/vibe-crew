@@ -42,12 +42,12 @@
 | 13 | Code Reviewer | Opus | `/review`, `/run-backlog` Phase 4.5 | <35% | Worktree | 30 |
 | 14 | System Reviewer | Opus | `/system-review` | <30% | Worktree | 25 |
 
-### Agents Deferred to v1.1
+### Agents Originally Deferred, Now Implemented
 
-| Agent | Original Role | v1.0 Disposition |
-|-------|---------------|------------------|
-| Performance Coach | Session retrospective, CLAUDE.md mutations, persistent memory | Scoring absorbed by Verifier (calculates Vibe Score during `/wrap`). Standalone agent with `memory: project` and cross-session trend analysis deferred to v1.1. |
-| Doc Generator | VitePress docs, session logs, release notes, CHANGELOG | Documentation generation absorbed into `/wrap` command. Verifier handles session logging as part of wrap-up. Dedicated docs agent deferred to v1.1. |
+| Agent | Role | Status |
+|-------|------|--------|
+| Performance Coach | Session retrospective, CLAUDE.md mutations, persistent memory, erosion trend analysis, expertise record writing | **Implemented.** Standalone Opus agent with `memory: project`. Reads erosion trends (`.vibecrew/erosion/trends.json`), detects recurring anti-patterns including erosion-complexity and erosion-hot-file, proposes CLAUDE.md mutations via 7-step guardrailed workflow. Writes failure/convention records to `.vibecrew/expertise/`. |
+| Doc Generator | VitePress docs, session logs, release notes, CHANGELOG | **Implemented.** Sonnet agent invoked during `/wrap` Step 10.5. Checks architecture diagram freshness, generates feature docs, updates CHANGELOG, rebuilds VitePress sidebar. |
 
 ---
 
@@ -1104,32 +1104,15 @@ The Orchestrator's `disallowedTools: Write, Edit` constraint is retained from v0
 3. **State mutations via scripts.** When the Orchestrator needs to update `backlog.json` or process signals, it uses `Bash` to run the shared scripts (`complete-phase.sh`, `claim-task.sh`, `update-backlog.sh`). This ensures state mutations go through the same validated code paths regardless of which agent triggers them.
 4. **Agent Teams resolves the old contradiction.** In v0.9, `safety.md` listed `Write(.vibecrew/*)` as allowed for the Orchestrator while `agents.md` listed `disallowedTools: Write`. The v1.0 resolution is clear: Orchestrator cannot use `Write` or `Edit` tools directly, but CAN use `Bash` to run scripts that modify `.vibecrew/` state files. No contradiction.
 
-### Why Defer Performance Coach and Doc Generator to v1.1?
+### Why Were Performance Coach and Doc Generator Originally Deferred?
 
-**Performance Coach deferral rationale:**
+**Performance Coach:** The standalone agent's most valuable features required infrastructure: `memory: project` for persistent `MEMORY.md`, approval workflows for CLAUDE.md mutations, and historical score file reading. These have since been implemented with a 7-step guardrailed mutation flow, expertise accumulation (JSONL-based records), erosion trend analysis, and drift detection integration.
 
-The standalone Performance Coach's most valuable features require infrastructure that adds complexity to v1.0:
-- `memory: project` requires persistent `MEMORY.md` files and cross-session state management
-- CLAUDE.md mutation proposals require a careful approval workflow
-- Cross-session trend analysis requires reading multiple historical score files
+**Doc Generator:** Documentation generation was not critical-path for feature development. It has since been implemented as a Sonnet agent handling VitePress docs, CHANGELOG, release notes, architecture diagram freshness checks, and sidebar rebuilds.
 
-For v1.0, the Verifier calculates the Vibe Score and provides per-session coaching suggestions. This covers the core value (session quality feedback) without the infrastructure overhead. The v1.1 Performance Coach will add:
-- Persistent memory for trend tracking
-- CLAUDE.md mutation proposals with developer approval
-- Historical comparison ("Your cache utilization improved 15% over the last 5 sessions")
+### Code Simplifier Erosion Integration
 
-**Doc Generator deferral rationale:**
-
-Documentation generation is valuable but not critical-path for feature development. For v1.0:
-- The Verifier writes session logs during `/wrap`
-- Release notes can be generated manually from conventional commits
-- CHANGELOG updates can be handled by the `/wrap` command
-
-The v1.1 Doc Generator will add:
-- VitePress docs site maintenance
-- Automated release notes from git tags
-- Kanban board rendering from `backlog.json`
-- Feature documentation from acceptance criteria
+After `/simplify` applies approved changes, the skill updates `.vibecrew/erosion/trends.json` to set `last_simplified` timestamps on simplified files. This resets their hot-file churn counter, preventing them from being flagged as hot files in future erosion checks.
 
 ### Verification Loop Design Rationale
 

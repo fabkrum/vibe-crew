@@ -66,10 +66,11 @@ Guidelines:
 <!-- (Complex features only) Rejected approaches and why -->
 
 ## Decisions
-<!-- Output from the Clarify sub-step -->
-| # | Question | Decision | Source |
-|---|----------|----------|--------|
-| 1 | {question} | {decision} | User / Assumed (High/Medium/Low) |
+<!-- Output from the Clarify sub-step. Category: Locked (from spec), Deferred (revisit later), Discretion (Builder's choice). -->
+| # | Category | Question | Decision | Source | Rationale |
+|---|----------|----------|----------|--------|-----------|
+| 1 | Locked | {question} | {decision} | Spec / User | {why locked} |
+| 2 | Discretion | {question} | {decision} | Builder (conventions) | {reasoning} |
 
 ## Tasks
 

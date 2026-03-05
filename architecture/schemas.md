@@ -1885,3 +1885,40 @@ The standard format for acceptance criteria in VibeCrew plan templates. EARS mak
 - `skills/plan-features/SKILL.md` -- Instructs EARS format during planning
 - `scripts/validate-plan.sh` -- Validates EARS format in acceptance criteria
 - `scripts/verify-plan-goals.sh` -- Advisory EARS check in plan verification loop
+
+---
+
+## 21. Decision Categories (Locked/Deferred/Discretion)
+
+The classification taxonomy for decisions made during the Clarify sub-step (Discuss phase) of Tier 2 Plan. Every ambiguity identified during planning is classified into one of three categories that determine how the Code phase handles it.
+
+**Categories:**
+
+| Category | Meaning | Code Phase Behavior |
+|----------|---------|---------------------|
+| **Locked** | Explicitly specified in spec, TDR, design brief, or user answer | Follow exactly. Deviation requires plan revision. |
+| **Deferred** | Intentionally left open ("TBD", "later", "phase 2") | Do not implement. Add `TODO(deferred)` comment at decision point. |
+| **Discretion** | Spec silent, doesn't affect acceptance criteria | Builder picks best option. Document choice with rationale. |
+
+**Classification rules:**
+- Spec says it → Locked
+- Spec says "TBD"/"later"/"phase 2" → Deferred
+- Spec silent, doesn't affect acceptance criteria → Discretion
+- Spec silent, affects acceptance criteria → Ask user → Locked
+
+**Decisions table schema (in plan.md):**
+
+| Column | Required | Description |
+|--------|----------|-------------|
+| `#` | yes | Sequential decision number |
+| `Category` | yes | `Locked` / `Deferred` / `Discretion` |
+| `Question` | yes | The ambiguity being resolved |
+| `Decision` | yes | The resolution or deferral note |
+| `Source` | yes | `Spec` / `User` / `Builder (conventions)` / `Spec ("TBD")` |
+| `Rationale` | yes | Why this classification and decision |
+
+**Files:**
+- `templates/clarify-checklist.md` -- Decision Categories section with taxonomy and classification rules
+- `templates/decisions.md.template` -- Standalone decisions document for complex features
+- `templates/plan.md.template` -- Decisions table with Category column
+- `agents/builder.md` -- Clarify sub-step uses taxonomy; Code phase enforces categories

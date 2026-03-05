@@ -1,0 +1,33 @@
+# Decisions: {Feature Name}
+
+> Generated during the Clarify sub-step of the Plan phase.
+> Each decision is classified as Locked (from spec), Deferred (intentionally delayed), or Discretion (Builder's choice).
+
+## Decision Log
+
+| # | Category | Question | Decision | Source | Rationale |
+|---|----------|----------|----------|--------|-----------|
+| 1 | Locked | {question from spec} | {exact spec answer} | Spec / User | {why this is locked} |
+| 2 | Deferred | {question left open} | Revisit in {phase/milestone} | Spec ("TBD") | {why deferral is appropriate} |
+| 3 | Discretion | {unspecified detail} | {Builder's choice} | Builder (conventions) | {reasoning for this choice} |
+
+<!--
+Classification rules:
+  - Locked: Explicitly in spec, TDR, design brief, or user answer. Cannot change without spec revision.
+  - Deferred: Spec says "TBD", "later", or "phase 2". Do not implement — add TODO(deferred) comment.
+  - Discretion: Spec silent, doesn't affect acceptance criteria. Builder chooses, documents rationale.
+  - If spec is silent but answer affects acceptance criteria → ask the user → classify as Locked.
+
+Guidelines:
+  - Every Locked decision must cite its source (spec section, TDR rule, user answer)
+  - Every Deferred decision must specify WHEN it will be revisited
+  - Every Discretion decision must include rationale sufficient for code review
+  - Aim for 60-80% Locked, 5-15% Deferred, 10-30% Discretion in a well-specified feature
+-->
+
+## Summary
+
+- **Locked**: {N} decisions (from spec/user)
+- **Deferred**: {N} decisions (revisit later)
+- **Discretion**: {N} decisions (Builder's choice)
+- **Total**: {N} decisions

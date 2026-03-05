@@ -167,15 +167,30 @@ const backlogJson = `{
 <span class="output">  Approach: Supabase Auth with SSR helpers</span>
 <span class="output">  Files to create: 5 new, 2 modified</span>
 <span class="output">  Testing approach: spec-first for auth logic, impl-first for UI</span>
-<span class="output">  Clarify: 2 ambiguities found (resolved as assumptions)</span>
-<span class="output">    | Session timeout? | 24h default (Assumed, High confidence)</span>
-<span class="output">    | OAuth providers?  | Google + GitHub (from spec)</span>
+<span class="output">  Discuss: 4 decisions classified</span>
+<span class="output">    | Locked     | OAuth providers?  | Google + GitHub          | Spec      |</span>
+<span class="output">    | Locked     | Session timeout?  | 24h default              | User      |</span>
+<span class="output">    | Discretion | Error toast style? | Shadcn Sonner           | Builder   |</span>
+<span class="output">    | Deferred   | i18n support?     | Revisit in phase 2       | Spec TBD  |</span>
 <span class="output">  Structured tasks: 5 tasks generated</span>
 
 <span class="success">Phase complete: Plan</span>
 <span class="output">Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
 
-    <p>The <strong>Clarify sub-step</strong> runs automatically within Plan for standard and complex features. It evaluates 6 categories of potential ambiguities (Layout, Data, Content, Interaction, Business Logic, Integration) and either resolves them as documented assumptions or pauses to ask you, depending on your <code>/profile</code> autonomy setting. Structured tasks (Files/Action/Verify/Done) give the Code phase a deterministic checklist to follow.</p>
+    <p>The <strong>Discuss phase</strong> (Clarify sub-step) runs automatically within Plan for standard and complex features. It evaluates 6 categories of potential ambiguities (Layout, Data, Content, Interaction, Business Logic, Integration) and classifies every decision into three categories:</p>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Category</th><th>Meaning</th><th>Code Phase Behavior</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Locked</strong></td><td>Explicitly in spec, TDR, or user answer</td><td>Follow exactly. Deviation requires plan revision.</td></tr>
+          <tr><td><strong>Deferred</strong></td><td>Intentionally left open (&ldquo;TBD&rdquo;, &ldquo;later&rdquo;)</td><td>Skip. Add <code>TODO(deferred)</code> comment in code.</td></tr>
+          <tr><td><strong>Discretion</strong></td><td>Spec silent, doesn&rsquo;t affect acceptance criteria</td><td>Builder picks best option; documents rationale.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Your <code>/profile</code> autonomy setting controls which decisions need your input: <code>full_auto</code> auto-resolves everything, while <code>collaborative</code> pauses for ambiguous items that could be Locked. Structured tasks (Files/Action/Verify/Done) give the Code phase a deterministic checklist to follow.</p>
 
     <h4 class="agent-table-heading">Plan Verification Loop</h4>
     <p class="cmd-group-desc">

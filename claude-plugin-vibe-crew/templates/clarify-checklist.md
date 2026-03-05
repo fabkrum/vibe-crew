@@ -2,6 +2,22 @@
 
 > Evaluate each question against the feature spec and plan. Flag only genuinely ambiguous items — typically 2-5 for standard features, 0-1 for well-specified ones.
 
+## Decision Categories
+
+Classify every decision into one of three categories:
+
+| Category | Meaning | Who decides | Code phase behavior |
+|----------|---------|-------------|---------------------|
+| **Locked** | Explicitly specified in spec, TDR, design brief, or user answer. Cannot be changed without spec revision. | User / Spec | Follow exactly. Any deviation requires plan revision. |
+| **Deferred** | Intentionally left open for later. Not needed for current implementation or depends on future information. | N/A (revisit later) | Skip. Do not implement or assume. Add a `TODO(deferred)` comment at the decision point. |
+| **Discretion** | Not specified and not worth blocking on. Builder picks the best option based on conventions, TDR, and design system. | Builder (auto-resolved) | Builder chooses. Document the choice with rationale. Reviewable but not blocking. |
+
+**Classification rules:**
+- If the spec says it → **Locked**
+- If the spec says "TBD", "later", or "phase 2" → **Deferred**
+- If the spec is silent and the answer doesn't affect acceptance criteria → **Discretion**
+- If the spec is silent and the answer DOES affect acceptance criteria → ask the user (then classify as **Locked**)
+
 ## 1. Layout & Navigation
 
 - Where does this feature appear in the app's navigation? (new sidebar item, nested under existing, top-level route, modal/drawer over current page?)

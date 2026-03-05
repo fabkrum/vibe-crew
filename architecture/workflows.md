@@ -524,10 +524,17 @@ Phases within `in-progress` are **sequential by default** with verify-fix loops 
     |    review: review report in .vibecrew/reviews/           |
     |    docs:   feature docs, CHANGELOG entry                 |
     |                                                          |
-    |  Clarify sub-step (within Plan, std/complex only):      |
+    |  Clarify sub-step / Discuss phase (Plan, std/complex):   |
     |    Evaluates 6-category checklist against spec.          |
-    |    Resolves ambiguities as decisions (User or Assumed).  |
-    |    Appends ## Decisions table to plan.md.                |
+    |    Classifies each decision into three categories:       |
+    |      Locked   — from spec/TDR/user; follow exactly.     |
+    |      Deferred — intentionally delayed; add TODO comment. |
+    |      Discretion — Builder's choice; document rationale.  |
+    |    Appends ## Decisions table (with Category column)     |
+    |    to plan.md. Complex features get standalone           |
+    |    decisions.md via decisions.md.template.                |
+    |    Code phase enforces categories: Locked = exact,       |
+    |    Deferred = TODO(deferred) comment, Discretion = go.   |
     |    Autonomy setting controls pause vs auto-resolve.      |
     |                                                          |
     |  Structured tasks (within Plan):                         |

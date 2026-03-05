@@ -125,23 +125,30 @@ When starting a feature, before the Design Phase:
      - `context_budget.warning` — consider splitting large plans into milestones.
      - `ears_format.non_ears_count > 0` — note for the user (not a blocker).
    - Revise the plan and re-run verification. **Maximum 3 iterations.** If still failing after 3, proceed with a warning in the plan file: `## Verification: Partial (see gaps below)`.
-5.5. **Clarify Sub-Step** (standard and complex features only; skip for trivial):
-   - Read `${CLAUDE_PLUGIN_ROOT}/templates/clarify-checklist.md` for the 6-category ambiguity checklist.
+5.5. **Clarify Sub-Step (Discuss Phase)** (standard and complex features only; skip for trivial):
+   - Read `${CLAUDE_PLUGIN_ROOT}/templates/clarify-checklist.md` for the 6-category ambiguity checklist and the **Locked/Deferred/Discretion** decision taxonomy.
    - Evaluate each question against the feature spec and plan. Only flag questions where the answer is genuinely ambiguous — not already resolved by the spec, TDR, or design brief.
    - Typically 2-5 questions for standard features, 0-1 for well-specified features.
+   - **Classify every decision** into one of three categories:
+     - **Locked**: Explicitly specified in spec, TDR, design brief, or user answer. Follow exactly during Code phase.
+     - **Deferred**: Intentionally left open ("TBD", "later", "phase 2"). Skip during Code phase; add `TODO(deferred)` comment.
+     - **Discretion**: Spec is silent and answer doesn't affect acceptance criteria. Builder picks best option.
+     - If spec is silent but the answer affects acceptance criteria → ask the user → classify as **Locked**.
    - **Behavior by autonomy setting** (from `read-profile.sh`):
-     - `full_auto`: Evaluate the checklist silently. Document assumptions with confidence levels (High/Medium/Low) in plan.md under `## Decisions (Auto-Resolved)`. No pause.
-     - `checkpoints` / `collaborative`: Pause and present flagged questions to the user. Wait for answers. Append to plan.md under `## Decisions`.
-     - `supervised`: Same as collaborative, with additional context explaining why each question matters.
+     - `full_auto`: Evaluate the checklist silently. Classify all decisions. Discretion items get auto-resolved with rationale. No pause.
+     - `checkpoints` / `collaborative`: Pause and present ambiguous items (potential Locked decisions needing user input). Auto-resolve Discretion items. Wait for answers on unclear items.
+     - `supervised`: Same as collaborative, with additional context explaining each category and why each question matters.
    - **Plan.md output format** — append after existing sections:
      ```markdown
      ## Decisions
-     | # | Question | Decision | Source |
-     |---|----------|----------|--------|
-     | 1 | Navigation placement? | New sidebar item under Settings | User |
-     | 2 | API timeout handling? | Toast error + retry button | Assumed (Medium) |
+     | # | Category | Question | Decision | Source | Rationale |
+     |---|----------|----------|----------|--------|-----------|
+     | 1 | Locked | Navigation placement? | New sidebar item under Settings | User | User specified during clarify |
+     | 2 | Discretion | API timeout handling? | Toast error + retry button | Builder (conventions) | Matches existing error patterns in codebase |
+     | 3 | Deferred | Multi-language support? | Revisit in phase 2 | Spec ("TBD") | Spec marks i18n as future work |
      ```
-   - If no ambiguities are found, add `## Decisions` with a single row: "No ambiguities identified — spec is fully resolved."
+   - If no ambiguities are found, add `## Decisions` with a single row: "No ambiguities identified — all decisions are Locked from spec."
+   - Optionally write a standalone decisions file using `${CLAUDE_PLUGIN_ROOT}/templates/decisions.md.template` at `docs/features/{feature-name}/decisions.md` for complex features with 5+ decisions.
    - Commit: `docs(plan): add clarification decisions for {feature-name}`.
 6. Commit the plan: `docs(plan): add implementation plan for {feature-name}` (if not already committed with the Clarify sub-step above, combine into a single commit).
 7. Signal completion with `builder-plan-complete.signal` (standard signal format with `"phase": "plan"`, add `"plan_file": "docs/features/{feature-name}/plan.md"`).
@@ -271,6 +278,11 @@ If not installed: full design guidance as documented below.
       - **severity: critical** (deleted/renamed files) →
         - All autonomy levels: Re-run plan for affected tasks only. Append `## Plan Refresh` section documenting what changed and why.
    6. Update `plan_commit_sha` to current HEAD after refresh.
+
+2.2. **Decision Category Enforcement** — Before executing tasks, read the `## Decisions` table from the plan:
+   - **Locked** decisions: Follow exactly. If implementation would deviate from a Locked decision, STOP and request a plan revision.
+   - **Deferred** decisions: Do not implement. Where the deferred decision would apply, add a code comment: `// TODO(deferred): {question} — revisit in {phase/milestone}`.
+   - **Discretion** decisions: Follow the documented choice. If a better option becomes apparent during implementation, update the Decisions table with the new choice and rationale.
 
 2.3. **Structured Task Execution** — Check for structured tasks in the plan:
    ```bash

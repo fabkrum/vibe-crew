@@ -103,6 +103,12 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/drift-tracker.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/context-monitor-posttool.sh",
+            "timeout": 3,
+            "statusMessage": "Monitoring context usage..."
           }
         ]
       }

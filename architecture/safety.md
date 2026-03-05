@@ -1394,12 +1394,30 @@ For non-technical VibeCrew users, this is especially dangerous because the outpu
 | 60% | Hard warning | Native OS notification to user via `notify.sh`. Recommend `/wrap`. |
 | 80% | Force stop | Agent should gracefully terminate. Create WIP commit. Start new session. |
 
-### 8.3 Implementation via Stop Hook Pipeline
+### 8.3 Dual-Hook Context Monitoring Strategy
+
+Context monitoring uses two complementary hooks for defense in depth:
+
+**PostToolUse hook: `context-monitor-posttool.sh`** (proactive)
+- Fires after every tool use, catching context bloat as it happens.
+- Uses **debouncing** (checks every 5th invocation) to minimize performance overhead.
+- Outputs warnings via `additionalContext` JSON, injecting them directly into the agent's reasoning context.
+- Maintains a counter file at `.vibecrew/.context-monitor-counter`.
+- Same 3-fold thresholds as the Stop hook (45% INFO, 60% WARNING, 80% CRITICAL).
+
+**Stop hook: `check-context.sh`** (safety net)
+- Fires after each agent turn completion, providing a complementary checkpoint.
+- Also handles signal file cleanup and stale lock detection.
+- Acts as a safety net if the PostToolUse hook misses a check (e.g., during debounce gaps).
+
+Both hooks read thresholds from `config.json` (`context_warnings.warn_at_percent`, `context_warnings.critical_at_percent`) and always exit 0 (never block).
+
+### 8.4 Stop Hook Pipeline
 
 The Stop event fires five scripts sequentially after each agent turn. The first four are advisory (exit 0 always); the fifth can block:
 
 1. **`drift-circuit-breaker.sh`** — Hard drift threshold check; forces WIP commit + escalation on breach (see Section 8.5)
-2. **`check-context.sh`** — Context window usage warnings
+2. **`check-context.sh`** — Context window usage warnings (Stop-hook safety net)
 3. **`cost-guardrails.sh`** — Session and daily cost tracking (see Section 9)
 4. **`claude-md-lint.sh`** — CLAUDE.md size and quality checks (see Section 10)
 5. **`quality-gate.sh`** — Runs typecheck/lint/build on modified source files (exit 1 on failure, respects `autonomy` profile)

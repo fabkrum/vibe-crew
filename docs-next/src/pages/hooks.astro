@@ -118,6 +118,11 @@ import { hooksDiagram } from '../data/diagrams';
           <td>PostToolUse (all)</td>
           <td>Classifies tool calls as progress/exploration/neutral. Emits soft warnings when exploration count exceeds phase-dependent thresholds (plan: 40, code: 20). Never blocks.</td>
         </tr>
+        <tr>
+          <td><code>context-monitor-posttool.sh</code></td>
+          <td>PostToolUse (all)</td>
+          <td>Lightweight context window monitor with debouncing (checks every 5th tool use). Injects warnings via <code>additionalContext</code> at three thresholds: 45% INFO, 60% WARNING, 80% CRITICAL. Complements the Stop-hook <code>check-context.sh</code> for defense in depth.</td>
+        </tr>
       </tbody>
     </table>
   </div>

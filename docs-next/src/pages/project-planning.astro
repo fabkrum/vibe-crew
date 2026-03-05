@@ -355,6 +355,31 @@ const badVisionExamples = `# Bad examples — too vague for VibeCrew to act on
 
   <hr>
 
+  <!-- ── EARS Acceptance Criteria ── -->
+  <section class="section" id="ears">
+  <h4 class="agent-table-heading">EARS Acceptance Criteria</h4>
+  <p class="cmd-group-desc">
+    VibeCrew uses the <strong>EARS</strong> (Easy Approach to Requirements Syntax) format for acceptance criteria. EARS makes every criterion directly testable and eliminates ambiguity.
+  </p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Pattern</th><th>Template</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Event-driven</strong></td><td>WHEN {'{'}<em>event</em>{'}'} THE SYSTEM SHALL {'{'}<em>behavior</em>{'}'}</td><td>When the user clicks Submit, the system shall validate all required fields.</td></tr>
+        <tr><td><strong>Ubiquitous</strong></td><td>THE SYSTEM SHALL {'{'}<em>behavior</em>{'}'}</td><td>The system shall display timestamps in the user&rsquo;s local timezone.</td></tr>
+        <tr><td><strong>State-driven</strong></td><td>WHILE {'{'}<em>state</em>{'}'} THE SYSTEM SHALL {'{'}<em>behavior</em>{'}'}</td><td>While unauthenticated, the system shall redirect protected routes to /login.</td></tr>
+        <tr><td><strong>Unwanted</strong></td><td>IF {'{'}<em>condition</em>{'}'} THEN THE SYSTEM SHALL {'{'}<em>behavior</em>{'}'}</td><td>If the API returns 429, then the system shall retry with exponential backoff.</td></tr>
+        <tr><td><strong>Optional</strong></td><td>WHERE {'{'}<em>condition</em>{'}'} THE SYSTEM SHALL {'{'}<em>behavior</em>{'}'}</td><td>Where dark mode is enabled, the system shall apply the dark color palette.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    The <code>/plan-features</code> command guides users to write criteria in EARS format during interactive planning. <code>validate-plan.sh</code> checks for EARS compliance when validating plans.
+  </p>
+  </section>
+
+  <hr>
+
   <!-- ── Common Mistakes ── -->
   <section class="section" id="common-mistakes">
     <h3>Common Mistakes</h3>

@@ -155,6 +155,24 @@ import { agentInteractionDiagram } from '../data/diagrams';
     </table>
   </div>
 
+  <h4 class="agent-table-heading">Shared Helpers</h4>
+  <p class="cmd-group-desc">
+    Agents share common procedures via <code>agents/helpers.md</code> &mdash; a centralized reference file with named sections for registration, profile reading, budget discipline, and more. This avoids duplicating the same instructions across 14 agent files, reducing prompt size and maintenance overhead.
+  </p>
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Helper</th><th>Agents</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>#Registration</code></td><td>All 14</td><td>Observability tracking on agent start</td></tr>
+        <tr><td><code>#Read-User-Profile</code></td><td>9</td><td>Profile-aware output adaptation</td></tr>
+        <tr><td><code>#Read-Only-Agent-Constraints</code></td><td>8</td><td>Enforce no-write safety for analysis agents</td></tr>
+        <tr><td><code>#Budget-Discipline</code></td><td>All 14</td><td>Context window management</td></tr>
+        <tr><td><code>#Escalation-on-Max-Turns</code></td><td>5</td><td>Graceful partial output on turn limit</td></tr>
+        <tr><td><code>#Expertise-Integration</code></td><td>3</td><td>Cross-session knowledge accumulation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <MermaidDiagram chart={agentInteractionDiagram} caption="Agent topology: how agents hand off work to each other" />
 
 </DocsLayout>

@@ -582,6 +582,22 @@ Severity determines action:
 During `/run-backlog`, each feature's fresh-session Agent receives the staleness
 report in its context via `prepare-feature-context.sh`.
 
+#### Plan Verification Loop
+
+After the Builder generates the implementation plan, it runs a pre-execution verification loop (max 3 iterations):
+
+1. **Run verification**: `verify-plan-goals.sh` checks four dimensions:
+   - **Goal coverage**: Do plan tasks address all acceptance criteria?
+   - **Dependency integrity**: Do referenced files exist (for "modify" actions)?
+   - **Context budget**: Is estimated context usage within the 40% threshold?
+   - **EARS format**: Are acceptance criteria in EARS format? (advisory, not blocking)
+
+2. **Iterate on failures**: If verification fails, the Builder revises the plan to address gaps (e.g., adds tasks for uncovered criteria, fixes file paths).
+
+3. **Maximum 3 iterations**: If the plan still fails after 3 attempts, the Builder proceeds with a `## Verification: Partial` warning in the plan file.
+
+This loop catches requirement gaps before tokens are spent on implementation, inspired by GSD's plan-checker pattern.
+
 ### 3.4 Step-by-Step: `/idea "text"`
 
 ```

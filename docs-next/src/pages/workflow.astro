@@ -177,6 +177,22 @@ const backlogJson = `{
 
     <p>The <strong>Clarify sub-step</strong> runs automatically within Plan for standard and complex features. It evaluates 6 categories of potential ambiguities (Layout, Data, Content, Interaction, Business Logic, Integration) and either resolves them as documented assumptions or pauses to ask you, depending on your <code>/profile</code> autonomy setting. Structured tasks (Files/Action/Verify/Done) give the Code phase a deterministic checklist to follow.</p>
 
+    <h4 class="agent-table-heading">Plan Verification Loop</h4>
+    <p class="cmd-group-desc">
+      After generating the implementation plan, the Builder runs a pre-execution verification loop (max 3 iterations) via <code>verify-plan-goals.sh</code>. This catches requirement gaps before tokens are spent on implementation.
+    </p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Check</th><th>What It Validates</th><th>Blocking?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Goal Coverage</strong></td><td>Plan tasks address all acceptance criteria</td><td>Yes</td></tr>
+          <tr><td><strong>Dependency Integrity</strong></td><td>Referenced files exist for &ldquo;modify&rdquo; actions</td><td>Yes</td></tr>
+          <tr><td><strong>Context Budget</strong></td><td>Estimated context usage within 40% threshold</td><td>No (warning)</td></tr>
+          <tr><td><strong>EARS Format</strong></td><td>Acceptance criteria use EARS syntax</td><td>No (advisory)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <p><strong>Plan Freshness Check</strong> &mdash; Before the Code phase begins, VibeCrew automatically checks whether any files referenced in your plan have changed since planning completed (from other features, quick fixes, or dependency updates). Minor changes are noted and the affected files are re-read. Major changes trigger a plan refresh for the affected tasks. This prevents building against stale assumptions.</p>
 
     <h4>Phase 2: UI Design (~5 min)</h4>

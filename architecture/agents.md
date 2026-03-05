@@ -18,8 +18,9 @@
 6. [Builder Agent](#6-builder-agent)
 7. [Verifier Agent](#7-verifier-agent)
 8. [Agent Interaction Map](#8-agent-interaction-map)
-9. [Design Decisions](#9-design-decisions)
-10. [System Reviewer Agent](#10-system-reviewer-agent)
+9. [Agent Helpers (Shared Procedures)](#9-agent-helpers-shared-procedures)
+10. [Design Decisions](#10-design-decisions)
+11. [System Reviewer Agent](#11-system-reviewer-agent)
 
 ---
 
@@ -997,7 +998,38 @@ builder-complete.signal           reads signal,                 verifier-test-co
 
 ---
 
-## 9. Design Decisions
+## 9. Agent Helpers (Shared Procedures)
+
+To reduce prompt duplication across 14 agent files, shared procedures are centralized in `agents/helpers.md`. Each agent references helpers by section anchor instead of repeating the full procedure.
+
+### Cross-Reference Table
+
+| Helper Section | Used By | Purpose |
+|---|---|---|
+| Registration | All 14 agents | Observability tracking on agent start |
+| Deregistration | All 14 agents | Cleanup on agent completion |
+| Read User Profile | 9 agents (Builder, Code Reviewer, Doc Generator, Opponent Processor, Performance Coach, Session Startup, Stack Scout, Verifier, Workflow Orchestrator) | Profile-aware output adaptation |
+| Read State | 8 agents | Extract active feature, phase, foundation status |
+| Load Architecture Diagrams | 6 agents | Inject Mermaid diagrams into context |
+| Escalation on Max Turns | 5 agents (Code Simplifier, Opponent Processor, Security Auditor, Stack Scout, System Reviewer) | Graceful partial output on turn limit |
+| Read-Only Agent Constraints | 8 agents (Code Auditor, Code Reviewer, Code Simplifier, Opponent Processor, Security Auditor, Stack Scout, System Reviewer + partial: Doc Generator) | Enforce no-write safety |
+| Budget Discipline | All 14 agents | Context window management |
+| Expertise Integration | 3 agents (Builder, Code Reviewer, Performance Coach) | Cross-session knowledge accumulation |
+| Signal File Format | 3 agents (Builder, Verifier, Workflow Orchestrator) | Standardized inter-agent communication |
+| Phase Advancement | 2 agents (Builder, Verifier) | Feature lifecycle state transitions |
+
+### How It Works
+
+1. `helpers.md` contains named sections with `## Section-Name` anchors.
+2. Agent files reference helpers: `Follow helpers.md#Registration — register as "builder"`.
+3. Agents with Read/Bash tools can read helpers.md at runtime for full procedure details.
+4. Agent-specific adaptations (e.g., profile dimension mappings, budget percentages) remain inline in each agent file.
+
+This pattern was inspired by BMAD's shared procedure approach, which demonstrated 70-85% token savings from deduplication.
+
+---
+
+## 10. Design Decisions
 
 ### Why 5 Agents Instead of 9?
 
@@ -1131,13 +1163,13 @@ The verification loop is the most important addition in the v1.0 revision, based
 
 ---
 
-## 10. System Reviewer Agent
+## 11. System Reviewer Agent
 
-### 10.1 Purpose
+### 11.1 Purpose
 
 The System Reviewer is a meta-analysis agent that audits the VibeCrew plugin itself rather than user projects. It analyzes plugin internals, cross-project telemetry data, and the external Claude Code ecosystem to produce structured improvement proposals. It is the only agent that operates at the plugin level rather than the project level.
 
-### 10.2 Specification
+### 11.2 Specification
 
 | Property | Value |
 |----------|-------|
@@ -1148,13 +1180,13 @@ The System Reviewer is a meta-analysis agent that audits the VibeCrew plugin its
 | **Trigger** | `/system-review` command (run from VibeCrew repo) |
 | **Read-only** | Yes — cannot Write, Edit, or create tasks |
 
-### 10.3 Tools
+### 11.3 Tools
 
 **Allowed:** Read, Bash, Glob, Grep, WebSearch, WebFetch, mcp\_\_context7\_\_resolve-library-id, mcp\_\_context7\_\_get-library-docs
 
 **Disallowed:** Write, Edit, TeamCreate, TaskCreate, SendMessage
 
-### 10.4 Ten-Step Methodology
+### 11.4 Ten-Step Methodology
 
 The agent executes a structured 10-step analysis divided into three parts:
 
@@ -1177,7 +1209,7 @@ The agent executes a structured 10-step analysis divided into three parts:
 9. **Community & Competitor Patterns** — Research Cursor rules, Windsurf cascades, Aider conventions
 10. **Innovation Brainstorm** — Synthesize all findings into forward-looking ideas
 
-### 10.5 Output
+### 11.5 Output
 
 The agent returns a single markdown report with five parts:
 
@@ -1189,7 +1221,7 @@ The agent returns a single markdown report with five parts:
 - **Part 5: Prioritized Proposals** (top 10 with implementation sketches)
 - **Appendix: Research Sources** (all queries and URLs)
 
-### 10.6 Verification Loop
+### 11.6 Verification Loop
 
 1. All sections present (no empty sections without "No findings" note)
 2. Internal findings cite specific file paths
@@ -1198,7 +1230,7 @@ The agent returns a single markdown report with five parts:
 5. Every proposal has priority, effort estimate, and implementation sketch
 6. No duplicate findings vs previous review (if provided)
 
-### 10.7 Key Differences from Other Agents
+### 11.7 Key Differences from Other Agents
 
 | Aspect | Other Agents | System Reviewer |
 |--------|-------------|-----------------|

@@ -8,31 +8,84 @@ import MermaidDiagram from '../components/MermaidDiagram.astro';
 <div class="panel-intro">
   <h2>Testing Strategy</h2>
   <p>
-    VibeCrew's 127 bash scripts form complex workflow chains. 1413 unit tests validate individual
-    scripts in isolation. 69 integration tests validate the chains compose correctly &mdash; catching
-    the category of bugs that only appear when script A's output becomes script B's input.
-    All tests run in isolated temp directories with mocked external tools &mdash; zero network, zero side effects.
+    VibeCrew provides testing commands for your project code <em>and</em> includes its own comprehensive
+    test suite for the plugin's 127 bash scripts. This page covers both.
   </p>
 
   <div class="key-points">
     <div class="key-point">
       <span class="key-icon purple">&#9874;</span>
       <div>
-        <strong>Unit Tests (1413)</strong>
-        Individual script validation. 1:1 mapping with scripts.
-        State built programmatically. External commands mocked.
+        <strong>Project Testing</strong>
+        4 slash commands for TDD, E2E, accessibility, and performance testing in your project.
       </div>
     </div>
     <div class="key-point">
       <span class="key-icon green">&#9939;</span>
       <div>
-        <strong>Integration Tests (69)</strong>
-        Workflow chain validation. Scripts call each other for real.
-        Mocking stops at the system boundary.
+        <strong>Plugin Test Suite</strong>
+        1413 unit tests + 69 integration tests validating VibeCrew's own scripts.
       </div>
     </div>
   </div>
 </div>
+
+<!-- Testing Your Project -->
+<section class="section">
+  <h3>Testing Your Project</h3>
+  <p>VibeCrew provides 4 testing commands that work on your project code. Each integrates with the Vibe Score &mdash; running these commands earns bonuses, skipping them incurs deductions.</p>
+
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Command</th><th>Tool</th><th>What It Does</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>/tdd</code></td>
+          <td>Vitest / Jest</td>
+          <td>Red-green-refactor cycle. Writes ONE failing test, implements minimum code to pass, refactors, and commits. Produces a Discipline Score (0&ndash;10) measuring TDD adherence.</td>
+        </tr>
+        <tr>
+          <td><code>/e2e</code></td>
+          <td>Playwright</td>
+          <td>Scaffolds Page Object Model, generates spec files with accessibility-first locators, and runs with trace-on-failure for debugging.</td>
+        </tr>
+        <tr>
+          <td><code>/a11y</code></td>
+          <td>axe-core</td>
+          <td>WCAG 2.1 AA audit: automated axe scan, keyboard navigation checklist, ARIA validation. Saves a JSON report to the project.</td>
+        </tr>
+        <tr>
+          <td><code>/perf-test</code></td>
+          <td>k6</td>
+          <td>Load, stress, spike, and soak test profiles. Configures thresholds and reports p95/p99 latency, throughput, and error rates.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="key-points">
+    <div class="key-point">
+      <span class="key-icon amber">&#9888;</span>
+      <div>
+        <strong>Project tests, not plugin tests</strong>
+        <p>These commands test <em>your</em> application code. The section below covers VibeCrew's own internal test suite.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- Plugin Test Suite -->
+<section class="section">
+  <h3>Plugin Test Suite</h3>
+  <p>
+    VibeCrew's 127 bash scripts form complex workflow chains. 1413 unit tests validate individual
+    scripts in isolation. 69 integration tests validate the chains compose correctly &mdash; catching
+    the category of bugs that only appear when script A's output becomes script B's input.
+    All tests run in isolated temp directories with mocked external tools &mdash; zero network, zero side effects.
+  </p>
+</section>
 
 <!-- Testing Flow -->
 <h4 class="agent-table-heading">Testing Flow</h4>

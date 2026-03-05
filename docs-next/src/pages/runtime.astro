@@ -98,6 +98,21 @@ import { runtimeStateDiagram } from '../data/diagrams';
           <td>4 persistent markdown files from <code>/onboard</code>: <code>stack.md</code> (language, framework, deps), <code>architecture.md</code> (dirs, patterns, API style), <code>conventions.md</code> (formatting, naming, test patterns), <code>gaps.md</code> (coverage, untested modules, TODOs). Refreshable via <code>/onboard --refresh</code>.</td>
           <td>Builder (Plan phase injection), compact-reinject (post-compaction context), Session Startup (staleness check).</td>
         </tr>
+        <tr>
+          <td><code>releases/</code></td>
+          <td>Release notes data (JSON) with version history and feature summaries.</td>
+          <td>Doc Generator (<code>/release</code>), dashboard releases tab.</td>
+        </tr>
+        <tr>
+          <td><code>workflows/</code></td>
+          <td>Reusable workflow templates extracted from high-scoring sessions via <code>/replay</code>.</td>
+          <td>Orchestrator (loads templates for replay).</td>
+        </tr>
+        <tr>
+          <td><code>expertise/</code></td>
+          <td>Persistent agent expertise records &mdash; learned patterns and session learnings (JSON).</td>
+          <td>Performance Coach (writes), Builder and Code Reviewer (read for adaptive behavior).</td>
+        </tr>
       </tbody>
     </table>
   </div>

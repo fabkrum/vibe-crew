@@ -89,6 +89,7 @@ import { selfImprovingDiagram } from '../data/diagrams';
           <tr><td>Documentation drift</td><td>-3 per stale doc</td><td>Source code changed but matching docs not updated</td></tr>
           <tr><td>Console errors</td><td>-5</td><td>Browser console errors on affected pages</td></tr>
           <tr><td>Visual token violations</td><td>-3 per violation (max -9)</td><td>Design system tokens used incorrectly</td></tr>
+          <tr><td>Unresolved clarifications</td><td>&minus;3</td><td>Plan phase identified 3+ ambiguities that went unresolved (low-confidence assumptions in code).</td></tr>
         </tbody>
       </table>
     </div>
@@ -108,6 +109,68 @@ import { selfImprovingDiagram } from '../data/diagrams';
           <tr><td>Code review complete</td><td>+2</td><td>/review ran with all findings addressed</td></tr>
           <tr><td>Performance baselines</td><td>+2</td><td>k6 performance tests run with baselines set</td></tr>
           <tr><td>Visual compliance clean</td><td>+3</td><td>No design system token violations</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ── Plan Staleness Detection ── -->
+  <section class="section">
+    <h3>Plan Staleness Detection</h3>
+    <p>During the Code phase, <code>check-plan-staleness.sh</code> compares files referenced in <code>plan.md</code> against the plan's commit SHA. If source files have changed since the plan was written, the script assesses severity and recommends action.</p>
+
+    <h4 class="agent-table-heading">Severity Levels</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Severity</th><th>Criteria</th><th>Recommendation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>none</strong></td><td>No plan-referenced files changed since plan commit</td><td>Proceed normally</td></tr>
+          <tr><td><strong>minor</strong></td><td>1&ndash;2 files changed, &lt;50 lines total</td><td>Review changes, then proceed</td></tr>
+          <tr><td><strong>major</strong></td><td>3+ files changed or &gt;50 lines modified</td><td>Refresh the plan before continuing</td></tr>
+          <tr><td><strong>critical</strong></td><td>Plan-referenced file deleted or renamed</td><td>Refresh the plan (mandatory)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="agent-table-heading">Vibe Score Integration</h4>
+    <p>The <code>plan_revision_count</code> field in <code>state.json</code> tracks how often specs change mid-feature. Frequent plan revisions indicate unstable requirements and reduce the session's Vibe Score. The Performance Coach monitors this metric across sessions to detect planning pattern issues.</p>
+  </section>
+
+  <hr>
+
+  <!-- ── Erosion & Drift Tracking ── -->
+  <section class="section">
+    <h3>Erosion &amp; Drift Tracking</h3>
+    <p>VibeCrew monitors two forms of session degradation: <strong>drift</strong> (agents exploring instead of progressing) and <strong>code erosion</strong> (increasing complexity metrics over time).</p>
+
+    <h4 class="agent-table-heading">Drift Tracking</h4>
+    <p>A two-tier system detects when agents spend too much time exploring rather than making progress.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Phase</th><th>Soft Warning<br/>(drift-tracker.sh)</th><th>Hard Escalation<br/>(drift-circuit-breaker.sh)</th></tr></thead>
+        <tbody>
+          <tr><td>Plan</td><td>40 exploration calls</td><td>60 exploration calls</td></tr>
+          <tr><td>Design</td><td>30 exploration calls</td><td>45 exploration calls</td></tr>
+          <tr><td>Code</td><td>20 exploration calls</td><td>35 exploration calls</td></tr>
+          <tr><td>Test</td><td>15 exploration calls</td><td>25 exploration calls</td></tr>
+          <tr><td>Docs</td><td>15 exploration calls</td><td>25 exploration calls</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Soft warnings are emitted by <code>drift-tracker.sh</code> (PostToolUse hook) and never block. Hard escalation via <code>drift-circuit-breaker.sh</code> (Stop hook) creates a WIP commit and blocker signal, prompting the agent to change approach. The circuit breaker is fail-open &mdash; it never prevents a session from stopping.</p>
+
+    <h4 class="agent-table-heading">Code Erosion</h4>
+    <p><code>collect-erosion-metrics.sh</code> gathers complexity metrics (lines of code, cyclomatic complexity, function length, import count) and <code>calculate-erosion-score.sh</code> computes a 0&ndash;100 erosion score.</p>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Score Range</th><th>Rating</th><th>Vibe Score Impact</th></tr></thead>
+        <tbody>
+          <tr><td>80&ndash;100</td><td>Healthy</td><td>+2 bonus</td></tr>
+          <tr><td>60&ndash;79</td><td>Moderate</td><td>No impact</td></tr>
+          <tr><td>40&ndash;59</td><td>Concerning</td><td>&minus;3 deduction</td></tr>
+          <tr><td>0&ndash;39</td><td>Critical</td><td>&minus;5 deduction</td></tr>
         </tbody>
       </table>
     </div>

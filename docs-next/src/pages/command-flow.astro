@@ -53,6 +53,11 @@ import { commandsDiagram } from '../data/diagrams';
           <td>Interview (or preset selection) that configures how agents communicate and work with you.</td>
           <td>After setup, to personalize agent behavior for your experience level and preferences.</td>
         </tr>
+        <tr>
+          <td><code>/install-skill &lt;source&gt;</code></td>
+          <td>Install companion skills from GitHub repos, local paths, or company-internal sources. Runs 5-gate safety validation on remote sources.</td>
+          <td>After TDR approval when companion skills are recommended, or anytime you want to add a skill manually.</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -192,6 +197,11 @@ import { commandsDiagram } from '../data/diagrams';
           <td><code>/system-review</code></td>
           <td>Plugin meta-analysis, cross-project telemetry, and ecosystem research.</td>
           <td>To analyze VibeCrew's own performance across all your projects.</td>
+        </tr>
+        <tr>
+          <td><code>/validate-skills</code></td>
+          <td>Evaluate skill schema quality, model-version tracking, and A/B test recommendations across 3 tiers.</td>
+          <td>After model updates or when skill reliability degrades. Periodic health check.</td>
         </tr>
       </tbody>
     </table>

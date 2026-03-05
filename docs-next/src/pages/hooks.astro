@@ -113,6 +113,11 @@ import { hooksDiagram } from '../data/diagrams';
           <td>Notification / PostToolUseFailure</td>
           <td>Sends native OS notifications for permission stalls, task completions, and errors. Includes Warp Terminal deep-links when available.</td>
         </tr>
+        <tr>
+          <td><code>drift-tracker.sh</code></td>
+          <td>PostToolUse (all)</td>
+          <td>Classifies tool calls as progress/exploration/neutral. Emits soft warnings when exploration count exceeds phase-dependent thresholds (plan: 40, code: 20). Never blocks.</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -142,6 +147,11 @@ import { hooksDiagram } from '../data/diagrams';
           <td><code>check-context.sh</code></td>
           <td>Stop</td>
           <td>Monitors context window usage and warns at 45% and 60%. Helps prevent sessions from running out of context mid-task.</td>
+        </tr>
+        <tr>
+          <td><code>drift-circuit-breaker.sh</code></td>
+          <td>Stop</td>
+          <td>Checks hard drift thresholds (plan: 60, code: 35). Creates WIP commit and blocker signal when exceeded, prompting the agent to change approach. Fail-open (never blocks stop).</td>
         </tr>
       </tbody>
     </table>

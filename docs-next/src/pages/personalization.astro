@@ -392,6 +392,34 @@ const profileJson = `{
     </div>
   </section>
 
+  <!-- ── Agent Overlay Customization ── -->
+  <section class="section" id="agent-overlays">
+    <h3>Agent Overlay Customization</h3>
+    <p>
+      Beyond profiles, you can customize individual agent behavior per-project by creating override files
+      in <code>.vibecrew/agent-overrides/&lt;agent&gt;.md</code>. Overrides survive plugin updates because
+      they live in your project directory, not the plugin.
+    </p>
+
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Aspect</th><th>How It Works</th></tr></thead>
+        <tbody>
+          <tr><td>Section replacement</td><td>Override sections with matching <code>## Heading</code> names replace the base section entirely</td></tr>
+          <tr><td>Section append</td><td>New headings in the override are appended after all base sections</td></tr>
+          <tr><td>Frontmatter preserved</td><td>Model, tools, isolation, and maxTurns cannot be changed by overrides</td></tr>
+          <tr><td>Empty/missing</td><td>No override file = base agent used unchanged</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      <strong>Example:</strong> To make the Builder always use Prisma ORM and CSS Modules for a specific project,
+      create <code>.vibecrew/agent-overrides/builder.md</code> with custom <code>## Code Phase</code> and
+      <code>## Project-Specific Conventions</code> sections.
+    </p>
+  </section>
+
   <!-- ── Related Pages ── -->
   <section class="section">
     <h3>Related Pages</h3>

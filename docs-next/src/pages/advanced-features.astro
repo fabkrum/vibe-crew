@@ -515,4 +515,45 @@ Results feed into <span class="highlight">Code Auditor</span> and <span class="h
       </Callout>
     </section>
 
+    <!-- ── Parallel Backlog Execution ── -->
+    <section id="parallel-backlog">
+      <h3>Parallel Backlog Execution</h3>
+      <p>
+        <code>/run-backlog --parallel</code> enables wave-based parallel processing of independent features.
+        The system analyzes feature dependencies via <code>analyze-feature-dependencies.sh</code> and groups
+        features into waves where no feature depends on another within the same wave.
+      </p>
+      <div class="agent-table-wrap">
+        <table class="agent-table">
+          <thead><tr><th>Aspect</th><th>Sequential (default)</th><th>Parallel (<code>--parallel</code>)</th></tr></thead>
+          <tbody>
+            <tr><td>Execution</td><td>One feature at a time</td><td>Up to N features per wave (default: 3)</td></tr>
+            <tr><td>Dependencies</td><td>Priority order</td><td>Wave-based: independent features grouped together</td></tr>
+            <tr><td>Quality gate</td><td>Per feature</td><td>Per wave (after merge)</td></tr>
+            <tr><td>Cost guardrails</td><td>Per feature</td><td>Multiplied by concurrent agents per wave</td></tr>
+            <tr><td>Merge strategy</td><td>Sequential on main</td><td>Sequential merge between waves</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <Callout type="info" title="When to use parallel mode">
+        Use <code>--parallel</code> when your backlog has 3+ features with few dependencies between them.
+        For backlogs with chain dependencies (A&rarr;B&rarr;C), parallel mode adds no benefit and falls back to sequential.
+      </Callout>
+    </section>
+
+    <!-- ── Agent Overlay System ── -->
+    <section id="agent-overlays">
+      <h3>Agent Overlay System</h3>
+      <p>
+        Customize any agent&apos;s behavior per-project by creating override files in
+        <code>.vibecrew/agent-overrides/&lt;agent&gt;.md</code>. Override sections with matching
+        <code>## Heading</code> names replace the base section; new headings are appended. YAML
+        frontmatter (model, tools, isolation) is always preserved from the base agent.
+      </p>
+      <p>
+        Overrides survive plugin updates because they live in your project, not the plugin.
+        See the <a href="personalization.html#agent-overlays">Personalization page</a> for details.
+      </p>
+    </section>
+
 </DocsLayout>

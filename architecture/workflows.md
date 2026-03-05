@@ -1643,7 +1643,37 @@ The most common parallel scenario is a pipeline where one feature is being teste
     (builder-feat-004              worktree)
 ```
 
-### 5.5 Worktree Branch Naming
+### 5.5 Wave-Based Parallel Backlog Execution
+
+When `/run-backlog --parallel` is invoked, the Orchestrator uses `analyze-feature-dependencies.sh` to group features into dependency-ordered waves:
+
+```
+    WAVE-BASED PARALLEL EXECUTION
+    ==============================
+
+    Wave 1: [feat-001, feat-003, feat-005]  (no dependencies)
+      |-- Spawn up to max_parallel_agents Builders
+      |-- Each in its own worktree
+      |-- Wait for all to complete
+      |-- Merge branches sequentially
+      |-- Run combined quality gate
+
+    Wave 2: [feat-002, feat-004]  (depend on Wave 1 features)
+      |-- Same pattern
+      |-- Dependency features already merged
+
+    Wave 3: [feat-006]  (depends on Wave 2)
+      |-- Sequential (only 1 feature)
+```
+
+Key rules:
+- Features within a wave have no dependencies on each other
+- Waves are processed sequentially
+- `max_parallel_agents` (from config.json, default 3) caps concurrent Agents per wave
+- Merge coordination happens between waves (sequential merge of feature branches)
+- Cost guardrails multiply per-feature budget by concurrent feature count
+
+### 5.6 Worktree Branch Naming
 
 Feature branches are named after features, not agents. The worktree path identifies the agent, while the branch identifies the feature:
 

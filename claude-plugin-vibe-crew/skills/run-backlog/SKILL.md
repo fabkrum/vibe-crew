@@ -86,6 +86,28 @@ Do NOT proceed until this is resolved.
 
 ---
 
+## Step 1.5: Detect Parallel Mode
+
+Check if the user passed `--parallel` as an argument. Also read `config.json` for `concurrency.max_parallel_agents` (default: 3).
+
+If `--parallel` is specified:
+
+1. Run dependency analysis:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/analyze-feature-dependencies.sh"
+```
+
+2. The script outputs JSON with `waves` (groups of independent features), `parallel_possible` (boolean), and `max_parallelism` (max features per wave).
+
+3. If `parallel_possible` is `false`, inform the user and fall back to sequential processing.
+
+4. If `parallel_possible` is `true`, use the wave-based execution plan in Step 3 instead of sequential processing. Features within the same wave can be spawned as concurrent Agent tool calls (up to `max_parallel_agents`). Waves are processed sequentially — Wave 2 only starts after all Wave 1 features complete.
+
+5. For parallel execution, cost guardrails apply per-wave: multiply the per-feature budget by the number of concurrent features in the wave.
+
+---
+
 ## Step 2: Build Execution Plan
 
 ### Gather planned features sorted by priority
@@ -150,7 +172,9 @@ If there are no skipped features, omit the "Skipped" section.
 
 ## Step 3: Feature Processing Loop
 
-Process each feature in the execution plan **sequentially**. Only one feature may be in-progress at a time.
+**Sequential mode (default):** Process each feature in the execution plan sequentially. Only one feature may be in-progress at a time.
+
+**Parallel mode (`--parallel`):** Process features in waves. Within each wave, spawn up to `max_parallel_agents` concurrent Agent tool calls. Each Agent runs in its own worktree. After all Agents in a wave complete, merge their branches sequentially before starting the next wave. Between waves, run the merge coordination step (Step 3h).
 
 ### Step 3a: Claim Feature
 
@@ -655,8 +679,33 @@ Write to `.vibecrew/sessions/backlog-run-<timestamp>.json`:
 
 ## Rules
 
+### Step 3h: Merge Coordination (Parallel Mode Only)
+
+After all Agents in a wave complete, merge their feature branches sequentially into the main branch:
+
+1. For each completed feature in the wave (in priority order):
+   ```bash
+   git merge --no-ff "feature/<feature-id>" -m "merge(backlog): integrate <feature-name>"
+   ```
+
+2. If a merge conflict occurs:
+   - Attempt auto-resolution via `git merge --abort` and retry with `git merge -X theirs` for non-critical conflicts.
+   - If critical conflicts exist (both features modified the same function/component), mark the later feature as `blocked` with reason "merge conflict with <other-feature-id>".
+   - Continue merging remaining features.
+
+3. After all merges, run the quality gate once for the combined wave (not per-feature):
+   ```bash
+   npm test && npm run build && npm run lint
+   ```
+
+4. If the combined quality gate fails, identify which feature introduced the failure and mark it as blocked.
+
+---
+
+## Rules
+
 - **NEVER process features without foundation complete.** The phase gate is non-negotiable.
-- **NEVER exceed WIP limit.** Only 1 feature may be in-progress at a time in sequential mode. Always clear the active feature before starting the next one.
+- **NEVER exceed WIP limit.** Only 1 feature may be in-progress at a time in sequential mode. In parallel mode, up to `max_parallel_agents` features may be in-progress simultaneously within a single wave. Always clear active features before starting the next wave.
 - **Maximum 3 retry attempts** per quality gate failure and per test failure. After 3 failures, mark as blocked and move on. NEVER infinite loop.
 - **Always run the quality gate between features.** No feature moves to review without passing the quality gate.
 - **Respect dependency ordering.** If feature B depends on feature A, A must complete first. If A is blocked, skip B with reason "dependency not met".

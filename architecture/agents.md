@@ -22,7 +22,8 @@
 10. [Design Decisions](#10-design-decisions)
 11. [System Reviewer Agent](#11-system-reviewer-agent)
 12. [Per-Agent Persistent Memory](#12-per-agent-persistent-memory)
-13. [Agent Overlay Customization](#13-agent-overlay-customization)
+13. [Multi-Builder Coordination](#13-multi-builder-coordination-parallel-backlog)
+14. [Agent Overlay Customization](#14-agent-overlay-customization)
 
 ---
 
@@ -1313,7 +1314,22 @@ Each line in a `.jsonl` file is a JSON object:
 
 ---
 
-## 13. Agent Overlay Customization
+## 13. Multi-Builder Coordination (Parallel Backlog)
+
+When `/run-backlog --parallel` spawns multiple Builder Agents simultaneously, the Orchestrator coordinates them via wave-based execution:
+
+1. `analyze-feature-dependencies.sh` groups features into dependency-ordered waves
+2. Within each wave, up to `max_parallel_agents` Builder instances run concurrently in separate worktrees
+3. Each Builder claims its feature via `claim-task.sh` (atomic lock prevents double-claims)
+4. After all Builders in a wave complete, the Orchestrator merges branches sequentially
+5. Quality gate runs once per wave against the merged result
+6. Cost guardrails aggregate across concurrent Agents
+
+The Orchestrator NEVER runs more Builders than `config.json → concurrency.max_parallel_agents` (default: 3).
+
+---
+
+## 14. Agent Overlay Customization
 
 Users can customize agent behavior per-project without modifying plugin files. Override files in `.vibecrew/agent-overrides/<agent>.md` are merged with base agent prompts at delegation time.
 

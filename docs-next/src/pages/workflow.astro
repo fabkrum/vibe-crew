@@ -346,6 +346,17 @@ const backlogJson = `{
     <h3>Complexity-aware processing</h3>
     <p><code>/run-backlog</code> respects each feature's <code>complexity</code> setting. Trivial features skip Design and Review phases for faster throughput. Complex features with milestones use wave-based execution &mdash; independent milestones run in parallel via separate Agent calls, each with its own fresh context window. If Agent delegation is unavailable, milestones fall back to sequential processing with <code>/compact</code> between them.</p>
 
+    <h3>Parallel mode (<code>--parallel</code>)</h3>
+    <p>
+      Add <code>--parallel</code> to process independent features simultaneously:
+      <code>/run-backlog --parallel</code>. VibeCrew analyzes feature dependencies and groups
+      features into <strong>waves</strong>. Features within the same wave have no dependencies on
+      each other and can be built concurrently in separate worktrees (up to
+      <code>max_parallel_agents</code> from config.json, default 3). Waves are processed
+      sequentially &mdash; Wave 2 only starts after all Wave 1 features are merged and pass
+      the quality gate.
+    </p>
+
     <h3>Fresh-session execution</h3>
     <p>Each feature is executed in a <strong>completely fresh 200k context window</strong> via Agent tool delegation. The orchestrating <code>/run-backlog</code> session prepares a context bundle (feature spec + TDR + architecture + design system + CLAUDE.md + profile + analysis docs) and spawns a Builder agent with it. This eliminates context rot entirely &mdash; feature 5 gets the same quality as feature 1. If Agent delegation is unavailable, VibeCrew falls back to inline execution with <code>/compact</code> between features.</p>
 

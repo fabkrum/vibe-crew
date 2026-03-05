@@ -15,7 +15,7 @@ export const commands: Command[] = [
   { name: '/idea', category: 'Planning', purpose: '1-line capture to backlog.json with status "unplanned". Zero context cost', agent: 'None (script only)', tier: 'Any', args: '"text"' },
   { name: '/status', category: 'Planning', purpose: 'Full project dashboard: foundation, backlog, active feature, recent scores', agent: 'None (script only)', tier: 'Any', args: '' },
   { name: '/new-feature', category: 'Development', purpose: 'Branch creation, checkpoint, 6-phase tracking, WIP limit enforcement', agent: 'Builder', tier: '2', args: '"name"' },
-  { name: '/run-backlog', category: 'Development', purpose: 'Auto-execute features by priority via fresh-session Agent delegation. Stops on failure for human review', agent: 'Builder, Verifier', tier: '2', args: '' },
+  { name: '/run-backlog', category: 'Development', purpose: 'Auto-execute features by priority via fresh-session Agent delegation. Stops on failure for human review. Use --parallel for wave-based parallel execution of independent features', agent: 'Builder, Verifier', tier: '2', args: '--parallel' },
   { name: '/quick', category: 'Development', purpose: 'Fast-track small fixes: code, quality gate, commit. No backlog entry or feature branch', agent: 'None (inline)', tier: '2', args: '"description"' },
   { name: '/check', category: 'Development', purpose: 'Run tests + build + lint + type-check without modifying code', agent: 'Verifier', tier: '2', args: '' },
   { name: '/simplify', category: 'Quality', purpose: 'Read-only analysis: dead code, abstractions, API surface. You approve each change', agent: 'Code Simplifier', tier: '2', args: '' },

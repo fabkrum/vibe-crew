@@ -12,7 +12,138 @@ import '../styles/pages/releases.css';
   </section>
 
   <div class="version-nav">
-    <a href="#v1.0.0" class="latest">v1.0.0</a>
+    <a href="#v1.1.0" class="latest">v1.1.0</a>
+    <a href="#v1.0.0">v1.0.0</a>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- v1.1.0                                                       -->
+  <!-- ============================================================ -->
+  <div class="release-section" id="v1.1.0">
+    <div class="release-header">
+      <span class="release-version">v1.1.0</span>
+      <span class="release-date">2026-03-05</span>
+      <span class="release-badge latest">Latest</span>
+    </div>
+
+    <p class="release-summary">Competitive improvements informed by cross-framework analysis of Superpowers, GSD, BMAD, Ruflo, Ralph Loop, Kiro, Spec Kit, Composio, and Claude Squad.</p>
+
+    <div class="change-category">
+      <h3><span class="change-type added">Session 1 &mdash; Agent Prompts, Templates &amp; Scripts</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>A1: Centralized Agent Helpers</h4>
+      <ul class="file-list">
+        <li>New <code>agents/helpers.md</code> with named anchors for shared procedures (register, deregister, profile, state, budget, escalation)</li>
+        <li>All 14 agents reference helpers instead of duplicating instructions &mdash; 70-85% token savings on repeated patterns</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>A2: Pre-Execution Plan Verification Loop</h4>
+      <ul class="file-list">
+        <li>Builder validates plans against 4 criteria before execution: goal coverage, dependency integrity, context budget, EARS compliance</li>
+        <li>Max 3 iterations to fix gaps, then proceeds with warnings</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>A3: TDD Rationalization Resistance</h4>
+      <ul class="file-list">
+        <li>Structured resistance tables in TDD prompts that counter common excuses for skipping tests</li>
+        <li>Integrated into Builder and Verifier agent prompts</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>A4: EARS-Format Acceptance Criteria</h4>
+      <ul class="file-list">
+        <li>Plan template uses Easy Approach to Requirements Syntax for testable acceptance criteria</li>
+        <li>Five patterns: Ubiquitous, Event-driven, State-driven, Unwanted, Optional</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>A5: Status-Driven &ldquo;What Next?&rdquo;</h4>
+      <ul class="file-list">
+        <li><code>/status</code> now suggests the most appropriate next action based on current project state</li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-type added">Session 2 &mdash; Workflow &amp; Safety Enhancements</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>B1: Discuss Phase with Decision Taxonomy</h4>
+      <ul class="file-list">
+        <li>New Discuss phase between Plan and Code with three decision categories: Locked, Deferred, and Discretion</li>
+        <li>Locked decisions must be followed exactly; Deferred get <code>TODO(deferred)</code> comments; Discretion choices are documented with rationale</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>B2: PostToolUse Context Monitoring</h4>
+      <ul class="file-list">
+        <li>Debounced context monitoring hook fires every 5th tool use with warnings at 45%, 60%, and 80% thresholds</li>
+        <li>Complements the existing Stop hook for continuous protection against context exhaustion</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>B3: Pause &amp; Resume with Worktree Cleanup</h4>
+      <ul class="file-list">
+        <li><code>/pause</code> commits WIP, creates handoff, stores paused state; <code>/resume</code> restores from preserved branch</li>
+        <li>Clean worktree lifecycle management prevents orphaned branches</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>B4: Pre-Execution Test Coverage Mapping</h4>
+      <ul class="file-list">
+        <li>Nyquist-pattern mapping of existing test coverage to acceptance criteria before code is written</li>
+        <li>Generates Wave 0 test scaffolding tasks for uncovered criteria</li>
+      </ul>
+    </div>
+
+    <div class="change-category">
+      <h3><span class="change-type added">Session 3 &mdash; Agent Intelligence &amp; Parallel Execution</span></h3>
+    </div>
+
+    <div class="feature-group">
+      <h4>C1: Per-Agent Persistent Memory</h4>
+      <ul class="file-list">
+        <li>JSONL-based memory in <code>.vibecrew/memory/&lt;agent&gt;/&lt;domain&gt;.jsonl</code> with TTL-based auto-pruning</li>
+        <li>Agents accumulate patterns, preferences, and lessons across sessions without bloating CLAUDE.md</li>
+        <li>Enforces 50-entry and 100KB limits per domain with duplicate detection</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>C2: Agent Overlay Customization</h4>
+      <ul class="file-list">
+        <li>Per-project agent overrides in <code>.vibecrew/agent-overrides/&lt;agent&gt;.md</code> survive plugin updates</li>
+        <li>Section-matching merge: matching headings replace, new headings append, frontmatter preserved</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>C3: Intent-Based Skill Triggering</h4>
+      <ul class="file-list">
+        <li>Natural language pattern matching maps user intent to all 38 slash commands</li>
+        <li>Session Startup agent detects intent from conversation and suggests the right skill</li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <h4>C4: Parallel Backlog Execution</h4>
+      <ul class="file-list">
+        <li><code>/run-backlog --parallel</code> analyzes feature dependencies and groups independent features into waves</li>
+        <li>Features within a wave execute simultaneously in separate Agent contexts and worktrees</li>
+        <li>Topological sort respects <code>depends_on</code> relationships; circular dependencies handled gracefully</li>
+      </ul>
+    </div>
   </div>
 
   <!-- ============================================================ -->

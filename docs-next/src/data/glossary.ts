@@ -283,4 +283,24 @@ export const glossary: GlossaryTerm[] = [
     category: 'tool',
     definition: 'A dual-hook system that tracks context window usage during a session. A PostToolUse hook runs every 5th tool use (debounced for performance) and injects warnings at 45%, 60%, and 80% thresholds. A complementary Stop hook provides a safety net at task boundaries. Together they prevent context exhaustion before it causes degraded output.',
   },
+  {
+    term: 'Agent Memory',
+    category: 'agent',
+    definition: 'Persistent per-agent knowledge stored as JSONL files in <code>.vibecrew/memory/&lt;agent&gt;/&lt;domain&gt;.jsonl</code>. Each entry has a TTL (default 30 days) and is auto-pruned on read. Agents write patterns, preferences, and lessons learned to memory, then load relevant entries in future sessions &mdash; building expertise over time without bloating CLAUDE.md.',
+  },
+  {
+    term: 'Agent Overlay',
+    category: 'agent',
+    definition: 'A per-project customization file at <code>.vibecrew/agent-overrides/&lt;agent&gt;.md</code> that modifies an agent&rsquo;s behavior without editing the plugin itself. Sections with matching headings replace the base agent&rsquo;s sections; new headings are appended. Frontmatter (model, tools, isolation) is preserved and cannot be overridden. Survives plugin updates.',
+  },
+  {
+    term: 'Intent Map',
+    category: 'tool',
+    definition: 'A mapping file (<code>templates/intent-map.md</code>) that connects natural language phrases to slash commands. Instead of remembering exact command names, users can describe what they want (&ldquo;I want to check my code&rdquo;) and the Session Startup agent matches it to the right skill (<code>/check</code>). Covers all 38 skills across 8 categories.',
+  },
+  {
+    term: 'Parallel Backlog',
+    category: 'workflow',
+    definition: 'An execution mode for <code>/run-backlog --parallel</code> that analyzes feature dependencies and groups independent features into waves. Features within the same wave run simultaneously in separate Agent contexts and worktrees, while waves execute sequentially. Uses topological sorting to respect <code>depends_on</code> relationships.',
+  },
 ];

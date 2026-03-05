@@ -106,6 +106,8 @@ When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
   releases/                     # Release notes data (JSON)
   handoffs/                     # Cross-session handoff documents
   workflows/                    # Reusable workflow templates (/replay)
+  memory/                       # Per-agent persistent memory (JSONL, TTL-pruned)
+  agent-overrides/              # Per-project agent prompt overrides
 ```
 
 ### Cross-Project Telemetry
@@ -114,7 +116,7 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/fix-issue`, `/sync-issues`, `/simplify`, `/apply-simplifications`, `/reconsider`, `/recover-state`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`, `/quick "description"`, `/install-skill`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog [--parallel]`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/fix-issue`, `/sync-issues`, `/simplify`, `/apply-simplifications`, `/reconsider`, `/recover-state`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`, `/quick "description"`, `/install-skill`
 
 ### User Profile System
 

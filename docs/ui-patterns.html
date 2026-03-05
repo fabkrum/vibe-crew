@@ -1,0 +1,1119 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — UI Pattern Guide</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.pattern-illustration[data-astro-cid-mn3m2azv]{flex-shrink:0;width:200px;height:120px}.pattern-illustration[data-astro-cid-mn3m2azv] svg{width:100%;height:100%;display:block}.category-nav[data-astro-cid-kxfk33mh]{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem;padding:1rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm)}.category-nav[data-astro-cid-kxfk33mh] a[data-astro-cid-kxfk33mh]{padding:.35rem .75rem;border-radius:var(--radius-xs);font-size:.82rem;font-weight:600;color:var(--color-text-secondary);text-decoration:none;transition:all .15s;white-space:nowrap}.category-nav[data-astro-cid-kxfk33mh] a[data-astro-cid-kxfk33mh]:hover{background:var(--color-accent-bg);color:var(--color-accent);text-decoration:none}.category-heading[data-astro-cid-kxfk33mh]{font-size:1.5rem;font-weight:800;color:var(--color-accent);border-bottom:1px solid var(--color-border);padding-bottom:.5rem;margin-bottom:.5rem;margin-top:2rem}.category-description[data-astro-cid-kxfk33mh]{margin:0 0 1.25rem;font-size:.92rem;color:var(--color-text-secondary);line-height:1.6}.pattern-list[data-astro-cid-kxfk33mh]{margin:0 0 2rem}.pattern-entry[data-astro-cid-kxfk33mh]{display:flex;align-items:flex-start;gap:1.25rem;padding:1rem 0;border-bottom:1px solid var(--color-border-subtle)}.pattern-entry[data-astro-cid-kxfk33mh]:last-child{border-bottom:none}.pattern-text[data-astro-cid-kxfk33mh]{flex:1;min-width:0}@media(max-width:640px){.pattern-entry[data-astro-cid-kxfk33mh]{flex-direction:column;gap:.75rem}}dt[data-astro-cid-kxfk33mh]{font-weight:700;font-size:1rem;color:var(--color-text);margin-bottom:.25rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}.shadcn-badge[data-astro-cid-kxfk33mh]{display:inline-block;padding:.15rem .5rem;font-size:.72rem;font-weight:600;font-family:var(--font-mono);background:var(--color-accent-bg);color:var(--color-accent);border-radius:var(--radius-xs);letter-spacing:.02em}.aliases[data-astro-cid-kxfk33mh]{margin:0 0 .25rem;font-size:.82rem;color:var(--color-text-muted);font-style:italic}dd[data-astro-cid-kxfk33mh]{margin:0;font-size:.92rem;color:var(--color-text-secondary);line-height:1.6}.docs-link[data-astro-cid-kxfk33mh]{display:inline-block;margin-top:.25rem;font-size:.82rem;font-weight:600;color:var(--color-accent);text-decoration:none}.docs-link[data-astro-cid-kxfk33mh]:hover{text-decoration:underline}.tips-section[data-astro-cid-kxfk33mh]{margin-top:3rem}.tips-table[data-astro-cid-kxfk33mh]{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.92rem}.tips-table[data-astro-cid-kxfk33mh] th[data-astro-cid-kxfk33mh]{text-align:left;padding:.6rem .75rem;background:var(--color-surface);border-bottom:2px solid var(--color-border);font-weight:700;color:var(--color-text)}.tips-table[data-astro-cid-kxfk33mh] td[data-astro-cid-kxfk33mh]{padding:.6rem .75rem;border-bottom:1px solid var(--color-border-subtle);color:var(--color-text-secondary)}.tips-table[data-astro-cid-kxfk33mh] tr[data-astro-cid-kxfk33mh]:last-child td[data-astro-cid-kxfk33mh]{border-bottom:none}.further-reading[data-astro-cid-kxfk33mh]{margin-top:3rem}.further-reading[data-astro-cid-kxfk33mh] ul[data-astro-cid-kxfk33mh]{list-style:none;padding:0;margin:1rem 0 0}.further-reading[data-astro-cid-kxfk33mh] li[data-astro-cid-kxfk33mh]{padding:.5rem 0;border-bottom:1px solid var(--color-border-subtle);font-size:.92rem;line-height:1.6}.further-reading[data-astro-cid-kxfk33mh] li[data-astro-cid-kxfk33mh]:last-child{border-bottom:none}.further-reading[data-astro-cid-kxfk33mh] a[data-astro-cid-kxfk33mh]{font-weight:600;color:var(--color-accent);text-decoration:none}.further-reading[data-astro-cid-kxfk33mh] a[data-astro-cid-kxfk33mh]:hover{text-decoration:underline}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link active"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Reference</span>  <span class="separator">/</span> <span>UI Pattern Guide</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"Reference"},{"@type":"ListItem","position":3,"name":"UI Pattern Guide"}]}</script>  <h2 data-astro-cid-kxfk33mh>UI Pattern Guide</h2> <p data-astro-cid-kxfk33mh>A plain-language reference for every UI component and pattern VibeCrew uses. Click a category to jump to that section.</p> <nav class="category-nav" aria-label="Pattern categories" data-astro-cid-kxfk33mh> <a href="#cat-input" data-astro-cid-kxfk33mh>Collecting User Input</a><a href="#cat-data" data-astro-cid-kxfk33mh>Displaying Data</a><a href="#cat-navigation" data-astro-cid-kxfk33mh>Navigation</a><a href="#cat-feedback" data-astro-cid-kxfk33mh>Feedback &amp; Status</a><a href="#cat-overlay" data-astro-cid-kxfk33mh>Overlays &amp; Modals</a><a href="#cat-layout" data-astro-cid-kxfk33mh>Layout</a><a href="#cat-interaction" data-astro-cid-kxfk33mh>Interaction &amp; Performance Patterns</a><a href="#cat-keyboard" data-astro-cid-kxfk33mh>Keyboard &amp; Focus Patterns</a> </nav> <section class="pattern-section" id="cat-input" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Collecting User Input</h3> <p class="category-description" data-astro-cid-kxfk33mh>Form controls and input components for collecting user data — from simple text fields to complex date pickers and file uploads.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="button" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="16" width="160" height="40" rx="8" style="fill: var(--color-accent)"/>
+  <text x="100" y="41" text-anchor="middle" style="fill: #fff; font-size: 13px; font-weight: 600; font-family: var(--font-sans)">Submit</text>
+  <rect x="20" y="68" width="76" height="32" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="58" y="88" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 11px; font-family: var(--font-sans)">Cancel</text>
+  <rect x="104" y="68" width="76" height="32" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <text x="142" y="88" text-anchor="middle" style="fill: var(--color-accent); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Outline</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Button <span class="shadcn-badge" data-astro-cid-kxfk33mh>button</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: action, CTA, submit button</p> <dd data-astro-cid-kxfk33mh>A clickable element that triggers an action. Use for primary actions, form submissions, and confirmations.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/button" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="checkbox" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="18" width="18" height="18" rx="4" style="fill: var(--color-accent)"/>
+  <polyline points="25,27 29,31 35,23" style="stroke: #fff; fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="46" y="31" style="fill: var(--color-text); font-size: 12px; font-family: var(--font-sans)">Dark mode</text>
+  <rect x="20" y="48" width="18" height="18" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="46" y="61" style="fill: var(--color-text-secondary); font-size: 12px; font-family: var(--font-sans)">Notifications</text>
+  <rect x="20" y="78" width="18" height="18" rx="4" style="fill: var(--color-accent)"/>
+  <polyline points="25,87 29,91 35,83" style="stroke: #fff; fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="46" y="91" style="fill: var(--color-text); font-size: 12px; font-family: var(--font-sans)">Auto-save</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Checkbox <span class="shadcn-badge" data-astro-cid-kxfk33mh>checkbox</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: tick box, multi-select option</p> <dd data-astro-cid-kxfk33mh>A box you tick to turn an option on or off. Use for multiple selections from a list or boolean toggles.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/checkbox" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="combobox" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="12" width="160" height="32" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="32" y="32" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">Austr</text>
+  <line x1="56" y1="22" x2="56" y2="34" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+  <polyline points="164,24 168,30 172,24" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="20" y="46" width="160" height="66" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="26" y="52" width="148" height="24" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="36" y="68" style="fill: var(--color-accent); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Australia</text>
+  <text x="36" y="92" style="fill: var(--color-text-secondary); font-size: 11px; font-family: var(--font-sans)">Austria</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Combobox <span class="shadcn-badge" data-astro-cid-kxfk33mh>command + popover</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: autocomplete, type-ahead, searchable dropdown</p> <dd data-astro-cid-kxfk33mh>A search box that filters and suggests options as you type. Use for selecting from large lists (10+ items) like countries or tags.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/combobox" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="date-picker" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="8" width="160" height="104" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="60" y="26" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">March 2026</text>
+  <polyline points="38,22 34,22" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="166,22 170,22" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="28" y1="34" x2="172" y2="34" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="36" y="48" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">Mo</text>
+  <text x="56" y="48" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">Tu</text>
+  <text x="76" y="48" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">We</text>
+  <text x="96" y="48" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">Th</text>
+  <text x="116" y="48" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">Fr</text>
+  <text x="136" y="48" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">Sa</text>
+  <text x="156" y="48" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">Su</text>
+  <text x="40" y="64" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">1</text>
+  <text x="60" y="64" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">2</text>
+  <circle cx="82" cy="60" r="10" style="fill: var(--color-accent)"/>
+  <text x="79" y="64" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-mono)">3</text>
+  <text x="100" y="64" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">4</text>
+  <text x="120" y="64" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">5</text>
+  <text x="140" y="64" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">6</text>
+  <text x="160" y="64" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">7</text>
+  <text x="40" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">8</text>
+  <text x="60" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">9</text>
+  <text x="78" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">10</text>
+  <text x="98" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">11</text>
+  <text x="118" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">12</text>
+  <text x="138" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">13</text>
+  <text x="158" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">14</text>
+  <text x="40" y="96" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">15</text>
+  <text x="58" y="96" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">16</text>
+  <text x="78" y="96" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">17</text>
+  <text x="98" y="96" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">18</text>
+  <text x="118" y="96" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">19</text>
+  <text x="138" y="96" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">20</text>
+  <text x="158" y="96" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-mono)">21</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Date Picker <span class="shadcn-badge" data-astro-cid-kxfk33mh>calendar + popover</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: calendar input, date selector</p> <dd data-astro-cid-kxfk33mh>A calendar popup for picking dates. Use for date selection, date ranges, and scheduling.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/date-picker" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="form" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="6" width="168" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="30" y="26" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Name</text>
+  <rect x="30" y="30" width="140" height="20" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="30" y="66" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Email</text>
+  <rect x="30" y="70" width="140" height="20" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <rect x="104" y="96" width="66" height="20" rx="5" style="fill: var(--color-accent)"/>
+  <text x="137" y="110" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Submit</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Form <span class="shadcn-badge" data-astro-cid-kxfk33mh>form</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: input form, data entry</p> <dd data-astro-cid-kxfk33mh>A group of fields the user fills in and submits. The foundation for any structured data collection.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/form" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="input" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="28" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Email address</text>
+  <rect x="20" y="34" width="160" height="36" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="32" y="57" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-sans)">you@example.com</text>
+  <text x="20" y="88" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">We'll never share your email.</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Input <span class="shadcn-badge" data-astro-cid-kxfk33mh>input</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: text field, text box</p> <dd data-astro-cid-kxfk33mh>A text field where users type short text like names, emails, or search queries.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/input" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="input-otp" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="100" y="24" text-anchor="middle" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Enter verification code</text>
+  <rect x="16" y="36" width="28" height="36" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="30" y="60" text-anchor="middle" style="fill: var(--color-text); font-size: 16px; font-weight: 700; font-family: var(--font-mono)">4</text>
+  <rect x="50" y="36" width="28" height="36" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="64" y="60" text-anchor="middle" style="fill: var(--color-text); font-size: 16px; font-weight: 700; font-family: var(--font-mono)">8</text>
+  <rect x="84" y="36" width="28" height="36" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="98" y="60" text-anchor="middle" style="fill: var(--color-text); font-size: 16px; font-weight: 700; font-family: var(--font-mono)">2</text>
+  <circle cx="100" cy="42" r="3" style="fill: var(--color-accent)"/>
+  <rect x="120" y="36" width="28" height="36" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface-2)" stroke-width="2"/>
+  <line x1="134" y1="44" x2="134" y2="64" style="stroke: var(--color-accent)" stroke-width="1.5"/>
+  <rect x="154" y="36" width="28" height="36" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="100" y="92" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">Didn't receive it? Resend</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Input OTP <span class="shadcn-badge" data-astro-cid-kxfk33mh>input-otp</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: verification code, PIN input</p> <dd data-astro-cid-kxfk33mh>Separate boxes for entering a verification code. Auto-advances on digit entry and supports paste.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/input-otp" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="label" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="28" style="fill: var(--color-text); font-size: 12px; font-weight: 600; font-family: var(--font-sans)">Full Name</text>
+  <text x="82" y="28" style="fill: var(--color-red); font-size: 12px; font-weight: 600; font-family: var(--font-sans)">*</text>
+  <rect x="20" y="36" width="160" height="32" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="32" y="56" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">Jane Doe</text>
+  <text x="20" y="84" style="fill: var(--color-text-muted); font-size: 12px; font-weight: 600; font-family: var(--font-sans)">Bio</text>
+  <text x="38" y="84" style="fill: var(--color-text-muted); font-size: 10px; font-style: italic; font-family: var(--font-sans)">(optional)</text>
+  <rect x="20" y="90" width="160" height="20" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Label <span class="shadcn-badge" data-astro-cid-kxfk33mh>label</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: field label, input label</p> <dd data-astro-cid-kxfk33mh>Text that describes what a form field is for. Every input must have one.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/label" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="radio-group" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="22" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Select plan</text>
+  <circle cx="32" cy="44" r="8" style="stroke: var(--color-accent); fill: none" stroke-width="1.5"/>
+  <circle cx="32" cy="44" r="4.5" style="fill: var(--color-accent)"/>
+  <text x="48" y="48" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Free</text>
+  <text x="48" y="60" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Basic features</text>
+  <circle cx="32" cy="80" r="8" style="stroke: var(--color-border); fill: none" stroke-width="1.5"/>
+  <text x="48" y="84" style="fill: var(--color-text-secondary); font-size: 11px; font-family: var(--font-sans)">Pro — $10/mo</text>
+  <circle cx="32" cy="104" r="8" style="stroke: var(--color-border); fill: none" stroke-width="1.5"/>
+  <text x="48" y="108" style="fill: var(--color-text-secondary); font-size: 11px; font-family: var(--font-sans)">Team — $25/mo</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Radio Group <span class="shadcn-badge" data-astro-cid-kxfk33mh>radio-group</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: single select, option picker</p> <dd data-astro-cid-kxfk33mh>A set of options where you pick exactly one. Use for mutually exclusive choices with 2–5 visible options.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/radio-group" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="select" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="22" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Country</text>
+  <rect x="20" y="28" width="160" height="32" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="32" y="49" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">United States</text>
+  <polyline points="162,40 168,46 174,40" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="20" y="62" width="160" height="50" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="26" y="66" width="148" height="18" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="34" y="79" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">United States</text>
+  <text x="34" y="100" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">United Kingdom</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Select <span class="shadcn-badge" data-astro-cid-kxfk33mh>select</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: dropdown, picker, select box</p> <dd data-astro-cid-kxfk33mh>A dropdown list for picking one option from 3–10 choices where space is limited.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/select" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="slider" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="24" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Price range</text>
+  <text x="170" y="24" style="fill: var(--color-accent); font-size: 11px; font-weight: 600; font-family: var(--font-mono)">$75</text>
+  <rect x="20" y="40" width="160" height="6" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="40" width="100" height="6" rx="3" style="fill: var(--color-accent)"/>
+  <circle cx="120" cy="43" r="10" style="fill: var(--color-accent); stroke: var(--color-surface); " stroke-width="2"/>
+  <text x="20" y="72" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-mono)">$0</text>
+  <text x="164" y="72" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-mono)">$100</text>
+  <text x="20" y="98" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Volume</text>
+  <rect x="20" y="104" width="160" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="104" width="60" height="4" rx="2" style="fill: var(--color-accent)"/>
+  <circle cx="80" cy="106" r="7" style="fill: var(--color-accent); stroke: var(--color-surface)" stroke-width="2"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Slider <span class="shadcn-badge" data-astro-cid-kxfk33mh>slider</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: range slider, range input</p> <dd data-astro-cid-kxfk33mh>A draggable handle for picking a value within a range, like price or volume.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/slider" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="switch" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="44" height="24" rx="12" style="fill: var(--color-accent)"/>
+  <circle cx="52" cy="32" r="9" style="fill: #fff"/>
+  <text x="76" y="36" style="fill: var(--color-text); font-size: 12px; font-weight: 600; font-family: var(--font-sans)">Dark mode</text>
+  <text x="150" y="36" style="fill: var(--color-green); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">On</text>
+  <rect x="20" y="60" width="44" height="24" rx="12" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <circle cx="32" cy="72" r="9" style="fill: var(--color-text-muted)"/>
+  <text x="76" y="76" style="fill: var(--color-text-secondary); font-size: 12px; font-family: var(--font-sans)">Notifications</text>
+  <text x="150" y="76" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">Off</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Switch <span class="shadcn-badge" data-astro-cid-kxfk33mh>switch</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: toggle, on/off switch</p> <dd data-astro-cid-kxfk33mh>An on/off toggle that takes effect immediately. Use for settings like dark mode or notifications.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/switch" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="textarea" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="22" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Description</text>
+  <rect x="20" y="28" width="160" height="72" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="30" y="46" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">This product is designed</text>
+  <text x="30" y="60" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">for teams who need a</text>
+  <text x="30" y="74" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">fast and reliable…</text>
+  <line x1="170" y1="92" x2="176" y2="98" style="stroke: var(--color-text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="164" y1="92" x2="176" y2="92" style="stroke: var(--color-text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="20" y="114" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">128 / 500 characters</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Textarea <span class="shadcn-badge" data-astro-cid-kxfk33mh>textarea</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: text area, message box</p> <dd data-astro-cid-kxfk33mh>A larger text box for writing longer content like descriptions, comments, or messages.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/textarea" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="toggle" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="28" width="36" height="36" rx="8" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <text x="38" y="52" text-anchor="middle" style="fill: var(--color-accent); font-size: 16px; font-weight: 700; font-family: var(--font-sans)">B</text>
+  <rect x="64" y="28" width="36" height="36" rx="8" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="82" y="52" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 16px; font-style: italic; font-family: var(--font-sans)">I</text>
+  <rect x="108" y="28" width="36" height="36" rx="8" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="126" y="52" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 16px; text-decoration: underline; font-family: var(--font-sans)">U</text>
+  <rect x="152" y="28" width="36" height="36" rx="8" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="170" y="52" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 16px; text-decoration: line-through; font-family: var(--font-sans)">S</text>
+  <text x="20" y="86" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">Stays pressed until toggled off</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Toggle <span class="shadcn-badge" data-astro-cid-kxfk33mh>toggle</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: toggle button, pressed button</p> <dd data-astro-cid-kxfk33mh>A button that stays pressed or released. Use for formatting tools like bold/italic or view mode switching.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/toggle" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="toggle-group" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="24" width="168" height="36" rx="8" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <rect x="20" y="28" width="52" height="28" rx="6" style="fill: var(--color-accent)"/>
+  <text x="46" y="46" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Grid</text>
+  <text x="96" y="46" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">List</text>
+  <text x="152" y="46" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Table</text>
+  <text x="16" y="80" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Pick one or multiple from a segmented set</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Toggle Group <span class="shadcn-badge" data-astro-cid-kxfk33mh>toggle-group</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: button group, segmented control</p> <dd data-astro-cid-kxfk33mh>A row of buttons where you pick one (or multiple). Use for view switchers or filter groups.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/toggle-group" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="file-upload" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="12" width="160" height="76" rx="8" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <line x1="100" y1="36" x2="100" y2="56" style="stroke: var(--color-accent)" stroke-width="2" stroke-linecap="round"/>
+  <polyline points="90,42 100,32 110,42" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="100" y="72" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Drag files here or click to browse</text>
+  <text x="100" y="84" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">PNG, JPG up to 10 MB</text>
+  <rect x="20" y="96" width="100" height="16" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="28" y="108" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">photo.png</text>
+  <text x="96" y="108" style="fill: var(--color-green); font-size: 9px; font-family: var(--font-sans)">✓</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> File Upload  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: file picker, drag and drop</p> <dd data-astro-cid-kxfk33mh>A button or drop zone for uploading files. Always provide a button alternative alongside drag-and-drop.</dd>  </div> </div> </dl> </section><section class="pattern-section" id="cat-data" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Displaying Data</h3> <p class="category-description" data-astro-cid-kxfk33mh>Components for presenting information — tables, charts, cards, and loading states that make data scannable and understandable.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="avatar" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="46" cy="48" r="26" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <text x="46" y="54" text-anchor="middle" style="fill: var(--color-accent); font-size: 18px; font-weight: 700; font-family: var(--font-sans)">JD</text>
+  <circle cx="108" cy="48" r="26" style="fill: var(--color-blue-dim); stroke: var(--color-blue)" stroke-width="1.5"/>
+  <text x="108" y="54" text-anchor="middle" style="fill: var(--color-blue); font-size: 18px; font-weight: 700; font-family: var(--font-sans)">AS</text>
+  <circle cx="162" cy="48" r="20" style="fill: var(--color-green-dim); stroke: var(--color-green)" stroke-width="1.5"/>
+  <text x="162" y="54" text-anchor="middle" style="fill: var(--color-green); font-size: 14px; font-weight: 700; font-family: var(--font-sans)">MK</text>
+  <circle cx="66" cy="68" r="6" style="fill: var(--color-green); stroke: var(--color-surface)" stroke-width="2"/>
+  <text x="46" y="92" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">With initials</text>
+  <text x="162" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Small</text>
+  <text x="108" y="92" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Fallback</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Avatar <span class="shadcn-badge" data-astro-cid-kxfk33mh>avatar</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: profile picture, user icon</p> <dd data-astro-cid-kxfk33mh>A small circular image showing a user&#39;s photo or initials.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/avatar" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="badge" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="52" height="22" rx="11" style="fill: var(--color-green-dim)"/>
+  <text x="46" y="35" text-anchor="middle" style="fill: var(--color-green); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Active</text>
+  <rect x="80" y="20" width="60" height="22" rx="11" style="fill: var(--color-amber-dim)"/>
+  <text x="110" y="35" text-anchor="middle" style="fill: var(--color-amber); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Pending</text>
+  <rect x="148" y="20" width="40" height="22" rx="11" style="fill: var(--color-red-dim)"/>
+  <text x="168" y="35" text-anchor="middle" style="fill: var(--color-red); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Error</text>
+  <rect x="20" y="54" width="50" height="22" rx="11" style="fill: var(--color-accent-bg)"/>
+  <text x="45" y="69" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Admin</text>
+  <rect x="78" y="54" width="36" height="22" rx="11" style="fill: var(--color-blue-dim)"/>
+  <text x="96" y="69" text-anchor="middle" style="fill: var(--color-blue); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">New</text>
+  <rect x="122" y="54" width="56" height="22" rx="11" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="150" y="69" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Outline</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Badge <span class="shadcn-badge" data-astro-cid-kxfk33mh>badge</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: tag, chip, pill, status indicator</p> <dd data-astro-cid-kxfk33mh>A small colored label showing status or category. Use for status indicators, counts, or tags.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/badge" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="calendar" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="6" width="168" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="16" y="6" width="168" height="24" rx="8" style="fill: var(--color-accent-bg)"/>
+  <rect x="16" y="22" width="168" height="8" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="22" text-anchor="middle" style="fill: var(--color-accent); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">March 2026</text>
+  <text x="36" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">M</text>
+  <text x="60" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">T</text>
+  <text x="84" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">W</text>
+  <text x="108" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">T</text>
+  <text x="132" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">F</text>
+  <text x="156" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">S</text>
+  <text x="36" y="62" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">23</text>
+  <text x="60" y="62" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-mono)">24</text>
+  <text x="84" y="62" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">1</text>
+  <text x="108" y="62" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">2</text>
+  <circle cx="132" cy="59" r="9" style="fill: var(--color-accent)"/>
+  <text x="132" y="62" text-anchor="middle" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-mono)">3</text>
+  <text x="156" y="62" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">4</text>
+  <text x="36" y="78" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">5</text>
+  <text x="60" y="78" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">6</text>
+  <text x="84" y="78" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">7</text>
+  <rect x="99" y="70" width="42" height="14" rx="7" style="fill: var(--color-accent-bg)"/>
+  <text x="108" y="80" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-mono)">8</text>
+  <text x="132" y="80" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-family: var(--font-mono)">9</text>
+  <text x="156" y="78" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">10</text>
+  <text x="36" y="94" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">11</text>
+  <text x="60" y="94" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">12</text>
+  <text x="84" y="94" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">13</text>
+  <text x="108" y="94" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">14</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Calendar <span class="shadcn-badge" data-astro-cid-kxfk33mh>calendar</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: month view, date grid</p> <dd data-astro-cid-kxfk33mh>A month grid showing dates. Use for inline date selection or scheduling displays.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/calendar" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="card" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="6" width="168" height="108" rx="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="16" y="6" width="168" height="36" rx="10" style="fill: var(--color-accent-bg)"/>
+  <rect x="16" y="32" width="168" height="10" style="fill: var(--color-accent-bg)"/>
+  <text x="30" y="30" style="fill: var(--color-accent); font-size: 12px; font-weight: 700; font-family: var(--font-sans)">Product Card</text>
+  <text x="30" y="58" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Widget Pro</text>
+  <text x="30" y="72" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">A powerful tool for teams</text>
+  <rect x="30" y="84" width="48" height="18" rx="5" style="fill: var(--color-accent)"/>
+  <text x="54" y="97" text-anchor="middle" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-sans)">$29/mo</text>
+  <rect x="84" y="84" width="52" height="18" rx="5" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="110" y="97" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Details</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Card <span class="shadcn-badge" data-astro-cid-kxfk33mh>card</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: content card, tile, panel</p> <dd data-astro-cid-kxfk33mh>A bordered box containing related information. Use for product displays, content previews, or dashboard widgets.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/card" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="carousel" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="36" y="8" width="128" height="80" rx="8" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <text x="100" y="52" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-sans)">Slide 2 of 4</text>
+  <circle cx="16" cy="48" r="12" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <polyline points="19,44 14,48 19,52" style="stroke: var(--color-text-secondary); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="184" cy="48" r="12" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <polyline points="181,44 186,48 181,52" style="stroke: var(--color-text-secondary); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="88" cy="100" r="4" style="fill: var(--color-surface-3)"/>
+  <circle cx="100" cy="100" r="4" style="fill: var(--color-accent)"/>
+  <circle cx="112" cy="100" r="4" style="fill: var(--color-surface-3)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Carousel <span class="shadcn-badge" data-astro-cid-kxfk33mh>carousel</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: image slider, slideshow, gallery</p> <dd data-astro-cid-kxfk33mh>A sliding gallery showing one item at a time with navigation arrows. Use sparingly.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/carousel" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="chart" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="30" y1="10" x2="30" y2="100" style="stroke: var(--color-border)" stroke-width="1"/>
+  <line x1="30" y1="100" x2="185" y2="100" style="stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="40" y="70" width="22" height="30" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="0.5"/>
+  <rect x="70" y="40" width="22" height="60" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="0.5"/>
+  <rect x="100" y="55" width="22" height="45" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="0.5"/>
+  <rect x="130" y="20" width="22" height="80" rx="3" style="fill: var(--color-accent)"/>
+  <rect x="160" y="50" width="22" height="50" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="0.5"/>
+  <text x="51" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Jan</text>
+  <text x="81" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Feb</text>
+  <text x="111" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Mar</text>
+  <text x="141" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Apr</text>
+  <text x="171" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">May</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Chart <span class="shadcn-badge" data-astro-cid-kxfk33mh>chart</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: graph, visualization, data chart</p> <dd data-astro-cid-kxfk33mh>A visual graph showing data trends and comparisons. Always provide a table alternative for accessibility.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/chart" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="data-table" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="6" width="176" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="12" y="6" width="176" height="24" rx="8" style="fill: var(--color-surface-2)"/>
+  <rect x="12" y="22" width="176" height="8" style="fill: var(--color-surface-2)"/>
+  <text x="24" y="22" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Name ↓</text>
+  <text x="80" y="22" style="fill: var(--color-text-muted); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Role</text>
+  <text x="130" y="22" style="fill: var(--color-text-muted); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Status</text>
+  <rect x="22" y="36" width="10" height="10" rx="2" style="fill: var(--color-accent)"/>
+  <polyline points="24,41 27,44 30,39" style="stroke: #fff; fill: none" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="38" y="44" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-sans)">Alice</text>
+  <text x="80" y="44" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Admin</text>
+  <rect x="130" y="36" width="36" height="12" rx="6" style="fill: var(--color-green-dim)"/>
+  <text x="137" y="45" style="fill: var(--color-green); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Active</text>
+  <line x1="16" y1="52" x2="184" y2="52" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <rect x="22" y="58" width="10" height="10" rx="2" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="38" y="66" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-sans)">Bob</text>
+  <text x="80" y="66" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Editor</text>
+  <rect x="130" y="58" width="36" height="12" rx="6" style="fill: var(--color-green-dim)"/>
+  <text x="137" y="67" style="fill: var(--color-green); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Active</text>
+  <line x1="16" y1="74" x2="184" y2="74" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <rect x="22" y="80" width="10" height="10" rx="2" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="38" y="88" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-sans)">Carol</text>
+  <text x="80" y="88" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Viewer</text>
+  <rect x="130" y="80" width="44" height="12" rx="6" style="fill: var(--color-amber-dim)"/>
+  <text x="137" y="89" style="fill: var(--color-amber); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Pending</text>
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">1 – 3 of 24 rows</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Data Table <span class="shadcn-badge" data-astro-cid-kxfk33mh>table</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: sortable table, data grid</p> <dd data-astro-cid-kxfk33mh>A table with sorting, filtering, and pagination. Use for structured data with 5+ columns.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/data-table" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="table" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="6" width="176" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="12" y="6" width="176" height="22" rx="8" style="fill: var(--color-surface-2)"/>
+  <rect x="12" y="22" width="176" height="6" style="fill: var(--color-surface-2)"/>
+  <text x="24" y="21" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Feature</text>
+  <text x="90" y="21" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Free</text>
+  <text x="132" y="21" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Pro</text>
+  <text x="24" y="44" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Storage</text>
+  <text x="90" y="44" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">5 GB</text>
+  <text x="132" y="44" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">100 GB</text>
+  <line x1="16" y1="50" x2="184" y2="50" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="24" y="64" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Users</text>
+  <text x="90" y="64" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">1</text>
+  <text x="132" y="64" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Unlimited</text>
+  <line x1="16" y1="70" x2="184" y2="70" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="24" y="84" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Support</text>
+  <text x="90" y="84" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Email</text>
+  <text x="132" y="84" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Priority</text>
+  <line x1="16" y1="90" x2="184" y2="90" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="24" y="104" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">API Access</text>
+  <text x="90" y="104" style="fill: var(--color-red); font-size: 9px; font-family: var(--font-sans)">—</text>
+  <text x="132" y="104" style="fill: var(--color-green); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">✓</text>
+  <line x1="82" y1="12" x2="82" y2="110" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <line x1="124" y1="12" x2="124" y2="110" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Table <span class="shadcn-badge" data-astro-cid-kxfk33mh>table</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: static table, simple table</p> <dd data-astro-cid-kxfk33mh>A simple table for displaying rows of data. Use for static displays, comparison tables, or pricing.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/table" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="progress" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="22" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Uploading…</text>
+  <text x="170" y="22" style="fill: var(--color-accent); font-size: 11px; font-weight: 600; font-family: var(--font-mono)">72%</text>
+  <rect x="20" y="30" width="160" height="10" rx="5" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="30" width="115" height="10" rx="5" style="fill: var(--color-accent)"/>
+  <text x="20" y="62" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Step 2 of 4</text>
+  <rect x="20" y="70" width="36" height="6" rx="3" style="fill: var(--color-green)"/>
+  <rect x="60" y="70" width="36" height="6" rx="3" style="fill: var(--color-accent)"/>
+  <rect x="100" y="70" width="36" height="6" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="140" y="70" width="36" height="6" rx="3" style="fill: var(--color-surface-2)"/>
+  <text x="20" y="100" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Loading…</text>
+  <rect x="20" y="106" width="160" height="6" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="20" y="106" width="80" height="6" rx="3" style="fill: var(--color-accent); opacity: 0.6"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Progress <span class="shadcn-badge" data-astro-cid-kxfk33mh>progress</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: progress bar, loading bar</p> <dd data-astro-cid-kxfk33mh>A bar showing how far along a task is. Use for file uploads, multi-step processes, or loading.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/progress" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="skeleton" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="36" cy="30" r="16" style="fill: var(--color-surface-3)"/>
+  <rect x="62" y="18" width="100" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="62" y="34" width="70" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="20" y="58" width="160" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="20" y="76" width="140" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="20" y="94" width="120" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <line x1="60" y1="10" x2="100" y2="110" style="stroke: var(--color-accent); opacity: 0.06" stroke-width="30"/>
+  <line x1="110" y1="10" x2="150" y2="110" style="stroke: var(--color-accent); opacity: 0.04" stroke-width="30"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Skeleton <span class="shadcn-badge" data-astro-cid-kxfk33mh>skeleton</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: placeholder, shimmer, loading skeleton</p> <dd data-astro-cid-kxfk33mh>A placeholder shape that shows where content will appear while loading. Replaces spinners for layout-aware loading.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/skeleton" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div> </dl> </section><section class="pattern-section" id="cat-navigation" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Navigation</h3> <p class="category-description" data-astro-cid-kxfk33mh>Wayfinding components that help users move through your application — menus, tabs, sidebars, and breadcrumbs.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="breadcrumb" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="36" width="168" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="28" y="54" style="fill: var(--color-accent); font-size: 11px; font-family: var(--font-sans)">Home</text>
+  <text x="62" y="54" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-sans)">/</text>
+  <text x="72" y="54" style="fill: var(--color-accent); font-size: 11px; font-family: var(--font-sans)">Products</text>
+  <text x="126" y="54" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-sans)">/</text>
+  <text x="136" y="54" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Details</text>
+  <text x="100" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Shows where you are in the site hierarchy</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Breadcrumb <span class="shadcn-badge" data-astro-cid-kxfk33mh>breadcrumb</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: path, trail, page path</p> <dd data-astro-cid-kxfk33mh>A trail showing where you are in the site hierarchy.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/breadcrumb" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="command" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="6" width="160" height="108" rx="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="30" y="14" width="140" height="28" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="42" y="32" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">Type a command…</text>
+  <rect x="140" y="20" width="24" height="16" rx="4" style="fill: var(--color-surface-3)"/>
+  <text x="146" y="32" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘K</text>
+  <line x1="30" y1="48" x2="170" y2="48" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="36" y="60" style="fill: var(--color-text-muted); font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-sans)">Actions</text>
+  <rect x="30" y="66" width="140" height="20" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="42" y="80" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Create new project</text>
+  <text x="42" y="98" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Open settings</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Command <span class="shadcn-badge" data-astro-cid-kxfk33mh>command</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: command palette, spotlight, Cmd+K</p> <dd data-astro-cid-kxfk33mh>A keyboard-triggered search box for finding actions and content quickly (Ctrl/Cmd+K).</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/command" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="dropdown-menu" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="8" width="80" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="40" y="26" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">Actions</text>
+  <polyline points="84,20 88,24 92,20" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="20" y="40" width="120" height="72" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="58" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Edit</text>
+  <text x="116" y="58" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘E</text>
+  <line x1="28" y1="64" x2="132" y2="64" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="32" y="78" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Duplicate</text>
+  <text x="116" y="78" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘D</text>
+  <line x1="28" y1="84" x2="132" y2="84" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="32" y="100" style="fill: var(--color-red); font-size: 10px; font-family: var(--font-sans)">Delete</text>
+  <text x="116" y="100" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌫</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Dropdown Menu <span class="shadcn-badge" data-astro-cid-kxfk33mh>dropdown-menu</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: action menu, kebab menu, three-dot menu</p> <dd data-astro-cid-kxfk33mh>A menu that appears when you click a button, showing a list of actions.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/dropdown-menu" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="menubar" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="14" width="176" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="16" y="18" width="36" height="20" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="24" y="32" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">File</text>
+  <text x="62" y="32" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Edit</text>
+  <text x="92" y="32" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">View</text>
+  <text x="122" y="32" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Help</text>
+  <rect x="12" y="44" width="100" height="68" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="24" y="62" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">New File</text>
+  <text x="86" y="62" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘N</text>
+  <rect x="16" y="68" width="92" height="18" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="24" y="81" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Open</text>
+  <text x="86" y="81" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘O</text>
+  <line x1="18" y1="90" x2="108" y2="90" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="24" y="104" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Save</text>
+  <text x="86" y="104" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘S</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Menubar <span class="shadcn-badge" data-astro-cid-kxfk33mh>menubar</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: top menu, application menu</p> <dd data-astro-cid-kxfk33mh>A horizontal bar of menus like File, Edit, View — for complex desktop-style applications.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/menubar" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="navigation-menu" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="14" width="176" height="28" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <circle cx="26" cy="28" r="8" style="fill: var(--color-accent)"/>
+  <text x="44" y="32" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Home</text>
+  <text x="78" y="32" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Products ▾</text>
+  <text x="138" y="32" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">About</text>
+  <rect x="60" y="44" width="128" height="68" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="72" y="62" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">All Products</text>
+  <text x="72" y="76" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Browse our full catalog</text>
+  <line x1="68" y1="84" x2="180" y2="84" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="72" y="98" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">New Releases</text>
+  <text x="72" y="108" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Just arrived this week</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Navigation Menu <span class="shadcn-badge" data-astro-cid-kxfk33mh>navigation-menu</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: nav bar, site nav, mega menu</p> <dd data-astro-cid-kxfk33mh>The main site navigation with links and optional dropdown sections.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/navigation-menu" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="pagination" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="100" y="28" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">Showing 1 – 10 of 97 results</text>
+  <rect x="16" y="40" width="28" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <polyline points="32,50 27,54 32,58" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="50" y="40" width="28" height="28" rx="6" style="fill: var(--color-accent)"/>
+  <text x="64" y="58" text-anchor="middle" style="fill: #fff; font-size: 11px; font-weight: 600; font-family: var(--font-mono)">1</text>
+  <rect x="84" y="40" width="28" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="98" y="58" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 11px; font-family: var(--font-mono)">2</text>
+  <rect x="118" y="40" width="28" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="132" y="58" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 11px; font-family: var(--font-mono)">3</text>
+  <text x="155" y="58" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-mono)">…</text>
+  <rect x="164" y="40" width="28" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <polyline points="176,50 181,54 176,58" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="100" y="90" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Default choice over infinite scroll</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Pagination <span class="shadcn-badge" data-astro-cid-kxfk33mh>pagination</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: page numbers, pager</p> <dd data-astro-cid-kxfk33mh>Page numbers for navigating between pages of a long list. Default choice over infinite scroll.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/pagination" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="sidebar" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="6" width="68" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="88" y="6" width="100" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="20" y="14" width="20" height="20" rx="5" style="fill: var(--color-accent)"/>
+  <text x="44" y="28" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">App</text>
+  <line x1="18" y1="40" x2="74" y2="40" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <rect x="18" y="46" width="56" height="18" rx="4" style="fill: var(--color-accent-bg)"/>
+  <rect x="18" y="48" width="3" height="14" rx="1.5" style="fill: var(--color-accent)"/>
+  <text x="28" y="58" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Dashboard</text>
+  <text x="28" y="78" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Projects</text>
+  <text x="28" y="94" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Settings</text>
+  <rect x="96" y="16" width="84" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="96" y="30" width="76" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="96" y="44" width="60" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Sidebar <span class="shadcn-badge" data-astro-cid-kxfk33mh>sidebar</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: side nav, navigation drawer, left panel</p> <dd data-astro-cid-kxfk33mh>A navigation panel on the left side of the screen. Use for dashboard apps and admin panels.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/sidebar" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="tabs" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="6" width="176" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <line x1="12" y1="36" x2="188" y2="36" style="stroke: var(--color-border)" stroke-width="1"/>
+  <text x="32" y="26" style="fill: var(--color-accent); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">General</text>
+  <line x1="28" y1="36" x2="78" y2="36" style="stroke: var(--color-accent)" stroke-width="2"/>
+  <text x="96" y="26" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-sans)">Security</text>
+  <text x="156" y="26" style="fill: var(--color-text-muted); font-size: 11px; font-family: var(--font-sans)">Billing</text>
+  <rect x="24" y="48" width="120" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="24" y="64" width="100" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="24" y="80" width="140" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="24" y="96" width="80" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Tabs <span class="shadcn-badge" data-astro-cid-kxfk33mh>tabs</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: tab bar, tabbed interface</p> <dd data-astro-cid-kxfk33mh>Tabs along the top that switch between different content sections.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/tabs" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div> </dl> </section><section class="pattern-section" id="cat-feedback" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Feedback &amp; Status</h3> <p class="category-description" data-astro-cid-kxfk33mh>Status indicators and notifications that keep users informed about what happened, what went wrong, or what to do next.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="alert" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="10" width="176" height="40" rx="8" style="fill: var(--color-blue-dim); stroke: var(--color-blue)" stroke-width="1"/>
+  <circle cx="30" cy="30" r="9" style="stroke: var(--color-blue); fill: none" stroke-width="1.5"/>
+  <text x="27" y="34" style="fill: var(--color-blue); font-size: 11px; font-weight: 700; font-family: var(--font-sans)">i</text>
+  <text x="46" y="28" style="fill: var(--color-blue); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Info: Your trial expires soon</text>
+  <text x="46" y="40" style="fill: var(--color-blue); font-size: 9px; font-family: var(--font-sans)">Upgrade to keep access</text>
+  <rect x="12" y="58" width="176" height="24" rx="6" style="fill: var(--color-red-dim); stroke: var(--color-red)" stroke-width="1"/>
+  <text x="26" y="74" style="fill: var(--color-red); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Error: Invalid email address</text>
+  <rect x="12" y="90" width="176" height="24" rx="6" style="fill: var(--color-green-dim); stroke: var(--color-green)" stroke-width="1"/>
+  <text x="26" y="106" style="fill: var(--color-green); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Success: Profile updated</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Alert <span class="shadcn-badge" data-astro-cid-kxfk33mh>alert</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: banner, notice, warning</p> <dd data-astro-cid-kxfk33mh>A colored banner showing an important inline message — warnings, success, errors, or info.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/alert" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="alert-dialog" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-bg); opacity: 0.5"/>
+  <rect x="24" y="16" width="152" height="88" rx="10" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <circle cx="48" cy="42" r="10" style="fill: var(--color-amber-dim)"/>
+  <text x="44" y="46" style="fill: var(--color-amber); font-size: 13px; font-weight: 700; font-family: var(--font-sans)">!</text>
+  <text x="64" y="46" style="fill: var(--color-text); font-size: 12px; font-weight: 700; font-family: var(--font-sans)">Are you sure?</text>
+  <text x="40" y="64" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">This action cannot be undone.</text>
+  <rect x="40" y="78" width="60" height="20" rx="5" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="56" y="92" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Cancel</text>
+  <rect x="106" y="78" width="60" height="20" rx="5" style="fill: var(--color-red)"/>
+  <text x="122" y="92" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Delete</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Alert Dialog <span class="shadcn-badge" data-astro-cid-kxfk33mh>alert-dialog</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: confirmation dialog, are-you-sure</p> <dd data-astro-cid-kxfk33mh>A popup asking you to confirm a significant action before it happens. Use for destructive or irreversible operations.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/alert-dialog" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="sonner--toast-" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1" opacity="0.3"/>
+  <rect x="40" y="8" width="148" height="46" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <circle cx="60" cy="26" r="10" style="fill: var(--color-green-dim)"/>
+  <polyline points="55,26 59,30 66,22" style="stroke: var(--color-green); fill: none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="76" y="24" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Changes saved</text>
+  <text x="76" y="38" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Your profile was updated.</text>
+  <rect x="44" y="46" width="140" height="3" rx="1.5" style="fill: var(--color-surface-2)"/>
+  <rect x="44" y="46" width="90" height="3" rx="1.5" style="fill: var(--color-green)"/>
+  <rect x="50" y="62" width="140" height="42" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1" opacity="0.6"/>
+  <text x="66" y="80" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans); opacity: 0.6">Email sent successfully</text>
+  <rect x="58" y="108" width="128" height="8" rx="4" style="fill: var(--color-surface-2); opacity: 0.3"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Sonner (Toast) <span class="shadcn-badge" data-astro-cid-kxfk33mh>sonner</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: toast, snackbar, notification popup</p> <dd data-astro-cid-kxfk33mh>A small popup message that appears briefly and disappears. Use for action confirmations and non-critical errors.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/sonner" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="empty-state" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="6" width="168" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <circle cx="100" cy="38" r="16" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5"/>
+  <rect x="92" y="30" width="16" height="16" rx="2" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.2"/>
+  <line x1="96" y1="50" x2="104" y2="42" style="stroke: var(--color-text-muted)" stroke-width="1.2"/>
+  <text x="100" y="68" text-anchor="middle" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">No projects yet</text>
+  <text x="100" y="82" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Create your first project to get started.</text>
+  <rect x="64" y="92" width="72" height="20" rx="5" style="fill: var(--color-accent)"/>
+  <text x="100" y="106" text-anchor="middle" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-sans)">New Project</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Empty State  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: zero state, no data, blank state</p> <dd data-astro-cid-kxfk33mh>A friendly message shown when there&#39;s no data yet, with a clear next step. Never show a blank page.</dd>  </div> </div> </dl> </section><section class="pattern-section" id="cat-overlay" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Overlays &amp; Modals</h3> <p class="category-description" data-astro-cid-kxfk33mh>Floating layers that appear on top of the page — dialogs, drawers, tooltips, and popovers for focused interactions.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="dialog" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-bg); opacity: 0.5"/>
+  <rect x="24" y="14" width="152" height="92" rx="10" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="40" y="36" style="fill: var(--color-text); font-size: 12px; font-weight: 700; font-family: var(--font-sans)">Edit Profile</text>
+  <circle cx="160" cy="30" r="8" style="fill: var(--color-surface-2)"/>
+  <line x1="156" y1="26" x2="164" y2="34" style="stroke: var(--color-text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="164" y1="26" x2="156" y2="34" style="stroke: var(--color-text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="36" y1="44" x2="164" y2="44" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="40" y="60" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Name</text>
+  <rect x="40" y="64" width="120" height="20" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <rect x="40" y="90" width="56" height="18" rx="5" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="54" y="103" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Cancel</text>
+  <rect x="102" y="90" width="56" height="18" rx="5" style="fill: var(--color-accent)"/>
+  <text x="120" y="103" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Save</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Dialog <span class="shadcn-badge" data-astro-cid-kxfk33mh>dialog</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: modal, popup, lightbox</p> <dd data-astro-cid-kxfk33mh>A popup window that appears on top of the page with a backdrop. Focus is trapped inside until closed.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/dialog" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="drawer" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1" opacity="0.3"/>
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-bg); opacity: 0.4"/>
+  <rect x="8" y="46" width="184" height="70" rx="12" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <rect x="88" y="52" width="24" height="4" rx="2" style="fill: var(--color-text-muted)"/>
+  <text x="100" y="72" text-anchor="middle" style="fill: var(--color-text); font-size: 12px; font-weight: 700; font-family: var(--font-sans)">Filter Options</text>
+  <rect x="24" y="82" width="76" height="20" rx="5" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="42" y="96" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Category ▾</text>
+  <rect x="108" y="82" width="76" height="20" rx="5" style="fill: var(--color-accent)"/>
+  <text x="128" y="96" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Apply</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Drawer <span class="shadcn-badge" data-astro-cid-kxfk33mh>drawer</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: bottom sheet, slide-out panel</p> <dd data-astro-cid-kxfk33mh>A panel that slides in from the bottom or side. Great for mobile-friendly detail views and filters.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/drawer" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="popover" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="76" width="60" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="34" y="94" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">Colors</text>
+  <polygon points="44,76 50,68 56,76" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="14" y="8" width="100" height="60" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="26" y="26" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Pick a color</text>
+  <circle cx="32" cy="40" r="8" style="fill: var(--color-red)"/>
+  <circle cx="52" cy="40" r="8" style="fill: var(--color-accent); stroke: var(--color-text)" stroke-width="2"/>
+  <circle cx="72" cy="40" r="8" style="fill: var(--color-green)"/>
+  <circle cx="92" cy="40" r="8" style="fill: var(--color-blue)"/>
+  <rect x="26" y="54" width="76" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Popover <span class="shadcn-badge" data-astro-cid-kxfk33mh>popover</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: popup, floating panel, bubble</p> <dd data-astro-cid-kxfk33mh>A small floating panel next to a button. Use for rich tooltips, mini-forms, or extra controls.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/popover" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="sheet" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1" opacity="0.3"/>
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-bg); opacity: 0.4"/>
+  <rect x="80" y="4" width="112" height="112" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="96" y="26" style="fill: var(--color-text); font-size: 12px; font-weight: 700; font-family: var(--font-sans)">Details</text>
+  <circle cx="176" cy="20" r="7" style="fill: var(--color-surface-2)"/>
+  <line x1="173" y1="17" x2="179" y2="23" style="stroke: var(--color-text-muted)" stroke-width="1.3" stroke-linecap="round"/>
+  <line x1="179" y1="17" x2="173" y2="23" style="stroke: var(--color-text-muted)" stroke-width="1.3" stroke-linecap="round"/>
+  <line x1="90" y1="34" x2="184" y2="34" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="96" y="42" width="80" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="96" y="56" width="64" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="96" y="70" width="72" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="96" y="92" width="80" height="18" rx="5" style="fill: var(--color-accent)"/>
+  <text x="136" y="105" text-anchor="middle" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Save Changes</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Sheet <span class="shadcn-badge" data-astro-cid-kxfk33mh>sheet</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: side panel, slide-over, off-canvas</p> <dd data-astro-cid-kxfk33mh>A panel that slides in from the side. Use for settings, detail views, or shopping carts.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/sheet" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="tooltip" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="72" y="64" width="56" height="36" rx="8" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="100" y="88" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 18px; font-family: var(--font-sans)">🗑</text>
+  <rect x="52" y="14" width="96" height="32" rx="6" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="100" y="34" text-anchor="middle" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-sans)">Delete item</text>
+  <polygon points="94,46 100,54 106,46" style="fill: var(--color-surface-3)"/>
+  <rect x="110" y="22" width="30" height="14" rx="3" style="fill: var(--color-surface-2)"/>
+  <text x="116" y="33" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Del</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Tooltip <span class="shadcn-badge" data-astro-cid-kxfk33mh>tooltip</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: hint, hover tip, info bubble</p> <dd data-astro-cid-kxfk33mh>A small label that appears on hover or focus. Use for icon-only buttons or additional context.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/tooltip" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="context-menu" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="60" y="20" width="44" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="60" y="34" width="36" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <circle cx="80" cy="50" r="3" style="fill: var(--color-accent)"/>
+  <rect x="80" y="40" width="108" height="72" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="92" y="58" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Cut</text>
+  <text x="164" y="58" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘X</text>
+  <text x="92" y="74" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Copy</text>
+  <text x="164" y="74" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘C</text>
+  <rect x="84" y="80" width="100" height="18" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="92" y="93" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Paste</text>
+  <text x="164" y="93" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">⌘V</text>
+  <line x1="88" y1="102" x2="180" y2="102" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="92" y="112" style="fill: var(--color-red); font-size: 10px; font-family: var(--font-sans)">Delete</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Context Menu <span class="shadcn-badge" data-astro-cid-kxfk33mh>context-menu</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: right-click menu</p> <dd data-astro-cid-kxfk33mh>A menu that appears on right-click. Use for desktop app-like interfaces. Always provide alternative access.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/context-menu" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="hover-card" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="20" y="26" style="fill: var(--color-accent); font-size: 11px; text-decoration: underline; font-family: var(--font-sans)">@janedoe</text>
+  <rect x="20" y="32" width="148" height="76" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <circle cx="44" cy="56" r="14" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1"/>
+  <text x="44" y="60" text-anchor="middle" style="fill: var(--color-accent); font-size: 11px; font-weight: 700; font-family: var(--font-sans)">JD</text>
+  <text x="66" y="52" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Jane Doe</text>
+  <text x="66" y="64" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Product Designer</text>
+  <line x1="28" y1="76" x2="160" y2="76" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="36" y="90" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">12 repos</text>
+  <text x="88" y="90" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">48 followers</text>
+  <rect x="36" y="96" width="56" height="16" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="48" y="108" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Follow</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Hover Card <span class="shadcn-badge" data-astro-cid-kxfk33mh>hover-card</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: preview card, link preview</p> <dd data-astro-cid-kxfk33mh>A preview card that appears when you hover over a link. Use for user profiles or entity summaries.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/hover-card" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div> </dl> </section><section class="pattern-section" id="cat-layout" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Layout</h3> <p class="category-description" data-astro-cid-kxfk33mh>Structural components that organize page content — accordions, resizable panels, scroll areas, and content separators.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="accordion" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="6" width="168" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="22" y="12" width="156" height="38" rx="5" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="32" y="26" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Getting Started</text>
+  <polyline points="162,22 166,28 170,22" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="32" y1="32" x2="168" y2="32" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <rect x="32" y="36" width="120" height="5" rx="2.5" style="fill: var(--color-surface-3)"/>
+  <rect x="32" y="44" width="96" height="5" rx="2.5" style="fill: var(--color-surface-3)"/>
+  <rect x="22" y="56" width="156" height="20" rx="5" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="32" y="70" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Configuration</text>
+  <polyline points="166,62 170,66 166,70" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="22" y="80" width="156" height="20" rx="5" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="32" y="94" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Advanced</text>
+  <polyline points="166,86 170,90 166,94" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Accordion <span class="shadcn-badge" data-astro-cid-kxfk33mh>accordion</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: collapsible section, expandable, FAQ</p> <dd data-astro-cid-kxfk33mh>Sections that expand and collapse when you click their headings. Use for FAQs or grouped settings.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/accordion" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="aspect-ratio" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="90" rx="8" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1.5"/>
+  <line x1="20" y1="10" x2="180" y2="100" style="stroke: var(--color-border-subtle)" stroke-width="0.5" stroke-dasharray="4 3"/>
+  <rect x="40" y="34" width="40" height="40" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="60" y="58" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-mono)">1:1</text>
+  <rect x="100" y="24" width="64" height="36" rx="4" style="stroke: var(--color-blue); fill: var(--color-blue-dim)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="132" y="46" text-anchor="middle" style="fill: var(--color-blue); font-size: 8px; font-weight: 600; font-family: var(--font-mono)">16:9</text>
+  <rect x="100" y="68" width="48" height="26" rx="4" style="stroke: var(--color-green); fill: var(--color-green-dim)" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="124" y="85" text-anchor="middle" style="fill: var(--color-green); font-size: 8px; font-weight: 600; font-family: var(--font-mono)">4:3</text>
+  <text x="100" y="114" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Maintains proportions at any screen size</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Aspect Ratio <span class="shadcn-badge" data-astro-cid-kxfk33mh>aspect-ratio</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: responsive container, fixed ratio box</p> <dd data-astro-cid-kxfk33mh>A container that keeps images or videos at the right proportions regardless of screen size.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/aspect-ratio" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="collapsible" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="8" width="168" height="30" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="30" y="27" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Advanced Options</text>
+  <polyline points="164,18 168,24 172,18" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="16" y="42" width="168" height="68" rx="6" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="28" y="60" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Enable caching</text>
+  <rect x="148" y="50" width="28" height="14" rx="7" style="fill: var(--color-accent)"/>
+  <circle cx="168" cy="57" r="5" style="fill: #fff"/>
+  <text x="28" y="82" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Debug mode</text>
+  <rect x="148" y="72" width="28" height="14" rx="7" style="fill: var(--color-surface-3)"/>
+  <circle cx="156" cy="79" r="5" style="fill: var(--color-text-muted)"/>
+  <text x="28" y="102" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Timeout (ms)</text>
+  <rect x="120" y="92" width="50" height="16" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="130" y="104" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-mono)">3000</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Collapsible <span class="shadcn-badge" data-astro-cid-kxfk33mh>collapsible</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: disclosure, show/hide, toggle section</p> <dd data-astro-cid-kxfk33mh>A section you can expand or collapse with a single toggle. Use for optional details or advanced options.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/collapsible" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="resizable" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="6" width="176" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="16" y="10" width="80" height="100" rx="4" style="fill: var(--color-surface-2)"/>
+  <text x="28" y="28" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Sidebar</text>
+  <rect x="28" y="36" width="56" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="28" y="48" width="48" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="28" y="60" width="52" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="98" y="10" width="8" height="100" rx="4" style="fill: var(--color-surface-2)"/>
+  <circle cx="102" cy="52" r="2" style="fill: var(--color-text-muted)"/>
+  <circle cx="102" cy="60" r="2" style="fill: var(--color-text-muted)"/>
+  <circle cx="102" cy="68" r="2" style="fill: var(--color-text-muted)"/>
+  <polyline points="94,56 90,60 94,64" style="stroke: var(--color-accent); fill: none" stroke-width="1" stroke-linecap="round"/>
+  <polyline points="110,56 114,60 110,64" style="stroke: var(--color-accent); fill: none" stroke-width="1" stroke-linecap="round"/>
+  <rect x="108" y="10" width="76" height="100" rx="4" style="fill: var(--color-surface-2)"/>
+  <text x="120" y="28" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Content</text>
+  <rect x="120" y="36" width="52" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="120" y="48" width="44" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Resizable <span class="shadcn-badge" data-astro-cid-kxfk33mh>resizable</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: split pane, draggable divider</p> <dd data-astro-cid-kxfk33mh>A divider between panels you can drag to resize. Use for code editors or comparison views.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/resizable" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="scroll-area" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="6" width="168" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="28" y="24" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Item 1</text>
+  <line x1="24" y1="30" x2="168" y2="30" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="28" y="44" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Item 2</text>
+  <line x1="24" y1="50" x2="168" y2="50" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="28" y="64" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Item 3</text>
+  <line x1="24" y1="70" x2="168" y2="70" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="28" y="84" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Item 4</text>
+  <line x1="24" y1="90" x2="168" y2="90" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="28" y="104" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">Item 5…</text>
+  <rect x="174" y="14" width="4" height="40" rx="2" style="fill: var(--color-accent); opacity: 0.6"/>
+  <rect x="174" y="58" width="4" height="48" rx="2" style="fill: var(--color-surface-3)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Scroll Area <span class="shadcn-badge" data-astro-cid-kxfk33mh>scroll-area</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: scrollable container, custom scrollbar</p> <dd data-astro-cid-kxfk33mh>A container with custom scrollbars for overflowing content like chat windows or code blocks.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/scroll-area" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="separator" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="100" y="24" text-anchor="middle" style="fill: var(--color-text); font-size: 12px; font-weight: 600; font-family: var(--font-sans)">Account Settings</text>
+  <text x="100" y="40" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">Manage your preferences</text>
+  <line x1="20" y1="52" x2="180" y2="52" style="stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="28" y="72" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">General</text>
+  <text x="80" y="72" style="fill: var(--color-border)" font-size="10px">|</text>
+  <text x="92" y="72" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Privacy</text>
+  <text x="132" y="72" style="fill: var(--color-border)" font-size="10px">|</text>
+  <text x="144" y="72" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Billing</text>
+  <line x1="20" y1="84" x2="180" y2="84" style="stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="30" y="94" width="140" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Separator <span class="shadcn-badge" data-astro-cid-kxfk33mh>separator</span> </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: divider, horizontal rule</p> <dd data-astro-cid-kxfk33mh>A visual line separating sections of content. Use between content groups or menu sections.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/separator" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div> </dl> </section><section class="pattern-section" id="cat-interaction" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Interaction &amp; Performance Patterns</h3> <p class="category-description" data-astro-cid-kxfk33mh>Performance and UX patterns that make interfaces feel fast and responsive — lazy loading, caching strategies, and optimistic updates.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="optimistic-ui" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="10" width="168" height="56" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="32" y="32" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Great post!</text>
+  <rect x="32" y="40" width="56" height="20" rx="10" style="fill: var(--color-red-dim); stroke: var(--color-red)" stroke-width="1"/>
+  <path d="M52,44 C52,42 54,40 56,40 C58,40 60,42 60,44 C60,42 62,40 64,40 C66,40 68,42 68,44 C68,48 60,52 60,52 C60,52 52,48 52,44Z" style="fill: var(--color-red)"/>
+  <text x="72" y="54" style="fill: var(--color-red); font-size: 9px; font-weight: 600; font-family: var(--font-mono)">24</text>
+  <polyline points="142,42 146,48 156,36" style="stroke: var(--color-green); fill: none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="148" cy="42" r="12" style="stroke: var(--color-green); fill: none" stroke-width="1"/>
+  <text x="100" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">saving...</text>
+  <rect x="80" y="92" width="40" height="3" rx="1.5" style="fill: var(--color-surface-2)"/>
+  <rect x="80" y="92" width="24" height="3" rx="1.5" style="fill: var(--color-accent); opacity: 0.6"/>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Instant feedback, background sync</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Optimistic UI  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: instant update, optimistic update</p> <dd data-astro-cid-kxfk33mh>Updates the interface instantly when you perform an action. If something goes wrong on the server, it quietly retries or rolls back.</dd> <a class="docs-link" href="https://simonhearne.com/2021/optimistic-ui-patterns/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="skeleton-loading" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="36" cy="30" r="18" style="fill: var(--color-surface-3)"/>
+  <rect x="64" y="16" width="110" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="64" y="34" width="80" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="20" y="60" width="160" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="20" y="78" width="140" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <rect x="20" y="96" width="100" height="10" rx="5" style="fill: var(--color-surface-3)"/>
+  <line x1="50" y1="8" x2="90" y2="114" style="stroke: var(--color-accent); opacity: 0.06" stroke-width="30"/>
+  <line x1="110" y1="8" x2="150" y2="114" style="stroke: var(--color-accent); opacity: 0.04" stroke-width="30"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Skeleton Loading  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: placeholder loading, shimmer</p> <dd data-astro-cid-kxfk33mh>Shows the page shape while content loads, so the layout doesn&#39;t jump around when data arrives.</dd> <a class="docs-link" href="https://ui.shadcn.com/docs/components/skeleton" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="import-on-interaction" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="48" y="10" width="104" height="28" rx="6" style="fill: var(--color-accent)"/>
+  <text x="100" y="28" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Open Editor</text>
+  <rect x="30" y="48" width="140" height="60" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="42" y="60" width="80" height="8" rx="2" style="fill: var(--color-surface-3); opacity: 0.5"/>
+  <rect x="42" y="74" width="64" height="8" rx="2" style="fill: var(--color-surface-3); opacity: 0.5"/>
+  <rect x="42" y="88" width="96" height="8" rx="2" style="fill: var(--color-surface-3); opacity: 0.5"/>
+  <path d="M148,72 L148,64 L154,68Z" style="fill: var(--color-amber); opacity: 0.7"/>
+  <line x1="146" y1="62" x2="146" y2="74" style="stroke: var(--color-amber); opacity: 0.7" stroke-width="2" stroke-linecap="round"/>
+  <text x="100" y="118" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Heavy code loads only on click</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Import on Interaction  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: lazy load on click, deferred import</p> <dd data-astro-cid-kxfk33mh>Heavy components like date pickers or rich text editors load only when you click on them.</dd> <a class="docs-link" href="https://www.patterns.dev/vanilla/import-on-interaction" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="import-on-visibility" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="8" width="140" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="38" y="14" width="80" height="8" rx="4" style="fill: var(--color-surface-3)"/>
+  <rect x="30" y="34" width="140" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="38" y="40" width="60" height="8" rx="4" style="fill: var(--color-surface-3)"/>
+  <line x1="16" y1="62" x2="184" y2="62" style="stroke: var(--color-accent)" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="186" y="60" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-mono)">viewport</text>
+  <rect x="30" y="70" width="140" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1" opacity="0.35"/>
+  <rect x="38" y="76" width="100" height="8" rx="4" style="fill: var(--color-surface-3); opacity: 0.35"/>
+  <rect x="30" y="96" width="140" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1" opacity="0.2"/>
+  <rect x="38" y="102" width="72" height="8" rx="4" style="fill: var(--color-surface-3); opacity: 0.2"/>
+  <polyline points="96,66 100,72 104,66" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Import on Visibility  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: lazy load on scroll, below-fold loading</p> <dd data-astro-cid-kxfk33mh>Content below the fold loads as you scroll to it, keeping the initial page load fast.</dd> <a class="docs-link" href="https://www.patterns.dev/vanilla/import-on-visibility" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="list-virtualization" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="6" width="120" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="48" y="12" width="104" height="14" rx="3" style="fill: var(--color-surface-2)" opacity="0.2"/>
+  <rect x="56" y="16" width="60" height="6" rx="3" style="fill: var(--color-surface-3); opacity: 0.2"/>
+  <rect x="48" y="30" width="104" height="14" rx="3" style="fill: var(--color-surface-2)" opacity="0.35"/>
+  <rect x="56" y="34" width="72" height="6" rx="3" style="fill: var(--color-surface-3); opacity: 0.35"/>
+  <line x1="44" y1="48" x2="156" y2="48" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="3 2"/>
+  <rect x="48" y="52" width="104" height="14" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="0.5"/>
+  <rect x="56" y="56" width="80" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="48" y="70" width="104" height="14" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="0.5"/>
+  <rect x="56" y="74" width="64" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="48" y="88" width="104" height="14" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="0.5"/>
+  <rect x="56" y="92" width="88" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <line x1="44" y1="106" x2="156" y2="106" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="3 2"/>
+  <text x="20" y="76" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-mono)" transform="rotate(-90 20 76)">visible</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> List Virtualization  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: virtual scroll, windowed list</p> <dd data-astro-cid-kxfk33mh>Only renders the rows you can see — handles thousands of items smoothly without slowing down.</dd> <a class="docs-link" href="https://www.patterns.dev/vanilla/virtual-lists" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="prefetch-on-hover" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="10" width="168" height="28" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="32" y="28" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Home</text>
+  <rect x="72" y="14" width="60" height="20" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="82" y="28" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Products</text>
+  <text x="148" y="28" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">About</text>
+  <path d="M110,42 L110,36 L116,42 L110,42Z M110,42 L116,42 L116,48" style="fill: var(--color-text-muted); stroke: var(--color-text-muted)" stroke-width="0.8"/>
+  <circle cx="140" cy="52" r="6" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <text x="140" y="70" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-mono)">prefetch</text>
+  <rect x="30" y="82" width="140" height="30" rx="6" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1" stroke-dasharray="4 3"/>
+  <rect x="40" y="88" width="80" height="6" rx="3" style="fill: var(--color-surface-3); opacity: 0.5"/>
+  <rect x="40" y="100" width="60" height="6" rx="3" style="fill: var(--color-surface-3); opacity: 0.5"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Prefetch on Hover  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: link prefetch, predictive loading</p> <dd data-astro-cid-kxfk33mh>Starts loading the next page when you hover a link, so navigation feels instant.</dd> <a class="docs-link" href="https://instant.page/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="progressive-disclosure" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="6" width="160" height="108" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="32" y="24" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Name</text>
+  <rect x="32" y="28" width="136" height="16" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="32" y="58" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Email</text>
+  <rect x="32" y="62" width="136" height="16" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="100" y="92" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Show advanced options</text>
+  <polyline points="82,95 100,100 118,95" style="stroke: var(--color-accent); fill: none" stroke-width="1" stroke-linecap="round"/>
+  <text x="48" y="110" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans); opacity: 0.4">Timezone</text>
+  <rect x="96" y="104" width="56" height="8" rx="4" style="fill: var(--color-surface-3); opacity: 0.3"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Progressive Disclosure  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: show more, advanced options</p> <dd data-astro-cid-kxfk33mh>Shows simple view first, details on demand. Keeps interfaces approachable without hiding power.</dd> <a class="docs-link" href="https://www.nngroup.com/articles/progressive-disclosure/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="stale-while-revalidate" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="10" width="168" height="100" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="28" y="28" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Dashboard</text>
+  <rect x="150" y="14" width="24" height="24" rx="12" style="fill: var(--color-accent-bg)"/>
+  <path d="M162,20 A6,6 0 1,1 156,26" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <polyline points="162,17 162,21 158,21" style="stroke: var(--color-accent); fill: none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="28" y="36" width="68" height="32" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="36" y="50" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Revenue</text>
+  <text x="36" y="62" style="fill: var(--color-text); font-size: 10px; font-weight: 700; font-family: var(--font-mono)">$12,400</text>
+  <rect x="104" y="36" width="68" height="32" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="112" y="50" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Users</text>
+  <text x="112" y="62" style="fill: var(--color-text); font-size: 10px; font-weight: 700; font-family: var(--font-mono)">1,847</text>
+  <rect x="28" y="76" width="144" height="8" rx="4" style="fill: var(--color-surface-3)"/>
+  <rect x="28" y="90" width="120" height="8" rx="4" style="fill: var(--color-surface-3)"/>
+  <text x="100" y="106" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Cached data shown, refreshing in background</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Stale-While-Revalidate  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: SWR, background refresh, cache-first</p> <dd data-astro-cid-kxfk33mh>Shows cached data immediately, refreshes in the background. Dashboards and feeds feel instant.</dd> <a class="docs-link" href="https://swr.vercel.app/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="debounced-search" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="10" width="160" height="28" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <circle cx="36" cy="24" r="7" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.5"/>
+  <line x1="41" y1="29" x2="44" y2="32" style="stroke: var(--color-text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="52" y="28" style="fill: var(--color-text); font-size: 10px; font-family: var(--font-mono)">reac...</text>
+  <circle cx="162" cy="24" r="8" style="stroke: var(--color-amber); fill: var(--color-amber-dim)" stroke-width="1"/>
+  <line x1="162" y1="20" x2="162" y2="24" style="stroke: var(--color-amber)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="162" y1="24" x2="165" y2="27" style="stroke: var(--color-amber)" stroke-width="1.2" stroke-linecap="round"/>
+  <text x="162" y="46" text-anchor="middle" style="fill: var(--color-amber); font-size: 7px; font-weight: 600; font-family: var(--font-mono)">300ms</text>
+  <rect x="20" y="52" width="160" height="60" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="32" y="70" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">React</text>
+  <text x="60" y="70" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">— UI library</text>
+  <line x1="28" y1="78" x2="172" y2="78" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="32" y="92" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">React</text>
+  <text x="60" y="92" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)"> Router — navigation</text>
+  <line x1="28" y1="100" x2="172" y2="100" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Debounced Search  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: throttled input, delayed search</p> <dd data-astro-cid-kxfk33mh>Waits until you stop typing before searching. Prevents unnecessary requests while you compose your query.</dd>  </div> </div><div class="pattern-entry" id="infinite-scroll-vs-pagination" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="100" y1="4" x2="100" y2="116" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <text x="50" y="14" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">SCROLL</text>
+  <rect x="20" y="20" width="60" height="12" rx="3" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <rect x="20" y="36" width="60" height="12" rx="3" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <rect x="20" y="52" width="60" height="12" rx="3" style="fill: var(--color-surface-2); stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <rect x="20" y="68" width="60" height="12" rx="3" style="fill: var(--color-surface-2); opacity: 0.5"/>
+  <rect x="20" y="84" width="60" height="12" rx="3" style="fill: var(--color-surface-2); opacity: 0.25"/>
+  <text x="50" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Loading...</text>
+  <text x="150" y="14" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">PAGES &#x2713;</text>
+  <rect x="116" y="20" width="68" height="12" rx="3" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="0.5"/>
+  <rect x="116" y="36" width="68" height="12" rx="3" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="0.5"/>
+  <rect x="116" y="52" width="68" height="12" rx="3" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="0.5"/>
+  <rect x="116" y="68" width="68" height="12" rx="3" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="0.5"/>
+  <rect x="118" y="88" width="20" height="18" rx="4" style="fill: var(--color-accent)"/>
+  <text x="128" y="101" text-anchor="middle" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-mono)">1</text>
+  <rect x="142" y="88" width="20" height="18" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="152" y="101" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">2</text>
+  <rect x="166" y="88" width="20" height="18" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="176" y="101" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-mono)">3</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Infinite Scroll vs Pagination  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: load more, endless scroll</p> <dd data-astro-cid-kxfk33mh>Paginated by default (better for SEO and accessibility). Infinite scroll only when explicitly chosen for feed-type content.</dd>  </div> </div><div class="pattern-entry" id="route-based-splitting" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="14" width="56" height="44" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="36" y="32" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-mono)">/home</text>
+  <rect x="20" y="40" width="32" height="10" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="36" y="48" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-mono)">12 kB</text>
+  <rect x="72" y="14" width="56" height="44" rx="6" style="stroke: var(--color-blue); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="100" y="32" text-anchor="middle" style="fill: var(--color-blue); font-size: 9px; font-weight: 600; font-family: var(--font-mono)">/about</text>
+  <rect x="84" y="40" width="32" height="10" rx="3" style="fill: var(--color-blue-dim)"/>
+  <text x="100" y="48" text-anchor="middle" style="fill: var(--color-blue); font-size: 6px; font-weight: 600; font-family: var(--font-mono)">8 kB</text>
+  <rect x="136" y="14" width="56" height="44" rx="6" style="stroke: var(--color-green); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="164" y="32" text-anchor="middle" style="fill: var(--color-green); font-size: 8px; font-weight: 600; font-family: var(--font-mono)">/dash</text>
+  <rect x="148" y="40" width="32" height="10" rx="3" style="fill: var(--color-green-dim)"/>
+  <text x="164" y="48" text-anchor="middle" style="fill: var(--color-green); font-size: 6px; font-weight: 600; font-family: var(--font-mono)">24 kB</text>
+  <line x1="36" y1="62" x2="36" y2="76" style="stroke: var(--color-border)" stroke-width="1" stroke-dasharray="3 2"/>
+  <line x1="100" y1="62" x2="100" y2="76" style="stroke: var(--color-border)" stroke-width="1" stroke-dasharray="3 2"/>
+  <line x1="164" y1="62" x2="164" y2="76" style="stroke: var(--color-border)" stroke-width="1" stroke-dasharray="3 2"/>
+  <rect x="16" y="78" width="40" height="12" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="36" y="87" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-mono)">bundle</text>
+  <rect x="80" y="78" width="40" height="12" rx="3" style="fill: var(--color-blue-dim)"/>
+  <text x="100" y="87" text-anchor="middle" style="fill: var(--color-blue); font-size: 7px; font-family: var(--font-mono)">bundle</text>
+  <rect x="144" y="78" width="40" height="12" rx="3" style="fill: var(--color-green-dim)"/>
+  <text x="164" y="87" text-anchor="middle" style="fill: var(--color-green); font-size: 7px; font-family: var(--font-mono)">bundle</text>
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Each route loads only its own code</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Route-Based Splitting  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: code splitting, page-level splitting</p> <dd data-astro-cid-kxfk33mh>Each page only loads the code it needs. Automatic in Next.js, Remix, and SvelteKit.</dd> <a class="docs-link" href="https://www.patterns.dev/vanilla/route-based-splitting" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="page-transitions" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="14" width="72" height="92" rx="8" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="22" y="20" width="60" height="12" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="52" y="29" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Page A</text>
+  <rect x="22" y="38" width="56" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="22" y="50" width="48" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="22" y="62" width="52" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <polyline points="98,52 110,60 98,68" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="96" y1="60" x2="112" y2="60" style="stroke: var(--color-accent)" stroke-width="2" stroke-linecap="round"/>
+  <rect x="112" y="14" width="72" height="92" rx="8" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="118" y="20" width="60" height="12" rx="3" style="fill: var(--color-accent)"/>
+  <text x="148" y="29" text-anchor="middle" style="fill: #fff; font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Page B</text>
+  <rect x="118" y="38" width="56" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="118" y="50" width="48" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <rect x="118" y="62" width="52" height="6" rx="3" style="fill: var(--color-surface-3)"/>
+  <text x="100" y="116" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Smooth animation between routes</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Page Transitions  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: route animation, view transition</p> <dd data-astro-cid-kxfk33mh>Smooth animations between page navigations. Respects user&#39;s reduced-motion preference.</dd> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div> </dl> </section><section class="pattern-section" id="cat-keyboard" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Keyboard &amp; Focus Patterns</h3> <p class="category-description" data-astro-cid-kxfk33mh>Accessibility patterns for keyboard and screen reader users — focus management, key bindings, and live announcements.</p> <dl class="pattern-list" data-astro-cid-kxfk33mh> <div class="pattern-entry" id="focus-trapping" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-bg); opacity: 0.5"/>
+  <rect x="30" y="14" width="140" height="92" rx="10" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="100" y="32" text-anchor="middle" style="fill: var(--color-text); font-size: 11px; font-weight: 700; font-family: var(--font-sans)">Modal</text>
+  <line x1="42" y1="38" x2="158" y2="38" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="46" y="46" width="48" height="18" rx="5" style="fill: var(--color-surface-2); stroke: var(--color-accent)" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <text x="70" y="59" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Input</text>
+  <rect x="106" y="46" width="48" height="18" rx="5" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="130" y="59" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Cancel</text>
+  <rect x="76" y="72" width="48" height="18" rx="5" style="fill: var(--color-accent)"/>
+  <text x="100" y="85" text-anchor="middle" style="fill: #fff; font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Save</text>
+  <path d="M 56 44 C 40 36, 40 92, 56 92" style="stroke: var(--color-accent); fill: none" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <path d="M 144 44 C 160 36, 160 92, 144 92" style="stroke: var(--color-accent); fill: none" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <path d="M 56 92 C 80 100, 120 100, 144 92" style="stroke: var(--color-accent); fill: none" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <path d="M 144 44 C 120 36, 80 36, 56 44" style="stroke: var(--color-accent); fill: none" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <polygon points="56,42 52,46 60,46" style="fill: var(--color-accent)"/>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Tab cycles inside</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Focus Trapping  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: modal focus, focus lock</p> <dd data-astro-cid-kxfk33mh>Tab stays inside the popup until you close it. Every modal, dialog, drawer, and sheet must trap focus.</dd> <a class="docs-link" href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="focus-restoration" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="40" width="52" height="24" rx="6" style="fill: var(--color-accent)"/>
+  <text x="38" y="56" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Open</text>
+  <rect x="108" y="16" width="80" height="64" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="148" y="34" text-anchor="middle" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Popup</text>
+  <line x1="116" y1="40" x2="180" y2="40" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="116" y="48" width="64" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="116" y="62" width="48" height="12" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <path d="M 64 46 L 104 32" style="stroke: var(--color-green); fill: none" stroke-width="1.5"/>
+  <polygon points="104,32 98,30 100,36" style="fill: var(--color-green)"/>
+  <text x="84" y="30" text-anchor="middle" style="fill: var(--color-green); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">open</text>
+  <path d="M 104 72 L 64 58" style="stroke: var(--color-accent); fill: none" stroke-width="1.5"/>
+  <polygon points="64,58 70,56 68,62" style="fill: var(--color-accent)"/>
+  <text x="84" y="74" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">return</text>
+  <rect x="8" y="36" width="60" height="32" rx="8" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <text x="100" y="104" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Focus returns to trigger on close</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Focus Restoration  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: return focus, focus return</p> <dd data-astro-cid-kxfk33mh>When a popup closes, focus returns to the button that opened it. Maintains keyboard user&#39;s place on the page.</dd> <a class="docs-link" href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="arrow-key-navigation" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="10" width="100" height="100" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <rect x="48" y="18" width="84" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="60" y="32" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Settings</text>
+  <rect x="48" y="42" width="84" height="20" rx="4" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1.5"/>
+  <text x="60" y="56" style="fill: var(--color-accent); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Profile</text>
+  <rect x="48" y="66" width="84" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="60" y="80" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Security</text>
+  <rect x="48" y="90" width="84" height="16" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="60" y="102" style="fill: var(--color-text-secondary); font-size: 9px; font-family: var(--font-sans)">Billing</text>
+  <rect x="148" y="20" width="36" height="20" rx="5" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <polygon points="166,26 162,32 170,32" style="fill: var(--color-text-muted)"/>
+  <text x="166" y="24" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-mono)"/>
+  <rect x="148" y="56" width="36" height="20" rx="5" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <polygon points="166,70 162,64 170,64" style="fill: var(--color-text-muted)"/>
+  <path d="M 166 42 L 166 54" style="stroke: var(--color-text-muted); fill: none" stroke-width="1" stroke-dasharray="2 2"/>
+  <text x="166" y="90" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Arrow</text>
+  <text x="166" y="100" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Keys</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Arrow Key Navigation  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: arrow keys, directional navigation</p> <dd data-astro-cid-kxfk33mh>Arrow keys move between items in a list, menu, or grid. The standard keyboard pattern for grouped elements.</dd> <a class="docs-link" href="https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="roving-tabindex" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="30" width="160" height="32" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="100" y="22" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Toolbar</text>
+  <rect x="28" y="36" width="36" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="46" y="50" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">B</text>
+  <rect x="68" y="36" width="36" height="20" rx="4" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="2"/>
+  <text x="86" y="50" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">I</text>
+  <rect x="108" y="36" width="36" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="126" y="50" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">U</text>
+  <rect x="148" y="36" width="24" height="20" rx="4" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="160" y="50" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">S</text>
+  <rect x="2" y="72" width="32" height="16" rx="4" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="18" y="84" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Tab</text>
+  <path d="M 36 80 L 56 62" style="stroke: var(--color-green); fill: none" stroke-width="1.2"/>
+  <polygon points="56,62 50,62 54,68" style="fill: var(--color-green)"/>
+  <text x="32" y="96" style="fill: var(--color-green); font-size: 7px; font-family: var(--font-sans)">enter</text>
+  <path d="M 68 62 L 108 62" style="stroke: var(--color-accent); fill: none" stroke-width="1.2"/>
+  <polygon points="104,58 110,62 104,66" style="fill: var(--color-accent)"/>
+  <rect x="76" y="72" width="48" height="16" rx="4" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="100" y="84" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-family: var(--font-mono)">Arrow Keys</text>
+  <rect x="166" y="72" width="32" height="16" rx="4" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="182" y="84" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-mono)">Tab</text>
+  <path d="M 164 80 L 144 62" style="stroke: var(--color-text-muted); fill: none" stroke-width="1.2"/>
+  <polygon points="144,62 150,62 146,68" style="fill: var(--color-text-muted)"/>
+  <text x="158" y="96" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">leave</text>
+  <text x="100" y="114" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Tab enters/leaves, arrows move within</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Roving Tabindex  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: managed focus, single tab stop</p> <dd data-astro-cid-kxfk33mh>Tab enters a group of items, arrow keys move within it, Tab leaves. Prevents excessive tab stops.</dd> <a class="docs-link" href="https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/#kbd_roving_tabindex" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="skip-link" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="12" y="6" width="176" height="108" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <rect x="12" y="6" width="176" height="22" rx="8" style="fill: var(--color-surface-2)"/>
+  <rect x="12" y="20" width="176" height="8" style="fill: var(--color-surface-2)"/>
+  <text x="24" y="20" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Logo</text>
+  <text x="60" y="20" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Home</text>
+  <text x="90" y="20" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">About</text>
+  <text x="120" y="20" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Blog</text>
+  <text x="150" y="20" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Contact</text>
+  <line x1="12" y1="28" x2="188" y2="28" style="stroke: var(--color-border)" stroke-width="1"/>
+  <text x="24" y="44" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Main Content</text>
+  <rect x="24" y="50" width="140" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="24" y="64" width="120" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="24" y="78" width="152" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="24" y="92" width="100" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="40" y="0" width="80" height="14" rx="4" style="fill: var(--color-accent)"/>
+  <text x="80" y="10" text-anchor="middle" style="fill: #fff; font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Skip to content</text>
+  <path d="M 80 14 C 80 14, 6 14, 6 44 L 6 44 L 20 36" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <polygon points="20,36 14,32 12,40" style="fill: var(--color-accent)"/>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Skip Link  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: skip navigation, skip to content</p> <dd data-astro-cid-kxfk33mh>A hidden link that lets keyboard users jump past navigation to the main content. Must be the first focusable element.</dd> <a class="docs-link" href="https://www.w3.org/WAI/WCAG21/Understanding/bypass-blocks.html" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="visible-focus-ring" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <text x="100" y="20" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Tab through buttons</text>
+  <rect x="14" y="38" width="48" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="38" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Prev</text>
+  <rect x="72" y="34" width="56" height="36" rx="8" style="stroke: var(--color-accent)" stroke-width="3"/>
+  <rect x="76" y="38" width="48" height="28" rx="6" style="fill: var(--color-accent)"/>
+  <text x="100" y="56" text-anchor="middle" style="fill: #fff; font-size: 10px; font-weight: 600; font-family: var(--font-sans)">Save</text>
+  <rect x="138" y="38" width="48" height="28" rx="6" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="162" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 10px; font-family: var(--font-sans)">Next</text>
+  <path d="M 72 80 L 72 86 L 128 86 L 128 80" style="stroke: var(--color-accent); fill: none" stroke-width="1"/>
+  <text x="100" y="98" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">:focus-visible</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">3px offset outline on focused element</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Visible Focus Ring  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: focus indicator, focus outline</p> <dd data-astro-cid-kxfk33mh>A clear outline shows which element is currently focused. Never remove focus styles without providing a visible replacement.</dd> <a class="docs-link" href="https://www.w3.org/WAI/WCAG21/Understanding/focus-visible.html" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="escape-to-close" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-bg); opacity: 0.4"/>
+  <rect x="40" y="14" width="120" height="72" rx="8" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1.5"/>
+  <text x="100" y="34" text-anchor="middle" style="fill: var(--color-text); font-size: 11px; font-weight: 600; font-family: var(--font-sans)">Popover</text>
+  <line x1="52" y1="40" x2="148" y2="40" style="stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="52" y="48" width="96" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="52" y="62" width="72" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="52" y="76" width="56" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="148" y="92" width="40" height="22" rx="5" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="168" y="107" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-mono)">Esc</text>
+  <path d="M 148 100 L 130 90" style="stroke: var(--color-red); fill: none" stroke-width="1.5"/>
+  <line x1="126" y1="84" x2="134" y2="92" style="stroke: var(--color-red)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="134" y1="84" x2="126" y2="92" style="stroke: var(--color-red)" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="40" y="112" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Press Escape to dismiss any overlay</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Escape to Close  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: dismiss on escape, escape key</p> <dd data-astro-cid-kxfk33mh>Pressing Escape closes any overlay — popovers, dialogs, drawers, dropdowns, and tooltips.</dd> <a class="docs-link" href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="enter-space-to-activate" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="56" y="12" width="88" height="36" rx="8" style="fill: var(--color-accent)"/>
+  <text x="100" y="35" text-anchor="middle" style="fill: #fff; font-size: 12px; font-weight: 700; font-family: var(--font-sans)">Submit</text>
+  <rect x="60" y="8" width="80" height="44" rx="10" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-dasharray="3 2"/>
+  <rect x="16" y="68" width="76" height="22" rx="5" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="54" y="83" text-anchor="middle" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-mono)">Enter</text>
+  <path d="M 54 68 L 80 52" style="stroke: var(--color-green); fill: none" stroke-width="1.5"/>
+  <polygon points="80,52 74,52 76,58" style="fill: var(--color-green)"/>
+  <rect x="108" y="68" width="76" height="22" rx="5" style="fill: var(--color-surface-3); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="146" y="83" text-anchor="middle" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-mono)">Space</text>
+  <path d="M 146 68 L 120 52" style="stroke: var(--color-green); fill: none" stroke-width="1.5"/>
+  <polygon points="120,52 126,52 124,58" style="fill: var(--color-green)"/>
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Both keys must activate every clickable element</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Enter/Space to Activate  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: keyboard activation</p> <dd data-astro-cid-kxfk33mh>Enter or Space triggers buttons and links. Every clickable element must respond to both keys.</dd> <a class="docs-link" href="https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div><div class="pattern-entry" id="live-regions" data-astro-cid-kxfk33mh> <div class="pattern-illustration" data-astro-cid-mn3m2azv><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="184" height="112" rx="8" style="fill: var(--color-surface); stroke: var(--color-border-subtle)" stroke-width="1"/>
+  <rect x="16" y="12" width="168" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="16" y="26" width="120" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="16" y="40" width="140" height="8" rx="4" style="fill: var(--color-surface-2)"/>
+  <rect x="120" y="62" width="68" height="38" rx="6" style="fill: var(--color-green-dim); stroke: var(--color-green)" stroke-width="1"/>
+  <text x="154" y="78" text-anchor="middle" style="fill: var(--color-green); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Saved!</text>
+  <rect x="126" y="86" width="56" height="10" rx="3" style="fill: var(--color-green); opacity: 0.3"/>
+  <text x="154" y="94" text-anchor="middle" style="fill: var(--color-green); font-size: 7px; font-family: var(--font-mono)">aria-live</text>
+  <circle cx="110" cy="76" r="8" style="fill: var(--color-surface-2); stroke: var(--color-border)" stroke-width="1"/>
+  <path d="M 107 76 L 113 76 L 113 72 L 107 72 Z" style="fill: var(--color-accent)"/>
+  <path d="M 113 72 L 118 68 L 118 80 L 113 76" style="fill: var(--color-accent)"/>
+  <path d="M 120 71 C 122 73, 122 79, 120 81" style="stroke: var(--color-accent); fill: none" stroke-width="1" stroke-linecap="round"/>
+  <path d="M 123 68 C 126 72, 126 80, 123 84" style="stroke: var(--color-accent); fill: none" stroke-width="1" stroke-linecap="round"/>
+  <text x="60" y="78" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Screen reader</text>
+  <text x="60" y="88" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">announces change</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Dynamic updates announced without moving focus</text>
+</svg></div> <div class="pattern-text" data-astro-cid-kxfk33mh> <dt data-astro-cid-kxfk33mh> Live Regions  </dt> <p class="aliases" data-astro-cid-kxfk33mh>Also called: ARIA live, dynamic announcements</p> <dd data-astro-cid-kxfk33mh>Screen readers announce dynamic changes — toast notifications, form errors, loading states — without moving focus.</dd> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Docs &rarr;</a> </div> </div> </dl> </section><section class="tips-section" id="tips" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Tips: What Users Say vs What Agents Build</h3> <p data-astro-cid-kxfk33mh>VibeCrew agents translate plain language into precise component vocabulary. Here are common examples:</p> <table class="tips-table" data-astro-cid-kxfk33mh> <thead data-astro-cid-kxfk33mh> <tr data-astro-cid-kxfk33mh> <th data-astro-cid-kxfk33mh>What you say</th> <th data-astro-cid-kxfk33mh>What gets built</th> </tr> </thead> <tbody data-astro-cid-kxfk33mh> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A dropdown for picking a country"</td><td data-astro-cid-kxfk33mh>Combobox (type-ahead search with 200+ items)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A popup to confirm deleting"</td><td data-astro-cid-kxfk33mh>Alert Dialog (traps focus, requires explicit choice)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A sidebar with links"</td><td data-astro-cid-kxfk33mh>Sidebar + Navigation Menu (keyboard navigable, collapsible)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A table with sorting"</td><td data-astro-cid-kxfk33mh>Data Table (sortable headers, pagination, filterable)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A toast message"</td><td data-astro-cid-kxfk33mh>Sonner (auto-dismissing, accessible live region)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A settings page"</td><td data-astro-cid-kxfk33mh>Tabs + Form + Switch (progressive disclosure, instant toggles)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A like button"</td><td data-astro-cid-kxfk33mh>Button + Optimistic UI (instant update, silent retry on failure)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A dashboard"</td><td data-astro-cid-kxfk33mh>Card grid + Chart + Skeleton Loading + SWR (fast perceived load)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A search bar"</td><td data-astro-cid-kxfk33mh>Combobox + Debounced Search (waits until you stop typing)</td></tr> <tr data-astro-cid-kxfk33mh><td data-astro-cid-kxfk33mh>"A list of 500 items"</td><td data-astro-cid-kxfk33mh>Data Table + List Virtualization (only renders visible rows)</td></tr> </tbody> </table> </section> <section class="further-reading" id="further-reading" data-astro-cid-kxfk33mh> <h3 class="category-heading" data-astro-cid-kxfk33mh>Further Reading</h3> <ul data-astro-cid-kxfk33mh> <li data-astro-cid-kxfk33mh><a href="https://component.gallery/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Component Gallery</a> &mdash; Visual catalog of UI components across design systems</li> <li data-astro-cid-kxfk33mh><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>W3C ARIA Authoring Practices Guide</a> &mdash; Keyboard patterns and accessibility for every component type</li> <li data-astro-cid-kxfk33mh><a href="https://www.patterns.dev/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Patterns.dev</a> &mdash; Performance and rendering patterns for modern web apps</li> <li data-astro-cid-kxfk33mh><a href="https://simonhearne.com/2021/optimistic-ui-patterns/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Optimistic UI Patterns</a> &mdash; Simon Hearne's guide to instant-feeling interfaces</li> <li data-astro-cid-kxfk33mh><a href="https://every-layout.dev/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Every Layout</a> &mdash; Intrinsic CSS layout patterns</li> <li data-astro-cid-kxfk33mh><a href="https://www.uidesign.tips/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>UI Design Tips</a> &mdash; Practical UI design advice</li> <li data-astro-cid-kxfk33mh><a href="https://inclusive-components.design/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>Inclusive Components</a> &mdash; Heydon Pickering's guide to accessible component patterns</li> <li data-astro-cid-kxfk33mh><a href="https://www.a11yproject.com/" target="_blank" rel="noopener noreferrer" data-astro-cid-kxfk33mh>The A11Y Project</a> &mdash; Community-driven accessibility resources</li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/dashboard.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Vibe Dashboard</span></a><a href="/vibe-crew/business-patterns.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Business Patterns</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html> 

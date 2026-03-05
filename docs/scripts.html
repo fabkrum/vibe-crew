@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Bash Scripts</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.mermaid-container[data-astro-cid-6vqylkyd]{margin-bottom:2rem;margin-left:-8vw;margin-right:-8vw;padding:1.5rem 2rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm);overflow-x:auto}pre[data-astro-cid-6vqylkyd].mermaid{background:transparent;border:none;padding:0;text-align:center;min-width:min-content}.mermaid-container[data-astro-cid-6vqylkyd] svg{max-width:100%;height:auto;min-height:300px}.mermaid-caption[data-astro-cid-6vqylkyd]{text-align:center;font-size:.85rem;color:var(--color-text-muted);margin-top:.75rem}@media(max-width:768px){.mermaid-container[data-astro-cid-6vqylkyd]{margin-left:-1rem;margin-right:-1rem;padding:1rem;border-radius:0}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link active"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>How It Works</span>  <span class="separator">/</span> <span>Bash Scripts</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"How It Works"},{"@type":"ListItem","position":3,"name":"Bash Scripts"}]}</script>  <div class="panel-intro"> <h2>Bash Scripts</h2> <p>Scripts are the <strong>worker bees</strong> of VibeCrew &mdash; small bash programs that do the actual mechanical work. While agents think and make decisions, scripts create files, update project state, calculate scores, and send notifications. They run in milliseconds and always produce the same result for the same input.</p> <div class="key-points"> <div class="key-point"> <span class="key-icon purple">&#9632;</span> <div> <strong>What they are</strong> <p>Deterministic bash scripts organized by function: core lifecycle, feature management, quality scoring, project analysis, documentation, gamification, and state management. Agents never write state files directly &mdash; all mutations go through scripts.</p> </div> </div> <div class="key-point"> <span class="key-icon green">&#10003;</span> <div> <strong>What problem they solve</strong> <p>AI token cost scales with complexity. By offloading mechanical tasks (JSON manipulation, git operations, file formatting) to scripts, VibeCrew keeps AI focused on decisions while scripts handle bookkeeping at zero token cost. Scripts also guarantee consistency &mdash; state mutations are atomic and predictable.</p> </div> </div> </div> </div> <h4 class="agent-table-heading">Core Lifecycle</h4> <p class="cmd-group-desc">Scripts that run during session startup and completion.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>session-startup.sh</code></td><td>Hook</td><td>Environment check, terminal detection, state loading, and workflow routing on every session start.</td></tr> <tr><td><code>quality-gate.sh</code></td><td>Hook</td><td>Runs typecheck, lint, and build on modified files at task completion. Blocks on failure.</td></tr> <tr><td><code>statusline.sh</code></td><td>Hook</td><td>Updates the terminal status bar with current feature, phase, and Vibe Score.</td></tr> <tr><td><code>notify.sh</code></td><td>Hook</td><td>Sends native OS notifications for permission stalls, completions, and errors.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Feature Management</h4> <p class="cmd-group-desc">Scripts that manage the feature lifecycle and backlog.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>update-backlog.sh</code></td><td>Agent / Skill</td><td>Adds, updates, or moves features in <code>backlog.json</code>. Manages Kanban column transitions.</td></tr> <tr><td><code>complete-phase.sh</code></td><td>Agent / Skill</td><td>Marks a development phase as done and advances to the next phase in the 6-phase cycle.</td></tr> <tr><td><code>git-branch-create.sh</code></td><td>Agent</td><td>Creates a feature branch with consistent naming: <code>feat/&lt;feature-name&gt;</code>.</td></tr> <tr><td><code>create-checkpoint.sh</code></td><td>Agent</td><td>Creates a git tag checkpoint before risky operations so you can roll back with <code>/undo</code>.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Quality &amp; Scoring</h4> <p class="cmd-group-desc">Scripts that calculate Vibe Scores and analyze quality.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>calculate-vibe-score.sh</code></td><td>Agent</td><td>Computes the session's Vibe Score (0&ndash;130) based on deductions and bonuses across quality dimensions.</td></tr> <tr><td><code>aggregate-scores.sh</code></td><td>Agent</td><td>Aggregates Vibe Scores across sessions for trend analysis and Performance Coach input.</td></tr> <tr><td><code>analyze-test-gaps.sh</code></td><td>Agent</td><td>Compares modified source files against test coverage to identify untested code paths.</td></tr> <tr><td><code>apply-mutation.sh</code></td><td>Agent</td><td>Applies Performance Coach CLAUDE.md mutation proposals after user approval.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">Project Analysis</h4> <p class="cmd-group-desc">Scripts that analyze the codebase and extract patterns.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>detect-conventions.sh</code></td><td>Agent</td><td>Scans the codebase for naming conventions, file patterns, and code style to populate CLAUDE.md.</td></tr> <tr><td><code>extract-design-system.sh</code></td><td>Agent</td><td>Extracts CSS tokens, color palette, typography, and spacing from existing stylesheets.</td></tr> <tr><td><code>detect-secrets.sh</code></td><td>Agent</td><td>Scans for accidentally committed secrets, API keys, and credentials.</td></tr> <tr><td><code>scan-dependencies.sh</code></td><td>Agent</td><td>Audits dependencies for known vulnerabilities and license compliance issues.</td></tr> </tbody> </table> </div> <h4 class="agent-table-heading">State &amp; Config</h4> <p class="cmd-group-desc">Scripts that manage the <code>.vibecrew/</code> runtime state.</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead><tr><th>Script</th><th>Called By</th><th>What It Does</th></tr></thead> <tbody> <tr><td><code>init-vibecrew-state.sh</code></td><td>Skill</td><td>Creates the initial <code>.vibecrew/</code> directory structure and default JSON files during <code>/setup</code>.</td></tr> <tr><td><code>migrate-state.sh</code></td><td>Skill</td><td>Migrates state files between VibeCrew versions when schemas change.</td></tr> <tr><td><code>generate-handoff.sh</code></td><td>Skill</td><td>Creates a structured context transfer document for cross-session continuity.</td></tr> <tr><td><code>detect-terminal.sh</code></td><td>Skill</td><td>Detects terminal type (Warp, iTerm2, VS Code, etc.) and configures notification and deep-link support.</td></tr> </tbody> </table> </div> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Callers["Who Calls Scripts"]
+    HK["Hooks"]
+    AG["Agents"]
+    SK["Skills"]
+  end
+
+  subgraph Core["Core Lifecycle"]
+    SS["session-startup.sh"]
+    QG["quality-gate.sh"]
+    SL["statusline.sh"]
+    NT["notify.sh"]
+  end
+
+  subgraph Feature["Feature Management"]
+    UB["update-backlog.sh"]
+    CP["complete-phase.sh"]
+    GBC["git-branch-create.sh"]
+    CKP["create-checkpoint.sh"]
+  end
+
+  subgraph Quality["Quality & Scoring"]
+    CVS["calculate-vibe-score.sh"]
+    AGS["aggregate-scores.sh"]
+    ATG["analyze-test-gaps.sh"]
+    AM["apply-mutation.sh"]
+  end
+
+  subgraph Analysis["Project Analysis"]
+    DC["detect-conventions.sh"]
+    EDS["extract-design-system.sh"]
+    DS["detect-secrets.sh"]
+    SD["scan-dependencies.sh"]
+  end
+
+  subgraph State["State & Config"]
+    IV["init-vibecrew-state.sh"]
+    MS["migrate-state.sh"]
+    GH["generate-handoff.sh"]
+    DT["detect-terminal.sh"]
+  end
+
+  HK --> Core
+  AG --> Feature
+  AG --> Quality
+  AG --> Analysis
+  SK --> Feature
+  SK --> State
+
+  style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Feature fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Quality fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Analysis fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style State fill:#18181b,stroke:#f87171,color:#fafafa
+</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Script categories and who calls them</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+  subgraph Callers[&quot;Who Calls Scripts&quot;]
+    HK[&quot;Hooks&quot;]
+    AG[&quot;Agents&quot;]
+    SK[&quot;Skills&quot;]
+  end
+
+  subgraph Core[&quot;Core Lifecycle&quot;]
+    SS[&quot;session-startup.sh&quot;]
+    QG[&quot;quality-gate.sh&quot;]
+    SL[&quot;statusline.sh&quot;]
+    NT[&quot;notify.sh&quot;]
+  end
+
+  subgraph Feature[&quot;Feature Management&quot;]
+    UB[&quot;update-backlog.sh&quot;]
+    CP[&quot;complete-phase.sh&quot;]
+    GBC[&quot;git-branch-create.sh&quot;]
+    CKP[&quot;create-checkpoint.sh&quot;]
+  end
+
+  subgraph Quality[&quot;Quality &amp; Scoring&quot;]
+    CVS[&quot;calculate-vibe-score.sh&quot;]
+    AGS[&quot;aggregate-scores.sh&quot;]
+    ATG[&quot;analyze-test-gaps.sh&quot;]
+    AM[&quot;apply-mutation.sh&quot;]
+  end
+
+  subgraph Analysis[&quot;Project Analysis&quot;]
+    DC[&quot;detect-conventions.sh&quot;]
+    EDS[&quot;extract-design-system.sh&quot;]
+    DS[&quot;detect-secrets.sh&quot;]
+    SD[&quot;scan-dependencies.sh&quot;]
+  end
+
+  subgraph State[&quot;State &amp; Config&quot;]
+    IV[&quot;init-vibecrew-state.sh&quot;]
+    MS[&quot;migrate-state.sh&quot;]
+    GH[&quot;generate-handoff.sh&quot;]
+    DT[&quot;detect-terminal.sh&quot;]
+  end
+
+  HK --&gt; Core
+  AG --&gt; Feature
+  AG --&gt; Quality
+  AG --&gt; Analysis
+  SK --&gt; Feature
+  SK --&gt; State
+
+  style Callers fill:#7c3aed,stroke:#a78bfa,color:#fafafa
+  style Core fill:#18181b,stroke:#a78bfa,color:#fafafa
+  style Feature fill:#18181b,stroke:#4ade80,color:#fafafa
+  style Quality fill:#18181b,stroke:#fbbf24,color:#fafafa
+  style Analysis fill:#18181b,stroke:#60a5fa,color:#fafafa
+  style State fill:#18181b,stroke:#f87171,color:#fafafa
+</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
+            useMaxWidth: true,
+          },
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+            fontSize: '16px',
+          },
+        });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/architecture.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Overview</span></a><a href="/vibe-crew/gamification.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Gamification</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html>

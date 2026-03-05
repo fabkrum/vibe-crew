@@ -15,6 +15,7 @@ export const systemDiagram = `flowchart TD
     Config["config.json"]
     State["state.json"]
     Backlog["backlog.json"]
+    Gamification["gamification.json"]
     Sessions["sessions/"]
     Scores["scores/"]
     Architecture["architecture/"]
@@ -109,7 +110,9 @@ export const hooksDiagram = `flowchart TD
     E2["PreToolUse Write/Edit"]
     E3["PreToolUse Bash"]
     E4["PostToolUse Write/Edit"]
+    E4b["PostToolUse (all)"]
     E5["Notification"]
+    E5b["PostToolUseFailure"]
     E6["Stop"]
   end
 
@@ -124,10 +127,12 @@ export const hooksDiagram = `flowchart TD
   subgraph Post["Post-Action Processors"]
     FC["format-code.sh"]
     VSS["validate-skill-schema.sh"]
+    DT["drift-tracker.sh"]
     NT["notify.sh"]
   end
 
   subgraph Stop["Session End Checks"]
+    DCB["drift-circuit-breaker.sh"]
     CC["check-context.sh"]
     CG["cost-guardrails.sh"]
     CL["claude-md-lint.sh"]
@@ -144,10 +149,13 @@ export const hooksDiagram = `flowchart TD
   E1 --> Init
   E2 --> Guards
   E3 --> PD
+  E3 --> VPT
   E2 --> VS
   E4 --> FC
   E4 --> VSS
+  E4b --> DT
   E5 --> NT
+  E5b --> NT
   E6 --> Stop
 
   style Events fill:#18181b,stroke:#a78bfa,color:#fafafa
@@ -267,11 +275,15 @@ export const runtimeStateDiagram = `flowchart TD
 
   subgraph Dirs["Runtime Directories"]
     Arch["architecture/"]
+    AnalysisDir["analysis/"]
     Sessions["sessions/"]
     Scores["scores/"]
     Signals["signals/"]
     Locks["locks/"]
+    Releases["releases/"]
     Handoffs["handoffs/"]
+    Workflows["workflows/"]
+    Expertise["expertise/"]
   end
 
   subgraph Consumers["Who Reads/Writes"]
@@ -338,7 +350,7 @@ export const safetyDiagram = `flowchart TD
 export const mcpServersDiagram = `flowchart TD
   TDR["TDR Finalized"] --> Sync["sync-mcp-from-tdr.sh"]
 
-  subgraph Registry["MCP Registry (25 servers)"]
+  subgraph Registry["MCP Registry (24 servers)"]
     Bundled["9 Bundled"]
     Extended["15 Extended"]
   end

@@ -1,0 +1,472 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Testing Strategy</title><meta name="description" content="VibeCrew Documentation — The Autonomous Vibe-Coding Operating System"><meta name="generator" content="Astro v5.18.0"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><style>.mermaid-container[data-astro-cid-6vqylkyd]{margin-bottom:2rem;margin-left:-8vw;margin-right:-8vw;padding:1.5rem 2rem;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-sm);overflow-x:auto}pre[data-astro-cid-6vqylkyd].mermaid{background:transparent;border:none;padding:0;text-align:center;min-width:min-content}.mermaid-container[data-astro-cid-6vqylkyd] svg{max-width:100%;height:auto;min-height:300px}.mermaid-caption[data-astro-cid-6vqylkyd]{text-align:center;font-size:.85rem;color:var(--color-text-muted);margin-top:.75rem}@media(max-width:768px){.mermaid-container[data-astro-cid-6vqylkyd]{margin-left:-1rem;margin-right:-1rem;padding:1rem;border-radius:0}}
+</style>
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link active"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>How It Works</span>  <span class="separator">/</span> <span>Testing Strategy</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://vibecrew.dev/"},{"@type":"ListItem","position":2,"name":"How It Works"},{"@type":"ListItem","position":3,"name":"Testing Strategy"}]}</script>  <div class="panel-intro"> <h2>Testing Strategy</h2> <p>
+VibeCrew's 127 bash scripts form complex workflow chains. 1413 unit tests validate individual
+    scripts in isolation. 69 integration tests validate the chains compose correctly &mdash; catching
+    the category of bugs that only appear when script A's output becomes script B's input.
+    All tests run in isolated temp directories with mocked external tools &mdash; zero network, zero side effects.
+</p> <div class="key-points"> <div class="key-point"> <span class="key-icon purple">&#9874;</span> <div> <strong>Unit Tests (1413)</strong>
+Individual script validation. 1:1 mapping with scripts.
+        State built programmatically. External commands mocked.
+</div> </div> <div class="key-point"> <span class="key-icon green">&#9939;</span> <div> <strong>Integration Tests (69)</strong>
+Workflow chain validation. Scripts call each other for real.
+        Mocking stops at the system boundary.
+</div> </div> </div> </div>  <h4 class="agent-table-heading">Testing Flow</h4> <p class="cmd-group-desc">
+How tests flow through the system, from development to CI to regression feedback.
+</p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+    DEV["Developer writes code"] --> UNIT["Unit Tests<br/>1413 tests · ~2min"]
+    DEV --> INT["Integration Tests<br/>69 tests · ~2-5min"]
+    UNIT --> CI["CI Pipeline<br/>ubuntu + macOS matrix"]
+    INT --> CI
+    CI --> PASS{"All pass?"}
+    PASS -->|Yes| MERGE["Merge to main"]
+    PASS -->|No| FIX["Fix failures"]
+    FIX --> DEV
+    MERGE --> WRAP["/wrap session"]
+    WRAP --> DETECT["detect-fix-commits.sh<br/>Scan for fix: commits"]
+    DETECT --> REGTEST{"Has test<br/>changes?"}
+    REGTEST -->|No| SKELETON["generate-regression-test.sh<br/>Create test skeleton"]
+    SKELETON --> SCORE["-5 Vibe Score"]
+    REGTEST -->|Yes| OK["No deduction"]
+    style UNIT fill:#bfb,stroke:#333,stroke-width:1px
+    style INT fill:#bbf,stroke:#333,stroke-width:1px
+    style CI fill:#ffd,stroke:#333,stroke-width:1px
+    style SKELETON fill:#fde8e8,stroke:#333,stroke-width:1px
+    style OK fill:#e8fde8,stroke:#333,stroke-width:1px</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Full testing flow: unit and integration tests feed CI, /wrap detects fix commits without regression tests.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+    DEV[&quot;Developer writes code&quot;] --&gt; UNIT[&quot;Unit Tests&lt;br/&gt;1413 tests · ~2min&quot;]
+    DEV --&gt; INT[&quot;Integration Tests&lt;br/&gt;69 tests · ~2-5min&quot;]
+    UNIT --&gt; CI[&quot;CI Pipeline&lt;br/&gt;ubuntu + macOS matrix&quot;]
+    INT --&gt; CI
+    CI --&gt; PASS{&quot;All pass?&quot;}
+    PASS --&gt;|Yes| MERGE[&quot;Merge to main&quot;]
+    PASS --&gt;|No| FIX[&quot;Fix failures&quot;]
+    FIX --&gt; DEV
+    MERGE --&gt; WRAP[&quot;/wrap session&quot;]
+    WRAP --&gt; DETECT[&quot;detect-fix-commits.sh&lt;br/&gt;Scan for fix: commits&quot;]
+    DETECT --&gt; REGTEST{&quot;Has test&lt;br/&gt;changes?&quot;}
+    REGTEST --&gt;|No| SKELETON[&quot;generate-regression-test.sh&lt;br/&gt;Create test skeleton&quot;]
+    SKELETON --&gt; SCORE[&quot;-5 Vibe Score&quot;]
+    REGTEST --&gt;|Yes| OK[&quot;No deduction&quot;]
+    style UNIT fill:#bfb,stroke:#333,stroke-width:1px
+    style INT fill:#bbf,stroke:#333,stroke-width:1px
+    style CI fill:#ffd,stroke:#333,stroke-width:1px
+    style SKELETON fill:#fde8e8,stroke:#333,stroke-width:1px
+    style OK fill:#e8fde8,stroke:#333,stroke-width:1px</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
+            useMaxWidth: true,
+          },
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+            fontSize: '16px',
+          },
+        });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script>  <h4 class="agent-table-heading">Testing Pyramid</h4> <p class="cmd-group-desc">
+Two automated tiers plus manual validation for complete coverage.
+</p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart TD
+    A["Manual Testing<br/>(Full Claude Code session)"] --> B
+    B["Integration Tests<br/>(69 tests — workflow chains)"] --> C
+    C["Unit Tests<br/>(1413 tests — individual scripts)"]
+    style A fill:#f9f,stroke:#333,stroke-width:1px
+    style B fill:#bbf,stroke:#333,stroke-width:1px
+    style C fill:#bfb,stroke:#333,stroke-width:1px</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Test pyramid: unit tests form the base, integration tests validate chains, manual testing covers full sessions.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart TD
+    A[&quot;Manual Testing&lt;br/&gt;(Full Claude Code session)&quot;] --&gt; B
+    B[&quot;Integration Tests&lt;br/&gt;(69 tests — workflow chains)&quot;] --&gt; C
+    C[&quot;Unit Tests&lt;br/&gt;(1413 tests — individual scripts)&quot;]
+    style A fill:#f9f,stroke:#333,stroke-width:1px
+    style B fill:#bbf,stroke:#333,stroke-width:1px
+    style C fill:#bfb,stroke:#333,stroke-width:1px</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
+            useMaxWidth: true,
+          },
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+            fontSize: '16px',
+          },
+        });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script>  <h4 class="agent-table-heading">Test Suites</h4> <div class="agent-table-wrap"> <table class="agent-table"> <thead> <tr><th>Suite</th><th>Tests</th><th>What It Tests</th><th>Speed</th></tr> </thead> <tbody> <tr> <td><strong>Unit</strong></td> <td>1413</td> <td>Individual script logic, edge cases, error paths</td> <td>~2min</td> </tr> <tr> <td><strong>Feature Lifecycle</strong></td> <td>16</td> <td>claim &rarr; 6 phases &rarr; done state machine (incl. complexity-aware skipping)</td> <td>~15s</td> </tr> <tr> <td><strong>Session Startup</strong></td> <td>13</td> <td>Migration, sync, repair, model-change detection</td> <td>~10s</td> </tr> <tr> <td><strong>Hook Enforcement</strong></td> <td>16</td> <td>Full PreToolUse &rarr; PostToolUse pipeline</td> <td>~10s</td> </tr> <tr> <td><strong>Wrap Sequence</strong></td> <td>14</td> <td>Score &rarr; docs &rarr; sidebar &rarr; handoff &rarr; agent metrics</td> <td>~10s</td> </tr> <tr> <td><strong>Concurrency</strong></td> <td>10</td> <td>Lock contention, parallel writers, stale cleanup</td> <td>~30s</td> </tr> </tbody> </table> </div>  <h4 class="agent-table-heading">How Tests Are Isolated</h4> <p class="cmd-group-desc">
+Every test creates an ephemeral project directory, runs in isolation, and cleans up after itself.
+</p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart LR
+    A["mktemp -d"] --> B["git init"]
+    B --> C["Create .vibecrew/"]
+    C --> D["Run test"]
+    D --> E["rm -rf"]
+    style A fill:#e8f4fd,stroke:#333
+    style E fill:#fde8e8,stroke:#333</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Test lifecycle: create temp dir, initialize git, create state files, run test, clean up.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart LR
+    A[&quot;mktemp -d&quot;] --&gt; B[&quot;git init&quot;]
+    B --&gt; C[&quot;Create .vibecrew/&quot;]
+    C --&gt; D[&quot;Run test&quot;]
+    D --&gt; E[&quot;rm -rf&quot;]
+    style A fill:#e8f4fd,stroke:#333
+    style E fill:#fde8e8,stroke:#333</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
+            useMaxWidth: true,
+          },
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+            fontSize: '16px',
+          },
+        });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script>  <h4 class="agent-table-heading">Mocking Strategy</h4> <p class="cmd-group-desc">
+External tools are always mocked. Internal scripts run for real in integration tests.
+</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead> <tr><th>Layer</th><th>What's Mocked</th><th>How</th></tr> </thead> <tbody> <tr> <td>External CLIs</td> <td><code>gh</code>, <code>glab</code>, <code>node</code>, <code>npm</code></td> <td><code>mock_command()</code> &mdash; executable stub prepended to PATH</td> </tr> <tr> <td>Package managers</td> <td><code>bun</code>, <code>pnpm</code>, <code>yarn</code></td> <td>Same PATH prepend pattern</td> </tr> <tr> <td>System tools</td> <td><code>terminal-notifier</code>, <code>timeout</code></td> <td>Same pattern</td> </tr> <tr> <td>File system</td> <td>None &mdash; uses real temp dirs</td> <td><code>mktemp -d</code> with cleanup in teardown</td> </tr> <tr> <td>Git</td> <td>Real git in temp repos</td> <td><code>git init</code> in setup, real commits when needed</td> </tr> <tr> <td>Internal scripts</td> <td><strong>Not mocked</strong> in integration tests</td> <td>Scripts call each other directly</td> </tr> </tbody> </table> </div>  <h4 class="agent-table-heading">Running Tests</h4> <p class="cmd-group-desc">
+The test runner supports three modes via a single entry point.
+</p> <pre><code>tests/run-tests.sh              # All tests (unit + integration)
+tests/run-tests.sh unit         # Unit tests only
+tests/run-tests.sh integration  # Integration tests only</code></pre>  <h4 class="agent-table-heading">Regression Test Feedback Loop</h4> <p class="cmd-group-desc">
+When bug fixes are committed without accompanying tests, VibeCrew automatically generates
+  regression test skeletons to close the loop.
+</p> <div class="mermaid-container" data-astro-cid-6vqylkyd> <pre class="mermaid" data-astro-cid-6vqylkyd>flowchart LR
+    A["fix: commit<br/>detected"] --> B{"Has test<br/>changes?"}
+    B -->|No| C["detect-fix-commits.sh"]
+    C --> D["generate-regression-test.sh"]
+    D --> E["Skeleton committed<br/>with skip marker"]
+    B -->|Yes| F["No action needed"]
+    style A fill:#fde8e8,stroke:#333
+    style E fill:#e8fde8,stroke:#333
+    style F fill:#e8fde8,stroke:#333</pre> <p class="mermaid-caption" data-astro-cid-6vqylkyd>Fix commits without tests trigger automatic skeleton generation during /wrap.</p> <noscript> <pre data-astro-cid-6vqylkyd><code data-astro-cid-6vqylkyd>flowchart LR
+    A[&quot;fix: commit&lt;br/&gt;detected&quot;] --&gt; B{&quot;Has test&lt;br/&gt;changes?&quot;}
+    B --&gt;|No| C[&quot;detect-fix-commits.sh&quot;]
+    C --&gt; D[&quot;generate-regression-test.sh&quot;]
+    D --&gt; E[&quot;Skeleton committed&lt;br/&gt;with skip marker&quot;]
+    B --&gt;|Yes| F[&quot;No action needed&quot;]
+    style A fill:#fde8e8,stroke:#333
+    style E fill:#e8fde8,stroke:#333
+    style F fill:#e8fde8,stroke:#333</code></pre> </noscript> </div>  <script>
+  (function() {
+    if (document.querySelector('.mermaid') && !window.__mermaidLoaded) {
+      window.__mermaidLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+      s.onload = function() {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'dark',
+          fontSize: 16,
+          flowchart: {
+            padding: 24,
+            nodeSpacing: 40,
+            rankSpacing: 50,
+            useMaxWidth: true,
+          },
+          themeVariables: {
+            primaryColor: '#7c3aed',
+            primaryTextColor: '#fafafa',
+            primaryBorderColor: '#a78bfa',
+            lineColor: '#a78bfa',
+            secondaryColor: '#18181b',
+            tertiaryColor: '#111113',
+            background: '#0a0a0b',
+            mainBkg: '#18181b',
+            nodeBorder: '#a78bfa',
+            clusterBkg: '#111113',
+            clusterBorder: '#27272a',
+            titleColor: '#fafafa',
+            edgeLabelBackground: '#18181b',
+            fontSize: '16px',
+          },
+        });
+        // Only render visible diagrams; hidden ones are rendered on demand
+        var visible = document.querySelectorAll('.arch-panel.active pre.mermaid');
+        if (visible.length > 0) {
+          mermaid.run({ nodes: visible });
+        } else {
+          // Fallback: render all visible .mermaid elements (non-tabbed pages)
+          var all = document.querySelectorAll('pre.mermaid');
+          if (all.length > 0) {
+            mermaid.run({ nodes: all });
+          }
+        }
+      };
+      document.head.appendChild(s);
+    }
+  })();
+</script> <p>
+The Vibe Score applies a <strong>-5 deduction</strong> per fix commit without a regression test.
+  After 3+ sessions with uncovered fixes, the Performance Coach proposes a CLAUDE.md mutation
+  enforcing TDD-style bug fixing.
+</p>  <h4 class="agent-table-heading">CI Pipeline</h4> <p class="cmd-group-desc">
+GitHub Actions runs two parallel jobs on push/PR to <code>main</code>.
+</p> <div class="agent-table-wrap"> <table class="agent-table"> <thead> <tr><th>Job</th><th>Suite</th><th>Speed</th><th>Timeout</th></tr> </thead> <tbody> <tr> <td><code>unit-tests</code></td> <td><code>tests/*.bats</code></td> <td>~30s</td> <td>Default</td> </tr> <tr> <td><code>integration-tests</code></td> <td><code>tests/integration/*.bats</code></td> <td>~2-5min</td> <td>10min</td> </tr> </tbody> </table> </div> <p>
+Both run on <code>ubuntu-latest</code> + <code>macos-latest</code> matrix with <code>fail-fast: false</code>.
+</p>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/templates.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Templates</span></a><a href="/vibe-crew/dashboard.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Vibe Dashboard</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html>

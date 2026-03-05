@@ -405,6 +405,59 @@ When a review feedback file exists at `.vibecrew/signals/builder-review-feedback
 2. Prepare a PR description summarizing changes, linking to the feature spec, and listing acceptance criteria with checkboxes.
 3. Do NOT open the PR — the Orchestrator handles that after verification.
 
+## Code Quality Standards
+
+Follow these standards for ALL code you write. Readability and simplicity are non-negotiable.
+
+### TypeScript First
+
+- Always use TypeScript for JavaScript projects. Never create `.js`/`.jsx` files when the project supports TypeScript (detect via `tsconfig.json`).
+- No `any` types. Use `unknown` + type narrowing if the type is truly dynamic.
+- Prefer explicit return types on exported functions.
+
+### Readability Over Cleverness
+
+- Write code that reads like prose. A junior developer should understand every function without documentation.
+- Prefer simple, explicit code over clever one-liners. A 5-line `if/else` is better than a nested ternary.
+- No clever tricks: no bitwise operators for math (`~~x`, `x | 0`), no comma operators, no void operators for side effects.
+- If a line requires a comment to explain WHAT it does, rewrite the line to be self-explanatory.
+
+### Function Design
+
+- **One task per function.** If you can describe what it does using "and", split it into two functions. This is the primary quality signal — not line count. A 50-line function that does one thing with flat nesting is better than 5 scattered 10-line functions you must mentally reassemble.
+- **Max 3 parameters.** Beyond 3, use an options object with destructuring: `function createUser({ name, email, role }: CreateUserOptions)`.
+- **Max 2 levels of nesting.** Use early returns and guard clauses to flatten logic.
+- **Pure by default.** Isolate side effects (API calls, mutations, logging) at system boundaries. Business logic should be pure.
+- **Early returns** over nested conditionals. Guard clauses at the top; happy path at the lowest indentation level.
+
+### Naming Conventions
+
+- **Functions**: `verb + noun` — `fetchUser`, `validateEmail`, `renderCard`, `handleSubmit`.
+- **Variables**: descriptive nouns, no abbreviations — `userEmail` not `ue`, `remainingAttempts` not `ra`.
+- **Booleans**: `is/has/can/should` prefix, always affirmative — `isValid` not `isInvalid`, use `!isValid` at call sites.
+- **Constants**: `SCREAMING_SNAKE_CASE` — `MAX_RETRY_COUNT`, `DEFAULT_TIMEOUT_MS`.
+- **Components**: `PascalCase` describing what it renders — `UserProfile`, `PaymentForm`.
+- **Hooks**: `use` + descriptive — `useAuth`, `useDebounce`, `useLocalStorage`.
+- **Event handlers**: `handle + event` — `handleClick`, `handleSubmit`, `handleFilterChange`.
+- **No generic names**: never `data`, `info`, `item`, `temp`, `stuff`, `result`. Be specific about what the value represents.
+- **No single-letter variables** except `i`/`j` in short loops (<5 lines).
+- **Include units** when relevant: `timeoutMs`, `fileSizeBytes`, `maxRetryCount`.
+
+### Tests and Linting
+
+- **Failing tests must be fixed immediately.** Never leave a failing test and move on. If a test breaks during implementation, stop current work and fix it before continuing.
+- **Linting must be 100% clean.** Zero warnings, zero errors. Run `lint --fix` first, then manually fix any remaining issues. Never ship code with lint warnings.
+- **Every exported function has at least one test.** Every acceptance criterion has at least one test.
+
+### Code Simplicity
+
+- **No premature abstractions.** Rule of Three — tolerate duplication until the 3rd occurrence, then extract.
+- **No unnecessary wrappers.** If a wrapper adds no logic beyond delegation, inline it.
+- **No design patterns for simple problems.** Factory, Strategy, Observer — only when complexity genuinely warrants them.
+- **No magic numbers or strings.** All literals used more than once must be named constants.
+- **Comments explain WHY, never WHAT.** Delete comments that restate the code. If the code needs a WHAT comment, rewrite the code.
+- **Use framework conventions.** Don't reimplement what the framework provides (routing, validation, error boundaries, data fetching).
+
 ## Mandatory Rules
 
 - **ALWAYS use Context7** for library documentation. Run `mcp__context7__resolve-library-id` to find the library, then `mcp__context7__get-library-docs` to retrieve docs. NEVER paste documentation into context manually.

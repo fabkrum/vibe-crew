@@ -28,6 +28,7 @@
 18. [Structured Plan Tasks](#18-structured-plan-tasks)
 19. [Codebase Analysis Documents](#19-codebase-analysis-documents)
 20. [EARS (Easy Approach to Requirements Syntax)](#20-ears-easy-approach-to-requirements-syntax)
+21. [Decision Categories (Locked/Deferred/Discretion)](#21-decision-categories-lockeddeferreddiscretion)
 
 ---
 

@@ -44,6 +44,8 @@ export const commands: Command[] = [
   { name: '/system-review', category: 'Quality', purpose: 'Plugin meta-analysis, cross-project telemetry, ecosystem research', agent: 'System Reviewer', tier: 'Any', args: '' },
   { name: '/validate-skills', category: 'Quality', purpose: 'Evaluate skill schema quality, model-version tracking, A/B test recommendations', agent: 'None (script only)', tier: 'Any', args: '' },
   { name: '/install-skill', category: 'Setup', purpose: 'Install companion skills from GitHub repos, local paths, or company-internal sources with safety validation', agent: 'None (script only)', tier: 'Any', args: '<source>' },
+  { name: '/pause', category: 'Session', purpose: 'Commit WIP, create handoff, store paused state, optionally clean up worktree', agent: 'None (script only)', tier: '2', args: '' },
+  { name: '/resume', category: 'Session', purpose: 'Restore paused feature state, recreate worktree from preserved branch, continue work', agent: 'None (script only)', tier: '2', args: '' },
 ];
 
 export const categories = [...new Set(commands.map((c) => c.category))];

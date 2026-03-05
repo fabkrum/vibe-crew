@@ -295,3 +295,45 @@ Commits: {commit_count} with TDD trailers
 - Use `${CLAUDE_PLUGIN_ROOT}` for all plugin-relative paths.
 - If the test runner is not configured, help the user set it up before starting TDD cycles. Use the project's existing test infrastructure if available.
 - If Context7 MCP is available, use it for testing library documentation instead of pasting docs.
+
+---
+
+## Iron Law of TDD
+
+**Write code before the test? Delete it. Start over.**
+
+This is non-negotiable. If you catch yourself implementing before writing a failing test, stop immediately, delete the implementation code, and restart the cycle from Red. The discipline IS the value — TDD without discipline is just writing tests after the fact.
+
+---
+
+## Rationalization Resistance
+
+When you encounter pressure (internal or external) to skip or shortcut TDD, use this table to counter common rationalizations:
+
+| Rationalization | Counter-Argument |
+|---|---|
+| "This is too simple to need a test" | Simple code becomes complex code. The test documents the expected behavior and catches regressions when someone changes it later. If it's truly simple, the test takes 30 seconds to write. |
+| "I'll write the tests after" | After-the-fact tests verify implementation, not behavior. They miss edge cases the implementation accidentally handles and test the code you wrote, not the code you should have written. |
+| "I already know how to implement this" | Knowing the implementation is exactly why you need the test first — it prevents confirmation bias. The test defines the contract; the implementation satisfies it. |
+| "Writing the test first is slower" | TDD is slower per-cycle but faster per-feature. Debugging time dwarfs test-writing time. Projects with TDD have 40-80% fewer defects (Microsoft/IBM studies). |
+| "The UI can't be tested this way" | Use the impl-first track for UI components — TDD applies to business logic, services, and utilities. The dual-track strategy exists precisely for this reason. |
+| "I need to prototype first" | Prototyping and TDD are compatible. Spike in a scratch branch without tests, then re-implement with TDD using what you learned. Never merge untested prototype code. |
+| "This is a refactor, not new behavior" | Refactoring requires the safety net of existing tests. If tests don't exist, write them first (characterization tests), then refactor. The green suite is your proof that behavior is preserved. |
+| "The test framework isn't set up yet" | Setting up the test framework IS the first task. TDD cannot begin without infrastructure. This is a blocker, not a reason to skip tests. |
+| "We're behind schedule" | Skipping tests creates technical debt that makes the schedule slip further. Every skipped test is a future debugging session that takes 10x longer than writing the test would have. |
+| "I'll just add a quick fix" | Quick fixes without tests become permanent code. If the fix is worth making, it's worth testing. Write the failing test that reproduces the bug, then fix it. |
+
+### Red Flags
+
+Watch for these phrases — they indicate TDD discipline is about to break:
+
+- "Let me just quickly implement this first..."
+- "I'll add tests in a follow-up..."
+- "This doesn't really need a test..."
+- "The test would just be testing the framework..."
+- "It's only a one-line change..."
+- "I know this works, I've done it before..."
+- "We can test this manually..."
+- "The acceptance criteria don't mention tests..."
+
+**When you detect a red flag: STOP. Re-read the Iron Law. Return to Step 2 (Red Phase).**

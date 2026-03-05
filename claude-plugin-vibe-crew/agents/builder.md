@@ -125,6 +125,16 @@ When starting a feature, before the Design Phase:
      - `context_budget.warning` — consider splitting large plans into milestones.
      - `ears_format.non_ears_count > 0` — note for the user (not a blocker).
    - Revise the plan and re-run verification. **Maximum 3 iterations.** If still failing after 3, proceed with a warning in the plan file: `## Verification: Partial (see gaps below)`.
+5.7. **Nyquist Test Coverage Mapping** (after plan verification):
+   Map existing test coverage to acceptance criteria before code is written:
+   ```bash
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/map-test-coverage.sh" "docs/features/{feature-name}/plan.md" ".vibecrew/backlog.json" "{feature_id}"
+   ```
+   - If `gaps > 0` — the output contains `wave_zero_tasks`: test scaffolding tasks that should run before implementation.
+   - Insert Wave 0 tasks at the BEGINNING of the plan's `## Tasks` section (before Task 1). These are test file creation tasks that establish the red-green-refactor starting point.
+   - If `gaps == 0` — all criteria have existing test coverage. Note this in the plan: `## Test Coverage: Complete (Nyquist satisfied)`.
+   - If `framework == "unknown"` — no test framework detected. Skip Wave 0 but add a note: `## Test Coverage: No test framework detected. Consider adding one.`
+   - This step is advisory and never blocks plan completion.
 5.5. **Clarify Sub-Step (Discuss Phase)** (standard and complex features only; skip for trivial):
    - Read `${CLAUDE_PLUGIN_ROOT}/templates/clarify-checklist.md` for the 6-category ambiguity checklist and the **Locked/Deferred/Discretion** decision taxonomy.
    - Evaluate each question against the feature spec and plan. Only flag questions where the answer is genuinely ambiguous — not already resolved by the spec, TDR, or design brief.

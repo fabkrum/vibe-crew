@@ -79,6 +79,25 @@ import MermaidDiagram from '../components/MermaidDiagram.astro';
     The <code>/tdd</code> command includes built-in resistance to common reasons for skipping test-driven development. When the agent detects &ldquo;red flag&rdquo; phrases (like &ldquo;I&rsquo;ll add tests later&rdquo; or &ldquo;this is too simple to test&rdquo;), it stops and returns to the Red phase. The Iron Law: <strong>write code before the test? Delete it. Start over.</strong>
   </p>
 
+  <h4 class="agent-table-heading">Nyquist Test Coverage Mapping</h4>
+  <p class="cmd-group-desc">
+    Before the Code phase begins, VibeCrew maps existing test coverage to acceptance criteria via <code>map-test-coverage.sh</code>. Criteria without matching tests become <strong>Wave 0 tasks</strong> &mdash; test scaffolding tasks inserted at the beginning of the plan, establishing the red-green-refactor starting point before any implementation.
+  </p>
+
+  <div class="agent-table-wrap">
+    <table class="agent-table">
+      <thead><tr><th>Step</th><th>What Happens</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Detect</strong></td><td>Identifies test framework (vitest, jest, playwright, cypress, bats) from config files</td></tr>
+        <tr><td><strong>Map</strong></td><td>Searches existing test files for keyword matches against each acceptance criterion</td></tr>
+        <tr><td><strong>Gap</strong></td><td>Flags criteria with no matching test file as coverage gaps</td></tr>
+        <tr><td><strong>Wave 0</strong></td><td>Generates test scaffolding tasks for each gap (create test file with failing test)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Wave 0 tasks go before implementation tasks in the plan. This is advisory &mdash; it never blocks plan completion. If no test framework is detected, VibeCrew notes it and skips.</p>
+
 <hr>
 
 <!-- Plugin Test Suite -->

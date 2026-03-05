@@ -134,7 +134,36 @@ When a `fix:` commit is detected during `/wrap`:
 
 ---
 
-## 10. Adding New Tests
+## 10. Pre-Execution Test Coverage Mapping (Nyquist)
+
+Before the Code phase begins, `map-test-coverage.sh` maps existing test coverage to the feature's acceptance criteria. This ensures test infrastructure exists before implementation starts.
+
+### How It Works
+
+1. **Framework detection**: Scans for config files (`vitest.config.ts`, `jest.config.js`, `playwright.config.ts`, `cypress.config.*`, `*.bats`) to identify the project's test framework.
+2. **Criteria extraction**: Reads acceptance criteria from `backlog.json` for the active feature.
+3. **Coverage mapping**: For each criterion, extracts key terms and searches existing test files for matches using `grep -Eli`.
+4. **Gap identification**: Criteria with no matching test file are flagged as gaps.
+5. **Wave 0 generation**: Creates test scaffolding tasks for each gap — these go before implementation tasks in the plan.
+
+### Wave 0 Tasks
+
+Wave 0 tasks establish the red-green-refactor starting point:
+- Each Wave 0 task creates a test file with a `describe`/`it` block matching an acceptance criterion
+- The test should fail (red) before implementation
+- Wave 0 tasks are inserted at the beginning of the plan's `## Tasks` section
+
+### Integration Points
+
+| Component | How It Uses Nyquist |
+|-----------|---------------------|
+| `builder.md` step 5.7 | Runs `map-test-coverage.sh` after plan verification |
+| `validate-plan.sh` | Includes Nyquist gap count in validation output (advisory) |
+| Vibe Score | Future: test coverage gaps could be scored as missing-phase artifacts |
+
+---
+
+## 11. Adding New Tests
 
 - **New script** → create `tests/<script-name>.bats` with matching name
 - **New workflow chain** → create `tests/integration/<chain-name>.bats`

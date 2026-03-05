@@ -93,6 +93,21 @@ if [[ -n "$BACKLOG_FILE" && -f "$BACKLOG_FILE" && -n "$FEATURE_ID" ]]; then
   fi
 fi
 
+# Check for test coverage mapping (Nyquist) — advisory only
+NYQUIST_STATUS="skipped"
+NYQUIST_GAPS=0
+if [[ -n "$BACKLOG_FILE" && -f "$BACKLOG_FILE" && -n "$FEATURE_ID" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+  if [[ -x "$SCRIPT_DIR/map-test-coverage.sh" ]]; then
+    NYQUIST_OUTPUT=$(bash "$SCRIPT_DIR/map-test-coverage.sh" "$PLAN_FILE" "$BACKLOG_FILE" "$FEATURE_ID" 2>/dev/null || echo '{}')
+    NYQUIST_MAPPED=$(echo "$NYQUIST_OUTPUT" | jq -r '.mapped // false' 2>/dev/null || echo "false")
+    if [[ "$NYQUIST_MAPPED" == "true" ]]; then
+      NYQUIST_STATUS="checked"
+      NYQUIST_GAPS=$(echo "$NYQUIST_OUTPUT" | jq -r '.gaps // 0' 2>/dev/null || echo "0")
+    fi
+  fi
+fi
+
 jq -n \
   --argjson structured true \
   --argjson task_count "$TASK_COUNT" \
@@ -101,7 +116,9 @@ jq -n \
   --arg ears_check "$EARS_CHECK" \
   --argjson ears_count "$EARS_COUNT" \
   --argjson non_ears_count "$NON_EARS_COUNT" \
-  '{structured: $structured, task_count: $task_count, missing_field_count: $missing_field_count, missing_fields: $missing_fields, ears: {status: $ears_check, ears_count: $ears_count, non_ears_count: $non_ears_count}}'
+  --arg nyquist_status "$NYQUIST_STATUS" \
+  --argjson nyquist_gaps "$NYQUIST_GAPS" \
+  '{structured: $structured, task_count: $task_count, missing_field_count: $missing_field_count, missing_fields: $missing_fields, ears: {status: $ears_check, ears_count: $ears_count, non_ears_count: $non_ears_count}, nyquist: {status: $nyquist_status, gaps: $nyquist_gaps}}'
 
 # Exit non-zero if structural issues found (missing required fields)
 if [[ "$TOTAL_MISSING" -gt 0 ]]; then

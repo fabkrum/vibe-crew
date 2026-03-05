@@ -614,6 +614,19 @@ After the Builder generates the implementation plan, it runs a pre-execution ver
 
 This loop catches requirement gaps before tokens are spent on implementation, inspired by GSD's plan-checker pattern.
 
+#### Nyquist Test Coverage Mapping
+
+After plan verification, the Builder runs `map-test-coverage.sh` to map existing test coverage to acceptance criteria:
+
+1. **Detect test framework**: Identifies vitest, jest, playwright, cypress, or bats from config files.
+2. **Map criteria to tests**: Searches existing test files for keywords matching each acceptance criterion.
+3. **Identify gaps**: Criteria with no matching test file are flagged as coverage gaps.
+4. **Generate Wave 0 tasks**: For each gap, creates a test scaffolding task (create test file with failing test) that should run before implementation tasks.
+
+Wave 0 tasks are inserted at the beginning of the plan's task list, establishing the red-green-refactor starting point. This ensures test infrastructure exists before implementation begins, inspired by GSD's Nyquist validation pattern.
+
+The mapping is advisory — it never blocks plan completion. If no test framework is detected, it logs a note and skips.
+
 ### 3.4 Step-by-Step: `/idea "text"`
 
 ```

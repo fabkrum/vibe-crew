@@ -208,6 +208,8 @@ const backlogJson = `{
       </table>
     </div>
 
+    <p><strong>Nyquist Test Coverage Mapping</strong> &mdash; After verification, the Builder maps existing test coverage to acceptance criteria. Criteria without matching tests generate <strong>Wave 0 tasks</strong> (test scaffolding) that are inserted before implementation tasks. This ensures test infrastructure exists before code is written. See <a href="testing.html">Testing</a> for details.</p>
+
     <p><strong>Plan Freshness Check</strong> &mdash; Before the Code phase begins, VibeCrew automatically checks whether any files referenced in your plan have changed since planning completed (from other features, quick fixes, or dependency updates). Minor changes are noted and the affected files are re-read. Major changes trigger a plan refresh for the affected tasks. This prevents building against stale assumptions.</p>
 
     <h4>Phase 2: UI Design (~5 min)</h4>

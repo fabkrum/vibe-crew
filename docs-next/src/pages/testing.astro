@@ -1,0 +1,259 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import MermaidDiagram from '../components/MermaidDiagram.astro';
+---
+
+<DocsLayout title="Testing Strategy" sectionLabel="How It Works" activeSlug="testing">
+
+<div class="panel-intro">
+  <h2>Testing Strategy</h2>
+  <p>
+    VibeCrew's 80+ bash scripts form complex workflow chains. 125 unit tests validate individual
+    scripts in isolation. 69 integration tests validate the chains compose correctly &mdash; catching
+    the category of bugs that only appear when script A's output becomes script B's input.
+    All tests run in isolated temp directories with mocked external tools &mdash; zero network, zero side effects.
+  </p>
+
+  <div class="key-points">
+    <div class="key-point">
+      <span class="key-icon purple">&#9874;</span>
+      <div>
+        <strong>Unit Tests (125)</strong>
+        Individual script validation. 1:1 mapping with scripts.
+        State built programmatically. External commands mocked.
+      </div>
+    </div>
+    <div class="key-point">
+      <span class="key-icon green">&#9939;</span>
+      <div>
+        <strong>Integration Tests (69)</strong>
+        Workflow chain validation. Scripts call each other for real.
+        Mocking stops at the system boundary.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Testing Flow -->
+<h4 class="agent-table-heading">Testing Flow</h4>
+<p class="cmd-group-desc">
+  How tests flow through the system, from development to CI to regression feedback.
+</p>
+
+<MermaidDiagram chart={`flowchart TD
+    DEV["Developer writes code"] --> UNIT["Unit Tests<br/>125 tests · ~30s"]
+    DEV --> INT["Integration Tests<br/>69 tests · ~2-5min"]
+    UNIT --> CI["CI Pipeline<br/>ubuntu + macOS matrix"]
+    INT --> CI
+    CI --> PASS{"All pass?"}
+    PASS -->|Yes| MERGE["Merge to main"]
+    PASS -->|No| FIX["Fix failures"]
+    FIX --> DEV
+    MERGE --> WRAP["/wrap session"]
+    WRAP --> DETECT["detect-fix-commits.sh<br/>Scan for fix: commits"]
+    DETECT --> REGTEST{"Has test<br/>changes?"}
+    REGTEST -->|No| SKELETON["generate-regression-test.sh<br/>Create test skeleton"]
+    SKELETON --> SCORE["-5 Vibe Score"]
+    REGTEST -->|Yes| OK["No deduction"]
+    style UNIT fill:#bfb,stroke:#333,stroke-width:1px
+    style INT fill:#bbf,stroke:#333,stroke-width:1px
+    style CI fill:#ffd,stroke:#333,stroke-width:1px
+    style SKELETON fill:#fde8e8,stroke:#333,stroke-width:1px
+    style OK fill:#e8fde8,stroke:#333,stroke-width:1px`}
+  caption="Full testing flow: unit and integration tests feed CI, /wrap detects fix commits without regression tests."
+/>
+
+<!-- Testing Pyramid -->
+<h4 class="agent-table-heading">Testing Pyramid</h4>
+<p class="cmd-group-desc">
+  Two automated tiers plus manual validation for complete coverage.
+</p>
+
+<MermaidDiagram chart={`flowchart TD
+    A["Manual Testing<br/>(Full Claude Code session)"] --> B
+    B["Integration Tests<br/>(69 tests — workflow chains)"] --> C
+    C["Unit Tests<br/>(125 tests — individual scripts)"]
+    style A fill:#f9f,stroke:#333,stroke-width:1px
+    style B fill:#bbf,stroke:#333,stroke-width:1px
+    style C fill:#bfb,stroke:#333,stroke-width:1px`}
+  caption="Test pyramid: unit tests form the base, integration tests validate chains, manual testing covers full sessions."
+/>
+
+<!-- Test Suites Table -->
+<h4 class="agent-table-heading">Test Suites</h4>
+<div class="agent-table-wrap">
+  <table class="agent-table">
+    <thead>
+      <tr><th>Suite</th><th>Tests</th><th>What It Tests</th><th>Speed</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Unit</strong></td>
+        <td>125</td>
+        <td>Individual script logic, edge cases, error paths</td>
+        <td>~30s</td>
+      </tr>
+      <tr>
+        <td><strong>Feature Lifecycle</strong></td>
+        <td>16</td>
+        <td>claim &rarr; 6 phases &rarr; done state machine (incl. complexity-aware skipping)</td>
+        <td>~15s</td>
+      </tr>
+      <tr>
+        <td><strong>Session Startup</strong></td>
+        <td>13</td>
+        <td>Migration, sync, repair, model-change detection</td>
+        <td>~10s</td>
+      </tr>
+      <tr>
+        <td><strong>Hook Enforcement</strong></td>
+        <td>16</td>
+        <td>Full PreToolUse &rarr; PostToolUse pipeline</td>
+        <td>~10s</td>
+      </tr>
+      <tr>
+        <td><strong>Wrap Sequence</strong></td>
+        <td>14</td>
+        <td>Score &rarr; docs &rarr; sidebar &rarr; handoff &rarr; agent metrics</td>
+        <td>~10s</td>
+      </tr>
+      <tr>
+        <td><strong>Concurrency</strong></td>
+        <td>10</td>
+        <td>Lock contention, parallel writers, stale cleanup</td>
+        <td>~30s</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Test Isolation -->
+<h4 class="agent-table-heading">How Tests Are Isolated</h4>
+<p class="cmd-group-desc">
+  Every test creates an ephemeral project directory, runs in isolation, and cleans up after itself.
+</p>
+
+<MermaidDiagram chart={`flowchart LR
+    A["mktemp -d"] --> B["git init"]
+    B --> C["Create .vibecrew/"]
+    C --> D["Run test"]
+    D --> E["rm -rf"]
+    style A fill:#e8f4fd,stroke:#333
+    style E fill:#fde8e8,stroke:#333`}
+  caption="Test lifecycle: create temp dir, initialize git, create state files, run test, clean up."
+/>
+
+<!-- Mocking Strategy -->
+<h4 class="agent-table-heading">Mocking Strategy</h4>
+<p class="cmd-group-desc">
+  External tools are always mocked. Internal scripts run for real in integration tests.
+</p>
+
+<div class="agent-table-wrap">
+  <table class="agent-table">
+    <thead>
+      <tr><th>Layer</th><th>What's Mocked</th><th>How</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>External CLIs</td>
+        <td><code>gh</code>, <code>glab</code>, <code>node</code>, <code>npm</code></td>
+        <td><code>mock_command()</code> &mdash; executable stub prepended to PATH</td>
+      </tr>
+      <tr>
+        <td>Package managers</td>
+        <td><code>bun</code>, <code>pnpm</code>, <code>yarn</code></td>
+        <td>Same PATH prepend pattern</td>
+      </tr>
+      <tr>
+        <td>System tools</td>
+        <td><code>terminal-notifier</code>, <code>timeout</code></td>
+        <td>Same pattern</td>
+      </tr>
+      <tr>
+        <td>File system</td>
+        <td>None &mdash; uses real temp dirs</td>
+        <td><code>mktemp -d</code> with cleanup in teardown</td>
+      </tr>
+      <tr>
+        <td>Git</td>
+        <td>Real git in temp repos</td>
+        <td><code>git init</code> in setup, real commits when needed</td>
+      </tr>
+      <tr>
+        <td>Internal scripts</td>
+        <td><strong>Not mocked</strong> in integration tests</td>
+        <td>Scripts call each other directly</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Running Tests -->
+<h4 class="agent-table-heading">Running Tests</h4>
+<p class="cmd-group-desc">
+  The test runner supports three modes via a single entry point.
+</p>
+
+<pre><code>tests/run-tests.sh              # All tests (unit + integration)
+tests/run-tests.sh unit         # Unit tests only
+tests/run-tests.sh integration  # Integration tests only</code></pre>
+
+<!-- Regression Test Feedback Loop -->
+<h4 class="agent-table-heading">Regression Test Feedback Loop</h4>
+<p class="cmd-group-desc">
+  When bug fixes are committed without accompanying tests, VibeCrew automatically generates
+  regression test skeletons to close the loop.
+</p>
+
+<MermaidDiagram chart={`flowchart LR
+    A["fix: commit<br/>detected"] --> B{"Has test<br/>changes?"}
+    B -->|No| C["detect-fix-commits.sh"]
+    C --> D["generate-regression-test.sh"]
+    D --> E["Skeleton committed<br/>with skip marker"]
+    B -->|Yes| F["No action needed"]
+    style A fill:#fde8e8,stroke:#333
+    style E fill:#e8fde8,stroke:#333
+    style F fill:#e8fde8,stroke:#333`}
+  caption="Fix commits without tests trigger automatic skeleton generation during /wrap."
+/>
+
+<p>
+  The Vibe Score applies a <strong>-5 deduction</strong> per fix commit without a regression test.
+  After 3+ sessions with uncovered fixes, the Performance Coach proposes a CLAUDE.md mutation
+  enforcing TDD-style bug fixing.
+</p>
+
+<!-- CI Pipeline -->
+<h4 class="agent-table-heading">CI Pipeline</h4>
+<p class="cmd-group-desc">
+  GitHub Actions runs two parallel jobs on push/PR to <code>main</code>.
+</p>
+
+<div class="agent-table-wrap">
+  <table class="agent-table">
+    <thead>
+      <tr><th>Job</th><th>Suite</th><th>Speed</th><th>Timeout</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>unit-tests</code></td>
+        <td><code>tests/*.bats</code></td>
+        <td>~30s</td>
+        <td>Default</td>
+      </tr>
+      <tr>
+        <td><code>integration-tests</code></td>
+        <td><code>tests/integration/*.bats</code></td>
+        <td>~2-5min</td>
+        <td>10min</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>
+  Both run on <code>ubuntu-latest</code> + <code>macos-latest</code> matrix with <code>fail-fast: false</code>.
+</p>
+
+</DocsLayout>

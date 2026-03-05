@@ -70,6 +70,8 @@ score -= 10 * min(drift_escalations, 2)                          # drift-escalat
 score -= 3  * min(drift_warnings, 3)                             # drift-warning: -3 each, max -9
 score -= 3  * min(erosion_complexity_files, 3)                   # erosion-complexity: -3 each, max -9
 score -= 5  * (1 if erosion_hot_files > 0 else 0)               # erosion-hot-file: max -5
+score -= 5  * min(fix_without_regression, 3)                     # fix-without-regression: -5 each, max -15
+score -= 3  * (1 if agent_inefficiency else 0)                   # agent-inefficiency: -3
 
 # Apply bonuses
 score += 5  * (1 if all_six_phases_complete else 0)            # all-phases: +5
@@ -107,6 +109,8 @@ Each deduction category has a per-category cap. Deductions are applied at most t
 | `drift-warning` | -3 per warning | -9 (3 warnings) | Soft drift threshold breached -- agent made 20+ exploration tool calls without progress. Detected by `drift-tracker.sh` PostToolUse hook. See [Section 3.7](#37-drift-detection-metrics). | Early signal of exploration without delivery. Less severe than escalation but indicates suboptimal tool usage patterns. |
 | `erosion-complexity` | -3 per file | -9 (3 files) | Modified files with cyclomatic complexity above configured threshold (default: 10) without corresponding test changes. Detected by `calculate-erosion-score.sh`. See [Section 3.8](#38-erosion-metrics). | Growing complexity without test coverage creates fragile code that breaks during refactoring. |
 | `erosion-hot-file` | -5 | -5 | Files modified 5+ times across sessions without `/simplify` being run. Detected from `.vibecrew/erosion/trends.json` file churn tracking. See [Section 3.8](#38-erosion-metrics). | Frequently modified files accumulate complexity. Running `/simplify` resets the churn counter. |
+| `fix-without-regression` | -5 per commit | -15 (3 commits) | `fix:` conventional commits detected in the session's git log that do not include corresponding test file changes. Detected by `detect-fix-commits.sh`. | Bug fixes without regression tests risk recurrence. The `generate-regression-test.sh` script creates test skeletons to close this loop. |
+| `agent-inefficiency` | -3 | -3 | Write-heavy agent has efficiency_ratio below threshold for 3+ sessions. Detected by `analyze-agent-effectiveness.sh`. | Agents with excessive exploration without delivery waste context and tokens. |
 
 **Total deduction caps:**
 

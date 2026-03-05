@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.6.0",
+  "foundation": {
+    "complete": true,
+    "completed_at": "2026-01-14T18:00:00Z",
+    "artifacts": {
+      "vision": { "status": "complete", "file": "VISION.md", "approved_at": "2026-01-14T10:00:00Z" },
+      "design_system": { "status": "complete", "file": "design-system.css", "approved_at": "2026-01-14T12:00:00Z" },
+      "tdr": { "status": "complete", "file": "docs/tdr/technology-decisions.tdr.md", "approved_at": "2026-01-14T14:00:00Z" },
+      "roadmap": { "status": "complete", "file": "roadmap.md", "approved_at": "2026-01-14T16:00:00Z" },
+      "architecture_diagrams": { "status": "complete", "file": ".vibecrew/architecture/", "approved_at": "2026-01-14T17:00:00Z" },
+      "claude_md": { "status": "complete", "file": "CLAUDE.md", "approved_at": "2026-01-14T18:00:00Z" }
+    }
+  },
+  "active_feature": {
+    "id": "billing-integration",
+    "name": "Stripe Billing",
+    "worktree": null,
+    "phase": "test",
+    "phases_completed": ["plan", "design", "code"],
+    "plan_revision_count": 2
+  },
+  "active_workflow": null,
+  "onboarded": true,
+  "onboarded_at": "2026-01-14T09:00:00Z",
+  "git": { "default_branch": "main", "initialized": true },
+  "updated_at": "2026-02-01T11:00:00Z"
+}

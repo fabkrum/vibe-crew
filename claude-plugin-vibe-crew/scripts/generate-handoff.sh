@@ -15,7 +15,7 @@ mkdir -p "$HANDOFFS_DIR"
 
 # --- Determine filename ---
 TODAY=$(date -u +%Y-%m-%d)
-EXISTING=$(ls "$HANDOFFS_DIR"/handoff-"${TODAY}"-*.md 2>/dev/null | wc -l | tr -d ' ')
+EXISTING=$(find "$HANDOFFS_DIR" -maxdepth 1 -name "handoff-${TODAY}-*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
 NEXT=$(printf "%03d" $((EXISTING + 1)))
 HANDOFF_FILE="$HANDOFFS_DIR/handoff-${TODAY}-${NEXT}.md"
 
@@ -40,7 +40,7 @@ fi
 # --- Read latest score ---
 SCORE="N/A"
 RATING="N/A"
-LATEST_SCORE=$(ls -1t "$PROJECT_ROOT/.vibecrew/scores"/score-*.json 2>/dev/null | head -1)
+LATEST_SCORE=$(ls -1t "$PROJECT_ROOT/.vibecrew/scores"/score-*.json 2>/dev/null | head -1 || true)
 if [[ -n "$LATEST_SCORE" && -f "$LATEST_SCORE" ]]; then
   SCORE=$(jq -r '.score // "N/A"' "$LATEST_SCORE" 2>/dev/null || echo "N/A")
   RATING=$(jq -r '.rating // "N/A"' "$LATEST_SCORE" 2>/dev/null || echo "N/A")

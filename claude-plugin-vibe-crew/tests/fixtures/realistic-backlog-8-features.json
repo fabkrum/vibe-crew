@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.6.0",
+  "columns": [
+    { "id": "idea", "title": "Ideas", "wip_limit": null },
+    { "id": "planning", "title": "Planning", "wip_limit": 2 },
+    { "id": "planned", "title": "Planned", "wip_limit": 5 },
+    { "id": "in-progress", "title": "In Development", "wip_limit": 1 },
+    { "id": "testing", "title": "Testing", "wip_limit": 1 },
+    { "id": "review", "title": "Review", "wip_limit": 2 },
+    { "id": "done", "title": "Done", "wip_limit": null }
+  ],
+  "features": [
+    {
+      "id": "auth-system",
+      "name": "User Authentication",
+      "column": "done",
+      "priority": 1,
+      "complexity": "complex",
+      "depends_on": [],
+      "labels": ["core", "security"],
+      "spec": {
+        "problem_statement": "Users need secure authentication with email/password and OAuth providers.",
+        "acceptance_criteria": [
+          "Users can register with email and password",
+          "Users can log in with Google OAuth",
+          "Sessions persist across page reloads",
+          "Password reset flow works end-to-end"
+        ]
+      },
+      "phases_completed": ["plan", "design", "code", "test", "review", "docs"],
+      "created_at": "2026-01-15T10:00:00Z",
+      "updated_at": "2026-01-20T14:30:00Z"
+    },
+    {
+      "id": "dashboard-ui",
+      "name": "Dashboard Layout",
+      "column": "done",
+      "priority": 2,
+      "complexity": "standard",
+      "depends_on": ["auth-system"],
+      "labels": ["ui", "core"],
+      "spec": {
+        "problem_statement": "Authenticated users need a dashboard showing key metrics and navigation.",
+        "acceptance_criteria": [
+          "Dashboard shows user greeting with name",
+          "Sidebar navigation with collapsible sections",
+          "Responsive layout for mobile and desktop"
+        ]
+      },
+      "phases_completed": ["plan", "design", "code", "test", "review", "docs"],
+      "created_at": "2026-01-16T09:00:00Z",
+      "updated_at": "2026-01-22T16:00:00Z"
+    },
+    {
+      "id": "billing-integration",
+      "name": "Stripe Billing",
+      "column": "in-progress",
+      "priority": 3,
+      "complexity": "complex",
+      "depends_on": ["auth-system"],
+      "labels": ["payments", "integration"],
+      "spec": {
+        "problem_statement": "Users need to subscribe to plans and manage billing via Stripe.",
+        "acceptance_criteria": [
+          "Users can view available pricing plans",
+          "Stripe Checkout integration for new subscriptions",
+          "Webhook handler for subscription lifecycle events",
+          "Users can cancel or upgrade plans"
+        ]
+      },
+      "phases_completed": ["plan", "design", "code"],
+      "created_at": "2026-01-17T08:00:00Z",
+      "updated_at": "2026-02-01T11:00:00Z"
+    },
+    {
+      "id": "team-management",
+      "name": "Team Management",
+      "column": "planned",
+      "priority": 4,
+      "complexity": "standard",
+      "depends_on": ["auth-system", "billing-integration"],
+      "labels": ["collaboration"],
+      "spec": {
+        "problem_statement": "Organization admins need to invite and manage team members.",
+        "acceptance_criteria": [
+          "Admins can invite users by email",
+          "Role-based access control (admin, member, viewer)",
+          "Team members inherit organization billing"
+        ]
+      },
+      "phases_completed": [],
+      "created_at": "2026-01-18T10:00:00Z",
+      "updated_at": "2026-01-18T10:00:00Z"
+    },
+    {
+      "id": "notifications",
+      "name": "Notification System",
+      "column": "planned",
+      "priority": 5,
+      "complexity": "standard",
+      "depends_on": ["auth-system"],
+      "labels": ["ux"],
+      "spec": {
+        "problem_statement": "Users need in-app and email notifications for important events.",
+        "acceptance_criteria": [
+          "In-app notification bell with unread count",
+          "Email notifications for critical events",
+          "User preferences for notification channels"
+        ]
+      },
+      "phases_completed": [],
+      "created_at": "2026-01-19T09:00:00Z",
+      "updated_at": "2026-01-19T09:00:00Z"
+    },
+    {
+      "id": "api-docs",
+      "name": "API Documentation",
+      "column": "planning",
+      "priority": 6,
+      "complexity": "trivial",
+      "depends_on": [],
+      "labels": ["docs"],
+      "spec": {
+        "problem_statement": "Developers need auto-generated API documentation from OpenAPI specs.",
+        "acceptance_criteria": [
+          "OpenAPI spec generated from route handlers",
+          "Swagger UI hosted at /api/docs"
+        ]
+      },
+      "phases_completed": [],
+      "created_at": "2026-01-20T08:00:00Z",
+      "updated_at": "2026-01-25T10:00:00Z"
+    },
+    {
+      "id": "dark-mode",
+      "name": "Dark Mode Toggle",
+      "column": "idea",
+      "priority": 7,
+      "complexity": "trivial",
+      "depends_on": ["dashboard-ui"],
+      "labels": ["ui", "ux"],
+      "spec": {
+        "problem_statement": null,
+        "acceptance_criteria": []
+      },
+      "phases_completed": [],
+      "created_at": "2026-01-21T14:00:00Z",
+      "updated_at": "2026-01-21T14:00:00Z"
+    },
+    {
+      "id": "audit-log",
+      "name": "Admin Audit Log",
+      "column": "review",
+      "priority": 8,
+      "complexity": "standard",
+      "depends_on": ["auth-system", "team-management"],
+      "labels": ["security", "admin"],
+      "spec": {
+        "problem_statement": "Admins need an audit trail of all user actions for compliance.",
+        "acceptance_criteria": [
+          "All CRUD operations logged with actor, timestamp, and resource",
+          "Filterable audit log UI in admin panel",
+          "30-day retention with export to CSV"
+        ]
+      },
+      "phases_completed": ["plan", "design", "code", "test", "review"],
+      "created_at": "2026-01-22T09:00:00Z",
+      "updated_at": "2026-02-05T13:00:00Z"
+    }
+  ]
+}

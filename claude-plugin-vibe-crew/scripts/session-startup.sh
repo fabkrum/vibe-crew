@@ -74,7 +74,7 @@ fi
 HANDOFF_FILE=""
 HANDOFF_DIR="$PROJECT_ROOT/.vibecrew/handoffs"
 if [[ -d "$HANDOFF_DIR" ]]; then
-  HANDOFF_FILE=$(ls -1t "$HANDOFF_DIR"/handoff-*.md 2>/dev/null | head -1)
+  HANDOFF_FILE=$(ls -1t "$HANDOFF_DIR"/handoff-*.md 2>/dev/null | head -1 || true)
 fi
 
 # --- Read gamification state ---

@@ -347,6 +347,14 @@ if [[ -x "$SCRIPT_DIR/analyze-agent-effectiveness.sh" ]]; then
   fi
 fi
 
+# --- 13b. Fix-without-regression detection ---
+FIX_WITHOUT_REGRESSION=0
+
+if [[ -x "$SCRIPT_DIR/detect-fix-commits.sh" ]]; then
+  FIX_COMMITS=$(bash "$SCRIPT_DIR/detect-fix-commits.sh" 2>/dev/null || echo "[]")
+  FIX_WITHOUT_REGRESSION=$(echo "$FIX_COMMITS" | jq 'length' 2>/dev/null || echo "0")
+fi
+
 # --- 13. Erosion detection metrics ---
 EROSION_SCORE=0
 EROSION_RATING="unknown"
@@ -394,6 +402,7 @@ jq -n \
   --argjson erosion_score "$EROSION_SCORE" \
   --arg erosion_rating "$EROSION_RATING" \
   --argjson erosion_flags "$EROSION_FLAGS" \
+  --argjson fix_without_regression "$FIX_WITHOUT_REGRESSION" \
   --argjson agent_inefficiency "$AGENT_INEFFICIENCY" \
   --argjson agent_efficiency_bonus "$AGENT_EFFICIENCY_BONUS" \
   '{
@@ -429,6 +438,7 @@ jq -n \
     erosion_score: $erosion_score,
     erosion_rating: $erosion_rating,
     erosion_flags: $erosion_flags,
+    fix_without_regression: $fix_without_regression,
     agent_inefficiency: $agent_inefficiency,
     agent_efficiency_bonus: $agent_efficiency_bonus
   }'

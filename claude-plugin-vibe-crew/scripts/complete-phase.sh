@@ -116,7 +116,8 @@ determine_next_column() {
       else echo "planned"; fi ;;
     design) echo "in-progress" ;;
     code)   echo "testing" ;;
-    test|review|docs) echo "review" ;;
+    test|review) echo "review" ;;
+    docs) echo "done" ;;
     *)      echo "in-progress" ;;
   esac
 }

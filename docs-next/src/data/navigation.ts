@@ -46,6 +46,7 @@ export const navigation: NavGroup[] = [
       { title: 'Status Line', slug: 'status-line' },
       { title: 'Sub-Agents', slug: 'agents' },
       { title: 'Templates', slug: 'templates' },
+      { title: 'Testing Strategy', slug: 'testing' },
       { title: 'Vibe Dashboard', slug: 'dashboard' },
     ],
   },

@@ -652,6 +652,53 @@ If the commit fails (e.g., pre-commit hook failure), report the error and sugges
 
 ---
 
+## Step 7.5: Regression Test Detection
+
+Check for `fix:` commits that lack accompanying test changes. This closes the loop between bug fixes and test coverage.
+
+### 7.5.1 Detect fix commits without regression tests
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/detect-fix-commits.sh"
+```
+
+Parse the JSON array output. If empty, skip to Step 8.
+
+### 7.5.2 Generate regression test skeletons
+
+For each fix commit in the output:
+
+1. Determine the test framework from the project (check for vitest/jest in package.json, or use `bats` for VibeCrew's own scripts)
+2. Generate the skeleton:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-regression-test.sh" "<commit-hash>" "<framework>"
+```
+
+3. Present the skeleton to the user:
+   - If `autonomy` = `full_auto`: auto-commit the skeleton
+   - If `autonomy` = `checkpoints` or `collaborative`: show the skeleton and ask for approval
+   - If `autonomy` = `supervised`: show the skeleton, explain what it does, and ask for approval
+
+4. If approved, stage and commit the regression test skeleton:
+
+```bash
+git add "<test-file-path>"
+git commit -m "test: add regression test skeleton for fix(<scope>): <description>
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+5. Record in the session log under a `regression_tests_generated` array.
+
+### 7.5.3 Vibe Score impact
+
+The `calculate-vibe-score.sh` script detects `fix:` commits without test changes and reports `fix_without_regression` count. The Performance Coach applies:
+- `-5` per fix commit without regression test (fix-without-regression)
+- `+0` for fix commits with regression tests (expected behavior)
+
+---
+
 ## Step 8: PR Creation (Profile-Aware)
 
 Read the `pr_review` value from the profile loaded in Step 1.2.

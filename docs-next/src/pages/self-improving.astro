@@ -271,6 +271,45 @@ import { selfImprovingDiagram } from '../data/diagrams';
 
   <hr>
 
+  <!-- ── Regression Test Feedback Loop ── -->
+  <section class="section">
+    <h3>Regression Test Feedback Loop</h3>
+    <p>When a bug fix (<code>fix:</code> commit) is made without an accompanying test, VibeCrew automatically generates a <strong>regression test skeleton</strong> to prevent the bug from recurring. This closes the gap between bug fixes and test coverage.</p>
+
+    <h4 class="agent-table-heading">How It Works</h4>
+    <div class="agent-table-wrap">
+      <table class="agent-table">
+        <thead><tr><th>Step</th><th>What Happens</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Detection</strong></td><td>During <code>/wrap</code>, <code>detect-fix-commits.sh</code> scans the session's git log for <code>fix:</code> conventional commits. For each, it checks whether the same commit also modified test files.</td></tr>
+          <tr><td><strong>2. Generation</strong></td><td>If no test changes accompany the fix, <code>generate-regression-test.sh</code> creates a test skeleton in the appropriate framework (BATS for bash scripts, Vitest/Jest for TypeScript projects). Skeletons include a <code>skip</code> marker for developers to fill in.</td></tr>
+          <tr><td><strong>3. Scoring</strong></td><td>The Vibe Score applies a <strong>-5 deduction</strong> per fix commit without a regression test (<code>fix-without-regression</code>). Fix commits with tests get no deduction.</td></tr>
+          <tr><td><strong>4. Expertise</strong></td><td>Bug-fix patterns are stored in the expertise knowledge base (domain: <code>failures</code>) for cross-session analysis of recurring bug categories.</td></tr>
+          <tr><td><strong>5. Mutation</strong></td><td>After 3+ sessions with uncovered fix commits, the Performance Coach proposes a CLAUDE.md rule: <em>"When fixing a bug, always add a regression test that reproduces the original failure."</em></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <MermaidDiagram chart={`flowchart LR
+    A["fix: commit"] --> B{"Test files<br/>changed?"}
+    B -->|No| C["detect-fix-commits.sh"]
+    C --> D["generate-regression-test.sh"]
+    D --> E["Skeleton committed"]
+    E --> F["-5 Vibe Score"]
+    B -->|Yes| G["No action"]
+    G --> H["Neutral score"]
+    F --> I["3+ sessions?"]
+    I -->|Yes| J["CLAUDE.md mutation<br/>proposed"]
+    style A fill:#fde8e8,stroke:#333
+    style E fill:#fff3cd,stroke:#333
+    style G fill:#e8fde8,stroke:#333
+    style J fill:#e8e8fd,stroke:#333`}
+      caption="Bug fixes without tests trigger skeleton generation, scoring deductions, and eventually a permanent CLAUDE.md rule."
+    />
+  </section>
+
+  <hr>
+
   <!-- ── Feedback Loop Diagram ── -->
   <section class="section">
     <h3>The Self-Improvement Loop</h3>

@@ -11,7 +11,7 @@ on:
       - 'claude-plugin-vibe-crew/**'
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -31,6 +31,31 @@ jobs:
       - name: Verify jq available
         run: jq --version
 
-      - name: Run tests
+      - name: Run unit tests
         working-directory: claude-plugin-vibe-crew
-        run: tests/run-tests.sh
+        run: tests/run-tests.sh unit
+
+  integration-tests:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+      fail-fast: false
+
+    steps:
+      - name: Checkout with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install jq
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Verify jq available
+        run: jq --version
+
+      - name: Run integration tests
+        working-directory: claude-plugin-vibe-crew
+        run: tests/run-tests.sh integration

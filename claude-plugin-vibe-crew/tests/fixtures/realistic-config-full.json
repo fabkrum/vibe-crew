@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.6.0",
+  "terminal": "warp",
+  "notifications": { "enabled": true },
+  "gamification": { "enabled": true },
+  "user_profile": {
+    "interview_completed": true,
+    "code_literacy": "fluent",
+    "autonomy": "full_auto",
+    "pr_review": "summary",
+    "verbosity": "minimal",
+    "gamification_preference": "light",
+    "learning": "reference_docs",
+    "risk_tolerance": "balanced"
+  },
+  "performance_coach": {
+    "auto_mutate": false,
+    "mutation_log": "mutations.json"
+  },
+  "doc_generator": {
+    "auto_changelog": true
+  },
+  "onboarding": {
+    "show_hints": false
+  },
+  "audit": {
+    "auto_issues": true,
+    "severity_threshold": "high"
+  },
+  "opponent_processor": {
+    "enabled": true,
+    "auto_run": true
+  },
+  "simplify": {
+    "enabled": true,
+    "auto_apply": false
+  },
+  "ci_healing": {
+    "enabled": true,
+    "max_attempts": 3
+  },
+  "quality_gate": {
+    "enabled": true,
+    "typecheck": true,
+    "lint": true,
+    "build": true
+  },
+  "pricing": {
+    "last_refreshed": "2026-01-20T10:00:00Z",
+    "model_costs": {
+      "opus": { "input": 15.0, "output": 75.0, "cache_read": 1.5 },
+      "sonnet": { "input": 3.0, "output": 15.0, "cache_read": 0.3 },
+      "haiku": { "input": 0.25, "output": 1.25, "cache_read": 0.03 }
+    }
+  },
+  "locks": {
+    "stale_timeout_secs": 60,
+    "wait_timeout_secs": 30
+  },
+  "git_provider": "github",
+  "issues": {
+    "enabled": true,
+    "auto_sync": false
+  }
+}

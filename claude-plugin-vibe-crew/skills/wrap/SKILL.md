@@ -314,6 +314,7 @@ score -= 3 * min(drift_warnings, 3)        # drift-warning: -3 each, max -9
 score -= 3 * min(erosion_complexity_files, 3)  # erosion-complexity: -3 each, max -9
 score -= 5 if erosion_hot_files > 0        # erosion-hot-file: -5 if any hot files exist
 score -= 3 if agent_inefficiency           # agent-inefficiency: -3 if write-heavy agents below threshold
+score -= 3 if unresolved_clarifications    # unresolved-clarifications: -3 if 3+ low-confidence assumptions in plan
 
 # Bonuses
 score += 5 if all_six_phases_complete       # all-phases: +5
@@ -348,6 +349,7 @@ The `calculate-vibe-score.sh` script detects these additional metrics:
 - **`erosion_hot_files`**: Count of hot files (modified 5+ times without `/simplify`).
 - **`agent_inefficiency`**: True if any write-heavy agent has efficiency_ratio below threshold for 3+ sessions (from `analyze-agent-effectiveness.sh`).
 - **`agent_efficiency_bonus`**: True if all agents with 3+ sessions of data have zero flags.
+- **`unresolved_clarifications`**: True if the active feature's `plan.md` contains 3+ decisions with `Assumed (Low)` confidence in the `## Decisions` table.
 
 **Important:** The `zero_deductions` check must happen AFTER applying all deductions (including `skipped-review`). If the total deduction sum is 0, the `clean-session` bonus applies.
 

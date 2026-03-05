@@ -367,21 +367,28 @@ The phase gate is the enforcement mechanism that prevents source code writes bef
 
 ---
 
-## 2. Workflow 2: Existing Project Onboarding (Deferred to v1.1)
+## 2. Workflow 2: Existing Project Onboarding
 
-Existing project onboarding -- adapting VibeCrew to a project that already has source code, dependencies, and possibly tests -- is **deferred to v1.1**. This workflow requires infrastructure not yet built in v1.0:
+Existing project onboarding -- adapting VibeCrew to a project that already has source code, dependencies, and possibly tests -- is handled by the `/onboard` command. The workflow:
 
-- **Codebase audit agent** (reverse-engineer TDR from existing dependencies, detect test frameworks, extract design tokens from CSS)
-- **Pattern extraction** (analyze file structure conventions, naming patterns, import styles to generate CLAUDE.md)
-- **Test coverage gap analysis** (identify untested modules, prioritize by risk)
+1. **Initialize** `.vibecrew/` directory via `init-vibecrew-state.sh`
+2. **Code Auditor** analyzes codebase (read-only, worktree isolation) → produces `onboard-findings.json`
+3. **Generate persistent analysis docs** via `generate-analysis-docs.sh` → creates 4 files in `.vibecrew/analysis/`:
+   - `stack.md` — language, framework, runtime, package manager, key deps, component library, database
+   - `architecture.md` — source dirs, component dirs, API routes, schema location, state management, error handling
+   - `conventions.md` — code style, naming, imports, commit format, test framework, co-location pattern
+   - `gaps.md` — source vs test file count, estimated coverage, untested modules, deprecated deps, TODO count
+4. **Present findings** for user review and correction
+5. **Generate CLAUDE.md** from findings
+6. **Initialize state** with `foundation.complete = true` (skipping Tier 1 artifacts)
+7. **Pre-populate backlog** from test gaps
+8. **Verify** state, CLAUDE.md, and backlog
 
-For v1.0, users with existing projects should manually:
+**Persistent analysis docs** are auto-injected into Plan phases (via `inject-analysis.sh`), post-compaction context (via `compact-reinject.sh`), and fresh-session Agent prompts (via `prepare-feature-context.sh`).
 
-1. Run `/setup` to scaffold `.vibecrew/`
-2. Run `/new-project` and answer the foundation questions (the TDR step can document the existing stack rather than choosing a new one)
-3. Proceed with the standard foundation workflow
+**Staleness detection**: `check-analysis-staleness.sh` runs on session startup. Warns if docs are >30 days old with >50 commits, or if `package.json` changed. Refresh via `/onboard --refresh`.
 
-The v1.1 onboarding workflow will automate this process with dedicated audit phases and the Verifier agent handling code quality assessment of the existing codebase.
+**Analysis docs are committed** to git (not gitignored) — they persist across sessions and team members.
 
 ---
 
@@ -506,7 +513,10 @@ Phases within `in-progress` are **sequential by default** with verify-fix loops 
     |                                                          |
     |  Phase artifacts:                                        |
     |    plan:   docs/features/{name}/plan.md                  |
-    |            (with Existing Code Analysis section)         |
+    |            (with Existing Code Analysis section,         |
+    |             Clarify Decisions table, and                 |
+    |             structured Tasks with Files/Action/          |
+    |             Verify/Done fields)                          |
     |    design: docs/features/{name}/design.md                |
     |            (with ASCII wireframes under ## Wireframes)   |
     |    code:   source files, conventional commits            |
@@ -514,17 +524,40 @@ Phases within `in-progress` are **sequential by default** with verify-fix loops 
     |    review: review report in .vibecrew/reviews/           |
     |    docs:   feature docs, CHANGELOG entry                 |
     |                                                          |
+    |  Clarify sub-step (within Plan, std/complex only):      |
+    |    Evaluates 6-category checklist against spec.          |
+    |    Resolves ambiguities as decisions (User or Assumed).  |
+    |    Appends ## Decisions table to plan.md.                |
+    |    Autonomy setting controls pause vs auto-resolve.      |
+    |                                                          |
+    |  Structured tasks (within Plan):                         |
+    |    Each plan produces ## Tasks with ordered entries.     |
+    |    Code phase follows tasks deterministically:           |
+    |    implement Action, run Verify, check Done criteria.   |
+    |    extract-plan-tasks.sh parses tasks into JSON.        |
+    |    Legacy plans without tasks use free-form fallback.   |
+    |                                                          |
     |  Milestone processing (complexity: "complex"):           |
-    |    Within the code phase, milestones are processed       |
-    |    sequentially. Each milestone gets its own commit      |
-    |    and verification loop. /compact between milestones    |
-    |    if context > 35%.                                     |
+    |    Milestones carry optional depends_on[] field.         |
+    |    compute-milestone-waves.sh groups into dep waves.     |
+    |    Independent milestones in a wave spawn parallel       |
+    |    Agent calls (each gets own worktree + fresh ctx).     |
+    |    merge-milestone-branches.sh merges after each wave.   |
+    |    Falls back to sequential if all milestones linear.   |
     |                                                          |
     |  Verify-fix loop:                                        |
     |    If Verifier finds bugs during test phase,             |
     |    feature returns to in-progress for Builder to fix.    |
     |    Builder fixes the bugs, then re-enters testing.       |
     |    Loop continues until Verifier passes all tests.       |
+    |                                                          |
+    |  Plan freshness gate (between plan and code):             |
+    |    plan_commit_sha recorded at plan completion.           |
+    |    check-plan-staleness.sh diffs plan-referenced files.   |
+    |    Severity: none/minor → proceed (re-read affected).    |
+    |    major → auto-refresh tasks (full_auto) or ask user.   |
+    |    critical (deleted/renamed) → mandatory re-plan.       |
+    |    /run-backlog Agent receives report in context.         |
     |                                                          |
     |  Phase tracking:                                         |
     |    phases_completed[] records completed phases.           |
@@ -534,6 +567,20 @@ Phases within `in-progress` are **sequential by default** with verify-fix loops 
     |                                                          |
     +----------------------------------------------------------+
 ```
+
+#### Plan Freshness Gate
+
+Between Plan and Code phases, `check-plan-staleness.sh` compares plan-referenced
+files against the `plan_commit_sha` recorded at plan completion. This catches drift
+from parallel features, quick fixes, or dependency updates that landed between phases.
+
+Severity determines action:
+- none/minor: proceed (minor: re-read affected files first)
+- major: auto-refresh affected tasks (full_auto) or ask user (collaborative/supervised)
+- critical (deleted/renamed files): mandatory re-plan of affected tasks
+
+During `/run-backlog`, each feature's fresh-session Agent receives the staleness
+report in its context via `prepare-feature-context.sh`.
 
 ### 3.4 Step-by-Step: `/idea "text"`
 
@@ -866,21 +913,36 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     |                          |                              |
     |                          v                              |
     |                 +------------------+                    |
-    |                 | Execute phases   |                    |
-    |                 | via Agent Teams: |                    |
-    |                 |  Plan (inline)   |                    |
-    |                 |  Design (Builder)|                    |
-    |                 |  Code (Builder)  |                    |
-    |                 |  Test (Verifier) |                    |
+    |                 | FRESH-SESSION    |                    |
+    |                 | AGENT DELEGATION |                    |
+    |                 |                  |                    |
+    |                 | prepare-feature- |                    |
+    |                 |  context.sh      |                    |
+    |                 |  assembles spec +|                    |
+    |                 |  TDR + arch +    |                    |
+    |                 |  design system + |                    |
+    |                 |  CLAUDE.md +     |                    |
+    |                 |  profile +       |                    |
+    |                 |  analysis docs   |                    |
+    |                 |                  |                    |
+    |                 | Agent tool call  |                    |
+    |                 | (Builder, fresh  |                    |
+    |                 |  200k context,   |                    |
+    |                 |  worktree):      |                    |
+    |                 |  Plan → Design → |                    |
+    |                 |  Code → Test     |                    |
+    |                 |                  |                    |
+    |                 | Orchestrator     |                    |
+    |                 | handles:         |                    |
     |                 |  Review (Code    |                    |
     |                 |   Reviewer)      |                    |
-    |                 |  Docs            |                    |
-    |                 |  (with verify-   |                    |
-    |                 |   fix loops,     |                    |
-    |                 |   review-fix     |                    |
-    |                 |   cycles max 2x, |                    |
-    |                 |   auto-recovery  |                    |
-    |                 |   via CI Healer) |                    |
+    |                 |  Docs (inline)   |                    |
+    |                 |  review-fix      |                    |
+    |                 |   cycles max 2x  |                    |
+    |                 |                  |                    |
+    |                 | FALLBACK: inline |                    |
+    |                 |  + /compact if   |                    |
+    |                 |  Agent unavail.  |                    |
     |                 +--------+---------+                    |
     |                          |                              |
     |                          v                              |
@@ -906,21 +968,20 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     |                 v         +--------------+             |
     |           +-----------------+                          |
     |           | CONTEXT HYGIENE |                          |
-    |           | (inter-feature  |                          |
-    |           |  compaction)    |                          |
     |           |                 |                          |
-    |           | If last feature:|                          |
-    |           |   Skip, go to  |                          |
-    |           |   completion   |                          |
-    |           |   summary      |                          |
-    |           | Else:          |                          |
-    |           |   /compact     |                          |
-    |           |   compact-     |                          |
-    |           |   reinject.sh  |                          |
-    |           |   re-injects   |                          |
-    |           |   state +      |                          |
-    |           |   architecture |                          |
-    |           |   diagrams     |                          |
+    |           | Primary: Agent  |                          |
+    |           |   delegation    |                          |
+    |           |   gives each    |                          |
+    |           |   feature fresh |                          |
+    |           |   200k context. |                          |
+    |           |   No compaction |                          |
+    |           |   needed.       |                          |
+    |           |                 |                          |
+    |           | Fallback: if    |                          |
+    |           |   inline exec,  |                          |
+    |           |   /compact +    |                          |
+    |           |   compact-      |                          |
+    |           |   reinject.sh   |                          |
     |           +---------+-------+                          |
     |                     |                                  |
     |                     v                                  |
@@ -934,7 +995,51 @@ The verify-fix loop is the mechanism that resolves the sequential-vs-flexible co
     +----------------------------------------------------------+
 ```
 
-### 3.10 Feature Status Transitions (Complete Reference)
+### 3.10 Quick Fix Workflow (`/quick`)
+
+The `/quick` command provides a lightweight alternative to the full Tier 2 lifecycle for small, self-contained changes (typos, config tweaks, copy updates, minor bug fixes).
+
+```
+    +--------------------------------------------------+
+    |                /quick "description" FLOW          |
+    +--------------------------------------------------+
+    |                                                  |
+    |  1. PRE-FLIGHT                                   |
+    |     - Verify foundation.complete == true         |
+    |     - Warn (don't block) if active_feature       |
+    |     - Parse description from argument            |
+    |                                                  |
+    |  2. SCOPE GUARD                                  |
+    |     - Check for feature indicators (new page,    |
+    |       migration, auth, endpoint, schema, etc.)   |
+    |     - If detected: warn, suggest /new-feature    |
+    |     - Proceed only if user confirms              |
+    |                                                  |
+    |  3. IMPLEMENT                                    |
+    |     - Locate relevant files via Grep/Glob        |
+    |     - Apply minimal change                       |
+    |     - No worktree, no feature branch             |
+    |     - Max 5 files (confirm if exceeded)          |
+    |                                                  |
+    |  4. QUALITY GATE                                 |
+    |     - build + lint + typecheck + test             |
+    |     - Max 2 retries with npm install recovery    |
+    |                                                  |
+    |  5. COMMIT                                       |
+    |     - Conventional commit (fix/style/docs/chore) |
+    |     - Stage only changed files by name           |
+    |     - Never git add -A                           |
+    |                                                  |
+    |  6. LOG                                          |
+    |     - Write quick-fix-<ts>.json to sessions/     |
+    |     - Type: "quick_fix"                          |
+    |                                                  |
+    |  KEY: No backlog entry, no feature branch,       |
+    |  no state mutation, no Vibe Score, no phases.    |
+    +--------------------------------------------------+
+```
+
+### 3.11 Feature Status Transitions (Complete Reference)
 
 | From | To | Trigger | Agent | Condition |
 |------|----|---------|-------|-----------|

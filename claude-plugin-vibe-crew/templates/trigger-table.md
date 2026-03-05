@@ -2,7 +2,7 @@
 
 > Compact reference for the Workflow Orchestrator. Load on-demand instead of verbose agent descriptions.
 
-## Slash Commands (31)
+## Slash Commands (32)
 
 | Command | Agent | Phase | Description |
 |---------|-------|-------|-------------|
@@ -36,6 +36,7 @@
 | `/reconsider` | opponent-processor | — | Re-run opponent analysis on specific decisions |
 | `/recover-state` | workflow-orchestrator | — | Recover from corrupted state files |
 | `/release` | doc-generator | — | Generate release notes and changelog |
+| `/quick "description"` | (inline) | Tier 2 | Fast-track small fixes: code, quality gate, commit |
 | `/system-review` | system-reviewer | — | Cross-project telemetry and ecosystem analysis |
 
 ## Agent Registry (14)

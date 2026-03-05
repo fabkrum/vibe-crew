@@ -27,9 +27,15 @@ echo "--- VibeCrew Context (re-injected after compaction) ---"
 GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")"
 jq -c --arg branch "$GIT_BRANCH" '{
   foundation_complete: .foundation.complete,
-  active_feature: {id: .active_feature.id, name: .active_feature.name, phase: .active_feature.phase, worktree: .active_feature.worktree, phases_completed: .active_feature.phases_completed, plan_revision_count: (.active_feature.plan_revision_count // 0)},
+  active_feature: {id: .active_feature.id, name: .active_feature.name, phase: .active_feature.phase, worktree: .active_feature.worktree, phases_completed: .active_feature.phases_completed, plan_revision_count: (.active_feature.plan_revision_count // 0), plan_commit_sha: .active_feature.plan_commit_sha},
   git_branch: $branch
 }' "$STATE_FILE" 2>/dev/null || echo '{"error":"state.json unreadable"}'
+
+# ── Plan baseline SHA (for staleness detection) ──
+PLAN_SHA="$(jq -r '.active_feature.plan_commit_sha // empty' "$STATE_FILE" 2>/dev/null || true)"
+if [[ -n "$PLAN_SHA" ]]; then
+  echo "Plan baseline SHA: $PLAN_SHA"
+fi
 
 # ── Foundation artifact status (only if foundation incomplete) ──
 FOUNDATION_COMPLETE="$(jq -r '.foundation.complete // false' "$STATE_FILE" 2>/dev/null || echo "false")"
@@ -104,6 +110,12 @@ fi
 EXPERTISE_PRIME="$SCRIPT_DIR_CR/expertise-prime.sh"
 if [[ -x "$EXPERTISE_PRIME" ]]; then
   bash "$EXPERTISE_PRIME" --agent builder --max-tokens 500 2>/dev/null || true
+fi
+
+# ── Codebase analysis docs (from /onboard) ──
+INJECT_ANALYSIS="$SCRIPT_DIR_CR/inject-analysis.sh"
+if [[ -x "$INJECT_ANALYSIS" ]]; then
+  bash "$INJECT_ANALYSIS" 2>/dev/null || true
 fi
 
 # ── Drift tracker summary (if warnings emitted) ──

@@ -30,7 +30,7 @@ CLAUDE.md                       # This file
 ### Two-Tier Workflow
 
 - **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css + design-brief.md (via Design Discovery interview or BYODS import of existing tokens), TDR (Technology Decision Record), Architecture Diagrams (5 Mermaid `.mmd` files), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook. Step 2 (Design Discovery) first asks a Pre-Design Gate question: users with an existing design system can import it (CSS, Tailwind, JSON tokens, URL, Figma, or brand PDF) via `import-design-tokens.sh`, skipping the interview but still answering component preference questions. Otherwise, the full 3-phase interview runs: Product & Audience Context → Visual Direction → Component Preferences. Both paths produce identical output files. Architecture Diagrams are generated before the Opponent Processor runs, giving it structural context for its analysis.
-- **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`. The Plan phase produces a persisted `docs/features/{name}/plan.md` with codebase exploration findings, and the Design phase generates ASCII wireframes (profile-gated) for cheap visual iteration before code. Features carry a `complexity` field (`trivial | standard | complex`): trivial skips Design and Review, complex enables milestone decomposition. Plan revision tracking (`plan_revision_count` in state.json) warns when specs change mid-feature and integrates with the Vibe Score.
+- **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`. The Plan phase includes a Clarify sub-step that resolves spec ambiguities before Design, checking 6 categories of gray areas and persisting decisions in plan.md. Plans use a structured task format (Files/Action/Verify/Done) for deterministic Code phase execution. The Design phase generates ASCII wireframes (profile-gated) for cheap visual iteration before code. Features carry a `complexity` field (`trivial | standard | complex`): trivial skips Design and Review, complex enables wave-based milestone decomposition with parallel execution of independent milestones. Plan revision tracking (`plan_revision_count` in state.json) warns when specs change mid-feature and integrates with the Vibe Score.
 
 ### Agent Topology (14 agents)
 
@@ -80,7 +80,7 @@ Notifications fire only on three conditions: permission stalls (permission_promp
 
 ### Vibe Score System
 
-Starts at 100, applies deductions: prompt churn (-5/sequence), tool loops (-10/loop), low cache utilization (-15), context violations (-20), no tests (-10), no feature spec (-5), skipped code review (-5), documentation drift (-3/stale doc), console errors on affected pages (-5), visual token violations (-3/violation, max -9). Bonuses up to +30 for complete phase artifacts, high cache utilization, full test coverage, clean sessions, TDD discipline (+3), E2E tests passing (+3), accessibility clean (+2), code review complete (+2), performance baselines (+2), and visual compliance clean (+3). The Performance Coach proposes permanent CLAUDE.md rule mutations based on identified anti-patterns.
+Starts at 100, applies deductions: prompt churn (-5/sequence), tool loops (-10/loop), low cache utilization (-15), context violations (-20), no tests (-10), no feature spec (-5), skipped code review (-5), documentation drift (-3/stale doc), console errors on affected pages (-5), visual token violations (-3/violation, max -9), unresolved clarifications (-3 for 3+ low-confidence assumptions). Bonuses up to +30 for complete phase artifacts, high cache utilization, full test coverage, clean sessions, TDD discipline (+3), E2E tests passing (+3), accessibility clean (+2), code review complete (+2), performance baselines (+2), and visual compliance clean (+3). The Performance Coach proposes permanent CLAUDE.md rule mutations based on identified anti-patterns.
 
 ### Per-Project Runtime State
 
@@ -98,6 +98,7 @@ When VibeCrew is used in a project, it creates a `.vibecrew/` folder:
     state-flows.mmd             #   Auth states and user flows (stateDiagram-v2)
     api-sequences.mmd           #   API request/response patterns (sequenceDiagram)
     component-tree.mmd          #   Component hierarchy with data flow (flowchart TD)
+  analysis/                     # Persistent codebase analysis (4 .md files, from /onboard)
   sessions/                     # Session logs (JSON)
   scores/                       # Vibe Score breakdowns (JSON)
   signals/                      # Inter-agent signal files
@@ -113,7 +114,7 @@ Projects auto-register with the central VibeCrew plugin during `/setup`. Anonymi
 
 ### Slash Commands
 
-`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/fix-issue`, `/sync-issues`, `/simplify`, `/apply-simplifications`, `/reconsider`, `/recover-state`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`
+`/setup`, `/new-project`, `/plan-features`, `/new-feature "name"`, `/run-backlog`, `/idea "text"`, `/status`, `/check`, `/wrap`, `/heal`, `/fix-issue`, `/sync-issues`, `/simplify`, `/apply-simplifications`, `/reconsider`, `/recover-state`, `/replay`, `/handoff`, `/audit`, `/cost`, `/achievements`, `/quiz`, `/undo`, `/tdd`, `/debug`, `/review`, `/e2e`, `/perf-test`, `/a11y`, `/system-review`, `/profile`, `/release`, `/onboard`, `/quick "description"`
 
 ### User Profile System
 
@@ -143,7 +144,7 @@ The `/profile` command runs a 7-question interview that stores user preferences 
 
 1. **Research before code** — The phase gate enforces architecture decisions (TDR) before any source code writes are allowed.
 2. **Human attention is the bottleneck** — The system stays silent during normal operation and interrupts only when blocked, complete, or failed.
-3. **Context window discipline** — Target <50% context usage. Subagents isolate expensive research. MCP servers (Context7) replace pasting docs. MCP Tool Search (Claude Code built-in, Jan 2026) dynamically loads only relevant tool definitions when 5+ servers are enabled. Architecture diagrams pre-loaded once via `inject-architecture.sh` instead of per-agent reads. Warnings at 45%/60%. During `/run-backlog`, forced `/compact` between features prevents context rot across long autonomous runs.
+3. **Context window discipline** — Target <50% context usage. Subagents isolate expensive research. MCP servers (Context7) replace pasting docs. MCP Tool Search (Claude Code built-in, Jan 2026) dynamically loads only relevant tool definitions when 5+ servers are enabled. Architecture diagrams pre-loaded once via `inject-architecture.sh` instead of per-agent reads. Warnings at 45%/60%. During `/run-backlog`, each feature is executed in a fresh Agent context window, eliminating context rot across features. Falls back to `/compact` between features if Agent delegation is unavailable.
 4. **Hooks over suggestions** — Enforce rules via deterministic bash scripts (zero tokens) rather than relying on the model to remember. The quality gate Stop hook (`quality-gate.sh`) catches typecheck/lint/build errors immediately after every task completion.
 5. **Self-improving** — Every session's Performance Coach analysis can permanently mutate CLAUDE.md rules, creating a recursive efficiency improvement loop. Capped at 15 Session Learnings with automatic oldest-pruning.
 6. **Parallel by default** — Planning and development can run simultaneously across terminal tabs.

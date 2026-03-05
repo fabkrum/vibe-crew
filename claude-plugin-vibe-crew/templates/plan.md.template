@@ -1,0 +1,64 @@
+# Implementation Plan: {Feature Name}
+
+## Existing Code Analysis
+<!-- Files read, patterns observed, integration points -->
+
+## Approach
+<!-- High-level strategy: 1-3 paragraphs explaining HOW this feature will be built -->
+
+## Files to Create
+<!-- New files this feature requires, with purpose for each -->
+
+## Files to Modify
+<!-- Existing files that need changes, with description of what changes -->
+
+## Component Strategy
+<!-- Which components to use/create, how they compose -->
+
+## Data Flow
+<!-- How data moves through the feature: API → state → UI -->
+
+## Testing Approach
+<!-- What types of tests, key test scenarios from acceptance criteria -->
+
+## Alternatives Considered
+<!-- (Complex features only) Rejected approaches and why -->
+
+## Decisions
+<!-- Output from the Clarify sub-step -->
+| # | Question | Decision | Source |
+|---|----------|----------|--------|
+| 1 | {question} | {decision} | User / Assumed (High/Medium/Low) |
+
+## Tasks
+
+### Task 1: {name}
+- **Files**: `path/to/file.ts` (create|modify)
+- **Action**: {what to implement — specific enough to be unambiguous}
+- **Verify**: `{command to verify this task, e.g., npm run build}`
+- **Done when**: {observable completion criteria}
+
+### Task 2: {name}
+- **Files**: `path/to/file.ts` (create|modify)
+- **Action**: {what to implement}
+- **Verify**: `{verification command}`
+- **Done when**: {completion criteria}
+
+### Task 3: {name}
+- **Files**: `path/to/file.ts` (create|modify), `path/to/other.ts` (modify)
+- **Action**: {what to implement}
+- **Verify**: `{verification command}`
+- **Done when**: {completion criteria}
+
+<!--
+Task count guidelines:
+  - Trivial features: 2-3 tasks
+  - Standard features: 4-6 tasks
+  - Complex features: 6-8 tasks per milestone
+
+Each task should be:
+  - Self-contained: completable and verifiable independently
+  - Ordered: later tasks may depend on earlier ones
+  - Specific: "Action" should be unambiguous enough that another agent could implement it
+  - Verifiable: "Verify" should be a runnable command (build, test, lint)
+-->

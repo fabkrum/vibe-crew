@@ -212,6 +212,7 @@ UPDATED_STATE=$(echo "$STATE" | jq \
   .active_feature.phase = "plan" |
   .active_feature.phases_completed = [] |
   .active_feature.plan_revision_count = 0 |
+  .active_feature.plan_commit_sha = null |
   .updated_at = $ts
   ')
 

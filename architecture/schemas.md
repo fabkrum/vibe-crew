@@ -254,7 +254,8 @@ Project state tracking. Created by `/new-project` (Tier 1) or `/setup` (existing
     "worktree": null,                    // Git worktree path | null
     "phase": null,                       // Current phase | null
     "phases_completed": [],              // Completed phases for this feature
-    "plan_revision_count": 0             // Times plan/spec revised mid-feature (reset on claim)
+    "plan_revision_count": 0,             // Times plan/spec revised mid-feature (reset on claim)
+    "plan_commit_sha": null               // Git SHA at plan phase completion (reset on claim)
   },
 
   // Git state
@@ -310,9 +311,28 @@ The `phases_completed` array tracks which phases have been completed at least on
 | `active_feature.worktree` | string\|null | yes | Git worktree path |
 | `active_feature.phase` | enum\|null | yes | Current workflow phase |
 | `active_feature.phases_completed` | string[] | yes | Completed phase names |
+| `active_feature.plan_revision_count` | number | yes | Times plan/spec revised mid-feature (reset on claim) |
+| `active_feature.plan_commit_sha` | string\|null | yes | Git SHA at plan phase completion. Used by check-plan-staleness.sh to detect codebase drift before Code phase. Reset to null on claim-task. |
 | `git.default_branch` | string | yes | Default git branch |
 | `git.initialized` | boolean | yes | Whether git repo exists |
 | `updated_at` | string | yes | Last modification timestamp |
+
+### Plan Staleness Report (`check-plan-staleness.sh` output)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `stale` | boolean | Whether any plan-referenced files changed |
+| `plan_sha` | string | SHA recorded at plan completion |
+| `current_sha` | string | Current HEAD SHA |
+| `commits_since_plan` | number | Count of commits between SHAs |
+| `affected_files` | array | Files changed that are referenced in the plan |
+| `affected_files[].path` | string | File path |
+| `affected_files[].change_type` | string | `modified` \| `deleted` \| `renamed` |
+| `affected_files[].insertions` | number | Lines added |
+| `affected_files[].deletions` | number | Lines removed |
+| `unaffected_plan_files` | string[] | Plan-referenced files with no changes |
+| `severity` | string | `none` \| `minor` \| `major` \| `critical` |
+| `recommendation` | string | `proceed` \| `review_changes` \| `refresh_plan` |
 
 ---
 
@@ -353,7 +373,7 @@ Feature backlog. Created by `/plan-features`. Modified by `/new-feature`, `/idea
         "ui_description": null,          // Brief UI description | null
         "business_logic": [],            // String array of logic requirements
         "technical_notes": null,         // Free-text technical considerations | null
-        "milestones": []                 // Optional: [{name, description, criteria_indices, estimated_files, status}]
+        "milestones": []                 // Optional: [{name, description, criteria_indices, estimated_files, status, depends_on}]
       },
 
       // Tracking
@@ -404,7 +424,7 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `spec.ui_description` | string\|null | yes | UI description |
 | `spec.business_logic` | string[] | yes | Business logic requirements |
 | `spec.technical_notes` | string\|null | no | Technical considerations |
-| `spec.milestones` | object[] | no | Optional milestone array: `[{name, description, criteria_indices, estimated_files, status}]`. Status: `"pending"` \| `"complete"` |
+| `spec.milestones` | object[] | no | Optional milestone array: `[{name, description, criteria_indices, estimated_files, status, depends_on}]`. Status: `"pending"` \| `"complete"`. `depends_on`: optional string[] of milestone names that must complete first. Milestones without `depends_on` default to Wave 1 (but >3 without explicit deps falls back to sequential). |
 | `worktree` | string\|null | yes | Active worktree path |
 | `phases_completed` | string[] | yes | Completed phases |
 | `sessions` | string[] | yes | Related session IDs |
@@ -423,7 +443,10 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 
 Per-session activity records. Created by Session Startup agent at session start, updated by `/wrap` command at session end.
 
-**File pattern:** `.vibecrew/sessions/session-<YYYY-MM-DD>-<NNN>.json`
+**File patterns:**
+- `.vibecrew/sessions/session-<YYYY-MM-DD>-<NNN>.json` — standard session logs
+- `.vibecrew/sessions/quick-fix-<timestamp>.json` — quick fix logs (type: `"quick_fix"`)
+- `.vibecrew/sessions/backlog-run-<timestamp>.json` — backlog run logs (type: `"backlog_run"`, includes `wave_log` in `feature_results[]`)
 
 ```jsonc
 {
@@ -1778,3 +1801,60 @@ Rolling 20-session trend summary with file churn tracking and alert detection. U
 | `erosion.hot_file_churn_count` | 5 | Churn count to flag as hot file |
 | `erosion.rapid_decline_points` | 15 | Score drop to trigger rapid-decline alert |
 | `erosion.rapid_decline_sessions` | 3 | Window for rapid decline detection |
+
+---
+
+## 18. Structured Plan Tasks
+
+Extracted from `plan.md` files by `scripts/extract-plan-tasks.sh`. Used by the Builder Code Phase for deterministic task execution.
+
+```jsonc
+{
+  "structured": true,              // false if no structured tasks found (legacy plan)
+  "tasks": [
+    {
+      "index": 1,                  // Task number from plan.md
+      "name": "Create database schema",
+      "files": [
+        {"path": "prisma/schema.prisma", "action": "modify"},
+        {"path": "src/types/user.ts", "action": "create"}
+      ],
+      "action": "Add User and Session models with email, password_hash, created_at fields...",
+      "verify": "npx prisma validate",
+      "done_criteria": "Schema validates without errors and includes both models"
+    }
+  ],
+  "milestone_filter": null         // Optional: milestone name to scope tasks to
+}
+```
+
+### Task Count Guidelines
+
+| Complexity | Tasks per plan (or per milestone) |
+|------------|-----------------------------------|
+| Trivial | 2-3 |
+| Standard | 4-6 |
+| Complex | 6-8 per milestone |
+
+---
+
+## 19. Codebase Analysis Documents
+
+Generated by `scripts/generate-analysis-docs.sh` from `onboard-findings.json`. Stored in `.vibecrew/analysis/`. Committed to git.
+
+| File | Sections | Content |
+|------|----------|---------|
+| `stack.md` | Runtime, Key Dependencies, UI & Components, Data & Deploy | Language, framework, runtime, package manager, key deps, component library, database, deployment target |
+| `architecture.md` | Directory Structure, Component Organization, API & Routes, Patterns | Source dirs, component dirs, API routes, schema location, API style, state management, error handling, auth |
+| `conventions.md` | Code Style, Naming, Git, Testing | Semicolons/quotes/indent, formatter/linter, component/file naming, import style, commit format, test framework, test co-location |
+| `gaps.md` | Test Coverage, Untested Modules, Documentation Gaps, Maintenance | Source vs test file count, coverage estimate, untested modules (top 10), deprecated deps, TODO count |
+
+### Staleness Heuristics
+
+| Condition | Trigger |
+|-----------|---------|
+| Age >30 days AND >50 commits | Stale warning on session startup |
+| `package.json` modified since analysis | Stale warning on session startup |
+| New source directories since analysis | Stale warning on session startup |
+
+Refresh via `/onboard --refresh` (re-runs auditor + regenerates analysis docs only).

@@ -93,6 +93,11 @@ import { runtimeStateDiagram } from '../data/diagrams';
           <td>Structured context transfer documents created by <code>/handoff</code> for cross-session continuity.</td>
           <td>Session Startup (detects and loads), agents (reads for context).</td>
         </tr>
+        <tr>
+          <td><code>analysis/</code></td>
+          <td>4 persistent markdown files from <code>/onboard</code>: <code>stack.md</code> (language, framework, deps), <code>architecture.md</code> (dirs, patterns, API style), <code>conventions.md</code> (formatting, naming, test patterns), <code>gaps.md</code> (coverage, untested modules, TODOs). Refreshable via <code>/onboard --refresh</code>.</td>
+          <td>Builder (Plan phase injection), compact-reinject (post-compaction context), Session Startup (staleness check).</td>
+        </tr>
       </tbody>
     </table>
   </div>

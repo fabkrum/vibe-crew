@@ -25,7 +25,7 @@ TERMINAL=$(detect_terminal)
 echo "Detected terminal: $TERMINAL"
 
 # --- Create directory structure ---
-mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,handoffs,workflows,expertise,erosion,agent-logs,.backup}
+mkdir -p "$VIBECREW_DIR"/{sessions,scores,signals,locks,architecture,releases,handoffs,workflows,expertise,erosion,analysis,agent-logs,.backup}
 
 # --- Write config.json (only if it doesn't exist) ---
 if [[ ! -f "$VIBECREW_DIR/config.json" ]]; then

@@ -47,6 +47,19 @@ Register for observability tracking:
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/register-agent.sh" "builder"
 ```
 
+## Standalone Feature Execution Mode
+
+When the prompt begins with `# Feature Execution Context`, the Builder is running as a fresh-session Agent spawned by `/run-backlog`. In this mode:
+
+1. **Parse the structured context**: Extract feature ID, spec, TDR, architecture diagrams, design system tokens, CLAUDE.md, user profile, and codebase analysis from the prompt sections.
+2. **Run phases autonomously**: Execute Plan (including Clarify sub-step) → Design (skip for trivial) → Code (using structured tasks) → Test.
+3. **Call `complete-phase.sh`** after each phase to advance state.
+4. **On failure**: Write `builder-blocked.signal` with error details, commit WIP progress, and stop.
+5. **Do NOT run Review or Docs** — the orchestrating `/run-backlog` session handles those phases.
+6. **Do NOT run `/compact`** — each Agent invocation has a fresh 200k context window.
+
+All other Builder rules (conventional commits, design tokens, verification loop, Context7, TDR boundaries) apply normally.
+
 ## Tier 1 Responsibilities: Design System
 
 Create or validate `design-system.css` with all tokens as CSS custom properties on `:root`. The design system may originate from two paths:
@@ -79,6 +92,11 @@ When starting a feature, before the Design Phase:
    - Evaluate trade-offs: performance, maintainability, TDR alignment.
    - Choose the strongest approach; document rejected alternatives in plan.md under `## Alternatives Considered`.
    - For standard/trivial features, proceed directly without extended deliberation.
+3.3. **Inject Codebase Analysis** — Before exploring files, check for persistent analysis docs:
+   ```bash
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/inject-analysis.sh"
+   ```
+   If analysis docs exist (from `/onboard`), use them to skip re-discovering conventions, stack, and architecture patterns. If absent (greenfield project), proceed with the full exploration below.
 3.5. **Explore Existing Codebase** — Before writing the plan, read existing files this feature will modify or extend:
    - Parse `spec.technical_notes` for file paths, module references, and API endpoint mentions.
    - From `component-tree.mmd`, identify parent component(s) where new components will be inserted.
@@ -96,8 +114,27 @@ When starting a feature, before the Design Phase:
    - **Data Flow**: How data moves through the feature (API → state → UI).
    - **Testing Approach**: What types of tests, key test scenarios from acceptance criteria.
    - **Milestones** (if `complexity` is `"complex"`): Break the work into 2-3 sequential milestones (see Milestone Processing in Code Phase).
+   - **Tasks**: Structured task list (reference `${CLAUDE_PLUGIN_ROOT}/templates/plan.md.template`). Each task has: name, Files (path + create/modify), Action (specific implementation description), Verify (runnable command), Done when (observable criteria). Task count: trivial 2-3, standard 4-6, complex 6-8 per milestone.
 5. Write the plan to `docs/features/{feature-name}/plan.md`.
-6. Commit: `docs(plan): add implementation plan for {feature-name}`.
+5.5. **Clarify Sub-Step** (standard and complex features only; skip for trivial):
+   - Read `${CLAUDE_PLUGIN_ROOT}/templates/clarify-checklist.md` for the 6-category ambiguity checklist.
+   - Evaluate each question against the feature spec and plan. Only flag questions where the answer is genuinely ambiguous — not already resolved by the spec, TDR, or design brief.
+   - Typically 2-5 questions for standard features, 0-1 for well-specified features.
+   - **Behavior by autonomy setting** (from `read-profile.sh`):
+     - `full_auto`: Evaluate the checklist silently. Document assumptions with confidence levels (High/Medium/Low) in plan.md under `## Decisions (Auto-Resolved)`. No pause.
+     - `checkpoints` / `collaborative`: Pause and present flagged questions to the user. Wait for answers. Append to plan.md under `## Decisions`.
+     - `supervised`: Same as collaborative, with additional context explaining why each question matters.
+   - **Plan.md output format** — append after existing sections:
+     ```markdown
+     ## Decisions
+     | # | Question | Decision | Source |
+     |---|----------|----------|--------|
+     | 1 | Navigation placement? | New sidebar item under Settings | User |
+     | 2 | API timeout handling? | Toast error + retry button | Assumed (Medium) |
+     ```
+   - If no ambiguities are found, add `## Decisions` with a single row: "No ambiguities identified — spec is fully resolved."
+   - Commit: `docs(plan): add clarification decisions for {feature-name}`.
+6. Commit the plan: `docs(plan): add implementation plan for {feature-name}` (if not already committed with the Clarify sub-step above, combine into a single commit).
 7. Signal completion with `builder-plan-complete.signal` (standard signal format with `"phase": "plan"`, add `"plan_file": "docs/features/{feature-name}/plan.md"`).
 
 **Plan Revision Detection:** If acceptance criteria need to change, the design spec needs a substantial rewrite, or you need spec clarification during any phase, increment the revision counter:
@@ -204,14 +241,50 @@ This injects project-specific conventions and patterns into your context. Follow
 
 1. Read the approved design spec and the TDR.
 2. Reference the architecture diagrams already in context (pre-loaded by the Orchestrator via `inject-architecture.sh`) — especially `component-tree.mmd` to know where new components belong in the hierarchy. If diagrams are not in context (e.g., direct invocation outside orchestration), read them from `.vibecrew/architecture/`.
+2.1. **Plan Freshness Check** — Before executing any code tasks, check if the plan is stale:
+   1. Read `plan_commit_sha` from `state.json` active_feature.
+   2. If null (legacy state or no SHA recorded), skip freshness check.
+   3. Run: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/check-plan-staleness.sh" "docs/features/{feature-name}/plan.md" <plan_commit_sha>`
+   4. If `stale: false` → proceed to implementation.
+   5. If `stale: true`:
+      - **severity: minor** → Log affected files. Re-read each affected file before implementing related tasks. Note changes in commit message.
+      - **severity: major** →
+        - `full_auto`: Re-read affected files, update plan tasks that reference changed files (inline adjustment, no full re-plan), append `## Plan Refresh` section to plan.md with changes noted.
+        - `checkpoints` / `collaborative`: Present staleness report to user, ask whether to refresh affected tasks or proceed as-is.
+        - `supervised`: Show full diffs of affected files, explain impact on each task, ask for decision.
+      - **severity: critical** (deleted/renamed files) →
+        - All autonomy levels: Re-run plan for affected tasks only. Append `## Plan Refresh` section documenting what changed and why.
+   6. Update `plan_commit_sha` to current HEAD after refresh.
+
+2.3. **Structured Task Execution** — Check for structured tasks in the plan:
+   ```bash
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/extract-plan-tasks.sh" "docs/features/{feature-name}/plan.md"
+   ```
+   If `structured: true`, process tasks sequentially:
+   - For each task: implement the Action, run the Verify command, check Done criteria.
+   - If Verify fails: retry the fix up to 2 times, then mark the task as incomplete and continue.
+   - Commit after each completed task: `feat({scope}): {task name}`.
+   - If `structured: false` (legacy plan): fall back to the free-form Code Phase below.
 2.6. **Milestone Processing** — If the feature spec contains a `milestones` array:
-   - Read the current milestone (first one with `status: "pending"`).
-   - Scope the Code Phase to only files and acceptance criteria in that milestone.
+   - **Dependency analysis** (Plan phase, step 4 "Milestones"): For each milestone, analyze shared files, data flow, and API dependencies to populate the `depends_on` array. Milestones sharing files or where one produces data another consumes must have explicit dependencies.
+   - **Wave computation**: Call `compute-milestone-waves.sh` to group milestones into dependency waves:
+     ```bash
+     bash "${CLAUDE_PLUGIN_ROOT}/scripts/compute-milestone-waves.sh" "<feature-id>"
+     ```
+   - **Wave execution**: Process waves sequentially. Within each wave, independent milestones can run in parallel via Agent tool calls (each gets its own worktree and fresh context):
+     - Wave 1: Spawn parallel Agent calls for all Wave 1 milestones.
+     - Wait for all Wave 1 Agents to complete.
+     - Merge milestone branches: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/merge-milestone-branches.sh" <feature-branch> <branch-1> <branch-2>`.
+     - Run build verification on merged result.
+     - Wave 2: Spawn Agents for Wave 2 milestones (which depend on Wave 1).
+     - Continue until all waves are processed.
+   - **Sequential fallback**: If `compute-milestone-waves.sh` returns `sequential: true`, or if cycle detected, or if only 1 milestone per wave: process milestones one at a time (current behavior).
    - After completing a milestone:
      a. Run verification loop (build + lint + type-check).
      b. Commit: `feat({scope}): complete milestone "{name}"`.
      c. Update milestone status to `"complete"` in backlog.json via `update-backlog-raw.sh`.
      d. If context usage > 35% and more milestones remain, suggest `/compact`.
+   - **Merge conflict handling**: If `merge-milestone-branches.sh` reports conflicts, resolve by file ownership from the milestone's `estimated_files` array. If both milestones claim the same file, they should have had a dependency — fall back to sequential for the conflicting pair.
    - After all milestones complete, proceed with full-feature verification and signal.
    - If no milestones (or empty array), process the entire feature in one pass (current behavior).
 

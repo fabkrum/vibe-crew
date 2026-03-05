@@ -49,7 +49,7 @@ import { url } from '../data/site';
           <table class="solution-table">
             <tr><td>Worktree isolation</td><td>Expensive agents (Stack Scout, Builder, Code Reviewer) run in separate git worktrees with their own context windows. Only their distilled output re-enters the main session.</td></tr>
             <tr><td>MCP servers</td><td>Context7 serves library documentation on demand. Chrome DevTools inspects live pages. No need to paste large blocks of reference material.</td></tr>
-            <tr><td>Forced compaction</td><td>During <code>/run-backlog</code>, the system forces <code>/compact</code> between features, preventing context rot across long autonomous runs.</td></tr>
+            <tr><td>Fresh-session execution</td><td>During <code>/run-backlog</code>, each feature is spawned as an isolated Agent tool call with a clean 200k context window. Context rot is eliminated entirely &mdash; no compaction needed. Falls back to inline execution with <code>/compact</code> between features if Agent delegation is unavailable.</td></tr>
             <tr><td>Context warnings</td><td>A Stop hook monitors usage and warns at 45% and 60%, giving you time to wrap up before hitting the limit.</td></tr>
           </table>
           <a class="solution-link" href={url('/agents.html')}>View agent topology &rarr;</a>
@@ -67,6 +67,7 @@ import { url } from '../data/site';
             <tr><td>Backlog &amp; signals</td><td>Feature specs live in <code>backlog.json</code>. Inter-agent signals coordinate handoffs between agents working in parallel.</td></tr>
             <tr><td>Session logs &amp; scores</td><td>Every session is logged with its Vibe Score breakdown. The Performance Coach reads score history to detect patterns across multiple sessions.</td></tr>
             <tr><td>Handoff documents</td><td>When context runs low, <code>/handoff</code> generates a structured document capturing all in-progress work, decisions, and next steps for the next session.</td></tr>
+            <tr><td>Persistent analysis docs</td><td>For brownfield projects, <code>/onboard</code> generates four persistent markdown files in <code>.vibecrew/analysis/</code> (stack, architecture, conventions, gaps). These are auto-injected into Plan phases and post-compaction context, so agents never need to rediscover project conventions from scratch.</td></tr>
           </table>
           <a class="solution-link" href={url('/runtime.html')}>View state structure &rarr;</a>
         </div>

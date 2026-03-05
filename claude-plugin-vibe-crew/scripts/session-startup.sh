@@ -114,6 +114,20 @@ if [[ -n "$GAMIFICATION_LINE" ]]; then
   echo "  $GAMIFICATION_LINE"
 fi
 
+# --- Analysis docs staleness check ---
+if [[ -f "$PROJECT_ROOT/.vibecrew/analysis/stack.md" ]]; then
+  STALENESS_RESULT=""
+  if [[ -x "$SCRIPT_DIR/check-analysis-staleness.sh" ]]; then
+    STALENESS_RESULT=$(bash "$SCRIPT_DIR/check-analysis-staleness.sh" 2>/dev/null || echo "")
+  fi
+  if [[ -n "$STALENESS_RESULT" ]]; then
+    IS_STALE=$(echo "$STALENESS_RESULT" | jq -r '.stale // false' 2>/dev/null || echo "false")
+    if [[ "$IS_STALE" == "true" ]]; then
+      echo "  Analysis docs may be stale. Run /onboard --refresh to update."
+    fi
+  fi
+fi
+
 # --- MCP health check (quick, bounded by timeout) ---
 if [[ -x "$SCRIPT_DIR/check-mcp-health.sh" ]]; then
   MCP_RESULT=""

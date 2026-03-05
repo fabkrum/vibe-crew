@@ -83,6 +83,16 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/extract-project-conventions.sh"
 
 Combine the outputs into a findings JSON and write to `.vibecrew/onboard-findings.json`.
 
+### 3.1 Generate Persistent Analysis Docs
+
+After findings are produced, generate the 4 persistent analysis docs:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/generate-analysis-docs.sh" --findings ".vibecrew/onboard-findings.json"
+```
+
+This creates `.vibecrew/analysis/` with `stack.md`, `architecture.md`, `conventions.md`, and `gaps.md`. These docs are auto-injected into Plan phases and post-compaction context, eliminating the need to re-discover conventions each session.
+
 ---
 
 ## Step 4: Present Findings for Review
@@ -289,6 +299,17 @@ Next steps:
 - Mark confidence as "low" for any convention detected from fewer than 3 file samples.
 - The generated CLAUDE.md should reflect actual project conventions, not template defaults.
 - Test gap items should reference specific file paths, not generic descriptions.
+
+### The `--refresh` flag
+
+When invoked as `/onboard --refresh`:
+1. Skip Steps 1.1 (existing check prompt), 2 (directory init), 5 (CLAUDE.md generation), 6 (state init), and 7 (backlog pre-population).
+2. Re-run Step 3 (Code Auditor) to produce fresh findings.
+3. Re-run Step 3.1 (generate analysis docs) to overwrite `.vibecrew/analysis/` with current data.
+4. Present updated findings (Step 4) for review.
+5. Run Step 8 (verification) to confirm analysis docs are current.
+
+This is useful when the codebase has evolved significantly since the original onboarding. The session startup script warns when analysis docs are stale.
 
 ### Edge cases
 - **Monorepo**: If multiple `package.json` files exist at different depths, ask the user which package to analyze.

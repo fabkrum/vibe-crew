@@ -217,6 +217,14 @@ UPDATED_STATE=$(echo "$STATE" | jq \
   .updated_at = $ts
   ')
 
+# Record git SHA when plan phase completes for staleness detection
+if [[ "$COMPLETED_PHASE" == "plan" ]]; then
+  PLAN_SHA=$(git rev-parse HEAD 2>/dev/null || echo "")
+  if [[ -n "$PLAN_SHA" ]]; then
+    UPDATED_STATE=$(echo "$UPDATED_STATE" | jq --arg sha "$PLAN_SHA" '.active_feature.plan_commit_sha = $sha')
+  fi
+fi
+
 # Prepare write-ahead journal (both intended states recorded before any write)
 prepare_dual_write "$VIBECREW_DIR" "$BACKLOG_FILE" "$UPDATED_BACKLOG" "$STATE_FILE" "$UPDATED_STATE"
 

@@ -45,8 +45,8 @@ import { commandsDiagram } from '../data/diagrams';
         </tr>
         <tr>
           <td><code>/onboard</code></td>
-          <td>Analyzes an existing codebase &mdash; extracts conventions, tech stack, and generates a CLAUDE.md.</td>
-          <td>Adding VibeCrew to a project that already has code.</td>
+          <td>Analyzes an existing codebase &mdash; extracts conventions, tech stack, generates a CLAUDE.md, and creates persistent analysis docs (<code>.vibecrew/analysis/</code>). Use <code>--refresh</code> to re-run analysis and regenerate analysis docs without repeating full onboarding.</td>
+          <td>Adding VibeCrew to a project that already has code. Use <code>--refresh</code> when the codebase has changed significantly.</td>
         </tr>
         <tr>
           <td><code>/profile</code></td>
@@ -117,6 +117,11 @@ import { commandsDiagram } from '../data/diagrams';
           <td><code>/fix-issue &lt;number&gt;</code></td>
           <td>Fetches a GitHub/GitLab issue, diagnoses the problem, implements a fix, tests it, and creates a PR/MR.</td>
           <td>To fix a specific issue end-to-end from your issue tracker.</td>
+        </tr>
+        <tr>
+          <td><code>/quick "description"</code></td>
+          <td>Fast-track small fixes: pre-flight check, scope guard (warns if it looks like a feature), implement, quality gate, conventional commit, session log. No backlog entry, no feature branch, no Vibe Score.</td>
+          <td>For typo fixes, config tweaks, and other changes too small for the full feature cycle.</td>
         </tr>
       </tbody>
     </table>

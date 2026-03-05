@@ -180,13 +180,95 @@ Presents suggestions one at a time for your approval
 
       <!-- INTER-FEATURE CONTEXT HYGIENE -->
       <h3 id="context-hygiene">Inter-Feature Context Hygiene (<code>/run-backlog</code>)</h3>
-      <p>When <code>/run-backlog</code> processes multiple features autonomously, stale conversation history from earlier features &mdash; planning discussions, build output, test results &mdash; accumulates in the context window and degrades quality for later features. VibeCrew prevents this with <strong>forced inter-feature compaction</strong>.</p>
+      <p>When <code>/run-backlog</code> processes multiple features autonomously, stale conversation history from earlier features can degrade quality for later features. VibeCrew solves this with <strong>fresh-session Agent delegation</strong>.</p>
 
-      <p>After each feature passes its quality gate and state is cleared, the agent triggers <code>/compact</code> before starting the next feature. This compresses stale history and fires <code>compact-reinject.sh</code> to re-inject fresh project state and architecture diagrams. Each feature effectively begins with a near-fresh context window. The last feature in the backlog skips compaction so the <code>/wrap</code> phase retains full context for the Performance Coach analysis.</p>
+      <p><strong>Primary approach:</strong> Each feature's build phases (Plan&rarr;Test) are spawned as an Agent tool call with a completely fresh 200k context window. The <code>prepare-feature-context.sh</code> script assembles the feature spec, TDR, architecture diagrams, design system, CLAUDE.md, user profile, and codebase analysis docs into a structured prompt. The Agent runs in its own worktree, eliminating context rot entirely.</p>
+
+      <p><strong>Fallback:</strong> If Agent delegation is unavailable, VibeCrew falls back to inline execution with <code>/compact</code> between features. This compresses stale history and fires <code>compact-reinject.sh</code> to re-inject fresh project state and architecture diagrams.</p>
 
       <Callout type="tip" title="Impact on long autonomous runs">
-        Without inter-feature compaction, feature 5 in a 6-feature backlog run would operate with a context window polluted by four features' worth of stale history. With compaction, every feature gets the same quality of context as the first. This is especially important for <code>/run-backlog</code> runs that process 5+ features unattended. See <a href="runtime.html">Runtime State</a> for the full technical flow.
+        With fresh-session execution, feature 10 gets the exact same 200k context quality as feature 1. The orchestrating session only accumulates lightweight state management overhead. This is a significant improvement over compaction, which still carries summarized prior context. See <a href="runtime.html">Runtime State</a> for the full technical flow.
       </Callout>
+
+      <!-- WAVE-BASED MILESTONES -->
+      <h3 id="wave-milestones">Wave-Based Milestones (Complex Features)</h3>
+      <p>Complex features with milestones can now declare <strong>dependencies</strong> between milestones via the <code>depends_on</code> field. Independent milestones are grouped into <strong>waves</strong> and executed in parallel.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4>Dependency Analysis</h4>
+          <p>During the Plan phase, the Builder analyzes shared files and data flow between milestones to populate <code>depends_on</code>. Milestones sharing files or where one produces data another consumes must have explicit dependencies.</p>
+        </div>
+        <div class="card">
+          <h4>Wave Computation</h4>
+          <p><code>compute-milestone-waves.sh</code> performs topological sort to group milestones into waves. Wave 1 milestones have no dependencies and can run in parallel. Wave 2 depends on Wave 1, etc.</p>
+        </div>
+        <div class="card">
+          <h4>Parallel Execution</h4>
+          <p>Independent milestones in a wave spawn parallel Agent calls, each with its own worktree and fresh context. After a wave completes, <code>merge-milestone-branches.sh</code> merges the results.</p>
+        </div>
+        <div class="card">
+          <h4>Safety Fallbacks</h4>
+          <p>Cycle detection falls back to sequential. Merge conflicts are resolved by file ownership from <code>estimated_files</code>. If all milestones are linear, behavior is unchanged from sequential processing.</p>
+        </div>
+      </div>
+
+      <!-- STRUCTURED TASK PLANS -->
+      <h3 id="structured-tasks">Structured Task Plans</h3>
+      <p>Implementation plans now include a <strong>structured <code>## Tasks</code> section</strong> alongside the existing free-form sections (Approach, Files, Component Strategy, etc.). Each task has explicit fields:</p>
+
+      <pre><code>### Task 1: Create database schema
+- <strong>Files</strong>: `prisma/schema.prisma` (modify)
+- <strong>Action</strong>: Add User and Session models with email, password_hash, created_at
+- <strong>Verify</strong>: `npx prisma validate`
+- <strong>Done when</strong>: Schema validates without errors and includes both models</code></pre>
+
+      <p>The Code phase extracts structured tasks via <code>extract-plan-tasks.sh</code> and processes them sequentially: implement the Action, run the Verify command, check the Done criteria, commit per task. Legacy plans without structured tasks fall back to free-form execution. Task count scales with complexity: 2-3 for trivial, 4-6 for standard, 6-8 per milestone for complex.</p>
+
+      <!-- PLAN FRESHNESS CHECKS -->
+      <h3 id="plan-freshness">Plan Freshness Checks</h3>
+      <p>When multiple features execute sequentially (especially during <code>/run-backlog</code>), earlier features may modify files that later features planned against. VibeCrew records the git SHA when each plan completes and checks for drift before the Code phase starts.</p>
+
+      <p><strong>How it works:</strong></p>
+      <ol>
+        <li>Plan phase completes &rarr; git SHA recorded in <code>state.json</code></li>
+        <li>Code phase starts &rarr; <code>check-plan-staleness.sh</code> diffs plan files against recorded SHA</li>
+        <li>Severity determines response: proceed, review, or refresh affected tasks</li>
+      </ol>
+
+      <p><strong>Severity levels:</strong></p>
+      <ul>
+        <li><strong>Minor</strong> (1&ndash;2 files, &lt;20 lines): Re-read affected files, proceed</li>
+        <li><strong>Major</strong> (3+ files or &gt;50 lines): Refresh affected plan tasks</li>
+        <li><strong>Critical</strong> (deleted/renamed files): Mandatory re-plan of affected tasks</li>
+      </ul>
+
+      <p>Behavior adapts to your autonomy setting &mdash; <code>full_auto</code> refreshes silently, <code>collaborative</code> asks before refreshing, <code>supervised</code> shows full diffs.</p>
+
+      <!-- PERSISTENT CODEBASE ANALYSIS -->
+      <h3 id="analysis-docs">Persistent Codebase Analysis</h3>
+      <p>When you onboard an existing project with <code>/onboard</code>, VibeCrew generates <strong>4 persistent analysis documents</strong> in <code>.vibecrew/analysis/</code> that capture your codebase's stack, architecture, conventions, and gaps. These docs are auto-injected into every Plan phase and post-compaction context, eliminating the need to re-discover conventions each session.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4><code>stack.md</code></h4>
+          <p>Language, framework, runtime, package manager, key dependencies, component library, database, deployment target.</p>
+        </div>
+        <div class="card">
+          <h4><code>architecture.md</code></h4>
+          <p>Source directories, component organization, API routes, schema location, state management, error handling, auth approach.</p>
+        </div>
+        <div class="card">
+          <h4><code>conventions.md</code></h4>
+          <p>Code style (quotes, semicolons, indent), formatter/linter, naming patterns, import style, commit format, test framework.</p>
+        </div>
+        <div class="card">
+          <h4><code>gaps.md</code></h4>
+          <p>Source vs test file count, estimated coverage, untested modules (top 10), deprecated dependencies, TODO count.</p>
+        </div>
+      </div>
+
+      <p>Analysis docs are <strong>committed to git</strong> (not gitignored) and persist across sessions and team members. Staleness detection runs on session startup &mdash; if docs are &gt;30 days old with &gt;50 commits, or <code>package.json</code> changed, VibeCrew warns you. Refresh with <code>/onboard --refresh</code> (re-runs the auditor without re-generating CLAUDE.md or re-initializing state).</p>
     </section>
 
     <hr>

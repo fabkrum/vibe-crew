@@ -190,17 +190,9 @@ Announce the feature start:
 
 ---
 
-### Step 3b: Run Phases Sequentially
+### Step 3b: Run Phases via Fresh-Session Agent Delegation
 
-Execute each of the six phases in order: **Plan > Design > Code > Test > Review > Docs**
-
-Update `state.json` active phase before each phase begins:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature.phase = "<phase-name>" | .active_feature.phase_started_at = "<ISO-timestamp>"'
-```
-
----
+Each feature's build phases (Plan→Test) are executed as an Agent tool call, giving each feature a completely fresh 200k context window. The orchestrating `/run-backlog` session handles state management, review, and docs.
 
 #### Read Feature Complexity
 
@@ -212,204 +204,33 @@ jq -r --arg id "<feature-id>" '.features[] | select(.id == $id) | .complexity //
 
 Store as `COMPLEXITY`. When complexity is `"trivial"`, `complete-phase.sh` automatically routes `plan → code` (skipping design) and `test → docs` (skipping review), so the phase loop naturally skips those phases.
 
-#### Phase 1: Plan
+#### Phases 1-4: Plan → Design → Code → Test (Agent Delegation)
 
-Load the feature spec from the backlog:
-
-```bash
-jq --arg id "<feature-id>" '.features[] | select(.id == $id) | .spec' .vibecrew/backlog.json
-```
-
-**If acceptance criteria are missing or empty**, generate them from the feature description and VISION.md context:
-
-1. Read the feature's `description` field.
-2. Read `VISION.md` for project goals.
-3. Generate 3-5 specific, testable acceptance criteria.
-4. Save them back to the backlog:
+1. Prepare the feature context:
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature-id>" spec.acceptance_criteria '["criterion 1", "criterion 2", "criterion 3"]'
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/prepare-feature-context.sh" "<feature-id>"
 ```
 
-**If acceptance criteria exist**, verify they are specific and testable. If they are vague, refine them.
+2. Invoke the **Agent tool** (subagent_type: `general-purpose`, isolation: `worktree`) with the output from `prepare-feature-context.sh` as the prompt. The Builder agent will:
+   - Run Plan phase (including Clarify sub-step for standard/complex features)
+   - Run Design phase (skip for trivial)
+   - Run Code phase (following structured tasks if present)
+   - Run Test phase
+   - Call `complete-phase.sh` after each phase
+   - On failure: write `builder-blocked.signal`, commit WIP, stop
 
-**Explore existing codebase and generate implementation plan:**
-
-After acceptance criteria are validated:
-
-1. Read the TDR and architecture diagrams for context.
-2. Read up to 10 existing files referenced in `spec.technical_notes` or identified from architecture diagrams. Log findings in the plan under `## Existing Code Analysis`.
-3. Write an implementation plan to `docs/features/{feature-name}/plan.md` covering: approach, files to create/modify, component strategy, data flow, testing approach.
-3. Commit: `docs(plan): add implementation plan for {feature-name}`.
-
-Mark phase complete:
+3. After the Agent completes, verify phase completion from `state.json`:
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "plan"
+jq -r --arg id "<feature-id>" '.features[] | select(.id == $id) | .phases_completed' .vibecrew/backlog.json 2>/dev/null
 ```
 
-Report: `  [1/6] Plan — complete`
+4. If the Agent timed out or failed partway, check which phases completed and pick up remaining phases inline (fallback).
 
----
+#### Phase 4.5: Review (Orchestrator-handled)
 
-#### Phase 2: Design
-
-In automated backlog mode, the Builder agent handles design. Create a brief component design spec:
-
-1. Read `design-system.css` for available tokens:
-
-```bash
-cat design-system.css 2>/dev/null || cat src/styles/design-system.css 2>/dev/null || echo "no design system found"
-```
-
-2. **ASCII Wireframes:** Generate ASCII wireframes for each key screen before writing the design spec. Embed in `docs/features/{feature-name}/design.md` under `## Wireframes`. Skip wireframes for trivial features.
-
-3. Based on the feature's `spec.ui_description`, document:
-   - UI components needed (name, purpose, props)
-   - CSS design tokens to use (colors, spacing, typography from design-system.css)
-   - Responsive behavior (mobile, tablet, desktop breakpoints)
-   - Component hierarchy and layout structure
-
-4. Write the design spec to the feature's docs:
-
-```bash
-mkdir -p docs/features
-```
-
-Write a brief design spec to `docs/features/<feature-id>-design.md` containing:
-- Component list with hierarchy
-- Design token usage
-- Responsive notes
-- Interaction states (hover, active, disabled, loading, error, empty)
-
-Mark phase complete:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "design"
-```
-
-Report: `  [2/6] Design — complete`
-
----
-
-#### Phase 3: Code
-
-This is the implementation phase. Follow TDR constraints strictly.
-
-1. Read the TDR for technology boundaries:
-
-```bash
-cat docs/tdr.md 2>/dev/null || echo "no TDR found"
-```
-
-2. Read the feature spec (acceptance criteria, UI description, business logic, technical notes):
-
-```bash
-jq --arg id "<feature-id>" '.features[] | select(.id == $id) | .spec' .vibecrew/backlog.json
-```
-
-3. **Milestone processing**: If the feature spec contains a `milestones` array, process one milestone at a time:
-   - Read the current milestone (first with `status: "pending"`).
-   - Scope implementation to only the files and acceptance criteria in that milestone.
-   - After each milestone: run build verification, commit with `feat({scope}): complete milestone "{name}"`, update milestone status in backlog.json.
-   - Between milestones: check context usage. If > 35% and more milestones remain, trigger `/compact`.
-   - After all milestones: proceed with full-feature verification.
-   - If no milestones, implement the entire feature in one pass.
-
-4. Implement the feature:
-   - Create files following the project's established patterns and conventions
-   - Follow the design spec from Phase 2
-   - Use only technologies approved in the TDR
-   - Follow CLAUDE.md rules for the project
-
-4. Make **conventional commits** after each logical change:
-   - `feat(<scope>): <description>` for new functionality
-   - `fix(<scope>): <description>` for bug fixes during implementation
-   - `style(<scope>): <description>` for styling changes
-   - `refactor(<scope>): <description>` for code restructuring
-
-5. After implementation, run a build verification:
-
-```bash
-npm run build 2>&1
-echo "EXIT_CODE: $?"
-```
-
-If the build fails, fix the issues before proceeding. If the build cannot be fixed after 3 attempts, note the failure but continue to the test phase.
-
-Mark phase complete:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "code"
-```
-
-Report: `  [3/6] Code — complete`
-
----
-
-#### Phase 4: Test
-
-Follow the TDD-hybrid approach:
-
-1. **Spec tests** (business logic): Write tests for each acceptance criterion. These verify the feature meets its requirements.
-
-2. **Implementation tests** (UI): Write tests for the UI components created in the code phase. Test rendering, interactions, and edge cases.
-
-3. Run the full test suite:
-
-```bash
-npm test 2>&1
-echo "EXIT_CODE: $?"
-```
-
-4. **If tests fail**, enter a fix-and-retry cycle:
-   - Analyze the failure output
-   - Fix the failing test or the implementation bug
-   - Re-run the test suite
-   - Maximum 3 fix-and-retry cycles
-
-5. **Before marking as blocked**, attempt auto-recovery:
-   - Check for missing dependencies: `npm install 2>&1`
-   - Re-run the test suite once after dependency install
-   - If tests pass after recovery, continue to the next phase
-
-6. **After recovery fails (or 3 total retries)**, mark the feature as blocked:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
-  '(.features[] | select(.id == $fid)) |= (.column = "blocked" | .blocked_reason = $reason | .updated_at = $ts)' \
-  --arg fid "<feature-id>" \
-  --arg reason "Tests failed after 3 retries" \
-  --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-```
-
-Clear the active feature from state:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature = null | .updated_at = (now | todate)'
-```
-
-Send notification:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/notify.sh" "VibeCrew" "Feature blocked: {name} — tests failed after 3 retries"
-```
-
-Report the failure and **skip to the next feature**.
-
-6. If all tests pass, mark phase complete:
-
-```bash
-bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "test"
-```
-
-Report: `  [4/6] Test — complete (X passed, Y failed)`
-
----
-
-#### Phase 4.5: Review
-
-After tests pass, invoke a structured code review:
+After Plan→Test complete, invoke a structured code review:
 
 1. Run the `/review` skill logic: collect changed files, invoke the `code-reviewer` agent in worktree isolation, and read the review report.
 
@@ -438,13 +259,9 @@ CRITICAL_COUNT=$(jq -r '.stats.critical // 0' "$LATEST_REVIEW" 2>/dev/null || ec
        '{feature_id: $fid, review_file: $rf, cycle: $cycle, critical_findings: $findings, timestamp: $ts}' \
        > .vibecrew/signals/builder-review-feedback.json
      ```
-   - Fix each critical finding, then re-run tests before re-review:
-     ```bash
-     npm test 2>&1
-     echo "EXIT_CODE: $?"
-     ```
+   - Re-invoke Builder Agent with feedback context (max 2 review-fix cycles)
    - Re-invoke the code reviewer for a follow-up review scoped to changed files
-   - Track the cycle count. **Maximum 2 review-fix cycles.** After 2 cycles, proceed to docs with remaining findings noted as unresolved.
+   - After 2 cycles, proceed to docs with remaining findings noted as unresolved.
 
 4. **If verdict is `approve` or `comment-only`**, proceed to docs.
 
@@ -458,9 +275,9 @@ Report: `  [5/6] Review — {verdict} ({critical} critical, {warning} warnings)`
 
 ---
 
-#### Phase 5: Docs
+#### Phase 5: Docs (Orchestrator-handled, inline)
 
-Update documentation for this feature:
+Update documentation for this feature (lightweight, runs inline in the orchestrator context):
 
 1. **Feature documentation**: Create or update `docs/features/<feature-id>.md` with:
    - Feature overview and purpose
@@ -501,6 +318,20 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/complete-phase.sh" "<feature-id>" "docs"
 ```
 
 Report: `  [6/6] Docs — complete`
+
+---
+
+#### Fallback: Inline Execution + Compact
+
+If the Agent tool is unavailable or fails to start, fall back to inline execution:
+
+1. Execute all phases directly in the orchestrator session (as described in the original phase-by-phase flow).
+2. After each feature, trigger `/compact` to compress context before the next feature.
+3. After compaction, verify state is intact:
+
+```bash
+jq -c '{foundation: .foundation.complete, active_feature: .active_feature.id}' .vibecrew/state.json 2>/dev/null
+```
 
 ---
 
@@ -618,6 +449,7 @@ Deductions:
 - Build warnings present: -5
 - Lint warnings present: -3
 - Feature blocked (failed quality gate): -20
+- Unresolved clarifications (3+ low-confidence assumptions in plan): -3
 
 Bonuses:
 - All 6 phases completed with artifacts: +5
@@ -685,13 +517,14 @@ Use these status indicators:
 
 ### Step 3f: Context Hygiene (between features)
 
-Before starting the next feature, reset the context window to prevent context rot across a long backlog run. This mirrors the "Ralph Loop" pattern — each feature gets a near-fresh context window.
+**Primary approach (Agent delegation):** When using fresh-session Agent delegation (Step 3b), each feature already gets a completely fresh 200k context window. No compaction is needed between features — the orchestrator session only accumulates lightweight state management overhead.
 
-**If there are more features remaining in the queue:**
+**Fallback approach (inline execution):** If running inline (Agent tool unavailable), reset the context window between features:
 
 1. Trigger context compaction by sending the `/compact` command. This compresses the conversation history and fires the `compact-reinject.sh` hook, which re-injects:
    - Current project state (foundation, active feature, backlog summary)
    - Architecture diagrams (all 5 Mermaid files)
+   - Codebase analysis docs (from `/onboard`, if present)
    - CLAUDE.md summary
    - Git branch and recent commits
 
@@ -704,8 +537,6 @@ jq -c '{foundation: .foundation.complete, active_feature: .active_feature.id, ba
 If `active_feature` is not null after the previous feature was cleared, something went wrong — re-run the state clear before proceeding.
 
 **If this is the last feature:** Skip compaction. Proceed directly to Step 4 (Completion Summary).
-
-**Why this matters:** Without inter-feature compaction, a 5-feature backlog run accumulates the full conversation history from all prior features. By feature 4-5, context usage is typically above 45%, triggering warnings and degrading agent quality. Compacting between features keeps each feature's working context lean.
 
 ---
 

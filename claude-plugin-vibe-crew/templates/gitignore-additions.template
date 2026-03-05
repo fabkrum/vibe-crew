@@ -29,6 +29,7 @@
 # .vibecrew/sessions/         — session history logs (audit trail)
 # .vibecrew/scores/           — vibe score breakdowns (quality tracking)
 # .vibecrew/releases/         — release notes data
+# .vibecrew/analysis/         — codebase analysis docs (persistent, from /onboard)
 
 # -----------------------------------------------------------------------------
 # Common development artifacts

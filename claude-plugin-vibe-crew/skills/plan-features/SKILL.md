@@ -148,8 +148,18 @@ If yes, guide the user to define 2-3 milestones:
 - **Description**: What this milestone delivers
 - **Acceptance criteria subset**: Which criteria (by number) this milestone covers
 - **Estimated files**: Key files this milestone creates/modifies
+- **Dependencies** (`depends_on`): Which other milestones must complete first? Milestones that share files or where one produces data another consumes must have explicit dependencies. Milestones with no dependencies can run in parallel.
 
-Store in `spec.milestones` via `update-backlog-raw.sh`.
+After defining milestones, display the wave structure:
+```
+Milestone Waves:
+  Wave 1 (parallel): Backend API, Frontend UI
+  Wave 2 (after Wave 1): Integration & Polish
+
+Independent milestones in the same wave can execute in parallel, each in its own worktree.
+```
+
+Store in `spec.milestones` via `update-backlog-raw.sh`. Each milestone object includes: `{name, description, criteria_indices, estimated_files, status, depends_on}`.
 
 If no (or complexity is not complex), skip milestones.
 

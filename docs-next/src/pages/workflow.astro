@@ -167,9 +167,17 @@ const backlogJson = `{
 <span class="output">  Approach: Supabase Auth with SSR helpers</span>
 <span class="output">  Files to create: 5 new, 2 modified</span>
 <span class="output">  Testing approach: spec-first for auth logic, impl-first for UI</span>
+<span class="output">  Clarify: 2 ambiguities found (resolved as assumptions)</span>
+<span class="output">    | Session timeout? | 24h default (Assumed, High confidence)</span>
+<span class="output">    | OAuth providers?  | Google + GitHub (from spec)</span>
+<span class="output">  Structured tasks: 5 tasks generated</span>
 
 <span class="success">Phase complete: Plan</span>
 <span class="output">Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
+
+    <p>The <strong>Clarify sub-step</strong> runs automatically within Plan for standard and complex features. It evaluates 6 categories of potential ambiguities (Layout, Data, Content, Interaction, Business Logic, Integration) and either resolves them as documented assumptions or pauses to ask you, depending on your <code>/profile</code> autonomy setting. Structured tasks (Files/Action/Verify/Done) give the Code phase a deterministic checklist to follow.</p>
+
+    <p><strong>Plan Freshness Check</strong> &mdash; Before the Code phase begins, VibeCrew automatically checks whether any files referenced in your plan have changed since planning completed (from other features, quick fixes, or dependency updates). Minor changes are noted and the affected files are re-read. Major changes trigger a plan refresh for the affected tasks. This prevents building against stale assumptions.</p>
 
     <h4>Phase 2: UI Design (~5 min)</h4>
     <pre><code><span class="code-label">Development</span><span class="prompt">&gt;</span> "Design the auth UI components"
@@ -303,10 +311,10 @@ const backlogJson = `{
 <span class="output">Building: trip-creation...</span></code></pre>
 
     <h3>Complexity-aware processing</h3>
-    <p><code>/run-backlog</code> respects each feature's <code>complexity</code> setting. Trivial features skip Design and Review phases for faster throughput. Complex features with milestones are processed one milestone at a time, with <code>/compact</code> between milestones to keep context lean.</p>
+    <p><code>/run-backlog</code> respects each feature's <code>complexity</code> setting. Trivial features skip Design and Review phases for faster throughput. Complex features with milestones use wave-based execution &mdash; independent milestones run in parallel via separate Agent calls, each with its own fresh context window. If Agent delegation is unavailable, milestones fall back to sequential processing with <code>/compact</code> between them.</p>
 
-    <h3>Inter-feature context hygiene</h3>
-    <p>Between features, VibeCrew forces a <code>/compact</code> to prevent context degradation across long autonomous runs. Each feature starts with a clean context window, ensuring the Builder agent doesn't confuse Trip Creation's patterns with Group Invites' requirements.</p>
+    <h3>Fresh-session execution</h3>
+    <p>Each feature is executed in a <strong>completely fresh 200k context window</strong> via Agent tool delegation. The orchestrating <code>/run-backlog</code> session prepares a context bundle (feature spec + TDR + architecture + design system + CLAUDE.md + profile + analysis docs) and spawns a Builder agent with it. This eliminates context rot entirely &mdash; feature 5 gets the same quality as feature 1. If Agent delegation is unavailable, VibeCrew falls back to inline execution with <code>/compact</code> between features.</p>
 
     <h3>When to use <code>/run-backlog</code> vs <code>/new-feature</code></h3>
     <div class="card-grid">
@@ -322,6 +330,34 @@ const backlogJson = `{
 
     <h3>What to expect</h3>
     <p>VibeCrew notifies you on three conditions only: <strong>permission prompts</strong> (a tool needs approval), <strong>task completion</strong> (a feature finished), and <strong>critical failures</strong> (something broke). Everything else runs silently. You'll get a native OS notification for each &mdash; click it to jump directly to the session.</p>
+  </section>
+
+  <hr>
+
+  <!-- ============ QUICK FIXES ============ -->
+  <section class="section" id="quick-fixes">
+    <span class="section-label">Use Case</span>
+    <h2>Quick Fixes</h2>
+    <p><em>"I just need to fix a typo / tweak a config value / update some copy."</em></p>
+
+    <p><code>/quick "description"</code> is a lightweight alternative to the full feature lifecycle. It skips planning, design, review, and docs &mdash; just code the fix, run the quality gate, and commit.</p>
+
+    <pre><code><span class="code-label">Development</span><span class="prompt">&gt;</span> /quick "fix typo in pricing page header"
+<span class="output">Locating file...</span>
+<span class="output">  src/app/pricing/page.tsx: "Prcing" &rarr; "Pricing"</span>
+<span class="output">Quality gate: build ✓  lint ✓  types ✓  tests ✓</span>
+<span class="success">Committed: fix(pricing): fix typo in pricing page header (abc1234)</span></code></pre>
+
+    <h3>What <code>/quick</code> does NOT do</h3>
+    <ul>
+      <li>No backlog entry &mdash; visible in git log and session log only</li>
+      <li>No feature branch &mdash; commits directly to the current branch</li>
+      <li>No state mutation &mdash; doesn't interfere with in-progress features</li>
+      <li>No Vibe Score &mdash; too lightweight to score</li>
+    </ul>
+
+    <h3>Scope guard</h3>
+    <p>If your description sounds like a feature (mentions "new page", "migration", "endpoint", etc.), VibeCrew will suggest <code>/new-feature</code> instead. You can override and proceed if you're sure it's a small change.</p>
   </section>
 
   <hr>

@@ -29,6 +29,7 @@
 19. [Codebase Analysis Documents](#19-codebase-analysis-documents)
 20. [EARS (Easy Approach to Requirements Syntax)](#20-ears-easy-approach-to-requirements-syntax)
 21. [Decision Categories (Locked/Deferred/Discretion)](#21-decision-categories-lockeddeferreddiscretion)
+22. [Agent Memory Records](#22-agent-memory-records)
 
 ---
 
@@ -1943,3 +1944,45 @@ The classification taxonomy for decisions made during the Clarify sub-step (Disc
 - `templates/decisions.md.template` -- Standalone decisions document for complex features
 - `templates/plan.md.template` -- Decisions table with Category column
 - `agents/builder.md` -- Clarify sub-step uses taxonomy; Code phase enforces categories
+
+---
+
+## 22. Agent Memory Records
+
+**Location:** `.vibecrew/memory/<agent>/<domain>.jsonl`
+
+**Purpose:** Per-agent persistent knowledge that accumulates across sessions. Each agent writes operational discoveries (API patterns, flaky tests, library gotchas) that future sessions can read to avoid re-discovering the same information.
+
+### Entry Schema
+
+Each line is a JSON object:
+
+| Field | Required | Type / Constraint |
+|---|---|---|
+| `content` | yes | String — the knowledge being stored |
+| `created_at` | yes | ISO 8601 timestamp |
+| `expires_at` | yes | ISO 8601 timestamp (empty string = no expiry) |
+| `ttl_days` | yes | Integer — days until auto-prune (default: 90) |
+
+### Limits
+
+| Constraint | Value |
+|---|---|
+| Max entries per domain file | 50 |
+| Max file size per domain | 100 KB |
+| Default TTL | 90 days |
+| Duplicate detection | Exact content match (skip if exists) |
+
+### Agent Domains
+
+| Agent | Typical Domains |
+|---|---|
+| `builder` | `api-patterns`, `code-conventions`, `integration-gotchas` |
+| `verifier` | `flaky-tests`, `environment-issues`, `failure-patterns` |
+| `stack-scout` | `library-gotchas`, `version-conflicts`, `migration-notes` |
+| `code-reviewer` | `recurring-issues`, `convention-violations` |
+
+**Scripts:**
+- `scripts/agent-memory-write.sh` — writes entry, enforces limits, deduplicates
+- `scripts/agent-memory-read.sh` — reads entries, prunes expired, outputs summary or JSON
+- `scripts/prepare-feature-context.sh` — injects Builder memory into fresh-session context

@@ -21,6 +21,7 @@
 9. [Agent Helpers (Shared Procedures)](#9-agent-helpers-shared-procedures)
 10. [Design Decisions](#10-design-decisions)
 11. [System Reviewer Agent](#11-system-reviewer-agent)
+12. [Per-Agent Persistent Memory](#12-per-agent-persistent-memory)
 
 ---
 
@@ -1015,6 +1016,7 @@ To reduce prompt duplication across 14 agent files, shared procedures are centra
 | Read-Only Agent Constraints | 8 agents (Code Auditor, Code Reviewer, Code Simplifier, Opponent Processor, Security Auditor, Stack Scout, System Reviewer + partial: Doc Generator) | Enforce no-write safety |
 | Budget Discipline | All 14 agents | Context window management |
 | Expertise Integration | 3 agents (Builder, Code Reviewer, Performance Coach) | Cross-session knowledge accumulation |
+| Agent Memory Integration | 4 agents (Builder, Verifier, Stack Scout, Code Reviewer) | Per-agent persistent knowledge base across sessions |
 | Signal File Format | 3 agents (Builder, Verifier, Workflow Orchestrator) | Standardized inter-agent communication |
 | Phase Advancement | 2 agents (Builder, Verifier) | Feature lifecycle state transitions |
 
@@ -1239,3 +1241,70 @@ The agent returns a single markdown report with five parts:
 | **Data sources** | Project files | Plugin files + telemetry + web |
 | **Output** | Project artifacts | Review report (JSON + markdown) |
 | **Frequency** | Per-session/feature | Periodic (manual invocation) |
+
+---
+
+## 12. Per-Agent Persistent Memory
+
+Agents accumulate operational knowledge across sessions in `.vibecrew/memory/<agent>/`. This complements the expertise system (domain-organized) with agent-specific operational patterns.
+
+### 12.1 Directory Structure
+
+```
+.vibecrew/memory/
+  builder/
+    api-patterns.jsonl        # REST conventions, integration patterns
+    code-conventions.jsonl    # Project-specific coding patterns
+  verifier/
+    flaky-tests.jsonl         # Tests that intermittently fail
+    environment-issues.jsonl  # Setup/environment gotchas
+  stack-scout/
+    library-gotchas.jsonl     # Version conflicts, migration notes
+  code-reviewer/
+    recurring-issues.jsonl    # Patterns that frequently need review feedback
+```
+
+### 12.2 Entry Schema (JSONL)
+
+Each line in a `.jsonl` file is a JSON object:
+
+```json
+{
+  "content": "REST endpoints use /api/v1 prefix with camelCase body params",
+  "created_at": "2026-03-05T10:00:00Z",
+  "expires_at": "2026-06-03T10:00:00Z",
+  "ttl_days": 90
+}
+```
+
+### 12.3 Limits
+
+| Constraint | Default | Purpose |
+|---|---|---|
+| Max entries per domain | 50 | Prevent unbounded growth |
+| Max file size per domain | 100 KB | Keep context injection fast |
+| Default TTL | 90 days | Auto-prune stale knowledge |
+| Duplicate detection | Exact match | Prevent redundant entries |
+
+### 12.4 Scripts
+
+| Script | Purpose |
+|---|---|
+| `agent-memory-write.sh` | Write a memory entry with TTL and size enforcement |
+| `agent-memory-read.sh` | Read entries (prunes expired), outputs summary or JSON |
+
+### 12.5 Integration Points
+
+- **prepare-feature-context.sh** injects Builder memory into fresh-session Agent context
+- **helpers.md#Agent-Memory-Integration** documents the read/write pattern for all agents
+- Agents write memory after discovering significant patterns (API conventions, flaky tests, library gotchas)
+- Memory is read at the start of relevant phases to inform decisions
+
+### 12.6 Relationship to Expertise System
+
+| Aspect | Expertise Records | Agent Memory |
+|---|---|---|
+| Organization | By domain (decisions, patterns, failures) | By agent + topic |
+| Format | JSONL with structured fields (type, tier, confidence) | JSONL with content + TTL |
+| Use case | Cross-agent domain knowledge | Agent-specific operational patterns |
+| Lifespan | Permanent (no TTL) | Time-limited (TTL with auto-prune) |

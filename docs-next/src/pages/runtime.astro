@@ -113,6 +113,11 @@ import { runtimeStateDiagram } from '../data/diagrams';
           <td>Persistent agent expertise records &mdash; learned patterns and session learnings (JSON).</td>
           <td>Performance Coach (writes), Builder and Code Reviewer (read for adaptive behavior).</td>
         </tr>
+        <tr>
+          <td><code>memory/</code></td>
+          <td>Per-agent persistent memory &mdash; operational knowledge accumulated across sessions (JSONL). Organized as <code>memory/&lt;agent&gt;/&lt;domain&gt;.jsonl</code> with TTL-based auto-pruning.</td>
+          <td>Builder (API patterns, conventions), Verifier (flaky tests), Stack Scout (library gotchas), Code Reviewer (recurring issues).</td>
+        </tr>
       </tbody>
     </table>
   </div>

@@ -102,6 +102,13 @@ if [[ -x "$SCRIPT_DIR/read-profile.sh" ]]; then
 fi
 
 echo ""
+echo "## Agent Memory"
+echo ""
+if [[ -x "$SCRIPT_DIR/agent-memory-read.sh" ]]; then
+  bash "$SCRIPT_DIR/agent-memory-read.sh" --agent "builder" --limit 10 2>/dev/null || echo "(no agent memory)"
+fi
+
+echo ""
 echo "## Codebase Analysis"
 echo ""
 if [[ -x "$SCRIPT_DIR/inject-analysis.sh" ]]; then

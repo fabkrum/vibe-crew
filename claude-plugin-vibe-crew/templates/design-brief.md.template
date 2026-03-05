@@ -46,6 +46,44 @@
 2. {{PRINCIPLE_2}}
 3. {{PRINCIPLE_3}}
 
+## Motion Preferences
+
+| Dimension | Choice |
+|-----------|--------|
+| Animation Level | {{ANIMATION_LEVEL}} |
+| Loading Indicators | {{LOADING_STYLE}} |
+
+_Options: minimal (opacity-only transitions), standard (fade + slide + scale), rich (spring animations, staggered reveals, scroll-driven effects)_
+
+## Form Preferences
+
+| Dimension | Choice |
+|-----------|--------|
+| Validation Timing | {{VALIDATION_TIMING}} |
+| Form Complexity | {{FORM_COMPLEXITY}} |
+
+_Validation: on-blur (default) / on-submit / real-time. Complexity: single-page / multi-step wizard / progressive disclosure._
+
+## i18n Requirements
+
+| Dimension | Choice |
+|-----------|--------|
+| Target Locales | {{TARGET_LOCALES}} |
+| RTL Support | {{RTL_NEEDED}} |
+| Multi-Currency | {{MULTI_CURRENCY}} |
+
+_Leave as "none" if single-locale. RTL needed for Arabic, Hebrew, Farsi, Urdu._
+
+## Legal Requirements
+
+| Dimension | Choice |
+|-----------|--------|
+| Target Jurisdictions | {{TARGET_JURISDICTIONS}} |
+| Impressum Required | {{IMPRESSUM_REQUIRED}} |
+| Cookie Consent | {{COOKIE_CONSENT_NEEDED}} |
+
+_Impressum required for DE/AT/CH. Cookie consent required for any EU-serving site with analytics._
+
 ## Accessibility Baseline
 
 - WCAG AA minimum contrast (4.5:1 text, 3:1 large text)

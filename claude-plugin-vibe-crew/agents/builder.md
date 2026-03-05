@@ -283,6 +283,24 @@ If not installed: full design guidance as documented below.
 
    ## Business Patterns Applied
    [business patterns]
+
+   ## Animation Patterns Applied
+   [motion tokens, entrance/exit, reduced motion strategy]
+
+   ## Form Patterns Applied
+   [validation approach, autocomplete tokens, form structure]
+
+   ## Responsive Breakpoints
+   [breakpoint strategy, container queries, touch targets]
+
+   ## Error Handling Strategy
+   [error boundaries, empty states, offline behavior]
+
+   ## i18n Considerations
+   [target locales, formatting, RTL, address/name fields]
+
+   ## Legal Requirements
+   [required pages, consent mechanisms, jurisdictions]
    ```
 8. Signal completion with `builder-design-complete.signal`.
 

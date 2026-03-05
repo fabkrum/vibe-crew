@@ -67,6 +67,28 @@ const categoryDescriptions: Record<I18nPattern['category'], string> = {
     </section>
   ))}
 
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Work in German"</td><td>Intl.NumberFormat + Intl.DateTimeFormat + Dynamic Address Form</td></tr>
+        <tr><td>"Support Arabic"</td><td>RTL Layout (dir="rtl" + CSS logical properties + mirrored layout)</td></tr>
+        <tr><td>"Name field"</td><td>Single Full Name Field (not first/last split)</td></tr>
+        <tr><td>"Show prices in euros"</td><td>Intl.NumberFormat with style: "currency" + locale formatting</td></tr>
+        <tr><td>"Multi-language"</td><td>Locale Switcher + String Externalization + Text Expansion Buffer</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Pages</h3>
+    <ul class="related-links">
+      <li><a href="/form-patterns">Form Patterns</a> &mdash; Form structure, validation, and autocomplete that work across locales</li>
+      <li><a href="/legal-compliance">Legal & Compliance</a> &mdash; Privacy policy and cookie consent requirements for international sites</li>
+    </ul>
+  </section>
+
   <section class="further-reading" id="further-reading">
     <h3 class="category-heading">Further Reading</h3>
     <ul>
@@ -206,6 +228,18 @@ const categoryDescriptions: Record<I18nPattern['category'], string> = {
   .docs-link:hover {
     text-decoration: underline;
   }
+
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
 
   .further-reading {
     margin-top: 3rem;

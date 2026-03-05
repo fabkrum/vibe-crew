@@ -152,7 +152,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature-id>" column in-
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" \
-  '.active_feature = {id: "<feature-id>", name: "<feature-name>", phase: "plan", phases_completed: [], worktree: "feat/<sanitized-name>"} | .updated_at = (now | todate)'
+  '.active_feature = {id: "<feature-id>", name: "<feature-name>", phase: "plan", phases_completed: [], plan_revision_count: 0, worktree: "feat/<sanitized-name>"} | .updated_at = (now | todate)'
 ```
 
 3. Report:
@@ -232,7 +232,19 @@ Phase Tracker:
 Next: Define the implementation approach for this feature.
 ```
 
-**Note:** The Review phase is optional in manual workflows. It earns a +2 Vibe Score bonus when completed. Run `/review` after tests pass to invoke the code reviewer. In `/run-backlog`, review runs automatically.
+**Complexity-aware display:** If the feature has `complexity: "trivial"` in backlog.json, show Design and Review as skipped:
+
+```
+Phase Tracker:
+  [>] Plan      -- Define acceptance criteria and approach
+  [-] Design    -- SKIPPED (trivial feature)
+  [ ] Code      -- Implementation within TDR boundaries
+  [ ] Test      -- TDD-hybrid testing (spec-first + impl-first)
+  [-] Review    -- SKIPPED (trivial feature)
+  [ ] Docs      -- Feature documentation and release notes
+```
+
+**Note:** The Review phase is optional in manual workflows. It earns a +2 Vibe Score bonus when completed. Run `/review` after tests pass to invoke the code reviewer. In `/run-backlog`, review runs automatically. Trivial features skip Design and Review phases automatically.
 
 Phase marker legend:
 - `[x]` = completed phase
@@ -254,7 +266,9 @@ Complete the initialization and hand off to the development workflow.
    > Builder and Verifier agents will be coordinated automatically as you progress through phases.
 
 3. Suggest the next action:
-   > Start with the **Plan** phase. Define your approach, then move to **Design**.
+   > Start with the **Plan** phase. The Builder will create an implementation plan at `docs/features/{feature-name}/plan.md` before writing any code. This plan covers approach, files, components, data flow, and testing strategy.
+   >
+   > During the **Design** phase, the Builder will generate ASCII wireframes based on your UI description. Wireframes let you visually verify the layout before any code is written.
 
 ---
 

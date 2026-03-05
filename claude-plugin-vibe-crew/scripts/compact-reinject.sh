@@ -27,7 +27,7 @@ echo "--- VibeCrew Context (re-injected after compaction) ---"
 GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")"
 jq -c --arg branch "$GIT_BRANCH" '{
   foundation_complete: .foundation.complete,
-  active_feature: {id: .active_feature.id, name: .active_feature.name, phase: .active_feature.phase, worktree: .active_feature.worktree, phases_completed: .active_feature.phases_completed},
+  active_feature: {id: .active_feature.id, name: .active_feature.name, phase: .active_feature.phase, worktree: .active_feature.worktree, phases_completed: .active_feature.phases_completed, plan_revision_count: (.active_feature.plan_revision_count // 0)},
   git_branch: $branch
 }' "$STATE_FILE" 2>/dev/null || echo '{"error":"state.json unreadable"}'
 

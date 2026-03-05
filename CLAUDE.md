@@ -30,7 +30,7 @@ CLAUDE.md                       # This file
 ### Two-Tier Workflow
 
 - **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css + design-brief.md (via Design Discovery interview or BYODS import of existing tokens), TDR (Technology Decision Record), Architecture Diagrams (5 Mermaid `.mmd` files), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook. Step 2 (Design Discovery) first asks a Pre-Design Gate question: users with an existing design system can import it (CSS, Tailwind, JSON tokens, URL, Figma, or brand PDF) via `import-design-tokens.sh`, skipping the interview but still answering component preference questions. Otherwise, the full 3-phase interview runs: Product & Audience Context → Visual Direction → Component Preferences. Both paths produce identical output files. Architecture Diagrams are generated before the Opponent Processor runs, giving it structural context for its analysis.
-- **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`.
+- **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`. The Plan phase produces a persisted `docs/features/{name}/plan.md` with codebase exploration findings, and the Design phase generates ASCII wireframes (profile-gated) for cheap visual iteration before code. Features carry a `complexity` field (`trivial | standard | complex`): trivial skips Design and Review, complex enables milestone decomposition. Plan revision tracking (`plan_revision_count` in state.json) warns when specs change mid-feature and integrates with the Vibe Score.
 
 ### Agent Topology (14 agents)
 
@@ -188,7 +188,7 @@ The Performance Coach can propose a CLAUDE.md mutation if documentation drift re
 
 ## Current Status
 
-VibeCrew v1.8.0 — the plugin is feature-complete. The repository contains:
+VibeCrew v1.9.0 — the plugin is feature-complete. The repository contains:
 - The full plugin (`claude-plugin-vibe-crew/`) with all agents, hooks, scripts, skills, and templates
 - Architecture design docs (`architecture/`) for contributor reference
 - Companion documentation website (`docs/`) with setup guide, workflows, example sessions, and best practices

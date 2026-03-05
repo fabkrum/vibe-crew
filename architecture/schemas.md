@@ -253,7 +253,8 @@ Project state tracking. Created by `/new-project` (Tier 1) or `/setup` (existing
     "name": null,                        // Human-readable name | null
     "worktree": null,                    // Git worktree path | null
     "phase": null,                       // Current phase | null
-    "phases_completed": []               // Completed phases for this feature
+    "phases_completed": [],              // Completed phases for this feature
+    "plan_revision_count": 0             // Times plan/spec revised mid-feature (reset on claim)
   },
 
   // Git state
@@ -342,6 +343,7 @@ Feature backlog. Created by `/plan-features`. Modified by `/new-feature`, `/idea
       "description": "OAuth2 + email/password login with session management",
       "column": "idea",                  // Current Kanban column
       "priority": 1,                     // Lower = higher priority
+      "complexity": "standard",          // "trivial" | "standard" | "complex" (default: "standard")
       "labels": ["auth", "security"],
 
       // Spec (populated during "plan" phase)
@@ -350,7 +352,8 @@ Feature backlog. Created by `/plan-features`. Modified by `/new-feature`, `/idea
         "acceptance_criteria": [],       // String array of requirements
         "ui_description": null,          // Brief UI description | null
         "business_logic": [],            // String array of logic requirements
-        "technical_notes": null          // Free-text technical considerations | null
+        "technical_notes": null,         // Free-text technical considerations | null
+        "milestones": []                 // Optional: [{name, description, criteria_indices, estimated_files, status}]
       },
 
       // Tracking
@@ -393,6 +396,7 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `description` | string | yes | Brief description |
 | `column` | enum | yes | Current Kanban column |
 | `priority` | integer | yes | Priority (1 = highest) |
+| `complexity` | enum | no | `"trivial"` \| `"standard"` \| `"complex"`. Default: `"standard"`. Controls which phases run |
 | `labels` | string[] | yes | Categorization labels |
 | `spec.problem_statement` | string\|null | yes | What problem this feature solves |
 | `spec.expected_action` | string\|null | no | Expected user action (e.g., "click Subscribe", "complete setup wizard") |
@@ -400,6 +404,7 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `spec.ui_description` | string\|null | yes | UI description |
 | `spec.business_logic` | string[] | yes | Business logic requirements |
 | `spec.technical_notes` | string\|null | no | Technical considerations |
+| `spec.milestones` | object[] | no | Optional milestone array: `[{name, description, criteria_indices, estimated_files, status}]`. Status: `"pending"` \| `"complete"` |
 | `worktree` | string\|null | yes | Active worktree path |
 | `phases_completed` | string[] | yes | Completed phases |
 | `sessions` | string[] | yes | Related session IDs |

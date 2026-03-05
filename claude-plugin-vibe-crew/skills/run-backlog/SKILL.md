@@ -201,6 +201,16 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-state.sh" '.active_feature.phase = "<
 
 ---
 
+#### Read Feature Complexity
+
+Before entering the phase loop, read the feature's complexity:
+
+```bash
+jq -r --arg id "<feature-id>" '.features[] | select(.id == $id) | .complexity // "standard"' .vibecrew/backlog.json
+```
+
+Store as `COMPLEXITY`. When complexity is `"trivial"`, `complete-phase.sh` automatically routes `plan → code` (skipping design) and `test → docs` (skipping review), so the phase loop naturally skips those phases.
+
 #### Phase 1: Plan
 
 Load the feature spec from the backlog:
@@ -222,6 +232,15 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog.sh" "<feature-id>" spec.accep
 
 **If acceptance criteria exist**, verify they are specific and testable. If they are vague, refine them.
 
+**Explore existing codebase and generate implementation plan:**
+
+After acceptance criteria are validated:
+
+1. Read the TDR and architecture diagrams for context.
+2. Read up to 10 existing files referenced in `spec.technical_notes` or identified from architecture diagrams. Log findings in the plan under `## Existing Code Analysis`.
+3. Write an implementation plan to `docs/features/{feature-name}/plan.md` covering: approach, files to create/modify, component strategy, data flow, testing approach.
+3. Commit: `docs(plan): add implementation plan for {feature-name}`.
+
 Mark phase complete:
 
 ```bash
@@ -242,13 +261,15 @@ In automated backlog mode, the Builder agent handles design. Create a brief comp
 cat design-system.css 2>/dev/null || cat src/styles/design-system.css 2>/dev/null || echo "no design system found"
 ```
 
-2. Based on the feature's `spec.ui_description`, document:
+2. **ASCII Wireframes:** Generate ASCII wireframes for each key screen before writing the design spec. Embed in `docs/features/{feature-name}/design.md` under `## Wireframes`. Skip wireframes for trivial features.
+
+3. Based on the feature's `spec.ui_description`, document:
    - UI components needed (name, purpose, props)
    - CSS design tokens to use (colors, spacing, typography from design-system.css)
    - Responsive behavior (mobile, tablet, desktop breakpoints)
    - Component hierarchy and layout structure
 
-3. Write the design spec to the feature's docs:
+4. Write the design spec to the feature's docs:
 
 ```bash
 mkdir -p docs/features
@@ -286,7 +307,15 @@ cat docs/tdr.md 2>/dev/null || echo "no TDR found"
 jq --arg id "<feature-id>" '.features[] | select(.id == $id) | .spec' .vibecrew/backlog.json
 ```
 
-3. Implement the feature:
+3. **Milestone processing**: If the feature spec contains a `milestones` array, process one milestone at a time:
+   - Read the current milestone (first with `status: "pending"`).
+   - Scope implementation to only the files and acceptance criteria in that milestone.
+   - After each milestone: run build verification, commit with `feat({scope}): complete milestone "{name}"`, update milestone status in backlog.json.
+   - Between milestones: check context usage. If > 35% and more milestones remain, trigger `/compact`.
+   - After all milestones: proceed with full-feature verification.
+   - If no milestones, implement the entire feature in one pass.
+
+4. Implement the feature:
    - Create files following the project's established patterns and conventions
    - Follow the design spec from Phase 2
    - Use only technologies approved in the TDR

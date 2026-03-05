@@ -497,8 +497,28 @@ Phases within `in-progress` are **sequential by default** with verify-fix loops 
     |                        +--------+                        |
     |                       verify-fix loop                    |
     |                                                          |
-    |  Default progression:                                    |
-    |    plan -> design -> code -> test -> (review)            |
+    |  Default progression (standard complexity):              |
+    |    plan -> design -> code -> test -> review -> docs      |
+    |                                                          |
+    |  Trivial progression (complexity: "trivial"):            |
+    |    plan -> code -> test -> docs                          |
+    |    (Design and Review phases skipped)                    |
+    |                                                          |
+    |  Phase artifacts:                                        |
+    |    plan:   docs/features/{name}/plan.md                  |
+    |            (with Existing Code Analysis section)         |
+    |    design: docs/features/{name}/design.md                |
+    |            (with ASCII wireframes under ## Wireframes)   |
+    |    code:   source files, conventional commits            |
+    |    test:   test files, verifier signal                   |
+    |    review: review report in .vibecrew/reviews/           |
+    |    docs:   feature docs, CHANGELOG entry                 |
+    |                                                          |
+    |  Milestone processing (complexity: "complex"):           |
+    |    Within the code phase, milestones are processed       |
+    |    sequentially. Each milestone gets its own commit      |
+    |    and verification loop. /compact between milestones    |
+    |    if context > 35%.                                     |
     |                                                          |
     |  Verify-fix loop:                                        |
     |    If Verifier finds bugs during test phase,             |
@@ -510,6 +530,7 @@ Phases within `in-progress` are **sequential by default** with verify-fix loops 
     |    phases_completed[] records completed phases.           |
     |    A phase can be re-entered -- it stays in the array    |
     |    and the re-entry is logged in the session log.        |
+    |    plan_revision_count tracks mid-feature spec changes.  |
     |                                                          |
     +----------------------------------------------------------+
 ```

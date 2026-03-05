@@ -121,6 +121,16 @@ The full phase sequence is: **Plan → Design → Code → Test → Review → D
 
 The review phase is optional in manual workflows (`/new-feature`) but runs automatically in `/run-backlog`. It earns a +2 Vibe Score bonus when completed.
 
+### Complex Feature Routing
+
+When routing a feature with `complexity: "complex"`:
+- Note in the task assignment: "This is a complex feature. Use extended thinking during Plan and Design phases."
+- If milestones weren't defined during `/plan-features`, suggest decomposition before proceeding.
+
+When routing a feature with `complexity: "trivial"`:
+- Design and Review phases are automatically skipped by `complete-phase.sh`.
+- Phase sequence becomes: **Plan → Code → Test → Docs**.
+
 ### /run-backlog Pre-flight
 
 Before starting `/run-backlog`, check for `.vibecrew/locks/run-backlog.lock`. If it exists and is not stale, inform the user that another backlog run is active and exit.
@@ -142,6 +152,7 @@ Poll `.vibecrew/signals/` for completion and error signals:
 
 All signals MUST conform to `templates/signal-schema.json`. After reading a signal file, verify it contains all required fields: `feature_id`, `phase`, `timestamp`, `agent`, `status`. If any are missing, log a warning and re-read once.
 
+- `builder-plan-complete.signal` — Builder finished plan phase. Advance to design (or code for trivial features). Notify Builder to proceed.
 - `builder-complete.signal` — Builder finished code phase. Advance to test. Notify Verifier.
 - `builder-design-complete.signal` — Builder finished design phase. Advance to code.
 - `builder-blocked.signal` — Builder hit an error. Attempt auto-recovery before escalating:

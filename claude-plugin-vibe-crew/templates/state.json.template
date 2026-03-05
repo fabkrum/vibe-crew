@@ -43,7 +43,8 @@
     "name": null,
     "worktree": null,
     "phase": null,
-    "phases_completed": []
+    "phases_completed": [],
+    "plan_revision_count": 0
   },
   "git": {
     "default_branch": "main",

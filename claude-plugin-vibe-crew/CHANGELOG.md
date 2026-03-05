@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Plan files**: Builder writes `docs/features/{name}/plan.md` during Plan phase as a committed decision record
+- **Codebase exploration**: Builder reads existing files referenced in spec before writing plan
+- **ASCII wireframes**: Builder generates ASCII art wireframes during Design Phase; profile-gated, interactive iteration in manual mode
+- **Complexity field**: Features support `complexity: "trivial" | "standard" | "complex"` with phase-skipping for trivial
+- **Milestone decomposition**: Complex features can be broken into 2-3 sequential milestones with mini quality gates
+- **Plan revision tracking**: `plan_revision_count` in state.json with warnings at thresholds; -5 Vibe Score deduction at >= 2
+- **Extended thinking**: Builder prompted to evaluate alternative approaches for complex features
+- New script: `scripts/increment-plan-revision.sh` — atomic revision counter with threshold warnings
+
+### Changed
+
+- `complete-phase.sh` — Phase transitions now read complexity from backlog.json; trivial features skip design and review
+- `update-state.sh` — Phase validation now complexity-aware
+- `claim-task.sh` — Initializes `plan_revision_count: 0` when claiming features
+- `compact-reinject.sh` — Preserves `plan_revision_count` across context compaction
+- `calculate-vibe-score.sh` — Adds plan revision deduction alongside existing drift/erosion deductions
+- `templates/state.json.template` — Added `plan_revision_count` field to `active_feature`
+
 ### Fixed
 
 - 11 robustness bugs across scripts, with 455 new BATS tests (1074 total, 0 failures):

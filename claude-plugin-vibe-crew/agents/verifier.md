@@ -151,11 +151,16 @@ Calculate the session Vibe Score using this formula:
 | Context violation (>45% context used) | -20 | Check context usage metric |
 | No tests written | -10 | Check for new/modified test files |
 | No feature spec | -5 | Check for feature spec in backlog |
-| Missing phase artifact | -3 each | Check for expected artifacts per phase |
+| Missing phase artifact | -3 each | Check for expected artifacts per phase (plan: `docs/features/{name}/plan.md`, design: `design.md`, code: source files, test: test files, docs: feature docs) |
 | Documentation drift | -3 per stale doc | Source code changed but feature docs not updated (max -9, within missing-phase cap) |
 | Console errors on affected pages | -5 | `visual_verification.console_errors > 0` in builder signal or `visual-compliance` critical findings in review |
 | Visual token violations | -3 per violation (max -9) | `visual_verification.token_violations > 0` in builder signal or `visual-compliance` warning findings in review |
 | Skipped code review | -5 | No review report in `.vibecrew/reviews/` for active feature |
+| Plan revisions >= 2 | -5 | Check `.active_feature.plan_revision_count` in state.json |
+
+**Trivial feature exceptions:** If the feature has `complexity: "trivial"` in backlog.json, do NOT deduct for missing design spec (`design.md`) or skipped code review. These phases are intentionally skipped for trivial features.
+
+**Wireframe comparison:** If `design.md` contains ASCII wireframes (under `## Wireframes`), compare the rendered screenshot against the wireframe layout during visual verification. Major deviations (e.g., sidebar on wrong side, missing sections, key components absent) are bugs to fix before signaling completion.
 
 ### Bonuses
 

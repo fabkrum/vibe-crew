@@ -60,6 +60,47 @@ Derive all values from VISION.md's brand direction and `design-brief.md` (if pre
 
 ## Tier 2 Responsibilities: Feature Implementation
 
+### Plan Phase
+
+When starting a feature, before the Design Phase:
+
+1. Read the feature spec from `.vibecrew/backlog.json` (acceptance criteria, UI description, business logic, technical notes).
+2. Read the TDR for technology boundaries.
+3. Reference the architecture diagrams in context (pre-loaded by the Orchestrator via `inject-architecture.sh`).
+3.1. **Extended Thinking for Complex Features** — If `complexity` is `"complex"`:
+   - Consider 2-3 alternative implementation strategies.
+   - Evaluate trade-offs: performance, maintainability, TDR alignment.
+   - Choose the strongest approach; document rejected alternatives in plan.md under `## Alternatives Considered`.
+   - For standard/trivial features, proceed directly without extended deliberation.
+3.5. **Explore Existing Codebase** — Before writing the plan, read existing files this feature will modify or extend:
+   - Parse `spec.technical_notes` for file paths, module references, and API endpoint mentions.
+   - From `component-tree.mmd`, identify parent component(s) where new components will be inserted.
+   - From `schema.mmd`, read existing model/table files that will be extended.
+   - Read each identified file (max 10 files to stay within context budget).
+   - Record findings in the plan file under an `## Existing Code Analysis` section:
+     - For each file: its purpose, current structure, and what needs to change.
+     - Patterns observed (naming conventions, state management, styling).
+   - If no relevant existing files are found (greenfield), note "Greenfield — no existing code to integrate with."
+4. Produce an implementation plan covering:
+   - **Approach**: High-level strategy (1-3 paragraphs) explaining HOW this feature will be built.
+   - **Files to Create**: New files this feature requires, with purpose for each.
+   - **Files to Modify**: Existing files that need changes, with brief description of what changes.
+   - **Component Strategy**: Which components to use/create, how they compose.
+   - **Data Flow**: How data moves through the feature (API → state → UI).
+   - **Testing Approach**: What types of tests, key test scenarios from acceptance criteria.
+   - **Milestones** (if `complexity` is `"complex"`): Break the work into 2-3 sequential milestones (see Milestone Processing in Code Phase).
+5. Write the plan to `docs/features/{feature-name}/plan.md`.
+6. Commit: `docs(plan): add implementation plan for {feature-name}`.
+7. Signal completion with `builder-plan-complete.signal` (standard signal format with `"phase": "plan"`, add `"plan_file": "docs/features/{feature-name}/plan.md"`).
+
+**Plan Revision Detection:** If acceptance criteria need to change, the design spec needs a substantial rewrite, or you need spec clarification during any phase, increment the revision counter:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/increment-plan-revision.sh"
+```
+
+If the script outputs a WARNING, display it to the user and follow its recommendation.
+
 ### Expertise Context
 
 Before starting the design phase, load relevant expertise records:
@@ -75,6 +116,10 @@ This injects project-specific conventions and patterns into your context. Follow
 1. Read the feature spec from `.vibecrew/backlog.json`.
 2. Read acceptance criteria.
 3. Read `design-brief.md` (if present) for navigation style, data display pattern, and interaction density preferences. Use these to inform component layout and structure decisions.
+3.2. **Extended Thinking for Complex Designs** — If `complexity` is `"complex"`:
+   - Evaluate whether the component tree should be flat or deeply nested.
+   - Consider state management implications (local state vs. store vs. context).
+   - Assess whether the design can be simplified while meeting all acceptance criteria.
 4. Read `${CLAUDE_PLUGIN_ROOT}/templates/components.md` for component vocabulary. Use it to:
    - Select the most appropriate component for each UI need (use the "When to use" criteria).
    - Note shadcn install commands for each selected component.
@@ -86,14 +131,83 @@ This injects project-specific conventions and patterns into your context. Follow
    - Describe the concrete UI implementation using components from `components.md`.
    - Examples: "This signup form should use inline validation (Baymard: 22% higher completion rates). Place the social proof bar above the form — trust signals near high-commitment actions reduce abandonment." "This empty state needs a guided first action with primary CTA — Fogg Behavior Model: capitalize on motivation at the moment of need."
    - If `spec.expected_action` exists, ensure the primary CTA in the design spec corresponds to that action and is visually dominant (primary Button variant, sufficient size, above the fold on desktop).
-5. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements. Include a "Components" section listing each shadcn component to install, an "Interaction Patterns" section listing applicable behavioral patterns with implementation approach, and a "Business Patterns Applied" section from step 4.5.
-6. Write the design spec to `docs/features/{feature-name}/design.md`.
-7. Signal completion with `builder-design-complete.signal`.
+5. **ASCII Wireframe** — Before writing the component design spec, generate ASCII wireframes for the feature's key screens:
+   - Use the `spec.ui_description` as the primary source for layout structure.
+   - Reference `design-brief.md` for navigation style (sidebar vs top-nav), data display pattern (cards vs table), and density (sparse vs dense).
+   - Reference selected components from step 4 to place them spatially.
+   - Reference business patterns from step 4.5 for element placement (e.g., "trust signals near CTAs").
+   - For each key screen/view the feature introduces (typically 1-3), produce an ASCII wireframe:
+     ```
+     ┌─ Dashboard ──────────────────────────────────────┐
+     │ ┌─ Sidebar ──┐ ┌─ Main Content ───────────────┐ │
+     │ │ Logo       │ │ ┌─ Stats Row ──────────────┐  │ │
+     │ │ Nav: Home  │ │ │ Users | Revenue | MRR    │  │ │
+     │ │ Nav: Team  │ │ └──────────────────────────┘  │ │
+     │ │ Nav: Billing│ │ ┌─ Chart ──┐ ┌─ Chart ──┐   │ │
+     │ │ Settings   │ │ │ Line     │ │ Pie      │   │ │
+     │ └────────────┘ │ └──────────┘ └──────────┘   │ │
+     │                │ ┌─ Data Table ─────────────┐  │ │
+     │                │ │ Name | Status | Action   │  │ │
+     │                │ └──────────────────────────┘  │ │
+     │                └───────────────────────────────┘ │
+     └──────────────────────────────────────────────────┘
+     ```
+   - Show component boundaries, spatial relationships, and data placement.
+   - Annotate interactive elements: `[Button: "Save"]`, `[Input: search]`, `[Dropdown: filter]`.
+   - For database features: generate ASCII ER diagrams showing tables, columns (PK/FK), and relationships.
+   - Embed wireframes in `design.md` under a `## Wireframes` section, positioned BEFORE the component tree.
+
+   **Profile gating** (read from `read-profile.sh`):
+   - Skip wireframes if `code_literacy` is `"fluent"` AND `verbosity` is `"minimal"`.
+   - For `code_literacy: "none"` or `"basic"`: always generate wireframes — essential for non-technical users to verify layout.
+   - For `learning: "teach"`: annotate wireframes with "Why this layout" notes explaining placement decisions.
+   - Default: generate wireframes for standard and complex features; skip for trivial features.
+
+   **Interactive mode** (manual `/new-feature`, not `/run-backlog`):
+   - Present the wireframe to the user: "Here's the proposed layout. Any changes before I write the design spec?"
+   - Accept feedback like: "Make the sidebar narrower", "Move pricing below features", "Add a search bar to the header"
+   - Redraw the wireframe with changes (cheap iteration — just text).
+   - Once approved, proceed to the component design spec.
+
+   **Autonomous mode** (`/run-backlog`):
+   - Generate wireframes without user interaction.
+   - Embed directly in design.md as documentation.
+   - The wireframe serves as a visual reference for the Code Phase's visual verification step.
+
+6. Produce a component design spec: component tree, props interface, state management approach, responsive behavior, accessibility requirements. Include a "Components" section listing each shadcn component to install, an "Interaction Patterns" section listing applicable behavioral patterns with implementation approach, and a "Business Patterns Applied" section from step 4.5.
+7. Write the design spec to `docs/features/{feature-name}/design.md`. Structure:
+   ```markdown
+   # Design Spec: {Feature Name}
+
+   ## Wireframes
+   [ASCII diagrams of 1-3 key screens]
+
+   ## Components
+   [component tree, props interface, state management]
+
+   ## Interaction Patterns
+   [applicable patterns]
+
+   ## Business Patterns Applied
+   [business patterns]
+   ```
+8. Signal completion with `builder-design-complete.signal`.
 
 ### Code Phase
 
 1. Read the approved design spec and the TDR.
 2. Reference the architecture diagrams already in context (pre-loaded by the Orchestrator via `inject-architecture.sh`) — especially `component-tree.mmd` to know where new components belong in the hierarchy. If diagrams are not in context (e.g., direct invocation outside orchestration), read them from `.vibecrew/architecture/`.
+2.6. **Milestone Processing** — If the feature spec contains a `milestones` array:
+   - Read the current milestone (first one with `status: "pending"`).
+   - Scope the Code Phase to only files and acceptance criteria in that milestone.
+   - After completing a milestone:
+     a. Run verification loop (build + lint + type-check).
+     b. Commit: `feat({scope}): complete milestone "{name}"`.
+     c. Update milestone status to `"complete"` in backlog.json via `update-backlog-raw.sh`.
+     d. If context usage > 35% and more milestones remain, suggest `/compact`.
+   - After all milestones complete, proceed with full-feature verification and signal.
+   - If no milestones (or empty array), process the entire feature in one pass (current behavior).
+
 2.5. **Install shadcn components**: If the project uses shadcn/ui (detect via `components.json` in project root), install all components listed in the design spec:
    ```bash
    npx shadcn@latest add <component-name> -y

@@ -15,7 +15,7 @@ const backlogJson = `{
       "id": "user-auth",
       "name": "User Authentication",
       "priority": "P0",
-      "complexity": "M",
+      "complexity": "standard",
       "status": "planned",
       "acceptance_criteria": [
         "Users can sign up with email/password",
@@ -29,8 +29,12 @@ const backlogJson = `{
       "id": "trip-creation",
       "name": "Trip Creation",
       "priority": "P0",
-      "complexity": "M",
+      "complexity": "complex",
       "status": "planned",
+      "milestones": [
+        {"name": "Backend API", "status": "pending"},
+        {"name": "UI Components", "status": "pending"}
+      ],
       "dependencies": ["user-auth"]
     }
   ]
@@ -98,7 +102,7 @@ const backlogJson = `{
       <li><strong>Name and description</strong> &mdash; one sentence</li>
       <li><strong>Acceptance criteria</strong> &mdash; when is this feature "done"?</li>
       <li><strong>Priority</strong> &mdash; P0 (must have) through P3 (nice to have)</li>
-      <li><strong>Complexity</strong> &mdash; S / M / L / XL</li>
+      <li><strong>Complexity</strong> &mdash; trivial / standard / complex (determines which phases run)</li>
       <li><strong>Dependencies</strong> &mdash; which features must exist first?</li>
     </ul>
 
@@ -156,12 +160,13 @@ const backlogJson = `{
     <h4>Phase 1: Plan (~3 min)</h4>
     <pre><code><span class="code-label">Development</span><span class="prompt">&gt;</span> "Plan the user authentication feature"
 
-<span class="output">Writing feature spec at docs/features/user-auth.md</span>
-<span class="output">  - Email/password signup with Supabase Auth</span>
-<span class="output">  - Google OAuth via Supabase provider</span>
-<span class="output">  - Middleware for protected routes</span>
-<span class="output">  - Session handling with Supabase SSR helpers</span>
-<span class="output">  - Edge cases: expired tokens, deleted accounts, rate limiting</span>
+<span class="output">Writing implementation plan at docs/features/user-auth/plan.md</span>
+<span class="output">  Exploring existing codebase...</span>
+<span class="output">  - src/middleware.ts: existing middleware, needs auth check added</span>
+<span class="output">  - src/lib/supabase: client exists, server module needed</span>
+<span class="output">  Approach: Supabase Auth with SSR helpers</span>
+<span class="output">  Files to create: 5 new, 2 modified</span>
+<span class="output">  Testing approach: spec-first for auth logic, impl-first for UI</span>
 
 <span class="success">Phase complete: Plan</span>
 <span class="output">Phases: [x] Plan  [ ] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
@@ -169,15 +174,31 @@ const backlogJson = `{
     <h4>Phase 2: UI Design (~5 min)</h4>
     <pre><code><span class="code-label">Development</span><span class="prompt">&gt;</span> "Design the auth UI components"
 
-<span class="output">Designing components using design-system.css tokens:</span>
-<span class="output">  - LoginForm: email input, password input, submit, OAuth buttons</span>
-<span class="output">  - SignupForm: extends LoginForm with name field, confirm password</span>
-<span class="output">  - AuthLayout: centered card layout, responsive breakpoints</span>
-<span class="output">  - ProtectedRoute: redirect wrapper component</span>
-<span class="output">All colors, spacing, and typography reference CSS custom properties.</span>
+<span class="output">Generating ASCII wireframe for auth pages...</span>
+
+<span class="output">  ┌─ /login ────────────────────────┐</span>
+<span class="output">  │  ┌─ AuthLayout (centered) ────┐ │</span>
+<span class="output">  │  │  Logo                      │ │</span>
+<span class="output">  │  │  [Input: email]            │ │</span>
+<span class="output">  │  │  [Input: password]         │ │</span>
+<span class="output">  │  │  [Button: "Sign In"]       │ │</span>
+<span class="output">  │  │  ── or ──                  │ │</span>
+<span class="output">  │  │  [Button: "Google"]        │ │</span>
+<span class="output">  │  │  Link: "Create account"    │ │</span>
+<span class="output">  │  └────────────────────────────┘ │</span>
+<span class="output">  └─────────────────────────────────┘</span>
+
+<span class="output">Here's the proposed layout. Any changes before I write the design spec?</span>
+<span class="prompt">&gt;</span> "Move OAuth buttons above the form"
+<span class="output">[Wireframe redrawn with OAuth buttons at top]</span>
+<span class="output">Writing design spec with wireframes at docs/features/user-auth/design.md</span>
 
 <span class="success">Phase complete: UI Design</span>
 <span class="output">Phases: [x] Plan  [x] UI Design  [ ] Code  [ ] Test  [ ] Review  [ ] Docs</span></code></pre>
+
+    <Callout type="tip" title="ASCII wireframes save tokens">
+      <p>Wireframes let you verify the layout <em>before</em> any code is written. Iterating on cheap text diagrams (&sim;50 tokens each) instead of rebuilding code (&sim;500-2000 tokens per cycle) reduces alignment-related rework by 70-90%. In interactive mode, you can say things like "make the sidebar narrower" or "add a search bar to the header".</p>
+    </Callout>
 
     <h4>Phase 3: Code (~15 min)</h4>
     <p>The longest phase. The Builder agent writes the implementation, consulting Context7 for Supabase and Next.js APIs instead of guessing.</p>
@@ -280,6 +301,9 @@ const backlogJson = `{
 <span class="output">Starting autonomous backlog run.</span>
 <span class="output">3 features queued: trip-creation, itinerary-builder, group-invites</span>
 <span class="output">Building: trip-creation...</span></code></pre>
+
+    <h3>Complexity-aware processing</h3>
+    <p><code>/run-backlog</code> respects each feature's <code>complexity</code> setting. Trivial features skip Design and Review phases for faster throughput. Complex features with milestones are processed one milestone at a time, with <code>/compact</code> between milestones to keep context lean.</p>
 
     <h3>Inter-feature context hygiene</h3>
     <p>Between features, VibeCrew forces a <code>/compact</code> to prevent context degradation across long autonomous runs. Each feature starts with a clean context window, ensuring the Builder agent doesn't confuse Trip Creation's patterns with Group Invites' requirements.</p>
@@ -521,7 +545,9 @@ const backlogJson = `{
 <span class="green"> 7.</span> Keep <span class="highlight">.vibecrew/</span> in version control
 <span class="green"> 8.</span> Never build on <span class="highlight">main</span> &mdash; always use feature branches
 <span class="green"> 9.</span> Resolve uncommitted changes before starting new work
-<span class="green">10.</span> Let Session Startup detect stale sessions</div>
+<span class="green">10.</span> Let Session Startup detect stale sessions
+<span class="green">11.</span> Use ASCII wireframes to align on layout before code
+<span class="green">12.</span> Set complexity during <span class="green">/plan-features</span> to right-size the workflow</div>
 
     <Callout type="info" title="Most of these are enforced automatically">
       <p>The phase gate blocks writes on <code>main</code>. Session Startup detects stale sessions and uncommitted changes. The context hook warns at 45% and 60%. <code>/new-feature</code> creates branches automatically. The habits above are about the few things only you can do &mdash; like remembering to <code>/wrap</code> and reviewing PRs.</p>

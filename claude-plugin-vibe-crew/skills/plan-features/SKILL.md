@@ -126,6 +126,34 @@ Based on the TDR and the user's answers, add technical notes:
 
 ### G. Metadata
 
+#### G.1. Complexity Assessment
+
+Auto-suggest based on the spec so far:
+- **trivial**: 1-2 acceptance criteria, single UI change or bug fix, no new API/schema
+- **standard**: 3-5 acceptance criteria, new UI components, possibly new endpoints (default)
+- **complex**: 5+ acceptance criteria, multiple interconnected components, new tables, external APIs
+
+Present: "Suggested complexity: **{level}**. Trivial features skip Design and Review phases. Complex features enable milestone decomposition."
+Allow the user to override.
+
+#### G.2. Milestone Decomposition (Complex Features Only)
+
+If the feature has `complexity: "complex"`, or has 5+ acceptance criteria with significant UI and backend work:
+
+"This feature is complex. Would you like to break it into milestones?"
+
+If yes, guide the user to define 2-3 milestones:
+- **Name**: Brief descriptive name (e.g., "Backend API", "UI Components", "Integration & Polish")
+- **Description**: What this milestone delivers
+- **Acceptance criteria subset**: Which criteria (by number) this milestone covers
+- **Estimated files**: Key files this milestone creates/modifies
+
+Store in `spec.milestones` via `update-backlog-raw.sh`.
+
+If no (or complexity is not complex), skip milestones.
+
+#### G.3. Standard Metadata
+
 Ask the user:
 - "Priority? (1 = highest, lower number = build first)" — suggest a default based on roadmap tier
 - "Labels? (e.g., mvp, frontend, backend, auth, payments, api)" — suggest based on feature content
@@ -139,11 +167,12 @@ For **new features** (from roadmap, not yet in backlog):
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/update-backlog-raw.sh" \
-  '.features += [{id: $id, name: $name, description: $desc, column: "planned", priority: ($priority | tonumber), labels: $labels, spec: {problem_statement: $problem, expected_action: $action, acceptance_criteria: $criteria, ui_description: $ui, business_logic: $logic, technical_notes: $tech}, dependencies: $deps, phases_completed: [], created_at: $ts, updated_at: $ts}]' \
+  '.features += [{id: $id, name: $name, description: $desc, column: "planned", priority: ($priority | tonumber), complexity: $complexity, labels: $labels, spec: {problem_statement: $problem, expected_action: $action, acceptance_criteria: $criteria, ui_description: $ui, business_logic: $logic, technical_notes: $tech}, dependencies: $deps, phases_completed: [], created_at: $ts, updated_at: $ts}]' \
   --arg id "feat-NNN" \
   --arg name "<feature name>" \
   --arg desc "<description>" \
   --arg priority "<number>" \
+  --arg complexity "<trivial|standard|complex>" \
   --arg problem "<problem statement>" \
   --arg action "<expected user action>" \
   --argjson criteria '["criterion 1", "criterion 2", "criterion 3"]' \

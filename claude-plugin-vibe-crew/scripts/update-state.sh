@@ -77,12 +77,24 @@ if echo "$JQ_EXPR" | grep -qE '\.active_feature\.phase\s*=' 2>/dev/null; then
     CURRENT_PHASE=$(jq -r '.active_feature.phase // empty' "$STATE_FILE" 2>/dev/null || true)
     # Allow "plan" as reset for new features (or when current phase is null/empty)
     if [[ "$TARGET_PHASE" != "plan" ]] && [[ -n "$CURRENT_PHASE" ]] && [[ "$CURRENT_PHASE" != "null" ]]; then
-      # Determine legal next phase from current
+      # Read complexity from backlog for the active feature
+      ACTIVE_FID=$(jq -r '.active_feature.id // empty' "$STATE_FILE" 2>/dev/null || true)
+      FEATURE_COMPLEXITY="standard"
+      if [[ -n "$ACTIVE_FID" ]] && [[ -f "$VIBECREW_DIR/backlog.json" ]]; then
+        FEATURE_COMPLEXITY=$(jq -r --arg fid "$ACTIVE_FID" \
+          '[.features[] | select(.id == $fid) | .complexity // "standard"] | .[0] // "standard"' \
+          "$VIBECREW_DIR/backlog.json" 2>/dev/null || echo "standard")
+      fi
+      # Determine legal next phase from current (complexity-aware)
       case "$CURRENT_PHASE" in
-        plan)   LEGAL_NEXT="design" ;;
+        plan)
+          if [[ "$FEATURE_COMPLEXITY" == "trivial" ]]; then LEGAL_NEXT="code"
+          else LEGAL_NEXT="design"; fi ;;
         design) LEGAL_NEXT="code" ;;
         code)   LEGAL_NEXT="test" ;;
-        test)   LEGAL_NEXT="review" ;;
+        test)
+          if [[ "$FEATURE_COMPLEXITY" == "trivial" ]]; then LEGAL_NEXT="docs"
+          else LEGAL_NEXT="review"; fi ;;
         review) LEGAL_NEXT="docs" ;;
         docs)   LEGAL_NEXT="done" ;;
         *)      LEGAL_NEXT="" ;;

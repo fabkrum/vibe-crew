@@ -167,9 +167,14 @@ const profileGamification = `"user_profile": {
           <tr><td>Documentation drift</td><td>&minus;3 per stale doc</td><td>Source code changed but matching feature docs not updated</td></tr>
           <tr><td>Console errors</td><td>&minus;5</td><td>Console errors detected on affected pages</td></tr>
           <tr><td>Visual token violations</td><td>&minus;3 each (max &minus;9)</td><td>Design system token violations (hardcoded colors, wrong spacing, etc.)</td></tr>
+          <tr><td>Plan revisions &ge; 2</td><td>&minus;5</td><td>Plan or spec revised 2+ times mid-feature (insufficient upfront planning)</td></tr>
         </tbody>
       </table>
     </TableWrap>
+
+    <Callout type="info" title="Phase artifact expectations">
+      <p>Expected artifacts per phase: Plan &rarr; <code>docs/features/{name}/plan.md</code>, Design &rarr; <code>design.md</code>, Code &rarr; source files, Test &rarr; test files, Docs &rarr; feature documentation. Trivial features skip Design and Review, so missing <code>design.md</code> or review reports are not penalized for trivial complexity.</p>
+    </Callout>
 
     <h3>Bonuses</h3>
     <p>Points are awarded for best practices:</p>

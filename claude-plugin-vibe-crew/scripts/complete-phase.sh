@@ -106,36 +106,39 @@ if [[ "$PHASE_VALID" == "false" ]]; then
   exit 1
 fi
 
-# Determine next column based on completed phase
+# Determine next column based on completed phase and complexity
 determine_next_column() {
   local phase="$1"
+  local complexity="${2:-standard}"
   case "$phase" in
-    plan)   echo "planned" ;;
+    plan)
+      if [[ "$complexity" == "trivial" ]]; then echo "in-progress"
+      else echo "planned"; fi ;;
     design) echo "in-progress" ;;
     code)   echo "testing" ;;
-    test)   echo "review" ;;
-    review) echo "review" ;;
-    docs)   echo "review" ;;
+    test|review|docs) echo "review" ;;
     *)      echo "in-progress" ;;
   esac
 }
 
-# Determine next phase for state.json
+# Determine next phase for state.json (complexity-aware)
 determine_next_phase() {
   local phase="$1"
+  local complexity="${2:-standard}"
   case "$phase" in
-    plan)   echo "design" ;;
+    plan)
+      if [[ "$complexity" == "trivial" ]]; then echo "code"
+      else echo "design"; fi ;;
     design) echo "code" ;;
     code)   echo "test" ;;
-    test)   echo "review" ;;
+    test)
+      if [[ "$complexity" == "trivial" ]]; then echo "docs"
+      else echo "review"; fi ;;
     review) echo "docs" ;;
     docs)   echo "done" ;;
     *)      echo "plan" ;;
   esac
 }
-
-NEXT_COLUMN=$(determine_next_column "$COMPLETED_PHASE")
-NEXT_PHASE=$(determine_next_phase "$COMPLETED_PHASE")
 
 # Check required files exist
 if [[ ! -f "$BACKLOG_FILE" ]]; then
@@ -167,6 +170,13 @@ fi
 # Get current feature column for the summary
 CURRENT_COLUMN=$(echo "$BACKLOG" | jq -r --argjson idx "$FEATURE_INDEX" \
   '.features[$idx].column // "unknown"')
+
+# Read complexity from backlog (default: standard)
+COMPLEXITY=$(echo "$BACKLOG" | jq -r --argjson idx "$FEATURE_INDEX" \
+  '.features[$idx].complexity // "standard"')
+
+NEXT_COLUMN=$(determine_next_column "$COMPLETED_PHASE" "$COMPLEXITY")
+NEXT_PHASE=$(determine_next_phase "$COMPLETED_PHASE" "$COMPLEXITY")
 
 # Update backlog: add phase to phases_completed (if not present), update column and timestamp
 UPDATED_BACKLOG=$(echo "$BACKLOG" | jq \

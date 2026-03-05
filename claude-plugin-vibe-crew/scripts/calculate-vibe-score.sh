@@ -309,6 +309,13 @@ if [[ -x "$SCRIPT_DIR/detect-perf-baselines.sh" ]]; then
   PERF_TEST_TYPES=$(echo "$PERF_OUTPUT" | jq -c '.test_types // []' 2>/dev/null || echo "[]")
 fi
 
+# --- 11.5. Plan revision count ---
+PLAN_REVISION_COUNT=0
+
+if [[ -f "$STATE_FILE" ]]; then
+  PLAN_REVISION_COUNT=$(safe_jq "$STATE_FILE" '.active_feature.plan_revision_count // 0' "0")
+fi
+
 # --- 12. Drift detection metrics ---
 DRIFT_WARNINGS=0
 DRIFT_ESCALATIONS=0
@@ -361,6 +368,7 @@ jq -n \
   --argjson review_findings "$REVIEW_FINDINGS" \
   --argjson perf_baselines_exist "$PERF_BASELINES_EXIST" \
   --argjson perf_test_types "$PERF_TEST_TYPES" \
+  --argjson plan_revision_count "$PLAN_REVISION_COUNT" \
   --argjson drift_warnings "$DRIFT_WARNINGS" \
   --argjson drift_escalations "$DRIFT_ESCALATIONS" \
   --argjson drift_calls_since_progress "$DRIFT_CALLS_SINCE_PROGRESS" \
@@ -393,6 +401,7 @@ jq -n \
     review_findings: $review_findings,
     perf_baselines_exist: $perf_baselines_exist,
     perf_test_types: $perf_test_types,
+    plan_revision_count: $plan_revision_count,
     drift_warnings: $drift_warnings,
     drift_escalations: $drift_escalations,
     drift_calls_since_progress: $drift_calls_since_progress,

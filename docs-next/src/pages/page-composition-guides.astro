@@ -1,0 +1,525 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import CompositionGuideIllustration from '../components/patterns/CompositionGuideIllustration.astro';
+import { pageCompositionGuides, categoryLabels, categoryOrder } from '../data/page-composition-guides';
+import type { PageCompositionGuide, PageZone } from '../data/page-composition-guides';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = pageCompositionGuides.filter((g) => g.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof pageCompositionGuides>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<PageCompositionGuide['category'], string> = {
+  conversion: 'Pages designed to turn visitors into customers — landing pages, pricing, and product details that maximize conversion through research-backed zone composition.',
+  content: 'Pages that deliver long-form content while building authority, engagement, and subscriber conversion.',
+  commerce: 'Pages that facilitate product discovery and purchase completion with trust and clarity.',
+  trust: 'Pages that establish organizational credibility, humanize the team, and facilitate direct communication.',
+  utility: 'Pages that handle edge cases gracefully — errors, maintenance, and system states that protect user confidence.',
+};
+
+function slugify(name: string): string {
+  return name.toLowerCase().replace(/[\s\/()&+@"=.,:']+/g, '-').replace(/-+/g, '-').replace(/-$/, '');
+}
+---
+
+<DocsLayout title="Page Composition Guides" sectionLabel="Reference" activeSlug="page-composition-guides">
+
+  <h2>Page Composition Guides</h2>
+  <p>Research-backed composition guides for 12 common page types. Each guide describes the <strong>essential zones</strong> a page needs, which existing patterns to use, common mistakes to avoid, and structural variations to choose from. These are composition guides, not rigid templates — they describe required zones and reference existing patterns without dictating layout, style, or ordering.</p>
+
+  <nav class="category-nav" aria-label="Page type categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="guide-list">
+        {grouped[cat].map((guide) => (
+          <div class="guide-card" id={slugify(guide.name)}>
+            <div class="guide-card-header">
+              <CompositionGuideIllustration name={guide.name} />
+              <div class="guide-header-content">
+                <h4 class="guide-name">{guide.name}</h4>
+                <p class="guide-purpose">{guide.purpose}</p>
+                <span class="source-badge">{guide.source}</span>
+              </div>
+            </div>
+
+            <div class="zones-grid">
+              <div class="zones-column">
+                <h5 class="zones-heading essential-heading">Essential Zones</h5>
+                <ul class="zone-list">
+                  {guide.essentialZones.map((zone) => (
+                    <li class="zone-item">
+                      <div class="zone-name-row">
+                        <span class="zone-badge essential">Required</span>
+                        <strong class="zone-name">{zone.name}</strong>
+                      </div>
+                      <p class="zone-purpose">{zone.purpose}</p>
+                      <p class="zone-placement"><span class="meta-label">Placement</span> {zone.placement}</p>
+                      <div class="zone-refs">
+                        {zone.patternRefs.map((pr) => (
+                          <a class="pattern-ref" href={`/${pr.page}#${pr.anchor}`}>{pr.name}</a>
+                        ))}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div class="zones-column">
+                <h5 class="zones-heading recommended-heading">Recommended Zones</h5>
+                <ul class="zone-list">
+                  {guide.recommendedZones.map((zone) => (
+                    <li class="zone-item">
+                      <div class="zone-name-row">
+                        <span class="zone-badge recommended">Optional</span>
+                        <strong class="zone-name">{zone.name}</strong>
+                      </div>
+                      <p class="zone-purpose">{zone.purpose}</p>
+                      <p class="zone-placement"><span class="meta-label">Placement</span> {zone.placement}</p>
+                      <div class="zone-refs">
+                        {zone.patternRefs.map((pr) => (
+                          <a class="pattern-ref" href={`/${pr.page}#${pr.anchor}`}>{pr.name}</a>
+                        ))}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div class="guide-details">
+              <details>
+                <summary>Research</summary>
+                <p class="detail-text">{guide.research}</p>
+              </details>
+
+              <details>
+                <summary>Common Mistakes</summary>
+                <table class="mistakes-table">
+                  <thead>
+                    <tr><th>Mistake</th><th>Fix</th></tr>
+                  </thead>
+                  <tbody>
+                    {guide.mistakes.map((m) => (
+                      <tr>
+                        <td>{m.mistake}</td>
+                        <td>{m.fix}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </details>
+
+              <details>
+                <summary>Variations</summary>
+                <div class="variations-list">
+                  {guide.variations.map((v) => (
+                    <div class="variation-item">
+                      <strong>{v.name}</strong>
+                      <p>{v.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Sources & Further Reading</h3>
+    <ul>
+      <li><a href="https://www.nngroup.com/articles/" target="_blank" rel="noopener noreferrer">Nielsen Norman Group</a> &mdash; Evidence-based UX research and usability guidelines</li>
+      <li><a href="https://baymard.com/research" target="_blank" rel="noopener noreferrer">Baymard Institute</a> &mdash; E-commerce UX research and benchmark studies</li>
+      <li><a href="https://cxl.com/blog/" target="_blank" rel="noopener noreferrer">CXL Institute</a> &mdash; Conversion optimization research and case studies</li>
+      <li><a href="https://unbounce.com/landing-page-articles/" target="_blank" rel="noopener noreferrer">Unbounce</a> &mdash; Landing page optimization data and benchmarks</li>
+      <li><a href="https://www.smashingmagazine.com/" target="_blank" rel="noopener noreferrer">Smashing Magazine</a> &mdash; Web design and UX best practices</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .category-nav a {
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .category-nav a:hover {
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .category-heading {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .category-description {
+    margin: 0 0 1.25rem;
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .guide-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .guide-card {
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .guide-card-header {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  @media (max-width: 600px) {
+    .guide-card-header {
+      flex-direction: column;
+    }
+  }
+
+  .guide-header-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .guide-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.5rem;
+  }
+
+  .guide-purpose {
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+  }
+
+  .source-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    border-radius: var(--radius-xs);
+    letter-spacing: 0.02em;
+  }
+
+  /* Zone grid */
+  .zones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  @media (max-width: 768px) {
+    .zones-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .zones-column {
+    padding: 1rem 1.25rem;
+  }
+
+  .zones-column:first-child {
+    border-right: 1px solid var(--color-border-subtle);
+  }
+
+  @media (max-width: 768px) {
+    .zones-column:first-child {
+      border-right: none;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+  }
+
+  .zones-heading {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem;
+  }
+
+  .essential-heading {
+    color: var(--color-accent);
+  }
+
+  .recommended-heading {
+    color: var(--color-text-muted);
+  }
+
+  .zone-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .zone-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .zone-item:last-child {
+    border-bottom: none;
+  }
+
+  .zone-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .zone-badge {
+    display: inline-block;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .zone-badge.essential {
+    background: rgba(167, 139, 250, 0.15);
+    color: var(--color-accent);
+  }
+
+  .zone-badge.recommended {
+    background: rgba(113, 113, 122, 0.15);
+    color: var(--color-text-muted);
+  }
+
+  .zone-name {
+    font-size: 0.88rem;
+    color: var(--color-text);
+  }
+
+  .zone-purpose {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0.15rem 0 0.25rem;
+  }
+
+  .zone-placement {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin: 0 0 0.35rem;
+  }
+
+  .meta-label {
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    margin-right: 0.25rem;
+  }
+
+  .zone-refs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .pattern-ref {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    background: var(--color-accent-bg);
+    border-radius: 3px;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  .pattern-ref:hover {
+    background: rgba(167, 139, 250, 0.2);
+    text-decoration: none;
+  }
+
+  /* Collapsible details */
+  .guide-details {
+    padding: 0 1.25rem 1rem;
+  }
+
+  .guide-details details {
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .guide-details details:last-child {
+    border-bottom: none;
+  }
+
+  .guide-details summary {
+    padding: 0.75rem 0;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .guide-details summary:hover {
+    color: var(--color-accent);
+  }
+
+  .detail-text {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+    padding-left: 0.5rem;
+  }
+
+  /* Mistakes table */
+  .mistakes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .mistakes-table th {
+    text-align: left;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .mistakes-table td {
+    padding: 0.5rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--color-border-subtle);
+    vertical-align: top;
+  }
+
+  .mistakes-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .mistakes-table td:first-child {
+    color: var(--color-red);
+    font-weight: 500;
+    width: 40%;
+  }
+
+  .mistakes-table td:last-child {
+    color: var(--color-green);
+  }
+
+  /* Variations */
+  .variations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+  }
+
+  .variation-item strong {
+    font-size: 0.85rem;
+    color: var(--color-text);
+  }
+
+  .variation-item p {
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0.15rem 0 0;
+  }
+
+  /* Further reading (same as existing pattern pages) */
+  .further-reading {
+    margin-top: 3rem;
+  }
+
+  .further-reading ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+  }
+
+  .further-reading li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .further-reading li:last-child {
+    border-bottom: none;
+  }
+
+  .further-reading a {
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .further-reading a:hover {
+    text-decoration: underline;
+  }
+</style>

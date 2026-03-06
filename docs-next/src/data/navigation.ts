@@ -72,6 +72,7 @@ export const navigation: NavGroup[] = [
       { title: 'Social Media Patterns', slug: 'social-patterns' },
       { title: 'SEO & AI Discoverability', slug: 'seo-patterns' },
       { title: 'Head Order Patterns', slug: 'head-order-patterns' },
+      { title: 'Page Composition Guides', slug: 'page-composition-guides' },
       { title: 'Dark Patterns to Avoid', slug: 'dark-patterns' },
       { title: 'Glossary', slug: 'glossary' },
     ],

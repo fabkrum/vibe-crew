@@ -55,17 +55,56 @@ Read state via `jq` queries on `.vibecrew/state.json` and `.vibecrew/backlog.jso
 Guide the foundation sequence strictly in order. Do not skip steps. Do not allow parallel execution.
 
 1. **VISION.md** — Prompt the developer for project vision. Delegate to Builder for file creation.
-2. **Design Discovery** — After VISION.md is approved, ask the Pre-Design Gate question: "Do you have an existing design system or style guide?" If yes, run the Import Flow (BYODS) — accept the file, run `import-design-tokens.sh`, review the gap analysis, then ask only component preference questions (Q7-Q10). If no, run the full 3-phase Design Discovery interview (Product Context → Visual Direction → Component Preferences). Both paths produce `design-system.css` and `design-brief.md`. For `full_auto` autonomy: auto-detect design system files in the project root and import if found.
-3. **TDR** — Delegate to Stack Scout for technology research. Wait for TDR completion.
-4. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR. Use the Stack Scout's preliminary system diagram as a starting point. Generating diagrams before the roadmap ensures the Opponent Processor and roadmap planning have access to the full architectural picture.
-5. **roadmap.md** — Synthesize VISION.md + TDR + architecture diagrams into a phased roadmap. Delegate to Builder.
-6. **CLAUDE.md** — Generate project-specific CLAUDE.md from the template. Delegate to Builder. **Minimalism principle:** Research shows oversized context files increase agent cost 20%+ without improving success rates. The generated CLAUDE.md must stay under 200 lines, must not enumerate directories or file trees (agents navigate via architecture diagrams), and must not restate rules that hooks already enforce (phase-gate, format-code, protect-data, quality-gate). Only include project-specific conventions, tech stack, and architecture rules that cannot be enforced mechanically.
+2. **Competitive Analysis (Optional)** — After VISION.md is approved, offer competitive research. See "Market Scout Coordination" below.
+3. **Design Discovery** — Ask the Pre-Design Gate question: "Do you have an existing design system or style guide?" If yes, run the Import Flow (BYODS) — accept the file, run `import-design-tokens.sh`, review the gap analysis, then ask only component preference questions (Q7-Q10). If no, run the full 3-phase Design Discovery interview (Product Context → Visual Direction → Component Preferences). Both paths produce `design-system.css` and `design-brief.md`. For `full_auto` autonomy: auto-detect design system files in the project root and import if found.
+4. **TDR** — Delegate to Stack Scout for technology research. Wait for TDR completion.
+5. **Architecture Diagrams** — Generate 5 Mermaid diagrams (system, schema, state-flows, api-sequences, component-tree) to `.vibecrew/architecture/` from VISION.md + TDR. Use the Stack Scout's preliminary system diagram as a starting point. Generating diagrams before the roadmap ensures the Opponent Processor and roadmap planning have access to the full architectural picture.
+6. **roadmap.md** — Synthesize VISION.md + TDR + architecture diagrams into a phased roadmap. Delegate to Builder.
+7. **CLAUDE.md** — Generate project-specific CLAUDE.md from the template. Delegate to Builder. **Minimalism principle:** Research shows oversized context files increase agent cost 20%+ without improving success rates. The generated CLAUDE.md must stay under 200 lines, must not enumerate directories or file trees (agents navigate via architecture diagrams), and must not restate rules that hooks already enforce (phase-gate, format-code, protect-data, quality-gate). Only include project-specific conventions, tech stack, and architecture rules that cannot be enforced mechanically.
 
 After each step, verify the artifact exists and run `complete-phase.sh` to advance foundation state. The phase-gate hook blocks source code writes until all 6 artifacts are complete.
 
+### Market Scout Coordination
+
+After VISION.md is approved (Step 1), offer competitive analysis before Design Discovery:
+
+**Prompt:** "Would you like me to research competitors before we continue with design? This helps identify market gaps and inform feature priorities."
+
+If the user accepts:
+
+1. Extract vision context: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/extract-vision-context.sh"`
+2. Launch the `market-scout` agent with the extracted context and VISION.md path.
+3. Wait for the agent to return the competitive analysis.
+4. Present the executive summary, competitor table, and feature comparison matrix to the developer.
+5. Walk through each feature recommendation interactively:
+   - For each recommendation, ask: "**{feature_name}** ({priority}) — {rationale}. Add to backlog, skip, or modify?"
+   - **Add to backlog** → collect the feature for batch addition.
+   - **Skip** → move to the next recommendation.
+   - **Modify** → let the developer edit the feature name/description, then collect it.
+6. For all accepted features, add them to backlog:
+   ```bash
+   bash "${CLAUDE_PLUGIN_ROOT}/scripts/add-suggested-features.sh" '<json_array_of_accepted_features>'
+   ```
+7. Present the positioning recommendation. Ask: "Would you like to add these positioning insights to VISION.md?"
+8. If yes, append the positioning insights to VISION.md under a `## Competitive Insights` section using the Builder.
+9. Save the full analysis:
+   ```bash
+   echo "<analysis_markdown>" | bash "${CLAUDE_PLUGIN_ROOT}/scripts/save-competitive-analysis.sh"
+   ```
+10. Summarize actions taken: "{X} features added to backlog, positioning insights saved to VISION.md, full analysis at docs/competitive-analysis.md."
+
+If the user declines, proceed directly to Step 3 (Design Discovery).
+
+#### Profile-Aware Competitive Analysis
+
+| `full_auto` | Auto-detect market-facing products from VISION.md (check `is_market_facing` in extract output). Auto-run for market-facing projects, skip for internal tools. Auto-add all recommendations without walking through each. |
+| `checkpoints` | Ask once: "Add all recommendations / review each / skip all?" |
+| `collaborative` | Walk through each recommendation interactively (default behavior). |
+| `supervised` | Explain market context for each recommendation before asking. |
+
 ### Opponent Processor Coordination
 
-After the TDR is completed in Tier 1 Step 3, invoke the Opponent Processor for a counter-analysis:
+After the TDR is completed in Tier 1 Step 4, invoke the Opponent Processor for a counter-analysis:
 
 1. Run `scripts/generate-counter-tdr.sh` to extract decisions from the TDR.
 2. Launch the `opponent-processor` agent with the extracted decisions as context.
@@ -74,7 +113,7 @@ After the TDR is completed in Tier 1 Step 3, invoke the Opponent Processor for a
 5. If the developer chooses to reconsider any decisions, re-run the relevant TDR section.
 6. Save the counter-analysis to `docs/counter-tdr.md`.
 
-The opponent processor is optional — if the developer prefers to skip it, proceed directly to Step 5 (Roadmap). Note: Architecture diagrams are now available before the Opponent Processor runs, giving it access to the full architectural picture for more informed counter-analysis.
+The opponent processor is optional — if the developer prefers to skip it, proceed directly to Step 6 (Roadmap). Note: Architecture diagrams are now available before the Opponent Processor runs, giving it access to the full architectural picture for more informed counter-analysis.
 
 ### Expertise: Record TDR Decisions
 
@@ -107,7 +146,7 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/sync-mcp-from-tdr.sh" "<path-to-tdr-file>"
    - If **pick** → let the user select servers, run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/add-mcp-server.sh" <key>` for each
    - If **skip** → proceed without adding
 5. For newly added servers that require environment variables (check `env_vars` in the recommendation), list the required variables.
-6. This step is non-blocking — proceed to Step 4 (Architecture Diagrams) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
+6. This step is non-blocking — proceed to Step 5 (Architecture Diagrams) regardless of whether the user sets the variables immediately. The servers will activate once the variables are configured.
 
 ### Companion Skills Check
 

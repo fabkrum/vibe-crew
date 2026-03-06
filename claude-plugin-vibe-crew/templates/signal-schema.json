@@ -21,7 +21,7 @@
     },
     "agent": {
       "type": "string",
-      "enum": ["builder", "verifier", "code-reviewer", "orchestrator", "ci-healer", "doc-generator", "performance-coach", "code-simplifier", "security-auditor", "code-auditor", "system-reviewer"],
+      "enum": ["builder", "verifier", "code-reviewer", "orchestrator", "ci-healer", "doc-generator", "performance-coach", "code-simplifier", "security-auditor", "code-auditor", "system-reviewer", "market-scout"],
       "description": "The agent that produced this signal"
     },
     "status": {

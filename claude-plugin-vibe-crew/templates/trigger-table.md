@@ -7,7 +7,7 @@
 | Command | Agent | Phase | Description |
 |---------|-------|-------|-------------|
 | `/setup` | session-startup | — | Initialize VibeCrew in a project |
-| `/new-project` | workflow-orchestrator | Tier 1 | Run sequential foundation (VISION → Design Discovery → TDR → roadmap → CLAUDE.md) |
+| `/new-project` | workflow-orchestrator | Tier 1 | Run sequential foundation (VISION → Competitive Analysis → Design Discovery → TDR → roadmap → CLAUDE.md) |
 | `/plan-features` | workflow-orchestrator | Tier 2 | Create/refine feature backlog with specs |
 | `/new-feature "name"` | workflow-orchestrator | Tier 2 | Start feature: branch, state, phase tracker |
 | `/run-backlog` | workflow-orchestrator | Tier 2 | Autonomous feature processing loop |
@@ -39,13 +39,14 @@
 | `/quick "description"` | (inline) | Tier 2 | Fast-track small fixes: code, quality gate, commit |
 | `/system-review` | system-reviewer | — | Cross-project telemetry and ecosystem analysis |
 
-## Agent Registry (14)
+## Agent Registry (15)
 
 | Agent | Model | Isolation | Triggers |
 |-------|-------|-----------|----------|
 | session-startup | haiku | inline | Every session start |
 | workflow-orchestrator | opus | inline | `/new-project`, `/new-feature`, `/run-backlog`, `/status`, `/plan-features`, `/idea`, `/replay`, `/undo`, `/debug` |
-| stack-scout | opus | worktree | TDR research (Tier 1 Step 3) |
+| market-scout | opus | worktree | Competitive analysis (Tier 1 Step 2, optional) |
+| stack-scout | opus | worktree | TDR research (Tier 1 Step 4) |
 | builder | opus | worktree | Design + code phases, `/tdd` |
 | verifier | haiku | inline | `/check`, `/wrap`, `/cost`, `/achievements`, `/quiz`, `/e2e`, `/perf-test`, `/a11y` |
 | performance-coach | opus | inline | `/wrap` Step 9.5 (after 5+ sessions) |

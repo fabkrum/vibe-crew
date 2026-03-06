@@ -1,0 +1,83 @@
+---
+/**
+ * Outputs JSON-LD structured data for SEO and AI discoverability.
+ * - Homepage: WebSite + SoftwareApplication schemas
+ * - All other pages: Article schema
+ */
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_AUTHOR } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  isHomepage?: boolean;
+}
+
+const { title, description = SITE_DESCRIPTION, isHomepage = false } = Astro.props;
+
+const siteUrl = 'https://fabkrum.github.io/vibe-crew';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": SITE_TITLE,
+  "url": siteUrl,
+  "description": SITE_DESCRIPTION,
+  "author": {
+    "@type": "Person",
+    "name": SITE_AUTHOR,
+    "url": "https://github.com/fabkrum",
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": SITE_AUTHOR,
+  },
+};
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "VibeCrew",
+  "description": SITE_DESCRIPTION,
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "macOS, Linux, Windows",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+  },
+  "url": "https://github.com/fabkrum/vibe-crew",
+  "downloadUrl": "https://github.com/fabkrum/vibe-crew",
+  "softwareVersion": "1.0.0",
+  "author": {
+    "@type": "Person",
+    "name": SITE_AUTHOR,
+  },
+};
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": title,
+  "description": description,
+  "url": canonicalUrl,
+  "author": {
+    "@type": "Person",
+    "name": SITE_AUTHOR,
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": SITE_AUTHOR,
+  },
+  "mainEntityOfPage": canonicalUrl,
+};
+---
+
+{isHomepage ? (
+  <>
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  </>
+) : (
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+)}

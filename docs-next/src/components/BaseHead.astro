@@ -1,20 +1,40 @@
 ---
-import { url } from '../data/site';
+import { url, SITE_TITLE, SITE_DESCRIPTION, SITE_AUTHOR } from '../data/site';
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = 'VibeCrew Documentation — The Autonomous Vibe-Coding Operating System' } = Astro.props;
+const { title, description = SITE_DESCRIPTION } = Astro.props;
+
+const siteUrl = 'https://fabkrum.github.io/vibe-crew';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const ogImageUrl = `${siteUrl}/images/og-default.svg`;
 ---
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{title}</title>
 <meta name="description" content={description} />
+<meta name="author" content={SITE_AUTHOR} />
 <meta name="generator" content={Astro.generator} />
+<link rel="canonical" href={canonicalUrl} />
 <link rel="sitemap" href={url('/sitemap-index.xml')} />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:site_name" content={SITE_TITLE} />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
 
 <!-- Prevent FOUC for theme -->
 <script is:inline>

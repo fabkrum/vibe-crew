@@ -1,0 +1,27 @@
+# VibeCrew Documentation
+# https://fabkrum.github.io/vibe-crew/
+
+User-agent: *
+Allow: /
+Disallow:
+
+Sitemap: https://fabkrum.github.io/vibe-crew/sitemap-index.xml
+
+# AI crawlers — allowed (we want AI discoverability)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /

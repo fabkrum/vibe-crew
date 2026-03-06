@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && npx pagefind --site ../docs",
+    "build": "bash scripts/build-llms-full.sh && astro build && npx pagefind --site ../docs",
     "preview": "astro preview",
     "astro": "astro"
   },

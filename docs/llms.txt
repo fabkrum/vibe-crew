@@ -1,0 +1,39 @@
+# VibeCrew
+
+> A free, open-source Claude Code plugin that transforms Claude Code into an autonomous vibe-coding operating system.
+
+VibeCrew orchestrates multiple Claude Code sessions, manages the full software development lifecycle, and enables non-technical users to build production-grade SaaS applications.
+
+## Key Capabilities
+
+- **14 Specialized AI Agents** — Opus for planning/research/code, Haiku for routing/commands, Sonnet for documentation
+- **Two-Tier Workflow** — Foundation phase (architecture, design, tech stack) then iterative feature development (plan, design, code, test, review, docs)
+- **Phase Gate Enforcement** — Bash hooks prevent code writes until architecture decisions are complete
+- **Vibe Score System** — Quantified code quality scoring (0-130) with automatic deductions and bonuses
+- **33+ Slash Commands** — `/setup`, `/plan-features`, `/run-backlog`, `/check`, `/wrap`, `/review`, `/tdd`, and more
+- **9 MCP Servers** — Context7, Chrome DevTools, Playwright, Semgrep, Sentry, Supabase, Stripe, Vercel, Figma
+- **Self-Improving** — Performance Coach proposes permanent CLAUDE.md rule mutations based on anti-patterns
+- **Cost Tracking** — Session and daily cost guardrails with automatic notifications
+- **User Profiles** — 7-dimension personalization (code literacy, autonomy, verbosity, risk tolerance, etc.)
+- **Gamification** — Achievements, progression, and session scoring
+
+## Installation
+
+Requires Git 2.30+, Node.js 18+, and `jq`. Install by cloning the plugin into your project's `.claude/plugins/` directory.
+
+## Documentation
+
+- [Setup Guide](https://fabkrum.github.io/vibe-crew/setup-detail.html)
+- [Daily Workflow](https://fabkrum.github.io/vibe-crew/workflow.html)
+- [Architecture Overview](https://fabkrum.github.io/vibe-crew/architecture.html)
+- [Sub-Agents](https://fabkrum.github.io/vibe-crew/agents.html)
+- [Slash Commands](https://fabkrum.github.io/vibe-crew/command-flow.html)
+- [Hooks](https://fabkrum.github.io/vibe-crew/hooks.html)
+- [MCP Servers](https://fabkrum.github.io/vibe-crew/mcp-servers.html)
+- [Personalization](https://fabkrum.github.io/vibe-crew/personalization.html)
+- [FAQ](https://fabkrum.github.io/vibe-crew/faq.html)
+- [Full Documentation](https://fabkrum.github.io/vibe-crew/llms-full.txt)
+
+## Source Code
+
+- GitHub: https://github.com/fabkrum/vibe-crew

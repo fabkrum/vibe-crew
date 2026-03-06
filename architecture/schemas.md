@@ -456,7 +456,7 @@ WIP limits are enforced: if `in-progress` has `wip_limit: 1`, a new feature cann
 | `created_at` | string | yes | Creation timestamp |
 | `updated_at` | string | yes | Last modification timestamp |
 | `completed_at` | string\|null | yes | Completion timestamp |
-| `source` | string\|null | no | Origin: `"github-issue"`, `"gitlab-issue"`, or null |
+| `source` | string\|null | no | Origin: `"issue"`, `"competitive-analysis"`, or null |
 | `type` | string\|null | no | `"hotfix"` or `"feature"` or null |
 | `provider` | string\|null | no | `"github"`, `"gitlab"`, or null |
 | `issue_number` | integer\|null | no | Issue number (migrated from `github_issue_number`) |

@@ -210,15 +210,15 @@ This is critical because marketplace-installed plugins are cached to `~/.claude/
 
 ## 2. Agent Topology
 
-### 2.1 The Fourteen Agents
+### 2.1 The Fifteen Agents
 
-VibeCrew operates through fourteen specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
+VibeCrew operates through fifteen specialized sub-agents. Each agent is a markdown file in `agents/` with YAML frontmatter that defines its model, tools, permissions, and behavioral constraints. Each runs in its own isolated context window -- the parent session's conversation history is never shared.
 
-The topology expands the original 9-agent design to 14 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding specialized agents for code quality, security, simplification, CI healing, adversarial review, code review, and plugin-level meta-analysis.
+The topology expands the original 9-agent design to 15 agents, consolidating some roles (Builder = UI Designer + Feature Developer; Verifier = Test Writer + Quality Check) while adding specialized agents for competitive research, code quality, security, simplification, CI healing, adversarial review, code review, and plugin-level meta-analysis.
 
 ```
 +------------------------------------------------------------------+
-|                     VIBECREW AGENT TOPOLOGY (v1.0)                  |
+|                     VIBECREW AGENT TOPOLOGY (v1.1)                  |
 +------------------------------------------------------------------+
 |                                                                   |
 |  LIGHTWEIGHT (Haiku)         CORE (Opus)                          |
@@ -248,11 +248,11 @@ The topology expands the original 9-agent design to 14 agents, consolidating som
 |  |  CLAUDE.md mutations)       |  |  release notes)             |  |
 |  +----------------------------+  +----------------------------+   |
 |                                                                   |
-|  +----------------------------+                                   |
-|  | Opponent Processor (Opus)   |                                  |
-|  | (adversarial review,        |                                  |
-|  |  edge case discovery)       |                                  |
-|  +----------------------------+                                   |
+|  +----------------------------+  +----------------------------+   |
+|  | Market Scout (Opus)         |  | Opponent Processor (Opus)   |  |
+|  | (competitive research,      |  | (adversarial review,        |  |
+|  |  feature comparison)        |  |  edge case discovery)       |  |
+|  +----------------------------+  +----------------------------+   |
 |                                                                   |
 +------------------------------------------------------------------+
 |  CA = Code Auditor, SA = Security Auditor, CS = Code Simplifier  |

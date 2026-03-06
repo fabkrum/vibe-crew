@@ -98,7 +98,22 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |  (Orchestrator writes via     |
  |                       |   Bash scripts)               |
  |                       |                               |
- |                       |  STEP 2: Design System        |
+ |                       |  STEP 2: Competitive Analysis |
+ |                       |  (Optional — user can skip)   |
+ |                       |  TaskCreate -> Market Scout   |
+ |                       |------------------------------->|
+ |                       |                Market Scout    |
+ |                       |                in worktree    |
+ |                       |  WebSearch + Chrome DevTools   |
+ |                       |  Competitor research           |
+ |                       |<-------------------------------|
+ |                       |  Present findings + walk       |
+ |  <-- recommendations  |  through each recommendation  |
+ |  add/skip/modify ---->|                               |
+ |                       |  Accepted -> backlog           |
+ |                       |  Positioning -> VISION.md      |
+ |                       |                               |
+ |                       |  STEP 3: Design System        |
  |                       |  TeamCreate("foundation")     |
  |                       |  TaskCreate -> Builder         |
  |                       |------------------------------->|
@@ -113,7 +128,7 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |                       |  Orchestrator merges back     |
  |                       |<-------------------------------|
  |                       |                               |
- |                       |  STEP 3: Architecture         |
+ |                       |  STEP 4: Architecture         |
  |                       |  TaskCreate -> Stack Scout    |
  |                       |------------------------------->|
  |                       |                Stack Scout     |
@@ -130,22 +145,22 @@ USER                 ORCHESTRATOR              AGENTS (via Agent Teams)
  |  <-- TDR for review   |                               |
  |  "Approved" --------->|                               |
  |                       |                               |
- |                       |  STEP 4: Roadmap              |
+ |                       |  STEP 5: Roadmap              |
  |  <-- "List features"  |                               |
  |  feature list ------->|                               |
  |                       |  Generate docs/roadmap.md     |
  |                       |                               |
- |                       |  STEP 5: Architecture Diagrams|
+ |                       |  STEP 6: Architecture Diagrams|
  |                       |  Read VISION + TDR + roadmap  |
  |                       |  Generate 5 .mmd files to     |
  |                       |  .vibecrew/architecture/      |
  |                       |                               |
- |                       |  STEP 6: CLAUDE.md            |
+ |                       |  STEP 7: CLAUDE.md            |
  |                       |  Synthesize from all          |
  |                       |  artifacts + diagrams         |
  |                       |  Generate CLAUDE.md           |
  |                       |                               |
- |                       |  STEP 7: Commit foundation    |
+ |                       |  STEP 8: Commit foundation    |
  |                       |  git add + commit foundation  |
  |                       |                               |
  |                       |  Update state.json:           |
@@ -234,11 +249,12 @@ See `architecture/schemas.md` Section 3 for the canonical `state.json` schema, i
 | Step | Artifact | Agent | Worktree | User Input Required |
 |------|----------|-------|----------|---------------------|
 | 1 | `VISION.md` | Orchestrator | No (inline) | Yes -- 5 questions via AskUserQuestion |
-| 2 | `design-system.css` | Builder | Yes | Yes -- brand preferences (color, font, radius, density) |
-| 3 | `docs/tdr-001-tech-stack.md` | Stack Scout | Yes | Yes -- approval of TDR |
-| 4 | `docs/roadmap.md` | Orchestrator | No (inline) | Yes -- feature list |
-| 5 | `CLAUDE.md` | Orchestrator | No (inline) | No -- synthesized from above |
-| 6 | Git commit | Orchestrator | No (inline) | No -- automatic |
+| 2 | `docs/competitive-analysis.md` (optional) | Market Scout | Yes | Yes -- per-recommendation approval |
+| 3 | `design-system.css` | Builder | Yes | Yes -- brand preferences (color, font, radius, density) |
+| 4 | `docs/tdr-001-tech-stack.md` | Stack Scout | Yes | Yes -- approval of TDR |
+| 5 | `docs/roadmap.md` | Orchestrator | No (inline) | Yes -- feature list |
+| 6 | `CLAUDE.md` | Orchestrator | No (inline) | No -- synthesized from above |
+| 7 | Git commit | Orchestrator | No (inline) | No -- automatic |
 
 ### 1.6 Agent Teams Coordination During Foundation
 
@@ -247,11 +263,22 @@ The Orchestrator uses the Agent Teams API to coordinate foundation work:
 ```
 Orchestrator
     |
-    +--- TeamCreate("foundation", [builder, stack-scout])
+    +--- TeamCreate("foundation", [builder, stack-scout, market-scout])
     |
     +--- STEP 1: Vision (Orchestrator does this inline, no delegation)
     |
-    +--- STEP 2: TaskCreate(assignee: builder,
+    +--- STEP 2: Competitive Analysis (Optional)
+    |         |
+    |         +--- Offer: "Would you like me to research competitors?"
+    |         |    YES → TaskCreate(assignee: market-scout,
+    |         |           task: "Research competitors based on VISION.md")
+    |         |         → Present findings, walk through recommendations
+    |         |         → Accepted features → backlog (source: competitive-analysis)
+    |         |         → Positioning insights → append to VISION.md
+    |         |         → Full analysis → docs/competitive-analysis.md
+    |         |    NO  → Skip to Step 3
+    |
+    +--- STEP 3: TaskCreate(assignee: builder,
     |         task: "Generate or import design-system.css")
     |         |
     |         +--- Pre-Design Gate: "Do you have an existing design system?"
@@ -269,7 +296,7 @@ Orchestrator
     |         |
     +--- Orchestrator merges builder worktree back to main
     |
-    +--- STEP 3: TaskCreate(assignee: stack-scout,
+    +--- STEP 4: TaskCreate(assignee: stack-scout,
     |         task: "Research tech stack, produce TDR based on VISION.md")
     |         |
     |         +--- Stack Scout works in worktree
@@ -282,7 +309,7 @@ Orchestrator
     +--- Orchestrator merges scout worktree back to main
     |    Presents TDR to user for approval
     |
-    +--- STEPS 4-6: Orchestrator handles inline (roadmap, CLAUDE.md, git)
+    +--- STEPS 5-8: Orchestrator handles inline (roadmap, diagrams, CLAUDE.md, git)
 ```
 
 ### 1.7 Phase Gate Enforcement
@@ -360,10 +387,10 @@ The phase gate is the enforcement mechanism that prevents source code writes bef
 |---------|------|----------|
 | Missing required dependency | `/setup` | Block setup, display install command |
 | User abandons `/new-project` mid-step | Any step | State persists partial progress; next `/new-project` resumes from last incomplete artifact |
-| Stack Scout research fails (no internet) | Step 3 | Offer manual TDR creation; user provides stack preferences directly |
-| Builder worktree creation fails | Step 2 | Fall back to inline execution without worktree isolation |
+| Stack Scout research fails (no internet) | Step 4 | Offer manual TDR creation; user provides stack preferences directly |
+| Builder worktree creation fails | Step 3 | Fall back to inline execution without worktree isolation |
 | Worktree merge conflict | After Steps 2 or 3 | Orchestrator reports conflict; user resolves manually then re-runs |
-| Git init fails | Step 6 | Report error; user can manually init and re-run `/new-project` |
+| Git init fails | Step 7 | Report error; user can manually init and re-run `/new-project` |
 
 ---
 

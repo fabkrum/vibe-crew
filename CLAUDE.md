@@ -15,7 +15,7 @@ claude-plugin-vibe-crew/          # The plugin — install this into your projec
   settings.json                 # Permission rules
   hooks/hooks.json              # Event hook bindings
   scripts/                      # ~80 bash automation scripts
-  agents/                       # 14 specialized AI agent prompts
+  agents/                       # 15 specialized AI agent prompts
   skills/                       # 33 slash command definitions
   tests/                        # BATS test suite
   templates/                    # Project templates and doc-site scaffold
@@ -29,10 +29,10 @@ CLAUDE.md                       # This file
 
 ### Two-Tier Workflow
 
-- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, design-system.css + design-brief.md (via Design Discovery interview or BYODS import of existing tokens), TDR (Technology Decision Record), Architecture Diagrams (5 Mermaid `.mmd` files), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook. Step 2 (Design Discovery) first asks a Pre-Design Gate question: users with an existing design system can import it (CSS, Tailwind, JSON tokens, URL, Figma, or brand PDF) via `import-design-tokens.sh`, skipping the interview but still answering component preference questions. Otherwise, the full 3-phase interview runs: Product & Audience Context → Visual Direction → Component Preferences. Both paths produce identical output files. Architecture Diagrams are generated before the Opponent Processor runs, giving it structural context for its analysis.
+- **Tier 1 (Project Foundation)**: Sequential, one-time process that creates VISION.md, optional competitive analysis, design-system.css + design-brief.md (via Design Discovery interview or BYODS import of existing tokens), TDR (Technology Decision Record), Architecture Diagrams (5 Mermaid `.mmd` files), roadmap, and CLAUDE.md before any source code can be written. Enforced by a phase gate hook. After VISION.md, the Market Scout agent optionally researches competitors, builds a feature comparison matrix, and recommends positioning — accepted features go to the backlog, positioning insights enrich VISION.md. Step 3 (Design Discovery) first asks a Pre-Design Gate question: users with an existing design system can import it (CSS, Tailwind, JSON tokens, URL, Figma, or brand PDF) via `import-design-tokens.sh`, skipping the interview but still answering component preference questions. Otherwise, the full 3-phase interview runs: Product & Audience Context → Visual Direction → Component Preferences. Both paths produce identical output files. Architecture Diagrams are generated before the Opponent Processor runs, giving it structural context for its analysis.
 - **Tier 2 (Feature Development)**: Iterative 6-phase cycle (Plan > UI Design > Code > Test > Review > Docs) for each feature. Review is optional in manual workflows but automatic in `/run-backlog`. The Plan phase includes a Clarify sub-step that resolves spec ambiguities before Design, checking 6 categories of gray areas and persisting decisions in plan.md. Plans use a structured task format (Files/Action/Verify/Done) for deterministic Code phase execution. The Design phase generates ASCII wireframes (profile-gated) for cheap visual iteration before code. Features carry a `complexity` field (`trivial | standard | complex`): trivial skips Design and Review, complex enables wave-based milestone decomposition with parallel execution of independent milestones. Plan revision tracking (`plan_revision_count` in state.json) warns when specs change mid-feature and integrates with the Vibe Score.
 
-### Agent Topology (14 agents)
+### Agent Topology (15 agents)
 
 Opus agents handle planning, research, code, security, and analysis — tasks where mistakes are expensive to fix later. Haiku agents handle fast, mechanical tasks (routing, running shell commands). Sonnet handles template-driven output like documentation.
 
@@ -40,6 +40,7 @@ Opus agents handle planning, research, code, security, and analysis — tasks wh
 |---|---|---|---|
 | Session Startup | Haiku | Inline | Environment check, state detection, routing on every session start |
 | Workflow Orchestrator | Opus | Inline | Routes between Tier 1/Tier 2, coordinates agent handoffs |
+| Market Scout | Opus | Worktree | Competitive research (WebSearch, Chrome DevTools), feature comparison, market positioning (optional Tier 1 step) |
 | Stack Scout | Opus | Worktree | Read-only research agent (WebSearch, Context7, Chrome DevTools) that produces TDRs in isolated context |
 | Builder | Opus | Worktree | Implements features within TDR boundaries |
 | Verifier | Haiku | Inline | Runs tests/build/lint/type-check for `/check`, `/wrap`, `/run-backlog` |

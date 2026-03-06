@@ -2,7 +2,7 @@
 
 > **Phase 2 Architecture** | Document 02 (Revised) | February 2026
 >
-> This document defines all 14 VibeCrew v1.7.0 agents -- their trigger conditions, input/output contracts, tool permissions, verification loops, context budgets, safety constraints, status reporting mechanisms, and complete YAML frontmatter for their `.md` definition files. Each agent runs as an isolated Claude Code sub-agent with its own context window, as documented in [Research 01: Plugin Architecture](../research/01-claude-code-plugin-architecture.md) and [Research 02: Multi-Agent Orchestration](../research/02-multi-agent-orchestration.md).
+> This document defines all 15 VibeCrew v1.8.0 agents -- their trigger conditions, input/output contracts, tool permissions, verification loops, context budgets, safety constraints, status reporting mechanisms, and complete YAML frontmatter for their `.md` definition files. Each agent runs as an isolated Claude Code sub-agent with its own context window, as documented in [Research 01: Plugin Architecture](../research/01-claude-code-plugin-architecture.md) and [Research 02: Multi-Agent Orchestration](../research/02-multi-agent-orchestration.md).
 >
 > **v1.0 Consolidation.** This revision reduces the agent count from 9 to 5, following Boris Cherny / Anthropic best practices for multi-agent systems. The primary changes: UI Designer and Feature Developer merge into **Builder**; Test Writer, Quality Check, and Performance Coach scoring merge into **Verifier**; Doc Generator and Performance Coach (as standalone agents) are deferred to v1.1. Every agent now includes an explicit **Verification Loop** -- the single most important practice for reliable agent output.
 
@@ -33,18 +33,19 @@
 |---|-------|-------|---------|----------------|-----------|--------|----------|
 | 1 | Session Startup | Haiku | `SessionStart` hook | <10% | Inline | — | 5 |
 | 2 | Workflow Orchestrator | Opus | Primary tab (always running) | <40% | Inline | — | 30 |
-| 3 | Stack Scout | Opus | Delegated by Orchestrator for research | <45% | Worktree | — | 50 |
-| 4 | Builder | Opus | Delegated for design and code phases | <45% | Worktree | Expertise | 100 |
-| 5 | Verifier | Haiku | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | — | 60 |
-| 6 | Performance Coach | Opus | `/wrap` Step 9.5 (after 5+ sessions) | <30% | Inline | Project | 25 |
-| 7 | Doc Generator | Sonnet | `/wrap` Step 10, `/handoff`, `/release` | <25% | Inline | — | 20 |
-| 8 | Code Auditor | Opus | `/audit`, `/onboard` | <40% | Worktree | — | 40 |
-| 9 | Security Auditor | Opus | `/audit` (fork) | <40% | Worktree | Project | 40 |
-| 10 | Code Simplifier | Opus | `/simplify` (fork) | <35% | Worktree | Project | 30 |
-| 11 | CI Healer | Opus | `/heal` (GitHub Actions and GitLab CI) | <30% | Inline | — | 15 |
-| 12 | Opponent Processor | Opus | TDR counter-analysis (Tier 1 Step 3.5) | <35% | Worktree | — | 30 |
-| 13 | Code Reviewer | Opus | `/review` (fork), `/run-backlog` Phase 4.5 | <35% | Worktree | Expertise | 30 |
-| 14 | System Reviewer | Opus | `/system-review` (fork) | <30% | Worktree | — | 25 |
+| 3 | Market Scout | Opus | Delegated by Orchestrator for competitive analysis (optional) | <40% | Worktree | — | 40 |
+| 4 | Stack Scout | Opus | Delegated by Orchestrator for research | <45% | Worktree | — | 50 |
+| 5 | Builder | Opus | Delegated for design and code phases | <45% | Worktree | Expertise | 100 |
+| 6 | Verifier | Haiku | Delegated for test phase, `/check`, `/wrap` | <40% | Inline | — | 60 |
+| 7 | Performance Coach | Opus | `/wrap` Step 9.5 (after 5+ sessions) | <30% | Inline | Project | 25 |
+| 8 | Doc Generator | Sonnet | `/wrap` Step 10, `/handoff`, `/release` | <25% | Inline | — | 20 |
+| 9 | Code Auditor | Opus | `/audit`, `/onboard` | <40% | Worktree | — | 40 |
+| 10 | Security Auditor | Opus | `/audit` (fork) | <40% | Worktree | Project | 40 |
+| 11 | Code Simplifier | Opus | `/simplify` (fork) | <35% | Worktree | Project | 30 |
+| 12 | CI Healer | Opus | `/heal` (GitHub Actions and GitLab CI) | <30% | Inline | — | 15 |
+| 13 | Opponent Processor | Opus | TDR counter-analysis (Tier 1 Step 4.5) | <35% | Worktree | — | 30 |
+| 14 | Code Reviewer | Opus | `/review` (fork), `/run-backlog` Phase 4.5 | <35% | Worktree | Expertise | 30 |
+| 15 | System Reviewer | Opus | `/system-review` (fork) | <30% | Worktree | — | 25 |
 
 ### Agents Originally Deferred, Now Implemented
 
@@ -61,6 +62,7 @@
 |-------|:----:|:-----:|:----:|:----:|:----:|:----:|:---------:|:--------:|:--------:|:---------:|:----------:|:-------:|:------:|:--------:|:------:|:------:|:-----:|:-----------:|
 | Session Startup | x | - | - | x | x | x | - | - | - | - | - | - | - | - | - | - | - | - |
 | Workflow Orchestrator | x | - | - | x | x | x | - | - | - | - | - | - | - | - | - | - | - | x |
+| Market Scout | x | - | - | x | x | x | x | x | - | x | - | - | - | - | - | - | - | - |
 | Stack Scout | x | - | - | x | x | x | x | x | x | x | - | - | - | x | - | - | - | - |
 | Builder | x | x | x | x | x | x | - | - | x | - | x | - | - | x | x | x | x | - |
 | Verifier | x | x | x | x | x | x | - | - | x | - | x | - | - | - | - | - | - | - |

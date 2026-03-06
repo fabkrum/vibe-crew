@@ -65,6 +65,7 @@ const badVisionExamples = `# Bad examples — too vague for VibeCrew to act on
       <li><a href="#overview">What Happens in Tier 1</a></li>
       <li><a href="#vision">Writing a Great Vision</a></li>
       <li><a href="#example">Concrete Example: Mealwise</a></li>
+      <li><a href="#competitive-analysis">Competitive Analysis (Optional)</a></li>
       <li><a href="#design-system">Dealing with an Existing Style Guide</a></li>
       <li><a href="#tdr">Technology Decisions</a></li>
       <li><a href="#roadmap">Prioritizing Your Roadmap</a></li>
@@ -93,36 +94,43 @@ const badVisionExamples = `# Bad examples — too vague for VibeCrew to act on
           <p>Problem, personas, core features, success metrics, constraints. <strong>This is the single most important artifact</strong> &mdash; every other decision flows from it.</p>
         </div>
       </div>
-      <div class="artifact-step">
+      <div class="artifact-step artifact-optional">
         <div class="artifact-number">2</div>
+        <div class="artifact-content">
+          <h4>Competitive Analysis <span class="badge-inline">Optional</span></h4>
+          <p>The <a href="agents.html">Market Scout</a> agent researches competitors, builds a feature comparison matrix, and recommends positioning. Accepted features go to the backlog; positioning insights enrich VISION.md.</p>
+        </div>
+      </div>
+      <div class="artifact-step">
+        <div class="artifact-number">3</div>
         <div class="artifact-content">
           <h4>Design System + Brief</h4>
           <p>Visual tokens (<code>design-system.css</code>) and design rationale (<code>design-brief.md</code>). Created via a design interview or by importing your existing style guide.</p>
         </div>
       </div>
       <div class="artifact-step">
-        <div class="artifact-number">3</div>
+        <div class="artifact-number">4</div>
         <div class="artifact-content">
           <h4>Technology Decision Record</h4>
           <p>Framework, database, auth, hosting &mdash; every choice documented with trade-offs. The <a href="agents.html">Stack Scout</a> agent researches options; the <a href="agents.html">Opponent Processor</a> stress-tests them.</p>
         </div>
       </div>
       <div class="artifact-step">
-        <div class="artifact-number">4</div>
+        <div class="artifact-number">5</div>
         <div class="artifact-content">
           <h4>Architecture Diagrams</h4>
           <p>5 Mermaid diagrams: system topology, entity-relationship, user flows, API sequences, component tree. Generated from your vision and tech stack.</p>
         </div>
       </div>
       <div class="artifact-step">
-        <div class="artifact-number">5</div>
+        <div class="artifact-number">6</div>
         <div class="artifact-content">
           <h4>Roadmap</h4>
           <p>Features from your vision, prioritized into MVP (Tier 1), Growth (Tier 2), and Future (Tier 3). Dependencies mapped between features.</p>
         </div>
       </div>
       <div class="artifact-step">
-        <div class="artifact-number">6</div>
+        <div class="artifact-number">7</div>
         <div class="artifact-content">
           <h4>CLAUDE.md</h4>
           <p>Project conventions synthesized from all prior artifacts. Under 200 lines &mdash; every line earns its token cost.</p>
@@ -224,10 +232,47 @@ const badVisionExamples = `# Bad examples — too vague for VibeCrew to act on
 
   <hr>
 
+  <!-- ── Competitive Analysis ── -->
+  <section class="section" id="competitive-analysis">
+    <h3>Competitive Analysis <span class="badge-inline">Optional</span></h3>
+    <p>After VISION.md is approved, VibeCrew offers to research your market before continuing with design. The <strong>Market Scout</strong> agent (Opus, worktree-isolated) uses WebSearch and Chrome DevTools to investigate competitors.</p>
+
+    <Callout type="info">
+      This step is optional. VibeCrew asks "Would you like me to research competitors?" &mdash; say no to skip straight to design. For <code>full_auto</code> profiles, it auto-detects market-facing products and runs automatically.
+    </Callout>
+
+    <h4>What You Get</h4>
+    <div class="tips-grid">
+      <div class="tip-item">
+        <strong>Competitor landscape.</strong> Top 5 competitors identified with their positioning, target audience, pricing model, and key differentiators.
+      </div>
+      <div class="tip-item">
+        <strong>Feature comparison matrix.</strong> Your planned features mapped against each competitor &mdash; showing gaps and overlaps at a glance.
+      </div>
+      <div class="tip-item">
+        <strong>Market gaps.</strong> Features, audiences, or price points that no competitor serves well &mdash; your differentiation opportunities.
+      </div>
+      <div class="tip-item">
+        <strong>Positioning recommendation.</strong> Where to position your product and which angle to lead with, based on the competitive landscape.
+      </div>
+    </div>
+
+    <h4>Interactive Recommendations</h4>
+    <p>After presenting the analysis, VibeCrew walks you through each feature recommendation one by one:</p>
+    <ul>
+      <li><strong>Add to backlog</strong> &mdash; the feature goes into your backlog as a suggestion, ready for <code>/plan-features</code></li>
+      <li><strong>Skip</strong> &mdash; move to the next recommendation</li>
+      <li><strong>Modify</strong> &mdash; edit the feature name or description before adding</li>
+    </ul>
+    <p>Positioning insights can optionally be appended to VISION.md, enriching it for downstream steps. The full analysis is saved to <code>docs/competitive-analysis.md</code>.</p>
+  </section>
+
+  <hr>
+
   <!-- ── Design System ── -->
   <section class="section" id="design-system">
     <h3>Dealing with an Existing Style Guide</h3>
-    <p>Step 2 of the foundation creates your design tokens (<code>design-system.css</code>) and design rationale (<code>design-brief.md</code>). If you already have a style guide, brand kit, or component library, you don't need to go through the full 10-question design interview &mdash; VibeCrew can import your existing tokens directly.</p>
+    <p>Step 3 of the foundation creates your design tokens (<code>design-system.css</code>) and design rationale (<code>design-brief.md</code>). If you already have a style guide, brand kit, or component library, you don't need to go through the full 10-question design interview &mdash; VibeCrew can import your existing tokens directly.</p>
 
     <h4>The Pre-Design Gate</h4>
     <p>Before the design interview starts, VibeCrew asks one question: <em>"Do you have an existing design system or style guide you'd like to import?"</em></p>
@@ -476,6 +521,8 @@ const badVisionExamples = `# Bad examples — too vague for VibeCrew to act on
 .artifact-content { flex: 1; min-width: 0; }
 .artifact-content h4 { margin: 0 0 0.35rem; font-size: 1.05rem; }
 .artifact-content p { font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.7; margin: 0; }
+.artifact-optional .artifact-number { background: var(--color-bg-tertiary); color: var(--color-text-secondary); border: 1px dashed var(--color-border); }
+.badge-inline { font-size: 0.7rem; font-weight: 600; color: var(--color-text-secondary); background: var(--color-bg-tertiary); padding: 0.15rem 0.5rem; border-radius: 0.75rem; vertical-align: middle; margin-left: 0.4rem; }
 
 .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
 .tip-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; }

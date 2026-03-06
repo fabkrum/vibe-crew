@@ -408,6 +408,21 @@ If the feature involves landing pages, marketing pages, blog posts, documentatio
 
 Severity: All SEO findings are `warning` unless noted. Category: `"seo-compliance"`.
 
+### Step 10.25: Head Order Compliance
+
+If the feature involves HTML pages, layouts, document templates, or `<head>` element modifications, read `${CLAUDE_PLUGIN_ROOT}/templates/head-order-patterns.md`. Check:
+
+1. **Charset first** — `<meta charset="utf-8">` is the first element in `<head>`. Flag charset after other elements as `critical`.
+2. **CSP before scripts** — If a `<meta http-equiv="content-security-policy">` exists, it precedes all `<script>` elements. Flag CSP after any script as `critical`.
+3. **Sync scripts before sync CSS** — Synchronous `<script src>` tags (no async/defer) appear before `<link rel="stylesheet">` and `<style>` tags, unless the script depends on CSSOM. Flag sync scripts after stylesheets as `warning`.
+4. **Static async over snippets** — Async scripts use `<script async src>` in HTML markup, not JavaScript-injected snippet patterns. Flag dynamically created script elements for resources that could be static `<script async>` as `warning`.
+5. **SEO/social tags last** — OG tags, meta description, canonical, favicons, and alternate links appear after all render-critical resources (scripts, stylesheets, preloads). Flag OG/description/icon tags before stylesheets or scripts as `warning`.
+6. **No redundant attributes** — Scripts do not have both `async` and `defer`. Flag `async defer` on the same script as `info`.
+7. **No @import** — Stylesheets use `<link>` tags, not `@import`. Flag `@import` in `<style>` tags as `warning`.
+8. **Preconnect budget** — No more than 4 `<link rel="preconnect">` hints. Unused preconnects waste connections. Flag 5+ preconnects as `info`.
+
+Severity: All head order findings are `warning` unless noted. Category: `"head-order-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:
@@ -450,7 +465,7 @@ mkdir -p .vibecrew/reviews
   "findings": [
     {
       "severity": "critical|warning|info",
-      "category": "correctness|tdr-compliance|architecture-consistency|convention|code-quality|design-system|visual-compliance|error-handling|test-coverage|security|performance|business-patterns|dark-pattern-compliance",
+      "category": "correctness|tdr-compliance|architecture-consistency|convention|code-quality|design-system|visual-compliance|error-handling|test-coverage|security|performance|business-patterns|dark-pattern-compliance|head-order-compliance",
       "file": "src/components/Example.tsx",
       "line": 42,
       "title": "Short finding title",

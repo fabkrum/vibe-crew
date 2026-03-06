@@ -67,6 +67,7 @@ export const navigation: NavGroup[] = [
       { title: 'Authentication Patterns', slug: 'auth-patterns' },
       { title: 'Media Patterns', slug: 'media-patterns' },
       { title: 'Collaboration Patterns', slug: 'collaboration-patterns' },
+      { title: 'Settings Patterns', slug: 'settings-patterns' },
       { title: 'Dark Patterns to Avoid', slug: 'dark-patterns' },
       { title: 'Glossary', slug: 'glossary' },
     ],

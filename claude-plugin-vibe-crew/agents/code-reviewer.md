@@ -355,6 +355,18 @@ If the feature involves real-time collaboration, multi-user editing, presence in
 
 Severity: All collaboration findings are `warning` unless noted. Category: `"collaboration-compliance"`.
 
+### Step 10.21: Settings Pattern Compliance
+
+If the feature involves settings pages, user preferences, account management, profile editing, billing, subscription plans, security settings, API keys, privacy controls, or data export, read `${CLAUDE_PLUGIN_ROOT}/templates/settings-patterns.md`. Check:
+
+1. **Auto-save feedback** — Toggle/select settings auto-save with visible feedback (checkmark, "Saved" label). Text input settings debounce before saving (not on every keystroke). Flag missing save feedback as `warning`. Flag per-keystroke API calls as `critical`.
+2. **Danger Zone isolation** — Destructive actions (account deletion, data deletion) are visually isolated in a red-bordered "Danger Zone" section with multi-step confirmation (typed input + password). Flag one-click destructive actions as `critical`.
+3. **Theme WCAG compliance** — If implementing dark mode, both themes meet WCAG 2.1 AA contrast ratios (4.5:1 text, 3:1 UI components). Dark theme avoids pure #000 backgrounds. Flag failing contrast in either theme as `critical`.
+4. **Privacy-preserving defaults** — Non-essential data collection toggles default to off (privacy by default). Cookie consent "Accept All" and "Reject" buttons are visually equal (no dark pattern). Flag pre-enabled non-essential tracking as `warning`.
+5. **API key security** — Full API keys shown only once at creation with copy + warning. Only key prefixes displayed after creation. Revocation requires confirmation. Flag stored/displayed full keys as `critical`.
+
+Severity: All settings findings are `warning` unless noted. Category: `"settings-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

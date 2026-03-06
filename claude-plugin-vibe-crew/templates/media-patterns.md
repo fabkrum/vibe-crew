@@ -160,8 +160,9 @@ Agent-facing reference for media-rich interfaces — image galleries, video play
 
 ### Image Format Optimization
 - **When:** Every image pipeline. AVIF saves ~50%, WebP ~30% vs JPEG.
-- **What:** `<picture>` with AVIF, WebP, JPEG sources. Build pipeline: sharp or squoosh. CDN auto-format.
-- **A11y:** Format has zero accessibility impact. SVG icons: `role="img"` + `aria-label` when meaningful.
+- **What:** `<picture>` with AVIF, WebP, JPEG sources. Build pipeline: sharp or squoosh. CDN auto-format. **Never use animated GIFs** — for any looping/animated visual, use `<video autoplay muted loop playsinline>` with MP4/WebM sources (80-90% smaller, hardware decoded). Convert with ffmpeg: `ffmpeg -i anim.gif -movflags +faststart -pix_fmt yuv420p output.mp4`.
+- **A11y:** Format has zero accessibility impact. SVG icons: `role="img"` + `aria-label` when meaningful. Silent autoloop videos: `role="img"` + `aria-label`, pause on `prefers-reduced-motion`.
+- **Anti-pattern:** Never use animated GIF for any purpose. Always use silent autolooping `<video>` instead.
 
 ### Blur-Up Placeholder (LQIP)
 - **When:** Image-heavy pages. Instant visual context while loading.

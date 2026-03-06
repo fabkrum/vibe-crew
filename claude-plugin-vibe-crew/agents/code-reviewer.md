@@ -339,6 +339,7 @@ If the feature involves image galleries, video players, audio playback, file upl
 6. **Upload validation** — File uploads validate type and size client-side before upload starts with specific error messages. Drag-and-drop always includes a button fallback. Flag drag-only upload as `warning`.
 7. **Video captions** — Prerecorded videos include captions via `<track>` element (WCAG 1.2.2). Flag videos without caption support as `critical`.
 8. **Data-saver awareness** — Media-heavy pages check `Save-Data` header or `navigator.connection?.saveData` and serve lighter assets when active. Alt text, captions, and transcripts must always be served regardless of Save-Data. Flag media-heavy pages that ignore `Save-Data` as `info`.
+9. **No animated GIFs** — Animated content must use `<video autoplay muted loop playsinline>` with MP4/WebM sources, never animated GIF. Silent autoloop videos are 80-90% smaller and support hardware decoding. Flag animated GIF usage as `critical`.
 
 Severity: All media findings are `warning` unless noted. Category: `"media-compliance"`.
 

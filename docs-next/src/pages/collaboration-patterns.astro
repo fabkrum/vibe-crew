@@ -1,0 +1,150 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import CollaborationPatternIllustration from '../components/patterns/CollaborationPatternIllustration.astro';
+import { collaborationPatterns, categoryLabels, categoryOrder } from '../data/collaboration-patterns';
+import type { CollaborationPattern } from '../data/collaboration-patterns';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = collaborationPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof collaborationPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<CollaborationPattern['category'], string> = {
+  presence: 'Presence patterns -- online status indicators, avatar stacks, participant lists, typing indicators, and live cursors for showing who is active in a shared space.',
+  editing: 'Collaborative editing patterns -- real-time text editing with CRDTs, selection highlighting, conflict resolution, optimistic updates, and section locking.',
+  communication: 'Communication patterns -- inline comments, @mentions, emoji reactions, activity feeds, and threaded replies for team interaction within shared content.',
+  history: 'History patterns -- version history, diff visualization, undo/redo, audit logs, and named restore points for tracking and reverting changes.',
+  sync: 'Sync patterns -- WebSocket connections, reconnection strategies, offline mode, event sourcing, and broadcast updates for real-time data synchronization.',
+  permissions: 'Permission patterns -- role-based access control, share dialogs, permission indicators, guest access, and access request flows for managing who can do what.',
+};
+---
+
+<DocsLayout title="Collaboration Patterns" sectionLabel="Reference" activeSlug="collaboration-patterns">
+
+  <h2>Collaboration & Real-time Patterns</h2>
+  <p>Research-backed patterns for multi-user, real-time collaborative interfaces that VibeCrew agents apply when building shared workspaces, collaborative editors, team communication, and permission systems. Each pattern includes implementation guidance, accessibility requirements, and anti-patterns based on Liveblocks, Yjs, Google Docs, Figma, Slack, NN/G, and W3C WAI research.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()&+@]/g, '-')}>
+            <div class="pattern-card-inner">
+              <CollaborationPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Implementation</span>
+                    <p>{entry.implementation}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Accessibility</span>
+                    <p>{entry.a11y}</p>
+                  </div>
+                  {entry.docsUrl && (
+                    <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Add real-time collaboration"</td><td>WebSocket Connection + Reconnection Strategy + Collaborative Text Editing (Yjs/CRDT) + User Cursors + Selection Highlighting + Avatar Stack + Typing Indicator + Broadcast Updates</td></tr>
+        <tr><td>"Add comments"</td><td>Inline Comments with highlight markers + Threaded Replies + @Mention Autocomplete + Emoji Reactions + resolved/re-opened states + Activity Feed entries</td></tr>
+        <tr><td>"Add version history"</td><td>Version History with named Restore Points + Diff Visualization (unified + side-by-side) + Undo/Redo Stack + Audit Log for compliance</td></tr>
+        <tr><td>"Add sharing"</td><td>Share Dialog with email invite + Role-Based Access Control (Owner/Editor/Viewer) + Permission Indicator in toolbar + Guest Access via link + Access Request flow</td></tr>
+        <tr><td>"Make it work offline"</td><td>Offline Mode with IndexedDB queue + Reconnection Strategy with exponential backoff + Conflict Resolution Dialog + Event Sourcing for reliable sync</td></tr>
+        <tr><td>"Show who's online"</td><td>Online Status Indicator (green/yellow/gray badges) + Avatar Stack with overflow count + Participant List sidebar + Typing Indicator in inputs</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Patterns</h3>
+    <p class="category-description">These patterns on other pages complement collaboration interfaces. They are referenced here rather than duplicated -- click through for full details.</p>
+    <ul class="related-links">
+      <li><a href="/ui-patterns#optimistic-ui">Optimistic UI</a> &mdash; General optimistic update pattern for responsive interfaces (UI Patterns)</li>
+      <li><a href="/ui-patterns#stale-while-revalidate">Stale-While-Revalidate</a> &mdash; Cache strategy for real-time data freshness (UI Patterns)</li>
+      <li><a href="/ui-patterns#avatar">Avatar</a> &mdash; User avatar component for presence displays (UI Patterns)</li>
+      <li><a href="/ui-patterns#badge">Badge</a> &mdash; Status badges for online indicators and counts (UI Patterns)</li>
+      <li><a href="/notification-patterns#toast-notification">Toast Notification</a> &mdash; Transient alerts for collaboration events (Notification Patterns)</li>
+      <li><a href="/notification-patterns#live-region">Live Region</a> &mdash; ARIA live regions for real-time announcements (Notification Patterns)</li>
+      <li><a href="/auth-patterns#session-management">Session Management</a> &mdash; Session handling for authenticated collaboration (Authentication Patterns)</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://liveblocks.io/docs" target="_blank" rel="noopener noreferrer">Liveblocks Documentation</a> &mdash; Complete real-time collaboration infrastructure (presence, storage, comments)</li>
+      <li><a href="https://docs.yjs.dev/" target="_blank" rel="noopener noreferrer">Yjs Documentation</a> &mdash; CRDT framework for collaborative editing</li>
+      <li><a href="https://automerge.org/" target="_blank" rel="noopener noreferrer">Automerge</a> &mdash; Alternative CRDT library for peer-to-peer collaboration</li>
+      <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/" target="_blank" rel="noopener noreferrer">W3C WAI ARIA Patterns</a> &mdash; Accessibility patterns for live regions and dynamic content</li>
+      <li><a href="https://www.nngroup.com/articles/collaborating-in-digital-spaces/" target="_blank" rel="noopener noreferrer">NN/G: Collaborating in Digital Spaces</a> &mdash; UX research on collaborative interfaces</li>
+      <li><a href="https://supabase.com/realtime" target="_blank" rel="noopener noreferrer">Supabase Realtime</a> &mdash; Real-time presence, broadcast, and database changes</li>
+      <li><a href="https://socket.io/docs/v4/" target="_blank" rel="noopener noreferrer">Socket.IO Documentation</a> &mdash; WebSocket library with fallbacks and rooms</li>
+      <li><a href="https://crdt.tech/" target="_blank" rel="noopener noreferrer">CRDT.tech</a> &mdash; Resources and research on Conflict-free Replicated Data Types</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .category-nav a { padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .category-nav a:hover { background: var(--color-accent-bg); color: var(--color-accent); text-decoration: none; }
+  .category-heading { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; margin-top: 2rem; }
+  .category-description { margin: 0 0 1.25rem; font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .pattern-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .pattern-card { padding: 1.25rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-surface); }
+  .pattern-card-inner { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .pattern-content { flex: 1; min-width: 0; }
+  @media (max-width: 600px) { .pattern-card-inner { flex-direction: column; } }
+  .pattern-name { font-size: 1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.5rem; }
+  .pattern-desc { font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.75rem; }
+  .pattern-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta-block { font-size: 0.85rem; line-height: 1.5; }
+  .meta-block p { margin: 0; color: var(--color-text-secondary); }
+  .meta-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-right: 0.35rem; }
+  .docs-link { display: inline-block; margin-top: 0.25rem; font-size: 0.82rem; font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+  .further-reading { margin-top: 3rem; }
+  .further-reading ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .further-reading li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .further-reading li:last-child { border-bottom: none; }
+  .further-reading a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .further-reading a:hover { text-decoration: underline; }
+</style>

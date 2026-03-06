@@ -342,6 +342,19 @@ If the feature involves image galleries, video players, audio playback, file upl
 
 Severity: All media findings are `warning` unless noted. Category: `"media-compliance"`.
 
+### Step 10.20: Collaboration Pattern Compliance
+
+If the feature involves real-time collaboration, multi-user editing, presence indicators, comments, sharing, version history, live cursors, or permission management, read `${CLAUDE_PLUGIN_ROOT}/templates/collaboration-patterns.md`. Check:
+
+1. **WebSocket reconnection** — Real-time features use exponential backoff with jitter for reconnection, not fixed-interval retry. A visible connection status banner appears during disconnection. Flag missing reconnection strategy as `critical`. Flag fixed-interval retry as `warning`.
+2. **Optimistic rollback announcement** — Optimistic updates announce rollbacks via aria-live="assertive" when the server rejects a change. Flag silent rollbacks as `warning`.
+3. **Live region throttling** — Real-time updates use aria-live="polite" and batch announcements to avoid overwhelming screen readers. Flag aria-live="assertive" on non-urgent real-time updates as `warning`. Flag per-character announcements as `critical`.
+4. **Permission enforcement** — Role-based controls are enforced server-side, not just hidden client-side. Disabled controls use aria-disabled with aria-describedby explaining the restriction. Flag client-only permission checks as `critical`.
+5. **Conflict resolution** — Concurrent edit conflicts surface a resolution UI (or auto-merge via CRDT) rather than silently discarding changes. Flag silent last-write-wins on user-facing content as `warning`.
+6. **Offline graceful degradation** — If the feature has offline mode, mutations queue locally and sync on reconnect. Controls remain functional with "pending sync" indicators. Flag features that disable entirely when offline as `warning`.
+
+Severity: All collaboration findings are `warning` unless noted. Category: `"collaboration-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

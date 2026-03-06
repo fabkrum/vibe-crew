@@ -1,0 +1,152 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import DatavizPatternIllustration from '../components/patterns/DatavizPatternIllustration.astro';
+import { datavizPatterns, categoryLabels, categoryOrder } from '../data/dataviz-patterns';
+import type { DatavizPattern } from '../data/dataviz-patterns';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = datavizPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof datavizPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<DatavizPattern['category'], string> = {
+  'chart-types': 'Core chart types and when to use each one — line, bar, area, pie, scatter, heatmap, sparkline, gauge, funnel, treemap, Sankey, and KPI cards for every data story.',
+  composition: 'Dashboard layout patterns — grid composition, global filters, card structure, tabbed views, comparison layouts, and empty states that turn charts into coherent dashboards.',
+  interaction: 'Interactive chart features — tooltips, crosshairs, brush selection, drill-down, legends, annotations, and export that let users explore data on their terms.',
+  accessibility: 'Accessibility patterns for data visualization — data table alternatives, color-blind palettes, ARIA containers, keyboard navigation, high contrast, and sonification.',
+  'real-time': 'Real-time and streaming data patterns — live-updating charts, threshold alerts, auto-refresh indicators, data buffering, time window selectors, and table sparklines.',
+  responsive: 'Responsive chart patterns — fluid containers, axis label rotation, mobile simplification, skeleton loading, stacked-to-scrollable layouts, and print optimization.',
+};
+---
+
+<DocsLayout title="Data Visualization Patterns" sectionLabel="Reference" activeSlug="dataviz-patterns">
+
+  <h2>Data Visualization Patterns</h2>
+  <p>Research-backed patterns for charts, dashboards, and data visualization that VibeCrew agents apply when building analytics views, monitoring dashboards, reporting interfaces, and any UI that turns data into insight. Each pattern includes implementation guidance with shadcn/Recharts/Tremor and accessibility requirements.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()&+]/g, '-')}>
+            <div class="pattern-card-inner">
+              <DatavizPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Implementation</span>
+                    <p>{entry.implementation}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Accessibility</span>
+                    <p>{entry.a11y}</p>
+                  </div>
+                  {entry.docsUrl && (
+                    <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Add a dashboard"</td><td>Dashboard Grid Layout + KPI Cards (top) + Chart Cards + Global Filters + Responsive Container</td></tr>
+        <tr><td>"Show a chart of revenue"</td><td>Line Chart + Tooltip + Chart Card with Header + Data Table Alternative + Color-Blind Safe Palette</td></tr>
+        <tr><td>"Compare this month vs last"</td><td>Comparison Layout (solid vs dashed lines) + Tooltip with both values + Legend toggle</td></tr>
+        <tr><td>"Show conversion rates"</td><td>Funnel Chart with stage labels + percentage drop-off + KPI Card for overall rate</td></tr>
+        <tr><td>"Real-time monitoring"</td><td>Live-Updating Chart + Threshold Alerts + Auto-Refresh Indicator + Time Window Selector</td></tr>
+        <tr><td>"Make the charts accessible"</td><td>Data Table Alternative + Color-Blind Safe Palette + Chart Container ARIA + Keyboard-Navigable Points</td></tr>
+        <tr><td>"A metrics overview"</td><td>KPI Cards (3-5) with sparklines + Tabbed Dashboard Views + Chart Skeleton Loading</td></tr>
+        <tr><td>"Show activity over time"</td><td>Heatmap (day x hour grid) + Tooltip on Hover + Color-Blind Safe sequential palette</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Patterns</h3>
+    <p class="category-description">These patterns on other pages complement data visualization interfaces. They are referenced here rather than duplicated — click through for full details.</p>
+    <ul class="related-links">
+      <li><a href="/ui-patterns#chart">Chart</a> &mdash; Base chart component overview (UI Patterns)</li>
+      <li><a href="/ui-patterns#data-table">Data Table</a> &mdash; Sortable, filterable tables for structured data (UI Patterns)</li>
+      <li><a href="/ui-patterns#skeleton">Skeleton Loading</a> &mdash; Placeholder loading states for any component (UI Patterns)</li>
+      <li><a href="/ui-patterns#card">Card</a> &mdash; Content container used for dashboard widgets (UI Patterns)</li>
+      <li><a href="/ui-patterns#tabs">Tabs</a> &mdash; Tab navigation pattern used for dashboard views (UI Patterns)</li>
+      <li><a href="/ui-patterns#stale-while-revalidate">Stale-While-Revalidate</a> &mdash; Background refresh for dashboard data (UI Patterns)</li>
+      <li><a href="/filter-search-patterns#sidebar-filters">Sidebar Filters</a> &mdash; Filter controls for dashboard data (Filter &amp; Search Patterns)</li>
+      <li><a href="/business-patterns#sample-data-preview">Sample Data Preview</a> &mdash; Show realistic sample data in empty dashboards (Business Patterns)</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://www.nngroup.com/articles/dashboards-preattentive/" target="_blank" rel="noopener noreferrer">NN/G: Dashboards — Preattentive Processing</a> &mdash; Making charts and graphs easier to understand</li>
+      <li><a href="https://www.nngroup.com/articles/choosing-chart-types/" target="_blank" rel="noopener noreferrer">NN/G: Choosing Chart Types</a> &mdash; Consider context when selecting visualizations</li>
+      <li><a href="https://www.smashingmagazine.com/2023/01/guide-getting-data-visualization-right/" target="_blank" rel="noopener noreferrer">Smashing: Getting Data Visualization Right</a> &mdash; Comprehensive guide to effective dataviz</li>
+      <li><a href="https://www.smashingmagazine.com/2025/09/ux-strategies-real-time-dashboards/" target="_blank" rel="noopener noreferrer">Smashing: UX Strategies for Real-Time Dashboards</a> &mdash; Patterns for live data displays</li>
+      <li><a href="https://www.w3.org/wiki/SVG_Accessibility/ARIA_roles_for_charts" target="_blank" rel="noopener noreferrer">W3C: ARIA Roles for Charts</a> &mdash; SVG accessibility for data visualizations</li>
+      <li><a href="https://ui.shadcn.com/docs/components/chart" target="_blank" rel="noopener noreferrer">shadcn/ui: Chart Component</a> &mdash; Recharts-based chart components</li>
+      <li><a href="https://www.tremor.so/" target="_blank" rel="noopener noreferrer">Tremor</a> &mdash; React dashboard components built on Recharts + Tailwind</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .category-nav a { padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .category-nav a:hover { background: var(--color-accent-bg); color: var(--color-accent); text-decoration: none; }
+  .category-heading { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; margin-top: 2rem; }
+  .category-description { margin: 0 0 1.25rem; font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .pattern-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .pattern-card { padding: 1.25rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-surface); }
+  .pattern-card-inner { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .pattern-content { flex: 1; min-width: 0; }
+  @media (max-width: 600px) { .pattern-card-inner { flex-direction: column; } }
+  .pattern-name { font-size: 1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.5rem; }
+  .pattern-desc { font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.75rem; }
+  .pattern-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta-block { font-size: 0.85rem; line-height: 1.5; }
+  .meta-block p { margin: 0; color: var(--color-text-secondary); }
+  .meta-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-right: 0.35rem; }
+  .docs-link { display: inline-block; margin-top: 0.25rem; font-size: 0.82rem; font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+  .further-reading { margin-top: 3rem; }
+  .further-reading ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .further-reading li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .further-reading li:last-child { border-bottom: none; }
+  .further-reading a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .further-reading a:hover { text-decoration: underline; }
+</style>

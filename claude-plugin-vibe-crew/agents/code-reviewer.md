@@ -275,6 +275,32 @@ Read `${CLAUDE_PLUGIN_ROOT}/templates/dark-patterns.md`. Check the implementatio
 
 Severity: All dark pattern findings are `warning`. Category: `"dark-pattern-compliance"`.
 
+### Step 10.15: Filter & Search Compliance
+
+If the feature involves list views, search, filtering, or sorting, read `${CLAUDE_PLUGIN_ROOT}/templates/filter-search-patterns.md`. Check:
+
+1. **Search landmark** — Search UI wrapped in `<search>` or `role="search"`. Flag missing landmark as `warning`.
+2. **Live result count** — Filter/search changes announce result count via `aria-live="polite"`. Flag missing announcements as `warning`.
+3. **URL sync** — Active query, filters, sort, and pagination serialized in URL params for shareability and back-button support. Flag missing URL sync as `warning`.
+4. **Filter chips** — Active filters shown as removable chips with "Clear all". Flag hidden active filters as `warning`.
+5. **Keyboard navigation** — All filter controls keyboard-operable; logical tab order; visible focus indicators. Flag inaccessible controls as `warning`.
+6. **Mobile adaptation** — Filters behind bottom sheet or collapsible panel on mobile, not a desktop sidebar. Flag desktop-only filter layout as `info`.
+
+Severity: All filter & search findings are `warning` unless noted. Category: `"filter-search-compliance"`.
+
+### Step 10.16: Data Visualization Compliance
+
+If the feature involves charts, dashboards, or data visualization, read `${CLAUDE_PLUGIN_ROOT}/templates/dataviz-patterns.md`. Check:
+
+1. **Data table alternative** — Every chart has a toggle to view data as a table. Flag charts without table alternative as `warning`.
+2. **Color-blind safety** — Chart series use color + a secondary differentiator (shape, pattern, line style). Flag color-only differentiation as `warning`.
+3. **Chart container ARIA** — Chart wrapper has `role="img"` with descriptive `aria-label` (chart type, subject, key trend). Flag missing ARIA as `warning`.
+4. **Responsive container** — Charts use responsive width (not fixed pixels). Flag fixed-width charts as `warning`.
+5. **Chart type selection** — Chart type matches the data story (e.g., not pie chart with 15 slices, not line chart for categorical data). Flag mismatched chart types as `info`.
+6. **Tooltip accessibility** — Tooltips appear on keyboard focus, not just mouse hover. Flag hover-only tooltips as `warning`.
+
+Severity: All dataviz findings are `warning` unless noted. Category: `"dataviz-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

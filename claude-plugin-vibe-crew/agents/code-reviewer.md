@@ -396,6 +396,18 @@ If the feature involves social media links, share buttons, social embeds, social
 
 Severity: All social findings are `warning` unless noted. Category: `"social-compliance"`.
 
+### Step 10.24: SEO & Discoverability Compliance
+
+If the feature involves landing pages, marketing pages, blog posts, documentation, product pages, public-facing content, or any page that should be indexed by search engines or discoverable by AI agents, read `${CLAUDE_PLUGIN_ROOT}/templates/seo-patterns.md`. Check:
+
+1. **Meta completeness** — Every public page has a unique `<title>`, `<meta name="description">`, OG tags (`og:title`, `og:description`, `og:image`, `og:url`), and `<link rel="canonical">`. Flag missing title or description as `critical`. Flag missing OG tags as `warning`.
+2. **Structured data validity** — JSON-LD blocks are valid JSON with correct Schema.org types. Required properties are present per schema type. No deprecated schema types. No duplicate schema types on the same page. Flag invalid JSON-LD as `critical`. Flag missing required properties as `warning`.
+3. **Heading hierarchy** — Single `<h1>` per page. No skipped heading levels (h2 to h4). Headings are descriptive. Flag multiple `<h1>` as `warning`. Flag skipped levels as `info`.
+4. **Image accessibility/SEO** — All `<img>` tags have `alt` attributes. Below-fold images have `loading="lazy"`. Images have explicit `width`/`height`. Flag missing alt as `critical` (also a11y). Flag missing dimensions as `warning`.
+5. **AI discoverability** — If the project has a public docs site or marketing site: `llms.txt` exists at root, `robots.txt` exists with sitemap directive, semantic HTML landmarks (`<main>`, `<article>`, `<nav>`) are used. Flag missing `llms.txt` as `info`. Flag missing `robots.txt` as `warning`.
+
+Severity: All SEO findings are `warning` unless noted. Category: `"seo-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

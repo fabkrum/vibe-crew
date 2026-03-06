@@ -86,28 +86,6 @@ export const seoPatternSvgs: Record<string, string> = {
   <text x="109" y="91" style="fill: var(--color-accent); font-size: 5px; font-family: sans-serif" opacity="0.6">Setup</text>
 </svg>`,
 
-'Performance Signals': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
-  <text x="35" y="28" style="fill: var(--color-text); font-size: 6px; font-weight: bold" opacity="0.4">LCP</text>
-  <text x="90" y="28" style="fill: var(--color-text); font-size: 6px; font-weight: bold" opacity="0.4">INP</text>
-  <text x="145" y="28" style="fill: var(--color-text); font-size: 6px; font-weight: bold" opacity="0.4">CLS</text>
-  <path d="M30 85 A25 25 0 0 1 55 35" style="stroke: var(--color-accent)" stroke-width="3" fill="none" opacity="0.2" stroke-linecap="round"/>
-  <path d="M30 85 A25 25 0 0 1 50 42" style="stroke: var(--color-accent)" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round"/>
-  <text x="34" y="68" style="fill: var(--color-accent); font-size: 8px; font-weight: bold" opacity="0.7">1.8s</text>
-  <path d="M85 85 A25 25 0 0 1 110 35" style="stroke: var(--color-accent)" stroke-width="3" fill="none" opacity="0.2" stroke-linecap="round"/>
-  <path d="M85 85 A25 25 0 0 1 107 40" style="stroke: var(--color-accent)" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round"/>
-  <text x="87" y="68" style="fill: var(--color-accent); font-size: 8px; font-weight: bold" opacity="0.7">120ms</text>
-  <path d="M140 85 A25 25 0 0 1 165 35" style="stroke: var(--color-accent)" stroke-width="3" fill="none" opacity="0.2" stroke-linecap="round"/>
-  <path d="M140 85 A25 25 0 0 1 163 38" style="stroke: var(--color-accent)" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round"/>
-  <text x="145" y="68" style="fill: var(--color-accent); font-size: 8px; font-weight: bold" opacity="0.7">0.05</text>
-  <rect x="25" y="92" width="50" height="6" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
-  <rect x="25" y="92" width="40" height="6" rx="3" style="fill: var(--color-accent)" opacity="0.3"/>
-  <rect x="85" y="92" width="50" height="6" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
-  <rect x="85" y="92" width="35" height="6" rx="3" style="fill: var(--color-accent)" opacity="0.3"/>
-  <rect x="145" y="92" width="30" height="6" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
-  <rect x="145" y="92" width="28" height="6" rx="3" style="fill: var(--color-accent)" opacity="0.3"/>
-</svg>`,
-
 'Open Graph Tags': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
   <rect x="30" y="20" width="140" height="55" rx="4" style="stroke: var(--color-border)" stroke-width="1"/>
@@ -256,6 +234,79 @@ export const seoPatternSvgs: Record<string, string> = {
   <rect x="30" y="72" width="140" height="24" rx="4" style="fill: var(--color-text)" opacity="0.03"/>
   <text x="38" y="83" style="fill: var(--color-accent); font-size: 5.5px; font-family: monospace" opacity="0.5">"@type": "SoftwareApplication"</text>
   <text x="38" y="91" style="fill: var(--color-text); font-size: 5px; font-family: monospace" opacity="0.3">"applicationCategory": "Dev..."</text>
+</svg>`,
+
+'Product Schema': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="25" y="20" width="55" height="55" rx="6" style="fill: var(--color-accent)" opacity="0.08"/>
+  <rect x="33" y="28" width="39" height="39" rx="4" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="44" y="52" style="fill: var(--color-accent); font-size: 14px" opacity="0.4">P</text>
+  <rect x="90" y="24" width="80" height="5" rx="2" style="fill: var(--color-text)" opacity="0.2"/>
+  <rect x="90" y="33" width="60" height="3" rx="1.5" style="fill: var(--color-text)" opacity="0.1"/>
+  <text x="90" y="50" style="fill: var(--color-accent); font-size: 9px; font-weight: bold" opacity="0.6">$29/mo</text>
+  <rect x="90" y="55" width="40" height="8" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
+  <text x="95" y="61" style="fill: var(--color-accent); font-size: 5px" opacity="0.5">In Stock</text>
+  <path d="M90 68 L95 68 L95 66 L100 66 L100 68 L105 68 L105 66 L110 66 L110 68" style="stroke: var(--color-accent); fill: none" stroke-width="1" opacity="0.4"/>
+  <text x="113" y="69" style="fill: var(--color-accent); font-size: 5px" opacity="0.4">4.8</text>
+  <rect x="25" y="82" width="150" height="20" rx="4" style="fill: var(--color-text)" opacity="0.03"/>
+  <text x="33" y="93" style="fill: var(--color-accent); font-size: 5.5px; font-family: monospace" opacity="0.5">"@type": "Product"</text>
+  <text x="33" y="99" style="fill: var(--color-text); font-size: 5px; font-family: monospace" opacity="0.3">"offers": {"price": "29"}</text>
+</svg>`,
+
+'Organization Schema': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="25" y="20" width="60" height="40" rx="6" style="fill: var(--color-accent)" opacity="0.08"/>
+  <rect x="35" y="26" width="40" height="28" rx="4" style="fill: var(--color-accent)" opacity="0.15"/>
+  <circle cx="55" cy="37" r="7" style="fill: var(--color-accent)" opacity="0.3"/>
+  <text x="51" y="41" style="fill: var(--color-surface); font-size: 8px; font-weight: bold">O</text>
+  <rect x="40" y="47" width="30" height="3" rx="1.5" style="fill: var(--color-text)" opacity="0.15"/>
+  <rect x="95" y="22" width="80" height="5" rx="2" style="fill: var(--color-text)" opacity="0.2"/>
+  <rect x="95" y="31" width="60" height="3" rx="1.5" style="fill: var(--color-text)" opacity="0.1"/>
+  <rect x="95" y="38" width="70" height="3" rx="1.5" style="fill: var(--color-text)" opacity="0.08"/>
+  <circle cx="100" cy="52" r="5" style="fill: var(--color-accent)" opacity="0.12"/>
+  <circle cx="115" cy="52" r="5" style="fill: var(--color-accent)" opacity="0.12"/>
+  <circle cx="130" cy="52" r="5" style="fill: var(--color-accent)" opacity="0.12"/>
+  <text x="97" y="54" style="fill: var(--color-accent); font-size: 5px" opacity="0.4">X</text>
+  <text x="112" y="54" style="fill: var(--color-accent); font-size: 5px" opacity="0.4">G</text>
+  <text x="127" y="54" style="fill: var(--color-accent); font-size: 5px" opacity="0.4">L</text>
+  <rect x="25" y="68" width="150" height="34" rx="4" style="fill: var(--color-text)" opacity="0.03"/>
+  <text x="33" y="80" style="fill: var(--color-accent); font-size: 5.5px; font-family: monospace" opacity="0.5">"@type": "Organization"</text>
+  <text x="33" y="88" style="fill: var(--color-text); font-size: 5px; font-family: monospace" opacity="0.3">"sameAs": ["twitter...", ...]</text>
+  <text x="33" y="96" style="fill: var(--color-text); font-size: 5px; font-family: monospace" opacity="0.3">"logo": "https://..."</text>
+</svg>`,
+
+'VideoObject Schema': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="25" y="20" width="100" height="56" rx="4" style="fill: var(--color-text)" opacity="0.06"/>
+  <polygon points="65,40 65,56 80,48" style="fill: var(--color-accent)" opacity="0.35"/>
+  <circle cx="75" cy="48" r="14" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" opacity="0.2"/>
+  <rect x="25" y="68" width="100" height="5" rx="2" style="fill: var(--color-accent)" opacity="0.08"/>
+  <rect x="25" y="68" width="65" height="5" rx="2" style="fill: var(--color-accent)" opacity="0.2"/>
+  <text x="135" y="28" style="fill: var(--color-text); font-size: 5px" opacity="0.3">Duration</text>
+  <text x="135" y="37" style="fill: var(--color-accent); font-size: 7px; font-weight: bold" opacity="0.5">5:30</text>
+  <text x="135" y="50" style="fill: var(--color-text); font-size: 5px" opacity="0.3">Uploaded</text>
+  <text x="135" y="59" style="fill: var(--color-accent); font-size: 6px" opacity="0.4">2025-01</text>
+  <rect x="25" y="82" width="150" height="20" rx="4" style="fill: var(--color-text)" opacity="0.03"/>
+  <text x="33" y="93" style="fill: var(--color-accent); font-size: 5.5px; font-family: monospace" opacity="0.5">"@type": "VideoObject"</text>
+  <text x="33" y="99" style="fill: var(--color-text); font-size: 5px; font-family: monospace" opacity="0.3">"duration": "PT5M30S"</text>
+</svg>`,
+
+'Event Schema': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="25" y="20" width="40" height="45" rx="4" style="fill: var(--color-accent)" opacity="0.08"/>
+  <rect x="25" y="20" width="40" height="12" rx="4" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="35" y="29" style="fill: var(--color-surface); font-size: 6px; font-weight: bold">MAR</text>
+  <text x="36" y="50" style="fill: var(--color-accent); font-size: 16px; font-weight: bold" opacity="0.5">15</text>
+  <rect x="75" y="22" width="95" height="5" rx="2" style="fill: var(--color-text)" opacity="0.2"/>
+  <rect x="75" y="31" width="70" height="3" rx="1.5" style="fill: var(--color-text)" opacity="0.1"/>
+  <rect x="75" y="40" width="40" height="8" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
+  <text x="80" y="46" style="fill: var(--color-accent); font-size: 5px" opacity="0.5">Online</text>
+  <rect x="120" y="40" width="40" height="8" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="125" y="46" style="fill: var(--color-accent); font-size: 5px" opacity="0.4">Free</text>
+  <rect x="75" y="53" width="60" height="3" rx="1.5" style="fill: var(--color-text)" opacity="0.08"/>
+  <rect x="25" y="74" width="150" height="28" rx="4" style="fill: var(--color-text)" opacity="0.03"/>
+  <text x="33" y="86" style="fill: var(--color-accent); font-size: 5.5px; font-family: monospace" opacity="0.5">"@type": "Event"</text>
+  <text x="33" y="94" style="fill: var(--color-text); font-size: 5px; font-family: monospace" opacity="0.3">"eventAttendanceMode": "Online"</text>
 </svg>`,
 
 'FAQ Schema': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">

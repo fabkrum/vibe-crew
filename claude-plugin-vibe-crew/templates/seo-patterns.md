@@ -29,12 +29,6 @@ Agent-facing reference for search engine optimization and AI agent discoverabili
 - **A11y:** Clean URLs benefit screen readers (they announce URLs). Descriptive paths > opaque IDs.
 - **Anti-pattern:** Never use IDs, query strings for content, file extensions, underscores, or uppercase in URLs. Never 302 redirect permanent URL changes.
 
-### Performance Signals
-- **When:** Every page. Direct ranking factor.
-- **What:** LCP < 2.5s (preload hero image, inline critical CSS). INP < 200ms (defer non-critical JS, break long tasks). CLS < 0.1 (explicit width/height on images/embeds, CSS aspect-ratio). WebP/AVIF images. HTTP/2. CDN.
-- **A11y:** Performance directly impacts accessibility. Slow pages disproportionately affect assistive technology users. CLS prevention prevents content jumping under screen readers.
-- **Anti-pattern:** Never load render-blocking scripts above the fold. Never omit image dimensions. Never lazy-load above-fold content.
-
 ## 2. Meta Tags
 
 ### Open Graph Tags
@@ -92,6 +86,30 @@ Agent-facing reference for search engine optimization and AI agent discoverabili
 - **What:** `name`, `applicationCategory` ("DeveloperApplication"), `operatingSystem`, `offers` (price), `description`, `url`. Add `aggregateRating` if verified ratings exist.
 - **A11y:** Invisible metadata.
 - **Anti-pattern:** Never add fake ratings. Never omit price/offers information.
+
+### Product Schema
+- **When:** Pricing pages, product listings, e-commerce pages.
+- **What:** `name`, `description`, `image`, `brand` (Organization), `offers` (price, priceCurrency, availability). For multiple tiers use `AggregateOffer` with `lowPrice`/`highPrice`. Add `aggregateRating` if verified reviews exist.
+- **A11y:** Invisible metadata. Visible pricing page needs clear labels and ARIA attributes on interactive elements.
+- **Anti-pattern:** Never add fake ratings. Never omit price/offers. Never use AggregateOffer when there's only one price.
+
+### Organization Schema
+- **When:** Homepage, about page.
+- **What:** `name`, `url`, `logo` (square, 112x112px+), `description`, `sameAs` (array of official social profile URLs), `contactPoint`. Enables Google Knowledge Panel.
+- **A11y:** Invisible metadata.
+- **Anti-pattern:** Never list unofficial social profiles in sameAs. Never use a non-square or low-resolution logo.
+
+### VideoObject Schema
+- **When:** Pages with video content (demos, tutorials, webinars).
+- **What:** `name`, `description`, `thumbnailUrl` (16:9, 120x120px+), `uploadDate`, `duration` (ISO 8601: PT5M30S), `contentUrl` or `embedUrl`. Add transcript for AI discoverability.
+- **A11y:** Visible video needs captions (WCAG 1.2.2), transcript (WCAG 1.2.1), keyboard-accessible controls. Never autoplay with sound.
+- **Anti-pattern:** Never omit duration or thumbnail. Never add VideoObject to pages without actual video content.
+
+### Event Schema
+- **When:** Webinars, conferences, launches, meetups, workshops.
+- **What:** `name`, `startDate`, `endDate`, `eventAttendanceMode` (Online/Offline/Mixed), `eventStatus` (Scheduled/Cancelled/Rescheduled), `location` (VirtualLocation with URL, or Place with address), `organizer`, `offers` (registration/ticket info).
+- **A11y:** Visible event page must clearly present date, time with timezone, location, and registration in semantic HTML.
+- **Anti-pattern:** Never leave eventStatus as Scheduled after cancellation. Never omit timezone from dates.
 
 ### FAQ Schema
 - **When:** FAQ pages, pages with expandable Q&A sections.

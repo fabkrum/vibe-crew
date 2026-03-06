@@ -244,6 +244,7 @@ On This Page
 What Happens in Tier 1
 Writing a Great Vision
 Concrete Example: Mealwise
+Competitive Analysis (Optional)
 Dealing with an Existing Style Guide
 Technology Decisions
 Prioritizing Your Roadmap
@@ -257,18 +258,21 @@ When you run /new-project, VibeCrew walks you through creating 6 artifacts in or
 VISION.md
 Problem, personas, core features, success metrics, constraints. This is the single most important artifact — every other decision flows from it.
 2
+Competitive Analysis Optional
+The Market Scout agent researches competitors, builds a feature comparison matrix, and recommends positioning. Accepted features go to the backlog; positioning insights enrich VISION.md.
+3
 Design System + Brief
 Visual tokens (design-system.css) and design rationale (design-brief.md). Created via a design interview or by importing your existing style guide.
-3
+4
 Technology Decision Record
 Framework, database, auth, hosting — every choice documented with trade-offs. The Stack Scout agent researches options; the Opponent Processor stress-tests them.
-4
+5
 Architecture Diagrams
 5 Mermaid diagrams: system topology, entity-relationship, user flows, API sequences, component tree. Generated from your vision and tech stack.
-5
+6
 Roadmap
 Features from your vision, prioritized into MVP (Tier 1), Growth (Tier 2), and Future (Tier 3). Dependencies mapped between features.
-6
+7
 CLAUDE.md
 Project conventions synthesized from all prior artifacts. Under 200 lines — every line earns its token cost.
 Each artifact can be marked "skipped" if you want to move fast. But the more you skip, the less context VibeCrew's agents have when building features later. The vision and design system have the highest impact.
@@ -310,8 +314,22 @@ First Value ActionDefines the onboarding flow. The Builder agent builds this fir
 ConstraintsThe Stack Scout uses these as hard requirements when evaluating technology options in the TDR.
 What Not to Write
 Vague inputs produce vague outputs. Here's what to avoid.
+Competitive Analysis Optional
+After VISION.md is approved, VibeCrew offers to research your market before continuing with design. The Market Scout agent (Opus, worktree-isolated) uses WebSearch and Chrome DevTools to investigate competitors.
+This step is optional. VibeCrew asks "Would you like me to research competitors?" — say no to skip straight to design. For full_auto profiles, it auto-detects market-facing products and runs automatically.
+What You Get
+Competitor landscape. Top 5 competitors identified with their positioning, target audience, pricing model, and key differentiators.
+Feature comparison matrix. Your planned features mapped against each competitor — showing gaps and overlaps at a glance.
+Market gaps. Features, audiences, or price points that no competitor serves well — your differentiation opportunities.
+Positioning recommendation. Where to position your product and which angle to lead with, based on the competitive landscape.
+Interactive Recommendations
+After presenting the analysis, VibeCrew walks you through each feature recommendation one by one:
+Add to backlog — the feature goes into your backlog as a suggestion, ready for /plan-features
+Skip — move to the next recommendation
+Modify — edit the feature name or description before adding
+Positioning insights can optionally be appended to VISION.md, enriching it for downstream steps. The full analysis is saved to docs/competitive-analysis.md.
 Dealing with an Existing Style Guide
-Step 2 of the foundation creates your design tokens (design-system.css) and design rationale (design-brief.md). If you already have a style guide, brand kit, or component library, you don't need to go through the full 10-question design interview — VibeCrew can import your existing tokens directly.
+Step 3 of the foundation creates your design tokens (design-system.css) and design rationale (design-brief.md). If you already have a style guide, brand kit, or component library, you don't need to go through the full 10-question design interview — VibeCrew can import your existing tokens directly.
 The Pre-Design Gate
 Before the design interview starts, VibeCrew asks one question: "Do you have an existing design system or style guide you'd like to import?"
 No existing system
@@ -3354,6 +3372,12 @@ Inline
 —
 Routes between Tier 1 and Tier 2, coordinates agent handoffs, manages backlog
 Command routing
+Market Scout
+Opus
+Worktree
+—
+Competitive research via WebSearch, Chrome DevTools. Identifies competitors, builds feature comparison matrix, recommends positioning
+Tier 1 Step 2 (optional)
 Stack Scout
 Opus
 Worktree
@@ -4600,11 +4624,14 @@ Docs →
 Tips: What Users Say vs What Gets Built
 What you sayWhat gets built
 "Make the site SEO-friendly"Canonical URL + XML Sitemap + robots.txt + Meta Description + Open Graph Tags + JSON-LD WebSite Schema
-"I want rich snippets in Google"Article Schema (with dateModified) + BreadcrumbList Schema + FAQ Schema on Q&A pages
+"I want rich snippets in Google"Article Schema (with dateModified) + BreadcrumbList Schema + FAQ Schema on Q&A pages + Product Schema on pricing pages
 "Make our docs discoverable by AI assistants"llms.txt + llms-full.txt (build-time generated) + AI-Friendly Content Structure + Semantic HTML landmarks
 "Pages should look good when shared"Open Graph Tags + Twitter/X Cards + OG Image Generation (per-page) + Share URL Hygiene
-"Add a product page for app stores"SoftwareApplication Schema + Favicon & App Manifest + Meta Description + Performance Signals
+"Add a product page for app stores"SoftwareApplication Schema + Product Schema + Favicon & App Manifest + Meta Description
 "Optimize the blog for search"Article Schema + Heading Hierarchy + Internal Linking + Image SEO + Canonical URL + Anchor-Based Deep Linking
+"We're hosting a launch event"Event Schema + Organization Schema + Open Graph Tags + Meta Description
+"Add our company info to Google"Organization Schema + JSON-LD WebSite Schema + Favicon & App Manifest
+"Embed tutorial videos"VideoObject Schema + HowTo Schema + Image SEO + Heading Hierarchy
 Related Patterns
 These patterns on other pages complement SEO and discoverability. They are referenced here rather than duplicated -- click through for full details.
 Schema.org sameAs — Social identity structured data connecting your site to social profiles (Social Media Patterns)

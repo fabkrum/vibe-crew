@@ -55,15 +55,6 @@ export const seoPatterns: SeoPattern[] = [
     a11y: 'Clean URLs benefit all users by being readable, memorable, and shareable. Screen readers announce URLs -- descriptive paths are easier to understand than opaque IDs.',
     docsUrl: null,
   },
-  {
-    name: 'Performance Signals',
-    category: 'technical',
-    description: 'Core Web Vitals optimization as a direct SEO ranking factor. LCP (Largest Contentful Paint) under 2.5 seconds, INP (Interaction to Next Paint) under 200 milliseconds, CLS (Cumulative Layout Shift) under 0.1. These metrics measure real user experience and Google uses them as ranking signals. Fast sites rank higher and convert better.',
-    implementation: 'LCP: preload the hero image/font with <link rel="preload">, inline critical CSS, use responsive images with srcset. INP: defer non-critical JS with async/defer, break long tasks (>50ms) into smaller chunks, use requestIdleCallback for analytics. CLS: set explicit width/height on all images and embeds, use CSS aspect-ratio, reserve space for dynamic content (ads, lazy-loaded images). Compress images (WebP/AVIF). Enable HTTP/2. Use a CDN. Measure with Lighthouse CI in your build pipeline.',
-    a11y: 'Performance directly impacts accessibility. Slow pages disproportionately affect users on older devices, slow connections, and assistive technologies. CLS prevention (explicit dimensions) also prevents content from jumping under screen readers.',
-    docsUrl: 'https://web.dev/articles/vitals',
-  },
-
   // --- Meta Tags ---
   {
     name: 'Open Graph Tags',
@@ -138,6 +129,38 @@ export const seoPatterns: SeoPattern[] = [
     implementation: 'Add to product/landing page: {"@context":"https://schema.org","@type":"SoftwareApplication","name":"{App Name}","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"{description}","url":"{landing-page-url}"}. For paid software, set the correct price. For freemium, use the free tier price. Add aggregateRating if you have verified ratings. applicationCategory values: DeveloperApplication, BusinessApplication, WebApplication, etc. Validate with Google Rich Results Test.',
     a11y: 'JSON-LD is invisible metadata. No accessibility impact.',
     docsUrl: 'https://schema.org/SoftwareApplication',
+  },
+  {
+    name: 'Product Schema',
+    category: 'structured_data',
+    description: 'JSON-LD Product structured data for pricing pages, product listings, and e-commerce. Enables rich results showing price, currency, availability, review ratings, and seller info directly in the SERP. One of the highest-impact schema types -- product rich results have significantly higher click-through rates than plain blue links.',
+    implementation: 'Add to product/pricing pages: {"@context":"https://schema.org","@type":"Product","name":"{Product Name}","description":"{description}","image":"{image-url}","brand":{"@type":"Organization","name":"{Brand}"},"offers":{"@type":"Offer","price":"{price}","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"{page-url}"}}. For multiple pricing tiers, use AggregateOffer with lowPrice and highPrice. Add aggregateRating with ratingValue and reviewCount if you have verified reviews. For SaaS: use "0" price for free tiers, actual price for paid. Availability values: InStock, OutOfStock, PreOrder, Discontinued. Validate with Google Rich Results Test.',
+    a11y: 'JSON-LD is invisible metadata. No accessibility impact. The visible pricing page should use semantic HTML with clear price labels and ARIA attributes on interactive elements (plan selectors, CTAs).',
+    docsUrl: 'https://schema.org/Product',
+  },
+  {
+    name: 'Organization Schema',
+    category: 'structured_data',
+    description: 'JSON-LD Organization structured data that establishes your brand identity in search. Enables the Google Knowledge Panel (the sidebar card showing your logo, description, social links, and contact info). Placed on the homepage and about page. The sameAs property connects your site to official social profiles, which Google uses to verify and display your brand information.',
+    implementation: 'Add to homepage and about page: {"@context":"https://schema.org","@type":"Organization","name":"{Company}","url":"https://example.com","logo":"https://example.com/logo.png","description":"{description}","sameAs":["https://twitter.com/{handle}","https://github.com/{org}","https://linkedin.com/company/{slug}"],"contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":"{email}"}}. Logo: square, at least 112x112px, light background. sameAs: list all official social profile URLs. For startups: include foundingDate, founders, and numberOfEmployees if public. Validate with Google Rich Results Test.',
+    a11y: 'JSON-LD is invisible metadata. No accessibility impact.',
+    docsUrl: 'https://schema.org/Organization',
+  },
+  {
+    name: 'VideoObject Schema',
+    category: 'structured_data',
+    description: 'JSON-LD VideoObject structured data for pages containing video content (demos, tutorials, webinars). Enables video rich results in Google with thumbnail, duration, upload date, and play button overlay. Videos with structured data can also appear in Google Video search and the video carousel. Particularly valuable for product demos and tutorial content.',
+    implementation: 'Add to pages with video: {"@context":"https://schema.org","@type":"VideoObject","name":"{title}","description":"{description}","thumbnailUrl":"https://example.com/thumb.jpg","uploadDate":"{ISO-date}","duration":"PT{X}M{Y}S","contentUrl":"https://example.com/video.mp4","embedUrl":"https://www.youtube.com/embed/{id}"}. Duration uses ISO 8601 format (PT5M30S = 5 min 30 sec). thumbnailUrl: 16:9 aspect ratio, minimum 120x120px. For YouTube/Vimeo embeds, provide the embed URL. Add transcript text in the description or as a separate property for AI discoverability. Validate with Google Rich Results Test.',
+    a11y: 'JSON-LD is invisible metadata. The visible video player must have captions/subtitles (WCAG 1.2.2), a text transcript (WCAG 1.2.1), and keyboard-accessible controls. Never autoplay with sound.',
+    docsUrl: 'https://schema.org/VideoObject',
+  },
+  {
+    name: 'Event Schema',
+    category: 'structured_data',
+    description: 'JSON-LD Event structured data for webinars, conferences, launches, meetups, and workshops. Enables event rich results in Google showing the event name, date, location (physical or online), and ticket/registration info. Online events use VirtualLocation with a URL. Events appear in Google Search and Google Events, significantly expanding discoverability beyond your site.',
+    implementation: 'Add to event pages: {"@context":"https://schema.org","@type":"Event","name":"{Event Name}","startDate":"{ISO-datetime}","endDate":"{ISO-datetime}","eventAttendanceMode":"https://schema.org/OnlineEventAttendanceMode","eventStatus":"https://schema.org/EventScheduled","location":{"@type":"VirtualLocation","url":"https://example.com/join"},"description":"{description}","organizer":{"@type":"Organization","name":"{org}","url":"https://example.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock","url":"{registration-url}"}}. For in-person: use Place with address. For hybrid: use MixedEventAttendanceMode. Update eventStatus if cancelled (EventCancelled) or rescheduled (EventRescheduled). Validate with Google Rich Results Test.',
+    a11y: 'JSON-LD is invisible metadata. The visible event page should clearly present date, time (with timezone), location, and registration in accessible, semantic HTML.',
+    docsUrl: 'https://schema.org/Event',
   },
   {
     name: 'FAQ Schema',

@@ -301,6 +301,19 @@ If the feature involves charts, dashboards, or data visualization, read `${CLAUD
 
 Severity: All dataviz findings are `warning` unless noted. Category: `"dataviz-compliance"`.
 
+### Step 10.17: Notification Pattern Compliance
+
+If the feature involves notifications, toasts, alerts, push notifications, or real-time updates, read `${CLAUDE_PLUGIN_ROOT}/templates/notification-patterns.md`. Check:
+
+1. **ARIA live regions** — Toast/banner notifications use `aria-live="polite"` (or `role="alert"` for errors only). Flag missing live regions as `warning`.
+2. **Focus management** — Notifications do not steal focus from the user's current task. Only modal dialogs may trap focus. Flag focus-stealing toasts/banners as `warning`.
+3. **Notification preferences** — If the feature sends notifications across multiple channels, users can control which channels deliver which types. Flag missing preferences as `info`.
+4. **Push permission timing** — Push notification permission is not requested on first page load. A soft-ask pre-prompt explains value before the browser prompt. Flag immediate permission requests as `warning`.
+5. **Reduced motion** — Notification animations respect `prefers-reduced-motion`. Flag animations without motion query as `info`.
+6. **Unsubscribe compliance** — Email notifications include an unsubscribe link and `List-Unsubscribe` header. Flag missing unsubscribe as `critical`.
+
+Severity: All notification findings are `warning` unless noted. Category: `"notification-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

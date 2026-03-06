@@ -1,0 +1,151 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import NotificationPatternIllustration from '../components/patterns/NotificationPatternIllustration.astro';
+import { notificationPatterns, categoryLabels, categoryOrder } from '../data/notification-patterns';
+import type { NotificationPattern } from '../data/notification-patterns';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = notificationPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof notificationPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<NotificationPattern['category'], string> = {
+  delivery: 'Notification delivery channels — toast messages, in-app banners, push notifications (web and mobile), email, interstitials, and real-time events via WebSocket and SSE.',
+  display: 'Visual notification patterns — bell icon badges, notification centers and drawers, individual notification items, inline contextual alerts, floating badges, and progress indicators.',
+  management: 'Managing notification lifecycle — read/unread states, grouping related events, smart batching into digests, snooze and remind-later, actionable buttons, and searchable history archives.',
+  preferences: 'User control over notifications — preferences matrix, frequency controls, do-not-disturb schedules, channel opt-outs, and first-run notification onboarding.',
+  accessibility: 'Accessible notification patterns — ARIA live regions, focus management, screen reader announcements, keyboard navigation, reduced motion, sound/haptic alternatives, and high contrast support.',
+};
+---
+
+<DocsLayout title="Notification Patterns" sectionLabel="Reference" activeSlug="notification-patterns">
+
+  <h2>Notification Patterns</h2>
+  <p>Research-backed patterns for notification systems that VibeCrew agents apply when building messaging, alerting, and communication features. Each pattern includes delivery channel guidance, implementation with shadcn/Sonner, and accessibility requirements based on NN/G, Smashing Magazine, and WCAG research.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()&+]/g, '-')}>
+            <div class="pattern-card-inner">
+              <NotificationPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Implementation</span>
+                    <p>{entry.implementation}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Accessibility</span>
+                    <p>{entry.a11y}</p>
+                  </div>
+                  {entry.docsUrl && (
+                    <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Add notifications"</td><td>Bell Icon + Badge + Notification Center/Drawer + Toast for real-time + Read/Unread State + ARIA Live Region</td></tr>
+        <tr><td>"Let users manage notifications"</td><td>Notification Preferences Matrix + Frequency Controls + Channel-Specific Opt-Out + Do Not Disturb</td></tr>
+        <tr><td>"Send email updates"</td><td>Email Notification (transactional) + Smart Batching/Digest + Unsubscribe link + Notification Preferences for email channel</td></tr>
+        <tr><td>"Show a success message"</td><td>Toast/Snackbar (Sonner) with toast.success() + auto-dismiss + aria-live="polite" + Reduced Motion Support</td></tr>
+        <tr><td>"Real-time updates"</td><td>Webhook/Real-Time Event (SSE or WebSocket) + Bell Icon badge update + Notification Item + Screen Reader Announcement</td></tr>
+        <tr><td>"Add push notifications"</td><td>Push Notification (Web) with soft-ask pre-prompt + Service Worker + Notification Onboarding + Channel Opt-Out</td></tr>
+        <tr><td>"Too many notifications"</td><td>Notification Grouping + Smart Batching/Digest + Frequency Controls + Do Not Disturb/Quiet Hours</td></tr>
+        <tr><td>"Make notifications accessible"</td><td>ARIA Live Region + Focus Management + Keyboard Navigation + Screen Reader Announcements + Reduced Motion + High Contrast</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Patterns</h3>
+    <p class="category-description">These patterns on other pages complement notification systems. They are referenced here rather than duplicated — click through for full details.</p>
+    <ul class="related-links">
+      <li><a href="/ui-patterns#sonner">Sonner / Toast</a> &mdash; Toast component overview and API (UI Patterns)</li>
+      <li><a href="/ui-patterns#alert">Alert</a> &mdash; Inline alert component for contextual messages (UI Patterns)</li>
+      <li><a href="/ui-patterns#live-region">Live Region</a> &mdash; ARIA live region pattern for dynamic content (UI Patterns)</li>
+      <li><a href="/ui-patterns#badge">Badge</a> &mdash; Badge component for counts and status indicators (UI Patterns)</li>
+      <li><a href="/ui-patterns#dialog">Dialog</a> &mdash; Modal dialog for critical notifications requiring acknowledgment (UI Patterns)</li>
+      <li><a href="/ui-patterns#popover">Popover</a> &mdash; Floating panel used for notification center dropdown (UI Patterns)</li>
+      <li><a href="/business-patterns#progressive-profiling">Progressive Profiling</a> &mdash; Gradual data collection relevant to notification onboarding (Business Patterns)</li>
+      <li><a href="/animation-patterns#reduced-motion">Reduced Motion</a> &mdash; Animation accessibility for notification transitions (Animation Patterns)</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://www.nngroup.com/articles/indicators-validations-notifications/" target="_blank" rel="noopener noreferrer">NN/G: Indicators, Validations, and Notifications</a> &mdash; Choosing the correct communication option</li>
+      <li><a href="https://www.nngroup.com/articles/push-notification/" target="_blank" rel="noopener noreferrer">NN/G: Five Mistakes in Mobile Push Notifications</a> &mdash; Common push notification UX mistakes</li>
+      <li><a href="https://www.smashingmagazine.com/2025/07/design-guidelines-better-notifications-ux/" target="_blank" rel="noopener noreferrer">Smashing: Design Guidelines for Better Notifications UX</a> &mdash; Comprehensive notification design guide</li>
+      <li><a href="https://www.smashingmagazine.com/2019/04/privacy-better-notifications-ux-permission-requests/" target="_blank" rel="noopener noreferrer">Smashing: Privacy UX — Better Notifications and Permission Requests</a> &mdash; Permission and privacy patterns</li>
+      <li><a href="https://www.sarasoueidan.com/blog/accessible-notifications-with-aria-live-regions-part-1/" target="_blank" rel="noopener noreferrer">Sara Soueidan: Accessible Notifications with ARIA Live Regions</a> &mdash; Deep dive into ARIA live region implementation</li>
+      <li><a href="https://carbondesignsystem.com/patterns/notification-pattern/" target="_blank" rel="noopener noreferrer">Carbon Design System: Notification Pattern</a> &mdash; IBM's notification pattern reference</li>
+      <li><a href="https://ui.shadcn.com/docs/components/radix/sonner" target="_blank" rel="noopener noreferrer">shadcn/ui: Sonner</a> &mdash; Toast notification component</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .category-nav a { padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .category-nav a:hover { background: var(--color-accent-bg); color: var(--color-accent); text-decoration: none; }
+  .category-heading { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; margin-top: 2rem; }
+  .category-description { margin: 0 0 1.25rem; font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .pattern-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .pattern-card { padding: 1.25rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-surface); }
+  .pattern-card-inner { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .pattern-content { flex: 1; min-width: 0; }
+  @media (max-width: 600px) { .pattern-card-inner { flex-direction: column; } }
+  .pattern-name { font-size: 1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.5rem; }
+  .pattern-desc { font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.75rem; }
+  .pattern-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta-block { font-size: 0.85rem; line-height: 1.5; }
+  .meta-block p { margin: 0; color: var(--color-text-secondary); }
+  .meta-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-right: 0.35rem; }
+  .docs-link { display: inline-block; margin-top: 0.25rem; font-size: 0.82rem; font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+  .further-reading { margin-top: 3rem; }
+  .further-reading ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .further-reading li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .further-reading li:last-child { border-bottom: none; }
+  .further-reading a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .further-reading a:hover { text-decoration: underline; }
+</style>

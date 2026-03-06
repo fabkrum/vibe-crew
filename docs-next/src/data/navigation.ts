@@ -63,6 +63,7 @@ export const navigation: NavGroup[] = [
       { title: 'Legal & Compliance', slug: 'legal-compliance' },
       { title: 'Filter & Search Patterns', slug: 'filter-search-patterns' },
       { title: 'Data Visualization Patterns', slug: 'dataviz-patterns' },
+      { title: 'Notification Patterns', slug: 'notification-patterns' },
       { title: 'Dark Patterns to Avoid', slug: 'dark-patterns' },
       { title: 'Glossary', slug: 'glossary' },
     ],

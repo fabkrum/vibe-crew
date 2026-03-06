@@ -367,6 +367,18 @@ If the feature involves settings pages, user preferences, account management, pr
 
 Severity: All settings findings are `warning` unless noted. Category: `"settings-compliance"`.
 
+### Step 10.22: Onboarding Pattern Compliance
+
+If the feature involves onboarding, product tours, setup wizards, feature discovery, coachmarks, checklists, what's new announcements, changelogs, empty states, or user education flows, read `${CLAUDE_PLUGIN_ROOT}/templates/onboarding-patterns.md`. Check:
+
+1. **Tour skip/dismiss** — Every tour, spotlight, and wizard step has a visible skip/dismiss option. Dismissed content is accessible later from a help menu. Flag forced tours (no skip) as `critical`. Flag missing help-menu replay as `warning`.
+2. **Focus management** — Tour overlays (role="dialog") trap focus within the active tooltip. On dismiss, focus returns to the triggering element or the highlighted element. Step transitions move focus to the new tooltip. Flag missing focus management as `critical`.
+3. **Completion persistence** — Onboarding state is stored server-side (not only localStorage). Completion survives device switches and cache clears. Checklist auto-detects task completion from app events. Flag localStorage-only persistence as `warning`.
+4. **Progressive disclosure** — Advanced features are not hidden from navigation/search — only tip visibility is controlled by progressive onboarding. Keyboard shortcuts are always discoverable via a shortcuts panel. Flag features made inaccessible by onboarding state as `critical`.
+5. **Reduced motion** — Tour animations, beacon pulses, confetti, and spotlight transitions respect prefers-reduced-motion. Replace animations with static alternatives. Flag ignored motion preferences as `warning`.
+
+Severity: All onboarding findings are `warning` unless noted. Category: `"onboarding-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

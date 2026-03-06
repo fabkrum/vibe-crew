@@ -1,0 +1,151 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import OnboardingPatternIllustration from '../components/patterns/OnboardingPatternIllustration.astro';
+import { onboardingPatterns, categoryLabels, categoryOrder } from '../data/onboarding-patterns';
+import type { OnboardingPattern } from '../data/onboarding-patterns';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = onboardingPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof onboardingPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<OnboardingPattern['category'], string> = {
+  tours: 'Product tour patterns -- multi-step walkthroughs, segmented paths, delayed triggers, resume/replay, and guided setup wizards for first-time user orientation.',
+  highlights: 'Coachmark and spotlight patterns -- overlay highlights, tooltip hotspots, feature callout banners, contextual tips, and beacon animations for drawing attention to specific features.',
+  checklists: 'Checklist and milestone patterns -- onboarding task lists, progress bars, gamified completion, persistent sidebar checklists, and quick win tasks for driving activation.',
+  announcements: 'Announcement patterns -- what\'s new modals, changelog feeds, in-app banners, badges, and release notes pages for communicating product updates.',
+  guidance: 'Guidance patterns -- empty state onboarding, interactive demo sandboxes, video walkthroughs, inline help panels, and sample data seeding for teaching through context.',
+  tracking: 'Tracking patterns -- skip/dismiss behavior, completion persistence, re-engagement tours, progressive onboarding, and analytics dashboards for measuring and optimizing onboarding flows.',
+};
+---
+
+<DocsLayout title="Onboarding Patterns" sectionLabel="Reference" activeSlug="onboarding-patterns">
+
+  <h2>Onboarding & Tutorial Patterns</h2>
+  <p>Research-backed patterns for user onboarding, product tours, feature discovery, and re-engagement that VibeCrew agents apply when building first-run experiences, setup wizards, and in-app education. Each pattern includes implementation guidance, accessibility requirements, and anti-patterns based on NN/G, Appcues, Pendo, Chameleon, UserGuiding, WCAG, and leading SaaS products (Notion, Linear, Slack, Figma, Stripe).</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()&+@']/g, '-')}>
+            <div class="pattern-card-inner">
+              <OnboardingPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Implementation</span>
+                    <p>{entry.implementation}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Accessibility</span>
+                    <p>{entry.a11y}</p>
+                  </div>
+                  {entry.docsUrl && (
+                    <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Add onboarding"</td><td>Guided Setup Wizard (3-5 steps) + Onboarding Checklist with auto-detection + Quick Win Task as first step + Progress Milestone Bar on dashboard</td></tr>
+        <tr><td>"Add a product tour"</td><td>Multi-Step Product Tour (3-5 steps) with Spotlight Coachmarks + Delayed Tour Trigger + Skip &amp; Dismiss + Tour Resume &amp; Replay from help menu</td></tr>
+        <tr><td>"Show what's new"</td><td>What's New Modal (login trigger) + Changelog Feed page + Announcement Badges on nav items + In-App Release Banner for contextual updates</td></tr>
+        <tr><td>"Help users get started"</td><td>Empty State Onboarding (per-section CTAs) + Sample Data Seeding + Contextual Tips for key features + Inline Help Panel</td></tr>
+        <tr><td>"Add feature discovery"</td><td>Tooltip Hotspots on new features + Beacon Pulse Animation on nav + Progressive Onboarding (reveal after proficiency) + Feature Callout Banners</td></tr>
+        <tr><td>"Reduce churn"</td><td>Re-Engagement Tour (14-day inactivity trigger) + Completion Persistence (cross-device) + Onboarding Analytics Dashboard + Gamified Task Completion</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Patterns</h3>
+    <p class="category-description">These patterns on other pages complement onboarding flows. They are referenced here rather than duplicated -- click through for full details.</p>
+    <ul class="related-links">
+      <li><a href="/business-patterns#first-run-experience">First-Run Experience</a> &mdash; Business-focused first-run conversion strategy (Business Patterns)</li>
+      <li><a href="/business-patterns#activation-moment">Activation Moment</a> &mdash; Identifying and designing for the "aha moment" (Business Patterns)</li>
+      <li><a href="/business-patterns#contextual-help">Contextual Help</a> &mdash; In-context education patterns for reducing support tickets (Business Patterns)</li>
+      <li><a href="/ui-patterns#tooltip">Tooltip</a> &mdash; Hover/focus tooltip component for contextual information (UI Patterns)</li>
+      <li><a href="/ui-patterns#progressive-disclosure">Progressive Disclosure</a> &mdash; Showing simple view first, details on demand (UI Patterns)</li>
+      <li><a href="/notification-patterns#toast-notification">Toast Notification</a> &mdash; Transient feedback for task completion celebrations (Notification Patterns)</li>
+      <li><a href="/form-patterns#multi-step-form">Multi-Step Form</a> &mdash; Step-by-step form wizard pattern used by setup wizards (Form Patterns)</li>
+      <li><a href="/animation-patterns#micro-interactions">Micro-Interactions</a> &mdash; Celebration animations and feedback for task completion (Animation Patterns)</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://www.nngroup.com/articles/product-tours/" target="_blank" rel="noopener noreferrer">NN/G: Product Tours and Feature Walkthroughs</a> &mdash; Research on tour effectiveness, step count, and dismissal behavior</li>
+      <li><a href="https://www.appcues.com/blog/user-onboarding-checklist" target="_blank" rel="noopener noreferrer">Appcues: Onboarding Checklist Best Practices</a> &mdash; Checklist design, completion rates, and gamification strategies</li>
+      <li><a href="https://www.useronboard.com/onboarding-teardowns/" target="_blank" rel="noopener noreferrer">UserOnboard: Onboarding Teardowns</a> &mdash; Step-by-step teardowns of onboarding flows from 100+ SaaS products</li>
+      <li><a href="https://www.intercom.com/blog/product-tours/" target="_blank" rel="noopener noreferrer">Intercom: The Beginner's Guide to Product Tours</a> &mdash; When to use tours vs tooltips vs checklists</li>
+      <li><a href="https://growth.design/case-studies" target="_blank" rel="noopener noreferrer">Growth.Design: UX Case Studies</a> &mdash; Visual case studies of onboarding psychology and conversion</li>
+      <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/" target="_blank" rel="noopener noreferrer">W3C WAI: Dialog (Modal) Pattern</a> &mdash; Accessibility requirements for tour overlays, modals, and focus management</li>
+      <li><a href="https://www.chameleon.io/blog/user-onboarding-best-practices" target="_blank" rel="noopener noreferrer">Chameleon: User Onboarding Best Practices</a> &mdash; Research on segmented tours, timing, and progressive onboarding</li>
+      <li><a href="https://www.pendo.io/resources/the-complete-guide-to-user-onboarding/" target="_blank" rel="noopener noreferrer">Pendo: Complete Guide to User Onboarding</a> &mdash; Analytics-driven approach to onboarding optimization</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .category-nav a { padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .category-nav a:hover { background: var(--color-accent-bg); color: var(--color-accent); text-decoration: none; }
+  .category-heading { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; margin-top: 2rem; }
+  .category-description { margin: 0 0 1.25rem; font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .pattern-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .pattern-card { padding: 1.25rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-surface); }
+  .pattern-card-inner { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .pattern-content { flex: 1; min-width: 0; }
+  @media (max-width: 600px) { .pattern-card-inner { flex-direction: column; } }
+  .pattern-name { font-size: 1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.5rem; }
+  .pattern-desc { font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.75rem; }
+  .pattern-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta-block { font-size: 0.85rem; line-height: 1.5; }
+  .meta-block p { margin: 0; color: var(--color-text-secondary); }
+  .meta-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-right: 0.35rem; }
+  .docs-link { display: inline-block; margin-top: 0.25rem; font-size: 0.82rem; font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+  .further-reading { margin-top: 3rem; }
+  .further-reading ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .further-reading li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .further-reading li:last-child { border-bottom: none; }
+  .further-reading a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .further-reading a:hover { text-decoration: underline; }
+</style>

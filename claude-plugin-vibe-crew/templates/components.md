@@ -374,8 +374,7 @@ The Builder and Orchestrator read this file during design and implementation pha
 
 ## 9. Conversion & Trust Patterns
 
-Cross-reference with `business-patterns.md` for full rationale. This section
-maps business patterns to specific component implementations.
+Maps business patterns to specific component implementations.
 
 | Pattern | Components | Implementation |
 |---------|-----------|----------------|
@@ -389,8 +388,6 @@ maps business patterns to specific component implementations.
 | Pricing Comparison | Table + Card + Badge + Toggle | 3 tiers, center highlighted (Von Restorff), annual/monthly toggle. |
 
 ## 10. Animation & Motion Patterns
-
-Cross-reference with `animation-patterns.md` for full token reference and reduced-motion requirements.
 
 | Pattern | When to apply | Token | Reduced Motion |
 |---------|---------------|-------|----------------|
@@ -409,8 +406,6 @@ Cross-reference with `animation-patterns.md` for full token reference and reduce
 
 ## 11. Responsive Design Patterns
 
-Cross-reference with `responsive-patterns.md` for full implementation guidance.
-
 | Pattern | When to apply | Implementation |
 |---------|---------------|----------------|
 | Mobile-First | Always — base CSS targets mobile | `min-width` media queries to enhance for larger screens |
@@ -425,8 +420,6 @@ Cross-reference with `responsive-patterns.md` for full implementation guidance.
 **Rules:** Mobile-first CSS. Touch targets 44px minimum. `clamp()` for fluid text. Logical properties over physical. `aspect-ratio` on all images.
 
 ## 12. Form Patterns
-
-Cross-reference with `form-patterns.md` for full implementation guidance and accessibility requirements.
 
 | Pattern | When to apply | Implementation |
 |---------|---------------|----------------|
@@ -447,8 +440,6 @@ Cross-reference with `form-patterns.md` for full implementation guidance and acc
 
 ## 13. Error Handling Patterns
 
-Cross-reference with `error-handling-patterns.md` for full implementation guidance.
-
 | Pattern | When to apply | Implementation |
 |---------|---------------|----------------|
 | Error Boundary | Every React/Vue app | Component-level catch, fallback UI, error logging, reset/retry button |
@@ -464,8 +455,6 @@ Cross-reference with `error-handling-patterns.md` for full implementation guidan
 
 ## 14. Internationalization
 
-Cross-reference with `i18n-patterns.md` for full implementation guidance and pitfall avoidance.
-
 | Pattern | When to apply | Implementation |
 |---------|---------------|----------------|
 | String Externalization | Every user-facing text | Extract to translation files, never hardcode in components |
@@ -479,8 +468,6 @@ Cross-reference with `i18n-patterns.md` for full implementation guidance and pit
 **Rules:** Never concatenate strings for sentences. Never hardcode number/date formats. Use `Intl` APIs. Logical CSS properties over physical. `lang` attribute on `<html>`.
 
 ## 15. Legal & Compliance
-
-Cross-reference with `legal-compliance.md` for jurisdiction-specific requirements.
 
 | Pattern | When to apply | Implementation |
 |---------|---------------|----------------|

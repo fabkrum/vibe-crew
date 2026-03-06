@@ -535,12 +535,7 @@ isolation: worktree
 | Existing codebase | Current source files for context | Source files |
 | User preferences | Color direction, font preference, border radius, density (Tier 1 design only) | Conversational input |
 | `templates/components.md` | UI component reference with shadcn mappings (15 sections) | Template |
-| `templates/business-patterns.md` | Business/conversion pattern reference | Template |
-| `templates/animation-patterns.md` | Motion pattern reference (tokens, easing, reduced motion) | Template |
-| `templates/responsive-patterns.md` | Responsive design reference (mobile-first, touch targets, fluid type) | Template |
-| `templates/form-patterns.md` | Form UX patterns (validation, autocomplete, multi-step, auto-save) | Template |
-| `templates/error-handling-patterns.md` | Error handling patterns (boundaries, retry, empty states, offline) | Template |
-| `templates/i18n-patterns.md` | Internationalization patterns (names, addresses, RTL, Intl APIs, testing) | Template |
+| `templates/ui-gotchas.md` | Condensed non-obvious UI rules (~75 lines, replaces 20 individual pattern file reads) | Template |
 | `templates/legal-compliance.md` | Legal compliance reference (GDPR, impressum, cookie consent, EAA) | Template |
 
 **Output (Tier 1 -- Foundation Design):**

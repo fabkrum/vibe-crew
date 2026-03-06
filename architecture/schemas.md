@@ -811,7 +811,7 @@ Created by Builder when the code phase finishes. Includes a `changed_files` list
       {"path": "src/auth/oauth.ts", "type": "added"},
       {"path": "src/routes.ts", "type": "modified"}
     ],
-    "business_patterns_applied": [          // Optional — names of business patterns from business-patterns.md
+    "business_patterns_applied": [          // Optional — names of business patterns from ui-gotchas.md
       "Inline Validation",
       "CTA Hierarchy",
       "Empty State Onboarding"

@@ -61,19 +61,11 @@ setup() {
 }
 
 # =============================================================================
-# Builder agent: references dark-patterns.md
+# Builder agent: references dark pattern prevention via ui-gotchas.md
 # =============================================================================
 
-@test "builder.md references dark-patterns.md in design phase" {
-  grep -q "dark-patterns.md" "$PLUGIN_DIR/agents/builder.md"
-}
-
-@test "builder.md has step 4.14 for dark pattern prevention" {
-  grep -q "4\.14\." "$PLUGIN_DIR/agents/builder.md"
-}
-
-@test "builder.md has Dark Pattern Prevention section in design spec template" {
-  grep -q "Dark Pattern Prevention" "$PLUGIN_DIR/agents/builder.md"
+@test "builder.md references ui-gotchas.md for dark pattern checklist" {
+  grep -q "ui-gotchas.md" "$PLUGIN_DIR/agents/builder.md"
 }
 
 @test "builder.md has mandatory rule against dark patterns" {
@@ -81,29 +73,18 @@ setup() {
 }
 
 # =============================================================================
-# Code Reviewer agent: has dark pattern compliance step
+# Code Reviewer agent: checks dark patterns via ui-gotchas compliance
 # =============================================================================
 
-@test "code-reviewer.md references dark-patterns.md" {
-  grep -q "dark-patterns.md" "$PLUGIN_DIR/agents/code-reviewer.md"
+@test "code-reviewer.md references ui-gotchas.md" {
+  grep -q "ui-gotchas.md" "$PLUGIN_DIR/agents/code-reviewer.md"
 }
 
-@test "code-reviewer.md has step 10.13 for dark pattern compliance" {
-  grep -q "10\.13" "$PLUGIN_DIR/agents/code-reviewer.md"
-}
-
-@test "code-reviewer.md checks all 6 dark pattern categories" {
+@test "code-reviewer.md has dark pattern severity defaults" {
   local reviewer="$PLUGIN_DIR/agents/code-reviewer.md"
+  grep -q "Dark patterns" "$reviewer"
+  grep -q "Consent asymmetry" "$reviewer"
   grep -q "Confirmshaming" "$reviewer"
-  grep -q "Fake urgency/scarcity" "$reviewer"
-  grep -q "Hidden costs" "$reviewer"
-  grep -q "Forced action" "$reviewer"
-  grep -q "Nagging" "$reviewer"
-  grep -q "Sneaking" "$reviewer"
-}
-
-@test "code-reviewer.md has dark-pattern-compliance in category enum" {
-  grep -q "dark-pattern-compliance" "$PLUGIN_DIR/agents/code-reviewer.md"
 }
 
 # =============================================================================

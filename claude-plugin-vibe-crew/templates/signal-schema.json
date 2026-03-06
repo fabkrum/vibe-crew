@@ -97,7 +97,7 @@
     "business_patterns_applied": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Names of business patterns applied during design/build (from business-patterns.md)"
+      "description": "Names of business patterns applied during design/build (from ui-gotchas.md)"
     },
     "visual_verification": {
       "type": "object",

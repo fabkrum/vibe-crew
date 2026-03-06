@@ -13,6 +13,7 @@ const grouped = categoryOrder.reduce((acc, cat) => {
 const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
 
 const categoryDescriptions: Record<FormPattern['category'], string> = {
+  components: 'The building blocks of forms — buttons, inputs, selects, checkboxes, toggles, and specialized controls like date pickers and file uploads.',
   validation: 'Inline validation, error summaries, focus management, and action-first error messages that help users fix mistakes fast.',
   autocomplete: 'HTML autocomplete tokens, address lookup, and OTP autofill that reduce typing effort by 30-50%.',
   enhancement: 'Password strength meters, reveal toggles, character counters, and input masking for better field interactions.',
@@ -84,7 +85,8 @@ const categoryDescriptions: Record<FormPattern['category'], string> = {
   <section class="related-section" id="related">
     <h3 class="category-heading">Related Pages</h3>
     <ul class="related-links">
-      <li><a href="/business-patterns">Business Patterns</a> &mdash; Forms section with conversion optimization patterns</li>
+      <li><a href="/business-patterns">Business Patterns</a> &mdash; Onboarding, trust signals, and pricing patterns that complement form design</li>
+      <li><a href="/ui-patterns">UI Patterns</a> &mdash; Layout, feedback, overlays, and interaction patterns</li>
       <li><a href="/i18n-guide">i18n Guide</a> &mdash; Form internationalization: name fields, address formats, locale-specific inputs</li>
       <li><a href="/legal-compliance">Legal & Compliance</a> &mdash; Privacy, consent, and data handling for form submissions</li>
     </ul>

@@ -1,6 +1,6 @@
 export interface BusinessPattern {
   name: string;
-  category: 'landing' | 'onboarding' | 'forms' | 'trust' | 'pricing' |
+  category: 'landing' | 'onboarding' | 'trust' | 'pricing' |
              'empty-states' | 'retention' | 'navigation' | 'feedback';
   description: string;
   whyItWorks: string;
@@ -11,7 +11,6 @@ export interface BusinessPattern {
 export const categoryLabels: Record<BusinessPattern['category'], string> = {
   landing: 'Landing & Marketing Pages',
   onboarding: 'Onboarding & Activation',
-  forms: 'Forms & Data Collection',
   trust: 'Trust & Credibility Signals',
   pricing: 'Pricing & Payment',
   'empty-states': 'Empty States & First Use',
@@ -21,7 +20,7 @@ export const categoryLabels: Record<BusinessPattern['category'], string> = {
 };
 
 export const categoryOrder: BusinessPattern['category'][] = [
-  'landing', 'onboarding', 'forms', 'trust', 'pricing',
+  'landing', 'onboarding', 'trust', 'pricing',
   'empty-states', 'retention', 'navigation', 'feedback',
 ];
 
@@ -108,56 +107,6 @@ export const businessPatterns: BusinessPattern[] = [
     whyItWorks: 'Krug: users don\'t read instructions. NNGroup: contextual help is 3x more effective than upfront tutorials because it arrives at the moment of relevance.',
     example: 'Figma — contextual tooltips appear on first interaction with each tool.',
     source: 'NNGroup / Steve Krug',
-  },
-
-  // --- Forms & Data Collection ---
-  {
-    name: 'Single-Column Layout',
-    category: 'forms',
-    description: 'Stack all fields in a single column. Left-align labels above fields. Never use multi-column form layouts.',
-    whyItWorks: 'Baymard Institute: multi-column forms cause 28% more errors because users miss fields. Eye-tracking shows single-column creates a clear vertical flow.',
-    example: 'Stripe Checkout — single column with labels above every field.',
-    source: 'Baymard Institute',
-  },
-  {
-    name: 'Inline Validation',
-    category: 'forms',
-    description: 'Validate on blur (not on keystroke). Show success checkmarks for valid fields. Show error messages inline below the field. Never clear the field on error.',
-    whyItWorks: 'Baymard: sites with inline validation see 22% higher completion rates. Luke Wroblewski\'s research confirms inline validation reduces errors by 47%.',
-    example: 'GitHub signup — validates username availability on blur with inline feedback.',
-    source: 'Baymard Institute / Luke Wroblewski',
-  },
-  {
-    name: 'Smart Defaults',
-    category: 'forms',
-    description: 'Pre-fill fields with the most common or contextually relevant values. Use browser autofill attributes. Default to the most popular option in select fields.',
-    whyItWorks: 'Fogg Behavior Model: reducing effort increases completion. NNGroup: smart defaults reduce form completion time by 25-40%.',
-    example: 'Stripe — auto-detects country from IP, pre-fills currency.',
-    source: 'NNGroup / Fogg Behavior Model',
-  },
-  {
-    name: 'Error Message Clarity',
-    category: 'forms',
-    description: 'Error messages must say what went wrong AND how to fix it. Use specific language, not generic. Red color + icon, not color alone.',
-    whyItWorks: 'NNGroup: specific error messages reduce retry attempts by 50%. Accessibility: 8% of men are colorblind — icon + color ensures visibility.',
-    example: 'Mailchimp — "Please enter a valid email address (e.g., name@example.com)".',
-    source: 'NNGroup',
-  },
-  {
-    name: 'Field Count Optimization',
-    category: 'forms',
-    description: 'Audit every field — remove any not strictly required. If a field can be derived later, skip it. Target 3-5 fields for signup forms.',
-    whyItWorks: 'Unbounce: reducing form fields from 11 to 4 increased conversions by 120%. Each field is a decision point that can cause abandonment.',
-    example: 'Dropbox — email, password, and agreement checkbox. Three fields.',
-    source: 'Unbounce',
-  },
-  {
-    name: 'Guest Checkout',
-    category: 'forms',
-    description: 'Never require account creation to complete a purchase. Offer guest checkout as the default, with optional account creation after payment.',
-    whyItWorks: 'Baymard Institute: 26% of users abandon checkout when forced to create an account. Guest checkout removes the #2 cause of cart abandonment.',
-    example: 'Amazon — guest checkout option prominently displayed alongside sign-in.',
-    source: 'Baymard Institute',
   },
 
   // --- Trust & Credibility Signals ---

@@ -1,5 +1,6 @@
 ---
 import { formPatternSvgs } from './form-pattern-svgs';
+import { inputSvgs } from './input-svgs';
 
 interface Props {
   name: string;
@@ -7,7 +8,12 @@ interface Props {
 
 const { name } = Astro.props;
 
-const svg = formPatternSvgs[name];
+const allSvgs: Record<string, string> = {
+  ...inputSvgs,
+  ...formPatternSvgs,
+};
+
+const svg = allSvgs[name];
 ---
 
 {svg && (

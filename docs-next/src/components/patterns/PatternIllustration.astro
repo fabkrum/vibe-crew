@@ -1,6 +1,5 @@
 ---
-// Import all 8 SVG maps
-import { inputSvgs } from './input-svgs';
+// Import SVG maps (input moved to FormPatternIllustration)
 import { dataSvgs } from './data-svgs';
 import { navigationSvgs } from './navigation-svgs';
 import { feedbackSvgs } from './feedback-svgs';
@@ -19,7 +18,6 @@ const { name } = Astro.props;
 
 // Merge all maps — later maps win on key collision (shouldn't happen)
 const allSvgs: Record<string, string> = {
-  ...inputSvgs,
   ...dataSvgs,
   ...navigationSvgs,
   ...feedbackSvgs,

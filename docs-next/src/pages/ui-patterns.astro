@@ -14,7 +14,6 @@ const grouped = categoryOrder.reduce((acc, cat) => {
 const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
 
 const categoryDescriptions: Record<UIPattern['category'], string> = {
-  input: 'Form controls and input components for collecting user data — from simple text fields to complex date pickers and file uploads.',
   data: 'Components for presenting information — tables, charts, cards, and loading states that make data scannable and understandable.',
   navigation: 'Wayfinding components that help users move through your application — menus, tabs, sidebars, and breadcrumbs.',
   feedback: 'Status indicators and notifications that keep users informed about what happened, what went wrong, or what to do next.',

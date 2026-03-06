@@ -1,14 +1,13 @@
 export interface UIPattern {
   name: string;
   aliases: string[];
-  category: 'input' | 'data' | 'navigation' | 'feedback' | 'overlay' | 'layout' | 'interaction' | 'keyboard' | 'responsive' | 'error';
+  category: 'data' | 'navigation' | 'feedback' | 'overlay' | 'layout' | 'interaction' | 'keyboard' | 'responsive' | 'error';
   description: string;
   shadcn: string | null;
   docsUrl: string | null;
 }
 
 export const categoryLabels: Record<UIPattern['category'], string> = {
-  input: 'Collecting User Input',
   data: 'Displaying Data',
   navigation: 'Navigation',
   feedback: 'Feedback & Status',
@@ -21,28 +20,10 @@ export const categoryLabels: Record<UIPattern['category'], string> = {
 };
 
 export const categoryOrder: UIPattern['category'][] = [
-  'input', 'data', 'navigation', 'feedback', 'overlay', 'layout', 'interaction', 'keyboard', 'responsive', 'error',
+  'data', 'navigation', 'feedback', 'overlay', 'layout', 'interaction', 'keyboard', 'responsive', 'error',
 ];
 
 export const uiPatterns: UIPattern[] = [
-  // --- Collecting User Input ---
-  { name: 'Button', aliases: ['action', 'CTA', 'submit button'], category: 'input', description: 'A clickable element that triggers an action. Use for primary actions, form submissions, and confirmations.', shadcn: 'button', docsUrl: 'https://ui.shadcn.com/docs/components/button' },
-  { name: 'Checkbox', aliases: ['tick box', 'multi-select option'], category: 'input', description: 'A box you tick to turn an option on or off. Use for multiple selections from a list or boolean toggles.', shadcn: 'checkbox', docsUrl: 'https://ui.shadcn.com/docs/components/checkbox' },
-  { name: 'Combobox', aliases: ['autocomplete', 'type-ahead', 'searchable dropdown'], category: 'input', description: 'A search box that filters and suggests options as you type. Use for selecting from large lists (10+ items) like countries or tags.', shadcn: 'command + popover', docsUrl: 'https://ui.shadcn.com/docs/components/combobox' },
-  { name: 'Date Picker', aliases: ['calendar input', 'date selector'], category: 'input', description: 'A calendar popup for picking dates. Use for date selection, date ranges, and scheduling.', shadcn: 'calendar + popover', docsUrl: 'https://ui.shadcn.com/docs/components/date-picker' },
-  { name: 'Form', aliases: ['input form', 'data entry'], category: 'input', description: 'A group of fields the user fills in and submits. The foundation for any structured data collection.', shadcn: 'form', docsUrl: 'https://ui.shadcn.com/docs/components/form' },
-  { name: 'Input', aliases: ['text field', 'text box'], category: 'input', description: 'A text field where users type short text like names, emails, or search queries.', shadcn: 'input', docsUrl: 'https://ui.shadcn.com/docs/components/input' },
-  { name: 'Input OTP', aliases: ['verification code', 'PIN input'], category: 'input', description: 'Separate boxes for entering a verification code. Auto-advances on digit entry and supports paste.', shadcn: 'input-otp', docsUrl: 'https://ui.shadcn.com/docs/components/input-otp' },
-  { name: 'Label', aliases: ['field label', 'input label'], category: 'input', description: 'Text that describes what a form field is for. Every input must have one.', shadcn: 'label', docsUrl: 'https://ui.shadcn.com/docs/components/label' },
-  { name: 'Radio Group', aliases: ['single select', 'option picker'], category: 'input', description: 'A set of options where you pick exactly one. Use for mutually exclusive choices with 2\u20135 visible options.', shadcn: 'radio-group', docsUrl: 'https://ui.shadcn.com/docs/components/radio-group' },
-  { name: 'Select', aliases: ['dropdown', 'picker', 'select box'], category: 'input', description: 'A dropdown list for picking one option from 3\u201310 choices where space is limited.', shadcn: 'select', docsUrl: 'https://ui.shadcn.com/docs/components/select' },
-  { name: 'Slider', aliases: ['range slider', 'range input'], category: 'input', description: 'A draggable handle for picking a value within a range, like price or volume.', shadcn: 'slider', docsUrl: 'https://ui.shadcn.com/docs/components/slider' },
-  { name: 'Switch', aliases: ['toggle', 'on/off switch'], category: 'input', description: 'An on/off toggle that takes effect immediately. Use for settings like dark mode or notifications.', shadcn: 'switch', docsUrl: 'https://ui.shadcn.com/docs/components/switch' },
-  { name: 'Textarea', aliases: ['text area', 'message box'], category: 'input', description: 'A larger text box for writing longer content like descriptions, comments, or messages.', shadcn: 'textarea', docsUrl: 'https://ui.shadcn.com/docs/components/textarea' },
-  { name: 'Toggle', aliases: ['toggle button', 'pressed button'], category: 'input', description: 'A button that stays pressed or released. Use for formatting tools like bold/italic or view mode switching.', shadcn: 'toggle', docsUrl: 'https://ui.shadcn.com/docs/components/toggle' },
-  { name: 'Toggle Group', aliases: ['button group', 'segmented control'], category: 'input', description: 'A row of buttons where you pick one (or multiple). Use for view switchers or filter groups.', shadcn: 'toggle-group', docsUrl: 'https://ui.shadcn.com/docs/components/toggle-group' },
-  { name: 'File Upload', aliases: ['file picker', 'drag and drop'], category: 'input', description: 'A button or drop zone for uploading files. Always provide a button alternative alongside drag-and-drop.', shadcn: null, docsUrl: null },
-
   // --- Displaying Data ---
   { name: 'Avatar', aliases: ['profile picture', 'user icon'], category: 'data', description: 'A small circular image showing a user\'s photo or initials.', shadcn: 'avatar', docsUrl: 'https://ui.shadcn.com/docs/components/avatar' },
   { name: 'Badge', aliases: ['tag', 'chip', 'pill', 'status indicator'], category: 'data', description: 'A small colored label showing status or category. Use for status indicators, counts, or tags.', shadcn: 'badge', docsUrl: 'https://ui.shadcn.com/docs/components/badge' },

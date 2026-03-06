@@ -1,0 +1,152 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import FilterSearchPatternIllustration from '../components/patterns/FilterSearchPatternIllustration.astro';
+import { filterSearchPatterns, categoryLabels, categoryOrder } from '../data/filter-search-patterns';
+import type { FilterSearchPattern } from '../data/filter-search-patterns';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = filterSearchPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof filterSearchPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<FilterSearchPattern['category'], string> = {
+  search: 'Text search patterns — search bars, instant search, autocomplete, faceted search, and query management that help users find content fast.',
+  filter: 'Filter controls that narrow results — sidebar filters, horizontal bars, chips, range sliders, toggles, and presets for refining large datasets.',
+  sort: 'Sort controls for ordering results — dropdowns, column headers, direction indicators, and sensible defaults for every content type.',
+  combined: 'Composite patterns that wire search, filter, and sort together — URL sync, active filter summaries, result counts, and batch apply.',
+  performance: 'Performance patterns for responsive filtering — debouncing, client vs server filtering, caching, and search indexing strategies.',
+  a11y: 'Accessibility patterns ensuring search and filter interfaces work for everyone — landmarks, live regions, keyboard navigation, and group labeling.',
+  mobile: 'Mobile-optimized filter experiences — bottom sheets, collapsible panels, full-screen overlays, horizontal chip scrolling, and combined sort/filter buttons.',
+};
+---
+
+<DocsLayout title="Filter & Search Patterns" sectionLabel="Reference" activeSlug="filter-search-patterns">
+
+  <h2>Filter & Search Patterns</h2>
+  <p>Research-backed patterns for search, filtering, and sorting that VibeCrew agents apply when building list views, product catalogs, dashboards, and content discovery interfaces. Each pattern includes implementation guidance and accessibility requirements.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()&+]/g, '-')}>
+            <div class="pattern-card-inner">
+              <FilterSearchPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Implementation</span>
+                    <p>{entry.implementation}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Accessibility</span>
+                    <p>{entry.a11y}</p>
+                  </div>
+                  {entry.docsUrl && (
+                    <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Add search"</td><td>Search Bar + Debounced Input + Search Landmark + Live Result Count</td></tr>
+        <tr><td>"Filter by category"</td><td>Sidebar Filters + Multi-Select + Filter Chips + URL Sync</td></tr>
+        <tr><td>"A product listing page"</td><td>Faceted Search + Filter Chips + Sort Dropdown + Pagination + URL-Synced Filters</td></tr>
+        <tr><td>"Sort the table"</td><td>Column Sort + Sort Direction Indicators + aria-sort headers</td></tr>
+        <tr><td>"Make it work on mobile"</td><td>Bottom Sheet Filters + Sort & Filter Button + Horizontal Scroll Chips</td></tr>
+        <tr><td>"Search with autocomplete"</td><td>Search Suggestions + Recent Searches + Fuzzy Matching + Combobox ARIA</td></tr>
+        <tr><td>"A price filter"</td><td>Range Filter (dual slider + min/max inputs) + Filter Counts</td></tr>
+        <tr><td>"Quick filter buttons"</td><td>Filter Presets (ToggleGroup pills) + Active Filter Summary + Clear All</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Patterns</h3>
+    <p class="category-description">These patterns on other pages complement filter &amp; search interfaces. They are referenced here rather than duplicated — click through for full details.</p>
+    <ul class="related-links">
+      <li><a href="/ui-patterns#command">Command / Cmd+K</a> &mdash; Keyboard-triggered search box for actions and content (UI Patterns)</li>
+      <li><a href="/ui-patterns#debounced-search">Debounced Search</a> &mdash; Core interaction pattern for delayed search (UI Patterns)</li>
+      <li><a href="/ui-patterns#data-table">Data Table</a> &mdash; Sortable, filterable tables for structured data (UI Patterns)</li>
+      <li><a href="/ui-patterns#empty-state-—-no-results">Empty State — No Results</a> &mdash; What to show when search/filter returns nothing (UI Patterns)</li>
+      <li><a href="/form-patterns#combobox">Combobox</a> &mdash; Search-as-you-type selection component (Form Patterns)</li>
+      <li><a href="/ui-patterns#drawer">Drawer</a> &mdash; Mobile-friendly slide-out panel used for filter sheets (UI Patterns)</li>
+      <li><a href="/ui-patterns#pagination">Pagination</a> &mdash; Page navigation for search results (UI Patterns)</li>
+      <li><a href="/ui-patterns#list-virtualization">List Virtualization</a> &mdash; Rendering large result sets efficiently (UI Patterns)</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://www.nngroup.com/articles/filter-categories-values/" target="_blank" rel="noopener noreferrer">NN/G: Filter Categories and Values</a> &mdash; Research on filter UX design</li>
+      <li><a href="https://www.smashingmagazine.com/2021/07/frustrating-design-patterns-broken-frozen-filters/" target="_blank" rel="noopener noreferrer">Smashing: Designing Filters That Work</a> &mdash; Common filter pattern mistakes and fixes</li>
+      <li><a href="https://baymard.com/blog/how-to-design-applied-filters" target="_blank" rel="noopener noreferrer">Baymard: Applied Filters Design</a> &mdash; E-commerce filter best practices</li>
+      <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/" target="_blank" rel="noopener noreferrer">W3C: Combobox Pattern</a> &mdash; ARIA specification for accessible autocomplete</li>
+      <li><a href="https://www.scottohara.me/blog/2022/02/05/dynamic-results.html" target="_blank" rel="noopener noreferrer">Scott O'Hara: Dynamic Search Results</a> &mdash; Accessible live search implementation</li>
+      <li><a href="https://www.algolia.com/blog/ux/mobile-search-ux-part-three-seach-results-display/" target="_blank" rel="noopener noreferrer">Algolia: Mobile Search UX</a> &mdash; Mobile search result patterns</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .category-nav a { padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .category-nav a:hover { background: var(--color-accent-bg); color: var(--color-accent); text-decoration: none; }
+  .category-heading { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; margin-top: 2rem; }
+  .category-description { margin: 0 0 1.25rem; font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .pattern-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .pattern-card { padding: 1.25rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-surface); }
+  .pattern-card-inner { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .pattern-content { flex: 1; min-width: 0; }
+  @media (max-width: 600px) { .pattern-card-inner { flex-direction: column; } }
+  .pattern-name { font-size: 1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.5rem; }
+  .pattern-desc { font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.75rem; }
+  .pattern-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta-block { font-size: 0.85rem; line-height: 1.5; }
+  .meta-block p { margin: 0; color: var(--color-text-secondary); }
+  .meta-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-right: 0.35rem; }
+  .docs-link { display: inline-block; margin-top: 0.25rem; font-size: 0.82rem; font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+  .further-reading { margin-top: 3rem; }
+  .further-reading ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .further-reading li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .further-reading li:last-child { border-bottom: none; }
+  .further-reading a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .further-reading a:hover { text-decoration: underline; }
+</style>

@@ -384,6 +384,18 @@ If the feature involves onboarding, product tours, setup wizards, feature discov
 
 Severity: All onboarding findings are `warning` unless noted. Category: `"onboarding-compliance"`.
 
+### Step 10.23: Social Media Pattern Compliance
+
+If the feature involves social media links, share buttons, social embeds, social feeds, testimonials, social proof elements, team pages with social profiles, or fediverse integration, read `${CLAUDE_PLUGIN_ROOT}/templates/social-patterns.md`. Check:
+
+1. **Zero third-party scripts on load** — No social platform JavaScript is loaded without explicit user action. Social links are plain `<a>` tags with inline SVGs. Flag auto-loading social widgets, platform SDKs, or embed scripts as `critical`.
+2. **rel attributes** — Social profile links include `rel="noopener"` (security) and `rel="me"` (identity verification). External links include `target="_blank"`. Flag missing `rel="noopener"` on social links as `warning`.
+3. **Embed privacy** — Social embeds use facade/click-to-load pattern OR privacy-proxied URLs (`youtube-nocookie.com`, Vimeo `?dnt=1`). No auto-loading iframes from social platforms. Flag auto-loading social iframes as `critical`.
+4. **Share link correctness** — Share URLs use correct platform intent/share URL schemes with properly encoded parameters (`encodeURIComponent`). Copy-link button has visible success feedback. Flag broken or unencoded share URLs as `warning`.
+5. **Structured identity** — If social profiles are linked, corresponding `sameAs` values exist in page/site JSON-LD structured data. Flag missing sameAs structured data as `info`.
+
+Severity: All social findings are `warning` unless noted. Category: `"social-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

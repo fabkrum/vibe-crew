@@ -64,6 +64,7 @@ export const navigation: NavGroup[] = [
       { title: 'Filter & Search Patterns', slug: 'filter-search-patterns' },
       { title: 'Data Visualization Patterns', slug: 'dataviz-patterns' },
       { title: 'Notification Patterns', slug: 'notification-patterns' },
+      { title: 'Authentication Patterns', slug: 'auth-patterns' },
       { title: 'Dark Patterns to Avoid', slug: 'dark-patterns' },
       { title: 'Glossary', slug: 'glossary' },
     ],

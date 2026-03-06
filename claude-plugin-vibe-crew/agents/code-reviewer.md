@@ -314,6 +314,19 @@ If the feature involves notifications, toasts, alerts, push notifications, or re
 
 Severity: All notification findings are `warning` unless noted. Category: `"notification-compliance"`.
 
+### Step 10.18: Authentication Pattern Compliance
+
+If the feature involves login, signup, authentication, MFA, password management, session handling, or account security, read `${CLAUDE_PLUGIN_ROOT}/templates/auth-patterns.md`. Check:
+
+1. **Generic error messages** — Login errors use a single generic message ("Invalid email or password") and never reveal whether the email or password is incorrect. Flag account enumeration as `critical`.
+2. **Password visibility toggle** — Password fields include a show/hide toggle instead of a "confirm password" field. Flag duplicate password fields as `warning`.
+3. **ARIA labels on auth forms** — Login/signup forms use `<form>` with `aria-label`, visible `<label>` elements, and `aria-describedby` for errors. Flag missing form accessibility as `warning`.
+4. **Session timeout handling** — If session timeouts exist, users receive a warning dialog with option to extend before expiry. Flag silent session expiry as `warning`.
+5. **Re-authentication for sensitive actions** — Password changes, billing access, and security settings require fresh authentication. Flag missing re-auth on sensitive actions as `warning`.
+6. **Recovery path availability** — Password reset flow exists and uses generic confirmation messages regardless of email existence. Flag missing recovery flow as `critical`.
+
+Severity: All auth findings are `warning` unless noted. Category: `"auth-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

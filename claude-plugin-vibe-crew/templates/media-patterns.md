@@ -45,9 +45,9 @@ Agent-facing reference for media-rich interfaces — image galleries, video play
 
 ### Video Player Controls
 - **When:** Any custom video playback. Replace browser defaults for consistent UX.
-- **What:** Play/pause, progress scrubber, volume/mute, fullscreen, speed, captions toggle, quality selector. Progressive disclosure for advanced controls. Auto-hide during playback.
+- **What:** Play/pause, progress scrubber, volume/mute, fullscreen, speed, captions toggle, quality selector. Progressive disclosure for advanced controls. Auto-hide during playback. **Never autoplay content videos** — always require explicit user interaction (WCAG 1.4.2). Always provide a `poster` attribute with a representative frame (not a black frame).
 - **A11y:** All controls keyboard-operable. Play/pause: toggling `aria-label`. Progress: `role="slider"`. 44px minimum touch targets. WCAG 1.2: captions and audio descriptions.
-- **Anti-pattern:** Never remove keyboard controls. Never hide captions toggle.
+- **Anti-pattern:** Never autoplay content videos. Never omit the poster image. Never remove keyboard controls. Never hide captions toggle.
 
 ### Video Captions & Subtitles
 - **When:** All prerecorded video (WCAG 1.2.2 Level A). 85% of Facebook videos watched without sound.
@@ -155,14 +155,15 @@ Agent-facing reference for media-rich interfaces — image galleries, video play
 
 ### Responsive Images
 - **When:** Every meaningful image. Serve appropriate size per device.
-- **What:** `srcset` + `sizes` for resolution switching. `<picture>` for art direction. WebP/AVIF via CDN or build pipeline.
+- **What:** `srcset` + `sizes` for resolution switching. `<picture>` for art direction. WebP/AVIF via CDN or build pipeline. **Cap at 2x DPR** — human eyes cannot distinguish 2x from 3x on mobile screens (Twitter/X saved ~45% image weight with no perceivable loss). Never generate or serve 3x variants.
 - **A11y:** Alt text applies across all variants. Art-directed crops must not remove meaningful content.
+- **Anti-pattern:** Never serve 3x image variants. Never generate images larger than 2x the CSS display size.
 
 ### Image Format Optimization
 - **When:** Every image pipeline. AVIF saves ~50%, WebP ~30% vs JPEG.
-- **What:** `<picture>` with AVIF, WebP, JPEG sources. Build pipeline: sharp or squoosh. CDN auto-format. **Never use animated GIFs** — for any looping/animated visual, use `<video autoplay muted loop playsinline>` with MP4/WebM sources (80-90% smaller, hardware decoded). Convert with ffmpeg: `ffmpeg -i anim.gif -movflags +faststart -pix_fmt yuv420p output.mp4`.
+- **What:** `<picture>` with AVIF, WebP, JPEG sources. Build pipeline: sharp or squoosh. CDN auto-format. Quality: JPEG/WebP at 80, AVIF at 75 — reducing from 100 to 80 halves file size with no visible difference (SSIM-confirmed). **Never use animated GIFs** — for any looping/animated visual, use `<video autoplay muted loop playsinline>` with MP4/WebM sources (80-90% smaller, hardware decoded). Convert with ffmpeg: `ffmpeg -i anim.gif -movflags +faststart -pix_fmt yuv420p output.mp4`.
 - **A11y:** Format has zero accessibility impact. SVG icons: `role="img"` + `aria-label` when meaningful. Silent autoloop videos: `role="img"` + `aria-label`, pause on `prefers-reduced-motion`.
-- **Anti-pattern:** Never use animated GIF for any purpose. Always use silent autolooping `<video>` instead.
+- **Anti-pattern:** Never use animated GIF. Never use quality 100 in production. Never serve 3x image variants.
 
 ### Blur-Up Placeholder (LQIP)
 - **When:** Image-heavy pages. Instant visual context while loading.
@@ -185,3 +186,9 @@ Agent-facing reference for media-rich interfaces — image galleries, video play
 - **What:** Server: serve smaller images, skip video preload, disable auto-play. Client: detect via `navigator.connection?.saveData`. Skip LQIP blur-up (use dominant color), skip adjacent preloads, skip hover-to-preview animations. CSS `@media (prefers-reduced-data: reduce)` has near-zero browser support — use JS detection. Reduce fidelity, never remove functionality.
 - **A11y:** Alt text, captions, and transcripts must always be served regardless of `Save-Data`. If images become placeholders, alt text becomes primary content — ensure it is descriptive.
 - **Anti-pattern:** Never strip essential content for data-saver users. Never ignore the `Save-Data` header on media-heavy pages.
+
+### Web Font Optimization
+- **When:** Any project using custom web fonts. Prevents FOIT and CLS from font swap.
+- **What:** Serve WOFF2 only (30% smaller than WOFF, 97%+ browser support). Use `font-display: swap` for primary text, `font-display: optional` for secondary/decorative fonts. Preload 1-2 critical fonts: `<link rel="preload" href="font.woff2" as="font" type="font/woff2" crossorigin>`. Eliminate CLS with CSS @font-face override descriptors: `size-adjust`, `ascent-override`, `descent-override`, `line-gap-override` on a fallback @font-face to match web font metrics. Use fontpie, Fontaine (npm), or next/font for automatic calculation. Self-host fonts (avoid Google Fonts extra DNS lookup). Subset to needed character ranges.
+- **A11y:** CLS from font swap disorients screen magnifier users — metric overrides improve accessibility. Never use `font-display: block` (up to 3s invisible text). Icon fonts: use SVGs instead; if unavoidable, `aria-hidden="true"` with text alternatives.
+- **Anti-pattern:** Never use `font-display: block`. Never serve WOFF/TTF/EOT (obsolete). Never load Google Fonts from CDN when self-hosting is possible. Never skip metric overrides — fallback-to-webfont reflow causes measurable CLS.

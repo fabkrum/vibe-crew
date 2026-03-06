@@ -533,4 +533,28 @@ export const mediaPatternSvgs: Record<string, string> = {
   <rect x="113" y="92" width="55" height="4" rx="1" style="fill: var(--color-text-muted)" opacity="0.15"/>
 </svg>`,
 
+'Web Font Optimization': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="85" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="18" y="18" width="30" height="8" rx="2" style="fill: var(--color-text)" opacity="0.15"/>
+  <rect x="18" y="30" width="68" height="5" rx="2" style="fill: var(--color-text)" opacity="0.25"/>
+  <rect x="18" y="39" width="60" height="5" rx="2" style="fill: var(--color-text)" opacity="0.25"/>
+  <rect x="18" y="48" width="65" height="5" rx="2" style="fill: var(--color-text)" opacity="0.25"/>
+  <rect x="18" y="60" width="50" height="4" rx="2" style="fill: var(--color-text)" opacity="0.12"/>
+  <rect x="18" y="68" width="62" height="4" rx="2" style="fill: var(--color-text)" opacity="0.12"/>
+  <rect x="18" y="76" width="45" height="4" rx="2" style="fill: var(--color-text)" opacity="0.12"/>
+  <rect x="18" y="88" width="55" height="8" rx="3" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="24" y="94" style="fill: var(--color-accent); font-size: 5px; font-weight: bold; font-family: var(--font-sans)">WOFF2</text>
+  <path d="M100 55 L108 55 M105 52 L108 55 L105 58" style="stroke: var(--color-accent)" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <rect x="112" y="10" width="85" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="120" y="18" width="30" height="8" rx="2" style="fill: var(--color-accent)" opacity="0.3"/>
+  <rect x="120" y="30" width="68" height="5" rx="2" style="fill: var(--color-accent)" opacity="0.5"/>
+  <rect x="120" y="39" width="60" height="5" rx="2" style="fill: var(--color-accent)" opacity="0.5"/>
+  <rect x="120" y="48" width="65" height="5" rx="2" style="fill: var(--color-accent)" opacity="0.5"/>
+  <rect x="120" y="60" width="50" height="4" rx="2" style="fill: var(--color-text)" opacity="0.12"/>
+  <rect x="120" y="68" width="62" height="4" rx="2" style="fill: var(--color-text)" opacity="0.12"/>
+  <rect x="120" y="76" width="45" height="4" rx="2" style="fill: var(--color-text)" opacity="0.12"/>
+  <rect x="120" y="88" width="55" height="8" rx="3" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="124" y="94" style="fill: var(--color-accent); font-size: 5px; font-weight: bold; font-family: var(--font-sans)">swap</text>
+</svg>`,
+
 };

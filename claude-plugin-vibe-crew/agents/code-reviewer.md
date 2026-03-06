@@ -327,6 +327,21 @@ If the feature involves login, signup, authentication, MFA, password management,
 
 Severity: All auth findings are `warning` unless noted. Category: `"auth-compliance"`.
 
+### Step 10.19: Media Pattern Compliance
+
+If the feature involves image galleries, video players, audio playback, file uploads, media browsing, or media-heavy pages, read `${CLAUDE_PLUGIN_ROOT}/templates/media-patterns.md`. Check:
+
+1. **Lazy loading off-screen media** — Images and iframes below the fold use `loading="lazy"`. Above-the-fold and viewport-visible images must NEVER be lazy-loaded — this is a critical performance anti-pattern that delays LCP and causes visible pop-in. Flag lazy-loaded viewport images as `critical`. Flag missing lazy loading on below-fold media as `warning`.
+2. **LCP image priority** — Exactly one image per page has `fetchpriority="high"` (the LCP candidate). Multiple same-sized images above the fold without a clear LCP candidate cause unpredictable LCP — one must be visually dominant or explicitly prioritized. Auto-rotating carousels must not be the LCP element. If the LCP image is not discoverable by the preload scanner (CSS background, JS-rendered), a `<link rel="preload">` with `fetchpriority="high"` must exist. Flag `fetchpriority="high"` on multiple images as `warning`. Flag auto-rotating hero carousels as `warning`.
+3. **Responsive images** — Images use `srcset` and `sizes` or framework image components (Next.js Image, Astro Image). Flag fixed-size `<img>` tags without responsive attributes as `warning`.
+4. **Explicit media dimensions** — All `<img>` and `<video>` elements have explicit `width`/`height` or `aspect-ratio` to prevent CLS. Flag missing dimensions as `warning`.
+5. **Media player keyboard controls** — Custom video/audio players support keyboard operation (Space=play/pause, arrows=seek, M=mute). All controls have `aria-label`. Flag inaccessible media controls as `critical`.
+6. **Upload validation** — File uploads validate type and size client-side before upload starts with specific error messages. Drag-and-drop always includes a button fallback. Flag drag-only upload as `warning`.
+7. **Video captions** — Prerecorded videos include captions via `<track>` element (WCAG 1.2.2). Flag videos without caption support as `critical`.
+8. **Data-saver awareness** — Media-heavy pages check `Save-Data` header or `navigator.connection?.saveData` and serve lighter assets when active. Alt text, captions, and transcripts must always be served regardless of Save-Data. Flag media-heavy pages that ignore `Save-Data` as `info`.
+
+Severity: All media findings are `warning` unless noted. Category: `"media-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:

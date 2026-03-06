@@ -1,0 +1,153 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import MediaPatternIllustration from '../components/patterns/MediaPatternIllustration.astro';
+import { mediaPatterns, categoryLabels, categoryOrder } from '../data/media-patterns';
+import type { MediaPattern } from '../data/media-patterns';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = mediaPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof mediaPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<MediaPattern['category'], string> = {
+  image: 'Image patterns — gallery grids, masonry layouts, lightboxes, zoom interactions, cropping tools, and carousels for browsing and interacting with image collections.',
+  video: 'Video patterns — custom player controls, captions and subtitles, thumbnail previews, adaptive streaming, picture-in-picture, and third-party embeds.',
+  audio: 'Audio patterns — custom audio players, waveform visualizations, and playlist management for podcasts, music, and voice messages.',
+  upload: 'Upload patterns — drag-and-drop zones, progress indicators, multi-file queues, resumable uploads, and file type validation.',
+  preview: 'Preview patterns — image previews before upload, document viewers, video thumbnails, and file type icon mapping.',
+  optimization: 'Optimization patterns — lazy loading, responsive images, format optimization, blur-up placeholders, CDN caching, and media preloading.',
+};
+---
+
+<DocsLayout title="Media Patterns" sectionLabel="Reference" activeSlug="media-patterns">
+
+  <h2>Media Patterns</h2>
+  <p>Research-backed patterns for media-rich interfaces that VibeCrew agents apply when building image galleries, video players, audio experiences, file uploads, and media optimization. Each pattern includes implementation guidance, accessibility requirements, and anti-patterns based on NN/G, W3C WAI, Baymard Institute, web.dev, and WCAG research.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()&+]/g, '-')}>
+            <div class="pattern-card-inner">
+              <MediaPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Implementation</span>
+                    <p>{entry.implementation}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Accessibility</span>
+                    <p>{entry.a11y}</p>
+                  </div>
+                  {entry.docsUrl && (
+                    <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Add an image gallery"</td><td>Image Gallery Grid + Lightbox + Image Zoom + Lazy Loading + Responsive Images + blur-up placeholders + ARIA labels + keyboard navigation</td></tr>
+        <tr><td>"Add a video player"</td><td>Video Player Controls + Captions & Subtitles + Thumbnail Preview + Adaptive Streaming + Picture-in-Picture + keyboard controls + Media Session API</td></tr>
+        <tr><td>"Add file upload"</td><td>Drag-and-Drop Upload + Upload Progress + Multi-File Upload + File Type Validation + Image Preview + resumable uploads for large files</td></tr>
+        <tr><td>"Add a podcast player"</td><td>Audio Player with skip buttons + Waveform Visualization + Playlist + playback speed control + persistent playback position</td></tr>
+        <tr><td>"Embed a YouTube video"</td><td>Video Embed with facade pattern (saves 500KB+ JS) + aspect-ratio container + captions enabled + privacy-enhanced mode</td></tr>
+        <tr><td>"Optimize images"</td><td>Responsive Images + Image Format Optimization (AVIF/WebP) + Lazy Loading + Blur-Up Placeholder + CDN & Caching + preloading for LCP images</td></tr>
+        <tr><td>"Add a document viewer"</td><td>Document Viewer (PDF.js) + page navigation + zoom + search + download + print + text selection + File Icon Mapping for non-PDF files</td></tr>
+        <tr><td>"Let users crop photos"</td><td>Image Cropping with preset aspect ratios + rule-of-thirds grid + live preview + Image Preview before upload + client/server-side crop application</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Patterns</h3>
+    <p class="category-description">These patterns on other pages complement media interfaces. They are referenced here rather than duplicated — click through for full details.</p>
+    <ul class="related-links">
+      <li><a href="/ui-patterns#carousel">Carousel</a> &mdash; General carousel component pattern (UI Patterns)</li>
+      <li><a href="/ui-patterns#aspect-ratio">Aspect Ratio</a> &mdash; Maintaining proportions for media containers (UI Patterns)</li>
+      <li><a href="/ui-patterns#skeleton">Skeleton</a> &mdash; Loading placeholder for media content (UI Patterns)</li>
+      <li><a href="/ui-patterns#dialog">Dialog</a> &mdash; Modal overlay used for lightbox implementation (UI Patterns)</li>
+      <li><a href="/form-patterns#file-upload">File Upload</a> &mdash; Form-level file input patterns (Form Patterns)</li>
+      <li><a href="/filter-search-patterns#infinite-scroll">Infinite Scroll</a> &mdash; Continuous loading for large media galleries (Filter & Search Patterns)</li>
+      <li><a href="/filter-search-patterns#pagination">Pagination</a> &mdash; Page-based navigation for media collections (Filter & Search Patterns)</li>
+      <li><a href="/animation-patterns#page-transitions">Page Transitions</a> &mdash; Smooth transitions between gallery views (Animation Patterns)</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://www.w3.org/WAI/media/av/player/" target="_blank" rel="noopener noreferrer">W3C WAI: Media Players</a> &mdash; Accessibility requirements for audio and video players</li>
+      <li><a href="https://web.dev/patterns/media/picture-in-picture" target="_blank" rel="noopener noreferrer">web.dev: Picture-in-Picture</a> &mdash; Implementation guide for PiP on the web</li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading" target="_blank" rel="noopener noreferrer">MDN: Lazy Loading</a> &mdash; Browser-native lazy loading for images and iframes</li>
+      <li><a href="https://www.industrialempathy.com/posts/image-optimizations/" target="_blank" rel="noopener noreferrer">Maximally Optimizing Image Loading</a> &mdash; Comprehensive image optimization techniques</li>
+      <li><a href="https://uploadcare.com/blog/file-uploader-ux-best-practices/" target="_blank" rel="noopener noreferrer">Uploadcare: File Uploader UX Best Practices</a> &mdash; Upload interaction design guide</li>
+      <li><a href="https://wavesurfer.xyz/" target="_blank" rel="noopener noreferrer">wavesurfer.js</a> &mdash; Audio waveform visualization library</li>
+      <li><a href="https://ui.shadcn.com/docs/components/radix/carousel" target="_blank" rel="noopener noreferrer">shadcn/ui: Carousel</a> &mdash; Carousel component built on Embla</li>
+      <li><a href="https://mobbin.com/glossary/gallery" target="_blank" rel="noopener noreferrer">Mobbin: Gallery UI Design</a> &mdash; Gallery layout design patterns and examples</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .category-nav a { padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .category-nav a:hover { background: var(--color-accent-bg); color: var(--color-accent); text-decoration: none; }
+  .category-heading { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; margin-top: 2rem; }
+  .category-description { margin: 0 0 1.25rem; font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .pattern-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .pattern-card { padding: 1.25rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-surface); }
+  .pattern-card-inner { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .pattern-content { flex: 1; min-width: 0; }
+  @media (max-width: 600px) { .pattern-card-inner { flex-direction: column; } }
+  .pattern-name { font-size: 1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.5rem; }
+  .pattern-desc { font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.75rem; }
+  .pattern-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta-block { font-size: 0.85rem; line-height: 1.5; }
+  .meta-block p { margin: 0; color: var(--color-text-secondary); }
+  .meta-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-right: 0.35rem; }
+  .docs-link { display: inline-block; margin-top: 0.25rem; font-size: 0.82rem; font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+  .further-reading { margin-top: 3rem; }
+  .further-reading ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .further-reading li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .further-reading li:last-child { border-bottom: none; }
+  .further-reading a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .further-reading a:hover { text-decoration: underline; }
+</style>

@@ -1,6 +1,6 @@
 export interface LegalPattern {
   name: string;
-  category: 'pages' | 'consent' | 'data' | 'accessibility' | 'regional';
+  category: 'pages' | 'consent' | 'data' | 'accessibility' | 'regional' | 'dark-patterns';
   description: string;
   requirement: string;
   penalty: string;
@@ -13,10 +13,11 @@ export const categoryLabels: Record<LegalPattern['category'], string> = {
   data: 'Data Rights',
   accessibility: 'Accessibility Compliance',
   regional: 'Regional Requirements',
+  'dark-patterns': 'Dark Patterns (Legal)',
 };
 
 export const categoryOrder: LegalPattern['category'][] = [
-  'pages', 'consent', 'data', 'accessibility', 'regional',
+  'pages', 'consent', 'data', 'accessibility', 'regional', 'dark-patterns',
 ];
 
 export const legalPatterns: LegalPattern[] = [
@@ -90,5 +91,39 @@ export const legalPatterns: LegalPattern[] = [
     requirement: 'EAA/BFSG (June 2025)',
     penalty: 'Up to \u20ac100,000 or 4% revenue',
     docsUrl: 'https://www.w3.org/WAI/planning/statements/',
+  },
+
+  // --- Dark Patterns (Legal) ---
+  {
+    name: 'Consent Asymmetry',
+    category: 'dark-patterns',
+    description: 'Accept and Reject buttons must have equal visual weight — same size, same prominence, same click depth. A large colorful "Accept All" next to a tiny gray "Manage preferences" link violates consent requirements.',
+    requirement: 'GDPR Art. 7, EDPB Guidelines 05/2020, TTDSG \u00a725',
+    penalty: 'CNIL fined Google \u20ac150M and Facebook \u20ac60M (2022)',
+    docsUrl: 'https://www.edpb.europa.eu/our-work-tools/documents/public-consultations/2020/guidelines-052020-consent-under-regulation_en',
+  },
+  {
+    name: 'Pre-checked Options',
+    category: 'dark-patterns',
+    description: 'No pre-selected consent categories for non-essential cookies or marketing. All optional checkboxes must start unchecked. Pre-ticked boxes do not constitute valid consent under EU law (Planet49 ruling, 2019).',
+    requirement: 'GDPR Art. 7(2), Planet49 ruling (CJEU C-673/17)',
+    penalty: 'Up to 4% annual revenue or \u20ac20M',
+    docsUrl: null,
+  },
+  {
+    name: 'Hidden Subscription',
+    category: 'dark-patterns',
+    description: 'Free trial to paid conversion must be clearly disclosed with amount, date, and cancellation path visible at the point of signup. Send a pre-charge reminder email before conversion.',
+    requirement: 'FTC Click-to-Cancel Rule (2024), EU Consumer Rights Directive Art. 6',
+    penalty: 'Amazon FTC settlement \u002430M (2023). FTC fines vary by case.',
+    docsUrl: null,
+  },
+  {
+    name: 'Cancellation Obstruction',
+    category: 'dark-patterns',
+    description: 'Cancellation must be as easy as signup — maximum 2 steps (click Cancel, Confirm). No mandatory phone calls, multi-page retention flows, or hidden cancellation paths.',
+    requirement: 'FTC Click-to-Cancel Rule (2025), EU Consumer Rights Directive Art. 11, California AB-390',
+    penalty: 'FTC enforcement actions. State-level fines vary.',
+    docsUrl: null,
   },
 ];

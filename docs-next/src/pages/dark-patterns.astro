@@ -1,0 +1,337 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import DarkPatternIllustration from '../components/patterns/DarkPatternIllustration.astro';
+import { darkPatterns, categoryLabels, categoryOrder } from '../data/dark-patterns';
+import type { DarkPattern } from '../data/dark-patterns';
+
+// Group patterns by category
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = darkPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof darkPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<DarkPattern['category'], string> = {
+  pressure: 'Patterns that create artificial urgency or emotional pressure to force quick decisions — fake scarcity, fake countdowns, guilt-tripping decline options, and persistent nagging.',
+  deception: 'Patterns that mislead through confusing language, disguised elements, fabricated evidence, or visual manipulation to trick users into unintended actions.',
+  hidden: 'Patterns that conceal costs, terms, or comparison information until the user is already committed — surprise fees, stealth subscriptions, and obstructed comparisons.',
+  obstruction: 'Patterns that make it deliberately difficult to leave, cancel, or avoid unwanted actions — hard-to-find cancellation, forced account creation, and silently added items.',
+  preselection: 'Patterns that exploit default settings to opt users into choices they didn\'t make — pre-checked boxes and asymmetric consent interfaces.',
+};
+---
+
+<DocsLayout title="Dark Patterns to Avoid" sectionLabel="Reference" activeSlug="dark-patterns">
+
+  <h2>Dark Patterns to Avoid</h2>
+  <p>Deceptive design patterns that manipulate users into unintended actions. VibeCrew agents detect and prevent these during design and code review. Each pattern includes detection guidance and ethical alternatives.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+    <a href="#checklist">Ethical Design Checklist</a>
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()]/g, '-')}>
+            <div class="pattern-card-inner">
+              <DarkPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">How to detect</span>
+                    <p>{entry.howToDetect}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Ethical alternative</span>
+                    <p>{entry.ethicalAlternative}</p>
+                  </div>
+                  {entry.legalRisk && (
+                    <div class="meta-block legal-risk">
+                      <span class="meta-label">Legal risk</span>
+                      <p>{entry.legalRisk}</p>
+                    </div>
+                  )}
+                  <span class="source-badge">{entry.source}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="checklist-section" id="checklist">
+    <h3 class="category-heading">Ethical Design Checklist</h3>
+    <p class="category-description">Before shipping any feature involving consent, checkout, subscriptions, or user decisions, run through this 7-question cognitive walkthrough (adapted from NNGroup):</p>
+    <ol class="checklist">
+      <li><strong>Equal weight test</strong> &mdash; Do all options (accept/reject, subscribe/skip, buy/cancel) have equal visual prominence?</li>
+      <li><strong>No surprises test</strong> &mdash; Is the total cost visible from the first price display? Are all fees disclosed?</li>
+      <li><strong>One-click reversal test</strong> &mdash; Can the user undo their action (unsubscribe, cancel, opt out) as easily as they did it?</li>
+      <li><strong>Neutral language test</strong> &mdash; Are decline options written in neutral tone without guilt or shame?</li>
+      <li><strong>Real data test</strong> &mdash; Are all numbers (stock counts, user counts, reviews, timers) backed by real data?</li>
+      <li><strong>Respect decline test</strong> &mdash; When a user says "no," does the system remember and stop asking?</li>
+      <li><strong>Transparency test</strong> &mdash; Would you be comfortable if a regulator reviewed this UI flow?</li>
+    </ol>
+  </section>
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Cookie consent"</td><td>Equal-weight Accept/Reject buttons + granular settings + consent logging</td></tr>
+        <tr><td>"Free trial signup"</td><td>Clear conversion terms + pre-charge reminder email + one-click cancellation</td></tr>
+        <tr><td>"Pricing page"</td><td>Honest comparison table + all fees visible + no pre-selected premium tier</td></tr>
+        <tr><td>"Newsletter popup"</td><td>Single non-intrusive prompt + neutral decline + dismissal persistence</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Pages</h3>
+    <ul class="related-links">
+      <li><a href="/legal-compliance">Legal & Compliance</a> &mdash; Legal patterns including consent asymmetry, pre-checked options, and hidden subscription regulations</li>
+      <li><a href="/business-patterns">Business Patterns</a> &mdash; Ethical conversion and trust patterns that work without manipulation</li>
+      <li><a href="/form-patterns">Form Patterns</a> &mdash; Accessible, user-respecting form design</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Sources & Further Reading</h3>
+    <ul>
+      <li><a href="https://www.deceptive.design/" target="_blank" rel="noopener noreferrer">deceptive.design</a> &mdash; Harry Brignull's comprehensive dark pattern taxonomy and hall of shame</li>
+      <li><a href="https://www.nngroup.com/articles/dark-patterns/" target="_blank" rel="noopener noreferrer">Nielsen Norman Group</a> &mdash; Dark pattern research and ethical design guidelines</li>
+      <li><a href="https://www.ftc.gov/reports/bringing-dark-patterns-light" target="_blank" rel="noopener noreferrer">FTC: Bringing Dark Patterns to Light</a> &mdash; US Federal Trade Commission enforcement report</li>
+      <li><a href="https://gdpr.eu/cookies/" target="_blank" rel="noopener noreferrer">GDPR.eu</a> &mdash; Cookie consent requirements under GDPR and ePrivacy</li>
+      <li><a href="https://www.cookieyes.com/blog/dark-patterns/" target="_blank" rel="noopener noreferrer">CookieYes</a> &mdash; Dark patterns in cookie consent and how to avoid them</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .category-nav a {
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .category-nav a:hover {
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .category-heading {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .category-description {
+    margin: 0 0 1.25rem;
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .pattern-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .pattern-card {
+    padding: 1.25rem;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+  }
+
+  .pattern-card-inner {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .pattern-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: 600px) {
+    .pattern-card-inner {
+      flex-direction: column;
+    }
+  }
+
+  .pattern-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0 0 0.5rem;
+  }
+
+  .pattern-desc {
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+  }
+
+  .pattern-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .meta-block {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .meta-block p {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .meta-label {
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    margin-right: 0.35rem;
+  }
+
+  .legal-risk .meta-label {
+    color: hsl(0, 84%, 60%);
+  }
+
+  .source-badge {
+    display: inline-block;
+    margin-top: 0.25rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    border-radius: var(--radius-xs);
+    letter-spacing: 0.02em;
+  }
+
+  .checklist-section { margin-top: 3rem; }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    counter-reset: checklist;
+  }
+
+  .checklist li {
+    counter-increment: checklist;
+    padding: 0.75rem 0 0.75rem 2.5rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .checklist li:last-child {
+    border-bottom: none;
+  }
+
+  .checklist li::before {
+    content: counter(checklist);
+    position: absolute;
+    left: 0;
+    top: 0.75rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-accent-bg);
+    color: var(--color-accent);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+
+  .further-reading {
+    margin-top: 3rem;
+  }
+
+  .further-reading ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+  }
+
+  .further-reading li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  .further-reading li:last-child {
+    border-bottom: none;
+  }
+
+  .further-reading a {
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .further-reading a:hover {
+    text-decoration: underline;
+  }
+</style>

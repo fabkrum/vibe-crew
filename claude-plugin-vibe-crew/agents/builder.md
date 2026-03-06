@@ -218,6 +218,7 @@ If not installed: full design guidance as documented below.
 4.10. Read `${CLAUDE_PLUGIN_ROOT}/templates/error-handling-patterns.md` for error handling strategy. Identify error boundaries, retry patterns, empty states, and offline handling needed for the feature. Note in design spec under "Error Handling Strategy".
 4.11. Read `${CLAUDE_PLUGIN_ROOT}/templates/i18n-patterns.md` for internationalization requirements if the feature involves user input, displayed text, or number/date formatting. Note locale-sensitive patterns in the design spec under "i18n Considerations".
 4.12. Read `${CLAUDE_PLUGIN_ROOT}/templates/legal-compliance.md` for legal compliance requirements. For frontend projects, flag missing legal pages (impressum, privacy policy, cookie consent). Note in design spec under "Legal Requirements".
+4.14. Read `${CLAUDE_PLUGIN_ROOT}/templates/dark-patterns.md` for dark pattern prevention. Cross-reference the feature spec for dark pattern risks — especially consent flows, checkout, subscription management, cookie banners, cancellation flows, and notification permission requests. Note applicable anti-patterns and their ethical alternatives in the design spec under "Dark Pattern Prevention".
 4.5. Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md` for business success patterns. Cross-reference the feature spec (especially `spec.expected_action` if present) against the pattern trigger conditions. For each applicable pattern:
    - Include the recommendation in the design spec under a "Business Patterns Applied" section.
    - Explain WHY the pattern applies to this feature (cite the research rationale from the reference).
@@ -301,6 +302,9 @@ If not installed: full design guidance as documented below.
 
    ## Legal Requirements
    [required pages, consent mechanisms, jurisdictions]
+
+   ## Dark Pattern Prevention
+   [identified risks, applicable anti-patterns, ethical alternatives]
    ```
 8. Signal completion with `builder-design-complete.signal`.
 
@@ -451,6 +455,7 @@ Follow `helpers.md#Code-Quality-Standards` for ALL code you write. These cover T
 - **ALWAYS evaluate interaction/performance patterns** during the Design Phase. Check trigger conditions for Optimistic UI, Skeleton Loading, Import on Visibility, Debounced Search, and other patterns against the feature spec.
 - **NEVER ship a custom interactive component without verifying keyboard navigation.** Check the W3C APG keyboard interaction spec for that component type in `components.md`.
 - **Every overlay MUST trap focus and restore it on close.** This is non-negotiable, even for simple popovers. shadcn/ui handles this via Radix — verify it works for any custom overlays.
+- **NEVER implement dark patterns.** No fake scarcity/urgency without real data, no confirmshaming, no pre-checked consent boxes, no consent asymmetry (accept/reject must have equal visual weight), no hidden costs, no sneaking items into carts, no obstruction of cancellation. Read `${CLAUDE_PLUGIN_ROOT}/templates/dark-patterns.md` for the full list.
 - **ALWAYS use CSS custom properties** from `design-system.css`. NEVER hardcode colors (`#hex`, `rgb()`, `hsl()` literals not wrapped in `var()`), spacing (pixel values not from the scale), or font sizes.
 - **ALWAYS work on feature branches**. Branch naming: `feat/{feature-name}` for features, `fix/{issue}` for fixes. NEVER commit directly to `main`.
 - **ALWAYS use conventional commits**. Format: `type(scope): description`. Types: `feat`, `fix`, `style`, `refactor`, `test`, `docs`, `chore`. Scope: the feature or component name.

@@ -102,4 +102,57 @@ export const legalPatternSvgs: Record<string, string> = {
   <text x="148" y="82" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">consent first</text>
 </svg>`,
 
+
+'Consent Asymmetry': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="40" width="180" height="50" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="20" y="58" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">We use cookies for analytics</text>
+  <rect x="18" y="66" width="80" height="18" rx="4" style="fill: var(--color-accent)"/>
+  <text x="58" y="78" text-anchor="middle" style="fill: #fff; font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Accept All</text>
+  <rect x="106" y="66" width="80" height="18" rx="4" style="stroke: var(--color-accent); fill: none" stroke-width="1.5"/>
+  <text x="146" y="78" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Reject All</text>
+  <text x="100" y="22" text-anchor="middle" style="fill: var(--color-accent); font-size: 11px; font-weight: 800; font-family: var(--font-sans)">=</text>
+  <line x1="30" y1="18" x2="170" y2="18" style="stroke: var(--color-accent)" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Equal weight required</text>
+</svg>`,
+
+'Pre-checked Options': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="10" width="140" height="100" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="50" y="30" style="fill: var(--color-text); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Cookie Preferences</text>
+  <rect x="44" y="40" width="14" height="14" rx="2" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="64" y="51" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Essential (required)</text>
+  <rect x="44" y="60" width="14" height="14" rx="2" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="64" y="71" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Analytics</text>
+  <rect x="44" y="80" width="14" height="14" rx="2" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="64" y="91" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Marketing</text>
+  <polyline points="46,47 50,51 56,43" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="42" y1="58" x2="60" y2="76" style="stroke: hsl(0, 84%, 60%)" stroke-width="2" stroke-linecap="round"/>
+  <line x1="60" y1="58" x2="42" y2="76" style="stroke: hsl(0, 84%, 60%)" stroke-width="2" stroke-linecap="round"/>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">No pre-ticked boxes</text>
+</svg>`,
+
+'Hidden Subscription': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="8" width="140" height="56" rx="6" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="100" y="28" text-anchor="middle" style="fill: var(--color-text); font-size: 10px; font-weight: 700; font-family: var(--font-sans)">Start Free Trial</text>
+  <text x="100" y="42" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">14 days free, then $9.99/mo</text>
+  <text x="100" y="54" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Cancel anytime before trial ends</text>
+  <path d="M88 70 L100 82 L112 70" style="stroke: var(--color-accent); fill: none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="50" y="88" width="100" height="24" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="62" y="100" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-mono)">Reminder email</text>
+  <text x="62" y="108" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-mono)">3 days before charge</text>
+</svg>`,
+
+'Cancellation Obstruction': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="24" y="14" width="72" height="44" rx="6" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="60" y="32" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Sign Up</text>
+  <text x="60" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">1 click</text>
+  <text x="100" y="40" text-anchor="middle" style="fill: var(--color-accent); font-size: 16px; font-weight: 800; font-family: var(--font-sans)">=</text>
+  <rect x="104" y="14" width="72" height="44" rx="6" style="stroke: hsl(0, 84%, 60%); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="140" y="32" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Cancel</text>
+  <text x="140" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">2 clicks max</text>
+  <rect x="40" y="74" width="120" height="32" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="100" y="88" text-anchor="middle" style="fill: hsl(0, 84%, 60%); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Cancel Subscription</text>
+  <text x="100" y="100" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Are you sure? [Confirm]</text>
+  <text x="100" y="116" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Easy as signup</text>
+</svg>`,
+
 };

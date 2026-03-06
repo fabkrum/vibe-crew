@@ -262,6 +262,19 @@ Run `${CLAUDE_PLUGIN_ROOT}/scripts/validate-legal-compliance.sh` against the pro
 
 Severity: Varies per check (see above). Category: `"legal-compliance"`.
 
+### Step 10.13: Dark Pattern Compliance
+
+Read `${CLAUDE_PLUGIN_ROOT}/templates/dark-patterns.md`. Check the implementation for deceptive UX patterns. Legal-impact dark patterns (consent asymmetry, pre-checked options, hidden subscription, cancellation obstruction) are already checked in step 10.12 Legal Compliance as `critical`. This step covers UX/ethical patterns:
+
+1. **Confirmshaming** — Decline options use neutral language, not guilt-tripping ("No thanks, I don't want to save money"). Flag guilt-tripping decline text as `warning`.
+2. **Fake urgency/scarcity** — No countdown timers or stock counts without real data backing. Flag client-side-only countdowns or hardcoded scarcity numbers as `warning`.
+3. **Hidden costs** — Total price shown early; no surprise fees at final checkout step. Flag fee calculations that only appear in the final step as `warning`.
+4. **Forced action** — Users aren't required to perform unrelated actions (e.g., social sharing to unlock features, account creation for public content). Flag unnecessary gates as `warning`.
+5. **Nagging** — Permission requests happen at most once after decline; no persistent interruptions. Flag missing dismissal persistence as `warning`.
+6. **Sneaking** — No items/options added to cart or selections changed without explicit user action. Flag programmatic cart additions or pre-checked add-on checkboxes as `warning`.
+
+Severity: All dark pattern findings are `warning`. Category: `"dark-pattern-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:
@@ -304,7 +317,7 @@ mkdir -p .vibecrew/reviews
   "findings": [
     {
       "severity": "critical|warning|info",
-      "category": "correctness|tdr-compliance|architecture-consistency|convention|code-quality|design-system|visual-compliance|error-handling|test-coverage|security|performance|business-patterns",
+      "category": "correctness|tdr-compliance|architecture-consistency|convention|code-quality|design-system|visual-compliance|error-handling|test-coverage|security|performance|business-patterns|dark-pattern-compliance",
       "file": "src/components/Example.tsx",
       "line": 42,
       "title": "Short finding title",

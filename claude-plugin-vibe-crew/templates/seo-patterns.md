@@ -214,3 +214,30 @@ Agent-facing reference for search engine optimization and AI agent discoverabili
 - **What:** Google Search Console verification (meta tag or DNS). Submit sitemap. Monitor: Index Coverage, Performance, Core Web Vitals, Enhancements. Email alerts for critical issues. Fix crawl errors promptly. URL Inspection for individual pages.
 - **A11y:** External monitoring tool. No direct accessibility impact.
 - **Anti-pattern:** Never ignore coverage errors. Never skip sitemap submission. Never ignore Core Web Vitals warnings.
+
+## 8. Performance & Caching
+
+### Cache-Control for HTML Pages
+- **When:** Every HTML page response.
+- **What:** `Cache-Control: no-cache`. Forces revalidation but allows 304 (use cache) if unchanged. HTML can't be fingerprinted — the URL is the URL.
+- **Anti-pattern:** Never use `max-age` on HTML without fingerprinting. `no-cache` ≠ "don't cache" — it means "always revalidate before serving from cache". For truly uncacheable content (banking), use `no-store`.
+
+### Cache-Control for Fingerprinted Assets
+- **When:** All CSS/JS/font/image files with content-hash filenames (e.g., `style.ae3f66.css`).
+- **What:** `Cache-Control: max-age=31536000, immutable`. One year cache, skip revalidation even on refresh. The filename changes when content changes, so stale cache is impossible.
+- **Anti-pattern:** Never apply `immutable` to mutable filenames. Never use query-string versioning (`style.css?v=1.2`) — CDNs/proxies strip query params. Content-hash fingerprinting is the only reliable method.
+
+### Cache-Control for API Data
+- **When:** API responses with varying freshness requirements.
+- **What:** Non-critical: `max-age=60, stale-while-revalidate=300`. Critical: `no-cache`. Sensitive: `private, no-store`. CDN layer: `s-maxage=3600` overrides `max-age` for shared caches.
+- **Anti-pattern:** Never cache sensitive data (banking, PII) with `public`. Never omit `Vary: Accept-Encoding`.
+
+### Cache-Control for Images & Media
+- **When:** All image and media file responses.
+- **What:** Fingerprinted: `max-age=31536000, immutable`. General: `max-age=2419200, must-revalidate, stale-while-revalidate=86400` (28 days + 1 day stale grace). User uploads: `max-age=3600, private, must-revalidate`.
+- **Anti-pattern:** Never cache user-specific images with `public`. Always pair with `ETag` or `Last-Modified` for revalidation.
+
+### Stale-While-Revalidate Pattern
+- **When:** Non-critical content where momentarily stale responses are acceptable.
+- **What:** `max-age=3600, stale-while-revalidate=86400`. Serves cached immediately, revalidates in background. User sees content instantly. Add `stale-if-error=86400` for outage resilience — serve stale on 5xx instead of error pages.
+- **Anti-pattern:** Never use SWR for real-time data (prices, scores). Never set stale windows longer than content volatility justifies.

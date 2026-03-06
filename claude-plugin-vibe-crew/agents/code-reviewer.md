@@ -423,6 +423,19 @@ If the feature involves HTML pages, layouts, document templates, or `<head>` ele
 
 Severity: All head order findings are `warning` unless noted. Category: `"head-order-compliance"`.
 
+### Step 10.26: Mobile & Touch Pattern Compliance
+
+If the feature involves mobile interfaces, touch interactions, bottom navigation, swipe gestures, stories, carousels, share sheets, or any UI that will be used on phones/tablets, read `${CLAUDE_PLUGIN_ROOT}/templates/mobile-patterns.md`. Check:
+
+1. **Touch target sizing** — Interactive elements are at least 48x48dp with 8px non-interactive gaps between adjacent targets. Flag undersized targets as `warning`. Flag missing spacing as `warning`.
+2. **Thumb zone placement** — Primary actions (CTAs, inputs, submit buttons) are placed in the bottom third of the mobile viewport. Flag primary CTAs in the top-right corner on mobile as `warning`.
+3. **Safe area insets** — Fixed-position elements (headers, tab bars, FABs, bottom sheets) use `env(safe-area-inset-*)` padding. `viewport-fit=cover` is set. Flag missing safe-area padding on fixed elements as `warning`.
+4. **Dynamic viewport height** — Full-screen layouts use `100dvh`, not `100vh`. Flag `100vh` for full-screen mobile layouts as `warning`.
+5. **iOS zoom prevention** — All `<input>`, `<select>`, and `<textarea>` elements have `font-size: 16px` or larger. Flag `font-size` below 16px on form inputs as `warning`. Flag `user-scalable=no` or `maximum-scale=1` in viewport meta as `critical`.
+6. **Gesture alternatives** — Swipe, long-press, and pinch interactions have visible non-gesture alternatives (buttons, links, menu triggers). Flag gesture-only interactions as `warning`.
+
+Severity: All mobile & touch findings are `warning` unless noted. Category: `"mobile-touch-compliance"`.
+
 ### Step 10.5: Business Pattern Compliance
 
 Read `${CLAUDE_PLUGIN_ROOT}/templates/business-patterns.md`. Check if the implementation follows applicable patterns:
@@ -465,7 +478,7 @@ mkdir -p .vibecrew/reviews
   "findings": [
     {
       "severity": "critical|warning|info",
-      "category": "correctness|tdr-compliance|architecture-consistency|convention|code-quality|design-system|visual-compliance|error-handling|test-coverage|security|performance|business-patterns|dark-pattern-compliance|head-order-compliance",
+      "category": "correctness|tdr-compliance|architecture-consistency|convention|code-quality|design-system|visual-compliance|error-handling|test-coverage|security|performance|business-patterns|dark-pattern-compliance|head-order-compliance|mobile-touch-compliance",
       "file": "src/components/Example.tsx",
       "line": 42,
       "title": "Short finding title",

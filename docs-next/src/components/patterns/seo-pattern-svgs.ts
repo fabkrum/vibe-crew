@@ -656,4 +656,103 @@ export const seoPatternSvgs: Record<string, string> = {
   <rect x="40" y="92" width="40" height="2.5" rx="1" style="fill: var(--color-text)" opacity="0.06"/>
 </svg>`,
 
+'Cache-Control for HTML Pages': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="20" y="20" width="70" height="35" rx="4" style="fill: var(--color-accent)" opacity="0.1"/>
+  <text x="55" y="34" text-anchor="middle" style="font-size: 8px; font-weight: 700; fill: var(--color-accent)">Browser</text>
+  <text x="55" y="46" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-secondary)">no-cache</text>
+  <path d="M90 38 L110 38" style="stroke: var(--color-accent)" stroke-width="1.5" marker-end="url(#arr-cc1)"/>
+  <defs><marker id="arr-cc1" viewBox="0 0 6 6" refX="6" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L6,3 L0,6" style="fill: var(--color-accent)"/></marker></defs>
+  <rect x="110" y="20" width="70" height="35" rx="4" style="fill: var(--color-accent)" opacity="0.1"/>
+  <text x="145" y="34" text-anchor="middle" style="font-size: 8px; font-weight: 700; fill: var(--color-accent)">Server</text>
+  <text x="145" y="46" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-secondary)">304 or 200</text>
+  <rect x="20" y="65" width="70" height="18" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="55" y="77" text-anchor="middle" style="font-size: 7px; fill: var(--color-accent)">304 → use cache</text>
+  <rect x="110" y="65" width="70" height="18" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="145" y="77" text-anchor="middle" style="font-size: 7px; fill: var(--color-accent)">200 → new HTML</text>
+  <text x="100" y="98" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-muted)">Always revalidate, cache if unchanged</text>
+</svg>`,
+
+'Cache-Control for Fingerprinted Assets': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="20" y="20" width="160" height="22" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="100" y="34" text-anchor="middle" style="font-size: 8px; font-weight: 700; fill: var(--color-accent)">max-age=31536000, immutable</text>
+  <rect x="20" y="50" width="50" height="28" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
+  <text x="45" y="62" text-anchor="middle" style="font-size: 7px; font-weight: 600; fill: var(--color-accent)">.ae3f66.css</text>
+  <text x="45" y="73" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">1 year cache</text>
+  <rect x="75" y="50" width="50" height="28" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
+  <text x="100" y="62" text-anchor="middle" style="font-size: 7px; font-weight: 600; fill: var(--color-accent)">.1be87a.js</text>
+  <text x="100" y="73" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">No revalidate</text>
+  <rect x="130" y="50" width="50" height="28" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
+  <text x="155" y="62" text-anchor="middle" style="font-size: 7px; font-weight: 600; fill: var(--color-accent)">.f4c2d1.woff</text>
+  <text x="155" y="73" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">Skip on refresh</text>
+  <text x="100" y="98" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-muted)">Hash in filename = safe to cache forever</text>
+</svg>`,
+
+'Cache-Control for Dynamic API Data': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="18" y="18" width="54" height="44" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="45" y="30" text-anchor="middle" style="font-size: 7px; font-weight: 700; fill: var(--color-accent)">Non-critical</text>
+  <text x="45" y="42" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">max-age=60</text>
+  <text x="45" y="52" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">swr=300</text>
+  <rect x="76" y="18" width="52" height="44" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="102" y="30" text-anchor="middle" style="font-size: 7px; font-weight: 700; fill: var(--color-accent)">Critical</text>
+  <text x="102" y="42" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">no-cache</text>
+  <text x="102" y="52" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">always fresh</text>
+  <rect x="132" y="18" width="52" height="44" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="158" y="30" text-anchor="middle" style="font-size: 7px; font-weight: 700; fill: var(--color-accent)">Sensitive</text>
+  <text x="158" y="42" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">private</text>
+  <text x="158" y="52" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">no-store</text>
+  <rect x="18" y="70" width="164" height="30" rx="4" style="fill: var(--color-accent)" opacity="0.06"/>
+  <text x="100" y="84" text-anchor="middle" style="font-size: 7px; font-weight: 600; fill: var(--color-accent)">CDN: s-maxage=3600</text>
+  <text x="100" y="94" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">Different TTL for CDN vs browser cache</text>
+</svg>`,
+
+'Cache-Control for Images & Media': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="18" y="18" width="50" height="40" rx="3" style="fill: var(--color-accent)" opacity="0.1"/>
+  <rect x="24" y="24" width="38" height="22" rx="2" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="43" y="38" text-anchor="middle" style="font-size: 10px; fill: var(--color-accent)">🖼</text>
+  <text x="43" y="54" text-anchor="middle" style="font-size: 5.5px; fill: var(--color-text-secondary)">28 days</text>
+  <rect x="74" y="18" width="50" height="40" rx="3" style="fill: var(--color-accent)" opacity="0.1"/>
+  <rect x="80" y="24" width="38" height="22" rx="2" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="99" y="38" text-anchor="middle" style="font-size: 10px; fill: var(--color-accent)">🎬</text>
+  <text x="99" y="54" text-anchor="middle" style="font-size: 5.5px; fill: var(--color-text-secondary)">immutable</text>
+  <rect x="130" y="18" width="50" height="40" rx="3" style="fill: var(--color-accent)" opacity="0.1"/>
+  <rect x="136" y="24" width="38" height="22" rx="2" style="fill: var(--color-accent)" opacity="0.15"/>
+  <text x="155" y="38" text-anchor="middle" style="font-size: 10px; fill: var(--color-accent)">👤</text>
+  <text x="155" y="54" text-anchor="middle" style="font-size: 5.5px; fill: var(--color-text-secondary)">1 hour</text>
+  <text x="100" y="76" text-anchor="middle" style="font-size: 7px; fill: var(--color-accent)">ETag + Last-Modified for revalidation</text>
+  <text x="100" y="90" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-muted)">Fingerprinted → immutable | General → 28d | Uploads → 1h</text>
+</svg>`,
+
+'Cache Busting Strategy': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <rect x="18" y="18" width="164" height="22" rx="3" style="fill: var(--color-accent)" opacity="0.12"/>
+  <text x="100" y="28" text-anchor="middle" style="font-size: 7px; font-weight: 700; fill: var(--color-accent)">✓ style.ae3f66.css → content hash</text>
+  <text x="100" y="37" text-anchor="middle" style="font-size: 6px; fill: var(--color-text-secondary)">Change content → new hash → new URL → cache busted</text>
+  <rect x="18" y="46" width="164" height="14" rx="3" style="fill: var(--color-text-muted)" opacity="0.1"/>
+  <text x="100" y="56" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-muted)">⚠ style.css?v=1.2 → query string (unreliable)</text>
+  <rect x="18" y="64" width="164" height="14" rx="3" style="fill: #fef2f2"/>
+  <text x="100" y="74" text-anchor="middle" style="font-size: 7px; fill: #ef4444">✕ style.css → no busting (dangerous)</text>
+  <rect x="18" y="86" width="164" height="18" rx="3" style="fill: var(--color-accent)" opacity="0.06"/>
+  <text x="100" y="98" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-secondary)">Build tools (Vite, webpack) fingerprint automatically</text>
+</svg>`,
+
+'Stale-While-Revalidate Pattern': `<svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="10" width="180" height="100" rx="6" style="fill: var(--color-surface); stroke: var(--color-border)" stroke-width="1"/>
+  <text x="100" y="24" text-anchor="middle" style="font-size: 8px; font-weight: 700; fill: var(--color-text)">Timeline</text>
+  <line x1="30" y1="42" x2="170" y2="42" style="stroke: var(--color-border)" stroke-width="1.5"/>
+  <rect x="30" y="34" width="46" height="16" rx="2" style="fill: var(--color-accent)" opacity="0.2"/>
+  <text x="53" y="45" text-anchor="middle" style="font-size: 6px; font-weight: 600; fill: var(--color-accent)">Fresh (1h)</text>
+  <rect x="76" y="34" width="70" height="16" rx="2" style="fill: #fefce8" stroke="#eab308" stroke-width="0.5"/>
+  <text x="111" y="45" text-anchor="middle" style="font-size: 6px; font-weight: 600; fill: #a16207">Stale OK (24h)</text>
+  <rect x="146" y="34" width="24" height="16" rx="2" style="fill: #fef2f2" stroke="#ef4444" stroke-width="0.5"/>
+  <text x="158" y="45" text-anchor="middle" style="font-size: 5px; fill: #ef4444">Must</text>
+  <text x="100" y="66" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-secondary)">Serve stale → revalidate in background</text>
+  <text x="100" y="78" text-anchor="middle" style="font-size: 7px; fill: var(--color-text-secondary)">User sees content instantly</text>
+  <rect x="30" y="86" width="140" height="14" rx="3" style="fill: var(--color-accent)" opacity="0.08"/>
+  <text x="100" y="96" text-anchor="middle" style="font-size: 6px; fill: var(--color-accent)">+ stale-if-error=86400 for outage resilience</text>
+</svg>`,
+
 };

@@ -16,7 +16,7 @@ Agent-facing reference for optimal `<head>` element ordering. The Builder reads 
 | 4 | Sync Styles | `<link rel="stylesheet">`, `<style>` | Render-blocking. After sync scripts for parallel discovery. |
 | 3 | Preload | `<link rel="preload">`, `<link rel="modulepreload">` | Hints for soon-needed resources. Below actual resources. |
 | 2 | Deferred Scripts | `<script defer>`, `<script type="module">` | Execute after parsing. Low urgency for early discovery. |
-| 1 | Prefetch/Prerender | `<link rel="prefetch">`, `<link rel="dns-prefetch">`, speculation rules | Future navigations. Must not compete with current-page resources. |
+| 1 | Prefetch/Prerender | `<link rel="prefetch">`, `<link rel="dns-prefetch">`, `<script type="speculationrules">` | Future navigations. Must not compete with current-page resources. |
 | 0 | Everything Else | OG tags, description, icons, canonical, alternate, manifest | No rendering impact. Bottom of `<head>`. |
 
 ## Key Rules
@@ -98,8 +98,20 @@ Agent-facing reference for optimal `<head>` element ordering. The Builder reads 
   <!-- Deferred scripts (weight 2) -->
   <script defer src="/app.js"></script>
 
-  <!-- Prefetch (weight 1) -->
+  <!-- Prefetch / Speculation Rules (weight 1) -->
   <link rel="dns-prefetch" href="https://analytics.example.com">
+  <script type="speculationrules">
+  {
+    "prerender": [
+      { "where": { "selector_matches": "[data-prefetch=prerender]" }, "eagerness": "immediate" },
+      { "where": { "selector_matches": "[data-prefetch='']" }, "eagerness": "moderate" }
+    ],
+    "prefetch": [
+      { "where": { "selector_matches": "[data-prefetch='']" }, "eagerness": "immediate" },
+      { "where": { "and": [{ "href_matches": "/*" }, { "not": { "selector_matches": "[data-prefetch=false]" } }] }, "eagerness": "moderate" }
+    ]
+  }
+  </script>
 
   <!-- Everything else (weight 0) -->
   <meta name="description" content="...">

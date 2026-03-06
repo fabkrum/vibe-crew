@@ -1,0 +1,771 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Mobile &amp; Touch Patterns</title><meta name="description" content="The autonomous vibe-coding operating system that turns Claude Code into a full development team."><meta name="author" content="Fabian Krumbholz"><meta name="generator" content="Astro v5.18.0"><link rel="canonical" href="https://fabkrum.github.io/vibe-crew/mobile-patterns.html"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://fabkrum.github.io/vibe-crew/mobile-patterns.html"><meta property="og:title" content="VibeCrew — Mobile &#38; Touch Patterns"><meta property="og:description" content="The autonomous vibe-coding operating system that turns Claude Code into a full development team."><meta property="og:image" content="https://fabkrum.github.io/vibe-crew/images/og-default.svg"><meta property="og:site_name" content="VibeCrew Documentation"><!-- Twitter / X --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="VibeCrew — Mobile &#38; Touch Patterns"><meta name="twitter:description" content="The autonomous vibe-coding operating system that turns Claude Code into a full development team."><meta name="twitter:image" content="https://fabkrum.github.io/vibe-crew/images/og-default.svg"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"VibeCrew — Mobile & Touch Patterns","description":"The autonomous vibe-coding operating system that turns Claude Code into a full development team.","url":"https://fabkrum.github.io/vibe-crew/mobile-patterns.html","author":{"@type":"Person","name":"Fabian Krumbholz"},"publisher":{"@type":"Person","name":"Fabian Krumbholz"},"mainEntityOfPage":"https://fabkrum.github.io/vibe-crew/mobile-patterns.html"}</script><link rel="stylesheet" href="/vibe-crew/_astro/mobile-patterns.BtOyfTqc.css">
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/animation-patterns.html" class="sidebar-link"> Animation Patterns </a><a href="/vibe-crew/form-patterns.html" class="sidebar-link"> Form Patterns </a><a href="/vibe-crew/i18n-guide.html" class="sidebar-link"> i18n Guide </a><a href="/vibe-crew/legal-compliance.html" class="sidebar-link"> Legal &amp; Compliance </a><a href="/vibe-crew/filter-search-patterns.html" class="sidebar-link"> Filter &amp; Search Patterns </a><a href="/vibe-crew/dataviz-patterns.html" class="sidebar-link"> Data Visualization Patterns </a><a href="/vibe-crew/notification-patterns.html" class="sidebar-link"> Notification Patterns </a><a href="/vibe-crew/auth-patterns.html" class="sidebar-link"> Authentication Patterns </a><a href="/vibe-crew/media-patterns.html" class="sidebar-link"> Media Patterns </a><a href="/vibe-crew/collaboration-patterns.html" class="sidebar-link"> Collaboration Patterns </a><a href="/vibe-crew/settings-patterns.html" class="sidebar-link"> Settings Patterns </a><a href="/vibe-crew/onboarding-patterns.html" class="sidebar-link"> Onboarding Patterns </a><a href="/vibe-crew/social-patterns.html" class="sidebar-link"> Social Media Patterns </a><a href="/vibe-crew/mobile-patterns.html" class="sidebar-link active"> Mobile &amp; Touch Patterns </a><a href="/vibe-crew/responsive-patterns.html" class="sidebar-link"> Responsive Patterns </a><a href="/vibe-crew/error-handling-patterns.html" class="sidebar-link"> Error Handling Patterns </a><a href="/vibe-crew/seo-patterns.html" class="sidebar-link"> SEO &amp; AI Discoverability </a><a href="/vibe-crew/head-order-patterns.html" class="sidebar-link"> Head Order Patterns </a><a href="/vibe-crew/page-composition-guides.html" class="sidebar-link"> Page Composition Guides </a><a href="/vibe-crew/dark-patterns.html" class="sidebar-link"> Dark Patterns to Avoid </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Reference</span>  <span class="separator">/</span> <span>Mobile &amp; Touch Patterns</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://fabkrum.github.io/vibe-crew/"},{"@type":"ListItem","position":2,"name":"Reference"},{"@type":"ListItem","position":3,"name":"Mobile & Touch Patterns"}]}</script>  <h2 data-astro-cid-fy7fumfv>Mobile & Touch Patterns</h2> <p data-astro-cid-fy7fumfv>32 research-backed patterns for building mobile-first, touch-friendly interfaces. Each pattern covers thumb-zone ergonomics, gesture handling, safe-area compliance, and accessibility — so VibeCrew agents produce interfaces that feel native on every device.</p> <nav class="category-nav" aria-label="Pattern categories" data-astro-cid-fy7fumfv> <a href="#cat-touch" data-astro-cid-fy7fumfv>Touch Targets &amp; Ergonomics</a><a href="#cat-navigation" data-astro-cid-fy7fumfv>Mobile Navigation</a><a href="#cat-gestures" data-astro-cid-fy7fumfv>Gestures &amp; Interactions</a><a href="#cat-layout" data-astro-cid-fy7fumfv>Mobile Layout &amp; Safe Areas</a><a href="#cat-feedback" data-astro-cid-fy7fumfv>Mobile Feedback</a><a href="#cat-content" data-astro-cid-fy7fumfv>Content Patterns</a><a href="#cat-utilities" data-astro-cid-fy7fumfv>Utility Components</a> </nav> <section class="pattern-section" id="cat-touch" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Touch Targets &amp; Ergonomics</h3> <p class="category-description" data-astro-cid-fy7fumfv>Touch target sizing, thumb zone placement, spacing, and input ergonomics — the foundation of usable mobile interfaces.</p> <div class="pattern-list" data-astro-cid-fy7fumfv> <div class="pattern-card" id="thumb-zone-design" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="64" y="8" width="72" height="104" rx="8" style="fill: var(--color-surface)"/>
+  <!-- Stretch zone (top) -->
+  <rect x="64" y="8" width="72" height="30" rx="8" style="fill: var(--color-accent-bg); opacity: 0.3"/>
+  <text x="100" y="26" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">STRETCH</text>
+  <!-- Reach zone (middle) -->
+  <rect x="64" y="38" width="72" height="30" style="fill: var(--color-accent-bg); opacity: 0.5"/>
+  <text x="100" y="56" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">REACH</text>
+  <!-- Thumb zone (bottom) - highlighted -->
+  <rect x="64" y="68" width="72" height="44" rx="0 0 8 8" style="fill: var(--color-accent-bg); opacity: 0.8"/>
+  <text x="100" y="86" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 700; font-family: var(--font-sans)">THUMB ZONE</text>
+  <rect x="72" y="94" width="56" height="14" rx="4" style="fill: var(--color-accent)"/>
+  <text x="100" y="104" text-anchor="middle" style="fill: var(--color-surface); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Action</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Thumb Zone Design</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Place primary actions in the bottom third of the screen where thumbs naturally rest. The top of the screen is the stretch zone — reserve it for less-frequent actions or information display. The &quot;thumb zone&quot; principle applies to all one-handed mobile usage.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Position CTAs, navigation, and primary inputs at the bottom. Use `env(safe-area-inset-bottom)` to pad above the home indicator. Test by holding the phone with one hand — if you can&#39;t reach a primary button, move it down.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Bottom placement benefits motor-impaired users who may have limited reach. Ensure actions remain visible to screen magnification users by not placing them at the extreme edge.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="touch-target-sizing" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Small target (bad) -->
+  <rect x="20" y="20" width="16" height="16" rx="3" style="stroke: var(--color-text-muted); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="28" y="31" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">x</text>
+  <text x="28" y="52" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">16px</text>
+  <line x1="20" y1="46" x2="36" y2="46" style="stroke: var(--color-text-muted)" stroke-width="0.5" stroke-dasharray="2"/>
+  <!-- Arrow -->
+  <text x="62" y="32" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 14px; font-family: var(--font-sans)">→</text>
+  <!-- Good target with expanded hit area -->
+  <rect x="80" y="8" width="48" height="48" rx="6" style="stroke: var(--color-accent); fill: none" stroke-width="1" stroke-dasharray="3"/>
+  <rect x="96" y="24" width="16" height="16" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="104" y="35" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">x</text>
+  <text x="104" y="72" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">48px</text>
+  <line x1="80" y1="66" x2="128" y2="66" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="2"/>
+  <!-- Label -->
+  <text x="104" y="88" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">::after hit area</text>
+  <!-- Finger circle -->
+  <circle cx="165" cy="35" r="22" style="fill: var(--color-accent-bg); opacity: 0.5"/>
+  <text x="165" y="38" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">finger</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Touch Target Sizing</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Minimum 48x48dp (Material Design) or 44x44px (WCAG 2.5.8). Small targets cause mis-taps, especially for users with motor impairments. The most common mobile usability failure.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Set `min-width: 48px; min-height: 48px` on interactive elements. For small icons, expand the hit area using a `::after` pseudo-element with `position: absolute; inset: -8px`. Never rely on visual size alone.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>WCAG 2.5.8 (Target Size Minimum) requires 24x24px minimum with no adjacent targets within 24px. WCAG 2.5.5 (Target Size Enhanced, AAA) requires 44x44px. Use the larger target.</p> </div> <a class="docs-link" href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="large-tap-areas" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Card with full tap area -->
+  <rect x="15" y="10" width="170" height="40" rx="6" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <circle cx="40" cy="30" r="12" style="fill: var(--color-accent); opacity: 0.3"/>
+  <text x="60" y="26" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Entire card tappable</text>
+  <text x="60" y="38" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">display: block on anchor</text>
+  <text x="158" y="32" style="fill: var(--color-accent); font-size: 10px; font-family: var(--font-sans)">→</text>
+  <!-- Bad example: only text tappable -->
+  <rect x="15" y="64" width="170" height="40" rx="6" style="stroke: var(--color-border-subtle); fill: var(--color-surface)" stroke-width="1"/>
+  <circle cx="40" cy="84" r="12" style="fill: var(--color-surface-2)"/>
+  <text x="60" y="80" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Only</text>
+  <text x="78" y="80" style="fill: var(--color-accent); font-size: 9px; text-decoration: underline; font-family: var(--font-sans)">link text</text>
+  <text x="110" y="80" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">tappable</text>
+  <text x="60" y="92" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Dead space frustrates users</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Large Tap Areas</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Make entire rows, cards, and list items tappable — not just the text or icon inside them. Users expect the full surface to be interactive. Tapping dead space next to a link and getting no response frustrates users.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Use `display: block` on anchor elements wrapping cards. For list items, apply `cursor: pointer` and click handler to the `&lt;li&gt;`, not a nested element. Ensure the entire visual container responds to touch.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>The tappable element must be a semantic link (`&lt;a&gt;`) or button. If the card has multiple actions, use one primary link wrapping the card and `position: relative` + `z-index` for secondary actions.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="minimum-spacing-between-targets" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bad: no spacing -->
+  <text x="30" y="16" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Too close</text>
+  <rect x="10" y="22" width="40" height="32" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="50" y="22" width="40" height="32" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="30" y="42" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Btn A</text>
+  <text x="70" y="42" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">Btn B</text>
+  <line x1="50" y1="58" x2="50" y2="62" style="stroke: var(--color-text-muted)" stroke-width="1"/>
+  <text x="50" y="70" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">0px!</text>
+  <!-- Good: 8px gap -->
+  <text x="155" y="16" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">8px gap</text>
+  <rect x="115" y="22" width="40" height="32" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <rect x="163" y="22" width="40" height="32" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="135" y="42" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-family: var(--font-sans)">Btn A</text>
+  <text x="183" y="42" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-family: var(--font-sans)">Btn B</text>
+  <line x1="155" y1="30" x2="163" y2="30" style="stroke: var(--color-accent)" stroke-width="1"/>
+  <line x1="155" y1="28" x2="155" y2="32" style="stroke: var(--color-accent)" stroke-width="1"/>
+  <line x1="163" y1="28" x2="163" y2="32" style="stroke: var(--color-accent)" stroke-width="1"/>
+  <text x="159" y="72" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">gap: 8px</text>
+  <!-- Ghost touch label -->
+  <text x="100" y="100" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-style: italic; font-family: var(--font-sans)">Prevents ghost touch errors</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Minimum Spacing Between Targets</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Maintain at least 8px of non-interactive space between adjacent touch targets. Without spacing, users accidentally trigger the wrong action — the &quot;ghost touch zone&quot; problem, especially common in dense lists and toolbars.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Use `gap: 8px` in flex/grid containers with interactive elements. For inline buttons, add `margin-inline: 4px`. Test with large-finger simulation (Chrome DevTools touch emulation at 2x DPR).</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>WCAG 2.5.8 allows undersized targets if they have 24px spacing. Generous spacing is the simplest way to meet target size requirements on constrained interfaces.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="fab-placement" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Content lines -->
+  <rect x="68" y="14" width="50" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="22" width="64" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="30" width="40" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="42" width="64" height="20" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="66" width="64" height="20" rx="3" style="fill: var(--color-surface-2)"/>
+  <!-- FAB -->
+  <circle cx="124" cy="92" r="14" style="fill: var(--color-accent)"/>
+  <text x="124" y="97" text-anchor="middle" style="fill: var(--color-surface); font-size: 16px; font-weight: 300; font-family: var(--font-sans)">+</text>
+  <!-- Tab bar -->
+  <rect x="60" y="100" width="80" height="16" rx="0 0 12 12" style="fill: var(--color-surface-2)"/>
+  <!-- Label -->
+  <text x="30" y="95" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">56px</text>
+  <line x1="45" y1="92" x2="110" y2="92" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="2"/>
+  <text x="170" y="95" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">above tab bar</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>FAB Placement</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Floating Action Button — a circular primary action button fixed at the bottom-right corner. Use for a single promoted action (compose, add, create). Limit to one per screen.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Fixed position, `bottom: calc(16px + env(safe-area-inset-bottom))`, `right: 16px`. Size: 56px diameter. Place above the tab bar if present. Use `z-index` above content but below modals.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Must have an accessible label (`aria-label=&quot;Create new item&quot;`). Should not obscure content — add scroll padding at the bottom. Consider hiding on scroll-down, showing on scroll-up.</p> </div> <a class="docs-link" href="https://m3.material.io/components/floating-action-button/overview" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="input-field-sizing" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bad: small input -->
+  <text x="50" y="16" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">font-size: 14px</text>
+  <rect x="10" y="22" width="80" height="24" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="18" y="38" style="fill: var(--color-text-muted); font-size: 9px; font-family: var(--font-sans)">Email...</text>
+  <text x="50" y="58" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-style: italic; font-family: var(--font-sans)">iOS zooms!</text>
+  <!-- Good: proper input -->
+  <text x="150" y="16" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">font-size: 16px</text>
+  <rect x="110" y="22" width="80" height="32" rx="4" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="118" y="42" style="fill: var(--color-text-secondary); font-size: 11px; font-family: var(--font-sans)">Email...</text>
+  <text x="150" y="68" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">48px height</text>
+  <!-- Arrow with dimension -->
+  <line x1="102" y1="22" x2="102" y2="54" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="2"/>
+  <!-- Bottom label -->
+  <text x="100" y="100" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">16px prevents iOS auto-zoom</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Input Field Sizing</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Text inputs need 48px minimum height and `font-size: 16px` to prevent iOS Safari from auto-zooming. iOS zooms the viewport when focused inputs have font-size below 16px, breaking layout.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Set `min-height: 48px; font-size: 16px` on all `&lt;input&gt;`, `&lt;textarea&gt;`, and `&lt;select&gt;` elements. The 16px rule specifically prevents iOS zoom — use it even if your design system prefers smaller text.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Larger inputs benefit users with motor impairments. Clear visual focus styles (2px+ border change) required. Pair with visible labels above (not placeholder-only).</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-navigation" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Mobile Navigation</h3> <p class="category-description" data-astro-cid-fy7fumfv>Mobile navigation patterns — bottom tabs, drawers, back buttons, collapsing headers, and bottom sheets for in-thumb-reach navigation.</p> <div class="pattern-list" data-astro-cid-fy7fumfv> <div class="pattern-card" id="bottom-tab-bar" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Content area -->
+  <rect x="68" y="14" width="64" height="72" rx="4" style="fill: var(--color-surface-2); opacity: 0.3"/>
+  <!-- Tab bar -->
+  <rect x="64" y="90" width="72" height="22" rx="4" style="fill: var(--color-surface-2)"/>
+  <!-- Tab 1: Home (active) -->
+  <circle cx="78" cy="97" r="4" style="fill: var(--color-accent)"/>
+  <text x="78" y="108" text-anchor="middle" style="fill: var(--color-accent); font-size: 5px; font-weight: 600; font-family: var(--font-sans)">Home</text>
+  <!-- Tab 2 -->
+  <circle cx="92" cy="97" r="3" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <text x="92" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Search</text>
+  <!-- Tab 3 -->
+  <circle cx="106" cy="97" r="3" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <text x="106" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Cart</text>
+  <!-- Tab 4 -->
+  <circle cx="120" cy="97" r="3" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <text x="120" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Profile</text>
+  <!-- Labels -->
+  <text x="22" y="100" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">3-5</text>
+  <text x="22" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">tabs</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Bottom Tab Bar</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A fixed bar at the bottom of the screen with 3-5 navigation tabs, each showing an icon and label. The dominant mobile navigation pattern — used by every major app. More than 5 tabs becomes cramped.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Fixed position at bottom with `padding-bottom: env(safe-area-inset-bottom)`. Each tab: icon + text label stacked vertically. Active tab highlighted with color and/or filled icon variant. Use `&lt;nav&gt;` with `role=&quot;tablist&quot;`.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Use `&lt;nav aria-label=&quot;Main navigation&quot;&gt;`. Each tab: `role=&quot;tab&quot;`, `aria-selected=&quot;true|false&quot;`, `aria-current=&quot;page&quot;` for active. Labels are mandatory — icon-only tabs fail WCAG 1.1.1.</p> </div> <a class="docs-link" href="https://m3.material.io/components/navigation-bar/overview" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="drawer-navigation" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Phone outline -->
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Backdrop -->
+  <rect x="64" y="8" width="72" height="104" rx="8" style="fill: var(--color-text); opacity: 0.15"/>
+  <!-- Drawer panel -->
+  <rect x="64" y="8" width="52" height="104" rx="8 0 0 8" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Close X -->
+  <text x="108" y="20" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">×</text>
+  <!-- Nav items -->
+  <rect x="70" y="22" width="40" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <text x="74" y="29" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Home</text>
+  <rect x="70" y="34" width="40" height="8" rx="2" style="fill: var(--color-surface)"/>
+  <text x="74" y="41" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">Products</text>
+  <rect x="70" y="46" width="40" height="8" rx="2" style="fill: var(--color-surface)"/>
+  <text x="74" y="53" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">About</text>
+  <rect x="70" y="58" width="40" height="8" rx="2" style="fill: var(--color-surface)"/>
+  <text x="74" y="65" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">Contact</text>
+  <!-- Width label -->
+  <text x="30" y="60" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">80vw</text>
+  <line x1="40" y1="58" x2="60" y2="58" style="stroke: var(--color-text-muted)" stroke-width="0.5" stroke-dasharray="2"/>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Drawer Navigation</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A side panel (typically 80vw wide) that slides in from the left or right, containing navigation links. Best for apps with 5+ sections or deep hierarchies. Always closeable via X button, backdrop tap, and swipe.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Width: `min(80vw, 360px)`. Close triggers: X button (top-right), backdrop click, swipe in closing direction. Transition: 250ms ease-out. Use `overscroll-behavior: contain` to prevent body scroll.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Focus trap inside open drawer. Close on Escape. Return focus to hamburger trigger on close. Drawer: `role=&quot;dialog&quot;`, `aria-modal=&quot;true&quot;`, `aria-label=&quot;Site navigation&quot;`.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="back-navigation" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Header bar -->
+  <rect x="64" y="8" width="72" height="20" rx="8 8 0 0" style="fill: var(--color-surface-2)"/>
+  <!-- Back chevron -->
+  <text x="74" y="22" style="fill: var(--color-accent); font-size: 12px; font-weight: 600; font-family: var(--font-sans)">‹</text>
+  <text x="84" y="21" style="fill: var(--color-text); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Details</text>
+  <!-- Content -->
+  <rect x="68" y="34" width="64" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="44" width="50" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="54" width="58" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <!-- Touch target indicator -->
+  <rect x="66" y="10" width="20" height="16" rx="3" style="stroke: var(--color-accent); fill: none" stroke-width="1" stroke-dasharray="2"/>
+  <text x="20" y="22" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">44x44</text>
+  <line x1="35" y1="20" x2="64" y2="18" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="2"/>
+  <!-- Swipe gesture hint -->
+  <text x="36" y="80" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">← swipe</text>
+  <text x="36" y="90" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">from edge</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Back Navigation</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A left-pointing chevron or arrow in the top-left corner that navigates to the previous screen. The universal mobile &quot;go back&quot; gesture. Must align with both Android back button and iOS swipe-back expectations.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Top-left position, min 44x44px touch target. Use `history.back()` or explicit route. On iOS, support swipe-from-left-edge with `touch-action: pan-x` on the first 20px of viewport.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Label: `aria-label=&quot;Go back&quot;` or `aria-label=&quot;Back to [previous page]&quot;`. The button itself must be a `&lt;button&gt;` or `&lt;a&gt;`, not a div with click handler.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="collapsing-header" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Expanded state -->
+  <rect x="10" y="8" width="80" height="48" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="14" y="12" width="72" height="20" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="50" y="26" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Page Title</text>
+  <text x="50" y="42" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Subtitle text here</text>
+  <text x="50" y="52" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">56px</text>
+  <!-- Arrow -->
+  <text x="100" y="36" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">scroll ↓</text>
+  <!-- Collapsed state -->
+  <rect x="110" y="16" width="80" height="28" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="150" y="34" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 700; font-family: var(--font-sans)">Page Title</text>
+  <text x="150" y="56" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">44px</text>
+  <!-- Content below -->
+  <rect x="110" y="50" width="80" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="110" y="58" width="70" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="110" y="66" width="75" height="4" rx="2" style="fill: var(--color-surface-2)"/>
+  <!-- More content label -->
+  <text x="150" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">More content visible</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Collapsing Header</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A header that shrinks from a tall layout (56px with title/subtitle) to a compact bar (44px with title only) as the user scrolls down, maximizing content space. Restores when scrolling back up.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Use `IntersectionObserver` on a sentinel element or `scroll` event (throttled) to toggle a `.collapsed` class. Transition: `height 200ms ease`. Hide subtitle with `opacity: 0` and `overflow: hidden`.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Content must remain accessible in both states. Never hide navigation controls during collapse. Use `prefers-reduced-motion` to disable the animation and snap between states.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="bottom-sheet" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Dimmed background -->
+  <rect x="64" y="8" width="72" height="40" rx="8 8 0 0" style="fill: var(--color-text); opacity: 0.1"/>
+  <!-- Bottom sheet -->
+  <rect x="64" y="48" width="72" height="64" rx="8 8 0 0" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Drag handle -->
+  <rect x="90" y="52" width="20" height="3" rx="1.5" style="fill: var(--color-text-muted)"/>
+  <!-- Sheet content -->
+  <text x="100" y="68" text-anchor="middle" style="fill: var(--color-text); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Sheet Title</text>
+  <rect x="72" y="74" width="56" height="8" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="72" y="86" width="56" height="8" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="72" y="98" width="56" height="10" rx="4" style="fill: var(--color-accent)"/>
+  <text x="100" y="106" text-anchor="middle" style="fill: var(--color-surface); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Action</text>
+  <!-- Height label -->
+  <text x="30" y="76" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">60%</text>
+  <line x1="42" y1="48" x2="42" y2="112" style="stroke: var(--color-text-muted)" stroke-width="0.5" stroke-dasharray="2"/>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Bottom Sheet</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A panel that slides up from the bottom to 40-60% of the screen height, with a drag handle for resize and swipe-down dismiss. Used for contextual options, filters, and secondary content without full navigation.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Snap points at 40%, 60%, and 100% height. Drag handle: 32x4px rounded bar centered at top. Dismiss: swipe below 20% threshold. Always include visible close button — many users don&#39;t discover swipe dismissal.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Trap focus when covering &gt;50% of viewport. `role=&quot;dialog&quot;`, `aria-modal=&quot;true&quot;`. Close button + Escape key. Announce opening: `aria-live=&quot;polite&quot;`. Drag handle: `role=&quot;separator&quot;` with `aria-label`.</p> </div> <a class="docs-link" href="https://www.nngroup.com/articles/bottom-sheet/" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-gestures" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Gestures &amp; Interactions</h3> <p class="category-description" data-astro-cid-fy7fumfv>Gesture-driven interactions — swipe actions, pull to refresh, long press, pinch zoom, and haptic feedback for native-feeling mobile experiences.</p> <div class="pattern-list" data-astro-cid-fy7fumfv> <div class="pattern-card" id="swipe-left---right" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- List item being swiped left -->
+  <rect x="10" y="10" width="180" height="30" rx="4" style="fill: var(--color-surface-2)"/>
+  <!-- Revealed red action -->
+  <rect x="150" y="10" width="40" height="30" rx="0 4 4 0" style="fill: #ef4444; opacity: 0.8"/>
+  <text x="170" y="29" text-anchor="middle" style="fill: white; font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Delete</text>
+  <!-- Item sliding left -->
+  <rect x="0" y="10" width="155" height="30" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="16" y="29" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-sans)">List item swiped left</text>
+  <!-- Arrow -->
+  <text x="80" y="52" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">← swipe left = destructive</text>
+  <!-- Swipe right example -->
+  <rect x="10" y="64" width="180" height="30" rx="4" style="fill: var(--color-surface-2)"/>
+  <!-- Revealed green action -->
+  <rect x="10" y="64" width="40" height="30" rx="4 0 0 4" style="fill: #22c55e; opacity: 0.8"/>
+  <text x="30" y="83" text-anchor="middle" style="fill: white; font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Done</text>
+  <!-- Item sliding right -->
+  <rect x="45" y="64" width="155" height="30" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="60" y="83" style="fill: var(--color-text); font-size: 9px; font-family: var(--font-sans)">List item swiped right</text>
+  <!-- Arrow -->
+  <text x="105" y="106" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">swipe right = affirmative →</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Swipe Left / Right</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Swipe horizontally on a list item to reveal actions — swipe left for destructive actions (delete, archive) in red, swipe right for affirmative actions (complete, favorite) in green. An 80px threshold prevents accidental triggers.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Track `touchstart`/`touchmove`/`touchend`. Set `touch-action: pan-y` to allow vertical scroll while capturing horizontal swipe. Threshold: 80px horizontal displacement. Snap back if below threshold.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Always provide non-swipe alternatives (context menu, long-press, or visible buttons). Swipe is undiscoverable — include a tutorial on first use. Keyboard: Delete key or context menu.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="pull-to-refresh" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Pull arrow -->
+  <text x="100" y="22" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-family: var(--font-sans)">↓</text>
+  <!-- Spinner -->
+  <circle cx="100" cy="36" r="8" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-dasharray="10 40" stroke-linecap="round"/>
+  <!-- Pushed down content -->
+  <rect x="68" y="50" width="64" height="10" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="64" width="64" height="10" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="78" width="64" height="10" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="92" width="64" height="10" rx="3" style="fill: var(--color-surface-2)"/>
+  <!-- Label -->
+  <text x="30" y="40" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">64px</text>
+  <text x="30" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">threshold</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Pull to Refresh</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Drag down from the top of a scrolled-to-top list to trigger a content refresh. Show a spinner animation pulled below the header. 64px pull threshold. The most recognized mobile gesture after tap and scroll.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Detect `touchmove` when `scrollTop === 0`. Set `overscroll-behavior-y: contain` to prevent browser-native PTR. Show spinner when pulled past 64px. CSS: translate the content container down. Release triggers refresh.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Provide a &quot;Refresh&quot; button as alternative. Announce refresh state via `aria-live=&quot;polite&quot;`: &quot;Refreshing...&quot; then &quot;Content updated, N new items&quot;. Never use as the only way to get fresh content.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="long-press-context-menu" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Phone outline -->
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Item being pressed -->
+  <rect x="68" y="14" width="64" height="16" rx="3" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1"/>
+  <text x="76" y="25" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Pressed item</text>
+  <!-- Hold timer -->
+  <text x="30" y="24" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">500ms</text>
+  <text x="30" y="34" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">hold</text>
+  <!-- Context bottom sheet -->
+  <rect x="64" y="58" width="72" height="54" rx="8 8 0 0" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="90" y="62" width="20" height="3" rx="1.5" style="fill: var(--color-text-muted)"/>
+  <text x="74" y="78" style="fill: var(--color-text); font-size: 7px; font-family: var(--font-sans)">Copy</text>
+  <text x="74" y="90" style="fill: var(--color-text); font-size: 7px; font-family: var(--font-sans)">Share</text>
+  <text x="74" y="102" style="fill: #ef4444; font-size: 7px; font-family: var(--font-sans)">Delete</text>
+  <line x1="70" y1="82" x2="130" y2="82" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <line x1="70" y1="94" x2="130" y2="94" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Long Press Context Menu</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A 500ms press-and-hold reveals a context menu of actions for the touched element. On mobile, render as a bottom sheet rather than a positioned dropdown to keep options in the thumb zone.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Start timer on `touchstart`, cancel on `touchmove` (&gt;10px displacement) or `touchend` before 500ms. Use `navigator.vibrate(10)` for haptic confirmation. Show bottom sheet with action list and Cancel button.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Long press is undiscoverable — always provide a visible menu trigger (kebab icon) as alternative. Context menu items must be keyboard-accessible. Announce menu opening via aria-live.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="pinch-to-zoom" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Image container -->
+  <rect x="30" y="10" width="100" height="75" rx="6" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <!-- Mountain scene placeholder -->
+  <polygon points="50,65 70,35 90,65" style="fill: var(--color-accent); opacity: 0.3"/>
+  <polygon points="75,65 95,45 115,65" style="fill: var(--color-accent); opacity: 0.5"/>
+  <circle cx="105" cy="30" r="8" style="fill: var(--color-accent); opacity: 0.2"/>
+  <!-- Pinch gesture fingers -->
+  <circle cx="60" cy="45" r="6" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1"/>
+  <circle cx="100" cy="50" r="6" style="fill: var(--color-accent-bg); stroke: var(--color-accent)" stroke-width="1"/>
+  <!-- Arrows showing spread -->
+  <line x1="66" y1="45" x2="55" y2="42" style="stroke: var(--color-accent)" stroke-width="1" stroke-linecap="round"/>
+  <line x1="94" y1="50" x2="105" y2="53" style="stroke: var(--color-accent)" stroke-width="1" stroke-linecap="round"/>
+  <!-- +/- buttons -->
+  <rect x="145" y="25" width="24" height="24" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="157" y="41" text-anchor="middle" style="fill: var(--color-text); font-size: 14px; font-family: var(--font-sans)">+</text>
+  <rect x="145" y="55" width="24" height="24" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="157" y="72" text-anchor="middle" style="fill: var(--color-text); font-size: 14px; font-family: var(--font-sans)">−</text>
+  <!-- Label -->
+  <text x="157" y="96" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Always</text>
+  <text x="157" y="106" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">provide</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Pinch to Zoom</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Two-finger pinch gesture to zoom into images, maps, or charts. Intuitive for visual content exploration. Always provide +/- button alternatives for single-finger and keyboard users.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Use `touch-action: manipulation` on zoomable elements. Track two-touch distance changes. Apply CSS `transform: scale()`. Clamp zoom range (1x-5x). Double-tap to toggle between 1x and 2x.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Never disable `user-scalable=no` on the viewport — it prevents assistive technology zoom. Provide visible +/- buttons with aria-labels. Support keyboard zoom with + and - keys.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="swipe-to-dismiss" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Toast being swiped -->
+  <rect x="30" y="25" width="130" height="32" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1" opacity="0.6" transform="rotate(-3 95 41)"/>
+  <text x="46" y="43" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)" opacity="0.6" transform="rotate(-3 95 41)">Item saved</text>
+  <text x="140" y="43" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)" opacity="0.6" transform="rotate(-3 95 41)">×</text>
+  <!-- Motion arrow -->
+  <line x1="140" y1="40" x2="180" y2="38" style="stroke: var(--color-accent)" stroke-width="1.5" stroke-linecap="round"/>
+  <polygon points="180,34 186,38 180,42" style="fill: var(--color-accent)"/>
+  <!-- Velocity indicator -->
+  <text x="100" y="72" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">velocity > 0.5px/ms → dismiss</text>
+  <!-- Static toast for comparison -->
+  <rect x="30" y="82" width="140" height="28" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <circle cx="48" cy="96" r="6" style="fill: var(--color-accent); opacity: 0.3"/>
+  <text x="60" y="99" style="fill: var(--color-text); font-size: 8px; font-family: var(--font-sans)">Notification</text>
+  <text x="152" y="99" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">×</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Swipe to Dismiss</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Swipe a toast, notification, or card horizontally to dismiss it. Uses velocity-based calculation — fast flicks dismiss even with small displacement. The standard dismissal gesture for transient UI.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Track touch velocity (`distance / time`). Dismiss if velocity &gt; 0.5px/ms OR displacement &gt; 50% of element width. Animate out with `transform: translateX(100%)` + `opacity: 0`. Duration: 200ms.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Always include a visible close button (X) as alternative. Toasts must have `role=&quot;status&quot;` or `role=&quot;alert&quot;`. Auto-dismiss timer should be pausable on hover/focus (WCAG 2.2.1).</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="haptic-feedback" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Phone outline -->
+  <rect x="70" y="10" width="60" height="100" rx="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Vibration waves -->
+  <path d="M62 40 Q58 50 62 60" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M56 35 Q50 50 56 65" style="stroke: var(--color-accent); fill: none; opacity: 0.6" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M138 40 Q142 50 138 60" style="stroke: var(--color-accent); fill: none" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M144 35 Q150 50 144 65" style="stroke: var(--color-accent); fill: none; opacity: 0.6" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Button being tapped -->
+  <rect x="80" y="42" width="40" height="16" rx="4" style="fill: var(--color-accent)"/>
+  <text x="100" y="53" text-anchor="middle" style="fill: var(--color-surface); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Tap</text>
+  <!-- Feedback labels -->
+  <text x="100" y="76" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">10ms = success</text>
+  <text x="100" y="88" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">100-50-100ms</text>
+  <text x="100" y="98" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">= error pattern</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Haptic Feedback</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Vibration feedback confirming touch interactions — 10ms for success/selection, 100-50-100ms pattern for error/warning. Enhances perceived responsiveness. Must be opt-out respecting user settings.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>`navigator.vibrate(10)` for tap confirmation. `navigator.vibrate([100, 50, 100])` for error pattern. Check `&quot;vibrate&quot; in navigator` before use. Respect `prefers-reduced-motion` — disable all haptics.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Haptics must supplement, never replace, visual and auditory feedback. Users with sensory disabilities may not perceive vibration. Always provide multi-modal feedback (visual + haptic + optional audio).</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-layout" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Mobile Layout &amp; Safe Areas</h3> <p class="category-description" data-astro-cid-fy7fumfv>Safe area handling, dynamic viewport units, one-handed reachability, and zoom prevention — the CSS foundations for mobile-correct layouts.</p> <div class="pattern-list" data-astro-cid-fy7fumfv> <div class="pattern-card" id="safe-area-insets" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="2" width="80" height="116" rx="14" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Notch / Dynamic Island -->
+  <rect x="86" y="2" width="28" height="10" rx="5" style="fill: var(--color-text); opacity: 0.2"/>
+  <!-- Safe area top inset -->
+  <line x1="64" y1="16" x2="136" y2="16" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="3"/>
+  <text x="148" y="14" style="fill: var(--color-accent); font-size: 5px; font-family: var(--font-sans)">safe-area-top</text>
+  <!-- Content area -->
+  <rect x="66" y="18" width="68" height="82" rx="2" style="fill: var(--color-accent-bg); opacity: 0.3"/>
+  <text x="100" y="60" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-family: var(--font-sans)">Safe content</text>
+  <!-- Safe area bottom inset -->
+  <line x1="64" y1="102" x2="136" y2="102" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="3"/>
+  <text x="148" y="106" style="fill: var(--color-accent); font-size: 5px; font-family: var(--font-sans)">safe-area-bottom</text>
+  <!-- Home indicator -->
+  <rect x="88" y="110" width="24" height="3" rx="1.5" style="fill: var(--color-text); opacity: 0.2"/>
+  <!-- Left/right insets -->
+  <line x1="66" y1="18" x2="66" y2="100" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="3"/>
+  <line x1="134" y1="18" x2="134" y2="100" style="stroke: var(--color-accent)" stroke-width="0.5" stroke-dasharray="3"/>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Safe Area Insets</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>CSS environment variables that account for hardware obstructions — the iPhone notch, Dynamic Island, Android camera cutouts, and home indicator bar. Without these, UI gets hidden behind device chrome.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Add `&lt;meta name=&quot;viewport&quot; content=&quot;viewport-fit=cover&quot;&gt;` to enable edge-to-edge. Then pad with `env(safe-area-inset-top)`, `env(safe-area-inset-bottom)`, `env(safe-area-inset-left)`, `env(safe-area-inset-right)`. Apply to fixed headers and bottom bars.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Ensures interactive elements are not obscured by device hardware. Critical for switch-access users who need to reach all interactive elements. Test on devices with notches and rounded corners.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/env" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="dynamic-viewport-height" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Phone with URL bar (100vh problem) -->
+  <rect x="15" y="8" width="70" height="104" rx="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <!-- URL bar -->
+  <rect x="19" y="12" width="62" height="14" rx="4" style="fill: var(--color-surface-2)"/>
+  <text x="50" y="22" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">example.com</text>
+  <!-- Content overflows -->
+  <rect x="19" y="28" width="62" height="80" rx="4" style="fill: var(--color-accent-bg); opacity: 0.3"/>
+  <text x="50" y="60" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">100vh</text>
+  <text x="50" y="72" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-style: italic; font-family: var(--font-sans)">overflows!</text>
+  <!-- Home indicator -->
+  <rect x="35" y="104" width="20" height="3" rx="1.5" style="fill: var(--color-text); opacity: 0.2"/>
+  <!-- Phone without URL bar (100dvh correct) -->
+  <rect x="115" y="8" width="70" height="104" rx="10" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Content fits perfectly -->
+  <rect x="119" y="12" width="62" height="92" rx="4" style="fill: var(--color-accent-bg); opacity: 0.5"/>
+  <text x="150" y="55" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">100dvh</text>
+  <text x="150" y="67" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">fits perfectly</text>
+  <!-- Home indicator -->
+  <rect x="135" y="104" width="20" height="3" rx="1.5" style="fill: var(--color-text); opacity: 0.2"/>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Dynamic Viewport Height</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Use `100dvh` instead of `100vh` for full-screen layouts. On mobile browsers, `100vh` includes the space behind the URL bar, causing content to overflow. `dvh` adjusts dynamically as the URL bar shows/hides.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>`height: 100dvh` for hero sections, modals, and full-screen interfaces. Fallback: `height: 100vh; height: 100dvh` for browsers without `dvh` support. Also available: `svh` (small) and `lvh` (large).</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Prevents content from being hidden behind the mobile browser chrome, which particularly affects screen magnification users. Stable layout reduces cognitive load for all users.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/length#dynamic" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="one-handed-reachability" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Info at top (readable, rarely tapped) -->
+  <rect x="68" y="12" width="64" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="22" width="50" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="32" width="58" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <text x="20" y="26" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Info</text>
+  <text x="20" y="34" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">(read)</text>
+  <!-- Reverse pyramid arrow -->
+  <polygon points="100,48 85,48 100,54 115,48" style="fill: var(--color-accent); opacity: 0.2"/>
+  <!-- Actions at bottom (easy to reach) -->
+  <rect x="72" y="62" width="56" height="12" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="71" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Input field</text>
+  <rect x="72" y="78" width="56" height="12" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="87" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Secondary</text>
+  <rect x="72" y="94" width="56" height="14" rx="4" style="fill: var(--color-accent)"/>
+  <text x="100" y="104" text-anchor="middle" style="fill: var(--color-surface); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Primary CTA</text>
+  <text x="170" y="90" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Actions</text>
+  <text x="170" y="100" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">(tap)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>One-Handed Reachability</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Arrange screen content in a reverse pyramid: critical interactive elements at the bottom (easy to reach), informational content at the top (readable but rarely tapped). Optimizes for one-handed phone use on larger screens.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Place primary CTA buttons, input fields, and tab bars at the bottom. Move titles, descriptions, and status information to the top. Use `flex-direction: column-reverse` for action-first mobile layouts.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Benefits users with limited hand mobility. Ensure the visual order still makes logical reading sense — DOM order must match reading order even when visually rearranged. Use `order` CSS property cautiously.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="prevent-zoom-on-input-focus" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bad: zoomed in -->
+  <rect x="10" y="10" width="80" height="48" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="50" y="24" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">14px font-size</text>
+  <rect x="18" y="28" width="64" height="22" rx="3" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1" transform="scale(1.3) translate(-4, -2)"/>
+  <text x="50" y="52" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-style: italic; font-family: var(--font-sans)">iOS zooms in!</text>
+  <!-- Good: no zoom -->
+  <rect x="110" y="10" width="80" height="48" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="150" y="24" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">16px font-size</text>
+  <rect x="118" y="28" width="64" height="22" rx="3" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="126" y="42" style="fill: var(--color-text); font-size: 11px; font-family: var(--font-sans)">Email</text>
+  <text x="150" y="52" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">No zoom</text>
+  <!-- Warning -->
+  <text x="100" y="80" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Never use user-scalable=no</text>
+  <text x="100" y="92" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Fix: font-size ≥ 16px</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Prevent Zoom on Input Focus</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>iOS Safari auto-zooms the viewport when a focused input has `font-size` below 16px. This breaks layout and disorients users. The fix is CSS, not meta tags — never use `user-scalable=no`.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Set `font-size: 16px` (or larger) on all `&lt;input&gt;`, `&lt;select&gt;`, and `&lt;textarea&gt;` elements. This is the only correct fix. Do NOT use `maximum-scale=1` or `user-scalable=no` in the viewport meta tag.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>WCAG 1.4.4 (Resize Text) requires content to be zoomable to 200%. Disabling zoom via meta tags violates this. The 16px font-size approach prevents unwanted zoom while preserving intentional zoom capability.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-feedback" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Mobile Feedback</h3> <p class="category-description" data-astro-cid-fy7fumfv>Mobile feedback patterns — stories format, pull-down banners, and skeleton loading for responsive, native-feeling content presentation.</p> <div class="pattern-list" data-astro-cid-fy7fumfv> <div class="pattern-card" id="stories-format" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Full-screen story background -->
+  <rect x="64" y="8" width="72" height="104" rx="8" style="fill: var(--color-accent-bg); opacity: 0.4"/>
+  <!-- Progress bars at top -->
+  <rect x="68" y="12" width="14" height="2" rx="1" style="fill: var(--color-accent)"/>
+  <rect x="84" y="12" width="14" height="2" rx="1" style="fill: var(--color-accent)"/>
+  <rect x="100" y="12" width="14" height="2" rx="1" style="fill: var(--color-accent); opacity: 0.5"/>
+  <rect x="116" y="12" width="14" height="2" rx="1" style="fill: var(--color-text-muted); opacity: 0.3"/>
+  <!-- Story content -->
+  <text x="100" y="50" text-anchor="middle" style="fill: var(--color-text); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Story Content</text>
+  <text x="100" y="64" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">5-7s auto-advance</text>
+  <!-- Tap zones -->
+  <line x1="86" y1="20" x2="86" y2="106" style="stroke: var(--color-text-muted); opacity: 0.3" stroke-width="0.5" stroke-dasharray="3"/>
+  <text x="76" y="98" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">← back</text>
+  <text x="116" y="98" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">next →</text>
+  <!-- Labels -->
+  <text x="25" y="34" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">hold</text>
+  <text x="25" y="44" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">= pause</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Stories Format</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Full-screen vertical cards that auto-advance every 5-7 seconds. Tap right side to advance, left to go back, hold to pause. Progress indicators at the top show position. The dominant format for ephemeral mobile content.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Full viewport height (`100dvh`). Progress bar: segmented `&lt;div&gt;`s with CSS animation (`width: 0 → 100%` over 5-7s). Pause on `touchstart`, resume on `touchend`. Preload next card&#39;s media for instant transitions.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>`prefers-reduced-motion`: disable auto-advance, require manual tap. Provide pause/play button. Each card: `role=&quot;group&quot;`, `aria-label=&quot;Story 3 of 8&quot;`. Progress: `role=&quot;progressbar&quot;`, `aria-valuenow`.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="pull-down-banner" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Banner sliding down -->
+  <rect x="66" y="10" width="68" height="28" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5">
+  </rect>
+  <!-- Banner content -->
+  <circle cx="78" cy="24" r="6" style="fill: var(--color-accent); opacity: 0.3"/>
+  <text x="88" y="21" style="fill: var(--color-text); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">New message</text>
+  <text x="88" y="30" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Tap to view</text>
+  <!-- Slide down arrow -->
+  <text x="46" y="20" text-anchor="middle" style="fill: var(--color-accent); font-size: 10px; font-family: var(--font-sans)">↓</text>
+  <!-- Content below -->
+  <rect x="68" y="46" width="64" height="8" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="58" width="64" height="8" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="70" width="64" height="8" rx="2" style="fill: var(--color-surface-2)"/>
+  <!-- Auto-dismiss timer -->
+  <text x="170" y="22" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">4s auto-</text>
+  <text x="170" y="32" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">dismiss</text>
+  <!-- Swipe up hint -->
+  <text x="100" y="104" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">↑ swipe to dismiss</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Pull-Down Banner</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A transient notification banner that slides down from the top of the screen, mimicking native push notification styling. Auto-dismisses after 4 seconds. Tappable to navigate to related content.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Fixed position, `top: env(safe-area-inset-top)`. Animate in: `translateY(-100%) → translateY(0)` over 300ms. Auto-dismiss timer: 4s. Swipe up to dismiss manually. Queue multiple banners.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>`role=&quot;status&quot;` for informational, `role=&quot;alert&quot;` for urgent. `aria-live=&quot;polite&quot;`. Auto-dismiss must be pausable on hover/focus (WCAG 2.2.1). Provide dismiss button.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="mobile-skeleton-loading" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Skeleton card 1 -->
+  <rect x="15" y="10" width="170" height="30" rx="4" style="stroke: var(--color-border-subtle); fill: var(--color-surface)" stroke-width="1"/>
+  <circle cx="34" cy="25" r="10" style="fill: var(--color-surface-2)"/>
+  <rect x="50" y="18" width="80" height="5" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="50" y="27" width="50" height="5" rx="2" style="fill: var(--color-surface-2)"/>
+  <!-- Shimmer gradient overlay -->
+  <rect x="15" y="10" width="170" height="30" rx="4" style="fill: url(#shimmer); opacity: 0.3"/>
+  <!-- Skeleton card 2 -->
+  <rect x="15" y="46" width="170" height="30" rx="4" style="stroke: var(--color-border-subtle); fill: var(--color-surface)" stroke-width="1"/>
+  <circle cx="34" cy="61" r="10" style="fill: var(--color-surface-2)"/>
+  <rect x="50" y="54" width="70" height="5" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="50" y="63" width="60" height="5" rx="2" style="fill: var(--color-surface-2)"/>
+  <!-- Labels -->
+  <text x="100" y="96" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Heights match real content</text>
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">aspect-ratio locks layout</text>
+  <defs>
+    <linearGradient id="shimmer" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color: var(--color-surface-2); stop-opacity: 0"/>
+      <stop offset="0.5" style="stop-color: var(--color-accent); stop-opacity: 0.15"/>
+      <stop offset="1" style="stop-color: var(--color-surface-2); stop-opacity: 0"/>
+    </linearGradient>
+  </defs>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Mobile Skeleton Loading</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>Placeholder shapes matching the real content layout, animated with a shimmer effect while loading. Heights must match actual content to prevent layout shift. More effective than spinners for perceived performance.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Match skeleton dimensions to actual content using `aspect-ratio` to lock heights. CSS shimmer: `linear-gradient` animated with `@keyframes`. Max 3 shimmer cycles, then static gray. Use `&lt;div aria-hidden=&quot;true&quot;&gt;`.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Skeleton is `aria-hidden=&quot;true&quot;`. Announce loading state separately: `&lt;div role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;Loading content...&lt;/div&gt;`. Respect `prefers-reduced-motion` — show static gray, no shimmer.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-content" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Content Patterns</h3> <p class="category-description" data-astro-cid-fy7fumfv>Content patterns commonly used on mobile — timelines, star ratings, steppers, dark mode toggles, and back-to-top buttons.</p> <div class="pattern-list" data-astro-cid-fy7fumfv> <div class="pattern-card" id="timeline---activity-feed" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Vertical timeline line -->
+  <line x1="50" y1="10" x2="50" y2="110" style="stroke: var(--color-border)" stroke-width="2"/>
+  <!-- Event 1 -->
+  <circle cx="50" cy="20" r="5" style="fill: var(--color-accent)"/>
+  <rect x="62" y="12" width="120" height="18" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="68" y="24" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Order confirmed</text>
+  <text x="150" y="24" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">2m ago</text>
+  <!-- Event 2 -->
+  <circle cx="50" cy="48" r="5" style="fill: var(--color-accent); opacity: 0.6"/>
+  <rect x="62" y="40" width="120" height="18" rx="4" style="fill: var(--color-surface)"/>
+  <text x="68" y="52" style="fill: var(--color-text); font-size: 7px; font-family: var(--font-sans)">Payment processed</text>
+  <text x="150" y="52" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">5m ago</text>
+  <!-- Event 3 -->
+  <circle cx="50" cy="76" r="5" style="fill: var(--color-text-muted)"/>
+  <rect x="62" y="68" width="120" height="18" rx="4" style="fill: var(--color-surface)"/>
+  <text x="68" y="80" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Cart updated</text>
+  <text x="150" y="80" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">1h ago</text>
+  <!-- CSS ::before label -->
+  <text x="28" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">CSS ::before</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Timeline / Activity Feed</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A vertical sequence of timestamped events connected by a visual line, showing chronological activity (user actions, order updates, project milestones). Each entry has a node marker, timestamp, title, and optional detail.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>CSS vertical line via `::before` pseudo-element on the container (2px wide, centered). Node markers: 12px circles positioned over the line. Each entry: `&lt;article&gt;` with `&lt;time datetime=&quot;...&quot;&gt;`. Alternate left/right on desktop, stack on mobile.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Use `&lt;ol&gt;` or `&lt;ul&gt;` for the event list. `&lt;time datetime=&quot;&quot;&gt;` for machine-readable timestamps. `aria-label=&quot;Activity timeline&quot;` on container. New events: `aria-live=&quot;polite&quot;` region.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="star-rating" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Star 1 (filled) -->
+  <polygon points="40,35 44,47 56,47 46,54 50,66 40,58 30,66 34,54 24,47 36,47" style="fill: var(--color-accent)"/>
+  <!-- Star 2 (filled) -->
+  <polygon points="70,35 74,47 86,47 76,54 80,66 70,58 60,66 64,54 54,47 66,47" style="fill: var(--color-accent)"/>
+  <!-- Star 3 (filled) -->
+  <polygon points="100,35 104,47 116,47 106,54 110,66 100,58 90,66 94,54 84,47 96,47" style="fill: var(--color-accent)"/>
+  <!-- Star 4 (filled) -->
+  <polygon points="130,35 134,47 146,47 136,54 140,66 130,58 120,66 124,54 114,47 126,47" style="fill: var(--color-accent)"/>
+  <!-- Star 5 (empty) -->
+  <polygon points="160,35 164,47 176,47 166,54 170,66 160,58 150,66 154,54 144,47 156,47" style="fill: none; stroke: var(--color-border)" stroke-width="1"/>
+  <!-- Touch target boxes -->
+  <rect x="24" y="30" width="32" height="40" rx="3" style="stroke: var(--color-accent); fill: none; opacity: 0.3" stroke-width="0.5" stroke-dasharray="2"/>
+  <rect x="54" y="30" width="32" height="40" rx="3" style="stroke: var(--color-accent); fill: none; opacity: 0.3" stroke-width="0.5" stroke-dasharray="2"/>
+  <rect x="84" y="30" width="32" height="40" rx="3" style="stroke: var(--color-accent); fill: none; opacity: 0.3" stroke-width="0.5" stroke-dasharray="2"/>
+  <rect x="114" y="30" width="32" height="40" rx="3" style="stroke: var(--color-accent); fill: none; opacity: 0.3" stroke-width="0.5" stroke-dasharray="2"/>
+  <rect x="144" y="30" width="32" height="40" rx="3" style="stroke: var(--color-accent); fill: none; opacity: 0.3" stroke-width="0.5" stroke-dasharray="2"/>
+  <!-- Label -->
+  <text x="100" y="88" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">4 out of 5 stars</text>
+  <text x="100" y="102" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">44px+ touch targets per star</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Star Rating</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A 1-5 star rating input or display. For input: tap a star to set rating (tapping the same star toggles it off). Each star must be an individually tappable 44px+ target. Display ratings with filled/half/empty stars.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Input: `role=&quot;radiogroup&quot;` container with 5 `role=&quot;radio&quot;` buttons. Use SVG star shapes. Display: `aria-label=&quot;Rated 4 out of 5 stars&quot;`. Half-stars via SVG `clipPath`. Touch: min 44x44px per star.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Input: `role=&quot;radiogroup&quot;` with `aria-label=&quot;Rating&quot;`. Each star: `role=&quot;radio&quot;`, `aria-checked`, `aria-label=&quot;1 star&quot;` through `aria-label=&quot;5 stars&quot;`. Arrow keys navigate. Display: `aria-label` with text value.</p> </div> <a class="docs-link" href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="stepper---wizard" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Desktop stepper -->
+  <text x="100" y="14" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Desktop</text>
+  <!-- Step 1 (done) -->
+  <circle cx="30" cy="32" r="10" style="fill: var(--color-accent)"/>
+  <text x="30" y="36" text-anchor="middle" style="fill: var(--color-surface); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">✓</text>
+  <text x="30" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Details</text>
+  <!-- Line 1-2 -->
+  <line x1="40" y1="32" x2="62" y2="32" style="stroke: var(--color-accent)" stroke-width="2"/>
+  <!-- Step 2 (active) -->
+  <circle cx="72" cy="32" r="10" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="2"/>
+  <text x="72" y="36" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 700; font-family: var(--font-sans)">2</text>
+  <text x="72" y="50" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Payment</text>
+  <!-- Line 2-3 -->
+  <line x1="82" y1="32" x2="104" y2="32" style="stroke: var(--color-border)" stroke-width="2"/>
+  <!-- Step 3 (upcoming) -->
+  <circle cx="114" cy="32" r="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="114" y="36" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">3</text>
+  <text x="114" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Review</text>
+  <!-- Line 3-4 -->
+  <line x1="124" y1="32" x2="146" y2="32" style="stroke: var(--color-border)" stroke-width="2"/>
+  <!-- Step 4 (upcoming) -->
+  <circle cx="156" cy="32" r="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="156" y="36" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">4</text>
+  <text x="156" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Confirm</text>
+  <!-- Mobile compact -->
+  <text x="100" y="72" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Mobile</text>
+  <rect x="40" y="78" width="120" height="24" rx="6" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="100" y="93" text-anchor="middle" style="fill: var(--color-accent); font-size: 9px; font-weight: 600; font-family: var(--font-sans)">Step 2 of 4</text>
+  <!-- Progress bar -->
+  <rect x="44" y="99" width="112" height="3" rx="1.5" style="fill: var(--color-surface-2)"/>
+  <rect x="44" y="99" width="56" height="3" rx="1.5" style="fill: var(--color-accent)"/>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Stepper / Wizard</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A multi-step process with a visual progress indicator showing completed, current, and upcoming steps. On mobile, the full stepper collapses to a compact &quot;Step 2 of 5&quot; label to save horizontal space.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Desktop: horizontal step indicators with connecting lines. Mobile: `&lt;span&gt;Step 2 of 5&lt;/span&gt;` with a thin progress bar. Each step: `&lt;li&gt;` in an `&lt;ol&gt;`. Completed steps are tappable to go back.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>`&lt;nav aria-label=&quot;Progress&quot;&gt;` containing `&lt;ol&gt;`. Current step: `aria-current=&quot;step&quot;`. Completed steps: links. Future steps: `aria-disabled=&quot;true&quot;`. Announce step changes via `aria-live`.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="dark-mode-toggle" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Three-state toggle -->
+  <rect x="30" y="30" width="140" height="32" rx="16" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- System option -->
+  <rect x="34" y="34" width="42" height="24" rx="12" style="fill: var(--color-surface-2)"/>
+  <text x="55" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">System</text>
+  <!-- Light option (active) -->
+  <rect x="78" y="34" width="42" height="24" rx="12" style="fill: var(--color-accent)"/>
+  <text x="99" y="50" text-anchor="middle" style="fill: var(--color-surface); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Light</text>
+  <!-- Dark option -->
+  <rect x="122" y="34" width="42" height="24" rx="12" style="fill: var(--color-surface-2)"/>
+  <text x="143" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Dark</text>
+  <!-- Sun/moon icons -->
+  <circle cx="55" cy="80" r="8" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <text x="55" y="84" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">⚙</text>
+  <circle cx="99" cy="80" r="8" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="99" y="84" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-family: var(--font-sans)">☀</text>
+  <circle cx="143" cy="80" r="8" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <text x="143" y="84" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">☾</text>
+  <!-- Label -->
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">prefers-color-scheme + localStorage</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Dark Mode Toggle</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A three-state toggle (System / Light / Dark) that respects `prefers-color-scheme` by default and saves user overrides to localStorage. System option follows OS preference and updates live.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Check `prefers-color-scheme` media query for default. Save override to localStorage. Apply via `data-theme` attribute on `&lt;html&gt;`. Use CSS custom properties for all colors. Transition: 200ms on `background-color` and `color`.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Use `role=&quot;radiogroup&quot;` for three-state toggle. Each option: `role=&quot;radio&quot;`, `aria-checked`. Ensure all color combinations meet WCAG contrast in both modes. Never rely on color alone for information.</p> </div> <a class="docs-link" href="https://web.dev/articles/prefers-color-scheme" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="back-to-top-button" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Scrolled content -->
+  <rect x="68" y="12" width="64" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="22" width="54" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="32" width="60" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="42" width="50" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="52" width="64" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="62" width="58" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="72" width="52" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="68" y="82" width="60" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <!-- Back to top button -->
+  <circle cx="124" cy="96" r="12" style="fill: var(--color-accent)"/>
+  <text x="124" y="100" text-anchor="middle" style="fill: var(--color-surface); font-size: 12px; font-weight: 600; font-family: var(--font-sans)">↑</text>
+  <!-- Labels -->
+  <text x="30" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Shows</text>
+  <text x="30" y="58" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">after</text>
+  <text x="30" y="66" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">400px</text>
+  <text x="170" y="96" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Intersection</text>
+  <text x="170" y="106" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Observer</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Back to Top Button</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A button that appears after scrolling 400-600px, smoothly scrolling to the top of the page when tapped. Essential for long-scrolling mobile pages where reaching the header requires excessive thumb effort.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Show/hide with `IntersectionObserver` on a sentinel element at 400-600px from top. `window.scrollTo({ top: 0, behavior: &quot;smooth&quot; })`. Position: bottom-right, above FAB if present. `prefers-reduced-motion`: use `behavior: &quot;instant&quot;`.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>`aria-label=&quot;Back to top&quot;`. Move focus to the top of the page (e.g., skip-nav target or `&lt;main&gt;`) after scrolling. Hidden when at top: `aria-hidden=&quot;true&quot;` or `display: none` to remove from tab order.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-utilities" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Utility Components</h3> <p class="category-description" data-astro-cid-fy7fumfv>Utility components for mobile — share sheets, swipeable card stacks, and horizontal scroll with snap for touch-first interactions.</p> <div class="pattern-list" data-astro-cid-fy7fumfv> <div class="pattern-card" id="share-sheet---action-sheet" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Dimmed background -->
+  <rect x="64" y="8" width="72" height="30" rx="8 8 0 0" style="fill: var(--color-text); opacity: 0.1"/>
+  <!-- Action sheet -->
+  <rect x="64" y="38" width="72" height="74" rx="8 8 0 0" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Drag handle -->
+  <rect x="90" y="42" width="20" height="3" rx="1.5" style="fill: var(--color-text-muted)"/>
+  <!-- Share options -->
+  <text x="76" y="58" style="fill: var(--color-text); font-size: 7px; font-family: var(--font-sans)">📋 Copy link</text>
+  <line x1="70" y1="62" x2="130" y2="62" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="76" y="74" style="fill: var(--color-text); font-size: 7px; font-family: var(--font-sans)">✉ Email</text>
+  <line x1="70" y1="78" x2="130" y2="78" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="76" y="90" style="fill: var(--color-text); font-size: 7px; font-family: var(--font-sans)">💬 Message</text>
+  <line x1="70" y1="94" x2="130" y2="94" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <!-- Cancel button -->
+  <rect x="70" y="98" width="60" height="12" rx="4" style="fill: var(--color-surface-2)"/>
+  <text x="100" y="107" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Cancel</text>
+  <!-- navigator.share label -->
+  <text x="30" y="70" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">navigator</text>
+  <text x="30" y="78" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">.share()</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Share Sheet / Action Sheet</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A bottom-mounted list of share targets or actions triggered by a share button. Uses the native Web Share API when available for OS-level sharing, with a custom fallback bottom sheet listing copy-link, email, and social options.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Check `navigator.share` support. If available: `navigator.share({ title, text, url })`. Fallback: custom bottom sheet with share options. Always include &quot;Copy link&quot; as first option. Cancel button at the bottom.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Share trigger: `aria-label=&quot;Share this [item]&quot;`. Bottom sheet: `role=&quot;dialog&quot;`, `aria-modal=&quot;true&quot;`, `aria-label=&quot;Share options&quot;`. Focus trap. Each option: `role=&quot;button&quot;` or `&lt;button&gt;`. Cancel returns focus.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="swipeable-card-stack" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Back cards (stacked) -->
+  <rect x="46" y="18" width="108" height="70" rx="8" style="fill: var(--color-surface-2); opacity: 0.4" transform="scale(0.9) translate(11, 8)"/>
+  <rect x="44" y="14" width="112" height="74" rx="8" style="fill: var(--color-surface-2); opacity: 0.6" transform="scale(0.95) translate(5, 4)"/>
+  <!-- Top card (being swiped) -->
+  <rect x="42" y="10" width="116" height="78" rx="8" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5" transform="rotate(-5 100 49)"/>
+  <text x="92" y="42" style="fill: var(--color-text); font-size: 10px; font-weight: 600; font-family: var(--font-sans)" transform="rotate(-5 100 49)">Card Content</text>
+  <text x="92" y="58" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)" transform="rotate(-5 100 49)">Swipe to decide</text>
+  <!-- Swipe direction indicators -->
+  <text x="20" y="55" text-anchor="middle" style="fill: #ef4444; font-size: 9px; font-weight: 700; font-family: var(--font-sans)">✕</text>
+  <text x="180" y="55" text-anchor="middle" style="fill: #22c55e; font-size: 9px; font-weight: 700; font-family: var(--font-sans)">♥</text>
+  <!-- Button alternatives -->
+  <circle cx="70" cy="104" r="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="70" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">←</text>
+  <circle cx="130" cy="104" r="10" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="130" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">→</text>
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">keyboard alt</text>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Swipeable Card Stack</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A deck of cards where the top card can be swiped left (reject) or right (accept) — the Tinder-style interaction pattern. Cards behind are slightly scaled down to create depth. Used for decision-making interfaces.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>Stack with `position: absolute`. Top card tracks touch with `transform: translateX() rotate()`. Rotation: `angle = displacement * 0.1deg`. Behind cards: `scale(0.95)`, `translateY(10px)`. Animate exit: fly off screen 300ms.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>Provide arrow buttons (left/right) below the stack as keyboard alternatives. Arrow keys for navigation. Each card: `role=&quot;group&quot;`, `aria-label`. Announce card content when it becomes the top card.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="horizontal-scroll-with-snap" data-astro-cid-fy7fumfv> <div class="pattern-card-inner" data-astro-cid-fy7fumfv> <div class="pattern-illustration" data-astro-cid-xwsnrbjq><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Container -->
+  <rect x="10" y="20" width="180" height="60" rx="6" style="stroke: var(--color-border-subtle); fill: var(--color-surface)" stroke-width="1"/>
+  <!-- Snap items -->
+  <rect x="16" y="26" width="50" height="48" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="41" y="54" text-anchor="middle" style="fill: var(--color-accent); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Item 1</text>
+  <rect x="72" y="26" width="50" height="48" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="97" y="54" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Item 2</text>
+  <rect x="128" y="26" width="50" height="48" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="153" y="54" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Item 3</text>
+  <!-- Gradient fade on right edge -->
+  <rect x="170" y="20" width="20" height="60" rx="0 6 6 0" style="fill: url(#edgeFade)"/>
+  <!-- Scroll indicators -->
+  <circle cx="88" cy="96" r="3" style="fill: var(--color-accent)"/>
+  <circle cx="100" cy="96" r="3" style="fill: var(--color-surface-2)"/>
+  <circle cx="112" cy="96" r="3" style="fill: var(--color-surface-2)"/>
+  <!-- Snap label -->
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">scroll-snap-type: x mandatory</text>
+  <defs>
+    <linearGradient id="edgeFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color: var(--color-surface); stop-opacity: 0"/>
+      <stop offset="1" style="stop-color: var(--color-surface); stop-opacity: 0.9"/>
+    </linearGradient>
+  </defs>
+</svg></div> <div class="pattern-content" data-astro-cid-fy7fumfv> <h4 class="pattern-name" data-astro-cid-fy7fumfv>Horizontal Scroll with Snap</h4> <p class="pattern-desc" data-astro-cid-fy7fumfv>A horizontally scrolling container where items snap to alignment points, creating a carousel-like experience without complex JavaScript. Used for image galleries, product rows, and category browsing.</p> <div class="pattern-meta" data-astro-cid-fy7fumfv> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Implementation</span> <p data-astro-cid-fy7fumfv>`scroll-snap-type: x mandatory` on container. `scroll-snap-align: start` on children. `overflow-x: auto; -webkit-overflow-scrolling: touch`. Hide scrollbar: `scrollbar-width: none`. Add gradient edge fades for affordance.</p> </div> <div class="meta-block" data-astro-cid-fy7fumfv> <span class="meta-label" data-astro-cid-fy7fumfv>Accessibility</span> <p data-astro-cid-fy7fumfv>`role=&quot;region&quot;` with `aria-label` and `tabindex=&quot;0&quot;` for keyboard scrollability. Arrow keys scroll. Provide visible prev/next buttons. Ensure all items are reachable — do not use `overflow: hidden` which hides content.</p> </div>  </div> </div> </div> </div> </div> </section><section class="tips-section" id="tips" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Tips: What Users Say vs What Gets Built</h3> <table class="tips-table" data-astro-cid-fy7fumfv> <thead data-astro-cid-fy7fumfv><tr data-astro-cid-fy7fumfv><th data-astro-cid-fy7fumfv>What you say</th><th data-astro-cid-fy7fumfv>What gets built</th></tr></thead> <tbody data-astro-cid-fy7fumfv> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"Make it mobile-friendly"</td><td data-astro-cid-fy7fumfv>Touch Target Sizing + Bottom Tab Bar + Safe Area Insets + Dynamic Viewport Height + Input Field Sizing</td></tr> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"Add a menu"</td><td data-astro-cid-fy7fumfv>Bottom Tab Bar (3-5 items) or Drawer Navigation (5+ items) + Back Navigation + safe-area padding</td></tr> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"Swipeable list"</td><td data-astro-cid-fy7fumfv>Swipe Left/Right + 80px threshold + red/green action reveal + visible button fallback</td></tr> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"Pull to refresh"</td><td data-astro-cid-fy7fumfv>Pull to Refresh + overscroll-behavior + 64px threshold + Refresh button alternative + aria-live</td></tr> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"Stories like Instagram"</td><td data-astro-cid-fy7fumfv>Stories Format + progress bars + tap zones + auto-advance + prefers-reduced-motion pause</td></tr> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"Add sharing"</td><td data-astro-cid-fy7fumfv>Share Sheet with navigator.share() + Copy Link fallback + bottom action sheet</td></tr> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"A card swiping UI"</td><td data-astro-cid-fy7fumfv>Swipeable Card Stack + rotation transform + arrow button alternatives + keyboard support</td></tr> <tr data-astro-cid-fy7fumfv><td data-astro-cid-fy7fumfv>"Dark mode"</td><td data-astro-cid-fy7fumfv>Dark Mode Toggle (System/Light/Dark) + prefers-color-scheme + localStorage + CSS custom properties</td></tr> </tbody> </table> </section> <section class="related-section" id="related" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Related Patterns</h3> <p class="category-description" data-astro-cid-fy7fumfv>These patterns on other pages complement mobile &amp; touch interfaces. They are referenced here rather than duplicated — click through for full details.</p> <ul class="related-links" data-astro-cid-fy7fumfv> <li data-astro-cid-fy7fumfv><a href="/filter-search-patterns#bottom-sheet-filters" data-astro-cid-fy7fumfv>Bottom Sheet Filters</a> &mdash; Mobile filter panels using bottom sheets (Filter &amp; Search Patterns)</li> <li data-astro-cid-fy7fumfv><a href="/filter-search-patterns#horizontal-scroll-chips" data-astro-cid-fy7fumfv>Horizontal Scroll Chips</a> &mdash; Mobile filter chip scrolling (Filter &amp; Search Patterns)</li> <li data-astro-cid-fy7fumfv><a href="/ui-patterns#drawer" data-astro-cid-fy7fumfv>Drawer</a> &mdash; Slide-out panel component (UI Patterns)</li> <li data-astro-cid-fy7fumfv><a href="/ui-patterns#toast" data-astro-cid-fy7fumfv>Toast</a> &mdash; Transient notification component (UI Patterns)</li> <li data-astro-cid-fy7fumfv><a href="/form-patterns#mobile-keyboard-types" data-astro-cid-fy7fumfv>Mobile Keyboard Types</a> &mdash; Input type optimization for mobile keyboards (Form Patterns)</li> <li data-astro-cid-fy7fumfv><a href="/animation-patterns#scroll-triggered-animations" data-astro-cid-fy7fumfv>Scroll-Triggered Animations</a> &mdash; IntersectionObserver-based animations (Animation Patterns)</li> <li data-astro-cid-fy7fumfv><a href="/ui-patterns#responsive-navigation" data-astro-cid-fy7fumfv>Responsive Navigation</a> &mdash; Desktop-to-mobile navigation adaptation (UI Patterns)</li> <li data-astro-cid-fy7fumfv><a href="/notification-patterns#toast-notification" data-astro-cid-fy7fumfv>Toast Notification</a> &mdash; Dismissible notification patterns (Notification Patterns)</li> </ul> </section> <section class="further-reading" id="further-reading" data-astro-cid-fy7fumfv> <h3 class="category-heading" data-astro-cid-fy7fumfv>Further Reading</h3> <ul data-astro-cid-fy7fumfv> <li data-astro-cid-fy7fumfv><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>W3C: WCAG 2.5.8 Target Size</a> &mdash; Minimum touch target size requirements</li> <li data-astro-cid-fy7fumfv><a href="https://m3.material.io/foundations/interaction/touch-input" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Material Design 3: Touch Input</a> &mdash; Touch target and gesture guidelines</li> <li data-astro-cid-fy7fumfv><a href="https://developer.apple.com/design/human-interface-guidelines/gestures" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Apple HIG: Gestures</a> &mdash; iOS gesture design guidelines</li> <li data-astro-cid-fy7fumfv><a href="https://web.dev/articles/viewport-units" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>web.dev: Viewport Units</a> &mdash; Dynamic viewport units (dvh, svh, lvh)</li> <li data-astro-cid-fy7fumfv><a href="https://www.nngroup.com/articles/bottom-sheet/" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>NN/G: Bottom Sheets</a> &mdash; Research on mobile bottom sheet usability</li> <li data-astro-cid-fy7fumfv><a href="https://www.smashingmagazine.com/2022/01/designing-better-mobile-navigation-ux/" target="_blank" rel="noopener noreferrer" data-astro-cid-fy7fumfv>Smashing: Mobile Navigation UX</a> &mdash; Mobile navigation best practices</li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/social-patterns.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Social Media Patterns</span></a><a href="/vibe-crew/responsive-patterns.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Responsive Patterns</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html> 

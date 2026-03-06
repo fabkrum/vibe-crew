@@ -1,0 +1,604 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VibeCrew — Responsive Design Patterns</title><meta name="description" content="The autonomous vibe-coding operating system that turns Claude Code into a full development team."><meta name="author" content="Fabian Krumbholz"><meta name="generator" content="Astro v5.18.0"><link rel="canonical" href="https://fabkrum.github.io/vibe-crew/responsive-patterns.html"><link rel="sitemap" href="/vibe-crew/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:url" content="https://fabkrum.github.io/vibe-crew/responsive-patterns.html"><meta property="og:title" content="VibeCrew — Responsive Design Patterns"><meta property="og:description" content="The autonomous vibe-coding operating system that turns Claude Code into a full development team."><meta property="og:image" content="https://fabkrum.github.io/vibe-crew/images/og-default.svg"><meta property="og:site_name" content="VibeCrew Documentation"><!-- Twitter / X --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="VibeCrew — Responsive Design Patterns"><meta name="twitter:description" content="The autonomous vibe-coding operating system that turns Claude Code into a full development team."><meta name="twitter:image" content="https://fabkrum.github.io/vibe-crew/images/og-default.svg"><!-- Prevent FOUC for theme --><script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  })();
+</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"VibeCrew — Responsive Design Patterns","description":"The autonomous vibe-coding operating system that turns Claude Code into a full development team.","url":"https://fabkrum.github.io/vibe-crew/responsive-patterns.html","author":{"@type":"Person","name":"Fabian Krumbholz"},"publisher":{"@type":"Person","name":"Fabian Krumbholz"},"mainEntityOfPage":"https://fabkrum.github.io/vibe-crew/responsive-patterns.html"}</script><link rel="stylesheet" href="/vibe-crew/_astro/responsive-patterns.BW3wXylp.css">
+<link rel="stylesheet" href="/vibe-crew/_astro/advanced-features.qqIeD72_.css"></head> <body> <div class="mobile-bar"> <button class="hamburger" id="hamburger" aria-label="Toggle navigation"> <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"> <line x1="3" y1="5" x2="17" y2="5"></line> <line x1="3" y1="10" x2="17" y2="10"></line> <line x1="3" y1="15" x2="17" y2="15"></line> </svg> </button> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> </div> <div class="sidebar-overlay" id="sidebar-overlay"></div> <script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.body.classList.toggle('sidebar-open');
+  });
+  document.getElementById('sidebar-overlay').addEventListener('click', function() {
+    document.body.classList.remove('sidebar-open');
+  });
+</script> <aside class="sidebar"> <div class="sidebar-header"> <a href="/vibe-crew/index.html" class="nav-brand"><span>&gt;_</span> VibeCrew</a> <div class="sidebar-actions"> <button class="search-btn" id="search-btn" aria-label="Search documentation" title="Search (/)"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> <kbd>/</kbd> </button> <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme" data-astro-cid-x3pjskd3> <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <line x1="12" y1="1" x2="12" y2="3" data-astro-cid-x3pjskd3></line><line x1="12" y1="21" x2="12" y2="23" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" data-astro-cid-x3pjskd3></line> <line x1="1" y1="12" x2="3" y2="12" data-astro-cid-x3pjskd3></line><line x1="21" y1="12" x2="23" y2="12" data-astro-cid-x3pjskd3></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" data-astro-cid-x3pjskd3></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" data-astro-cid-x3pjskd3></line> </svg> <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button>  <script>
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var html = document.documentElement;
+    var isLight = html.getAttribute('data-theme') === 'light';
+    if (isLight) {
+      html.removeAttribute('data-theme');
+      localStorage.removeItem('theme');
+    } else {
+      html.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+</script> </div> </div> <nav class="sidebar-nav"> <div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Get Started </div> <a href="/vibe-crew/index.html" class="sidebar-link"> Home </a><a href="/vibe-crew/setup-detail.html" class="sidebar-link"> Setup in Detail </a><a href="/vibe-crew/project-planning.html" class="sidebar-link"> Project Planning </a><a href="/vibe-crew/warp.html" class="sidebar-link"> Warp Integration </a><a href="/vibe-crew/faq.html" class="sidebar-link"> FAQ </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Workflows </div> <a href="/vibe-crew/workflow.html" class="sidebar-link"> Daily Workflow </a><a href="/vibe-crew/advanced-features.html" class="sidebar-link"> Advanced Features </a> </div><div class="sidebar-group collapsed"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> How It Works </div> <a href="/vibe-crew/architecture.html" class="sidebar-link"> Overview </a><a href="/vibe-crew/scripts.html" class="sidebar-link"> Bash Scripts </a><a href="/vibe-crew/gamification.html" class="sidebar-link"> Gamification </a><a href="/vibe-crew/hooks.html" class="sidebar-link"> Hooks </a><a href="/vibe-crew/mcp-servers.html" class="sidebar-link"> MCP Servers </a><a href="/vibe-crew/companion-skills.html" class="sidebar-link"> Companion Skills </a><a href="/vibe-crew/safety.html" class="sidebar-link"> Permissions &amp; Safety </a><a href="/vibe-crew/personalization.html" class="sidebar-link"> Personalization </a><a href="/vibe-crew/plugin.html" class="sidebar-link"> Plugin Structure </a><a href="/vibe-crew/runtime.html" class="sidebar-link"> Runtime State </a><a href="/vibe-crew/self-improving.html" class="sidebar-link"> Self-Improving System </a><a href="/vibe-crew/skills.html" class="sidebar-link"> Skills Reference </a><a href="/vibe-crew/command-flow.html" class="sidebar-link"> Slash Commands </a><a href="/vibe-crew/status-line.html" class="sidebar-link"> Status Line </a><a href="/vibe-crew/agents.html" class="sidebar-link"> Sub-Agents </a><a href="/vibe-crew/templates.html" class="sidebar-link"> Templates </a><a href="/vibe-crew/testing.html" class="sidebar-link"> Testing Strategy </a><a href="/vibe-crew/dashboard.html" class="sidebar-link"> Vibe Dashboard </a> </div><div class="sidebar-group"> <div class="sidebar-label" onclick="this.parentElement.classList.toggle('collapsed')"> Reference </div> <a href="/vibe-crew/ui-patterns.html" class="sidebar-link"> UI Pattern Guide </a><a href="/vibe-crew/business-patterns.html" class="sidebar-link"> Business Patterns </a><a href="/vibe-crew/animation-patterns.html" class="sidebar-link"> Animation Patterns </a><a href="/vibe-crew/form-patterns.html" class="sidebar-link"> Form Patterns </a><a href="/vibe-crew/i18n-guide.html" class="sidebar-link"> i18n Guide </a><a href="/vibe-crew/legal-compliance.html" class="sidebar-link"> Legal &amp; Compliance </a><a href="/vibe-crew/filter-search-patterns.html" class="sidebar-link"> Filter &amp; Search Patterns </a><a href="/vibe-crew/dataviz-patterns.html" class="sidebar-link"> Data Visualization Patterns </a><a href="/vibe-crew/notification-patterns.html" class="sidebar-link"> Notification Patterns </a><a href="/vibe-crew/auth-patterns.html" class="sidebar-link"> Authentication Patterns </a><a href="/vibe-crew/media-patterns.html" class="sidebar-link"> Media Patterns </a><a href="/vibe-crew/collaboration-patterns.html" class="sidebar-link"> Collaboration Patterns </a><a href="/vibe-crew/settings-patterns.html" class="sidebar-link"> Settings Patterns </a><a href="/vibe-crew/onboarding-patterns.html" class="sidebar-link"> Onboarding Patterns </a><a href="/vibe-crew/social-patterns.html" class="sidebar-link"> Social Media Patterns </a><a href="/vibe-crew/mobile-patterns.html" class="sidebar-link"> Mobile &amp; Touch Patterns </a><a href="/vibe-crew/responsive-patterns.html" class="sidebar-link active"> Responsive Patterns </a><a href="/vibe-crew/error-handling-patterns.html" class="sidebar-link"> Error Handling Patterns </a><a href="/vibe-crew/seo-patterns.html" class="sidebar-link"> SEO &amp; AI Discoverability </a><a href="/vibe-crew/head-order-patterns.html" class="sidebar-link"> Head Order Patterns </a><a href="/vibe-crew/page-composition-guides.html" class="sidebar-link"> Page Composition Guides </a><a href="/vibe-crew/dark-patterns.html" class="sidebar-link"> Dark Patterns to Avoid </a><a href="/vibe-crew/glossary.html" class="sidebar-link"> Glossary </a> </div><a href="/vibe-crew/releases.html" class="sidebar-standalone"> Changelog </a> </nav> </aside> <div class="scroll-progress" aria-hidden="true"> <div class="scroll-progress-bar" id="scroll-progress-bar"></div> </div> <script>
+  (function() {
+    var bar = document.getElementById('scroll-progress-bar');
+    if (!bar) return;
+    function update() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script> <div class="layout">  <div class="main" data-pagefind-body> <nav class="breadcrumbs" aria-label="Breadcrumb"> <a href="/vibe-crew/index.html">Home</a>  <span class="separator">/</span> <span>Reference</span>  <span class="separator">/</span> <span>Responsive Design Patterns</span> </nav> <!-- Schema.org BreadcrumbList --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://fabkrum.github.io/vibe-crew/"},{"@type":"ListItem","position":2,"name":"Reference"},{"@type":"ListItem","position":3,"name":"Responsive Design Patterns"}]}</script>  <h2 data-astro-cid-6r6yxiub>Responsive Design Patterns</h2> <p data-astro-cid-6r6yxiub>22 patterns for building responsive, adaptive interfaces that work across every viewport and input method. Each pattern covers mobile-first CSS strategy, fluid sizing, responsive images, and adaptive navigation — so VibeCrew agents produce layouts that look great on every device.</p> <nav class="category-nav" aria-label="Pattern categories" data-astro-cid-6r6yxiub> <a href="#cat-strategy" data-astro-cid-6r6yxiub>Mobile-First Strategy</a><a href="#cat-breakpoints" data-astro-cid-6r6yxiub>Breakpoints &amp; Container Queries</a><a href="#cat-typography" data-astro-cid-6r6yxiub>Fluid Typography</a><a href="#cat-images" data-astro-cid-6r6yxiub>Responsive Images</a><a href="#cat-layout" data-astro-cid-6r6yxiub>Responsive Layout Patterns</a><a href="#cat-navigation" data-astro-cid-6r6yxiub>Responsive Navigation</a> </nav> <section class="pattern-section" id="cat-strategy" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Mobile-First Strategy</h3> <p class="category-description" data-astro-cid-6r6yxiub>Mobile-first CSS strategy, content-driven breakpoints, and progressive enhancement — the foundational principles for responsive design.</p> <div class="pattern-list" data-astro-cid-6r6yxiub> <div class="pattern-card" id="mobile-first-css" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mobile base (smallest) -->
+  <rect x="10" y="15" width="40" height="70" rx="6" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="14" y="20" width="32" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="14" y="32" width="32" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="14" y="44" width="32" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <text x="30" y="68" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Base CSS</text>
+  <!-- Arrow -->
+  <text x="60" y="50" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">→</text>
+  <!-- Tablet (enhanced) -->
+  <rect x="70" y="10" width="50" height="80" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="74" y="15" width="20" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="96" y="15" width="20" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="74" y="27" width="20" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="96" y="27" width="20" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <text x="95" y="58" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">min-width:</text>
+  <text x="95" y="66" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">768px</text>
+  <!-- Arrow -->
+  <text x="128" y="50" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">→</text>
+  <!-- Desktop (full) -->
+  <rect x="138" y="6" width="56" height="88" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="142" y="11" width="14" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="158" y="11" width="14" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="174" y="11" width="14" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="142" y="21" width="14" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="158" y="21" width="14" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="174" y="21" width="14" height="6" rx="2" style="fill: var(--color-accent-bg)"/>
+  <text x="166" y="54" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">min-width:</text>
+  <text x="166" y="62" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">1024px</text>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Enhance progressively →</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Mobile-First CSS</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Write base CSS for the smallest screen, then add @media (min-width) queries to enhance for larger viewports. Mobile-first forces content prioritization — you start with what matters most and add enhancements, rather than hiding content on mobile.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Base styles target mobile (no media query). Add `@media (min-width: 768px)` for tablet, `@media (min-width: 1024px)` for desktop. Each query adds complexity, never removes it. Use the design system breakpoint tokens.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Mobile-first ensures core content is accessible on all devices. Content hidden via `display: none` at certain breakpoints must not contain focusable elements — use `visibility: hidden` or remove from DOM instead.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="content-driven-breakpoints" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Browser resize illustration -->
+  <rect x="10" y="15" width="180" height="70" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <!-- Content that breaks at 620px -->
+  <rect x="16" y="22" width="60" height="30" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="80" y="22" width="60" height="30" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="144" y="22" width="40" height="12" rx="3" style="fill: var(--color-accent-bg)"/>
+  <!-- Overflow indicator -->
+  <rect x="144" y="38" width="40" height="14" rx="3" style="stroke: #ef4444; fill: none" stroke-width="1" stroke-dasharray="3"/>
+  <text x="164" y="48" text-anchor="middle" style="fill: #ef4444; font-size: 6px; font-family: var(--font-sans)">overflow!</text>
+  <!-- Breakpoint line -->
+  <line x1="140" y1="15" x2="140" y2="85" style="stroke: var(--color-accent)" stroke-width="1" stroke-dasharray="4"/>
+  <text x="140" y="96" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">620px breakpoint</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Break where content breaks</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Content-Driven Breakpoints</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Add breakpoints where the design breaks, not at arbitrary device widths. If a layout looks wrong at 620px, add a breakpoint at 620px. Device-based breakpoints (iPhone, iPad) become outdated as new devices launch.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Test layouts by slowly resizing the browser. Where content overflows, line lengths become unreadable, or layouts collapse — add a breakpoint there. Standard breakpoints (768px, 1024px) are starting points, not rules.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Content-driven breakpoints ensure readability at every viewport width. Target 45-75 characters per line for body text — add breakpoints or adjust font size when lines get too long or too short.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="progressive-enhancement" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Layered cake diagram -->
+  <!-- Layer 1: HTML (base) -->
+  <rect x="30" y="80" width="140" height="24" rx="4" style="fill: var(--color-accent); opacity: 0.7"/>
+  <text x="100" y="96" text-anchor="middle" style="fill: var(--color-surface); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Semantic HTML (works everywhere)</text>
+  <!-- Layer 2: CSS -->
+  <rect x="40" y="56" width="120" height="22" rx="4" style="fill: var(--color-accent); opacity: 0.5"/>
+  <text x="100" y="71" text-anchor="middle" style="fill: var(--color-surface); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">CSS Grid, Flex, Clamp</text>
+  <!-- Layer 3: JS enhancements -->
+  <rect x="50" y="34" width="100" height="20" rx="4" style="fill: var(--color-accent); opacity: 0.35"/>
+  <text x="100" y="48" text-anchor="middle" style="fill: var(--color-text); font-size: 8px; font-family: var(--font-sans)">JS enhancements</text>
+  <!-- Layer 4: Advanced -->
+  <rect x="60" y="14" width="80" height="18" rx="4" style="fill: var(--color-accent); opacity: 0.2"/>
+  <text x="100" y="27" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Animations, WebGL</text>
+  <!-- Arrow -->
+  <text x="16" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">↑</text>
+  <text x="16" y="60" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">enhance</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Progressive Enhancement</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Start with a functional baseline that works everywhere (semantic HTML + core CSS), then layer on enhancements (Grid, animations, WebGL) for capable browsers. Every user gets a working experience; modern browsers get a richer one.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Use `@supports` to test for CSS feature support before applying advanced layouts. Use `@media (hover: hover)` to add hover effects only on devices with pointer input. Use `@media (prefers-reduced-motion: no-preference)` to gate animations.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Progressive enhancement is inherently accessible — the baseline works with assistive technology. Enhanced features should never break the accessible baseline.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Docs &rarr;</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-breakpoints" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Breakpoints &amp; Container Queries</h3> <p class="category-description" data-astro-cid-6r6yxiub>Viewport breakpoints, container queries, and input detection — choosing the right responsive mechanism for each context.</p> <div class="pattern-list" data-astro-cid-6r6yxiub> <div class="pattern-card" id="standard-breakpoints" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Breakpoint markers on a ruler -->
+  <line x1="10" y1="50" x2="190" y2="50" style="stroke: var(--color-border)" stroke-width="2"/>
+  <!-- 360px -->
+  <line x1="30" y1="42" x2="30" y2="58" style="stroke: var(--color-text-muted)" stroke-width="2"/>
+  <text x="30" y="38" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">360</text>
+  <text x="30" y="70" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Mobile</text>
+  <!-- 768px -->
+  <line x1="80" y1="42" x2="80" y2="58" style="stroke: var(--color-accent)" stroke-width="2"/>
+  <text x="80" y="38" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">768</text>
+  <text x="80" y="70" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">Tablet</text>
+  <!-- 1024px -->
+  <line x1="130" y1="42" x2="130" y2="58" style="stroke: var(--color-accent)" stroke-width="2"/>
+  <text x="130" y="38" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">1024</text>
+  <text x="130" y="70" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">Desktop</text>
+  <!-- 1440px -->
+  <line x1="170" y1="42" x2="170" y2="58" style="stroke: var(--color-text-muted)" stroke-width="2"/>
+  <text x="170" y="38" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">1440</text>
+  <text x="170" y="70" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Large</text>
+  <!-- Range labels -->
+  <rect x="30" y="80" width="50" height="10" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="55" y="88" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">sm</text>
+  <rect x="80" y="80" width="50" height="10" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="105" y="88" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">md</text>
+  <rect x="130" y="80" width="40" height="10" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="150" y="88" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">lg</text>
+  <text x="100" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Starting points, not rules</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Standard Breakpoints</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Four standard viewport breakpoints cover the vast majority of devices: 360px (small mobile minimum), 768px (tablet/large phone landscape), 1024px (desktop), and 1440px (large desktop/content max-width). Use these as starting points, then adjust based on content needs.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Define as CSS custom properties (for documentation) and `@media` queries. `--breakpoint-sm: 640px`, `--breakpoint-md: 768px`, `--breakpoint-lg: 1024px`, `--breakpoint-xl: 1280px`. Note: CSS custom properties cannot be used directly in media queries.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Breakpoints should never hide essential content. If content is visible at one breakpoint, its functionality should be reachable at all breakpoints — even if the presentation changes.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="container-queries" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Page layout with sidebar + main -->
+  <rect x="10" y="10" width="180" height="100" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <!-- Sidebar container (narrow) -->
+  <rect x="14" y="14" width="50" height="92" rx="3" style="stroke: var(--color-border-subtle); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="39" y="26" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Sidebar (200px)</text>
+  <!-- Card in sidebar (stacked) -->
+  <rect x="18" y="30" width="42" height="32" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="22" y="34" width="14" height="10" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="22" y="48" width="34" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <rect x="22" y="54" width="26" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <!-- Main container (wide) -->
+  <rect x="68" y="14" width="118" height="92" rx="3" style="stroke: var(--color-border-subtle); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="127" y="26" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Main (600px)</text>
+  <!-- Card in main (horizontal) -->
+  <rect x="72" y="30" width="110" height="32" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="76" y="34" width="24" height="24" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="104" y="36" width="60" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <rect x="104" y="44" width="50" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <rect x="104" y="52" width="40" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <!-- Label -->
+  <text x="100" y="82" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Same component, different container</text>
+  <text x="100" y="96" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">@container (min-width: 400px)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Container Queries</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Component behavior depends on its container width, not the viewport. A card component adapts differently in a sidebar (300px) vs main content (800px) using the same code. Container queries make components truly reusable across layout contexts.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Set `container-type: inline-size` on the parent wrapper. Use `@container (min-width: 400px) { ... }` to style children based on container width. Name containers with `container-name` for specificity. 95%+ browser support (2024+).</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>No specific accessibility impact beyond standard responsive concerns. Container queries improve component reusability which indirectly improves consistency for assistive technology users.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="pointer---hover-detection" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mouse (pointer: fine) -->
+  <text x="50" y="16" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">pointer: fine</text>
+  <rect x="20" y="22" width="60" height="40" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="30" y="30" width="18" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="52" y="30" width="18" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="30" y="42" width="18" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="52" y="42" width="18" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <text x="50" y="72" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">24px targets OK</text>
+  <text x="50" y="82" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">hover effects ✓</text>
+  <!-- Arrow -->
+  <text x="100" y="42" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">↔</text>
+  <!-- Touch (pointer: coarse) -->
+  <text x="150" y="16" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">pointer: coarse</text>
+  <rect x="120" y="22" width="60" height="40" rx="4" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="126" y="28" width="48" height="12" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="126" y="44" width="48" height="12" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="150" y="72" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">48px targets</text>
+  <text x="150" y="82" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">no hover needed</text>
+  <text x="100" y="106" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">@media (pointer: fine/coarse)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Pointer &amp; Hover Detection</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Use `@media (pointer: fine)` to detect mouse/stylus input and `@media (hover: hover)` to detect hover capability. This lets you add hover effects only on devices that support them, and adjust target sizes based on input precision.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`@media (pointer: coarse)` for touch devices — increase touch targets to 48px+. `@media (hover: hover)` — add hover states only here. `@media (pointer: fine)` — allow smaller interactive elements (24px minimum).</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Never rely on hover as the only way to access information — `@media (hover: hover)` adds hover effects, but the content must be accessible via click/tap/keyboard too. Hover-only interactions fail for keyboard and touch users.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Docs &rarr;</a> </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-typography" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Fluid Typography</h3> <p class="category-description" data-astro-cid-6r6yxiub>Fluid type sizing with clamp(), fluid spacing, and line length control — typography that scales smoothly across all viewports.</p> <div class="pattern-list" data-astro-cid-6r6yxiub> <div class="pattern-card" id="clamp-based-font-sizing" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Font scaling visualization -->
+  <text x="20" y="24" style="fill: var(--color-text); font-size: 10px; font-weight: 700; font-family: var(--font-sans)">Heading</text>
+  <text x="20" y="38" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">1.75rem (min)</text>
+  <!-- Arrow showing growth -->
+  <line x1="20" y1="48" x2="180" y2="48" style="stroke: var(--color-accent); opacity: 0.3" stroke-width="2"/>
+  <line x1="20" y1="48" x2="130" y2="48" style="stroke: var(--color-accent)" stroke-width="2"/>
+  <circle cx="130" cy="48" r="3" style="fill: var(--color-accent)"/>
+  <!-- Large text -->
+  <text x="100" y="70" style="fill: var(--color-text); font-size: 16px; font-weight: 700; font-family: var(--font-sans)">Heading</text>
+  <text x="100" y="84" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">3rem (max)</text>
+  <!-- Clamp formula -->
+  <rect x="20" y="94" width="160" height="18" rx="4" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="107" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">clamp(1.75rem, 1.2rem + 2vw, 3rem)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Clamp-Based Font Sizing</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Use `clamp(min, preferred, max)` for font sizes that scale smoothly between breakpoints without media queries. The preferred value uses a `rem + vw` formula to create fluid scaling. Eliminates jarring font-size jumps at breakpoints.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`h1 { font-size: clamp(1.75rem, 1.2rem + 2vw, 3rem); }`. Body: `clamp(0.9rem, 0.85rem + 0.25vw, 1.1rem)`. Use a fluid type scale generator to calculate values. Always use `rem` for the min to ensure zoom works.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>WCAG 1.4.4 (Resize Text) requires text to be zoomable to 200%. `clamp()` respects browser zoom when the min value uses `rem`. Never use `vw` alone — it ignores zoom and becomes unreadable at extremes.</p> </div> <a class="docs-link" href="https://utopia.fyi/type/calculator/" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="fluid-spacing" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tight spacing (mobile) -->
+  <text x="45" y="14" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Mobile</text>
+  <rect x="15" y="20" width="60" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="15" y="40" width="60" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="15" y="60" width="60" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <!-- Gap indicators -->
+  <line x1="80" y1="36" x2="80" y2="40" style="stroke: var(--color-accent)" stroke-width="1"/>
+  <text x="88" y="40" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">4px</text>
+  <!-- Arrow -->
+  <text x="100" y="50" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">→</text>
+  <!-- Generous spacing (desktop) -->
+  <text x="155" y="14" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Desktop</text>
+  <rect x="125" y="20" width="60" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="125" y="48" width="60" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="125" y="76" width="60" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <!-- Gap indicators -->
+  <line x1="190" y1="36" x2="190" y2="48" style="stroke: var(--color-accent)" stroke-width="1"/>
+  <text x="194" y="44" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">12</text>
+  <!-- Formula -->
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">clamp(0.75rem, 0.5rem + 1vw, 2rem)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Fluid Spacing</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Apply the same `clamp()` approach to spacing (margins, padding, gaps) so layouts breathe proportionally to viewport width. Tight spacing on mobile, generous spacing on desktop — without media query jumps.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`gap: clamp(0.75rem, 0.5rem + 1vw, 2rem)`. Apply to grid gaps, section padding, and content margins. Match fluid spacing scale to fluid type scale for visual consistency.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Fluid spacing benefits users who zoom — spacing scales proportionally rather than staying fixed. Ensure minimum spacing never goes below 4px to maintain visual separation.</p> </div> <a class="docs-link" href="https://utopia.fyi/space/calculator/" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="line-length-control" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Too long lines -->
+  <rect x="10" y="10" width="180" height="36" rx="4" style="stroke: var(--color-border-subtle); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="16" y="16" width="168" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <rect x="16" y="24" width="168" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <rect x="16" y="32" width="100" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <text x="10" y="56" style="fill: var(--color-text-muted); font-size: 7px; font-style: italic; font-family: var(--font-sans)">100+ characters — hard to read</text>
+  <!-- Optimal width -->
+  <rect x="10" y="66" width="120" height="36" rx="4" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="16" y="72" width="108" height="4" rx="1" style="fill: var(--color-accent-bg)"/>
+  <rect x="16" y="80" width="108" height="4" rx="1" style="fill: var(--color-accent-bg)"/>
+  <rect x="16" y="88" width="70" height="4" rx="1" style="fill: var(--color-accent-bg)"/>
+  <text x="10" y="112" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">max-width: 65ch (45-75 chars)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Line Length Control</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Optimal line length is 45-75 characters for body text (66ch ideal per typographic research). Lines too long reduce reading comprehension; lines too short cause excessive eye movement. Use `max-width` in `ch` units to constrain.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`max-width: 65ch` on text containers. For wider layouts, use multi-column with `column-width: 25ch; column-count: auto`. `ch` unit is based on the width of the &quot;0&quot; character in the current font.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>WCAG 1.4.8 (Visual Presentation, AAA) recommends max 80 characters per line. Using `ch` units naturally adapts when users change font size or zoom.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-images" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Responsive Images</h3> <p class="category-description" data-astro-cid-6r6yxiub>Responsive images with srcset, art direction with picture, aspect ratio preservation, and lazy loading — optimized media delivery.</p> <div class="pattern-list" data-astro-cid-6r6yxiub> <div class="pattern-card" id="srcset-and-sizes" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Multiple resolution images -->
+  <rect x="10" y="20" width="36" height="24" rx="3" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="28" y="36" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">400w</text>
+  <rect x="54" y="14" width="48" height="34" rx="3" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="78" y="36" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">800w</text>
+  <rect x="110" y="8" width="60" height="42" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="140" y="34" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">1200w</text>
+  <!-- Browser chooses -->
+  <text x="100" y="68" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-family: var(--font-sans)">Browser picks the best match</text>
+  <!-- sizes attribute -->
+  <rect x="20" y="78" width="160" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="89" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">sizes="(max-width: 768px) 100vw, 33vw"</text>
+  <text x="100" y="108" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Cap at 2x — eyes can't tell 3x</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>srcset and sizes</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Provide multiple image resolutions and let the browser choose the best one based on viewport width and device pixel ratio. The `srcset` attribute lists available widths; `sizes` tells the browser how wide the image renders at each breakpoint.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`&lt;img srcset=&quot;photo-400.jpg 400w, photo-800.jpg 800w, photo-1200.jpg 1200w&quot; sizes=&quot;(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw&quot; src=&quot;photo-800.jpg&quot; alt=&quot;Description&quot; loading=&quot;lazy&quot;&gt;`. Cap at 2x — human eyes can&#39;t distinguish 2x from 3x.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Always include `alt` attribute. The responsive image mechanism is transparent to assistive technology — `alt` text applies regardless of which source is loaded.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Responsive_images" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="art-direction-with-picture" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mobile crop (square) -->
+  <rect x="10" y="20" width="40" height="40" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <polygon points="20,48 30,32 40,48" style="fill: var(--color-accent); opacity: 0.4"/>
+  <circle cx="38" cy="30" r="4" style="fill: var(--color-accent); opacity: 0.3"/>
+  <text x="30" y="72" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Mobile</text>
+  <text x="30" y="80" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">(square)</text>
+  <!-- Tablet crop (4:3) -->
+  <rect x="60" y="16" width="50" height="48" rx="4" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <polygon points="68,50 85,26 100,50" style="fill: var(--color-accent); opacity: 0.4"/>
+  <circle cx="96" cy="26" r="4" style="fill: var(--color-accent); opacity: 0.3"/>
+  <text x="85" y="72" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">Tablet</text>
+  <text x="85" y="80" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">(4:3)</text>
+  <!-- Desktop crop (panoramic) -->
+  <rect x="120" y="22" width="70" height="36" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <polygon points="130,48 148,28 165,48" style="fill: var(--color-accent); opacity: 0.4"/>
+  <polygon points="155,48 168,36 180,48" style="fill: var(--color-accent); opacity: 0.3"/>
+  <circle cx="175" cy="30" r="4" style="fill: var(--color-accent); opacity: 0.3"/>
+  <text x="155" y="72" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Desktop</text>
+  <text x="155" y="80" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">(panoramic)</text>
+  <text x="100" y="100" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Different crops per breakpoint</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">&lt;picture&gt; + &lt;source media&gt;</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Art Direction with Picture</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>The `&lt;picture&gt;` element lets you serve different image crops or formats per breakpoint (art direction). A wide panoramic hero on desktop can become a square crop on mobile — different compositions optimized for each viewport.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`&lt;picture&gt;&lt;source media=&quot;(min-width: 1024px)&quot; srcset=&quot;hero-wide.webp&quot; type=&quot;image/webp&quot; /&gt;&lt;source media=&quot;(min-width: 768px)&quot; srcset=&quot;hero-medium.webp&quot; /&gt;&lt;img src=&quot;hero-mobile.jpg&quot; alt=&quot;Hero&quot; /&gt;&lt;/picture&gt;`. List sources from largest to smallest.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>The `alt` attribute goes on the `&lt;img&gt;` fallback element, not on `&lt;source&gt;`. All art-directed crops should convey the same essential content — don&#39;t change the semantic meaning between breakpoints.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="aspect-ratio-preservation" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bad: layout shift -->
+  <text x="45" y="14" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">No aspect-ratio</text>
+  <rect x="10" y="20" width="70" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="10" y="30" width="70" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="10" y="40" width="70" height="28" rx="3" style="stroke: var(--color-border); fill: var(--color-surface-2)" stroke-width="1"/>
+  <text x="45" y="58" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">image loads</text>
+  <!-- Content shifted down -->
+  <rect x="10" y="72" width="70" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <text x="76" y="78" style="fill: #ef4444; font-size: 8px; font-family: var(--font-sans)">↓ CLS!</text>
+  <!-- Good: reserved space -->
+  <text x="155" y="14" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">aspect-ratio: 16/9</text>
+  <rect x="120" y="20" width="70" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="120" y="30" width="70" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="120" y="40" width="70" height="28" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="155" y="58" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">reserved!</text>
+  <rect x="120" y="72" width="70" height="6" rx="2" style="fill: var(--color-surface-2)"/>
+  <text x="186" y="78" style="fill: var(--color-accent); font-size: 8px; font-family: var(--font-sans)">stable</text>
+  <text x="100" y="106" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Prevents layout shift (CLS)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Aspect Ratio Preservation</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Always set `aspect-ratio` or explicit `width`/`height` on images and videos to prevent Cumulative Layout Shift (CLS). Without dimensions, the browser can&#39;t reserve space before the image loads, causing content to jump.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`img { aspect-ratio: 16/9; object-fit: cover; width: 100%; height: auto; }`. Or use explicit HTML attributes: `&lt;img width=&quot;800&quot; height=&quot;450&quot;&gt;`. Framework image components (Next.js Image, Astro Image) handle this automatically.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Layout shift is disorienting for all users, especially those using screen magnification or with cognitive disabilities. Stable layouts reduce cognitive load.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="lazy-loading-strategy" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Viewport boundary -->
+  <rect x="30" y="5" width="140" height="80" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="100" y="16" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">viewport</text>
+  <!-- LCP image (eager) -->
+  <rect x="38" y="20" width="124" height="30" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1.5"/>
+  <text x="100" y="38" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Hero: loading="eager"</text>
+  <text x="100" y="48" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">fetchpriority="high"</text>
+  <!-- Content below viewport -->
+  <rect x="38" y="56" width="60" height="24" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="102" y="56" width="60" height="24" rx="3" style="fill: var(--color-surface-2)"/>
+  <!-- Below fold -->
+  <line x1="30" y1="85" x2="170" y2="85" style="stroke: var(--color-border)" stroke-width="1" stroke-dasharray="4"/>
+  <text x="100" y="94" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">below fold</text>
+  <!-- Lazy images -->
+  <rect x="38" y="98" width="40" height="16" rx="3" style="stroke: var(--color-text-muted); fill: var(--color-surface)" stroke-width="1" stroke-dasharray="3"/>
+  <text x="58" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">lazy</text>
+  <rect x="82" y="98" width="40" height="16" rx="3" style="stroke: var(--color-text-muted); fill: var(--color-surface)" stroke-width="1" stroke-dasharray="3"/>
+  <text x="102" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">lazy</text>
+  <rect x="126" y="98" width="40" height="16" rx="3" style="stroke: var(--color-text-muted); fill: var(--color-surface)" stroke-width="1" stroke-dasharray="3"/>
+  <text x="146" y="110" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">lazy</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Lazy Loading Strategy</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Below-fold images use `loading=&quot;lazy&quot;` to defer loading until they&#39;re near the viewport. Above-fold and LCP (Largest Contentful Paint) images must NEVER be lazy-loaded — this delays the critical rendering path and causes visible pop-in.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Hero/LCP image: `loading=&quot;eager&quot; fetchpriority=&quot;high&quot;` (exactly one per page). All other images: `loading=&quot;lazy&quot;`. If the LCP image is CSS-rendered, add `&lt;link rel=&quot;preload&quot; as=&quot;image&quot; fetchpriority=&quot;high&quot;&gt;`.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Lazy loading has no direct accessibility impact, but faster page loads benefit users on assistive technology who may experience compounded delays.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-layout" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Responsive Layout Patterns</h3> <p class="category-description" data-astro-cid-6r6yxiub>CSS Grid auto-fill, flex wrap, logical properties, sidebar layouts, and stack-to-row — responsive layout building blocks.</p> <div class="pattern-list" data-astro-cid-6r6yxiub> <div class="pattern-card" id="auto-fill-grid" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Grid cards that auto-fill -->
+  <rect x="10" y="10" width="56" height="44" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="72" y="10" width="56" height="44" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="134" y="10" width="56" height="44" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="10" y="60" width="56" height="44" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="72" y="60" width="56" height="44" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <rect x="134" y="60" width="56" height="44" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1" stroke-dasharray="3"/>
+  <!-- Labels -->
+  <text x="38" y="36" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Card</text>
+  <text x="100" y="36" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Card</text>
+  <text x="162" y="36" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Card</text>
+  <text x="38" y="86" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Card</text>
+  <text x="100" y="86" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Card</text>
+  <text x="162" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">auto-fill</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Auto-Fill Grid</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>A CSS Grid that automatically adjusts column count based on available space — no media queries needed. Cards flow into as many columns as fit, with a minimum card width. The simplest responsive card layout.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--spacing-4)`. Use `auto-fill` (empty tracks) vs `auto-fit` (collapsed tracks) based on whether you want items to stretch to fill.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Grid items maintain DOM order which matches visual order. Never use CSS Grid to reorder items in a way that contradicts the logical reading order.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="flex-wrap-layout" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flex items wrapping -->
+  <rect x="10" y="15" width="45" height="22" rx="11" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="33" y="30" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">React</text>
+  <rect x="61" y="15" width="55" height="22" rx="11" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="89" y="30" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">TypeScript</text>
+  <rect x="122" y="15" width="40" height="22" rx="11" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="142" y="30" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Next.js</text>
+  <rect x="168" y="15" width="26" height="22" rx="11" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="181" y="30" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">CSS</text>
+  <!-- Wrapped row -->
+  <rect x="10" y="43" width="50" height="22" rx="11" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="35" y="58" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Tailwind</text>
+  <rect x="66" y="43" width="60" height="22" rx="11" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="96" y="58" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">PostgreSQL</text>
+  <rect x="132" y="43" width="42" height="22" rx="11" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="153" y="58" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Prisma</text>
+  <text x="100" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">flex-wrap: wrap + gap</text>
+  <text x="100" y="100" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Items wrap naturally at any width</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Flex Wrap Layout</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>A flexbox layout where items wrap to the next line when they don&#39;t fit. Best for 1D collections of varying-width items like tags, buttons, or navigation items. Items maintain their natural width.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`display: flex; flex-wrap: wrap; gap: var(--spacing-2)`. Use `flex: 1 1 200px` on children for equal-width wrapping. Use `flex: 0 0 auto` for natural-width items.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Wrapped flex items maintain DOM order. Use `gap` instead of margins for consistent spacing. Avoid `order` property which creates a mismatch between visual and DOM order.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="logical-properties" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- LTR example -->
+  <text x="50" y="16" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">LTR (English)</text>
+  <rect x="10" y="22" width="80" height="36" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="16" y="28" width="30" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="16" y="40" width="68" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <rect x="16" y="48" width="50" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <text x="14" y="36" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">→</text>
+  <!-- RTL example -->
+  <text x="150" y="16" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">RTL (Arabic)</text>
+  <rect x="110" y="22" width="80" height="36" rx="4" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="154" y="28" width="30" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="116" y="40" width="68" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <rect x="134" y="48" width="50" height="4" rx="1" style="fill: var(--color-surface-2)"/>
+  <text x="182" y="36" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">←</text>
+  <!-- Same code -->
+  <text x="100" y="78" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 8px; font-weight: 600; font-family: var(--font-sans)">Same CSS code</text>
+  <rect x="25" y="86" width="150" height="14" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="100" y="96" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">margin-inline-start: 1rem</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Auto-adapts to dir="rtl"</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Logical Properties</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Use `margin-inline`, `padding-block`, `border-inline-start` instead of physical properties like `margin-left`, `padding-top`. Logical properties automatically adapt to RTL (`dir=&quot;rtl&quot;`) and vertical writing modes without additional CSS.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`margin-left` → `margin-inline-start`. `padding-top` → `padding-block-start`. `width` → `inline-size`. `text-align: left` → `text-align: start`. Apply to all new CSS — no performance or size cost.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Logical properties make RTL support automatic, benefiting Arabic, Hebrew, Farsi, and other RTL language users. Combined with `lang` and `dir` attributes, layouts adapt without any extra CSS.</p> </div> <a class="docs-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_logical_properties_and_values" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Docs &rarr;</a> </div> </div> </div> </div><div class="pattern-card" id="sidebar-layout" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Desktop layout (side by side) -->
+  <text x="100" y="12" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Desktop: grid-template-columns: 260px 1fr</text>
+  <rect x="10" y="18" width="50" height="50" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="35" y="46" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Sidebar</text>
+  <rect x="64" y="18" width="126" height="50" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="127" y="46" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Main Content</text>
+  <!-- Mobile layout (stacked) -->
+  <text x="100" y="82" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Mobile: grid-template-columns: 1fr</text>
+  <rect x="40" y="88" width="120" height="12" rx="3" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="100" y="97" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">Main Content</text>
+  <rect x="40" y="103" width="120" height="12" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">Sidebar (below)</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Sidebar Layout</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>A main content area with a sidebar that collapses below the content on mobile. Uses CSS Grid or Flexbox with a breakpoint to switch from side-by-side to stacked layout.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>CSS Grid: `grid-template-columns: 1fr` (mobile), then `@media (min-width: 1024px) { grid-template-columns: 260px 1fr }`. Or use &quot;Every Layout&quot; sidebar pattern: `flex-wrap: wrap` with `flex-basis` on sidebar and `flex-grow: 999` on main.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Sidebar should be `&lt;aside aria-label=&quot;Sidebar&quot;&gt;`. On mobile, sidebar content appears after main content in DOM order. Use skip links to navigate between sections.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="stack-to-row-pattern" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mobile: stacked -->
+  <text x="35" y="12" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Mobile</text>
+  <rect x="10" y="18" width="50" height="14" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="35" y="28" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Label</text>
+  <rect x="10" y="36" width="50" height="14" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="35" y="46" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Input</text>
+  <rect x="10" y="54" width="50" height="14" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="35" y="64" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Button</text>
+  <text x="35" y="82" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">flex-direction:</text>
+  <text x="35" y="90" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">column</text>
+  <!-- Arrow -->
+  <text x="80" y="46" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">→</text>
+  <!-- Desktop: row -->
+  <text x="145" y="12" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Desktop</text>
+  <rect x="90" y="30" width="36" height="28" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="108" y="48" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Label</text>
+  <rect x="130" y="30" width="36" height="28" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="148" y="48" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Input</text>
+  <rect x="170" y="30" width="26" height="28" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="183" y="48" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Btn</text>
+  <text x="145" y="76" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">flex-direction: row</text>
+  <text x="100" y="112" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Most common responsive layout shift</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Stack-to-Row Pattern</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Elements stack vertically on mobile and arrange horizontally on wider viewports. The most common responsive layout shift — used for header layouts, form fields, card content, and action button groups.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>`display: flex; flex-direction: column; gap: var(--spacing-2)` then `@media (min-width: 768px) { flex-direction: row; align-items: center }`. Use `flex-wrap: wrap` as a safety net on intermediate widths.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Maintain logical reading order regardless of layout direction. Stacked (mobile) and inline (desktop) should read in the same sequence. Focus order must match visual order.</p> </div>  </div> </div> </div> </div> </div> </section><section class="pattern-section" id="cat-navigation" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Responsive Navigation</h3> <p class="category-description" data-astro-cid-6r6yxiub>Navigation patterns that adapt across desktop, tablet, and mobile — horizontal bars, priority+, off-canvas drawers, and responsive tables.</p> <div class="pattern-list" data-astro-cid-6r6yxiub> <div class="pattern-card" id="responsive-nav-pattern" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Desktop: horizontal nav -->
+  <rect x="10" y="8" width="180" height="20" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="14" y="12" width="24" height="12" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="42" y="12" width="20" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="66" y="12" width="20" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="90" y="12" width="20" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="114" y="12" width="20" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <text x="170" y="20" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">1024+</text>
+  <!-- Tablet: condensed with "More" -->
+  <rect x="10" y="36" width="120" height="20" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="14" y="40" width="24" height="12" rx="3" style="fill: var(--color-accent-bg)"/>
+  <rect x="42" y="40" width="20" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="66" y="40" width="20" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <rect x="100" y="40" width="26" height="12" rx="3" style="fill: var(--color-surface-2)"/>
+  <text x="113" y="49" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">More</text>
+  <text x="170" y="48" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">768-1023</text>
+  <!-- Mobile: bottom tab bar -->
+  <rect x="40" y="62" width="80" height="52" rx="8" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <rect x="44" y="96" width="72" height="14" rx="4" style="fill: var(--color-accent-bg)"/>
+  <circle cx="56" cy="102" r="3" style="fill: var(--color-accent)"/>
+  <circle cx="72" cy="102" r="3" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <circle cx="88" cy="102" r="3" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <circle cx="104" cy="102" r="3" style="stroke: var(--color-text-muted); fill: none" stroke-width="1"/>
+  <text x="170" y="90" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">&lt;768</text>
+  <text x="170" y="100" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">bottom</text>
+  <text x="170" y="108" text-anchor="middle" style="fill: var(--color-accent); font-size: 6px; font-family: var(--font-sans)">tab bar</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Responsive Nav Pattern</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Navigation adapts across three breakpoints: horizontal top bar on desktop (1024px+), condensed top bar or collapsible sidebar on tablet (768px-1023px), and bottom tab bar or hamburger drawer on mobile (&lt;768px). Bottom tab bar is preferred for primary actions — it&#39;s in the thumb zone.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Desktop: `&lt;nav&gt;` with horizontal `&lt;ul&gt;`. Tablet: priority+ pattern (show top items, overflow into &quot;More&quot; menu). Mobile: bottom tab bar for 3-5 items, hamburger drawer for 5+ items. Use `@media` to switch.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>`&lt;nav aria-label=&quot;Main navigation&quot;&gt;` at all breakpoints. Hamburger button: `aria-expanded`, `aria-controls`. Tab bar: `role=&quot;tablist&quot;` with `aria-selected`. All items keyboard-navigable.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="priority--navigation" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Nav bar with items + More dropdown -->
+  <rect x="10" y="20" width="180" height="28" rx="6" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="16" y="26" width="30" height="16" rx="3" style="fill: var(--color-accent-bg)"/>
+  <text x="31" y="37" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-family: var(--font-sans)">Home</text>
+  <rect x="50" y="26" width="38" height="16" rx="3" style="fill: var(--color-surface-2)"/>
+  <text x="69" y="37" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Products</text>
+  <rect x="92" y="26" width="30" height="16" rx="3" style="fill: var(--color-surface-2)"/>
+  <text x="107" y="37" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">About</text>
+  <!-- More button -->
+  <rect x="150" y="26" width="34" height="16" rx="3" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="167" y="37" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">More ▾</text>
+  <!-- Dropdown -->
+  <rect x="138" y="50" width="50" height="42" rx="4" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <text x="163" y="64" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Blog</text>
+  <line x1="142" y1="70" x2="184" y2="70" style="stroke: var(--color-border-subtle)" stroke-width="0.5"/>
+  <text x="163" y="82" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">Contact</text>
+  <!-- Label -->
+  <text x="70" y="78" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Overflow items → "More"</text>
+  <text x="70" y="92" text-anchor="middle" style="fill: var(--color-text-secondary); font-size: 7px; font-family: var(--font-sans)">ResizeObserver recalculates</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Priority+ Navigation</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Show as many nav items as fit in the available space; overflow the rest into a &quot;More&quot; dropdown. The nav adapts dynamically to any width without needing specific breakpoints. Used by Google and many responsive web apps.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Use `ResizeObserver` on the nav container. Calculate which items fit based on their widths. Move overflow items to a &quot;More&quot; dropdown. Recalculate on resize. Libraries: `react-priority-navigation`.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>&quot;More&quot; button: `aria-expanded`, `aria-haspopup=&quot;true&quot;`. Overflow menu: `role=&quot;menu&quot;`. Items in &quot;More&quot; must be keyboard-navigable with arrow keys. Focus returns to &quot;More&quot; button on close.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="off-canvas-navigation" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="60" y="4" width="80" height="112" rx="12" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1.5"/>
+  <!-- Backdrop -->
+  <rect x="64" y="8" width="72" height="104" rx="8" style="fill: var(--color-text); opacity: 0.15"/>
+  <!-- Off-canvas panel -->
+  <rect x="64" y="8" width="52" height="104" rx="8 0 0 8" style="stroke: var(--color-accent); fill: var(--color-surface)" stroke-width="1.5"/>
+  <text x="108" y="20" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">×</text>
+  <rect x="70" y="22" width="40" height="8" rx="2" style="fill: var(--color-accent-bg)"/>
+  <rect x="70" y="34" width="40" height="8" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="70" y="46" width="40" height="8" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="70" y="58" width="40" height="8" rx="2" style="fill: var(--color-surface-2)"/>
+  <rect x="70" y="70" width="40" height="8" rx="2" style="fill: var(--color-surface-2)"/>
+  <!-- Hamburger trigger indicator -->
+  <text x="20" y="20" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 8px; font-family: var(--font-sans)">☰</text>
+  <line x1="30" y1="18" x2="60" y2="12" style="stroke: var(--color-text-muted)" stroke-width="0.5" stroke-dasharray="2"/>
+  <text x="30" y="60" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">role=</text>
+  <text x="30" y="68" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">"dialog"</text>
+  <text x="30" y="80" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">focus</text>
+  <text x="30" y="88" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 6px; font-family: var(--font-sans)">trapped</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Off-Canvas Navigation</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>A navigation panel that slides in from the side of the viewport, overlaying or pushing the main content. The standard mobile navigation pattern for apps with many sections. Triggered by a hamburger icon.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Width: `min(80vw, 360px)`. Transform: `translateX(-100%)` → `translateX(0)` over 250ms ease-out. Close: X button + backdrop click + swipe + Escape. `overscroll-behavior: contain` to prevent body scroll bleed.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Focus trap when open. `role=&quot;dialog&quot;`, `aria-modal=&quot;true&quot;`, `aria-label=&quot;Site navigation&quot;`. Close on Escape. Return focus to hamburger trigger on close. Hamburger: `aria-expanded` + `aria-controls`.</p> </div>  </div> </div> </div> </div><div class="pattern-card" id="responsive-table" data-astro-cid-6r6yxiub> <div class="pattern-card-inner" data-astro-cid-6r6yxiub> <div class="pattern-illustration" data-astro-cid-nn7jwhbx><svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Desktop table -->
+  <text x="50" y="12" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">Desktop: table</text>
+  <rect x="10" y="16" width="80" height="48" rx="3" style="stroke: var(--color-border); fill: var(--color-surface)" stroke-width="1"/>
+  <rect x="10" y="16" width="80" height="12" rx="3 3 0 0" style="fill: var(--color-accent-bg)"/>
+  <text x="24" y="25" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Name</text>
+  <text x="50" y="25" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Email</text>
+  <text x="74" y="25" style="fill: var(--color-accent); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Role</text>
+  <text x="16" y="38" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">Alice</text>
+  <text x="46" y="38" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">a@b.co</text>
+  <text x="74" y="38" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">Admin</text>
+  <text x="16" y="52" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">Bob</text>
+  <text x="46" y="52" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">b@c.co</text>
+  <text x="74" y="52" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">User</text>
+  <!-- Arrow -->
+  <text x="100" y="44" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 10px; font-family: var(--font-sans)">→</text>
+  <!-- Mobile: cards -->
+  <text x="155" y="12" text-anchor="middle" style="fill: var(--color-accent); font-size: 7px; font-weight: 600; font-family: var(--font-sans)">Mobile: cards</text>
+  <rect x="120" y="16" width="70" height="24" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="126" y="26" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Name</text>
+  <text x="148" y="26" style="fill: var(--color-text); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Alice</text>
+  <text x="126" y="36" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Email</text>
+  <text x="148" y="36" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">a@b.co</text>
+  <rect x="120" y="44" width="70" height="24" rx="4" style="stroke: var(--color-accent); fill: var(--color-accent-bg)" stroke-width="1"/>
+  <text x="126" y="54" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Name</text>
+  <text x="148" y="54" style="fill: var(--color-text); font-size: 6px; font-weight: 600; font-family: var(--font-sans)">Bob</text>
+  <text x="126" y="64" style="fill: var(--color-text-muted); font-size: 5px; font-family: var(--font-sans)">Email</text>
+  <text x="148" y="64" style="fill: var(--color-text-secondary); font-size: 6px; font-family: var(--font-sans)">b@c.co</text>
+  <!-- Strategies -->
+  <text x="100" y="86" text-anchor="middle" style="fill: var(--color-text-muted); font-size: 7px; font-family: var(--font-sans)">3 strategies: scroll, cards, or hide columns</text>
+</svg></div> <div class="pattern-content" data-astro-cid-6r6yxiub> <h4 class="pattern-name" data-astro-cid-6r6yxiub>Responsive Table</h4> <p class="pattern-desc" data-astro-cid-6r6yxiub>Tables are inherently wide and overflow on mobile. Three adaptation strategies: horizontal scroll (simplest), card transformation (each row becomes a card), or column prioritization (hide low-priority columns). Choose based on data density.</p> <div class="pattern-meta" data-astro-cid-6r6yxiub> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Implementation</span> <p data-astro-cid-6r6yxiub>Scroll: wrap in `&lt;div style=&quot;overflow-x: auto&quot;&gt;` with `-webkit-overflow-scrolling: touch`. Cards: `@media (max-width: 768px)` — set `display: block` on rows, use `data-label` attributes for headers. Column priority: `display: none` on low-priority columns.</p> </div> <div class="meta-block" data-astro-cid-6r6yxiub> <span class="meta-label" data-astro-cid-6r6yxiub>Accessibility</span> <p data-astro-cid-6r6yxiub>Scrollable tables: add `tabindex=&quot;0&quot;` and `role=&quot;region&quot;` with `aria-label` on the scroll container. Card view: use `aria-label` on each card. Never remove columns that contain essential data without providing an alternative view.</p> </div>  </div> </div> </div> </div> </div> </section><section class="tips-section" id="tips" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Tips: What Users Say vs What Gets Built</h3> <table class="tips-table" data-astro-cid-6r6yxiub> <thead data-astro-cid-6r6yxiub><tr data-astro-cid-6r6yxiub><th data-astro-cid-6r6yxiub>What you say</th><th data-astro-cid-6r6yxiub>What gets built</th></tr></thead> <tbody data-astro-cid-6r6yxiub> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"Make it responsive"</td><td data-astro-cid-6r6yxiub>Mobile-First CSS + Standard Breakpoints + Touch Targets + Fluid Typography + Responsive Images</td></tr> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"Add a card grid"</td><td data-astro-cid-6r6yxiub>Auto-Fill Grid with minmax(280px, 1fr) + aspect-ratio on images + lazy loading below fold</td></tr> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"Text should scale nicely"</td><td data-astro-cid-6r6yxiub>Clamp-Based Font Sizing + Line Length Control (max-width: 65ch) + Fluid Spacing</td></tr> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"Optimize images"</td><td data-astro-cid-6r6yxiub>srcset + sizes + Art Direction + Aspect Ratio Preservation + Lazy Loading + fetchpriority</td></tr> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"Navigation for mobile"</td><td data-astro-cid-6r6yxiub>Bottom Tab Bar (3-5 items) or Off-Canvas Drawer (5+) + Priority+ for tablet</td></tr> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"Support RTL languages"</td><td data-astro-cid-6r6yxiub>Logical Properties (margin-inline, padding-block) + dir="rtl" attribute</td></tr> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"A table that works on mobile"</td><td data-astro-cid-6r6yxiub>Responsive Table with horizontal scroll + card transformation fallback</td></tr> <tr data-astro-cid-6r6yxiub><td data-astro-cid-6r6yxiub>"Sidebar layout"</td><td data-astro-cid-6r6yxiub>CSS Grid sidebar (260px + 1fr) desktop, stacked 1fr mobile + Container Queries for widgets</td></tr> </tbody> </table> </section> <section class="related-section" id="related" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Related Patterns</h3> <p class="category-description" data-astro-cid-6r6yxiub>These patterns on other pages complement responsive design. They are referenced here rather than duplicated — click through for full details.</p> <ul class="related-links" data-astro-cid-6r6yxiub> <li data-astro-cid-6r6yxiub><a href="/mobile-patterns#thumb-zone-design" data-astro-cid-6r6yxiub>Thumb Zone Design</a> &mdash; Mobile ergonomics and one-handed reachability (Mobile &amp; Touch Patterns)</li> <li data-astro-cid-6r6yxiub><a href="/mobile-patterns#safe-area-insets" data-astro-cid-6r6yxiub>Safe Area Insets</a> &mdash; Device notch and home indicator handling (Mobile &amp; Touch Patterns)</li> <li data-astro-cid-6r6yxiub><a href="/mobile-patterns#dynamic-viewport-height" data-astro-cid-6r6yxiub>Dynamic Viewport Height</a> &mdash; 100dvh vs 100vh for mobile (Mobile &amp; Touch Patterns)</li> <li data-astro-cid-6r6yxiub><a href="/mobile-patterns#bottom-tab-bar" data-astro-cid-6r6yxiub>Bottom Tab Bar</a> &mdash; Mobile-first navigation (Mobile &amp; Touch Patterns)</li> <li data-astro-cid-6r6yxiub><a href="/media-patterns" data-astro-cid-6r6yxiub>Media Patterns</a> &mdash; Image optimization, video players, and lazy loading strategies (Media Patterns)</li> <li data-astro-cid-6r6yxiub><a href="/ui-patterns#data-table" data-astro-cid-6r6yxiub>Data Table</a> &mdash; Sortable, filterable tables (UI Patterns)</li> <li data-astro-cid-6r6yxiub><a href="/i18n-guide" data-astro-cid-6r6yxiub>i18n Guide</a> &mdash; RTL support and logical properties in context (i18n Guide)</li> </ul> </section> <section class="further-reading" id="further-reading" data-astro-cid-6r6yxiub> <h3 class="category-heading" data-astro-cid-6r6yxiub>Further Reading</h3> <ul data-astro-cid-6r6yxiub> <li data-astro-cid-6r6yxiub><a href="https://web.dev/articles/responsive-web-design-basics" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>web.dev: Responsive Web Design Basics</a> &mdash; Google's responsive design fundamentals</li> <li data-astro-cid-6r6yxiub><a href="https://utopia.fyi/" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Utopia: Fluid Type & Space Calculator</a> &mdash; Generate fluid type and spacing scales</li> <li data-astro-cid-6r6yxiub><a href="https://every-layout.dev/" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>Every Layout</a> &mdash; Intrinsic, responsive layout primitives</li> <li data-astro-cid-6r6yxiub><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>MDN: Container Queries</a> &mdash; Container query specification and examples</li> <li data-astro-cid-6r6yxiub><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>W3C: WCAG 2.5.8 Target Size</a> &mdash; Touch target sizing requirements</li> <li data-astro-cid-6r6yxiub><a href="https://web.dev/articles/responsive-images" target="_blank" rel="noopener noreferrer" data-astro-cid-6r6yxiub>web.dev: Responsive Images</a> &mdash; Complete guide to srcset, sizes, and picture</li> </ul> </section>  <nav class="prev-next" aria-label="Page navigation"><a href="/vibe-crew/mobile-patterns.html" class="prev-next-link prev"><span class="prev-next-label">&larr; Previous</span><span class="prev-next-title">Mobile &amp; Touch Patterns</span></a><a href="/vibe-crew/error-handling-patterns.html" class="prev-next-link next"><span class="prev-next-label">Next &rarr;</span><span class="prev-next-title">Error Handling Patterns</span></a></nav> </div>  <footer class="footer"> <p><strong>VibeCrew</strong> &mdash; The Autonomous Vibe-Coding Operating System</p> <p style="margin-top: 0.25rem;">A Claude Code plugin by Fabian Krumbholz &middot; March 2026</p> </footer> </div> <div class="search-modal-overlay" id="search-modal-overlay" data-base="/vibe-crew" data-astro-cid-qk3db3zz> <div class="search-modal" data-astro-cid-qk3db3zz> <div id="search-container" data-astro-cid-qk3db3zz></div> </div> </div>  <script>
+  (function() {
+    var overlay = document.getElementById('search-modal-overlay');
+    var container = document.getElementById('search-container');
+    var searchBtn = document.getElementById('search-btn');
+    var base = overlay.getAttribute('data-base') || '';
+    var loaded = false;
+
+    function openSearch() {
+      overlay.classList.add('open');
+      if (!loaded) {
+        loaded = true;
+        // Dynamically load Pagefind UI
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = base + '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        var script = document.createElement('script');
+        script.src = base + '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+          new PagefindUI({
+            element: '#search-container',
+            showSubResults: true,
+            showImages: false,
+            bundlePath: base + '/pagefind/',
+          });
+          setTimeout(function() {
+            var input = container.querySelector('input');
+            if (input) input.focus();
+          }, 100);
+        };
+        document.head.appendChild(script);
+      } else {
+        setTimeout(function() {
+          var input = container.querySelector('input');
+          if (input) input.focus();
+        }, 50);
+      }
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('open');
+    }
+
+    if (searchBtn) searchBtn.addEventListener('click', openSearch);
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeSearch();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
+        var tag = document.activeElement && document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && overlay.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+  })();
+</script> <div class="kbd-tooltip" id="kbd-tooltip"> <h4>Keyboard Shortcuts</h4> <dl> <dt>/</dt><dd>Search</dd> <dt>n</dt><dd>Next page</dd> <dt>p</dt><dd>Previous page</dd> <dt>t</dt><dd>Toggle TOC</dd> <dt>?</dt><dd>Show/hide shortcuts</dd> </dl> </div> <script>
+  (function() {
+    var tooltip = document.getElementById('kbd-tooltip');
+    document.addEventListener('keydown', function(e) {
+      var tag = document.activeElement && document.activeElement.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      switch (e.key) {
+        case '?':
+          e.preventDefault();
+          tooltip.classList.toggle('visible');
+          break;
+        case 'n': {
+          var next = document.querySelector('.prev-next-link.next');
+          if (next) { e.preventDefault(); next.click(); }
+          break;
+        }
+        case 'p': {
+          var prev = document.querySelector('.prev-next-link.prev');
+          if (prev) { e.preventDefault(); prev.click(); }
+          break;
+        }
+        case 't': {
+          var toc = document.querySelector('.toc-sidebar');
+          if (toc) {
+            e.preventDefault();
+            toc.style.display = toc.style.display === 'none' ? '' : 'none';
+          }
+          break;
+        }
+      }
+    });
+  })();
+</script> <!-- Global copy button handler --> <script>
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('.copy-btn');
+      if (!btn) return;
+      var pre = btn.closest('pre');
+      var text = pre && pre.getAttribute('data-copy');
+      if (!text) {
+        var code = pre && pre.querySelector('code');
+        if (code) text = code.textContent;
+      }
+      if (text) {
+        navigator.clipboard.writeText(text).then(function() {
+          btn.classList.add('copied');
+          setTimeout(function() { btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    });
+
+    // Auto-inject copy buttons on any pre without one
+    document.querySelectorAll('pre:not(:has(.copy-btn))').forEach(function(pre) {
+      if (pre.classList.contains('mermaid')) return;
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  </script> </body> </html> 

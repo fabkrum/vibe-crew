@@ -1,0 +1,147 @@
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import ErrorHandlingPatternIllustration from '../components/patterns/ErrorHandlingPatternIllustration.astro';
+import { errorHandlingPatterns, categoryLabels, categoryOrder } from '../data/error-handling-patterns';
+import type { ErrorHandlingPattern } from '../data/error-handling-patterns';
+
+const grouped = categoryOrder.reduce((acc, cat) => {
+  const items = errorHandlingPatterns.filter((p) => p.category === cat);
+  if (items.length > 0) acc[cat] = items;
+  return acc;
+}, {} as Record<string, typeof errorHandlingPatterns>);
+
+const categories = Object.keys(grouped) as Array<keyof typeof categoryLabels>;
+
+const categoryDescriptions: Record<ErrorHandlingPattern['category'], string> = {
+  boundaries: 'React error boundaries, granular fallback scoping, and structured error logging — catching errors gracefully instead of white-screening.',
+  network: 'Timeout handling, retry with exponential backoff, offline detection, and mutation queuing — resilient network communication.',
+  pages: '404, 500, 403, and maintenance pages — every HTTP error state with clear messaging, next actions, and blame-free language.',
+  empty: 'First-use onboarding, no-results guidance, completion celebrations, and error-masked empty states — turning blank screens into opportunities.',
+  offline: 'Service worker caching, offline banners, sync-on-reconnect, and optimistic writes — apps that work without a connection.',
+};
+---
+
+<DocsLayout title="Error Handling Patterns" sectionLabel="Reference" activeSlug="error-handling-patterns">
+
+  <h2>Error Handling Patterns</h2>
+  <p>20 patterns for building resilient error handling, empty states, and offline support. Each pattern covers error boundaries, network resilience, HTTP error pages, empty states, and offline connectivity — so VibeCrew agents produce apps that fail gracefully and keep users informed.</p>
+
+  <nav class="category-nav" aria-label="Pattern categories">
+    {categories.map((cat) => (
+      <a href={`#cat-${cat}`}>{categoryLabels[cat]}</a>
+    ))}
+  </nav>
+
+  {categories.map((cat) => (
+    <section class="pattern-section" id={`cat-${cat}`}>
+      <h3 class="category-heading">{categoryLabels[cat]}</h3>
+      <p class="category-description">{categoryDescriptions[cat]}</p>
+      <div class="pattern-list">
+        {grouped[cat].map((entry) => (
+          <div class="pattern-card" id={entry.name.toLowerCase().replace(/[\s\/()&+—]/g, '-')}>
+            <div class="pattern-card-inner">
+              <ErrorHandlingPatternIllustration name={entry.name} />
+              <div class="pattern-content">
+                <h4 class="pattern-name">{entry.name}</h4>
+                <p class="pattern-desc">{entry.description}</p>
+                <div class="pattern-meta">
+                  <div class="meta-block">
+                    <span class="meta-label">Implementation</span>
+                    <p>{entry.implementation}</p>
+                  </div>
+                  <div class="meta-block">
+                    <span class="meta-label">Accessibility</span>
+                    <p>{entry.a11y}</p>
+                  </div>
+                  {entry.docsUrl && (
+                    <a class="docs-link" href={entry.docsUrl} target="_blank" rel="noopener noreferrer">Docs &rarr;</a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="tips-section" id="tips">
+    <h3 class="category-heading">Tips: What Users Say vs What Gets Built</h3>
+    <table class="tips-table">
+      <thead><tr><th>What you say</th><th>What gets built</th></tr></thead>
+      <tbody>
+        <tr><td>"Handle errors properly"</td><td>Error Boundaries (route + widget) + Error Logging (Sentry) + Fallback UI with retry</td></tr>
+        <tr><td>"Make API calls reliable"</td><td>Timeout Handling (8s) + Retry with Backoff (3 attempts) + Offline Detection banner</td></tr>
+        <tr><td>"Add a 404 page"</td><td>404 page with search, popular links, Go Home CTA + 500 page with reference ID + 403 login prompt</td></tr>
+        <tr><td>"Handle empty lists"</td><td>First Use CTA + No Results suggestions + All Done celebration + Error Empty State with retry</td></tr>
+        <tr><td>"Work offline"</td><td>Service Worker + Offline Banner + Mutation Queue + Sync on Reconnect + Optimistic Writes</td></tr>
+        <tr><td>"Don't lose user data"</td><td>Mutation Queue (IndexedDB) + Optimistic Writes + Sync on Reconnect + Conflict resolution</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="related-section" id="related">
+    <h3 class="category-heading">Related Patterns</h3>
+    <p class="category-description">These patterns on other pages complement error handling. They are referenced here rather than duplicated — click through for full details.</p>
+    <ul class="related-links">
+      <li><a href="/notification-patterns">Notification Patterns</a> &mdash; Toast notifications, banners, and alerts for communicating errors and status</li>
+      <li><a href="/form-patterns#inline-validation">Inline Validation</a> &mdash; Field-level error feedback in forms (Form Patterns)</li>
+      <li><a href="/form-patterns#error-summary">Error Summary</a> &mdash; Form-level error summaries for multi-field validation (Form Patterns)</li>
+      <li><a href="/ui-patterns#loading-skeleton">Loading Skeleton</a> &mdash; Placeholder UI while content loads (UI Patterns)</li>
+      <li><a href="/mobile-patterns#mobile-skeleton-loading">Mobile Skeleton Loading</a> &mdash; Aspect-ratio-locked skeletons for mobile (Mobile &amp; Touch Patterns)</li>
+      <li><a href="/auth-patterns">Authentication Patterns</a> &mdash; Login flows, session management, and auth error handling</li>
+      <li><a href="/responsive-patterns#progressive-enhancement">Progressive Enhancement</a> &mdash; Graceful degradation for unsupported features (Responsive Patterns)</li>
+    </ul>
+  </section>
+
+  <section class="further-reading" id="further-reading">
+    <h3 class="category-heading">Further Reading</h3>
+    <ul>
+      <li><a href="https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary" target="_blank" rel="noopener noreferrer">React: Error Boundaries</a> &mdash; Official React error boundary documentation</li>
+      <li><a href="https://developer.chrome.com/docs/workbox" target="_blank" rel="noopener noreferrer">Workbox: Service Worker Libraries</a> &mdash; Google's service worker tooling</li>
+      <li><a href="https://web.dev/articles/offline-cookbook" target="_blank" rel="noopener noreferrer">web.dev: The Offline Cookbook</a> &mdash; Caching strategies for service workers</li>
+      <li><a href="https://www.nngroup.com/articles/empty-state-interface-design/" target="_blank" rel="noopener noreferrer">NN/g: Empty State Design</a> &mdash; Research on designing effective empty states</li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API" target="_blank" rel="noopener noreferrer">MDN: Background Sync API</a> &mdash; Defer actions until the user has connectivity</li>
+      <li><a href="https://httpstatuses.io/" target="_blank" rel="noopener noreferrer">HTTP Status Codes Reference</a> &mdash; Complete reference for HTTP status codes</li>
+    </ul>
+  </section>
+
+</DocsLayout>
+
+<style>
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+  .category-nav a { padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); text-decoration: none; transition: all 0.15s; white-space: nowrap; }
+  .category-nav a:hover { background: var(--color-accent-bg); color: var(--color-accent); text-decoration: none; }
+  .category-heading { font-size: 1.5rem; font-weight: 800; color: var(--color-accent); border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; margin-top: 2rem; }
+  .category-description { margin: 0 0 1.25rem; font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .pattern-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+  .pattern-card { padding: 1.25rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-surface); overflow: hidden; }
+  .pattern-card-inner { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .pattern-content { flex: 1; min-width: 0; }
+  @media (max-width: 600px) { .pattern-card-inner { flex-direction: column; } }
+  .pattern-name { font-size: 1rem; font-weight: 700; color: var(--color-text); margin: 0 0 0.5rem; }
+  .pattern-desc { font-size: 0.92rem; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.75rem; }
+  .pattern-meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta-block { font-size: 0.85rem; line-height: 1.5; }
+  .meta-block p { margin: 0; color: var(--color-text-secondary); overflow-wrap: break-word; }
+  .meta-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); margin-right: 0.35rem; }
+  .docs-link { display: inline-block; margin-top: 0.25rem; font-size: 0.82rem; font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .tips-section { margin-top: 3rem; }
+  .tips-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+  .tips-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--color-surface); border-bottom: 2px solid var(--color-border); font-weight: 700; color: var(--color-text); }
+  .tips-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--color-border-subtle); color: var(--color-text-secondary); }
+  .tips-table tr:last-child td { border-bottom: none; }
+  .related-section { margin-top: 3rem; }
+  .related-links { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .related-links li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .related-links li:last-child { border-bottom: none; }
+  .related-links a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .related-links a:hover { text-decoration: underline; }
+  .further-reading { margin-top: 3rem; }
+  .further-reading ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .further-reading li { padding: 0.5rem 0; border-bottom: 1px solid var(--color-border-subtle); font-size: 0.92rem; line-height: 1.6; }
+  .further-reading li:last-child { border-bottom: none; }
+  .further-reading a { font-weight: 600; color: var(--color-accent); text-decoration: none; }
+  .further-reading a:hover { text-decoration: underline; }
+</style>

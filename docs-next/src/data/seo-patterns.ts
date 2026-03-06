@@ -1,6 +1,6 @@
 export interface SeoPattern {
   name: string;
-  category: 'technical' | 'meta' | 'structured_data' | 'ai_discovery' | 'content' | 'sharing' | 'monitoring';
+  category: 'technical' | 'meta' | 'structured_data' | 'ai_discovery' | 'content' | 'sharing' | 'monitoring' | 'performance';
   description: string;
   implementation: string;
   a11y: string;
@@ -15,10 +15,11 @@ export const categoryLabels: Record<SeoPattern['category'], string> = {
   content: 'Content SEO',
   sharing: 'Social & Sharing SEO',
   monitoring: 'Monitoring & Validation',
+  performance: 'Performance & Caching',
 };
 
 export const categoryOrder: SeoPattern['category'][] = [
-  'technical', 'meta', 'structured_data', 'ai_discovery', 'content', 'sharing', 'monitoring',
+  'technical', 'meta', 'structured_data', 'ai_discovery', 'content', 'sharing', 'monitoring', 'performance',
 ];
 
 export const seoPatterns: SeoPattern[] = [
@@ -297,5 +298,55 @@ export const seoPatterns: SeoPattern[] = [
     implementation: 'Verify ownership via meta tag (<meta name="google-site-verification" content="{code}">) or DNS TXT record. Submit your sitemap. Monitor weekly: Index Coverage (errors, excluded pages, valid pages), Performance (impressions, clicks, CTR, average position), Core Web Vitals (LCP, INP, CLS), and Enhancements (structured data errors). Set up email alerts for critical issues. Fix crawl errors promptly (404s, server errors, redirect loops). Use the URL Inspection tool to debug individual page indexing. For multi-site: use Bing Webmaster Tools as a secondary signal.',
     a11y: 'Search Console is an external monitoring tool. No direct accessibility impact on your site.',
     docsUrl: 'https://search.google.com/search-console/about',
+  },
+
+  // --- Performance & Caching ---
+  {
+    name: 'Cache-Control for HTML Pages',
+    category: 'performance',
+    description: 'HTML pages are the entry point to your site and cannot be fingerprinted — the URL is the URL. Use `Cache-Control: no-cache` which forces revalidation with the server on every request but allows the browser to use its cached copy if the server confirms freshness (304 response). This ensures users always get the latest HTML while avoiding full re-downloads when nothing changed.',
+    implementation: 'Response header: `Cache-Control: no-cache`. The browser will send `If-Modified-Since` or `If-None-Match` headers. If content is unchanged, the server returns 304 (use cache) — fast. If changed, returns 200 with new content. IMPORTANT: `no-cache` does NOT mean "don\'t cache" — it means "always revalidate before serving from cache". For truly uncacheable content (banking, real-time data), use `Cache-Control: no-store`.',
+    a11y: 'Caching has no direct accessibility impact. However, stale HTML can cause users to interact with outdated forms or broken references, which is disorienting for all users including those on assistive technology.',
+    docsUrl: null,
+  },
+  {
+    name: 'Cache-Control for Fingerprinted Assets',
+    category: 'performance',
+    description: 'Static assets with content-hash filenames (style.ae3f66.css, app.1be87a.js) can be cached aggressively — the filename changes when content changes, so the URL is effectively immutable. Use `max-age=31536000, immutable` for maximum caching. The `immutable` directive tells the browser to skip revalidation even on user refresh.',
+    implementation: 'Response header: `Cache-Control: max-age=31536000, immutable`. Requires build-time fingerprinting (Vite, webpack, esbuild all do this by default). The filename hash ensures a new URL when content changes, so stale cache is never a problem. This is the single most impactful caching optimization — it eliminates all network requests for static assets on repeat visits. ANTI-PATTERN: Never apply `immutable` to mutable filenames (style.css without a hash). ANTI-PATTERN: Query-string versioning (style.css?v=1.2) is unreliable — CDNs and proxies may strip or ignore query params.',
+    a11y: 'No accessibility impact. Faster asset loading benefits all users, especially those on slower connections or assistive technology that adds rendering overhead.',
+    docsUrl: null,
+  },
+  {
+    name: 'Cache-Control for Dynamic API Data',
+    category: 'performance',
+    description: 'API responses need caching strategies that balance freshness against latency. Use `stale-while-revalidate` to serve cached data instantly while fetching fresh data in the background — the user sees content immediately and gets updated data on the next request. For real-time data (prices, scores), use `no-cache` or `no-store`.',
+    implementation: 'Non-critical data: `Cache-Control: max-age=60, stale-while-revalidate=300` — serve from cache for 60s, then serve stale for up to 5 more minutes while revalidating. Critical data: `Cache-Control: no-cache` — always revalidate. Sensitive data: `Cache-Control: private, no-store` — never cache (banking, personal data). CDN layer: use `s-maxage` to set different CDN vs browser cache times: `Cache-Control: max-age=0, s-maxage=3600` — CDN caches for 1 hour, browser always revalidates. Add `Vary: Accept-Encoding` for compressed responses.',
+    a11y: 'No direct accessibility impact. Faster API responses reduce perceived wait times, which benefits users with cognitive disabilities who may lose context during loading.',
+    docsUrl: null,
+  },
+  {
+    name: 'Cache-Control for Images & Media',
+    category: 'performance',
+    description: 'Images and media files are typically the heaviest assets on a page. Use aggressive caching with revalidation fallback: `max-age=2419200, must-revalidate, stale-while-revalidate=86400` for general images (28 days cached, 1 day stale grace). For fingerprinted images from a CDN/image pipeline, use the immutable strategy. For user-uploaded content, use shorter durations with revalidation.',
+    implementation: 'Fingerprinted images (CDN-optimized): `Cache-Control: max-age=31536000, immutable`. General images (not fingerprinted): `Cache-Control: max-age=2419200, must-revalidate, stale-while-revalidate=86400`. User avatars/uploads (may change): `Cache-Control: max-age=3600, must-revalidate`. Always pair with `ETag` or `Last-Modified` headers for efficient revalidation. ANTI-PATTERN: Caching user-specific images (profile photos) with `public` — use `private` to prevent CDN caching of personal content.',
+    a11y: 'No direct accessibility impact. Cached images avoid layout shift from re-downloads, which benefits users with motion sensitivities and screen magnification users.',
+    docsUrl: null,
+  },
+  {
+    name: 'Cache Busting Strategy',
+    category: 'performance',
+    description: 'Cache busting ensures users get new assets when content changes. Content-hash fingerprinting (style.ae3f66.css) is the only reliable method — the URL changes when content changes. Query-string versioning (style.css?v=1.2) is unreliable because CDNs and proxies may strip query parameters. Never use mutable filenames with aggressive caching — it locks users into stale assets with no way to force a refresh.',
+    implementation: 'Best: Content-hash filenames generated by build tools (Vite, webpack, esbuild). The hash is derived from file content, so any change produces a new filename. Set `Cache-Control: max-age=31536000, immutable` on these files. HTML references the new filename automatically. Nuclear option: `Clear-Site-Data: "cache"` response header on a specific endpoint to force-clear all cached assets for the origin (use sparingly — clears everything). NEVER: Rely on filename-based versioning (style-v2.css) — humans forget to bump versions.',
+    a11y: 'No direct accessibility impact. Proper cache busting prevents users from experiencing broken layouts caused by stale CSS/JS assets.',
+    docsUrl: null,
+  },
+  {
+    name: 'Stale-While-Revalidate Pattern',
+    category: 'performance',
+    description: 'The `stale-while-revalidate` directive lets the browser serve a stale cached response immediately while revalidating in the background. The user sees content instantly (from cache) and gets fresh content on the next visit. This is the best pattern for non-critical content where a momentarily-outdated response is acceptable for a massive speed gain.',
+    implementation: '`Cache-Control: max-age=3600, stale-while-revalidate=86400`. Translation: serve from cache for 1 hour. After 1 hour, serve stale but revalidate in background — for up to 24 more hours. After 25 hours total, must fully revalidate before serving. Pair with `stale-if-error=86400` to serve stale content if the server returns 5xx errors: `Cache-Control: max-age=3600, stale-while-revalidate=86400, stale-if-error=86400`. This provides resilience during outages — users see cached content instead of error pages.',
+    a11y: 'No direct accessibility impact. SWR improves perceived performance for all users. Content freshness is usually acceptable for the brief stale window.',
+    docsUrl: null,
   },
 ];

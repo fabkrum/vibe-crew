@@ -12,7 +12,7 @@
 
 VibeCrew
 Vibecoding without the hassle.
-A free, open-source Claude Code plugin that turns your ideas into production-ready apps. Install in minutes, describe what you want, and let AI agents handle architecture, design, code, tests, review, and docs.
+A free, open-source Claude Code plugin that brings engineering discipline to AI-assisted development. Architecture, design system, and tech stack are locked in before any code is written. 15 specialized agents handle the full lifecycle: plan, design, code, test, review, and docs.
 Four major vibecoding problems solved
 Context that stays under control
 Sub-agents isolate expensive research into separate context windows. MCP servers inject documentation on demand instead of pasting it. Your main session stays lean.
@@ -24,11 +24,11 @@ Plan before code
 Architecture, design system, and tech stack are locked in before a single line of source code is written. A phase gate enforces the order so you get reliable, production-ready results.
 Is VibeCrew right for you?
 Great for
-Building new web apps and SaaS products from scratch
-Non-technical founders turning ideas into working software
+Developers tired of AI tools that generate throwaway code
 Solo developers who want architecture, tests, and docs without the overhead
 Full-stack projects that need a design system, API layer, and frontend
 Teams that want repeatable, structured AI-assisted development
+Building new web apps and SaaS products from scratch
 Not designed for
 Quick one-off scripts or throwaway prototypes
 Small bug fixes or minor changes to existing codebases
@@ -2604,7 +2604,7 @@ How Agents Adapt
 Storage & Scripts
 Changing Your Profile
 How the Profile System Works
-Most AI coding tools treat every user the same. A non-technical founder gets the same unexplained terminal output as a senior developer. A learner is overwhelmed by terse error messages. An experienced developer wades through verbose explanations they don't need. VibeCrew's profile system solves this by adapting every agent's behavior to your experience level, working style, and preferences.
+Most AI coding tools treat every user the same. A junior developer gets the same unexplained terminal output as a senior engineer. A learner is overwhelmed by terse error messages. An experienced developer wades through verbose explanations they don't need. VibeCrew's profile system solves this by adapting every agent's behavior to your experience level, working style, and preferences.
 &#9632;
 What it is
 A multi-dimension preference system that controls how every agent communicates, how much autonomy the system takes, how technical the language is, and how adventurous technology choices are.

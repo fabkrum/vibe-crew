@@ -119,7 +119,7 @@ export const glossary: GlossaryTerm[] = [
   {
     term: 'MCP',
     category: 'tool',
-    definition: 'Short for <strong>Model Context Protocol</strong> &mdash; a standard way for AI to connect to external tools and services. Think of it like USB for AI: a universal plug that lets Claude talk to databases, testing tools, documentation libraries, and more. VibeCrew ships with 9 MCP connections pre-configured.',
+    definition: 'Short for <strong>Model Context Protocol</strong> &mdash; a standard way for AI to connect to external tools and services. Think of it like USB for AI: a universal plug that lets Claude talk to databases, testing tools, documentation libraries, and more. VibeCrew ships with 3 MCP servers enabled by default, with 22 more available from the registry.',
     learnMoreUrl: 'https://modelcontextprotocol.io',
     learnMoreLabel: 'Model Context Protocol',
   },

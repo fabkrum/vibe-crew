@@ -137,7 +137,7 @@ Test Notifications
 Fires notify.sh test to send a test notification via your terminal's best available method (Warp deep-link, iTerm OSC 9, terminal-notifier, or bell fallback). Success confirms the notification pipeline works; failure warns but doesn't block.
 4
 Check MCP Server Health
-Runs check-mcp-health.sh with a 5-second timeout per server. Displays a status table of all bundled MCP servers. Three are enabled by default: Context7, Chrome DevTools, and Playwright. The remaining 6 (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) are conditionally enabled later based on your TDR technology choices.
+Runs check-mcp-health.sh with a 5-second timeout per server. Displays a status table of the 3 bundled MCP servers: Context7, Chrome DevTools, and Playwright. Additional servers (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, and more) are automatically added from the registry after TDR technology choices.
 Server failures are warnings, not blockers. The system works fine with reduced MCP capabilities.
 5
 Configure Claude Command
@@ -2800,7 +2800,7 @@ Plugin Manifest
 Entry point that Claude Code reads on startup. Registers every agent, skill, hook binding, and MCP server so they load automatically.
 MCP Servers
 .mcp.json
-Configures external tool servers (Context7, Chrome DevTools, Playwright, and conditionally Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) that give agents web search, browser control, and service integrations.
+Configures 3 default external tool servers (Context7, Chrome DevTools, Playwright) that give agents web search, browser control, and service integrations. Additional servers are added from the registry after TDR approval.
 Permissions
 settings.json
 Allow/deny rules that control what agents can do without prompting. Allows file ops, npm scripts, and git; blocks sudo, force push, and destructive commands.
@@ -4812,7 +4812,7 @@ Utilities — /quick, /install-skill
 MCP Servers
 Bundled servers for library docs (Context7), browser testing (Playwright, Chrome DevTools), and more
 Registry of additional servers auto-discovered and injected based on TDR technology choices
-Conditional activation — Semgrep, Sentry, Supabase, Stripe, Vercel, and Figma enabled from TDR
+Conditional activation — additional MCP servers (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, and more) added from registry after TDR
 Planning Workflow
 Implementation plan files — Builder writes docs/features/&lbrace;name&rbrace;/plan.md with structured tasks (Files/Action/Verify/Done) before coding
 Clarify sub-step — Resolves spec ambiguities before Design phase, checking 6 categories of gray areas

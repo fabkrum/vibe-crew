@@ -11,7 +11,7 @@ VibeCrew is a Claude Code plugin that transforms Claude Code into an autonomous 
 ```
 claude-plugin-vibe-crew/          # The plugin — install this into your projects
   .claude-plugin/plugin.json    # Plugin manifest
-  .mcp.json                     # MCP server config (9 servers)
+  .mcp.json                     # MCP server config (3 default servers)
   settings.json                 # Permission rules
   hooks/hooks.json              # Event hook bindings
   scripts/                      # ~80 bash automation scripts
@@ -206,4 +206,4 @@ VibeCrew v1.0.0 — the plugin is feature-complete. The repository contains:
 - **Required:** Git 2.30+, Node.js 18+, `jq` (JSON parsing in hook scripts)
 - **Optional:** GitHub CLI or GitLab CLI (PR/MR automation; provider auto-detected from git remote), `terminal-notifier` (macOS notifications)
 - **Bootstrap:** `install.sh` at plugin root auto-installs missing deps; `/setup` offers in-session auto-install
-- MCP servers: 9 bundled in `.mcp.json` (Context7, Chrome DevTools, Playwright enabled by default; Semgrep, Sentry, Supabase, Stripe, Vercel, Figma conditionally enabled from TDR) + 15 additional servers in `templates/mcp-registry.json` that can be auto-discovered and injected based on TDR technology choices
+- MCP servers: 3 enabled by default in `.mcp.json` (Context7, Chrome DevTools, Playwright) + 22 additional servers in `templates/mcp-registry.json` that are auto-discovered and added based on TDR technology choices via `scripts/sync-mcp-from-tdr.sh`

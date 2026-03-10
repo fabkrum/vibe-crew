@@ -50,8 +50,8 @@ environment. The `/setup` command can also auto-install missing dependencies.
 
 **Optional MCP servers**
 
-VibeCrew ships with configurations for 10 MCP servers in `.mcp.json`. They are
-enabled or conditionally enabled based on TDR technology choices.
+VibeCrew ships with 3 MCP servers enabled by default in `.mcp.json`. Additional
+servers are added automatically from the registry after TDR technology choices.
 
 - **Context7** -- documentation lookup for popular frameworks and libraries.
 - **Chrome DevTools** -- browser debugging and automation for visual testing and research.

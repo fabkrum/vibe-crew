@@ -176,23 +176,17 @@ After installation, the user runs `/setup` to initialize the `.vibecrew/` runtim
 
 ### 1.5 MCP Server Configuration
 
-The `.mcp.json` file at the plugin root registers 10 bundled MCP servers. Three ship enabled by default (Context7, Chrome DevTools, Playwright); seven ship disabled and are auto-enabled when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh`. An additional 15 servers are defined in `templates/mcp-registry.json` and can be discovered and injected into `.mcp.json` based on TDR technology choices via `scripts/add-mcp-server.sh`.
+The `.mcp.json` file at the plugin root ships with 3 enabled MCP servers (Context7, Chrome DevTools, Playwright). Additional servers are defined in `templates/mcp-registry.json` (25 total) and are automatically added to `.mcp.json` when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh` and `scripts/add-mcp-server.sh`.
 
-| Server | Ships Enabled | Purpose |
-|--------|:------------:|---------|
+| Server | Bundled | Purpose |
+|--------|:------:|---------|
 | Context7 | Yes | Documentation lookup (~1,500 tokens saved per query) |
 | Chrome DevTools | Yes | Browser debugging and automation for research |
 | Playwright | Yes | Interactive E2E browser debugging |
-| Semgrep | No | Static security analysis (Security Auditor) |
-| Sentry | No | Production error context (CI Healer) |
-| Supabase | No | Database schema inspection (Stack Scout, Builder) |
-| Stripe | No | Payment product management (Builder) |
-| Vercel | No | Deployment management (Builder) |
-| Figma | No | Design spec extraction (Builder) |
 
-Servers are toggled via `scripts/enable-mcp-server.sh <name> [enable|disable]`. Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy. All agents gracefully degrade when MCP servers are unavailable.
+Servers from the registry (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, and 19 others) are added and enabled after TDR approval. Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy. All agents gracefully degrade when MCP servers are unavailable.
 
-**MCP Tool Search (automatic).** Claude Code's built-in Tool Search (shipped January 2026) dynamically loads only 3-5 relevant tool definitions per task instead of preloading all MCP tools into context. This activates automatically when combined tool definitions exceed 10% of the context window. For VibeCrew projects that enable 5+ servers after TDR selection, Tool Search prevents tool definitions from consuming context — reducing overhead from ~60K tokens (with many servers) to ~8.5K. VibeCrew's "disabled by default, enable from TDR" pattern complements this: baseline projects start with only 3 servers, and Tool Search handles the scaling when more are activated.
+**MCP Tool Search (automatic).** Claude Code's built-in Tool Search (shipped January 2026) dynamically loads only 3-5 relevant tool definitions per task instead of preloading all MCP tools into context. This activates automatically when combined tool definitions exceed 10% of the context window. For VibeCrew projects that enable 5+ servers after TDR selection, Tool Search prevents tool definitions from consuming context — reducing overhead from ~60K tokens (with many servers) to ~8.5K. Baseline projects start with only 3 servers, and Tool Search handles the scaling when more are activated.
 
 ### 1.6 Path Reference Rule
 

@@ -650,9 +650,9 @@ VibeCrew's state is small (kilobytes, not megabytes), rarely queried in complex 
 
 ## 6. MCP Server Dependencies
 
-VibeCrew ships with 10 MCP servers in `.mcp.json` and a **registry of 25 servers** in `templates/mcp-registry.json`. Three bundled servers are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies. An additional 15 servers in the registry can be discovered and injected into `.mcp.json` based on TDR technology choices.
+VibeCrew ships with 3 MCP servers enabled by default in `.mcp.json` (no auth required). A **registry of 25 servers** in `templates/mcp-registry.json` provides additional servers that are automatically added to `.mcp.json` when the TDR selects matching technologies via `scripts/sync-mcp-from-tdr.sh`.
 
-### 6.1 Always-Enabled Servers (bundled)
+### 6.1 Bundled Servers (always enabled)
 
 | Server | Package | Purpose | Used By |
 |--------|---------|---------|---------|
@@ -660,24 +660,9 @@ VibeCrew ships with 10 MCP servers in `.mcp.json` and a **registry of 25 servers
 | Chrome DevTools | `chrome-devtools-mcp@latest` | Browser debugging and automation for research | Stack Scout |
 | Playwright | `@playwright/mcp@latest` | Interactive E2E browser debugging and visual verification | Verifier |
 
-### 6.2 Conditionally-Enabled Servers (bundled)
+### 6.2 MCP Server Registry (added after TDR)
 
-These servers ship disabled in `.mcp.json` and are auto-enabled when the TDR mentions the matching technology.
-
-| Server | Package | Auth Required | Purpose | Used By |
-|--------|---------|---------------|---------|---------|
-| Semgrep | `@anthropic-ai/semgrep-mcp@latest` | No | Static analysis for security scanning | Security Auditor |
-| Sentry | `mcp-remote https://mcp.sentry.dev/mcp` | `SENTRY_AUTH_TOKEN` | Production error context for CI diagnosis | CI Healer |
-| Supabase | `supabase-mcp-server@latest` | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Database schema inspection and migrations | Stack Scout, Builder |
-| Stripe | `@stripe/mcp@latest` | `STRIPE_SECRET_KEY` | Product/price management during development | Builder |
-| Vercel | `mcp-remote https://mcp.vercel.com` | `VERCEL_TOKEN` | Deployment status and project configuration | Builder |
-| Figma | `mcp-remote https://mcp.figma.com/mcp` | `FIGMA_ACCESS_TOKEN` | Design spec extraction | Builder |
-
-Remote servers (Sentry, Vercel, Figma) use `npx mcp-remote <url>` as a local proxy for compatibility.
-
-### 6.3 MCP Server Registry (discoverable)
-
-The file `templates/mcp-registry.json` is the single source of truth for all known MCP servers. It contains all 10 bundled servers plus 15 additional servers that can be recommended and injected into `.mcp.json` based on TDR technology choices.
+The file `templates/mcp-registry.json` is the single source of truth for all known MCP servers. It contains the 3 bundled defaults plus 22 additional servers that are automatically added and enabled in `.mcp.json` when the TDR mentions matching technologies. Remote servers (Sentry, Vercel, Figma, Neon) use `npx mcp-remote <url>` as a local proxy for compatibility.
 
 Each registry entry contains:
 - **`patterns`** — array of case-insensitive search terms for TDR matching (e.g. `["firebase", "firestore"]`)

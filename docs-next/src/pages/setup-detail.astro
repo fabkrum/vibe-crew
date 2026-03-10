@@ -197,7 +197,7 @@ const configSnippet = `{
         <div class="step-number">4</div>
         <div class="step-content">
           <h4>Check MCP Server Health</h4>
-          <p>Runs <code>check-mcp-health.sh</code> with a 5-second timeout per server. Displays a status table of all bundled MCP servers. Three are enabled by default: <strong>Context7</strong>, <strong>Chrome DevTools</strong>, and <strong>Playwright</strong>. The remaining 6 (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma) are conditionally enabled later based on your TDR technology choices.</p>
+          <p>Runs <code>check-mcp-health.sh</code> with a 5-second timeout per server. Displays a status table of the 3 bundled MCP servers: <strong>Context7</strong>, <strong>Chrome DevTools</strong>, and <strong>Playwright</strong>. Additional servers (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, and more) are automatically added from the registry after TDR technology choices.</p>
           <p>Server failures are warnings, not blockers. The system works fine with reduced MCP capabilities.</p>
         </div>
       </div>

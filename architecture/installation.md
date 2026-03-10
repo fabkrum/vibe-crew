@@ -272,23 +272,17 @@ jq -n --argjson deps "[$DEPS_JSON]" --arg gh_auth "$GH_AUTH" --arg glab_auth "$G
 
 ### 3.1 Server Overview
 
-VibeCrew ships with 10 MCP servers in `.mcp.json` and a **registry of 25 servers** in `templates/mcp-registry.json`. Three bundled servers are enabled by default (no auth required); seven are disabled and auto-enabled when the TDR selects matching technologies. An additional 15 servers can be discovered from the registry and injected into `.mcp.json` based on TDR choices.
+VibeCrew ships with 3 MCP servers enabled by default in `.mcp.json` (no auth required). A **registry of 25 servers** in `templates/mcp-registry.json` provides additional servers that are automatically added to `.mcp.json` when the TDR selects matching technologies.
 
-| Server | Package | Ships Enabled | Auth Required | Used By |
-|--------|---------|:------------:|---------------|---------|
+| Server | Package | Bundled | Auth Required | Used By |
+|--------|---------|:------:|---------------|---------|
 | Context7 | `@upstash/context7-mcp@latest` | Yes | No | Stack Scout, Builder, Verifier |
 | Chrome DevTools | `chrome-devtools-mcp@latest` | Yes | No | Stack Scout |
 | Playwright | `@playwright/mcp@latest` | Yes | No | Verifier |
-| Semgrep | `@anthropic-ai/semgrep-mcp@latest` | No | No | Security Auditor |
-| Sentry | `mcp-remote https://mcp.sentry.dev/mcp` | No | `SENTRY_AUTH_TOKEN` | CI Healer |
-| Supabase | `supabase-mcp-server@latest` | No | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Stack Scout, Builder |
-| Stripe | `@stripe/mcp@latest` | No | `STRIPE_SECRET_KEY` | Builder |
-| Vercel | `mcp-remote https://mcp.vercel.com` | No | `VERCEL_TOKEN` | Builder |
-| Figma | `mcp-remote https://mcp.figma.com/mcp` | No | `FIGMA_ACCESS_TOKEN` | Builder |
 
 ### 3.2 .mcp.json Configuration
 
-The plugin ships `.mcp.json` at its root with all 9 bundled servers. Each has a `disabled` flag controlling activation. The always-enabled servers (Context7, Chrome DevTools, Playwright) require no API keys. Three scripts manage MCP servers:
+The plugin ships `.mcp.json` at its root with 3 default servers (Context7, Chrome DevTools, Playwright), all enabled and requiring no API keys. Three scripts manage MCP servers:
 
 ```bash
 # Toggle existing servers
@@ -315,7 +309,7 @@ All three scripts atomically update `.mcp.json` and sync `.vibecrew/config.json`
 
 ### 3.3 MCP Server Registry
 
-The file `templates/mcp-registry.json` is the single source of truth for all known MCP servers. It contains the 10 bundled servers plus 15 additional servers (Firebase, Prisma, Clerk, Auth0, Netlify, Railway, Shopify, MongoDB, Resend, Next.js, shadcn/ui, Terraform, Kubernetes, Neon, Upstash Redis).
+The file `templates/mcp-registry.json` is the single source of truth for all known MCP servers. It contains 25 servers: the 3 bundled defaults plus 22 additional servers (Semgrep, Sentry, Supabase, Stripe, Vercel, Figma, Firebase, Prisma, Clerk, Auth0, Netlify, Railway, Shopify, MongoDB, Resend, Next.js, shadcn/ui, Terraform, Kubernetes, Neon, Upstash Redis, and more).
 
 Each entry specifies:
 - **`patterns`** — array of search terms for TDR matching (e.g. `["firebase", "firestore"]`)

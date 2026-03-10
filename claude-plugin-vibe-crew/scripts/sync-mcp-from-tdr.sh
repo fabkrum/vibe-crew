@@ -20,6 +20,7 @@ else
 fi
 
 ENABLE_SCRIPT="$PLUGIN_ROOT/scripts/enable-mcp-server.sh"
+ADD_SCRIPT="$PLUGIN_ROOT/scripts/add-mcp-server.sh"
 REGISTRY_FILE="$PLUGIN_ROOT/templates/mcp-registry.json"
 MCP_FILE="$PLUGIN_ROOT/.mcp.json"
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
@@ -84,27 +85,32 @@ if [[ -f "$REGISTRY_FILE" ]]; then
         SKIPPED+=("$key")
       fi
     else
-      # Server not in .mcp.json — recommend it
-      NAME=$(jq -r --arg k "$key" '.servers[$k].name' "$REGISTRY_FILE")
-      DESC=$(jq -r --arg k "$key" '.servers[$k].description' "$REGISTRY_FILE")
-      DOCS=$(jq -r --arg k "$key" '.servers[$k].docs_url' "$REGISTRY_FILE")
-      ENV_KEYS=$(jq -r --arg k "$key" '.servers[$k].env | keys[]' "$REGISTRY_FILE" 2>/dev/null || true)
+      # Server not in .mcp.json — add and enable it from registry
+      if bash "$ADD_SCRIPT" "$key" --enable 2>/dev/null; then
+        ENABLED+=("$key")
+      else
+        # Add failed — recommend it instead
+        NAME=$(jq -r --arg k "$key" '.servers[$k].name' "$REGISTRY_FILE")
+        DESC=$(jq -r --arg k "$key" '.servers[$k].description' "$REGISTRY_FILE")
+        DOCS=$(jq -r --arg k "$key" '.servers[$k].docs_url' "$REGISTRY_FILE")
+        ENV_KEYS=$(jq -r --arg k "$key" '.servers[$k].env | keys[]' "$REGISTRY_FILE" 2>/dev/null || true)
 
-      AUTH_REQUIRED=false
-      ENV_VARS_JSON="[]"
-      if [[ -n "$ENV_KEYS" ]]; then
-        AUTH_REQUIRED=true
-        ENV_VARS_JSON=$(echo "$ENV_KEYS" | jq -R . | jq -s .)
+        AUTH_REQUIRED=false
+        ENV_VARS_JSON="[]"
+        if [[ -n "$ENV_KEYS" ]]; then
+          AUTH_REQUIRED=true
+          ENV_VARS_JSON=$(echo "$ENV_KEYS" | jq -R . | jq -s .)
+        fi
+
+        RECOMMENDED_JSON=$(echo "$RECOMMENDED_JSON" | jq \
+          --arg key "$key" \
+          --arg name "$NAME" \
+          --arg desc "$DESC" \
+          --argjson auth "$AUTH_REQUIRED" \
+          --argjson env_vars "$ENV_VARS_JSON" \
+          --arg docs "$DOCS" \
+          '. + [{ key: $key, name: $name, description: $desc, auth_required: $auth, env_vars: $env_vars, docs_url: $docs }]')
       fi
-
-      RECOMMENDED_JSON=$(echo "$RECOMMENDED_JSON" | jq \
-        --arg key "$key" \
-        --arg name "$NAME" \
-        --arg desc "$DESC" \
-        --argjson auth "$AUTH_REQUIRED" \
-        --argjson env_vars "$ENV_VARS_JSON" \
-        --arg docs "$DOCS" \
-        '. + [{ key: $key, name: $name, description: $desc, auth_required: $auth, env_vars: $env_vars, docs_url: $docs }]')
     fi
   done <<< "$KEYS"
 else
@@ -123,7 +129,10 @@ else
     SERVER="${mapping##*:}"
 
     if echo "$TDR_CONTENT" | grep -q "$PATTERN"; then
+      # Try enable first (if already in .mcp.json), otherwise add
       if bash "$ENABLE_SCRIPT" "$SERVER" enable 2>/dev/null; then
+        ENABLED+=("$SERVER")
+      elif bash "$ADD_SCRIPT" "$SERVER" --enable 2>/dev/null; then
         ENABLED+=("$SERVER")
       else
         SKIPPED+=("$SERVER")

@@ -76,7 +76,7 @@ check() {
 
   if command -v "$cmd" &>/dev/null; then
     local version
-    version=$("$cmd" --version 2>&1 | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)
+    version=$("$cmd" --version 2>&1 | head -1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1 || true)
     echo "  [ok]  $name (${version:-installed})"
   else
     echo "  [--]  $name (missing)"

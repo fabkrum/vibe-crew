@@ -48,6 +48,11 @@ This registers hooks, agents, slash commands, permission rules, and optional MCP
 servers automatically. Then run `/setup` inside Claude Code to verify your
 environment. The `/setup` command can also auto-install missing dependencies.
 
+**Warp Terminal users:** `/setup` auto-generates a launch configuration at
+`~/.warp/launch_configurations/<project>.yaml`. The `--plugin-dir` flag is
+automatically included so all Warp panes load VibeCrew. Open the config with
+**Ctrl+Shift+L** in Warp.
+
 **Optional MCP servers**
 
 VibeCrew ships with 3 MCP servers enabled by default in `.mcp.json`. Additional

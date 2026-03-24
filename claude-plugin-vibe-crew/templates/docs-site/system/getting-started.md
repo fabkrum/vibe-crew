@@ -33,10 +33,15 @@ Run the setup wizard to configure your environment:
 
 The wizard will:
 
-1. Detect your terminal emulator (Warp, iTerm2, VS Code, Terminal.app)
-2. Test notification delivery
-3. Verify MCP server connections (Context7, Chrome DevTools)
-4. Initialize the `.vibecrew/` state directory
+1. Check prerequisites (Git, Node.js, jq required; gh, terminal-notifier optional)
+2. Detect your terminal emulator (Warp, iTerm2, VS Code, Terminal.app)
+3. Test notification delivery
+4. Verify MCP server connections (Context7, Chrome DevTools, Playwright)
+5. Configure your Claude Code command (`claude`, `claude-p`, `claude-w`, or custom)
+6. Initialize the `.vibecrew/` state directory
+7. Set up git repository (GitHub, GitLab, or local)
+
+**Warp Terminal users:** The wizard auto-generates a launch configuration at `~/.warp/launch_configurations/<project>.yaml` with multi-pane layout. If VibeCrew is loaded via `--plugin-dir`, the flag is automatically included in the launch config so all Warp panes have access to VibeCrew commands.
 
 ## Creating a New Project
 

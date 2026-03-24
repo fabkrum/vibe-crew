@@ -13,7 +13,7 @@ TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # --- Detect terminal ---
 detect_terminal() {
-  if [[ -n "${WARP_SESSION_ID:-}" ]]; then echo "warp"
+  if [[ -n "${WARP_SESSION_ID:-}" || "${TERM_PROGRAM:-}" == "WarpTerminal" ]]; then echo "warp"
   elif [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then echo "iterm"
   elif [[ "${TERM_PROGRAM:-}" == "vscode" ]]; then echo "vscode"
   elif [[ "${TERM_PROGRAM:-}" == "Apple_Terminal" ]]; then echo "terminal"
@@ -335,6 +335,23 @@ if [[ "$TERMINAL" == "warp" ]]; then
   PROJECT_NAME=$(basename "$PROJECT_ROOT")
   WARP_LC_FILE="$WARP_LC_DIR/$PROJECT_NAME.yaml"
   WARP_CLAUDE_CMD="${CLAUDE_COMMAND:-claude}"
+
+  # Derive the VibeCrew plugin directory from this script's location
+  VIBECREW_PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+  # Check if VibeCrew is installed as a marketplace plugin (in which case --plugin-dir is not needed)
+  CLAUDE_CFG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
+  VIBECREW_INSTALLED=false
+  if [[ -f "$CLAUDE_CFG/plugins/installed_plugins.json" ]]; then
+    if jq -e '.plugins | keys[] | select(startswith("vibe-crew@"))' "$CLAUDE_CFG/plugins/installed_plugins.json" &>/dev/null; then
+      VIBECREW_INSTALLED=true
+    fi
+  fi
+
+  # If not installed as a marketplace plugin, include --plugin-dir so Warp sessions load VibeCrew
+  if [[ "$VIBECREW_INSTALLED" == "false" ]]; then
+    WARP_CLAUDE_CMD="$WARP_CLAUDE_CMD --plugin-dir $VIBECREW_PLUGIN_DIR"
+  fi
 
   if [[ ! -f "$WARP_LC_FILE" ]]; then
     mkdir -p "$WARP_LC_DIR"

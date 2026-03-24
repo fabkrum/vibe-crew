@@ -56,7 +56,7 @@ fi
 
 # --- Detect terminal ---
 detect_terminal() {
-  if [[ -n "${WARP_SESSION_ID:-}" ]]; then echo "warp"
+  if [[ -n "${WARP_SESSION_ID:-}" || "${TERM_PROGRAM:-}" == "WarpTerminal" ]]; then echo "warp"
   elif [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]]; then echo "iterm2"
   elif [[ "${TERM_PROGRAM:-}" == "vscode" ]]; then echo "vscode"
   elif [[ "${TERM_PROGRAM:-}" == "Apple_Terminal" ]]; then echo "terminal_app"

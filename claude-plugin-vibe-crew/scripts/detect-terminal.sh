@@ -14,7 +14,7 @@ NOTIFICATION_METHOD="bell"
 SUPPORTS_OSC=false
 WARP_ID=""
 
-if [[ -n "${WARP_SESSION_ID:-}" ]]; then
+if [[ -n "${WARP_SESSION_ID:-}" || "${TERM_PROGRAM:-}" == "WarpTerminal" ]]; then
   TERMINAL="warp"
   NOTIFICATION_METHOD="warp-deeplink"
   SUPPORTS_OSC=true
